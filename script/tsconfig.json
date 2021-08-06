@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "moduleResolution": "node",
+        "declaration": false,
+        "target": "es5",
+        "lib": [
+            "es6",
+            "dom",
+            "scripthost"
+        ],
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitUseStrict": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "traceResolution": false,
+        "listFiles": false,
+        "stripInternal": true,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": false,
+        "pretty": false,
+        "noEmitOnError": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "outFile": "index.js"
+    },
+    "files": [
+        "index.ts"
+    ],
+    "exclude": [
+    ]
+}
