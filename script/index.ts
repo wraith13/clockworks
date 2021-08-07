@@ -656,12 +656,55 @@ export module NeverStopWatch
                 }
             }
         );
-
-
-        export const tickItem = async (tick: number, interval: number | null) => $div
-        ("tick-item flex-item")
+        export const tickItem = async (tick: number, interval: number | null) => $div("task-item flex-item")
         ([
-            await Resource.loadSvgOrCache("tick-icon"),
+            $div("item-header")
+            ([
+                $div("item-title")
+                ([
+                    await Resource.loadSvgOrCache("tick-icon"),
+                    $div("tick-elapsed-time")
+                    ([
+                        $span("value monospace")(label("elapsed time")),
+                    ]),
+                ]),
+                $div("item-operator")
+                ([
+                    // {
+                    //     tag: "button",
+                    //     className: "default-button main-button",
+                    //     children: "開く",
+                    //     onclick: async () => { }
+                    // },
+                    await menuButton
+                    ([
+                        menuItem
+                        (
+                            label("Edit"),
+                            async () =>
+                            {
+                                const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
+                                if (null !== result && tick !== Domain.getTicks(result) && Domain.getTicks(result) <= Domain.getTicks())
+                                {
+                                    Storage.History.remove(tick);
+                                    Storage.History.add(Domain.getTicks(result));
+                                    await reload();
+                                }
+                            }
+                        ),
+                        menuItem
+                        (
+                            label("Delete"),
+                            async () =>
+                            {
+                                Storage.History.remove(tick);
+                                await reload();
+                            },
+                            "delete-button"
+                        )
+                    ]),
+                ]),
+            ]),
             $div("item-information")
             ([
                 $div("tick-timestamp")
@@ -675,76 +718,7 @@ export module NeverStopWatch
                     $span("value monospace")(Domain.timeLongStringFromTick(interval)),
                 ]),
             ]),
-            $div("item-operator")
-            ([
-                // {
-                //     tag: "button",
-                //     className: "default-button main-button",
-                //     children: "開く",
-                //     onclick: async () => { }
-                // },
-                await menuButton
-                ([
-                    menuItem
-                    (
-                        label("Edit"),
-                        async () =>
-                        {
-                            const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
-                            if (null !== result && tick !== Domain.getTicks(result) && Domain.getTicks(result) <= Domain.getTicks())
-                            {
-                                Storage.History.remove(tick);
-                                Storage.History.add(Domain.getTicks(result));
-                                await reload();
-                            }
-                        }
-                    ),
-                    menuItem
-                    (
-                        label("Delete"),
-                        async () =>
-                        {
-                            Storage.History.remove(tick);
-                            await reload();
-                        },
-                        "delete-button"
-                    )
-                ]),
-            ])
         ]);
-        export const dropDownLabel = (options: { list: string[] | { [value:string]:string }, value: string, onChange?: (value: string) => unknown, className?: string}) =>
-        {
-            const dropdown = $make(HTMLSelectElement)
-            ({
-                className: options.className,
-                children: Array.isArray(options.list) ?
-                    options.list.map(i => ({ tag: "option", value:i, children: i, selected: options.value === i ? true: undefined, })):
-                    Object.keys(options.list).map(i => ({ tag: "option", value:i, children: options.list[i] ?? i, selected: options.value === i ? true: undefined, })),
-                onchange: () =>
-                {
-                    if (labelSoan.innerText !== dropdown.value)
-                    {
-                        labelSoan.innerText =Array.isArray(options.list) ?
-                            dropdown.value:
-                            (options.list[dropdown.value] ?? dropdown.value);
-                        options.onChange?.(dropdown.value);
-                    }
-                },
-            });
-            const labelSoan = $make(HTMLSpanElement)
-            ({
-                children: Array.isArray(options.list) ?
-                    options.value:
-                    (options.list[options.value] ?? options.value),
-            });
-            const result = $tag("label")(options.className)
-            ([
-                dropdown,
-                labelSoan
-            ]);
-            return result;
-        };
-
         export interface HeaderSegmentSource
         {
             icon: Resource.KeyType;
@@ -899,21 +873,21 @@ export module NeverStopWatch
         ];
         export const screenBody = async (ticks: number[]) =>
         ([
-                $div("button-list")
-                ({
-                    tag: "button",
-                    className: "default-button main-button long-button",
-                    children: label("Done"),
-                    onclick: async () =>
-                    {
-                        await Operate.done
-                        (
-                            Domain.getTicks(),
-                            () => updateWindow("operate")
-                        );
-                        updateWindow("operate");
-                    }
-                }),
+            $div("button-list")
+            ({
+                tag: "button",
+                className: "default-button main-button long-button",
+                children: label("Done"),
+                onclick: async () =>
+                {
+                    await Operate.done
+                    (
+                        Domain.getTicks(),
+                        () => updateWindow("operate")
+                    );
+                    updateWindow("operate");
+                }
+            }),
             $div("column-flex-list tick-list")
             (
                 await Promise.all
@@ -928,6 +902,14 @@ export module NeverStopWatch
                     )
                 )
             ),
+            $div("description")
+            (
+                $tag("ul")("")
+                ([
+                    $tag("li")("")("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first. / 最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。"),
+                    $tag("li")("")("The larger the elapsed time, the less accurate the elapsed time display. / 経過時間が大きくなる程、経過時間表示は精度が低くなります。"),
+                ])
+            )
         ]);
         export const screen = async (ticks: number[]): Promise<ScreenSource> =>
         ({
@@ -950,6 +932,22 @@ export module NeverStopWatch
                 switch(event)
                 {
                     case "timer":
+                        (
+                            Array.from
+                            (
+                                (
+                                    document
+                                        .getElementsByClassName("home-screen")[0]
+                                        .getElementsByClassName("tick-list")[0] as HTMLDivElement
+                                ).childNodes
+                            ) as HTMLDivElement[]
+                        ).forEach
+                        (
+                            (dom, index) =>
+                            {
+                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(Domain.getTicks() -ticks[index]);
+                            }
+                        );
                         break;
                     case "storage":
                         await reload();
@@ -958,10 +956,12 @@ export module NeverStopWatch
                         ticks = Storage.History.get();
                         replaceScreenBody(await screenBody(ticks));
                         resizeFlexList();
+                        await updateWindow("timer");
                         break;
                 }
             };
             await showWindow(await screen(ticks), updateWindow);
+            await updateWindow("timer");
         };
 
         export const updateTitle = () =>
