@@ -1190,39 +1190,7 @@ button
         }
     }
 }
-.removed-item
-{
-    .item-information
-    {
-        padding: 0.5rem;
-        margin: 0rem;
-        background-color: rgba(128,128,128,0.4);
-        *
-        {
-            line-height: 1.4em;
-        }
-        .label
-        {
-            font-size: 1.0rem;
-            opacity: 0.4;
-            margin-right: -50%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: calc(100% - 180px);
-            &::after
-            {
-                content: ":";
-            }
-        }
-        .value
-        {
-            font-size: 1.0rem;
-            opacity: 0.4;
-            float: right;
-        }
-    }
-}
+
 .locale-parallel-on .task-item .item-header .item-title
 {
     max-width: calc(100% - 180px);
@@ -1246,62 +1214,6 @@ button
     button+button
     {
         margin-left: 4px;
-    }
-}
-.history-list
-{
-    .history-item
-    {
-        position: relative;
-        padding: 0.5rem;
-        display: inline-flex;
-        flex-direction: row;
-        align-items: center;
-        white-space: nowrap;
-        height: 3.8rem;
-        .item-title
-        {
-            max-width: calc(100% - 150px);
-        }
-        .item-information
-        {
-            width: 100%;
-            line-height: 1.4em;
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            flex-direction: row;
-            .value
-            {
-                opacity: 0.4;
-                float: right;
-            }
-        }
-        .item-operator
-        {
-            padding-left: 0.5rem;
-        }
-        // .item-information
-        // {
-        //     & > *
-        //     {
-        //         display: inline-block !important;
-        //         //width: calc(50% - 2rem);
-        //         line-height: 1.4em;
-        //         display: flex;
-        //         flex-wrap: wrap;
-        //         align-items: center;
-        //         justify-content: space-between;
-        //         flex-direction: row;
-        //     }
-        //     .value
-        //     {
-        //         float: right;
-        //         text-align: right;
-        //     }
-        // }
     }
 }
 @media (prefers-color-scheme: dark)
@@ -1344,8 +1256,7 @@ button
         flex-grow: 1;
     }
 }
-
-.todo-screen
+.home-screen
 {
     .task-item
     {
@@ -1393,115 +1304,6 @@ button
             {
                 padding-left: 0.5rem;
             }
-        }
-    }
-}
-.welcome-screen
-{
-    .screen-body
-    {
-        .list-list:not(:empty)
-        {
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        }
-    }
-}
-.welcome-screen,
-.updating-screen
-{
-    .screen-body
-    {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        right: 0px;
-        left: 0px;
-
-        & > .application-icon
-        {
-            margin-left: auto;
-            margin-right: auto;
-            // width: 240px;
-            // height: 240px;
-            // max-width: 60vw;
-            // max-height: 50vh;
-            width: 400px;
-            height: 400px;
-            min-width: 25vw;
-            min-height: 25vw;
-            max-width: 90vw;
-            // max-height: 80vh;
-            display: block;
-            .loading-spinner;
-            // animation-iteration-count: infinite;
-            animation-iteration-count: 1;
-            svg
-            {
-                color: @accent-color;
-                fill: @accent-color;
-            }
-        }
-        // .message
-        // {
-        //     text-align: center;
-        //     padding: 0.5rem;
-        //     font-size: 2.5rem;
-        // }
-        .button-line,
-        .button-list
-        {
-            width: calc(100vw - 1.0rem);
-        }
-    }
-}
-.logo
-{
-    margin: calc(100vw / 16);
-    font-size: calc(100vw / 16);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    & > .application-icon
-    {
-        width: calc(100vw / 6);
-        height: calc(100vw / 6);
-        svg
-        {
-            color: @accent-color;
-            fill: @accent-color;
-        }
-    }
-    & > .application-icon + .logo-text
-    {
-        margin-left: calc(100vw / 24);
-    }
-    & > .logo-text
-    {
-        font-size: calc(100vw / 8);
-        color: @accent-color;
-        // グラデーション
-        // background: -webkit-linear-gradient(top, #28D928, #136E13);
-        // background-clip: text;
-        // -webkit-background-clip: text;
-        // -webkit-text-fill-color: transparent;
-        // line-height: 1.4em;
-        white-space: nowrap;
-    }
-}
-.updating-screen
-{
-    .screen-body
-    {
-        justify-content: space-evenly;
-        .button-list
-        {
-            animation-name: late-fade-in;
-            animation-direction: normal;
-            animation-delay: 0s;
-            animation-duration: 1.5s;
-            animation-timing-function: ease-in-out;
-            animation-fill-mode: both;
         }
     }
 }

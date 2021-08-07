@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Aug 07 2021 15:42:30 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sat Aug 07 2021 21:28:52 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1508,31 +1508,6 @@ button.delete-button {
   opacity: 0.4;
   float: right;
 }
-.removed-item .item-information {
-  padding: 0.5rem;
-  margin: 0rem;
-  background-color: rgba(128, 128, 128, 0.4);
-}
-.removed-item .item-information * {
-  line-height: 1.4em;
-}
-.removed-item .item-information .label {
-  font-size: 1rem;
-  opacity: 0.4;
-  margin-right: -50%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: calc(100% - 180px);
-}
-.removed-item .item-information .label::after {
-  content: ":";
-}
-.removed-item .item-information .value {
-  font-size: 1rem;
-  opacity: 0.4;
-  float: right;
-}
 .locale-parallel-on .task-item .item-header .item-title {
   max-width: calc(100% - 180px);
 }
@@ -1552,35 +1527,6 @@ button.delete-button {
 }
 .item-operator button + button {
   margin-left: 4px;
-}
-.history-list .history-item {
-  position: relative;
-  padding: 0.5rem;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  white-space: nowrap;
-  height: 3.8rem;
-}
-.history-list .history-item .item-title {
-  max-width: calc(100% - 150px);
-}
-.history-list .history-item .item-information {
-  width: 100%;
-  line-height: 1.4em;
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-}
-.history-list .history-item .item-information .value {
-  opacity: 0.4;
-  float: right;
-}
-.history-list .history-item .item-operator {
-  padding-left: 0.5rem;
 }
 @media (prefers-color-scheme: dark) and (hover: hover) {
   .history-list .history-item .item-title:not(:hover) {
@@ -1611,10 +1557,10 @@ button.delete-button {
   overflow-y: auto;
   flex-grow: 1;
 }
-.todo-screen .task-item {
+.home-screen .task-item {
   padding-top: 0px;
 }
-.todo-screen .tick-list .tick-item {
+.home-screen .tick-list .tick-item {
   position: relative;
   padding: 0.5rem;
   display: inline-flex;
@@ -1623,16 +1569,16 @@ button.delete-button {
   white-space: nowrap;
   height: 3.8rem;
 }
-.todo-screen .tick-list .tick-item > svg {
+.home-screen .tick-list .tick-item > svg {
   width: 2.5rem;
   height: 2.5rem;
   margin-right: 0.5rem;
   opacity: 0.6;
 }
-.todo-screen .tick-list .tick-item .item-information {
+.home-screen .tick-list .tick-item .item-information {
   width: 100%;
 }
-.todo-screen .tick-list .tick-item .item-information > * {
+.home-screen .tick-list .tick-item .item-information > * {
   opacity: 0.6;
   width: 100%;
   line-height: 1.4em;
@@ -1643,83 +1589,8 @@ button.delete-button {
   justify-content: space-between;
   flex-direction: row;
 }
-.todo-screen .tick-list .tick-item .item-operator {
+.home-screen .tick-list .tick-item .item-operator {
   padding-left: 0.5rem;
-}
-.welcome-screen .screen-body .list-list:not(:empty) {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-.welcome-screen .screen-body,
-.updating-screen .screen-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  right: 0px;
-  left: 0px;
-}
-.welcome-screen .screen-body > .application-icon,
-.updating-screen .screen-body > .application-icon {
-  margin-left: auto;
-  margin-right: auto;
-  width: 400px;
-  height: 400px;
-  min-width: 25vw;
-  min-height: 25vw;
-  max-width: 90vw;
-  display: block;
-  animation-name: loading-spinner;
-  animation-direction: normal;
-  animation-delay: 0s;
-  animation-duration: 0.3s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
-  animation-iteration-count: 1;
-}
-.welcome-screen .screen-body > .application-icon svg,
-.updating-screen .screen-body > .application-icon svg {
-  color: #412489;
-  fill: #412489;
-}
-.welcome-screen .screen-body .button-line,
-.updating-screen .screen-body .button-line,
-.welcome-screen .screen-body .button-list,
-.updating-screen .screen-body .button-list {
-  width: calc(100vw - 1rem);
-}
-.logo {
-  margin: calc(100vw / 16);
-  font-size: calc(100vw / 16);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.logo > .application-icon {
-  width: calc(100vw / 6);
-  height: calc(100vw / 6);
-}
-.logo > .application-icon svg {
-  color: #412489;
-  fill: #412489;
-}
-.logo > .application-icon + .logo-text {
-  margin-left: calc(100vw / 24);
-}
-.logo > .logo-text {
-  font-size: calc(100vw / 8);
-  color: #412489;
-  white-space: nowrap;
-}
-.updating-screen .screen-body {
-  justify-content: space-evenly;
-}
-.updating-screen .screen-body .button-list {
-  animation-name: late-fade-in;
-  animation-direction: normal;
-  animation-delay: 0s;
-  animation-duration: 1.5s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
 }
 @keyframes late-fade-in {
   0% {
@@ -3747,9 +3618,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return __generator(this, function (_d) {
                     switch (_d.label) {
                         case 0:
-                            _a = Render.$div("tick-item flex-item ");
-                            return [4 /*yield*/, Resource.loadSvgOrCache(null === interval ? "one-icon" :
-                                    "tick-icon")];
+                            _a = Render.$div("tick-item flex-item");
+                            return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
                             _b = [
                                 _d.sent(),
@@ -4087,7 +3957,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     switch (_c.label) {
                         case 0:
                             _a = {
-                                className: "welcome-screen"
+                                className: "home-screen"
                             };
                             _b = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
@@ -4162,7 +4032,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return __generator(this, function (_d) {
                     switch (_d.label) {
                         case 0:
-                            Render.removeProgressStyle("obsolescence");
                             if (undefined !== updateWindow) {
                                 Render.updateWindow = updateWindow;
                             }
@@ -4262,59 +4131,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
                 return latestPrimaryToast = Render.makeToast(data);
             };
-            Render.getProgressElement = function () { return document.getElementById("screen-header"); };
-            Render.setProgressStyleRaw = function (className) { return Render.getProgressElement().className = "segmented " + className; };
-            var lastSetProgressAt = 0;
-            Render.setProgressStyle = function (className, timeout) { return __awaiter(_this, void 0, void 0, function () {
-                var timestamp;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            timestamp = lastSetProgressAt = new Date().getTime();
-                            Render.setProgressStyleRaw(className);
-                            if (!(0 < timeout)) return [3 /*break*/, 3];
-                            return [4 /*yield*/, minamo_js_1.minamo.core.timeout(timeout)];
-                        case 1:
-                            _a.sent();
-                            if (!(timestamp === lastSetProgressAt)) return [3 /*break*/, 3];
-                            Render.setProgressStyleRaw("max-progress");
-                            return [4 /*yield*/, minamo_js_1.minamo.core.timeout(100)];
-                        case 2:
-                            _a.sent();
-                            if (timestamp === lastSetProgressAt) {
-                                Render.setProgressStyleRaw("");
-                            }
-                            _a.label = 3;
-                        case 3: return [2 /*return*/];
-                    }
-                });
-            }); };
-            Render.removeProgressStyle = function (className) { return Render.getProgressElement().classList.remove(className); };
-            Render.withProgress = function (className, content, task) { return __awaiter(_this, void 0, void 0, function () {
-                var toast, result;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            Render.setProgressStyle(className, 0);
-                            toast = Render.makePrimaryToast({
-                                content: content,
-                                wait: 0,
-                            });
-                            return [4 /*yield*/, task];
-                        case 1:
-                            result = _a.sent();
-                            Render.setProgressStyle("", 0);
-                            toast.hide();
-                            return [2 /*return*/, result];
-                    }
-                });
-            }); };
-            Render.withUpdateProgress = function (content, task) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, Render.withProgress("update", content, task)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            }); }); };
             Render.resizeFlexList = function () {
                 var minColumns = 1 + Math.floor(window.innerWidth / 780);
                 var maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));

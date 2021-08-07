@@ -659,13 +659,9 @@ export module NeverStopWatch
 
 
         export const tickItem = async (tick: number, interval: number | null) => $div
-        ("tick-item flex-item ")
+        ("tick-item flex-item")
         ([
-            await Resource.loadSvgOrCache
-            (
-                null === interval ? "one-icon":
-                "tick-icon"
-            ),
+            await Resource.loadSvgOrCache("tick-icon"),
             $div("item-information")
             ([
                 $div("tick-timestamp")
@@ -935,7 +931,7 @@ export module NeverStopWatch
         ]);
         export const screen = async (ticks: number[]): Promise<ScreenSource> =>
         ({
-            className: "welcome-screen",
+            className: "home-screen",
             header:
             {
                 items:
@@ -982,7 +978,6 @@ export module NeverStopWatch
         export const getHeaderElement = () => document.getElementById("screen-header") as HTMLDivElement;
         export const showWindow = async (screen: ScreenSource, updateWindow?: (event: UpdateWindowEventEype) => unknown) =>
         {
-            removeProgressStyle("obsolescence");
             if (undefined !== updateWindow)
             {
                 Render.updateWindow = updateWindow;
@@ -1109,43 +1104,6 @@ export module NeverStopWatch
             }
             return latestPrimaryToast = makeToast(data);
         };
-        export const getProgressElement = () => document.getElementById("screen-header");
-        export const setProgressStyleRaw = (className: string) => getProgressElement().className = `segmented ${className}`;
-        let lastSetProgressAt = 0;
-        export const setProgressStyle = async (className: string, timeout: number) =>
-        {
-            const timestamp = lastSetProgressAt = new Date().getTime();
-            setProgressStyleRaw(className);
-            if (0 < timeout)
-            {
-                await minamo.core.timeout(timeout);
-                if (timestamp === lastSetProgressAt)
-                {
-                    setProgressStyleRaw("max-progress");
-                    await minamo.core.timeout(100);
-                    if (timestamp === lastSetProgressAt)
-                    {
-                        setProgressStyleRaw("");
-                    }
-                }
-            }
-        };
-        export const removeProgressStyle = (className: string) => getProgressElement().classList.remove(className);
-        export const withProgress = async <T>(className: string, content: minamo.dom.Source, task: Promise<T>): Promise<T> =>
-        {
-            setProgressStyle(className, 0);
-            const toast = makePrimaryToast
-            ({
-                content,
-                wait: 0,
-            });
-            const result = await task;
-            setProgressStyle("", 0);
-            toast.hide();
-            return result;
-        };
-        export const withUpdateProgress = async <T>(content: minamo.dom.Source, task: Promise<T>): Promise<T> =>
-            await withProgress("update", content, task);
         export const resizeFlexList = () =>
         {
             const minColumns = 1 +Math.floor(window.innerWidth / 780);
@@ -1355,7 +1313,6 @@ export module NeverStopWatch
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
         await Render.showScreen();
-
     };
     export const reload = async () => await showPage();
 }
