@@ -3,15 +3,8 @@ import config from "../resource/config.json";
 import localeEn from "../resource/lang.en.json";
 import localeJa from "../resource/lang.ja.json";
 import resource from "../resource/images.json";
-export const makeObject = <T>(items: { key: string, value: T}[]) =>
-{
-    const result: { [key: string]: T} = { };
-    items.forEach(i => result[i.key] = i.value);
-    return result;
-};
 export const simpleComparer = minamo.core.comparer.basic;
 export const simpleReverseComparer = <T>(a: T, b: T) => -simpleComparer(a, b);
-export const uniqueFilter = <T>(value: T, index: number, list: T[]) => index === list.indexOf(value);
 export module locale
 {
     export const master =
@@ -53,17 +46,12 @@ export module NeverStopWatch
     export module Storage
     {
         export let lastUpdate = 0;
-
-
         export module History
         {
-            export const makeKey = () => `never-stop-watch:history`;
-            export const get = (): number[] =>
-            minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-            export const set = (list: number[]) =>
-            minamo.localStorage.set(makeKey(), list);
-            export const removeKey = () =>
-            minamo.localStorage.remove(makeKey());
+            export const makeKey = () => `${config.localDbPrefix}:history`;
+            export const get = (): number[] => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
+            export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+            export const removeKey = () => minamo.localStorage.remove(makeKey());
             export const add = (tick: number | number[]) =>
                 set(get().concat(tick).sort(simpleReverseComparer));
             export const remove = (tick: number | number[]) =>
@@ -72,7 +60,7 @@ export module NeverStopWatch
 
         export module Settings
         {
-            export const makeKey = () => `settings`;
+            export const makeKey = () => `${config.localDbPrefix}:settings`;
             export const get = () =>
                 minamo.localStorage.getOrNull<NeverStopWatch.Settings>(makeKey()) ?? { };
             export const set = (settings: NeverStopWatch.Settings) =>
@@ -81,8 +69,7 @@ export module NeverStopWatch
     }
     export module Domain
     {
-        export const timeAccuracy = config.timeAccuracy;
-        export const getTicks = (date: Date = new Date()) => Math.floor(date.getTime() / timeAccuracy);
+        export const getTicks = (date: Date = new Date()) => date.getTime();
         export const dateCoreStringFromTick = (tick: null | number) =>
         {
             if (null === tick)
@@ -91,7 +78,7 @@ export module NeverStopWatch
             }
             else
             {
-                const date = new Date(tick *timeAccuracy);
+                const date = new Date(tick);
                 return `${date.getFullYear()}-${("0" +(date.getMonth() +1)).substr(-2)}-${("0" +date.getDate()).substr(-2)}`;
             }
         };
@@ -107,13 +94,13 @@ export module NeverStopWatch
                 return -getTime(tick);
             }
             else
-            if (tick *timeAccuracy < 24 *60 *60 *1000)
+            if (tick < 24 *60 *60 *1000)
             {
                 return tick;
             }
             else
             {
-                const date = new Date(tick *timeAccuracy);
+                const date = new Date(tick);
                 date.setHours(0);
                 date.setMinutes(0);
                 date.setSeconds(0);
@@ -129,10 +116,10 @@ export module NeverStopWatch
             }
             else
             {
-                return `${dateCoreStringFromTick(tick)} ${timeCoreStringFromTick(getTime(tick))}`;
+                return `${dateCoreStringFromTick(tick)} ${timeFullCoreStringFromTick(getTime(tick))}`;
             }
         };
-        export const timeCoreStringFromTick = (tick: null | number) =>
+        export const timeLongCoreStringFromTick = (tick: null | number) =>
         {
             if (null === tick)
             {
@@ -141,14 +128,34 @@ export module NeverStopWatch
             else
             if (tick < 0)
             {
-                return `-${timeCoreStringFromTick(-tick)}`;
+                return `-${timeLongCoreStringFromTick(-tick)}`;
             }
             else
             {
-                const time = Math.floor(tick) % (24 *60);
-                const hour = Math.floor(time /60);
-                const minute = time % 60;
-                return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}`;
+                const hour = Math.floor(tick /(60 *60 *1000)) %24;
+                const minute = Math.floor(tick /(60 *1000)) %60;
+                const second = Math.floor(tick /(1000)) %60;
+                return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}`;
+            }
+        };
+        export const timeFullCoreStringFromTick = (tick: null | number) =>
+        {
+            if (null === tick)
+            {
+                return "N/A";
+            }
+            else
+            if (tick < 0)
+            {
+                return `-${timeFullCoreStringFromTick(-tick)}`;
+            }
+            else
+            {
+                const hour = Math.floor(tick /(60 *60 *1000)) %24;
+                const minute = Math.floor(tick /(60 *1000)) %60;
+                const second = Math.floor(tick /(1000)) %60;
+                const milliseconds = tick %1000;
+                return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}.${("000" +milliseconds).slice(-3)}`;
             }
         };
         export const timeShortStringFromTick = (tick: null | number) =>
@@ -164,12 +171,20 @@ export module NeverStopWatch
             }
             else
             {
-                const days = Math.floor(tick / (24 *60));
-                return 10 <= days ?
-                    `${days.toLocaleString()} ${locale.map("days")}`:
-                    0 < days ?
-                        `${days.toLocaleString()} ${locale.map("days")} ${timeCoreStringFromTick(tick)}`:
-                        timeCoreStringFromTick(tick);
+                // if (tick < 60 *1000)
+                // {
+                //     return timeFullCoreStringFromTick(tick);
+                // }
+                if (tick < 60 *60 *1000)
+                {
+                    return timeLongCoreStringFromTick(tick);
+                }
+                const days = Math.floor(tick / (24 *60 *60 *1000));
+                if (days < 1)
+                {
+                    return timeLongCoreStringFromTick(tick);
+                }
+                return `${days.toLocaleString()} ${locale.map("days")} ${timeLongCoreStringFromTick(tick)}`;
             }
         };
         export const timeLongStringFromTick = (tick: null | number) =>
@@ -185,14 +200,12 @@ export module NeverStopWatch
             }
             else
             {
-                const days = Math.floor(tick / (24 *60));
+                const days = Math.floor(tick / (24 *60 *60 *1000));
                 return 0 < days ?
-                    `${days.toLocaleString()} ${locale.map("days")} ${timeCoreStringFromTick(tick)}`:
-                    timeCoreStringFromTick(tick);
+                    `${days.toLocaleString()} ${locale.map("days")} ${timeFullCoreStringFromTick(tick)}`:
+                    timeFullCoreStringFromTick(tick);
             }
         };
-        export const timeRangeStringFromTick = (a: null | number, b: null | number) =>
-            `${Domain.timeShortStringFromTick(a)} 〜 ${Domain.timeShortStringFromTick(b)}`;
         export const parseDate = (date: string | null): Date | null =>
         {
             if (null !== date)
@@ -213,9 +226,11 @@ export module NeverStopWatch
     {
         export module Operate
         {
-            export const done = async (tick: number, onCanceled: () => unknown) =>
+            export const done = async (tick: number, onCanceled?: () => unknown) =>
             {
+                const backup = Storage.History.get();
                 Storage.History.add(tick);
+                updateWindow("operate");
                 const toast = makePrimaryToast
                 ({
                     content: $span("")(`${locale.map("Done!")}`),
@@ -223,17 +238,60 @@ export module NeverStopWatch
                     (
                         async () =>
                         {
-                            Storage.History.remove(tick);
+                            Storage.History.set(backup);
+                            updateWindow("operate");
                             await toast.hide();
-                            onCanceled();
+                            onCanceled?.();
                         }
                     ),
                 });
             };
-            export const reset = async (onCanceled: () => unknown) =>
+            export const edit = async (oldTick: number, newTick: number, onCanceled?: () => unknown) =>
+            {
+                const backup = Storage.History.get();
+                Storage.History.remove(oldTick);
+                Storage.History.add(newTick);
+                updateWindow("operate");
+                const toast = makePrimaryToast
+                ({
+                    content: $span("")(`${locale.map("Updated.")}`),
+                    backwardOperator: cancelTextButton
+                    (
+                        async () =>
+                        {
+                            Storage.History.set(backup);
+                            updateWindow("operate");
+                            await toast.hide();
+                            onCanceled?.();
+                        }
+                    ),
+                });
+            };
+            export const remove = async (tick: number, onCanceled?: () => unknown) =>
+            {
+                const backup = Storage.History.get();
+                Storage.History.remove(tick);
+                updateWindow("operate");
+                const toast = makePrimaryToast
+                ({
+                    content: $span("")(`${locale.map("Removed.")}`),
+                    backwardOperator: cancelTextButton
+                    (
+                        async () =>
+                        {
+                            Storage.History.set(backup);
+                            updateWindow("operate");
+                            await toast.hide();
+                            onCanceled?.();
+                        }
+                    ),
+                });
+            };
+            export const reset = async (onCanceled?: () => unknown) =>
             {
                 const backup = Storage.History.get();
                 Storage.History.removeKey();
+                updateWindow("operate");
                 const toast = makePrimaryToast
                 ({
                     content: $span("")(`リセットしました。`),
@@ -242,8 +300,9 @@ export module NeverStopWatch
                         async () =>
                         {
                             Storage.History.set(backup);
+                            updateWindow("operate");
                             await toast.hide();
-                            onCanceled();
+                            onCanceled?.();
                         }
                     ),
                 });
@@ -295,68 +354,6 @@ export module NeverStopWatch
             $span("locale-parallel")(locale.parallel(label)),
             $span("locale-map")(locale.map(label)),
         ]);
-        export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
-        {
-            await minamo.core.timeout(100); // この wait をかましてないと呼び出し元のポップアップメニューが window.prompt が表示されてる間、ずっと表示される事になる。
-            return await new Promise(resolve => resolve(window.prompt(message, _default)?.trim() ?? null));
-        };
-        export const customPrompt = async (message?: string, _default?: string): Promise<string | null> =>
-        {
-            const input = $make(HTMLInputElement)
-            ({
-                tag: "input",
-                type: "text",
-                value: _default,
-            });
-            return await new Promise
-            (
-                resolve =>
-                {
-                    let result: string | null = null;
-                    const ui = popup
-                    ({
-                        children:
-                        [
-                            $tag("h2")("")(message ?? locale.map("please input")),
-                            input,
-                            $div("popup-operator")
-                            ([
-                                {
-                                    tag: "button",
-                                    className: "cancel-button",
-                                    children: locale.map("Cancel"),
-                                    onclick: () =>
-                                    {
-                                        result = null;
-                                        ui.close();
-                                    },
-                                },
-                                {
-                                    tag: "button",
-                                    className: "default-button",
-                                    children: locale.map("OK"),
-                                    onclick: () =>
-                                    {
-                                        result = input.value;
-                                        ui.close();
-                                    },
-                                },
-                            ]),
-                        ],
-                        onClose: async () => resolve(result),
-                    });
-                    input.setSelectionRange(0, _default?.length ?? 0);
-                    input.focus();
-                }
-            );
-        };
-        // export const prompt = systemPrompt;
-        export const prompt = customPrompt;
-        // export const alert = (message: string) => window.alert(message);
-        export const alert = (message: string) => makeToast({ content: message, });
-
-        export const systemConfirm = (message: string) => window.confirm(message);
-        export const confirm = systemConfirm;
         export const dateTimePrompt = async (message: string, _default: number): Promise<string | null> =>
         {
             const inputDate = $make(HTMLInputElement)
@@ -370,7 +367,7 @@ export module NeverStopWatch
             ({
                 tag: "input",
                 type: "time",
-                value: Domain.timeCoreStringFromTick(Domain.getTime(_default)),
+                value: Domain.timeFullCoreStringFromTick(Domain.getTime(_default)),
                 required: "",
             });
             return await new Promise
@@ -414,7 +411,6 @@ export module NeverStopWatch
                 }
             );
         };
-
         export const localeSettingsPopup = async (settings: Settings = Storage.Settings.get()): Promise<boolean> =>
         {
             return await new Promise
@@ -634,28 +630,6 @@ export module NeverStopWatch
         //     href,
         //     children,
         // });
-        export const todoDoneMenu =
-        (
-            onDone: () => Promise<unknown> = async () => await updateWindow("operate"),
-            onCanceled: () => Promise<unknown> = async () => await updateWindow("operate")
-        ) =>
-        menuItem
-        (
-            label("Done with timestamp or memo"),
-            async () =>
-            {
-                const result = Domain.parseDate(await dateTimePrompt("dummy", Domain.getTicks()));
-                if (null !== result && Domain.getTicks(result) <= Domain.getTicks())
-                {
-                    await Operate.done
-                    (
-                        Domain.getTicks(result),
-                        onCanceled
-                    );
-                    await onDone();
-                }
-            }
-        );
         export const tickItem = async (tick: number, interval: number | null) => $div("task-item flex-item")
         ([
             $div("item-header")
@@ -684,22 +658,30 @@ export module NeverStopWatch
                             async () =>
                             {
                                 const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
-                                if (null !== result && tick !== Domain.getTicks(result) && Domain.getTicks(result) <= Domain.getTicks())
+                                if (null !== result)
                                 {
-                                    Storage.History.remove(tick);
-                                    Storage.History.add(Domain.getTicks(result));
-                                    await reload();
+                                    const newTick = Domain.getTicks(result);
+                                    if (tick !== Domain.getTicks(result))
+                                    {
+                                        if (0 <= newTick && newTick <= Domain.getTicks())
+                                        {
+                                            await Operate.edit(tick, newTick);
+                                        }
+                                        else
+                                        {
+                                            makeToast
+                                            ({
+                                                content: "有効な範囲外な日時が指定されました。( 未来や極端に過去の日時は指定できません。 )",
+                                            });
+                                        }
+                                    }
                                 }
                             }
                         ),
                         menuItem
                         (
                             label("Delete"),
-                            async () =>
-                            {
-                                Storage.History.remove(tick);
-                                await reload();
-                            },
+                            async () => await Operate.remove(tick),
                             "delete-button"
                         )
                     ]),
@@ -841,14 +823,8 @@ export module NeverStopWatch
                 }
             };
         }
-        export const applicationIcon = async () =>
-            $div("application-icon icon")(await Resource.loadSvgOrCache("application-icon"));
-        // export const applicationColorIcon = async () =>
-        //     $div("application-icon icon")(await Resource.loadSvgOrCache("application-color-icon"));
-
         export const screenMenu = async () =>
         [
-            todoDoneMenu(),
             menuItem
             (
                 label("Display language setting"),
@@ -863,7 +839,7 @@ export module NeverStopWatch
             menuItem
             (
                 label("Permanently Delete"),
-                async () => Operate.reset(async () => await reload())
+                async () => await Operate.reset()
             ),
             externalLink
             ({
@@ -873,20 +849,16 @@ export module NeverStopWatch
         ];
         export const screenBody = async (ticks: number[]) =>
         ([
+            $div("capital-interval")
+            ([
+                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+            ]),
             $div("button-list")
             ({
                 tag: "button",
                 className: "default-button main-button long-button",
                 children: label("Done"),
-                onclick: async () =>
-                {
-                    await Operate.done
-                    (
-                        Domain.getTicks(),
-                        () => updateWindow("operate")
-                    );
-                    updateWindow("operate");
-                }
+                onclick: async () => await Operate.done(Domain.getTicks())
             }),
             $div("column-flex-list tick-list")
             (
@@ -904,10 +876,10 @@ export module NeverStopWatch
             ),
             $div("description")
             (
-                $tag("ul")("")
+                $tag("ul")("locale-parallel-off")
                 ([
-                    $tag("li")("")("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first. / 最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。"),
-                    $tag("li")("")("The larger the elapsed time, the less accurate the elapsed time display. / 経過時間が大きくなる程、経過時間表示は精度が低くなります。"),
+                    $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                    // $tag("li")("")("The larger the elapsed time, the less accurate the elapsed time display. / 経過時間が大きくなる程、経過時間表示は精度が低くなります。"),
                 ])
             )
         ]);
@@ -931,7 +903,11 @@ export module NeverStopWatch
             {
                 switch(event)
                 {
+                    case "high-resolution-timer":
+                        (document.getElementsByClassName("home-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
+                        break;
                     case "timer":
+                        document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
                         (
                             Array.from
                             (
@@ -945,7 +921,7 @@ export module NeverStopWatch
                         (
                             (dom, index) =>
                             {
-                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(Domain.getTicks() -ticks[index]);
+                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                             }
                         );
                         break;
@@ -963,7 +939,6 @@ export module NeverStopWatch
             await showWindow(await screen(ticks), updateWindow);
             await updateWindow("timer");
         };
-
         export const updateTitle = () =>
         {
             document.title = Array.from(getHeaderElement().getElementsByClassName("segment-title"))
@@ -972,7 +947,7 @@ export module NeverStopWatch
                 ?.join(" / ")
                 ?? applicationTitle;
         };
-        export type UpdateWindowEventEype = "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
+        export type UpdateWindowEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
         export let updateWindow: (event: UpdateWindowEventEype) => unknown;
         let updateWindowTimer = undefined;
         export const getHeaderElement = () => document.getElementById("screen-header") as HTMLDivElement;
@@ -996,8 +971,13 @@ export module NeverStopWatch
             {
                 updateWindowTimer = setInterval
                 (
+                    () => Render.updateWindow?.("high-resolution-timer"),
+                    36
+                );
+                updateWindowTimer = setInterval
+                (
                     () => Render.updateWindow?.("timer"),
-                    Domain.timeAccuracy
+                    360
                 );
                 document.addEventListener
                 (
@@ -1282,7 +1262,7 @@ export module NeverStopWatch
     {
         console.log("start!!!");
         locale.setLocale(Storage.Settings.get().locale);
-        window.onpopstate = () => showPage();
+        // window.onpopstate = () => showPage();
         window.addEventListener('resize', Render.onWindowResize);
         window.addEventListener('focus', Render.onWindowFocus);
         window.addEventListener('blur', Render.onWindowBlur);

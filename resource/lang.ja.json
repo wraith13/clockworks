@@ -70,5 +70,9 @@
     "This action cannot be undone. Do you want to continue?": "この操作は取り消せません。続行しますか？",
     "Close": "閉じる",
     "Done!": "完了！",
-    "Storing": "保存中"
+    "Updated.": "更新しました。",
+    "Removed.": "削除しました。",
+    "Reseted.": "リセットしました。",
+    "Storing": "保存中",
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。"
 }

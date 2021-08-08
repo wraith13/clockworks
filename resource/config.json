@@ -1,10 +1,5 @@
 {
     "applicationTitle": "Never Stop Watch",
-    "repositoryUrl": "https://github.com/wraith13/never-stop-watch/",
-    "timeAccuracy": 60000,
-    "standardDeviationRate": 1.5,
-    "sleepStandardDeviationRate": 3.0,
-    "granceMinutes": 1440,
-    "maxRestAdjustMinutes": 180,
-    "maxShortTermMinutes": 14400
+    "localDbPrefix": "never-stop-watch",
+    "repositoryUrl": "https://github.com/wraith13/never-stop-watch/"
 }

@@ -70,5 +70,9 @@
     "This action cannot be undone. Do you want to continue?": "This action cannot be undone. Do you want to continue?",
     "Close": "Close",
     "Done!": "Done!",
-    "Storing": "Storing"
+    "Updated.": "Updated.",
+    "Removed.": "Removed.",
+    "Reseted.": "Reseted.",
+    "Storing": "Storing",
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first."
 }
