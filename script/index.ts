@@ -35,7 +35,6 @@ export module locale
     export const map = (key : LocaleKeyType) : string => string(key);
     export const parallel = (key : LocaleKeyType) : string => `${getPrimary(key)} / ${getSecondary(key)}`;
 }
-
 export module NeverStopWatch
 {
     export const applicationTitle = config.applicationTitle;
@@ -57,7 +56,6 @@ export module NeverStopWatch
             export const remove = (tick: number | number[]) =>
                 set(get().filter(i => tick !== i).sort(simpleReverseComparer));
         }
-
         export module Settings
         {
             export const makeKey = () => `${config.localDbPrefix}:settings`;
@@ -65,6 +63,12 @@ export module NeverStopWatch
                 minamo.localStorage.getOrNull<NeverStopWatch.Settings>(makeKey()) ?? { };
             export const set = (settings: NeverStopWatch.Settings) =>
                 minamo.localStorage.set(makeKey(), settings);
+        }
+        export module flashInterval
+        {
+            export const makeKey = () => `${config.localDbPrefix}:flashInterval`;
+            export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
+            export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
         }
     }
     export module Domain
@@ -233,7 +237,7 @@ export module NeverStopWatch
                 updateWindow("operate");
                 const toast = makePrimaryToast
                 ({
-                    content: $span("")(`${locale.map("Done!")}`),
+                    content: $span("")(`${locale.map("Stamped!")}`),
                     backwardOperator: cancelTextButton
                     (
                         async () =>
@@ -630,7 +634,7 @@ export module NeverStopWatch
         //     href,
         //     children,
         // });
-        export const tickItem = async (tick: number, interval: number | null) => $div("task-item flex-item")
+        export const tickItem = async (tick: number, interval: number | null) => $div("tick-item flex-item")
         ([
             $div("item-header")
             ([
@@ -680,7 +684,7 @@ export module NeverStopWatch
                         ),
                         menuItem
                         (
-                            label("Delete"),
+                            label("Remove"),
                             async () => await Operate.remove(tick),
                             "delete-button"
                         )
@@ -691,12 +695,12 @@ export module NeverStopWatch
             ([
                 $div("tick-timestamp")
                 ([
-                    label("timestamp"),
+                    label("Timestamp"),
                     $span("value monospace")(Domain.dateStringFromTick(tick)),
                 ]),
                 $div("tick-interval")
                 ([
-                    label("interval"),
+                    label("Interval"),
                     $span("value monospace")(Domain.timeLongStringFromTick(interval)),
                 ]),
             ]),
@@ -800,7 +804,33 @@ export module NeverStopWatch
             icon: "application-icon",
             title: NeverStopWatch.applicationTitle,
         });
-
+        export const screenHeaderFlashSegmentMenu = async (flashInterval: number): Promise<minamo.dom.Source> => await Promise.all
+        (
+            [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, ]
+            .map
+            (
+                async i =>
+                menuItem
+                (
+                    [
+                        await Resource.loadSvgOrCache(0 === i ? "sleep-icon": "flash-icon"),
+                        labelSpan(0 === i ? locale.map("No Flash"): `${locale.map("Interval")}: ${i} ${locale.map("m(minutes)")}`),
+                    ],
+                    async () =>
+                    {
+                        Storage.flashInterval.set(i);
+                        await reload();
+                    },
+                    flashInterval === i ? "current-item": undefined
+                )
+            )
+        );
+        export const screenHeaderFlashSegment = async (flashInterval: number): Promise<HeaderSegmentSource> =>
+        ({
+            icon: 0 === flashInterval ? "sleep-icon": "flash-icon",
+            title: 0 === flashInterval ? locale.map("No Flash"): `${locale.map("Interval")}: ${flashInterval} ${locale.map("m(minutes)")}`,
+            menu: await screenHeaderFlashSegmentMenu(flashInterval),
+        });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
         (
             document.getElementsByClassName("screen-body")[0],
@@ -838,7 +868,7 @@ export module NeverStopWatch
             ),
             menuItem
             (
-                label("Permanently Delete"),
+                label("Reset"),
                 async () => await Operate.reset()
             ),
             externalLink
@@ -857,7 +887,7 @@ export module NeverStopWatch
             ({
                 tag: "button",
                 className: "default-button main-button long-button",
-                children: label("Done"),
+                children: label("Stamp"),
                 onclick: async () => await Operate.done(Domain.getTicks())
             }),
             $div("column-flex-list tick-list")
@@ -891,11 +921,13 @@ export module NeverStopWatch
                 items:
                 [
                     await screenHeaderHomeSegment(),
+                    await screenHeaderFlashSegment(Storage.flashInterval.get()),
                 ],
                 menu: await screenMenu()
             },
             body: await screenBody(ticks)
         });
+        let previousPrimaryStep = 0;
         export const showScreen = async () =>
         {
             let ticks = Storage.History.get();
@@ -924,11 +956,27 @@ export module NeverStopWatch
                                 (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                             }
                         );
+                        const flashInterval = Storage.flashInterval.get();
+                        if (flashInterval)
+                        {
+                            const primaryStep = Math.floor((0 < ticks.length ? Domain.getTicks() -ticks[0]: 0) / (Storage.flashInterval.get() *60 *1000));
+                            if (primaryStep === previousPrimaryStep +1)
+                            {
+                                document.body.classList.add("flash");
+                                setTimeout(() => document.body.classList.remove("flash"), 1500);
+                            }
+                            previousPrimaryStep = primaryStep;
+                        }
+                        else
+                        {
+                            previousPrimaryStep = 0;
+                        }
                         break;
                     case "storage":
                         await reload();
                         break;
                     case "operate":
+                        previousPrimaryStep = 0;
                         ticks = Storage.History.get();
                         replaceScreenBody(await screenBody(ticks));
                         resizeFlexList();

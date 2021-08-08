@@ -2,6 +2,111 @@
 @import "traits.less";
 @import "base.less";
 
+body.flash
+{
+    animation-name: flash;
+    @media (prefers-color-scheme: dark)
+    {
+        animation-name: dark-flash;
+    }
+    animation-direction: normal;
+    animation-delay: 0s;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}
+@keyframes flash
+{
+    0% { background: radial-gradient(@accent-color 0%, @base-color 0%); }
+    2.5% { background: radial-gradient(@accent-color 0%, @base-color 10%); }
+    5% { background: radial-gradient(@accent-color 0%, @base-color 20%); }
+    7.5% { background: radial-gradient(@accent-color 0%, @base-color 30%); }
+    10% { background: radial-gradient(@accent-color 0%, @base-color 40%); }
+    12.5% { background: radial-gradient(@accent-color 0%, @base-color 50%); }
+    15.0% { background: radial-gradient(@accent-color 0%, @base-color 60%); }
+    17.5% { background: radial-gradient(@accent-color 0%, @base-color 70%); }
+    20% { background: radial-gradient(@accent-color 0%, @base-color 80%); }
+    22.5% { background: radial-gradient(@accent-color 0%, @base-color 90%); }
+    25% { background: radial-gradient(@accent-color 0%, @base-color 100%); }
+    25.5% { background: radial-gradient(@accent-color 10%, @base-color 100%); }
+    27.5% { background: radial-gradient(@accent-color 20%, @base-color 100%); }
+    30% { background: radial-gradient(@accent-color 30%, @base-color 100%); }
+    32.5% { background: radial-gradient(@accent-color 40%, @base-color 100%); }
+    35% { background: radial-gradient(@accent-color 40%, @base-color 100%); }
+    37.5% { background: radial-gradient(@accent-color 50%, @base-color 100%); }
+    40% { background: radial-gradient(@accent-color 60%, @base-color 100%); }
+    42.5% { background: radial-gradient(@accent-color 70%, @base-color 100%); }
+    45% { background: radial-gradient(@accent-color 80%, @base-color 100%); }
+    47.5% { background: radial-gradient(@accent-color 90%, @base-color 100%); }
+    50% { background: radial-gradient(@accent-color 100%, @base-color 100%); }
+    50.1% { background: radial-gradient(@base-color 0%, @accent-color 0%); }
+    52.5% { background: radial-gradient(@base-color 0%, @accent-color 10%); }
+    55% { background: radial-gradient(@base-color 0%, @accent-color 20%); }
+    57.5% { background: radial-gradient(@base-color 0%, @accent-color 30%); }
+    60% { background: radial-gradient(@base-color 0%, @accent-color 40%); }
+    62.5% { background: radial-gradient(@base-color 0%, @accent-color 50%); }
+    65% { background: radial-gradient(@base-color 0%, @accent-color 60%); }
+    67.5% { background: radial-gradient(@base-color 0%, @accent-color 70%); }
+    70% { background: radial-gradient(@base-color 0%, @accent-color 80%); }
+    72.5% { background: radial-gradient(@base-color 0%, @accent-color 90%); }
+    75% { background: radial-gradient(@base-color 0%, @accent-color 100%); }
+    77.5% { background: radial-gradient(@base-color 10%, @accent-color 100%); }
+    80% { background: radial-gradient(@base-color 20%, @accent-color 100%); }
+    82.5% { background: radial-gradient(@base-color 30%, @accent-color 100%); }
+    85% { background: radial-gradient(@base-color 40%, @accent-color 100%); }
+    87.5% { background: radial-gradient(@base-color 50%, @accent-color 100%); }
+    90% { background: radial-gradient(@base-color 60%, @accent-color 100%); }
+    92.5% { background: radial-gradient(@base-color 70%, @accent-color 100%); }
+    95% { background: radial-gradient(@base-color 80%, @accent-color 100%); }
+    97.5% { background: radial-gradient(@base-color 90%, @accent-color 100%); }
+    100% { background: radial-gradient(@base-color 100%, @accent-color 100%); }
+}
+@keyframes dark-flash
+{
+    0% { background: radial-gradient(@accent-color 0%, @dark-base-color 0%); }
+    2.5% { background: radial-gradient(@accent-color 0%, @dark-base-color 10%); }
+    5% { background: radial-gradient(@accent-color 0%, @dark-base-color 20%); }
+    7.5% { background: radial-gradient(@accent-color 0%, @dark-base-color 30%); }
+    10% { background: radial-gradient(@accent-color 0%, @dark-base-color 40%); }
+    12.5% { background: radial-gradient(@accent-color 0%, @dark-base-color 50%); }
+    15.0% { background: radial-gradient(@accent-color 0%, @dark-base-color 60%); }
+    17.5% { background: radial-gradient(@accent-color 0%, @dark-base-color 70%); }
+    20% { background: radial-gradient(@accent-color 0%, @dark-base-color 80%); }
+    22.5% { background: radial-gradient(@accent-color 0%, @dark-base-color 90%); }
+    25% { background: radial-gradient(@accent-color 0%, @dark-base-color 100%); }
+    25.5% { background: radial-gradient(@accent-color 10%, @dark-base-color 100%); }
+    27.5% { background: radial-gradient(@accent-color 20%, @dark-base-color 100%); }
+    30% { background: radial-gradient(@accent-color 30%, @dark-base-color 100%); }
+    32.5% { background: radial-gradient(@accent-color 40%, @dark-base-color 100%); }
+    35% { background: radial-gradient(@accent-color 40%, @dark-base-color 100%); }
+    37.5% { background: radial-gradient(@accent-color 50%, @dark-base-color 100%); }
+    40% { background: radial-gradient(@accent-color 60%, @dark-base-color 100%); }
+    42.5% { background: radial-gradient(@accent-color 70%, @dark-base-color 100%); }
+    45% { background: radial-gradient(@accent-color 80%, @dark-base-color 100%); }
+    47.5% { background: radial-gradient(@accent-color 90%, @dark-base-color 100%); }
+    50% { background: radial-gradient(@accent-color 100%, @dark-base-color 100%); }
+    50.1% { background: radial-gradient(@dark-base-color 0%, @accent-color 0%); }
+    52.5% { background: radial-gradient(@dark-base-color 0%, @accent-color 10%); }
+    55% { background: radial-gradient(@dark-base-color 0%, @accent-color 20%); }
+    57.5% { background: radial-gradient(@dark-base-color 0%, @accent-color 30%); }
+    60% { background: radial-gradient(@dark-base-color 0%, @accent-color 40%); }
+    62.5% { background: radial-gradient(@dark-base-color 0%, @accent-color 50%); }
+    65% { background: radial-gradient(@dark-base-color 0%, @accent-color 60%); }
+    67.5% { background: radial-gradient(@dark-base-color 0%, @accent-color 70%); }
+    70% { background: radial-gradient(@dark-base-color 0%, @accent-color 80%); }
+    72.5% { background: radial-gradient(@dark-base-color 0%, @accent-color 90%); }
+    75% { background: radial-gradient(@dark-base-color 0%, @accent-color 100%); }
+    77.5% { background: radial-gradient(@dark-base-color 10%, @accent-color 100%); }
+    80% { background: radial-gradient(@dark-base-color 20%, @accent-color 100%); }
+    82.5% { background: radial-gradient(@dark-base-color 30%, @accent-color 100%); }
+    85% { background: radial-gradient(@dark-base-color 40%, @accent-color 100%); }
+    87.5% { background: radial-gradient(@dark-base-color 50%, @accent-color 100%); }
+    90% { background: radial-gradient(@dark-base-color 60%, @accent-color 100%); }
+    92.5% { background: radial-gradient(@dark-base-color 70%, @accent-color 100%); }
+    95% { background: radial-gradient(@dark-base-color 80%, @accent-color 100%); }
+    97.5% { background: radial-gradient(@dark-base-color 90%, @accent-color 100%); }
+    100% { background: radial-gradient(@dark-base-color 100%, @accent-color 100%); }
+}
 .monospace
 {
     .monospace-trait;
@@ -129,54 +234,17 @@ h1
     {
         white-space: nowrap;
     }
-    @media (max-width:780px)
-    {
-        &:not(.header-operator-has-focus)
-        {
-            //.segment:not(.last-segment):not(:hover)
-            .segment:not(.last-segment)
-            {
-                padding-right: 0.5rem;
-                .segment-title
-                {
-                    display: none;
-                }
-            }
-            .filter-frame
-            {
-                & > :not(.filter-icon)
-                {
-                    display: none;
-                }
-                .filter-icon
-                {
-                    svg
-                    {
-                        .negative-foreground-coloring-trait;
-                    }
-                }
-                background-color: transparent;
-                border-style: none;
-                border-width: 0px;
-                flex-grow: 0;
-            }
-        }
-        &.header-operator-has-focus
-        {
-            .segment
-            {
-                padding-right: 0.5rem;
-                .segment-title
-                {
-                    display: none;
-                }
-            }
-            .filter-frame
-            {
-                max-width: initial;
-            }
-        }
-    }
+    // @media (max-width:780px)
+    // {
+    //     .segment:not(.last-segment)
+    //     {
+    //         padding-right: 0.5rem;
+    //         .segment-title
+    //         {
+    //             display: none;
+    //         }
+    //     }
+    // }
     button.icon-button,
     button.menu-button
     {
@@ -400,94 +468,6 @@ h1
     margin: 0px;
     background-color: transparent !important;
     text-decoration: none !important;
-}
-.filter-frame
-{
-    .positive-foreground-coloring-trait;
-    .positive-background-coloring-trait;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-grow: 1;
-    justify-content: stretch;
-    //margin: 4px;
-    //padding: 4px 16px;
-    padding: 2px 4px;
-    border-radius: 32px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #8888;
-    font-size: 1.0rem;
-    max-width: 240px;
-    svg
-    {
-        color: #888;
-        fill: #888;
-        width: 1.5rem;
-        height: 1.5rem;
-    }
-    input
-    {
-        background-color: transparent;
-        border-style: none;
-        border-width: 0px;
-        margin: 0px;
-        padding: 0px 4px;
-        width: 60px; // この値自体は適当で直接的には全く意味がない・・・んだけど、この指定が無いとスマフォでシュリンクしてくれずにレイアウトが崩れる。
-        flex-grow: 1;
-    }
-    .dropdownlist
-    {
-        &:empty
-        {
-            display: none;
-        }
-        position: absolute;
-        .positive-background-coloring-trait;
-        top: 2.5rem;
-        max-height: 50vh;
-        overflow-y: auto;
-        border-style: solid;
-        border-width: 1px;
-        border-radius: 0.5rem;
-        border-color: @accent-color;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        // justify-content: stretch;
-        button
-        {
-            border-width: 0px;
-            border-style: none;
-            border-radius: initial;
-            margin: 0px;
-            text-align: left;
-        }
-    }
-}
-h1:not(.header-operator-has-focus)
-{
-    .filter-frame
-    {
-        .dropdownlist
-        {
-            display: none;;
-        }
-    }
-}
-h1.header-operator-has-focus
-{
-    .filter-frame
-    {
-        input:not(.empty) + .dropdownlist
-        {
-            display: none;;
-        }
-        .dropdownlist:empty
-        {
-            display: none;;
-        }
-    }
 }
 
 h2
@@ -771,26 +751,6 @@ button
         opacity: 0.0;
     }
 }
-.add-remove-tags-popup
-{
-    .check-button-list
-    {
-        display: flex;
-        position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: stretch;
-        justify-content: stretch;
-        flex-direction: column;
-
-        button
-        {
-            border-color: rgba(128,128,128,0.5);
-            border-style: solid;
-            border-width: 0px 0px 1px 0px;
-        }
-    }
-}
 .button-list
 {
     text-align: center;
@@ -976,7 +936,6 @@ button
     white-space: nowrap;
     height: 1.4em;
     margin-right: -120px;
-    cursor: pointer;
     svg
     {
         width: 1.4em;
@@ -987,7 +946,7 @@ button
     }
     .positive-foreground-coloring-trait;
 }
-.task-item
+.tick-item
 {
     position: relative;
     // padding: 0.5rem;
@@ -1012,7 +971,7 @@ button
         }
     }
 }
-.task-item
+.tick-item
 {
     .item-information
     {
@@ -1044,15 +1003,6 @@ button
             float: right;
         }
     }
-}
-
-.locale-parallel-on .task-item .item-header .item-title
-{
-    max-width: calc(100% - 180px);
-}
-.locale-parallel-off .task-item .item-header .item-title
-{
-    max-width: calc(100% - 120px);
 }
 .item-operator
 {
@@ -1121,50 +1071,6 @@ button
         {
             font-size: 7vw;
             line-height: 100%;
-        }
-    }
-    .tick-list
-    {
-        .tick-item
-        {
-            position: relative;
-            padding: 0.5rem;
-            display: inline-flex;
-            flex-direction: row;
-            align-items: center;
-            white-space: nowrap;
-            height: 3.8rem;
-            & > svg
-            {
-                width: 2.5rem;
-                height: 2.5rem;
-                margin-right: 0.5rem;
-                opacity: 0.6;
-            }
-            .item-information
-            {
-                width: 100%;
-                & > *
-                {
-                    opacity: 0.6;
-                    width: 100%;
-                    line-height: 1.4em;
-                    position: relative;
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    justify-content: space-between;
-                    flex-direction: row;
-                    // .value
-                    // {
-                    //     float: right;
-                    // }
-                }
-            }
-            .item-operator
-            {
-                padding-left: 0.5rem;
-            }
         }
     }
 }
