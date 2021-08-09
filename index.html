@@ -1,14 +1,16 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Aug 08 2021 20:20:14 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Aug 08 2021 22:18:38 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
 <meta name="theme-color" content="#5F42A7">
 <meta name="apple-mobile-web-app-title" content="Never Stop Watch">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Never Stop Watch</title>
 <link id="favicon" rel="shortcut icon" href="./image/never-stop-watch.1024.png">
-<link rel="apple-touch-icon" href="./image/cyclictodohex-ios.1024.png">
+<link rel="apple-touch-icon" href="./image/never-stop-watch-ios.1024.png">
 <style type="text/css">
 .clickable-trait {
   cursor: pointer;
@@ -186,12 +188,6 @@
   font: -apple-system-body;
   outline: none;
 }
-body {
-  margin: 0px;
-  margin-bottom: 5rem;
-  line-height: 100%;
-  overflow: hidden;
-}
 body,
 input,
 textarea {
@@ -213,6 +209,13 @@ textarea {
   textarea {
     background-color: #000022;
   }
+}
+body {
+  margin: 0px;
+  margin-bottom: 5rem;
+  line-height: 100%;
+  overflow: hidden;
+  background-color: rgba(95, 66, 167, 0.95);
 }
 @media (prefers-color-scheme: dark) {
   ::-webkit-calendar-picker-indicator {
@@ -248,7 +251,7 @@ ul {
   padding-inline-end: 16px;
   padding-inline-start: 40px;
 }
-body.flash {
+body.flash .screen {
   animation-name: flash;
   animation-direction: normal;
   animation-delay: 0s;
@@ -257,7 +260,7 @@ body.flash {
   animation-fill-mode: both;
 }
 @media (prefers-color-scheme: dark) {
-  body.flash {
+  body.flash .screen {
     animation-name: dark-flash;
   }
 }
@@ -1276,6 +1279,19 @@ button.delete-button {
     opacity: 0;
   }
 }
+.check-button-list {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-direction: column;
+}
+.check-button-list button {
+  border-color: rgba(128, 128, 128, 0.5);
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+}
 .button-list {
   text-align: center;
   padding: 0.5rem;
@@ -1526,6 +1542,9 @@ button.delete-button {
   }
 }
 .screen {
+  color: #000022;
+  fill: #000022;
+  background-color: #FFFFFF;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -1535,6 +1554,17 @@ button.delete-button {
   left: 0px;
   max-width: 100vw;
   max-height: 100vh;
+}
+@media (prefers-color-scheme: dark) {
+  .screen {
+    color: #FFFFFF;
+    fill: #FFFFFF;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .screen {
+    background-color: #000022;
+  }
 }
 .screen > :not(.screen-body) {
   flex-shrink: 0;
@@ -3737,6 +3767,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         case 0: return [4 /*yield*/, Render.localeSettingsPopup()];
                                         case 1:
                                             if (!_a.sent()) return [3 /*break*/, 3];
+                                            locale.setLocale(Storage.Settings.get().locale);
                                             return [4 /*yield*/, NeverStopWatch.reload()];
                                         case 2:
                                             _a.sent();

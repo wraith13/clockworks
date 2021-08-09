@@ -174,12 +174,6 @@
   font: -apple-system-body;
   outline: none;
 }
-body {
-  margin: 0px;
-  margin-bottom: 5rem;
-  line-height: 100%;
-  overflow: hidden;
-}
 body,
 input,
 textarea {
@@ -201,6 +195,13 @@ textarea {
   textarea {
     background-color: #000022;
   }
+}
+body {
+  margin: 0px;
+  margin-bottom: 5rem;
+  line-height: 100%;
+  overflow: hidden;
+  background-color: rgba(95, 66, 167, 0.95);
 }
 @media (prefers-color-scheme: dark) {
   ::-webkit-calendar-picker-indicator {

@@ -862,6 +862,7 @@ export module NeverStopWatch
                 {
                     if (await localeSettingsPopup())
                     {
+                        locale.setLocale(Storage.Settings.get().locale);
                         await reload();
                     }
                 }
