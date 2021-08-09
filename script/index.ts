@@ -648,12 +648,6 @@ export module NeverStopWatch
                 ]),
                 $div("item-operator")
                 ([
-                    // {
-                    //     tag: "button",
-                    //     className: "default-button main-button",
-                    //     children: "開く",
-                    //     onclick: async () => { }
-                    // },
                     await menuButton
                     ([
                         menuItem
@@ -675,7 +669,8 @@ export module NeverStopWatch
                                         {
                                             makeToast
                                             ({
-                                                content: "有効な範囲外な日時が指定されました。( 未来や極端に過去の日時は指定できません。 )",
+                                                content: "有効な範囲外な日時が指定されました。",
+                                                isWideContent: true,
                                             });
                                         }
                                     }
@@ -870,7 +865,8 @@ export module NeverStopWatch
             menuItem
             (
                 label("Reset"),
-                async () => await Operate.reset()
+                async () => await Operate.reset(),
+                "delete-button"
             ),
             externalLink
             ({
@@ -883,6 +879,10 @@ export module NeverStopWatch
             $div("capital-interval")
             ([
                 $span("value monospace")(Domain.timeLongStringFromTick(0)),
+            ]),
+            $div("current-timestamp")
+            ([
+                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
             ]),
             $div("button-list")
             ({
@@ -910,7 +910,7 @@ export module NeverStopWatch
                 $tag("ul")("locale-parallel-off")
                 ([
                     $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                    // $tag("li")("")("The larger the elapsed time, the less accurate the elapsed time display. / 経過時間が大きくなる程、経過時間表示は精度が低くなります。"),
+                    $tag("li")("")(labelSpan("スマートフォンのホーム画面に登録する事でアプリのようにも使えます。")),
                 ])
             )
         ]);
@@ -938,6 +938,26 @@ export module NeverStopWatch
                 {
                     case "high-resolution-timer":
                         (document.getElementsByClassName("home-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
+                        (document.getElementsByClassName("home-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateStringFromTick(Domain.getTicks());
+                        const flashInterval = Storage.flashInterval.get();
+                        if (0 < flashInterval && 0 < ticks.length)
+                        {
+                            const primaryStep = Math.floor((Domain.getTicks() -ticks[0]) / (Storage.flashInterval.get() *60 *1000));
+                            if (primaryStep === previousPrimaryStep +1)
+                            {
+                                document.body.classList.add("flash");
+                                setTimeout(() => document.body.classList.remove("flash"), 1500);
+                            }
+                            previousPrimaryStep = primaryStep;
+                            const unit = flashInterval *60 *1000;
+                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                        }
+                        else
+                        {
+                            previousPrimaryStep = 0;
+                            getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                        }
                         break;
                     case "timer":
                         document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
@@ -957,21 +977,6 @@ export module NeverStopWatch
                                 (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                             }
                         );
-                        const flashInterval = Storage.flashInterval.get();
-                        if (flashInterval)
-                        {
-                            const primaryStep = Math.floor((0 < ticks.length ? Domain.getTicks() -ticks[0]: 0) / (Storage.flashInterval.get() *60 *1000));
-                            if (primaryStep === previousPrimaryStep +1)
-                            {
-                                document.body.classList.add("flash");
-                                setTimeout(() => document.body.classList.remove("flash"), 1500);
-                            }
-                            previousPrimaryStep = primaryStep;
-                        }
-                        else
-                        {
-                            previousPrimaryStep = 0;
-                        }
                         break;
                     case "storage":
                         await reload();
@@ -1068,6 +1073,7 @@ export module NeverStopWatch
                 content: minamo.dom.Source,
                 backwardOperator?: minamo.dom.Source,
                 forwardOperator?: minamo.dom.Source,
+                isWideContent?: boolean,
                 wait?: number,
             }
         ): Toast =>
@@ -1076,7 +1082,12 @@ export module NeverStopWatch
             ({
                 tag: "div",
                 className: "item slide-up-in",
-                children:
+                children: data.isWideContent ?
+                [
+                    data.backwardOperator,
+                    data.content,
+                    data.forwardOperator,
+                ].filter(i => undefined !== i):
                 [
                     data.backwardOperator ?? $span("dummy")([]),
                     data.content,
@@ -1133,6 +1144,7 @@ export module NeverStopWatch
             }
             return latestPrimaryToast = makeToast(data);
         };
+        export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
         export const resizeFlexList = () =>
         {
             const minColumns = 1 +Math.floor(window.innerWidth / 780);
