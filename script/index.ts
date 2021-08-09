@@ -480,7 +480,7 @@ export module NeverStopWatch
                         className: "add-remove-tags-popup",
                         children:
                         [
-                            $tag("h2")("")(label("Display language setting")),
+                            $tag("h2")("")(label("Language setting")),
                             checkButtonList,
                             $div("popup-operator")
                             ([{
@@ -579,7 +579,7 @@ export module NeverStopWatch
             };
             return result;
         };
-        export const menuButton = async (menu: minamo.dom.Source) =>
+        export const menuButton = async (menu: minamo.dom.Source | (() => Promise<minamo.dom.Source>)) =>
         {
             let cover: { dom: HTMLDivElement, close: () => Promise<unknown> };
             const close = () =>
@@ -591,7 +591,7 @@ export module NeverStopWatch
             ({
                 tag: "div",
                 className: "menu-popup",
-                children: menu,
+                children: "function" !== typeof menu ? menu: [ ],
                 onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
@@ -608,10 +608,14 @@ export module NeverStopWatch
                 [
                     await Resource.loadSvgOrCache("ellipsis-icon"),
                 ],
-                onclick: (event: MouseEvent) =>
+                onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
                     console.log("menu-button.click!");
+                    if ("function" === typeof menu)
+                    {
+                        minamo.dom.replaceChildren(popup, await menu());
+                    }
                     popup.classList.add("show");
                     cover = screenCover
                     ({
@@ -704,12 +708,12 @@ export module NeverStopWatch
         {
             icon: Resource.KeyType;
             title: string;
-            menu?: minamo.dom.Source;
+            menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
         }
         export interface HeaderSource
         {
             items: HeaderSegmentSource[];
-            menu?: minamo.dom.Source;
+            menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
             operator?: minamo.dom.Source;
         }
         export interface ScreenSource
@@ -763,7 +767,7 @@ export module NeverStopWatch
             ({
                 tag: "div",
                 className: "menu-popup segment-popup",
-                children: item.menu,
+                children: "function" !== typeof item.menu ? item.menu: [ ],
                 onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
@@ -777,10 +781,14 @@ export module NeverStopWatch
                 tag: "div",
                 className: `segment ${className}`,
                 children: await screenHeaderSegmentCore(item),
-                onclick: (event: MouseEvent) =>
+                onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
                     console.log("menu-button.click!");
+                    if ("function" === typeof item.menu)
+                    {
+                        minamo.dom.replaceChildren(popup, await item.menu());
+                    }
                     popup.classList.add("show");
                     //popup.style.height = `${popup.offsetHeight -2}px`;
                     popup.style.width = `${popup.offsetWidth -2}px`;
@@ -801,8 +809,7 @@ export module NeverStopWatch
         });
         export const screenHeaderFlashSegmentMenu = async (flashInterval: number): Promise<minamo.dom.Source> => await Promise.all
         (
-            [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, ]
-            .map
+            config.flashIntervalPreset.map
             (
                 async i =>
                 menuItem
@@ -850,9 +857,24 @@ export module NeverStopWatch
         }
         export const screenMenu = async () =>
         [
+            document.fullscreenEnabled ?
+                (
+                    null === document.fullscreenElement ?
+                        menuItem
+                        (
+                            labelSpan("フルスクリーン表示"),
+                            async () => await document.body.requestFullscreen(),
+                        ):
+                        menuItem
+                        (
+                            labelSpan("フルスクリーン解除"),
+                            async () => await document.exitFullscreen(),
+                        )
+                ):
+                [],
             menuItem
             (
-                label("Display language setting"),
+                label("Language setting"),
                 async () =>
                 {
                     if (await localeSettingsPopup())
@@ -924,7 +946,7 @@ export module NeverStopWatch
                     await screenHeaderHomeSegment(),
                     await screenHeaderFlashSegment(Storage.flashInterval.get()),
                 ],
-                menu: await screenMenu()
+                menu: screenMenu
             },
             body: await screenBody(ticks)
         });
@@ -942,14 +964,15 @@ export module NeverStopWatch
                         const flashInterval = Storage.flashInterval.get();
                         if (0 < flashInterval && 0 < ticks.length)
                         {
-                            const primaryStep = Math.floor((Domain.getTicks() -ticks[0]) / (Storage.flashInterval.get() *60 *1000));
-                            if (primaryStep === previousPrimaryStep +1)
+                            const elapsed = Domain.getTicks() -ticks[0];
+                            const unit = flashInterval *60 *1000;
+                            const primaryStep = Math.floor(elapsed / unit);
+                            if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                             {
                                 document.body.classList.add("flash");
                                 setTimeout(() => document.body.classList.remove("flash"), 1500);
                             }
                             previousPrimaryStep = primaryStep;
-                            const unit = flashInterval *60 *1000;
                             const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
                             getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                         }
