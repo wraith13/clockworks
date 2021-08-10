@@ -1,4 +1,4 @@
-# Never Stop Watch
+# Never Stopwatch
 
 🚧 This static web application is under development. / この Static Web アプリは開発中です。
 
@@ -45,7 +45,7 @@ Debug builds embed map files.
 
 ## How to publish
 
-1. Fork [this repository](https://github.com/wraith13/never-stop-watch/) on GitHub.
+1. Fork [this repository](https://github.com/wraith13/never-stopwatch/) on GitHub.
 2. Go `Settings`(→`Options`)→`GitHub Pages`, select `master branch` from drop down list, and click `Save`.
 
 ## License

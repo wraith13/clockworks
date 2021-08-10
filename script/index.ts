@@ -38,23 +38,57 @@ export module locale
 export module NeverStopWatch
 {
     export const applicationTitle = config.applicationTitle;
+    export const application =
+    {
+        "Never Stopwatch":
+        {
+            icon: <Render.Resource.KeyType>"application-icon",
+            show: Render.showNeverStopwatchScreen,
+        },
+        "Countdown Timer":
+        {
+            icon: <Render.Resource.KeyType>"application-icon",
+            show: Render.showNeverStopwatchScreen,
+        },
+        "Rainbow Clock":
+        {
+            icon: <Render.Resource.KeyType>"tick-icon",
+            show: Render.showNeverStopwatchScreen,
+        },
+    };
     export interface Settings
     {
         locale?: locale.LocaleType;
     }
+    export interface AlermEntry
+    {
+        tick: number;
+        title: string;
+    }
     export module Storage
     {
         export let lastUpdate = 0;
-        export module History
+        export module Stamps
         {
-            export const makeKey = () => `${config.localDbPrefix}:history`;
+            export const makeKey = () => `${config.localDbPrefix}:stamps`;
             export const get = (): number[] => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
             export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
             export const removeKey = () => minamo.localStorage.remove(makeKey());
             export const add = (tick: number | number[]) =>
                 set(get().concat(tick).sort(simpleReverseComparer));
-            export const remove = (tick: number | number[]) =>
+            export const remove = (tick: number) =>
                 set(get().filter(i => tick !== i).sort(simpleReverseComparer));
+        }
+        export module Alerms
+        {
+            export const makeKey = () => `${config.localDbPrefix}:alerms`;
+            export const get = (): AlermEntry[] => minamo.localStorage.getOrNull<AlermEntry[]>(makeKey()) ?? [];
+            export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list);
+            export const removeKey = () => minamo.localStorage.remove(makeKey());
+            export const add = (tick: AlermEntry | AlermEntry[]) =>
+                set(get().concat(tick).sort(simpleReverseComparer));
+            export const remove = (tick: AlermEntry) =>
+                set(get().filter(i => JSON.stringify(tick) !== JSON.stringify(i)).sort(simpleReverseComparer));
         }
         export module Settings
         {
@@ -232,8 +266,8 @@ export module NeverStopWatch
         {
             export const done = async (tick: number, onCanceled?: () => unknown) =>
             {
-                const backup = Storage.History.get();
-                Storage.History.add(tick);
+                const backup = Storage.Stamps.get();
+                Storage.Stamps.add(tick);
                 updateWindow("operate");
                 const toast = makePrimaryToast
                 ({
@@ -242,7 +276,7 @@ export module NeverStopWatch
                     (
                         async () =>
                         {
-                            Storage.History.set(backup);
+                            Storage.Stamps.set(backup);
                             updateWindow("operate");
                             await toast.hide();
                             onCanceled?.();
@@ -252,9 +286,9 @@ export module NeverStopWatch
             };
             export const edit = async (oldTick: number, newTick: number, onCanceled?: () => unknown) =>
             {
-                const backup = Storage.History.get();
-                Storage.History.remove(oldTick);
-                Storage.History.add(newTick);
+                const backup = Storage.Stamps.get();
+                Storage.Stamps.remove(oldTick);
+                Storage.Stamps.add(newTick);
                 updateWindow("operate");
                 const toast = makePrimaryToast
                 ({
@@ -263,7 +297,7 @@ export module NeverStopWatch
                     (
                         async () =>
                         {
-                            Storage.History.set(backup);
+                            Storage.Stamps.set(backup);
                             updateWindow("operate");
                             await toast.hide();
                             onCanceled?.();
@@ -273,8 +307,8 @@ export module NeverStopWatch
             };
             export const remove = async (tick: number, onCanceled?: () => unknown) =>
             {
-                const backup = Storage.History.get();
-                Storage.History.remove(tick);
+                const backup = Storage.Stamps.get();
+                Storage.Stamps.remove(tick);
                 updateWindow("operate");
                 const toast = makePrimaryToast
                 ({
@@ -283,7 +317,7 @@ export module NeverStopWatch
                     (
                         async () =>
                         {
-                            Storage.History.set(backup);
+                            Storage.Stamps.set(backup);
                             updateWindow("operate");
                             await toast.hide();
                             onCanceled?.();
@@ -293,8 +327,8 @@ export module NeverStopWatch
             };
             export const reset = async (onCanceled?: () => unknown) =>
             {
-                const backup = Storage.History.get();
-                Storage.History.removeKey();
+                const backup = Storage.Stamps.get();
+                Storage.Stamps.removeKey();
                 updateWindow("operate");
                 const toast = makePrimaryToast
                 ({
@@ -303,7 +337,7 @@ export module NeverStopWatch
                     (
                         async () =>
                         {
-                            Storage.History.set(backup);
+                            Storage.Stamps.set(backup);
                             updateWindow("operate");
                             await toast.hide();
                             onCanceled?.();
@@ -802,10 +836,23 @@ export module NeverStopWatch
             });
             return [ segment, popup, ];
         };
-        export const screenHeaderHomeSegment = async (): Promise<HeaderSegmentSource> =>
+        export const screenHeaderHomeSegment = async (applicationType: keyof typeof application): Promise<HeaderSegmentSource> =>
         ({
-            icon: "application-icon",
-            title: NeverStopWatch.applicationTitle,
+            icon: application[applicationType].icon,
+            title: applicationType,
+            menu: await Promise.all
+            (
+                Object.keys(application).map
+                (
+                    async i =>
+                    menuItem
+                    (
+                        [ await Resource.loadSvgOrCache(application[i].icon), i, ],
+                        async () => await application[i].show(),
+                        applicationType === i ? "current-item": undefined
+                    )
+                )
+            )
         });
         export const screenHeaderFlashSegmentMenu = async (flashInterval: number): Promise<minamo.dom.Source> => await Promise.all
         (
@@ -896,7 +943,7 @@ export module NeverStopWatch
                 children: menuItem(labelSpan("GitHub")),
             }),
         ];
-        export const screenBody = async (ticks: number[]) =>
+        export const NeverStopwatchScreenBody = async (ticks: number[]) =>
         ([
             $div("capital-interval")
             ([
@@ -936,31 +983,31 @@ export module NeverStopWatch
                 ])
             )
         ]);
-        export const screen = async (ticks: number[]): Promise<ScreenSource> =>
+        export const neverStopwatchScreen = async (ticks: number[]): Promise<ScreenSource> =>
         ({
-            className: "home-screen",
+            className: "never-stopwatch-screen",
             header:
             {
                 items:
                 [
-                    await screenHeaderHomeSegment(),
+                    await screenHeaderHomeSegment("Never Stopwatch"),
                     await screenHeaderFlashSegment(Storage.flashInterval.get()),
                 ],
                 menu: screenMenu
             },
-            body: await screenBody(ticks)
+            body: await NeverStopwatchScreenBody(ticks)
         });
         let previousPrimaryStep = 0;
-        export const showScreen = async () =>
+        export const showNeverStopwatchScreen = async () =>
         {
-            let ticks = Storage.History.get();
+            let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 switch(event)
                 {
                     case "high-resolution-timer":
-                        (document.getElementsByClassName("home-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
-                        (document.getElementsByClassName("home-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateStringFromTick(Domain.getTicks());
+                        (document.getElementsByClassName("never-stopwatch-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
+                        (document.getElementsByClassName("never-stopwatch-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateStringFromTick(Domain.getTicks());
                         const flashInterval = Storage.flashInterval.get();
                         if (0 < flashInterval && 0 < ticks.length)
                         {
@@ -989,7 +1036,7 @@ export module NeverStopWatch
                             (
                                 (
                                     document
-                                        .getElementsByClassName("home-screen")[0]
+                                        .getElementsByClassName("never-stopwatch-screen")[0]
                                         .getElementsByClassName("tick-list")[0] as HTMLDivElement
                                 ).childNodes
                             ) as HTMLDivElement[]
@@ -1006,14 +1053,14 @@ export module NeverStopWatch
                         break;
                     case "operate":
                         previousPrimaryStep = 0;
-                        ticks = Storage.History.get();
-                        replaceScreenBody(await screenBody(ticks));
+                        ticks = Storage.Stamps.get();
+                        replaceScreenBody(await NeverStopwatchScreenBody(ticks));
                         resizeFlexList();
                         await updateWindow("timer");
                         break;
                 }
             };
-            await showWindow(await screen(ticks), updateWindow);
+            await showWindow(await neverStopwatchScreen(ticks), updateWindow);
             await updateWindow("timer");
         };
         export const updateTitle = () =>
@@ -1370,13 +1417,15 @@ export module NeverStopWatch
                 body.scrollTo(0, 0);
             }
         );
-        await showPage();
+        await showPage("Never Stopwatch");
     };
-    export const showPage = async () =>
+    let currentApplicationType: keyof typeof application = "Never Stopwatch";
+    export const showPage = async (applicationType: keyof typeof application) =>
     {
+        currentApplicationType = applicationType;
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
-        await Render.showScreen();
+        await application[applicationType].show();
     };
-    export const reload = async () => await showPage();
+    export const reload = async () => await showPage(currentApplicationType);
 }

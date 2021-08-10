@@ -1,7 +1,7 @@
 {
-  "name": "never-stop-watch",
+  "name": "never-stopwatch",
   "version": "1.0.0",
-  "description": "Never Stop Watch Static Web Application",
+  "description": "Never Stopwatch Static Web Application",
   "scripts": {
     "build all": "node ./build.js release",
     "build html": "node ./build.js none",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wraith13/cnever-stop-watch.git"
+    "url": "git+https://github.com/wraith13/cnever-stopwatch.git"
   },
   "author": "wraith13",
   "license": "BSL-1.0",
   "bugs": {
-    "url": "https://github.com/wraith13/never-stop-watch/issues"
+    "url": "https://github.com/wraith13/never-stopwatch/issues"
   },
-  "homepage": "https://github.com/wraith13/never-stop-watch",
+  "homepage": "https://github.com/wraith13/never-stopwatch",
   "devDependencies": {
     "less": "^4.1.1",
     "typescript": "^4.2.3"
