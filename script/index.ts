@@ -862,12 +862,12 @@ export module NeverStopWatch
                     null === document.fullscreenElement ?
                         menuItem
                         (
-                            labelSpan("フルスクリーン表示"),
+                            label("Full screen"),
                             async () => await document.body.requestFullscreen(),
                         ):
                         menuItem
                         (
-                            labelSpan("フルスクリーン解除"),
+                            label("Cancel full screen"),
                             async () => await document.exitFullscreen(),
                         )
                 ):
@@ -932,7 +932,7 @@ export module NeverStopWatch
                 $tag("ul")("locale-parallel-off")
                 ([
                     $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                    $tag("li")("")(labelSpan("スマートフォンのホーム画面に登録する事でアプリのようにも使えます。")),
+                    $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                 ])
             )
         ]);

@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Aug 09 2021 23:29:30 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Aug 10 2021 10:43:44 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -2963,6 +2963,8 @@ define("resource/config", [], {
 });
 define("resource/lang.en", [], {
     "$name": "English",
+    "Full screen": "Full screen",
+    "Cancel full screen": "Cancel full screen",
     "elapsed time": "elapsed time",
     "Stamp": "Stamp",
     "days": "days",
@@ -2985,10 +2987,13 @@ define("resource/lang.en", [], {
     "Updated.": "Updated.",
     "Removed.": "Removed.",
     "Reseted.": "Reseted.",
-    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first."
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
+    "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone."
 });
 define("resource/lang.ja", [], {
     "$name": "日本語",
+    "Full screen": "フルスクリーン表示",
+    "Cancel full screen": "フルスクリーン解除",
     "elapsed time": "経過時間",
     "Stamp": "スタンプ",
     "days": "日",
@@ -3010,7 +3015,8 @@ define("resource/lang.ja", [], {
     "Updated.": "更新しました。",
     "Removed.": "削除しました。",
     "Reseted.": "リセットしました。",
-    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。"
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
+    "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。"
 });
 define("resource/images", [], {
     "application-icon": "./image/never-stop-watch.1024.svg",
@@ -4016,13 +4022,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     return [2 /*return*/, [
                             document.fullscreenEnabled ?
                                 (null === document.fullscreenElement ?
-                                    Render.menuItem(Render.labelSpan("フルスクリーン表示"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                    Render.menuItem(Render.label("Full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0: return [4 /*yield*/, document.body.requestFullscreen()];
                                             case 1: return [2 /*return*/, _a.sent()];
                                         }
                                     }); }); }) :
-                                    Render.menuItem(Render.labelSpan("フルスクリーン解除"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                    Render.menuItem(Render.label("Cancel full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0: return [4 /*yield*/, document.exitFullscreen()];
                                             case 1: return [2 /*return*/, _a.sent()];
@@ -4085,7 +4091,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 _b.apply(void 0, [_c.sent()]),
                                 Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                     Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                    Render.$tag("li")("")(Render.labelSpan("スマートフォンのホーム画面に登録する事でアプリのようにも使えます。")),
+                                    Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                 ]))
                             ]))];
                     }
@@ -4514,7 +4520,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
 <!-- meta name="twitter:creator" content="@wraith13" -->
 <meta name="twitter:title" content="Never Stop Watch">
 <meta name="twitter:description" content="Never Stop Watch Static Web Application">
-<meta name="twitter:image" content="https://wraith13.github.io/never-stop-watch/image/cyclictodobox.1024.png">
+<meta name="twitter:image" content="https://wraith13.github.io/never-stop-watch/image/never-stop-watch-twitter-card.png">
 </head>
 <body onload="require('script/index').NeverStopWatch.start()"><div id="screen"><h1 id="screen-header" class="segmented"></h1><div id="screen-body" class="screen-body"></div><div id="screen-toast"></div></div><div id="images" style="display: none;"><div id="application-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path id="output" d="M156.588,697.19C156.579,696.794 156.574,696.397 156.574,696C156.574,669.508 178.082,648 204.574,648C222.546,648 238.224,657.899 246.449,672.536L246.78,672.344C296.651,758.208 389.63,816 496,816C574.156,816 645.083,784.8 696.984,734.197C709.04,765.925 737.449,789.628 771.889,794.99C702.072,867.123 604.235,912 496,912C416.664,912 342.916,887.889 281.696,846.607L156,919.061L156.155,696.939L156.588,697.19ZM746.963,669.301C770.538,627.557 784,579.338 784,528C784,395.466 694.283,283.722 572.304,250.234C584.659,234.074 592,213.888 592,192C592,178.584 589.242,165.808 584.265,154.211C753.716,194.132 880,346.435 880,528C880,537.769 879.634,547.453 878.916,557.047L1000.22,627.195L819.083,731.607C810.548,739.39 799.202,744.137 786.757,744.137C760.265,744.137 738.757,722.629 738.757,696.137C738.757,686.2 741.783,676.964 746.963,669.301ZM487.806,524.395L618.311,394.045C636.904,375.474 667.078,375.492 685.649,394.085L686.193,394.629C704.764,413.223 704.746,443.396 686.153,461.968L523.166,624.761C522.717,625.249 522.254,625.732 521.778,626.208C514.727,633.263 506.02,637.663 496.902,639.408L495.872,639.593C494.28,639.863 492.661,640.054 491.02,640.162L489.569,640.236L488.742,640.259L487.507,640.267L487.26,640.264C482.449,640.21 477.806,639.446 473.434,638.072L473.266,638.019C466.181,635.773 459.514,631.843 453.896,626.229L348.021,520.417C329.282,501.69 329.273,471.273 348,452.535C366.727,433.797 397.144,433.788 415.882,452.515L487.806,524.395ZM515.177,147.97C532.136,155.378 544,172.305 544,191.98C544,218.472 522.492,239.98 496,239.98L495.692,239.979L495.692,240C336.894,240.155 208,369.144 208,528C208,553.162 211.234,577.575 217.307,600.839C213.141,600.286 208.891,600 204.574,600C173.34,600 145.57,614.949 128.036,638.073C117.606,603.21 112,566.254 112,528C112,374.863 201.835,242.542 331.617,180.916L331.713,41.877L515.177,147.97Z"/>

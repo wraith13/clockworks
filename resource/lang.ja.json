@@ -1,5 +1,7 @@
 {
     "$name": "日本語",
+    "Full screen": "フルスクリーン表示",
+    "Cancel full screen": "フルスクリーン解除",
     "elapsed time": "経過時間",
     "Stamp": "スタンプ",
     "days": "日",
@@ -21,5 +23,6 @@
     "Updated.": "更新しました。",
     "Removed.": "削除しました。",
     "Reseted.": "リセットしました。",
-    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。"
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
+    "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。"
 }

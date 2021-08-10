@@ -8,6 +8,7 @@
 - ✅️ Supports PCs and smartphones. / PCとスマフォをサポート。
 - ✅️ ダークモード対応
 - ✅️ 多言語対応
+- 🚧 PWS対応
 
 ## Development environment construction
 

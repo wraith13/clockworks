@@ -1,5 +1,7 @@
 {
     "$name": "English",
+    "Full screen": "Full screen",
+    "Cancel full screen": "Cancel full screen",
     "elapsed time": "elapsed time",
     "Stamp": "Stamp",
     "days": "days",
@@ -22,5 +24,6 @@
     "Updated.": "Updated.",
     "Removed.": "Removed.",
     "Reseted.": "Reseted.",
-    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first."
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
+    "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone."
 }
