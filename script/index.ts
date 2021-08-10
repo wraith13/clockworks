@@ -35,7 +35,7 @@ export module locale
     export const map = (key : LocaleKeyType) : string => string(key);
     export const parallel = (key : LocaleKeyType) : string => `${getPrimary(key)} / ${getSecondary(key)}`;
 }
-export module NeverStopWatch
+export module NeverStopwatch
 {
     export const applicationTitle = config.applicationTitle;
     export const application =
@@ -43,17 +43,17 @@ export module NeverStopWatch
         "Never Stopwatch":
         {
             icon: <Render.Resource.KeyType>"application-icon",
-            show: Render.showNeverStopwatchScreen,
+            show: async () => await Render.showNeverStopwatchScreen(),
         },
         "Countdown Timer":
         {
             icon: <Render.Resource.KeyType>"application-icon",
-            show: Render.showNeverStopwatchScreen,
+            show: async () => await Render.showNeverStopwatchScreen(),
         },
         "Rainbow Clock":
         {
             icon: <Render.Resource.KeyType>"tick-icon",
-            show: Render.showNeverStopwatchScreen,
+            show: async () => await Render.showNeverStopwatchScreen(),
         },
     };
     export interface Settings
@@ -94,8 +94,8 @@ export module NeverStopWatch
         {
             export const makeKey = () => `${config.localDbPrefix}:settings`;
             export const get = () =>
-                minamo.localStorage.getOrNull<NeverStopWatch.Settings>(makeKey()) ?? { };
-            export const set = (settings: NeverStopWatch.Settings) =>
+                minamo.localStorage.getOrNull<NeverStopwatch.Settings>(makeKey()) ?? { };
+            export const set = (settings: NeverStopwatch.Settings) =>
                 minamo.localStorage.set(makeKey(), settings);
         }
         export module flashInterval

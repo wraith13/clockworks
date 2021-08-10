@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Aug 10 2021 21:59:54 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Aug 10 2021 22:28:11 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Never Stopwatch">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Never Stopwatch</title>
+<title>Never Stopwatch XXXX</title>
 <link id="favicon" rel="shortcut icon" href="./image/never-stopwatch.1024.png">
 <link rel="apple-touch-icon" href="./image/never-stopwatch-ios.1024.png">
 <style type="text/css">
@@ -3029,7 +3029,7 @@ define("resource/images", [], {
 define("script/index", ["require", "exports", "script/minamo.js/index", "resource/config", "resource/lang.en", "resource/lang.ja"], function (require, exports, minamo_js_1, config_json_1, lang_en_json_1, lang_ja_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NeverStopWatch = exports.locale = exports.simpleReverseComparer = exports.simpleComparer = void 0;
+    exports.NeverStopwatch = exports.locale = exports.simpleReverseComparer = exports.simpleComparer = void 0;
     config_json_1 = __importDefault(config_json_1);
     lang_en_json_1 = __importDefault(lang_en_json_1);
     lang_ja_json_1 = __importDefault(lang_ja_json_1);
@@ -3059,22 +3059,37 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         locale_1.map = function (key) { return locale_1.string(key); };
         locale_1.parallel = function (key) { return locale_1.getPrimary(key) + " / " + locale_1.getSecondary(key); };
     })(locale = exports.locale || (exports.locale = {}));
-    var NeverStopWatch;
-    (function (NeverStopWatch) {
+    var NeverStopwatch;
+    (function (NeverStopwatch) {
         var _this = this;
-        NeverStopWatch.applicationTitle = config_json_1.default.applicationTitle;
-        NeverStopWatch.application = {
+        NeverStopwatch.applicationTitle = config_json_1.default.applicationTitle;
+        NeverStopwatch.application = {
             "Never Stopwatch": {
                 icon: "application-icon",
-                show: Render.showNeverStopwatchScreen,
+                show: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, Render.showNeverStopwatchScreen()];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                }); }); },
             },
             "Countdown Timer": {
                 icon: "application-icon",
-                show: Render.showNeverStopwatchScreen,
+                show: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, Render.showNeverStopwatchScreen()];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                }); }); },
             },
             "Rainbow Clock": {
                 icon: "tick-icon",
-                show: Render.showNeverStopwatchScreen,
+                show: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, Render.showNeverStopwatchScreen()];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                }); }); },
             },
         };
         var Storage;
@@ -3120,7 +3135,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
                 flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
             })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
-        })(Storage = NeverStopWatch.Storage || (NeverStopWatch.Storage = {}));
+        })(Storage = NeverStopwatch.Storage || (NeverStopwatch.Storage = {}));
         var Domain;
         (function (Domain) {
             Domain.getTicks = function (date) {
@@ -3239,7 +3254,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
                 return null;
             };
-        })(Domain = NeverStopWatch.Domain || (NeverStopWatch.Domain = {}));
+        })(Domain = NeverStopwatch.Domain || (NeverStopwatch.Domain = {}));
         var Render;
         (function (Render) {
             var _this = this;
@@ -3976,20 +3991,20 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     switch (_b.label) {
                         case 0:
                             _a = {
-                                icon: NeverStopWatch.application[applicationType].icon,
+                                icon: NeverStopwatch.application[applicationType].icon,
                                 title: applicationType
                             };
-                            return [4 /*yield*/, Promise.all(Object.keys(NeverStopWatch.application).map(function (i) { return __awaiter(_this, void 0, void 0, function () {
+                            return [4 /*yield*/, Promise.all(Object.keys(NeverStopwatch.application).map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                     var _a;
                                     var _this = this;
                                     return __generator(this, function (_b) {
                                         switch (_b.label) {
                                             case 0:
                                                 _a = Render.menuItem;
-                                                return [4 /*yield*/, Resource.loadSvgOrCache(NeverStopWatch.application[i].icon)];
+                                                return [4 /*yield*/, Resource.loadSvgOrCache(NeverStopwatch.application[i].icon)];
                                             case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), i], function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                                         switch (_a.label) {
-                                                            case 0: return [4 /*yield*/, NeverStopWatch.application[i].show()];
+                                                            case 0: return [4 /*yield*/, NeverStopwatch.application[i].show()];
                                                             case 1: return [2 /*return*/, _a.sent()];
                                                         }
                                                     }); }); }, applicationType === i ? "current-item" : undefined])];
@@ -4021,7 +4036,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         switch (_a.label) {
                                                             case 0:
                                                                 Storage.flashInterval.set(i);
-                                                                return [4 /*yield*/, NeverStopWatch.reload()];
+                                                                return [4 /*yield*/, NeverStopwatch.reload()];
                                                             case 1:
                                                                 _a.sent();
                                                                 return [2 /*return*/];
@@ -4093,7 +4108,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         case 1:
                                             if (!_a.sent()) return [3 /*break*/, 3];
                                             locale.setLocale(Storage.Settings.get().locale);
-                                            return [4 /*yield*/, NeverStopWatch.reload()];
+                                            return [4 /*yield*/, NeverStopwatch.reload()];
                                         case 2:
                                             _a.sent();
                                             _a.label = 3;
@@ -4219,14 +4234,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 8];
                                         case 2:
-                                            document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + NeverStopWatch.applicationTitle : NeverStopWatch.applicationTitle);
+                                            document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + NeverStopwatch.applicationTitle : NeverStopwatch.applicationTitle);
                                             Array.from(document
                                                 .getElementsByClassName("never-stopwatch-screen")[0]
                                                 .getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
                                                 dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
                                             });
                                             return [3 /*break*/, 8];
-                                        case 3: return [4 /*yield*/, NeverStopWatch.reload()];
+                                        case 3: return [4 /*yield*/, NeverStopwatch.reload()];
                                         case 4:
                                             _c.sent();
                                             return [3 /*break*/, 8];
@@ -4260,7 +4275,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             Render.updateTitle = function () {
                 var _a, _b, _c;
-                document.title = (_c = (_b = (_a = Array.from(Render.getHeaderElement().getElementsByClassName("segment-title"))) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : NeverStopWatch.applicationTitle;
+                document.title = (_c = (_b = (_a = Array.from(Render.getHeaderElement().getElementsByClassName("segment-title"))) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : NeverStopwatch.applicationTitle;
             };
             var updateWindowTimer = undefined;
             Render.getHeaderElement = function () { return document.getElementById("screen-header"); };
@@ -4279,7 +4294,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 if (!("storage" === event || "operate" === event)) return [3 /*break*/, 2];
-                                                return [4 /*yield*/, NeverStopWatch.reload()];
+                                                return [4 /*yield*/, NeverStopwatch.reload()];
                                             case 1:
                                                 _a.sent();
                                                 _a.label = 2;
@@ -4494,8 +4509,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 }
             };
-        })(Render = NeverStopWatch.Render || (NeverStopWatch.Render = {}));
-        NeverStopWatch.start = function () { return __awaiter(_this, void 0, void 0, function () {
+        })(Render = NeverStopwatch.Render || (NeverStopwatch.Render = {}));
+        NeverStopwatch.start = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -4536,7 +4551,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 }
                             });
                         }); });
-                        return [4 /*yield*/, NeverStopWatch.showPage("Never Stopwatch")];
+                        return [4 /*yield*/, NeverStopwatch.showPage("Never Stopwatch")];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -4544,27 +4559,27 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             });
         }); };
         var currentApplicationType = "Never Stopwatch";
-        NeverStopWatch.showPage = function (applicationType) { return __awaiter(_this, void 0, void 0, function () {
+        NeverStopwatch.showPage = function (applicationType) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         currentApplicationType = applicationType;
                         window.scrollTo(0, 0);
                         document.getElementById("screen-body").scrollTo(0, 0);
-                        return [4 /*yield*/, NeverStopWatch.application[applicationType].show()];
+                        return [4 /*yield*/, NeverStopwatch.application[applicationType].show()];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
                 }
             });
         }); };
-        NeverStopWatch.reload = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        NeverStopwatch.reload = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, NeverStopWatch.showPage(currentApplicationType)];
+                case 0: return [4 /*yield*/, NeverStopwatch.showPage(currentApplicationType)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); };
-    })(NeverStopWatch = exports.NeverStopWatch || (exports.NeverStopWatch = {}));
+    })(NeverStopwatch = exports.NeverStopwatch || (exports.NeverStopwatch = {}));
 });
 
 </script>
@@ -4575,7 +4590,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
 <meta name="twitter:description" content="Never Stopwatch Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/never-stopwatch/image/never-stopwatch-twitter-card.png">
 </head>
-<body onload="require('script/index').NeverStopWatch.start()"><div id="screen"><h1 id="screen-header" class="segmented"></h1><div id="screen-body" class="screen-body"></div><div id="screen-toast"></div></div><div id="images" style="display: none;"><div id="application-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<body onload="require('script/index').NeverStopwatch.start()"><div id="screen"><h1 id="screen-header" class="segmented"></h1><div id="screen-body" class="screen-body"></div><div id="screen-toast"></div></div><div id="images" style="display: none;"><div id="application-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path id="output" d="M156.588,697.19C156.579,696.794 156.574,696.397 156.574,696C156.574,669.508 178.082,648 204.574,648C222.546,648 238.224,657.899 246.449,672.536L246.78,672.344C296.651,758.208 389.63,816 496,816C574.156,816 645.083,784.8 696.984,734.197C709.04,765.925 737.449,789.628 771.889,794.99C702.072,867.123 604.235,912 496,912C416.664,912 342.916,887.889 281.696,846.607L156,919.061L156.155,696.939L156.588,697.19ZM746.963,669.301C770.538,627.557 784,579.338 784,528C784,395.466 694.283,283.722 572.304,250.234C584.659,234.074 592,213.888 592,192C592,178.584 589.242,165.808 584.265,154.211C753.716,194.132 880,346.435 880,528C880,537.769 879.634,547.453 878.916,557.047L1000.22,627.195L819.083,731.607C810.548,739.39 799.202,744.137 786.757,744.137C760.265,744.137 738.757,722.629 738.757,696.137C738.757,686.2 741.783,676.964 746.963,669.301ZM487.806,524.395L618.311,394.045C636.904,375.474 667.078,375.492 685.649,394.085L686.193,394.629C704.764,413.223 704.746,443.396 686.153,461.968L523.166,624.761C522.717,625.249 522.254,625.732 521.778,626.208C514.727,633.263 506.02,637.663 496.902,639.408L495.872,639.593C494.28,639.863 492.661,640.054 491.02,640.162L489.569,640.236L488.742,640.259L487.507,640.267L487.26,640.264C482.449,640.21 477.806,639.446 473.434,638.072L473.266,638.019C466.181,635.773 459.514,631.843 453.896,626.229L348.021,520.417C329.282,501.69 329.273,471.273 348,452.535C366.727,433.797 397.144,433.788 415.882,452.515L487.806,524.395ZM515.177,147.97C532.136,155.378 544,172.305 544,191.98C544,218.472 522.492,239.98 496,239.98L495.692,239.979L495.692,240C336.894,240.155 208,369.144 208,528C208,553.162 211.234,577.575 217.307,600.839C213.141,600.286 208.891,600 204.574,600C173.34,600 145.57,614.949 128.036,638.073C117.606,603.21 112,566.254 112,528C112,374.863 201.835,242.542 331.617,180.916L331.713,41.877L515.177,147.97Z"/>
 </svg>
 </div><div id="ellipsis-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
