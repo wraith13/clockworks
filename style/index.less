@@ -1183,6 +1183,65 @@ button
         }
     }
 }
+.rainbow-clock-screen
+{
+    z-index: 0;
+    background-color: transparent;
+    h1
+    {
+        // z-index: 300;
+        background-color: transparent;
+    }
+    .screen-body
+    {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 5.0rem;
+        // width: 100vw;
+        // height: calc(100vh - 5.0rem);
+        .main-panel
+        {
+            // z-index: 100;
+            .capital-time
+            {
+                // text-align: center;
+                padding-bottom: 16px;
+                .value
+                {
+                    font-size: 9vw;
+                    line-height: 100%;
+                }
+            }
+            .current-date
+            {
+                // text-align: center;
+                // padding-bottom: 16px;
+                .value
+                {
+                    color: #888;
+                    font-size: 6vw;
+                    line-height: 100%;
+                }
+            }
+        }
+        .minutes-bar
+        {
+            z-index: -10;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            border-width: 0px;
+            border-style: solid;
+            border-color: @base-color;
+            @media (prefers-color-scheme: dark)
+            {
+                border-color: @dark-base-color;
+            }
+        }
+    }
+}
 @keyframes late-fade-in
 {
     0%

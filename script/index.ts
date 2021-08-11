@@ -48,12 +48,12 @@ export module NeverStopwatch
         "Countdown Timer":
         {
             icon: <Render.Resource.KeyType>"application-icon",
-            show: async () => await Render.showNeverStopwatchScreen(),
+            show: async () => await Render.showCountdownTimerScreen(),
         },
         "Rainbow Clock":
         {
             icon: <Render.Resource.KeyType>"tick-icon",
-            show: async () => await Render.showNeverStopwatchScreen(),
+            show: async () => await Render.showRainbowClockScreen(),
         },
     };
     export interface Settings
@@ -62,8 +62,10 @@ export module NeverStopwatch
     }
     export interface AlermEntry
     {
-        tick: number;
+        type: "timer" | "schedule";
         title: string;
+        start: number;
+        end: number;
     }
     export module Storage
     {
@@ -103,6 +105,12 @@ export module NeverStopwatch
             export const makeKey = () => `${config.localDbPrefix}:flashInterval`;
             export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
             export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+        }
+        export module lastApplication
+        {
+            export const makeKey = () => `${config.localDbPrefix}:lastApplication`;
+            export const get = () => minamo.localStorage.getOrNull<keyof typeof application>(makeKey()) ?? "Never Stopwatch";
+            export const set = (value: keyof typeof application) => minamo.localStorage.set(makeKey(), value);
         }
     }
     export module Domain
@@ -554,7 +562,7 @@ export module NeverStopwatch
                 await minamo.core.timeout(500);
                 minamo.dom.remove(dom);
             };
-            minamo.dom.appendChildren(document.body, dom);
+            minamo.dom.appendChildren(document.getElementById("screen"), dom);
             const result =
             {
                 dom,
@@ -1000,6 +1008,7 @@ export module NeverStopwatch
         let previousPrimaryStep = 0;
         export const showNeverStopwatchScreen = async () =>
         {
+            Storage.lastApplication.set("Never Stopwatch");
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
@@ -1063,6 +1072,209 @@ export module NeverStopwatch
             await showWindow(await neverStopwatchScreen(ticks), updateWindow);
             await updateWindow("timer");
         };
+        export const countdownTimerScreenBody = async (ticks: number[]) =>
+        ([
+            $div("capital-interval")
+            ([
+                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+            ]),
+            $div("current-timestamp")
+            ([
+                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+            ]),
+            $div("button-list")
+            ({
+                tag: "button",
+                className: "default-button main-button long-button",
+                children: label("Stamp"),
+                onclick: async () => await Operate.done(Domain.getTicks())
+            }),
+            $div("column-flex-list tick-list")
+            (
+                await Promise.all
+                (
+                    ticks.map
+                    (
+                        (tick, index) => tickItem
+                        (
+                            tick,
+                            "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
+                        )
+                    )
+                )
+            ),
+            $div("description")
+            (
+                $tag("ul")("locale-parallel-off")
+                ([
+                    $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                    $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                ])
+            )
+        ]);
+        export const countdownTimerScreen = async (ticks: number[]): Promise<ScreenSource> =>
+        ({
+            className: "countdown-timer-screen",
+            header:
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment("Countdown Timer"),
+                    await screenHeaderFlashSegment(Storage.flashInterval.get()),
+                ],
+                menu: screenMenu
+            },
+            body: await countdownTimerScreenBody(ticks)
+        });
+        export const showCountdownTimerScreen = async () =>
+        {
+            Storage.lastApplication.set("Countdown Timer");
+            let ticks = Storage.Stamps.get();
+            const updateWindow = async (event: UpdateWindowEventEype) =>
+            {
+                switch(event)
+                {
+                    case "high-resolution-timer":
+                        (document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
+                        (document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateStringFromTick(Domain.getTicks());
+                        const flashInterval = Storage.flashInterval.get();
+                        if (0 < flashInterval && 0 < ticks.length)
+                        {
+                            const elapsed = Domain.getTicks() -ticks[0];
+                            const unit = flashInterval *60 *1000;
+                            const primaryStep = Math.floor(elapsed / unit);
+                            if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
+                            {
+                                document.body.classList.add("flash");
+                                setTimeout(() => document.body.classList.remove("flash"), 1500);
+                            }
+                            previousPrimaryStep = primaryStep;
+                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                        }
+                        else
+                        {
+                            previousPrimaryStep = 0;
+                            getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                        }
+                        break;
+                    case "timer":
+                        document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
+                        (
+                            Array.from
+                            (
+                                (
+                                    document
+                                        .getElementsByClassName("countdown-timer-screen")[0]
+                                        .getElementsByClassName("tick-list")[0] as HTMLDivElement
+                                ).childNodes
+                            ) as HTMLDivElement[]
+                        ).forEach
+                        (
+                            (dom, index) =>
+                            {
+                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
+                            }
+                        );
+                        break;
+                    case "storage":
+                        await reload();
+                        break;
+                    case "operate":
+                        previousPrimaryStep = 0;
+                        ticks = Storage.Stamps.get();
+                        replaceScreenBody(await NeverStopwatchScreenBody(ticks));
+                        resizeFlexList();
+                        await updateWindow("timer");
+                        break;
+                }
+            };
+            await showWindow(await countdownTimerScreen(ticks), updateWindow);
+            await updateWindow("timer");
+        };
+        export const rainbowClockScreenBody = async () =>
+        ([
+            $div("main-panel")
+            ([
+                $div("capital-time")
+                ([
+                    $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
+                ]),
+                $div("current-date")
+                ([
+                    $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
+                ]),
+            ]),
+            $div("minutes-bar")([]),
+        ]);
+        export const rainbowClockScreen = async (): Promise<ScreenSource> =>
+        ({
+            className: "rainbow-clock-screen",
+            header:
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment("Rainbow Clock"),
+                ],
+                menu: screenMenu
+            },
+            body: await rainbowClockScreenBody()
+        });
+        const rainbowColorSet =
+        [
+            "#7E3397", "#6F39A1", "#5F42A7", "#504EA9",
+            "#445DA8", "#3A6CA2", "#347C99", "#318A8C",
+            "#33977E", "#39A16F", "#42A75F", "#4EA950",
+            "#5DA844", "#6CA23A", "#7C9934", "#8A8C31",
+            "#977E33", "#A16F39", "#A75F42", "#A9504E",
+            "#A8445D", "#A23A6C", "#99347C", "#8C318A",
+        ];
+        export const showRainbowClockScreen = async () =>
+        {
+            Storage.lastApplication.set("Rainbow Clock");
+            const updateWindow = async (event: UpdateWindowEventEype) =>
+            {
+                const screen = document.getElementsByClassName("rainbow-clock-screen")[0] as HTMLDivElement;
+                const now = new Date();
+                const tick = Domain.getTicks(now);
+                switch(event)
+                {
+                    case "high-resolution-timer":
+                        (screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeFullCoreStringFromTick(Domain.getTime(tick));
+                        break;
+                    case "timer":
+                        (screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateCoreStringFromTick(tick);
+                        document.body.style.backgroundColor = rainbowColorSet[now.getHours()];
+                        const minutesBar = screen.getElementsByClassName("minutes-bar")[0] as HTMLDivElement;
+                        minutesBar.style.backgroundColor = rainbowColorSet[(now.getHours() +1) % rainbowColorSet.length];
+                        const hourUnit = 60 *60 *1000;
+                        const minutes = ((tick % hourUnit) / hourUnit).toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                        if (window.innerHeight < window.innerWidth)
+                        {
+                            minutesBar.style.height = "100%";
+                            minutesBar.style.width = minutes;
+                            minutesBar.style.borderRightWidth = "1px";
+                            minutesBar.style.borderBottomWidth = "0px";
+                        }
+                        else
+                        {
+                            minutesBar.style.width = "100%";
+                            minutesBar.style.height = minutes;
+                            minutesBar.style.borderBottomWidth = "1px";
+                            minutesBar.style.borderRightWidth = "0px";
+                        }
+                        break;
+                    case "storage":
+                        await reload();
+                        break;
+                    case "operate":
+                        await updateWindow("timer");
+                        break;
+                }
+            };
+            await showWindow(await rainbowClockScreen(), updateWindow);
+            await updateWindow("timer");
+        };
         export const updateTitle = () =>
         {
             document.title = Array.from(getHeaderElement().getElementsByClassName("segment-title"))
@@ -1115,6 +1327,7 @@ export module NeverStopwatch
                     }
                 );
             }
+            document.body.style.removeProperty("background-color");
             document.getElementById("screen").className = `${screen.className} screen`;
             minamo.dom.replaceChildren
             (
@@ -1417,15 +1630,13 @@ export module NeverStopwatch
                 body.scrollTo(0, 0);
             }
         );
-        await showPage("Never Stopwatch");
+        await showPage(Storage.lastApplication.get());
     };
-    let currentApplicationType: keyof typeof application = "Never Stopwatch";
     export const showPage = async (applicationType: keyof typeof application) =>
     {
-        currentApplicationType = applicationType;
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
         await application[applicationType].show();
     };
-    export const reload = async () => await showPage(currentApplicationType);
+    export const reload = async () => await showPage(Storage.lastApplication.get());
 }
