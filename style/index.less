@@ -1194,11 +1194,12 @@ button
     }
     .screen-body
     {
+        .negative-foreground-coloring-trait;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding-bottom: 5.0rem;
+        padding-bottom: 2.5rem;
         // width: 100vw;
         // height: calc(100vh - 5.0rem);
         .main-panel
@@ -1216,11 +1217,11 @@ button
             }
             .current-date
             {
+                opacity: 0.333;
                 // text-align: center;
                 // padding-bottom: 16px;
                 .value
                 {
-                    color: #888;
                     font-size: 6vw;
                     line-height: 100%;
                 }
@@ -1234,11 +1235,8 @@ button
             left: 0px;
             border-width: 0px;
             border-style: solid;
-            border-color: @base-color;
-            @media (prefers-color-scheme: dark)
-            {
-                border-color: @dark-base-color;
-            }
+            border-color: #0005;
+            box-sizing: border-box;
         }
     }
 }

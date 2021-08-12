@@ -1244,7 +1244,7 @@ export module NeverStopwatch
                         break;
                     case "timer":
                         (screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateCoreStringFromTick(tick);
-                        document.body.style.backgroundColor = rainbowColorSet[now.getHours()];
+                        document.body.style.backgroundColor = screen.style.backgroundColor = rainbowColorSet[now.getHours()];
                         const minutesBar = screen.getElementsByClassName("minutes-bar")[0] as HTMLDivElement;
                         minutesBar.style.backgroundColor = rainbowColorSet[(now.getHours() +1) % rainbowColorSet.length];
                         const hourUnit = 60 *60 *1000;
@@ -1328,6 +1328,7 @@ export module NeverStopwatch
                 );
             }
             document.body.style.removeProperty("background-color");
+            document.getElementById("screen").style.removeProperty("background-color");
             document.getElementById("screen").className = `${screen.className} screen`;
             minamo.dom.replaceChildren
             (

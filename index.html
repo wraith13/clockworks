@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Aug 11 2021 22:05:20 GMT+0900 (GMT+09:00) -->
+<!-- build at: Thu Aug 12 2021 00:17:46 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1828,11 +1828,19 @@ button.delete-button {
   background-color: transparent;
 }
 .rainbow-clock-screen .screen-body {
+  color: #FFFFFF;
+  fill: #FFFFFF;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 5rem;
+  padding-bottom: 2.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  .rainbow-clock-screen .screen-body {
+    color: #000022;
+    fill: #000022;
+  }
 }
 .rainbow-clock-screen .screen-body .main-panel .capital-time {
   padding-bottom: 16px;
@@ -1841,8 +1849,10 @@ button.delete-button {
   font-size: 9vw;
   line-height: 100%;
 }
+.rainbow-clock-screen .screen-body .main-panel .current-date {
+  opacity: 0.333;
+}
 .rainbow-clock-screen .screen-body .main-panel .current-date .value {
-  color: #888;
   font-size: 6vw;
   line-height: 100%;
 }
@@ -1853,12 +1863,8 @@ button.delete-button {
   left: 0px;
   border-width: 0px;
   border-style: solid;
-  border-color: #FFFFFF;
-}
-@media (prefers-color-scheme: dark) {
-  .rainbow-clock-screen .screen-body .minutes-bar {
-    border-color: #000022;
-  }
+  border-color: #0005;
+  box-sizing: border-box;
 }
 @keyframes late-fade-in {
   0% {
@@ -4537,7 +4543,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 7];
                                         case 2:
                                             screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0].innerText = Domain.dateCoreStringFromTick(tick);
-                                            document.body.style.backgroundColor = rainbowColorSet[now.getHours()];
+                                            document.body.style.backgroundColor = screen.style.backgroundColor = rainbowColorSet[now.getHours()];
                                             minutesBar = screen.getElementsByClassName("minutes-bar")[0];
                                             minutesBar.style.backgroundColor = rainbowColorSet[(now.getHours() + 1) % rainbowColorSet.length];
                                             hourUnit = 60 * 60 * 1000;
@@ -4620,6 +4626,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 });
                             }
                             document.body.style.removeProperty("background-color");
+                            document.getElementById("screen").style.removeProperty("background-color");
                             document.getElementById("screen").className = screen.className + " screen";
                             _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
                             _c = [Render.getHeaderElement()];
