@@ -29,6 +29,7 @@ export module locale
             masterKey = key;
         }
     };
+    export const get = () => masterKey;
     export const getPrimary = (key : LocaleKeyType) => master[masterKey][key];
     export const getSecondary = (key : LocaleKeyType) => master[locales.filter(locale => masterKey !== locale)[0]][key];
     export const string = (key : string) : string => getPrimary(key as LocaleKeyType) || key;
@@ -67,6 +68,12 @@ export module NeverStopwatch
         start: number;
         end: number;
     }
+    export const rainbowClockColorPatternMap =
+    {
+        "gradation": 1,
+        "solid": 7,
+    };
+    export type rainbowClockColorPatternType = keyof typeof rainbowClockColorPatternMap;
     export module Storage
     {
         export let lastUpdate = 0;
@@ -106,6 +113,14 @@ export module NeverStopwatch
             export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
             export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
         }
+        export module rainbowClockColorPattern
+        {
+            export const makeKey = () => `${config.localDbPrefix}:rainbowClockColorPattern`;
+            export const get = () =>
+                minamo.localStorage.getOrNull<rainbowClockColorPatternType>(makeKey()) ?? "gradation";
+            export const set = (settings: rainbowClockColorPatternType) =>
+                minamo.localStorage.set(makeKey(), settings);
+        }
         export module lastApplication
         {
             export const makeKey = () => `${config.localDbPrefix}:lastApplication`;
@@ -116,6 +131,8 @@ export module NeverStopwatch
     export module Domain
     {
         export const getTicks = (date: Date = new Date()) => date.getTime();
+        export const weekday = (tick: number) =>
+            new Intl.DateTimeFormat(locale.get(), { weekday: 'long'}).format(tick);
         export const dateCoreStringFromTick = (tick: null | number) =>
         {
             if (null === tick)
@@ -519,10 +536,74 @@ export module NeverStopwatch
                     await checkButtonListUpdate();
                     const ui = popup
                     ({
-                        className: "add-remove-tags-popup",
+                        // className: "add-remove-tags-popup",
                         children:
                         [
                             $tag("h2")("")(label("Language setting")),
+                            checkButtonList,
+                            $div("popup-operator")
+                            ([{
+                                tag: "button",
+                                className: "default-button",
+                                children: label("Close"),
+                                onclick: () =>
+                                {
+                                    ui.close();
+                                },
+                            }])
+                        ],
+                        onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
+        export const colorSettingsPopup = async (settings = Storage.rainbowClockColorPattern.get()): Promise<boolean> =>
+        {
+            return await new Promise
+            (
+                async resolve =>
+                {
+                    let result = false;
+                    const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                    const checkButtonListUpdate = async () => minamo.dom.replaceChildren
+                    (
+                        checkButtonList,
+                        [
+                            await Promise.all
+                            (
+                                Object.keys(rainbowClockColorPatternMap).map
+                                (
+                                    async (key: rainbowClockColorPatternType) =>
+                                    ({
+                                        tag: "button",
+                                        className: `check-button ${key === settings ? "checked": ""}`,
+                                        children:
+                                        [
+                                            await Resource.loadSvgOrCache("check-icon"),
+                                            $span("")(label(key)),
+                                        ],
+                                        onclick: async () =>
+                                        {
+                                            if (key !== settings ?? null)
+                                            {
+                                                settings = key;
+                                                Storage.rainbowClockColorPattern.set(settings);
+                                                result = true;
+                                                await checkButtonListUpdate();
+                                            }
+                                        }
+                                    })
+                                )
+                            )
+                        ]
+                    );
+                    await checkButtonListUpdate();
+                    const ui = popup
+                    ({
+                        // className: "add-remove-tags-popup",
+                        children:
+                        [
+                            $tag("h2")("")(label("Color setting")),
                             checkButtonList,
                             $div("popup-operator")
                             ([{
@@ -715,7 +796,7 @@ export module NeverStopwatch
                                         {
                                             makeToast
                                             ({
-                                                content: "有効な範囲外な日時が指定されました。",
+                                                content: label("A date and time outside the valid range was specified."),
                                                 isWideContent: true,
                                             });
                                         }
@@ -910,8 +991,7 @@ export module NeverStopwatch
                 }
             };
         }
-        export const screenMenu = async () =>
-        [
+        export const fullscreenMenuItem = async () =>
             document.fullscreenEnabled ?
                 (
                     null === document.fullscreenElement ?
@@ -926,7 +1006,8 @@ export module NeverStopwatch
                             async () => await document.exitFullscreen(),
                         )
                 ):
-                [],
+                [];
+        export const languageMenuItem = async () =>
             menuItem
             (
                 label("Language setting"),
@@ -938,20 +1019,28 @@ export module NeverStopwatch
                         await reload();
                     }
                 }
-            ),
+            );
+        export const resetMenuItem = async () =>
             menuItem
             (
                 label("Reset"),
                 async () => await Operate.reset(),
                 "delete-button"
-            ),
+            );
+        export const githubMenuItem = async () =>
             externalLink
             ({
                 href: config.repositoryUrl,
                 children: menuItem(labelSpan("GitHub")),
-            }),
+            });
+        export const neverStopwatchScreenMenu = async () =>
+        [
+            await fullscreenMenuItem(),
+            await languageMenuItem(),
+            await resetMenuItem(),
+            await githubMenuItem(),
         ];
-        export const NeverStopwatchScreenBody = async (ticks: number[]) =>
+        export const neverStopwatchScreenBody = async (ticks: number[]) =>
         ([
             $div("capital-interval")
             ([
@@ -1001,9 +1090,9 @@ export module NeverStopwatch
                     await screenHeaderHomeSegment("Never Stopwatch"),
                     await screenHeaderFlashSegment(Storage.flashInterval.get()),
                 ],
-                menu: screenMenu
+                menu: neverStopwatchScreenMenu
             },
-            body: await NeverStopwatchScreenBody(ticks)
+            body: await neverStopwatchScreenBody(ticks)
         });
         let previousPrimaryStep = 0;
         export const showNeverStopwatchScreen = async () =>
@@ -1063,7 +1152,7 @@ export module NeverStopwatch
                     case "operate":
                         previousPrimaryStep = 0;
                         ticks = Storage.Stamps.get();
-                        replaceScreenBody(await NeverStopwatchScreenBody(ticks));
+                        replaceScreenBody(await neverStopwatchScreenBody(ticks));
                         resizeFlexList();
                         await updateWindow("timer");
                         break;
@@ -1122,7 +1211,7 @@ export module NeverStopwatch
                     await screenHeaderHomeSegment("Countdown Timer"),
                     await screenHeaderFlashSegment(Storage.flashInterval.get()),
                 ],
-                menu: screenMenu
+                menu: neverStopwatchScreenMenu
             },
             body: await countdownTimerScreenBody(ticks)
         });
@@ -1173,7 +1262,12 @@ export module NeverStopwatch
                         (
                             (dom, index) =>
                             {
-                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
+                                const text = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
+                                const elapsedTimeSpan = dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
+                                if (elapsedTimeSpan.innerText !== text)
+                                {
+                                    elapsedTimeSpan.innerText = text;
+                                }
                             }
                         );
                         break;
@@ -1183,7 +1277,7 @@ export module NeverStopwatch
                     case "operate":
                         previousPrimaryStep = 0;
                         ticks = Storage.Stamps.get();
-                        replaceScreenBody(await NeverStopwatchScreenBody(ticks));
+                        replaceScreenBody(await neverStopwatchScreenBody(ticks));
                         resizeFlexList();
                         await updateWindow("timer");
                         break;
@@ -1192,6 +1286,19 @@ export module NeverStopwatch
             await showWindow(await countdownTimerScreen(ticks), updateWindow);
             await updateWindow("timer");
         };
+        export const colorMenuItem = async () =>
+            menuItem
+            (
+                label("Color setting"),
+                async () => await colorSettingsPopup(),
+            );
+        export const rainbowClockScreenMenu = async () =>
+        [
+            await fullscreenMenuItem(),
+            await colorMenuItem(),
+            await languageMenuItem(),
+            await githubMenuItem(),
+        ];
         export const rainbowClockScreenBody = async () =>
         ([
             $div("main-panel")
@@ -1216,7 +1323,7 @@ export module NeverStopwatch
                 [
                     await screenHeaderHomeSegment("Rainbow Clock"),
                 ],
-                menu: screenMenu
+                menu: rainbowClockScreenMenu
             },
             body: await rainbowClockScreenBody()
         });
@@ -1229,6 +1336,7 @@ export module NeverStopwatch
             "#977E33", "#A16F39", "#A75F42", "#A9504E",
             "#A8445D", "#A23A6C", "#99347C", "#8C318A",
         ];
+        const getRainbowColor = (index: number) => rainbowColorSet[(index *rainbowClockColorPatternMap[Storage.rainbowClockColorPattern.get()]) % rainbowColorSet.length];
         export const showRainbowClockScreen = async () =>
         {
             Storage.lastApplication.set("Rainbow Clock");
@@ -1243,25 +1351,66 @@ export module NeverStopwatch
                         (screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeFullCoreStringFromTick(Domain.getTime(tick));
                         break;
                     case "timer":
-                        (screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateCoreStringFromTick(tick);
-                        document.body.style.backgroundColor = screen.style.backgroundColor = rainbowColorSet[now.getHours()];
+                        const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
+                        const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
+                        if(currentDateSpan.innerText !== dateString)
+                        {
+                            currentDateSpan.innerText = dateString;
+                        }
+                        const currentColor = getRainbowColor(now.getHours());
+                        if (screen.style.backgroundColor !== currentColor)
+                        {
+                            screen.style.backgroundColor = currentColor;
+                        }
                         const minutesBar = screen.getElementsByClassName("minutes-bar")[0] as HTMLDivElement;
-                        minutesBar.style.backgroundColor = rainbowColorSet[(now.getHours() +1) % rainbowColorSet.length];
+                        const nextColor = getRainbowColor(now.getHours() +1);
+                        if (minutesBar.style.backgroundColor !== nextColor)
+                        {
+                            minutesBar.style.backgroundColor = nextColor;
+                        }
+                        if (document.body.style.backgroundColor !== nextColor)
+                        {
+                            document.body.style.backgroundColor = nextColor;
+                        }
                         const hourUnit = 60 *60 *1000;
                         const minutes = ((tick % hourUnit) / hourUnit).toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                         if (window.innerHeight < window.innerWidth)
                         {
-                            minutesBar.style.height = "100%";
-                            minutesBar.style.width = minutes;
-                            minutesBar.style.borderRightWidth = "1px";
-                            minutesBar.style.borderBottomWidth = "0px";
+                            if (minutesBar.style.height !== "100%")
+                            {
+                                minutesBar.style.height = "100%";
+                            }
+                            if (minutesBar.style.width !== minutes)
+                            {
+                                minutesBar.style.width = minutes;
+                            }
+                            if (minutesBar.style.borderRightWidth !== "1px")
+                            {
+                                minutesBar.style.borderRightWidth = "1px";
+                            }
+                            if (minutesBar.style.borderBottomWidth !== "0px")
+                            {
+                                minutesBar.style.borderBottomWidth = "0px";
+                            }
                         }
                         else
                         {
-                            minutesBar.style.width = "100%";
-                            minutesBar.style.height = minutes;
-                            minutesBar.style.borderBottomWidth = "1px";
-                            minutesBar.style.borderRightWidth = "0px";
+                            if (minutesBar.style.width !== "100%")
+                            {
+                                minutesBar.style.width = "100%";
+                            }
+                            if (minutesBar.style.height !== minutes)
+                            {
+                                minutesBar.style.height = minutes;
+                            }
+                            if (minutesBar.style.borderBottomWidth !== "1px")
+                            {
+                                minutesBar.style.borderBottomWidth = "1px";
+                            }
+                            if (minutesBar.style.borderRightWidth !== "0px")
+                            {
+                                minutesBar.style.borderRightWidth = "0px";
+                            }
                         }
                         break;
                     case "storage":

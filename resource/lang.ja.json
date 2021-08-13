@@ -16,6 +16,9 @@
     "Edit": "編集",
     "language.auto": "自動",
     "Language setting": "言語設定",
+    "Color setting": "色設定",
+    "gradation": "グラデーション",
+    "solid": "ソリッド",
     "roll-back": "取り消す",
     "roll-backed": "取り消しました。",
     "Close": "閉じる",
@@ -24,5 +27,6 @@
     "Removed.": "削除しました。",
     "Reseted.": "リセットしました。",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
-    "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。"
+    "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
+    "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。"
 }
