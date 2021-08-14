@@ -36,7 +36,7 @@ export module locale
     export const map = (key : LocaleKeyType) : string => string(key);
     export const parallel = (key : LocaleKeyType) : string => `${getPrimary(key)} / ${getSecondary(key)}`;
 }
-export module NeverStopwatch
+export module Clockworks
 {
     export const applicationTitle = config.applicationTitle;
     export const application =
@@ -104,8 +104,8 @@ export module NeverStopwatch
         {
             export const makeKey = () => `${config.localDbPrefix}:settings`;
             export const get = () =>
-                minamo.localStorage.getOrNull<NeverStopwatch.Settings>(makeKey()) ?? { };
-            export const set = (settings: NeverStopwatch.Settings) =>
+                minamo.localStorage.getOrNull<Clockworks.Settings>(makeKey()) ?? { };
+            export const set = (settings: Clockworks.Settings) =>
                 minamo.localStorage.set(makeKey(), settings);
         }
         export module flashInterval
