@@ -216,10 +216,6 @@ h1
         border-left-style: solid;
         border-left-width: 1px;
         border-left-color: @base-color !important;
-        @media (prefers-color-scheme: dark)
-        {
-            border-left-color: @dark-base-color !important;
-        }
         .icon
         {
             padding: 0.5rem 0.25rem;
@@ -634,13 +630,6 @@ button
         width: 100%;
     }
 }
-@media (prefers-color-scheme: dark)
-{
-    .menu-popup
-    {
-        background-color: @dark-base-color;
-    }
-}
 .hide
 {
     display: none;
@@ -1036,23 +1025,6 @@ button
     button+button
     {
         margin-left: 4px;
-    }
-}
-@media (prefers-color-scheme: dark)
-{
-    @media (hover: hover)
-    {
-        .history-list .history-item .item-title:not(:hover)
-        {
-            color: @dark-main-color;
-        }
-    }
-    @media (hover: none)
-    {
-        .history-list .history-item .item-title
-        {
-            color: @dark-main-color;
-        }
     }
 }
 .screen

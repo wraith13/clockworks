@@ -59,6 +59,7 @@ export module NeverStopwatch
     };
     export interface Settings
     {
+        theme?: "auto" | "light" | "dark";
         locale?: locale.LocaleType;
     }
     export interface AlermEntry
@@ -468,6 +469,71 @@ export module NeverStopwatch
                                     },
                                 },
                             ])
+                        ],
+                        onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
+        export const themeSettingsPopup = async (settings: Settings = Storage.Settings.get()): Promise<boolean> =>
+        {
+            const init = settings.theme ?? "auto";
+            return await new Promise
+            (
+                async resolve =>
+                {
+                    let result = false;
+                    const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                    const checkButtonListUpdate = async () => minamo.dom.replaceChildren
+                    (
+                        checkButtonList,
+                        [
+                            await Promise.all
+                            (
+                                ["auto", "light", "dark"].map
+                                (
+                                    async (key: "auto" | "light" | "dark") =>
+                                    ({
+                                        tag: "button",
+                                        className: `check-button ${key === (settings.theme ?? "auto") ? "checked": ""}`,
+                                        children:
+                                        [
+                                            await Resource.loadSvgOrCache("check-icon"),
+                                            $span("")(label(<"theme.auto" | "theme.light" | "theme.dark">`theme.${key}`)),
+                                        ],
+                                        onclick: async () =>
+                                        {
+                                            if (key !== (settings.theme ?? "auto"))
+                                            {
+                                                settings.theme = key;
+                                                Storage.Settings.set(settings);
+                                                await checkButtonListUpdate();
+                                                result = init !== key;
+                                            }
+                                        }
+                                    })
+                                )
+                            )
+                        ]
+                    );
+                    await checkButtonListUpdate();
+                    const ui = popup
+                    ({
+                        // className: "add-remove-tags-popup",
+                        children:
+                        [
+                            $tag("h2")("")(label("Theme setting")),
+                            checkButtonList,
+                            $div("popup-operator")
+                            ([{
+                                tag: "button",
+                                className: "default-button",
+                                children: label("Close"),
+                                onclick: () =>
+                                {
+                                    ui.close();
+                                },
+                            }])
                         ],
                         onClose: async () => resolve(result),
                     });
@@ -1007,6 +1073,19 @@ export module NeverStopwatch
                         )
                 ):
                 [];
+                
+        export const themeMenuItem = async () =>
+            menuItem
+            (
+                label("Theme setting"),
+                async () =>
+                {
+                    if (await themeSettingsPopup())
+                    {
+                        updateStyle();
+                    }
+                }
+            );
         export const languageMenuItem = async () =>
             menuItem
             (
@@ -1036,6 +1115,7 @@ export module NeverStopwatch
         export const neverStopwatchScreenMenu = async () =>
         [
             await fullscreenMenuItem(),
+            await themeMenuItem(),
             await languageMenuItem(),
             await resetMenuItem(),
             await githubMenuItem(),
@@ -1295,6 +1375,7 @@ export module NeverStopwatch
         export const rainbowClockScreenMenu = async () =>
         [
             await fullscreenMenuItem(),
+            await themeMenuItem(),
             await colorMenuItem(),
             await languageMenuItem(),
             await githubMenuItem(),
@@ -1752,6 +1833,43 @@ export module NeverStopwatch
             }
         };
     }
+    const originalStyle = document.getElementById("style").innerText;
+    const makeRegExpPart = (text: string) => text.replace(/([\\\/\.\+\?\*\[\]\(\)\{\}\|])/gmu, "\\$1");
+    export const updateStyle = () =>
+    {
+        const setting = Storage.Settings.get().theme ?? "auto";
+        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
+        const theme = "auto" === setting ? system: setting;
+        let style = originalStyle;
+        Object.keys(config.theme.original).forEach
+        (
+            key => style = style.replace
+            (
+                new RegExp
+                (
+                    makeRegExpPart(config.theme.original[key]),
+                    "gmu"
+                ),
+                key
+            )
+        );
+        Object.keys(config.theme.original).forEach
+        (
+            key => style = style.replace
+            (
+                new RegExp
+                (
+                    makeRegExpPart(key),
+                    "gmu"
+                ),
+                config.theme[theme][key] ?? config.theme.original[key]
+            )
+        );
+        if (document.getElementById("style").innerText !== style)
+        {
+            document.getElementById("style").innerText = style;
+        }
+    };
     export const start = async () =>
     {
         console.log("start!!!");
@@ -1780,6 +1898,8 @@ export module NeverStopwatch
                 body.scrollTo(0, 0);
             }
         );
+        window.matchMedia('(prefers-color-scheme: dark)').addListener(updateStyle);
+        updateStyle();
         await showPage(Storage.lastApplication.get());
     };
     export const showPage = async (applicationType: keyof typeof application) =>

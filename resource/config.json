@@ -2,5 +2,29 @@
     "applicationTitle": "Never Stopwatch",
     "localDbPrefix": "never-stopwatch",
     "repositoryUrl": "https://github.com/wraith13/never-stopwatch/",
-    "flashIntervalPreset": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60 ]
+    "flashIntervalPreset": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60 ],
+    "theme":
+    {
+        "original":
+        {
+            "@main-color": "#000022",
+            "@base-color": "#FFFFFF",
+            "@accent-color": "#5F42A7",
+            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
+        },
+        "light":
+        {
+            "@main-color": "#000022",
+            "@base-color": "#FFFFFF",
+            "@accent-color": "#5F42A7",
+            "::-webkit-calendar-picker-indicator": ".dummy-invalid-class"
+        },
+        "dark":
+        {
+            "@main-color": "#FFFFFF",
+            "@base-color": "#000022",
+            "@accent-color": "#5F42A7",
+            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
+        }
+    }
 }
