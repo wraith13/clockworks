@@ -180,6 +180,17 @@ export module NeverStopwatch
             }
             else
             {
+                return `${dateCoreStringFromTick(tick)} ${timeLongCoreStringFromTick(getTime(tick))}`;
+            }
+        };
+        export const dateFullStringFromTick = (tick: null | number) =>
+        {
+            if (null === tick)
+            {
+                return "N/A";
+            }
+            else
+            {
                 return `${dateCoreStringFromTick(tick)} ${timeFullCoreStringFromTick(getTime(tick))}`;
             }
         };
@@ -884,7 +895,7 @@ export module NeverStopwatch
                 $div("tick-timestamp")
                 ([
                     label("Timestamp"),
-                    $span("value monospace")(Domain.dateStringFromTick(tick)),
+                    $span("value monospace")(Domain.dateFullStringFromTick(tick)),
                 ]),
                 $div("tick-interval")
                 ([
@@ -1128,7 +1139,7 @@ export module NeverStopwatch
             ]),
             $div("current-timestamp")
             ([
-                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
             ]),
             $div("button-list")
             ({
@@ -1181,11 +1192,19 @@ export module NeverStopwatch
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
+                const screen = document.getElementsByClassName("never-stopwatch-screen")[0] as HTMLDivElement;
+                const now = new Date();
+                const tick = Domain.getTicks(now);
                 switch(event)
                 {
                     case "high-resolution-timer":
-                        (document.getElementsByClassName("never-stopwatch-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
-                        (document.getElementsByClassName("never-stopwatch-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateStringFromTick(Domain.getTicks());
+                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick -ticks[0]: 0);
+                        const capitalTime = Domain.dateStringFromTick(tick);
+                        const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
+                        if(capitalTimeSpan.innerText !== capitalTime)
+                        {
+                            capitalTimeSpan.innerText = capitalTime;
+                        }
                         const flashInterval = Storage.flashInterval.get();
                         if (0 < flashInterval && 0 < ticks.length)
                         {
@@ -1212,11 +1231,7 @@ export module NeverStopwatch
                         (
                             Array.from
                             (
-                                (
-                                    document
-                                        .getElementsByClassName("never-stopwatch-screen")[0]
-                                        .getElementsByClassName("tick-list")[0] as HTMLDivElement
-                                ).childNodes
+                                (screen.getElementsByClassName("tick-list")[0] as HTMLDivElement).childNodes
                             ) as HTMLDivElement[]
                         ).forEach
                         (
@@ -1249,7 +1264,7 @@ export module NeverStopwatch
             ]),
             $div("current-timestamp")
             ([
-                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
             ]),
             $div("button-list")
             ({
@@ -1305,7 +1320,7 @@ export module NeverStopwatch
                 {
                     case "high-resolution-timer":
                         (document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
-                        (document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateStringFromTick(Domain.getTicks());
+                        (document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateFullStringFromTick(Domain.getTicks());
                         const flashInterval = Storage.flashInterval.get();
                         if (0 < flashInterval && 0 < ticks.length)
                         {
@@ -1429,7 +1444,12 @@ export module NeverStopwatch
                 switch(event)
                 {
                     case "high-resolution-timer":
-                        (screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeFullCoreStringFromTick(Domain.getTime(tick));
+                        const capitalTime = Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
+                        const capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
+                        if(capitalTimeSpan.innerText !== capitalTime)
+                        {
+                            capitalTimeSpan.innerText = capitalTime;
+                        }
                         break;
                     case "timer":
                         const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);

@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Aug 14 2021 04:35:26 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Aug 15 2021 00:19:47 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1401,7 +1401,7 @@ button.delete-button {
   padding-bottom: 16px;
 }
 .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
-  font-size: 9vw;
+  font-size: 15vw;
   line-height: 100%;
 }
 .rainbow-clock-screen .screen-body .main-panel .current-date {
@@ -2833,6 +2833,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     return "N/A";
                 }
                 else {
+                    return Domain.dateCoreStringFromTick(tick) + " " + Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
+                }
+            };
+            Domain.dateFullStringFromTick = function (tick) {
+                if (null === tick) {
+                    return "N/A";
+                }
+                else {
                     return Domain.dateCoreStringFromTick(tick) + " " + Domain.timeFullCoreStringFromTick(Domain.getTime(tick));
                 }
             };
@@ -3677,7 +3685,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$div("item-information")([
                                         Render.$div("tick-timestamp")([
                                             Render.label("Timestamp"),
-                                            Render.$span("value monospace")(Domain.dateStringFromTick(tick)),
+                                            Render.$span("value monospace")(Domain.dateFullStringFromTick(tick)),
                                         ]),
                                         Render.$div("tick-interval")([
                                             Render.label("Interval"),
@@ -4050,7 +4058,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                                 ]),
                                 Render.$div("current-timestamp")([
-                                    Render.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                    Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                                 ]), Render.$div("button-list")({
                                     tag: "button",
                                     className: "default-button main-button long-button",
@@ -4112,10 +4120,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.lastApplication.set("Never Stopwatch");
                             ticks = Storage.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var _a, flashInterval, elapsed, unit, primaryStep, rate, _b;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, rate, _b;
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
+                                            screen = document.getElementsByClassName("never-stopwatch-screen")[0];
+                                            now = new Date();
+                                            tick = Domain.getTicks(now);
                                             _a = event;
                                             switch (_a) {
                                                 case "high-resolution-timer": return [3 /*break*/, 1];
@@ -4125,8 +4136,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 8];
                                         case 1:
-                                            document.getElementsByClassName("never-stopwatch-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() - ticks[0] : 0);
-                                            document.getElementsByClassName("never-stopwatch-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0].innerText = Domain.dateStringFromTick(Domain.getTicks());
+                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick - ticks[0] : 0);
+                                            capitalTime = Domain.dateStringFromTick(tick);
+                                            capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
+                                            if (capitalTimeSpan.innerText !== capitalTime) {
+                                                capitalTimeSpan.innerText = capitalTime;
+                                            }
                                             flashInterval = Storage.flashInterval.get();
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
@@ -4147,9 +4162,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 2:
                                             document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + NeverStopwatch.applicationTitle : NeverStopwatch.applicationTitle);
-                                            Array.from(document
-                                                .getElementsByClassName("never-stopwatch-screen")[0]
-                                                .getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
+                                            Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
                                                 dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
                                             });
                                             return [3 /*break*/, 8];
@@ -4195,7 +4208,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                                 ]),
                                 Render.$div("current-timestamp")([
-                                    Render.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                    Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                                 ]), Render.$div("button-list")({
                                     tag: "button",
                                     className: "default-button main-button long-button",
@@ -4270,7 +4283,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 1:
                                             document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() - ticks[0] : 0);
-                                            document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0].innerText = Domain.dateStringFromTick(Domain.getTicks());
+                                            document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0].innerText = Domain.dateFullStringFromTick(Domain.getTicks());
                                             flashInterval = Storage.flashInterval.get();
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
@@ -4429,7 +4442,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             Storage.lastApplication.set("Rainbow Clock");
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, dateString, currentDateSpan, currentColor, minutesBar, nextColor, hourUnit, minutes;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, dateString, currentDateSpan, currentColor, minutesBar, nextColor, hourUnit, minutes;
                                 return __generator(this, function (_b) {
                                     switch (_b.label) {
                                         case 0:
@@ -4445,7 +4458,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 7];
                                         case 1:
-                                            screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeFullCoreStringFromTick(Domain.getTime(tick));
+                                            capitalTime = Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
+                                            capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0];
+                                            if (capitalTimeSpan.innerText !== capitalTime) {
+                                                capitalTimeSpan.innerText = capitalTime;
+                                            }
                                             return [3 /*break*/, 7];
                                         case 2:
                                             dateString = Domain.dateCoreStringFromTick(tick) + " " + Domain.weekday(tick);
