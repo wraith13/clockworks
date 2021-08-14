@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Aug 15 2021 00:19:47 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Aug 15 2021 04:50:34 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1349,6 +1349,8 @@ button.delete-button {
   display: flex;
   flex-direction: column;
   position: absolute;
+  z-index: 0;
+  background-color: transparent;
   top: 0px;
   bottom: 0px;
   right: 0px;
@@ -1364,6 +1366,19 @@ button.delete-button {
   overflow-y: auto;
   flex-grow: 1;
 }
+.screen > .screen-body .screen-bar {
+  z-index: -10;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  border-width: 0px;
+  border-style: solid;
+  border-color: #0005;
+  box-sizing: border-box;
+}
+.never-stopwatch-screen h1.with-screen-prgress {
+  background-color: rgba(95, 66, 167, 0.9);
+}
 .never-stopwatch-screen .capital-interval {
   text-align: center;
   padding-top: 16px;
@@ -1375,15 +1390,14 @@ button.delete-button {
 .never-stopwatch-screen .current-timestamp {
   text-align: center;
   padding-top: 8px;
+  opacity: 0.5;
 }
 .never-stopwatch-screen .current-timestamp .value {
-  color: #888;
-  font-size: 3.5vw;
+  font-size: 4.4vw;
   line-height: 100%;
 }
-.rainbow-clock-screen {
-  z-index: 0;
-  background-color: transparent;
+.never-stopwatch-screen .screen-bar {
+  opacity: 0.333;
 }
 .rainbow-clock-screen h1 {
   background-color: transparent;
@@ -1410,16 +1424,6 @@ button.delete-button {
 .rainbow-clock-screen .screen-body .main-panel .current-date .value {
   font-size: 6vw;
   line-height: 120%;
-}
-.rainbow-clock-screen .screen-body .minutes-bar {
-  z-index: -10;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  border-width: 0px;
-  border-style: solid;
-  border-color: #0005;
-  box-sizing: border-box;
 }
 @keyframes late-fade-in {
   0% {
@@ -4077,7 +4081,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                     Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                     Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                ]))
+                                ])),
+                                Render.$div("screen-bar")([])
                             ]))];
                     }
                 });
@@ -4143,6 +4148,25 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 capitalTimeSpan.innerText = capitalTime;
                                             }
                                             flashInterval = Storage.flashInterval.get();
+                                            // if (0 < flashInterval && 0 < ticks.length)
+                                            // {
+                                            //     const elapsed = Domain.getTicks() -ticks[0];
+                                            //     const unit = flashInterval *60 *1000;
+                                            //     const primaryStep = Math.floor(elapsed / unit);
+                                            //     if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
+                                            //     {
+                                            //         document.body.classList.add("flash");
+                                            //         setTimeout(() => document.body.classList.remove("flash"), 1500);
+                                            //     }
+                                            //     previousPrimaryStep = primaryStep;
+                                            //     const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                                            //     getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                            // }
+                                            // else
+                                            // {
+                                            //     previousPrimaryStep = 0;
+                                            //     getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                                            // }
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
                                                 unit = flashInterval * 60 * 1000;
@@ -4153,11 +4177,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 }
                                                 previousPrimaryStep = primaryStep;
                                                 rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
-                                                Render.getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                                Render.setScreenBarProgress(rate, getRainbowColor(primaryStep + 1));
+                                                // getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                                Render.getHeaderElement().classList.add("with-screen-prgress");
                                             }
                                             else {
                                                 previousPrimaryStep = 0;
-                                                Render.getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                                                Render.setScreenBarProgress(null);
+                                                // getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                                                Render.getHeaderElement().classList.remove("with-screen-prgress");
                                             }
                                             return [3 /*break*/, 8];
                                         case 2:
@@ -4399,7 +4427,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
                                 ]),
                             ]),
-                            Render.$div("minutes-bar")([]),
+                            Render.$div("screen-bar")([]),
                         ])];
                 });
             }); };
@@ -4442,7 +4470,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             Storage.lastApplication.set("Rainbow Clock");
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, dateString, currentDateSpan, currentColor, minutesBar, nextColor, hourUnit, minutes;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, dateString, currentDateSpan, currentColor, hourUnit, minutes, nextColor;
                                 return __generator(this, function (_b) {
                                     switch (_b.label) {
                                         case 0:
@@ -4474,43 +4502,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             if (screen.style.backgroundColor !== currentColor) {
                                                 screen.style.backgroundColor = currentColor;
                                             }
-                                            minutesBar = screen.getElementsByClassName("minutes-bar")[0];
+                                            hourUnit = 60 * 60 * 1000;
+                                            minutes = (tick % hourUnit) / hourUnit;
                                             nextColor = getRainbowColor(now.getHours() + 1);
-                                            if (minutesBar.style.backgroundColor !== nextColor) {
-                                                minutesBar.style.backgroundColor = nextColor;
-                                            }
+                                            Render.setScreenBarProgress(minutes, nextColor);
                                             if (document.body.style.backgroundColor !== nextColor) {
                                                 document.body.style.backgroundColor = nextColor;
-                                            }
-                                            hourUnit = 60 * 60 * 1000;
-                                            minutes = ((tick % hourUnit) / hourUnit).toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                                            if (window.innerHeight < window.innerWidth) {
-                                                if (minutesBar.style.height !== "100%") {
-                                                    minutesBar.style.height = "100%";
-                                                }
-                                                if (minutesBar.style.width !== minutes) {
-                                                    minutesBar.style.width = minutes;
-                                                }
-                                                if (minutesBar.style.borderRightWidth !== "1px") {
-                                                    minutesBar.style.borderRightWidth = "1px";
-                                                }
-                                                if (minutesBar.style.borderBottomWidth !== "0px") {
-                                                    minutesBar.style.borderBottomWidth = "0px";
-                                                }
-                                            }
-                                            else {
-                                                if (minutesBar.style.width !== "100%") {
-                                                    minutesBar.style.width = "100%";
-                                                }
-                                                if (minutesBar.style.height !== minutes) {
-                                                    minutesBar.style.height = minutes;
-                                                }
-                                                if (minutesBar.style.borderBottomWidth !== "1px") {
-                                                    minutesBar.style.borderBottomWidth = "1px";
-                                                }
-                                                if (minutesBar.style.borderRightWidth !== "0px") {
-                                                    minutesBar.style.borderRightWidth = "0px";
-                                                }
                                             }
                                             return [3 /*break*/, 7];
                                         case 3: return [4 /*yield*/, NeverStopwatch.reload()];
@@ -4658,6 +4655,43 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return latestPrimaryToast = Render.makeToast(data);
             };
             Render.getProgressElement = function () { return document.getElementById("screen-header").getElementsByClassName("progress-bar")[0]; };
+            Render.setScreenBarProgress = function (percent, color) {
+                var screenBar = document.getElementsByClassName("screen-bar")[0];
+                if (color) {
+                    if (screenBar.style.backgroundColor !== color) {
+                        screenBar.style.backgroundColor = color;
+                    }
+                }
+                var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                if (window.innerHeight < window.innerWidth) {
+                    if (screenBar.style.height !== "100%") {
+                        screenBar.style.height = "100%";
+                    }
+                    if (screenBar.style.width !== percentString) {
+                        screenBar.style.width = percentString;
+                    }
+                    if (screenBar.style.borderRightWidth !== "1px") {
+                        screenBar.style.borderRightWidth = "1px";
+                    }
+                    if (screenBar.style.borderBottomWidth !== "0px") {
+                        screenBar.style.borderBottomWidth = "0px";
+                    }
+                }
+                else {
+                    if (screenBar.style.width !== "100%") {
+                        screenBar.style.width = "100%";
+                    }
+                    if (screenBar.style.height !== percentString) {
+                        screenBar.style.height = percentString;
+                    }
+                    if (screenBar.style.borderBottomWidth !== "1px") {
+                        screenBar.style.borderBottomWidth = "1px";
+                    }
+                    if (screenBar.style.borderRightWidth !== "0px") {
+                        screenBar.style.borderRightWidth = "0px";
+                    }
+                }
+            };
             Render.resizeFlexList = function () {
                 var minColumns = 1 + Math.floor(window.innerWidth / 780);
                 var maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
@@ -4761,7 +4795,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return event.isComposing || isInComposeSession || new Date().getTime() < lastestCompositionEndAt + 100;
             };
             Render.onKeydown = function (event) {
-                var _a, _b;
+                var _a, _b, _c, _d, _e;
                 if (!Render.isComposing(event)) {
                     switch (event.key) {
                         case "Enter":
@@ -4772,6 +4806,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case "Escape":
                             (_b = ((_a = Render.getScreenCover()) !== null && _a !== void 0 ? _a : Render.getCloseButton())) === null || _b === void 0 ? void 0 : _b.click();
                             break;
+                    }
+                    var focusedElementTagName = (_e = (_d = (_c = document.activeElement) === null || _c === void 0 ? void 0 : _c.tagName) === null || _d === void 0 ? void 0 : _d.toLowerCase()) !== null && _e !== void 0 ? _e : "";
+                    if (["input", "textarea"].indexOf(focusedElementTagName) < 0) {
+                        switch (event.key.toLowerCase()) {
+                            case "f":
+                                if (null === document.fullscreenElement) {
+                                    document.body.requestFullscreen();
+                                }
+                                else {
+                                    document.exitFullscreen();
+                                }
+                                break;
+                        }
                     }
                 }
             };

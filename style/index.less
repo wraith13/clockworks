@@ -1033,6 +1033,8 @@ button
     display: flex;
     flex-direction: column;
     position: absolute;
+    z-index: 0;
+    background-color: transparent;
     top: 0px;
     bottom: 0px;
     right: 0px;
@@ -1049,10 +1051,25 @@ button
         overflow-x: hidden;
         overflow-y: auto;
         flex-grow: 1;
+        .screen-bar
+        {
+            z-index: -10;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            border-width: 0px;
+            border-style: solid;
+            border-color: #0005;
+            box-sizing: border-box;
+        }
     }
 }
 .never-stopwatch-screen
 {
+    h1.with-screen-prgress
+    {
+        background-color: fade(@accent-color, 90%);
+    }
     .capital-interval
     {
         text-align: center;
@@ -1067,18 +1084,20 @@ button
     {
         text-align: center;
         padding-top: 8px;
+        opacity: 0.5;
         .value
         {
-            color: #888;
-            font-size: 3.5vw;
+            font-size: 4.4vw;
             line-height: 100%;
         }
+    }
+    .screen-bar
+    {
+        opacity: 0.333;
     }
 }
 .rainbow-clock-screen
 {
-    z-index: 0;
-    background-color: transparent;
     h1
     {
         // z-index: 300;
@@ -1118,17 +1137,6 @@ button
                     line-height: 120%; // 本当は 100% にしておきたいが 100% だと Safari で日本語文字上部が表示されない。
                 }
             }
-        }
-        .minutes-bar
-        {
-            z-index: -10;
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            border-width: 0px;
-            border-style: solid;
-            border-color: #0005;
-            box-sizing: border-box;
         }
     }
 }

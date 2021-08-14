@@ -1169,7 +1169,8 @@ export module NeverStopwatch
                     $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                     $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                 ])
-            )
+            ),
+            $div("screen-bar")([]),
         ]);
         export const neverStopwatchScreen = async (ticks: number[]): Promise<ScreenSource> =>
         ({
@@ -1206,6 +1207,25 @@ export module NeverStopwatch
                             capitalTimeSpan.innerText = capitalTime;
                         }
                         const flashInterval = Storage.flashInterval.get();
+                        // if (0 < flashInterval && 0 < ticks.length)
+                        // {
+                        //     const elapsed = Domain.getTicks() -ticks[0];
+                        //     const unit = flashInterval *60 *1000;
+                        //     const primaryStep = Math.floor(elapsed / unit);
+                        //     if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
+                        //     {
+                        //         document.body.classList.add("flash");
+                        //         setTimeout(() => document.body.classList.remove("flash"), 1500);
+                        //     }
+                        //     previousPrimaryStep = primaryStep;
+                        //     const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                        //     getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                        // }
+                        // else
+                        // {
+                        //     previousPrimaryStep = 0;
+                        //     getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                        // }
                         if (0 < flashInterval && 0 < ticks.length)
                         {
                             const elapsed = Domain.getTicks() -ticks[0];
@@ -1218,12 +1238,16 @@ export module NeverStopwatch
                             }
                             previousPrimaryStep = primaryStep;
                             const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
-                            getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                            setScreenBarProgress(rate, getRainbowColor(primaryStep +1));
+                            // getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                            getHeaderElement().classList.add("with-screen-prgress");
                         }
                         else
                         {
                             previousPrimaryStep = 0;
-                            getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                            setScreenBarProgress(null);
+                            // getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                            getHeaderElement().classList.remove("with-screen-prgress");
                         }
                         break;
                     case "timer":
@@ -1408,7 +1432,7 @@ export module NeverStopwatch
                     $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
                 ]),
             ]),
-            $div("minutes-bar")([]),
+            $div("screen-bar")([]),
         ]);
         export const rainbowClockScreen = async (): Promise<ScreenSource> =>
         ({
@@ -1463,56 +1487,67 @@ export module NeverStopwatch
                         {
                             screen.style.backgroundColor = currentColor;
                         }
-                        const minutesBar = screen.getElementsByClassName("minutes-bar")[0] as HTMLDivElement;
+
+
+
+                        // const screenBar = screen.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
+                        // const nextColor = getRainbowColor(now.getHours() +1);
+                        // if (screenBar.style.backgroundColor !== nextColor)
+                        // {
+                        //     screenBar.style.backgroundColor = nextColor;
+                        // }
+                        // if (document.body.style.backgroundColor !== nextColor)
+                        // {
+                        //     document.body.style.backgroundColor = nextColor;
+                        // }
+                        // if (window.innerHeight < window.innerWidth)
+                        // {
+                        //     if (screenBar.style.height !== "100%")
+                        //     {
+                        //         screenBar.style.height = "100%";
+                        //     }
+                        //     if (screenBar.style.width !== minutes)
+                        //     {
+                        //         screenBar.style.width = minutes;
+                        //     }
+                        //     if (screenBar.style.borderRightWidth !== "1px")
+                        //     {
+                        //         screenBar.style.borderRightWidth = "1px";
+                        //     }
+                        //     if (screenBar.style.borderBottomWidth !== "0px")
+                        //     {
+                        //         screenBar.style.borderBottomWidth = "0px";
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     if (screenBar.style.width !== "100%")
+                        //     {
+                        //         screenBar.style.width = "100%";
+                        //     }
+                        //     if (screenBar.style.height !== minutes)
+                        //     {
+                        //         screenBar.style.height = minutes;
+                        //     }
+                        //     if (screenBar.style.borderBottomWidth !== "1px")
+                        //     {
+                        //         screenBar.style.borderBottomWidth = "1px";
+                        //     }
+                        //     if (screenBar.style.borderRightWidth !== "0px")
+                        //     {
+                        //         screenBar.style.borderRightWidth = "0px";
+                        //     }
+                        // }
+
+                        const hourUnit = 60 *60 *1000;
+                        const minutes = (tick % hourUnit) / hourUnit;
                         const nextColor = getRainbowColor(now.getHours() +1);
-                        if (minutesBar.style.backgroundColor !== nextColor)
-                        {
-                            minutesBar.style.backgroundColor = nextColor;
-                        }
+                        setScreenBarProgress(minutes, nextColor);
                         if (document.body.style.backgroundColor !== nextColor)
                         {
                             document.body.style.backgroundColor = nextColor;
                         }
-                        const hourUnit = 60 *60 *1000;
-                        const minutes = ((tick % hourUnit) / hourUnit).toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                        if (window.innerHeight < window.innerWidth)
-                        {
-                            if (minutesBar.style.height !== "100%")
-                            {
-                                minutesBar.style.height = "100%";
-                            }
-                            if (minutesBar.style.width !== minutes)
-                            {
-                                minutesBar.style.width = minutes;
-                            }
-                            if (minutesBar.style.borderRightWidth !== "1px")
-                            {
-                                minutesBar.style.borderRightWidth = "1px";
-                            }
-                            if (minutesBar.style.borderBottomWidth !== "0px")
-                            {
-                                minutesBar.style.borderBottomWidth = "0px";
-                            }
-                        }
-                        else
-                        {
-                            if (minutesBar.style.width !== "100%")
-                            {
-                                minutesBar.style.width = "100%";
-                            }
-                            if (minutesBar.style.height !== minutes)
-                            {
-                                minutesBar.style.height = minutes;
-                            }
-                            if (minutesBar.style.borderBottomWidth !== "1px")
-                            {
-                                minutesBar.style.borderBottomWidth = "1px";
-                            }
-                            if (minutesBar.style.borderRightWidth !== "0px")
-                            {
-                                minutesBar.style.borderRightWidth = "0px";
-                            }
-                        }
+        
                         break;
                     case "storage":
                         await reload();
@@ -1679,6 +1714,56 @@ export module NeverStopwatch
             return latestPrimaryToast = makeToast(data);
         };
         export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
+        export const setScreenBarProgress = (percent: null | number, color?: string) =>
+        {
+            const screenBar = document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
+            if (color)
+            {
+                if (screenBar.style.backgroundColor !== color)
+                {
+                    screenBar.style.backgroundColor = color;
+                }
+            }
+            const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            if (window.innerHeight < window.innerWidth)
+            {
+                if (screenBar.style.height !== "100%")
+                {
+                    screenBar.style.height = "100%";
+                }
+                if (screenBar.style.width !== percentString)
+                {
+                    screenBar.style.width = percentString;
+                }
+                if (screenBar.style.borderRightWidth !== "1px")
+                {
+                    screenBar.style.borderRightWidth = "1px";
+                }
+                if (screenBar.style.borderBottomWidth !== "0px")
+                {
+                    screenBar.style.borderBottomWidth = "0px";
+                }
+            }
+            else
+            {
+                if (screenBar.style.width !== "100%")
+                {
+                    screenBar.style.width = "100%";
+                }
+                if (screenBar.style.height !== percentString)
+                {
+                    screenBar.style.height = percentString;
+                }
+                if (screenBar.style.borderBottomWidth !== "1px")
+                {
+                    screenBar.style.borderBottomWidth = "1px";
+                }
+                if (screenBar.style.borderRightWidth !== "0px")
+                {
+                    screenBar.style.borderRightWidth = "0px";
+                }
+            }
+        };
         export const resizeFlexList = () =>
         {
             const minColumns = 1 +Math.floor(window.innerWidth / 780);
@@ -1849,6 +1934,23 @@ export module NeverStopwatch
                     case "Escape":
                         (getScreenCover() ?? getCloseButton())?.click();
                         break;
+                }
+                const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
+                if (["input", "textarea"].indexOf(focusedElementTagName) < 0)
+                {
+                    switch(event.key.toLowerCase())
+                    {
+                        case "f":
+                            if(null === document.fullscreenElement)
+                            {
+                                document.body.requestFullscreen();
+                            }
+                            else
+                            {
+                                document.exitFullscreen();
+                            }
+                            break;
+                    }
                 }
             }
         };
