@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Aug 15 2021 08:05:42 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Aug 15 2021 16:21:09 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -142,8 +142,12 @@ textarea {
   background-color: #FFFFFF;
 }
 body {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
   margin: 0px;
-  margin-bottom: 5rem;
   line-height: 100%;
   overflow: hidden;
   background-color: rgba(95, 66, 167, 0.95);
@@ -647,6 +651,10 @@ h1.obsolescence .progress-bar {
   }
 }
 #screen-toast {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
   filter: drop-shadow(0rem 0rem 3rem #5F42A7);
   background-color: #FFFFFF;
 }
@@ -1369,34 +1377,50 @@ button.delete-button {
 .screen > .screen-body .screen-bar {
   z-index: -10;
   position: fixed;
-  top: 0px;
-  left: 0px;
   border-width: 0px;
   border-style: solid;
   border-color: #0005;
   box-sizing: border-box;
 }
-.never-stopwatch-screen h1.with-screen-prgress {
+.screen > .screen-body .screen-bar.horizontal {
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  border-right-width: 1px;
+}
+.screen > .screen-body .screen-bar.vertical {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  border-bottom-width: 1px;
+}
+.never-stopwatch-screen h1.with-screen-prgress,
+.countdown-timer-screen h1.with-screen-prgress {
   background-color: rgba(95, 66, 167, 0.9);
 }
-.never-stopwatch-screen .capital-interval {
+.never-stopwatch-screen .capital-interval,
+.countdown-timer-screen .capital-interval {
   text-align: center;
   padding-top: 16px;
 }
-.never-stopwatch-screen .capital-interval .value {
+.never-stopwatch-screen .capital-interval .value,
+.countdown-timer-screen .capital-interval .value {
   font-size: 7vw;
   line-height: 100%;
 }
-.never-stopwatch-screen .current-timestamp {
+.never-stopwatch-screen .current-timestamp,
+.countdown-timer-screen .current-timestamp {
   text-align: center;
   padding-top: 8px;
   opacity: 0.5;
 }
-.never-stopwatch-screen .current-timestamp .value {
+.never-stopwatch-screen .current-timestamp .value,
+.countdown-timer-screen .current-timestamp .value {
   font-size: 4.4vw;
   line-height: 100%;
 }
-.never-stopwatch-screen .screen-bar {
+.never-stopwatch-screen .screen-bar,
+.countdown-timer-screen .screen-bar {
   opacity: 0.333;
 }
 .rainbow-clock-screen h1 {
@@ -2660,6 +2684,7 @@ define("resource/lang.ja", [], {
 });
 define("resource/images", [], {
     "application-icon": "./image/never-stopwatch.1024.svg",
+    "history-icon": "./image/history.1024.svg",
     "ellipsis-icon": "./image/ellipsis.1024.svg",
     "check-icon": "./image/check.1024.svg",
     "flash-icon": "./image/sun.1024.svg",
@@ -2715,7 +2740,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }); }); },
             },
             "Countdown Timer": {
-                icon: "application-icon",
+                icon: "history-icon",
                 show: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, Render.showCountdownTimerScreen()];
@@ -4129,7 +4154,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
-                                            screen = document.getElementsByClassName("never-stopwatch-screen")[0];
+                                            screen = document.getElementById("screen");
                                             now = new Date();
                                             tick = Domain.getTicks(now);
                                             _a = event;
@@ -4148,25 +4173,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 capitalTimeSpan.innerText = capitalTime;
                                             }
                                             flashInterval = Storage.flashInterval.get();
-                                            // if (0 < flashInterval && 0 < ticks.length)
-                                            // {
-                                            //     const elapsed = Domain.getTicks() -ticks[0];
-                                            //     const unit = flashInterval *60 *1000;
-                                            //     const primaryStep = Math.floor(elapsed / unit);
-                                            //     if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
-                                            //     {
-                                            //         document.body.classList.add("flash");
-                                            //         setTimeout(() => document.body.classList.remove("flash"), 1500);
-                                            //     }
-                                            //     previousPrimaryStep = primaryStep;
-                                            //     const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
-                                            //     getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                                            // }
-                                            // else
-                                            // {
-                                            //     previousPrimaryStep = 0;
-                                            //     getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
-                                            // }
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
                                                 unit = flashInterval * 60 * 1000;
@@ -4255,7 +4261,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                     Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                     Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                ]))
+                                ])),
+                                Render.$div("screen-bar")([])
                             ]))];
                     }
                 });
@@ -4297,10 +4304,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.lastApplication.set("Countdown Timer");
                             ticks = Storage.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var _a, flashInterval, elapsed, unit, primaryStep, rate, _b;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, rate, _b;
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
+                                            screen = document.getElementById("screen");
+                                            now = new Date();
+                                            tick = Domain.getTicks(now);
                                             _a = event;
                                             switch (_a) {
                                                 case "high-resolution-timer": return [3 /*break*/, 1];
@@ -4310,8 +4320,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 8];
                                         case 1:
-                                            document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() - ticks[0] : 0);
-                                            document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0].innerText = Domain.dateFullStringFromTick(Domain.getTicks());
+                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick - ticks[0] : 0);
+                                            capitalTime = Domain.dateStringFromTick(tick);
+                                            capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
+                                            if (capitalTimeSpan.innerText !== capitalTime) {
+                                                capitalTimeSpan.innerText = capitalTime;
+                                            }
                                             flashInterval = Storage.flashInterval.get();
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
@@ -4323,23 +4337,21 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 }
                                                 previousPrimaryStep = primaryStep;
                                                 rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
-                                                Render.getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                                Render.setScreenBarProgress(rate, getRainbowColor(primaryStep + 1));
+                                                // getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                                Render.getHeaderElement().classList.add("with-screen-prgress");
                                             }
                                             else {
                                                 previousPrimaryStep = 0;
-                                                Render.getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                                                Render.setScreenBarProgress(null);
+                                                // getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                                                Render.getHeaderElement().classList.remove("with-screen-prgress");
                                             }
                                             return [3 /*break*/, 8];
                                         case 2:
                                             document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + Clockworks.applicationTitle : Clockworks.applicationTitle);
-                                            Array.from(document
-                                                .getElementsByClassName("countdown-timer-screen")[0]
-                                                .getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
-                                                var text = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
-                                                var elapsedTimeSpan = dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0];
-                                                if (elapsedTimeSpan.innerText !== text) {
-                                                    elapsedTimeSpan.innerText = text;
-                                                }
+                                            Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
+                                                dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
                                             });
                                             return [3 /*break*/, 8];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
@@ -4470,11 +4482,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             Storage.lastApplication.set("Rainbow Clock");
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, dateString, currentDateSpan, currentColor, hourUnit, minutes, nextColor;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, dateString, currentDateSpan, currentColor, hourUnit, minutes, nextColor, nextBodyColor;
                                 return __generator(this, function (_b) {
                                     switch (_b.label) {
                                         case 0:
-                                            screen = document.getElementsByClassName("rainbow-clock-screen")[0];
+                                            screen = document.getElementById("screen");
                                             now = new Date();
                                             tick = Domain.getTicks(now);
                                             _a = event;
@@ -4506,8 +4518,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             minutes = (tick % hourUnit) / hourUnit;
                                             nextColor = getRainbowColor(now.getHours() + 1);
                                             Render.setScreenBarProgress(minutes, nextColor);
-                                            if (document.body.style.backgroundColor !== nextColor) {
-                                                document.body.style.backgroundColor = nextColor;
+                                            nextBodyColor = nextColor + "E8";
+                                            if (document.body.style.backgroundColor !== nextBodyColor) {
+                                                document.body.style.backgroundColor = nextBodyColor;
                                             }
                                             return [3 /*break*/, 7];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
@@ -4664,31 +4677,31 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
                 var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 if (window.innerHeight < window.innerWidth) {
-                    if (screenBar.style.height !== "100%") {
-                        screenBar.style.height = "100%";
+                    if (!screenBar.classList.contains("horizontal")) {
+                        screenBar.classList.add("horizontal");
+                    }
+                    if (screenBar.classList.contains("vertical")) {
+                        screenBar.classList.remove("vertical");
+                    }
+                    if (screenBar.style.height !== "initial") {
+                        screenBar.style.height = "initial";
                     }
                     if (screenBar.style.width !== percentString) {
                         screenBar.style.width = percentString;
                     }
-                    if (screenBar.style.borderRightWidth !== "1px") {
-                        screenBar.style.borderRightWidth = "1px";
-                    }
-                    if (screenBar.style.borderBottomWidth !== "0px") {
-                        screenBar.style.borderBottomWidth = "0px";
-                    }
                 }
                 else {
-                    if (screenBar.style.width !== "100%") {
-                        screenBar.style.width = "100%";
+                    if (!screenBar.classList.contains("vertical")) {
+                        screenBar.classList.add("vertical");
+                    }
+                    if (screenBar.classList.contains("horizontal")) {
+                        screenBar.classList.remove("horizontal");
+                    }
+                    if (screenBar.style.width !== "initial") {
+                        screenBar.style.width = "initial";
                     }
                     if (screenBar.style.height !== percentString) {
                         screenBar.style.height = percentString;
-                    }
-                    if (screenBar.style.borderBottomWidth !== "1px") {
-                        screenBar.style.borderBottomWidth = "1px";
-                    }
-                    if (screenBar.style.borderRightWidth !== "0px") {
-                        screenBar.style.borderRightWidth = "0px";
                     }
                 }
             };
@@ -4922,6 +4935,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
 </head>
 <body onload="require('script/index').Clockworks.start()"><div id="foundation"><div id="screen"><h1 id="screen-header" class="segmented"></h1><div id="screen-body" class="screen-body"></div><div id="screen-toast"></div></div></div><div id="images" style="display: none;"><div id="application-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path id="output" d="M156.588,697.19C156.579,696.794 156.574,696.397 156.574,696C156.574,669.508 178.082,648 204.574,648C222.546,648 238.224,657.899 246.449,672.536L246.78,672.344C296.651,758.208 389.63,816 496,816C574.156,816 645.083,784.8 696.984,734.197C709.04,765.925 737.449,789.628 771.889,794.99C702.072,867.123 604.235,912 496,912C416.664,912 342.916,887.889 281.696,846.607L156,919.061L156.155,696.939L156.588,697.19ZM746.963,669.301C770.538,627.557 784,579.338 784,528C784,395.466 694.283,283.722 572.304,250.234C584.659,234.074 592,213.888 592,192C592,178.584 589.242,165.808 584.265,154.211C753.716,194.132 880,346.435 880,528C880,537.769 879.634,547.453 878.916,557.047L1000.22,627.195L819.083,731.607C810.548,739.39 799.202,744.137 786.757,744.137C760.265,744.137 738.757,722.629 738.757,696.137C738.757,686.2 741.783,676.964 746.963,669.301ZM487.806,524.395L618.311,394.045C636.904,375.474 667.078,375.492 685.649,394.085L686.193,394.629C704.764,413.223 704.746,443.396 686.153,461.968L523.166,624.761C522.717,625.249 522.254,625.732 521.778,626.208C514.727,633.263 506.02,637.663 496.902,639.408L495.872,639.593C494.28,639.863 492.661,640.054 491.02,640.162L489.569,640.236L488.742,640.259L487.507,640.267L487.26,640.264C482.449,640.21 477.806,639.446 473.434,638.072L473.266,638.019C466.181,635.773 459.514,631.843 453.896,626.229L348.021,520.417C329.282,501.69 329.273,471.273 348,452.535C366.727,433.797 397.144,433.788 415.882,452.515L487.806,524.395ZM515.177,147.97C532.136,155.378 544,172.305 544,191.98C544,218.472 522.492,239.98 496,239.98L495.692,239.979L495.692,240C336.894,240.155 208,369.144 208,528C208,553.162 211.234,577.575 217.307,600.839C213.141,600.286 208.891,600 204.574,600C173.34,600 145.57,614.949 128.036,638.073C117.606,603.21 112,566.254 112,528C112,374.863 201.835,242.542 331.617,180.916L331.713,41.877L515.177,147.97Z"/>
+</svg>
+</div><div id="history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
 </div><div id="ellipsis-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M512,407C569.951,407 617,454.049 617,512C617,569.951 569.951,617 512,617C454.049,617 407,569.951 407,512C407,454.049 454.049,407 512,407ZM197,407C254.951,407 302,454.049 302,512C302,569.951 254.951,617 197,617C139.049,617 92,569.951 92,512C92,454.049 139.049,407 197,407ZM827,407C884.951,407 932,454.049 932,512C932,569.951 884.951,617 827,617C769.049,617 722,569.951 722,512C722,454.049 769.049,407 827,407Z"/>

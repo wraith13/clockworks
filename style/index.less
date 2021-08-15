@@ -329,6 +329,10 @@ h1
 }
 #screen-toast
 {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
     filter: drop-shadow(0.0rem -0rem 3rem @accent-color); // #screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     .positive-background-coloring-trait;
     .item
@@ -1041,7 +1045,6 @@ button
     left: 0px;
     max-width: 100vw;
     max-height: 100vh;
-
     & > :not(.screen-body)
     {
         flex-shrink: 0;
@@ -1055,16 +1058,29 @@ button
         {
             z-index: -10;
             position: fixed;
-            top: 0px;
-            left: 0px;
             border-width: 0px;
             border-style: solid;
             border-color: #0005;
             box-sizing: border-box;
+            &.horizontal
+            {
+                top: 0px;
+                bottom: 0px;
+                left: 0px;
+                border-right-width: 1px;
+            }
+            &.vertical
+            {
+                top: 0px;
+                left: 0px;
+                right: 0px;
+                border-bottom-width: 1px;
+            }
         }
     }
 }
-.never-stopwatch-screen
+.never-stopwatch-screen,
+.countdown-timer-screen
 {
     h1.with-screen-prgress
     {

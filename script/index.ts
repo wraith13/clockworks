@@ -48,7 +48,7 @@ export module Clockworks
         },
         "Countdown Timer":
         {
-            icon: <Render.Resource.KeyType>"application-icon",
+            icon: <Render.Resource.KeyType>"history-icon",
             show: async () => await Render.showCountdownTimerScreen(),
         },
         "Rainbow Clock":
@@ -1193,7 +1193,7 @@ export module Clockworks
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
-                const screen = document.getElementsByClassName("never-stopwatch-screen")[0] as HTMLDivElement;
+                const screen = document.getElementById("screen") as HTMLDivElement;
                 const now = new Date();
                 const tick = Domain.getTicks(now);
                 switch(event)
@@ -1207,25 +1207,6 @@ export module Clockworks
                             capitalTimeSpan.innerText = capitalTime;
                         }
                         const flashInterval = Storage.flashInterval.get();
-                        // if (0 < flashInterval && 0 < ticks.length)
-                        // {
-                        //     const elapsed = Domain.getTicks() -ticks[0];
-                        //     const unit = flashInterval *60 *1000;
-                        //     const primaryStep = Math.floor(elapsed / unit);
-                        //     if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
-                        //     {
-                        //         document.body.classList.add("flash");
-                        //         setTimeout(() => document.body.classList.remove("flash"), 1500);
-                        //     }
-                        //     previousPrimaryStep = primaryStep;
-                        //     const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
-                        //     getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                        // }
-                        // else
-                        // {
-                        //     previousPrimaryStep = 0;
-                        //     getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
-                        // }
                         if (0 < flashInterval && 0 < ticks.length)
                         {
                             const elapsed = Domain.getTicks() -ticks[0];
@@ -1318,7 +1299,8 @@ export module Clockworks
                     $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                     $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                 ])
-            )
+            ),
+            $div("screen-bar")([]),
         ]);
         export const countdownTimerScreen = async (ticks: number[]): Promise<ScreenSource> =>
         ({
@@ -1340,11 +1322,19 @@ export module Clockworks
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
+                const screen = document.getElementById("screen") as HTMLDivElement;
+                const now = new Date();
+                const tick = Domain.getTicks(now);
                 switch(event)
                 {
                     case "high-resolution-timer":
-                        (document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? Domain.getTicks() -ticks[0]: 0);
-                        (document.getElementsByClassName("countdown-timer-screen")[0].getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.dateFullStringFromTick(Domain.getTicks());
+                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick -ticks[0]: 0);
+                        const capitalTime = Domain.dateStringFromTick(tick);
+                        const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
+                        if(capitalTimeSpan.innerText !== capitalTime)
+                        {
+                            capitalTimeSpan.innerText = capitalTime;
+                        }
                         const flashInterval = Storage.flashInterval.get();
                         if (0 < flashInterval && 0 < ticks.length)
                         {
@@ -1358,12 +1348,16 @@ export module Clockworks
                             }
                             previousPrimaryStep = primaryStep;
                             const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
-                            getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                            setScreenBarProgress(rate, getRainbowColor(primaryStep +1));
+                            // getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                            getHeaderElement().classList.add("with-screen-prgress");
                         }
                         else
                         {
                             previousPrimaryStep = 0;
-                            getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                            setScreenBarProgress(null);
+                            // getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
+                            getHeaderElement().classList.remove("with-screen-prgress");
                         }
                         break;
                     case "timer":
@@ -1371,22 +1365,13 @@ export module Clockworks
                         (
                             Array.from
                             (
-                                (
-                                    document
-                                        .getElementsByClassName("countdown-timer-screen")[0]
-                                        .getElementsByClassName("tick-list")[0] as HTMLDivElement
-                                ).childNodes
+                                (screen.getElementsByClassName("tick-list")[0] as HTMLDivElement).childNodes
                             ) as HTMLDivElement[]
                         ).forEach
                         (
                             (dom, index) =>
                             {
-                                const text = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
-                                const elapsedTimeSpan = dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                                if (elapsedTimeSpan.innerText !== text)
-                                {
-                                    elapsedTimeSpan.innerText = text;
-                                }
+                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                             }
                         );
                         break;
@@ -1462,7 +1447,7 @@ export module Clockworks
             Storage.lastApplication.set("Rainbow Clock");
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
-                const screen = document.getElementsByClassName("rainbow-clock-screen")[0] as HTMLDivElement;
+                const screen = document.getElementById("screen") as HTMLDivElement;
                 const now = new Date();
                 const tick = Domain.getTicks(now);
                 switch(event)
@@ -1487,67 +1472,15 @@ export module Clockworks
                         {
                             screen.style.backgroundColor = currentColor;
                         }
-
-
-
-                        // const screenBar = screen.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
-                        // const nextColor = getRainbowColor(now.getHours() +1);
-                        // if (screenBar.style.backgroundColor !== nextColor)
-                        // {
-                        //     screenBar.style.backgroundColor = nextColor;
-                        // }
-                        // if (document.body.style.backgroundColor !== nextColor)
-                        // {
-                        //     document.body.style.backgroundColor = nextColor;
-                        // }
-                        // if (window.innerHeight < window.innerWidth)
-                        // {
-                        //     if (screenBar.style.height !== "100%")
-                        //     {
-                        //         screenBar.style.height = "100%";
-                        //     }
-                        //     if (screenBar.style.width !== minutes)
-                        //     {
-                        //         screenBar.style.width = minutes;
-                        //     }
-                        //     if (screenBar.style.borderRightWidth !== "1px")
-                        //     {
-                        //         screenBar.style.borderRightWidth = "1px";
-                        //     }
-                        //     if (screenBar.style.borderBottomWidth !== "0px")
-                        //     {
-                        //         screenBar.style.borderBottomWidth = "0px";
-                        //     }
-                        // }
-                        // else
-                        // {
-                        //     if (screenBar.style.width !== "100%")
-                        //     {
-                        //         screenBar.style.width = "100%";
-                        //     }
-                        //     if (screenBar.style.height !== minutes)
-                        //     {
-                        //         screenBar.style.height = minutes;
-                        //     }
-                        //     if (screenBar.style.borderBottomWidth !== "1px")
-                        //     {
-                        //         screenBar.style.borderBottomWidth = "1px";
-                        //     }
-                        //     if (screenBar.style.borderRightWidth !== "0px")
-                        //     {
-                        //         screenBar.style.borderRightWidth = "0px";
-                        //     }
-                        // }
-
                         const hourUnit = 60 *60 *1000;
                         const minutes = (tick % hourUnit) / hourUnit;
                         const nextColor = getRainbowColor(now.getHours() +1);
                         setScreenBarProgress(minutes, nextColor);
-                        if (document.body.style.backgroundColor !== nextColor)
+                        const nextBodyColor = `${nextColor}E8`;
+                        if (document.body.style.backgroundColor !== nextBodyColor)
                         {
-                            document.body.style.backgroundColor = nextColor;
+                            document.body.style.backgroundColor = nextBodyColor;
                         }
-        
                         break;
                     case "storage":
                         await reload();
@@ -1727,40 +1660,40 @@ export module Clockworks
             const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
             if (window.innerHeight < window.innerWidth)
             {
-                if (screenBar.style.height !== "100%")
+                if ( ! screenBar.classList.contains("horizontal"))
                 {
-                    screenBar.style.height = "100%";
+                    screenBar.classList.add("horizontal");
+                }
+                if (screenBar.classList.contains("vertical"))
+                {
+                    screenBar.classList.remove("vertical");
+                }
+                if (screenBar.style.height !== "initial")
+                {
+                    screenBar.style.height = "initial";
                 }
                 if (screenBar.style.width !== percentString)
                 {
                     screenBar.style.width = percentString;
                 }
-                if (screenBar.style.borderRightWidth !== "1px")
-                {
-                    screenBar.style.borderRightWidth = "1px";
-                }
-                if (screenBar.style.borderBottomWidth !== "0px")
-                {
-                    screenBar.style.borderBottomWidth = "0px";
-                }
             }
             else
             {
-                if (screenBar.style.width !== "100%")
+                if ( ! screenBar.classList.contains("vertical"))
                 {
-                    screenBar.style.width = "100%";
+                    screenBar.classList.add("vertical");
+                }
+                if (screenBar.classList.contains("horizontal"))
+                {
+                    screenBar.classList.remove("horizontal");
+                }
+                if (screenBar.style.width !== "initial")
+                {
+                    screenBar.style.width = "initial";
                 }
                 if (screenBar.style.height !== percentString)
                 {
                     screenBar.style.height = percentString;
-                }
-                if (screenBar.style.borderBottomWidth !== "1px")
-                {
-                    screenBar.style.borderBottomWidth = "1px";
-                }
-                if (screenBar.style.borderRightWidth !== "0px")
-                {
-                    screenBar.style.borderRightWidth = "0px";
                 }
             }
         };
