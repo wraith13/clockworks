@@ -2,6 +2,16 @@
     "applicationTitle": "Clockworks",
     "localDbPrefix": "clockworks",
     "repositoryUrl": "https://github.com/wraith13/clockworks/",
+    "rainbowColorSetDefaultIndex": 2,
+    "rainbowColorSet":
+    [
+        "#7E3397", "#6F39A1", "#5F42A7", "#504EA9",
+        "#445DA8", "#3A6CA2", "#347C99", "#318A8C",
+        "#33977E", "#39A16F", "#42A75F", "#4EA950",
+        "#5DA844", "#6CA23A", "#7C9934", "#8A8C31",
+        "#977E33", "#A16F39", "#A75F42", "#A9504E",
+        "#A8445D", "#A23A6C", "#99347C", "#8C318A"
+    ],
     "flashIntervalPreset": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60 ],
     "timerPreset": [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 90, 120, 150, 180 ],
     "theme":

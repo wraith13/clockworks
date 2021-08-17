@@ -76,10 +76,37 @@ export module Clockworks
         end: number;
     }
     export type AlermEntry = AlermTimerEntry | AlermScheduleEntry;
+    const setTitle = (title: string) =>
+    {
+        if (document.title !== title)
+        {
+            document.title = title;
+        }
+    };
+    const getRainbowColor = (index: number, baseIndex = config.rainbowColorSetDefaultIndex) =>
+        config.rainbowColorSet[(index +baseIndex) % config.rainbowColorSet.length];
+    const getSolidRainbowColor = (index: number, baseIndex = config.rainbowColorSetDefaultIndex) =>
+        getRainbowColor(index *7, baseIndex);
+    const setBodyColor = (color: string) =>
+    {
+        const bodyColor = `${color}E8`;
+        if (document.body.style.backgroundColor !== bodyColor)
+        {
+            document.body.style.backgroundColor = bodyColor;
+        }
+    };
+    const setFoundationColor = (color: string) =>
+    {
+        const foundation = document.getElementById("foundation");
+        if (foundation.style.backgroundColor !== color)
+        {
+            foundation.style.backgroundColor = color;
+        }
+};
     export const rainbowClockColorPatternMap =
     {
-        "gradation": 1,
-        "solid": 7,
+        "gradation": (index: number) => getRainbowColor(index, 0),
+        "solid": (index: number) => getSolidRainbowColor(index, 0),
     };
     export type rainbowClockColorPatternType = keyof typeof rainbowClockColorPatternMap;
     export module Storage
@@ -142,7 +169,7 @@ export module Clockworks
         export const getTicks = (date: Date = new Date()) => date.getTime();
         export const weekday = (tick: number) =>
             new Intl.DateTimeFormat(locale.get(), { weekday: 'long'}).format(tick);
-        export const dateCoreStringFromTick = (tick: null | number) =>
+        export const dateCoreStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
             {
@@ -180,7 +207,7 @@ export module Clockworks
                 return tick -getTicks(date);
             }
         };
-        export const dateStringFromTick = (tick: null | number) =>
+        export const dateStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
             {
@@ -191,7 +218,7 @@ export module Clockworks
                 return `${dateCoreStringFromTick(tick)} ${timeLongCoreStringFromTick(getTime(tick))}`;
             }
         };
-        export const dateFullStringFromTick = (tick: null | number) =>
+        export const dateFullStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
             {
@@ -202,7 +229,7 @@ export module Clockworks
                 return `${dateCoreStringFromTick(tick)} ${timeFullCoreStringFromTick(getTime(tick))}`;
             }
         };
-        export const timeLongCoreStringFromTick = (tick: null | number) =>
+        export const timeLongCoreStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
             {
@@ -221,7 +248,7 @@ export module Clockworks
                 return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}`;
             }
         };
-        export const timeFullCoreStringFromTick = (tick: null | number) =>
+        export const timeFullCoreStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
             {
@@ -241,7 +268,7 @@ export module Clockworks
                 return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}.${("000" +milliseconds).slice(-3)}`;
             }
         };
-        export const timeShortStringFromTick = (tick: null | number) =>
+        export const timeShortStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
             {
@@ -270,7 +297,7 @@ export module Clockworks
                 return `${days.toLocaleString()} ${locale.map("days")} ${timeLongCoreStringFromTick(tick)}`;
             }
         };
-        export const timeLongStringFromTick = (tick: null | number) =>
+        export const timeLongStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
             {
@@ -1362,6 +1389,11 @@ export module Clockworks
                 }
             };
         }
+        export const screenFlash = () =>
+        {
+            document.body.classList.add("flash");
+            setTimeout(() => document.body.classList.remove("flash"), 1500);
+        };
         export const fullscreenMenuItem = async () =>
             document.fullscreenEnabled ?
                 (
@@ -1427,43 +1459,52 @@ export module Clockworks
         ];
         export const neverStopwatchScreenBody = async (ticks: number[]) =>
         ([
-            $div("capital-interval")
+            $div("primary-page")
             ([
-                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                $div("main-panel")
+                ([
+                    $div("capital-interval")
+                    ([
+                        $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                    ]),
+                    $div("current-timestamp")
+                    ([
+                        $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                    ]),
+                    $div("button-list")
+                    ({
+                        tag: "button",
+                        className: "default-button main-button long-button",
+                        children: label("Stamp"),
+                        onclick: async () => await Operate.stamp(Domain.getTicks())
+                    }),
+                ]),
             ]),
-            $div("current-timestamp")
+            $div("trail-page")
             ([
-                $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
-            ]),
-            $div("button-list")
-            ({
-                tag: "button",
-                className: "default-button main-button long-button",
-                children: label("Stamp"),
-                onclick: async () => await Operate.stamp(Domain.getTicks())
-            }),
-            $div("column-flex-list tick-list")
-            (
-                await Promise.all
+                $div("column-flex-list tick-list")
                 (
-                    ticks.map
+                    await Promise.all
                     (
-                        (tick, index) => tickItem
+                        ticks.map
                         (
-                            tick,
-                            "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
+                            (tick, index) => tickItem
+                            (
+                                tick,
+                                "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
+                            )
                         )
                     )
-                )
-            ),
-            $div("description")
-            (
-                $tag("ul")("locale-parallel-off")
-                ([
-                    $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                    $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                ])
-            ),
+                ),
+                $div("description")
+                (
+                    $tag("ul")("locale-parallel-off")
+                    ([
+                        $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                    ])
+                ),
+            ]),
             $div("screen-bar")([]),
         ]);
         export const neverStopwatchScreen = async (ticks: number[]): Promise<ScreenSource> =>
@@ -1483,7 +1524,9 @@ export module Clockworks
         let previousPrimaryStep = 0;
         export const showNeverStopwatchScreen = async () =>
         {
-            Storage.lastApplication.set("Never Stopwatch");
+            const applicationTitle = "Never Stopwatch";
+            document.body.classList.add("hide-scroll-bar");
+            Storage.lastApplication.set(applicationTitle);
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
@@ -1508,25 +1551,29 @@ export module Clockworks
                             const primaryStep = Math.floor(elapsed / unit);
                             if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                             {
-                                document.body.classList.add("flash");
-                                setTimeout(() => document.body.classList.remove("flash"), 1500);
+                                screenFlash();
                             }
+                            const currentColor = getSolidRainbowColor(primaryStep);
+                            setFoundationColor(currentColor);
                             previousPrimaryStep = primaryStep;
                             const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
-                            setScreenBarProgress(rate, getRainbowColor(primaryStep +1));
-                            // getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            setScreenBarProgress(rate, nextColor);
+                            setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
                         }
                         else
                         {
                             previousPrimaryStep = 0;
                             setScreenBarProgress(null);
-                            // getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
                             getHeaderElement().classList.remove("with-screen-prgress");
+                            const currentColor = getSolidRainbowColor(0);
+                            setFoundationColor(currentColor);
+                            setBodyColor(currentColor);
                         }
                         break;
                     case "timer":
-                        document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
+                        setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
                         (
                             Array.from
                             (
@@ -1557,52 +1604,61 @@ export module Clockworks
         };
         export const countdownTimerScreenBody = async (alerts: AlermEntry[]) =>
         ([
-            $div("capital-interval")
+            $div("primary-page")
             ([
-                $span("value monospace")(Domain.timeLongStringFromTick(0)),
-            ]),
-            $div("current-timestamp")
-            ([
-                $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
-            ]),
-            $div("button-list")
-            ({
-                tag: "button",
-                id: "done-button",
-                className: "default-button main-button long-button",
-                children: label("Done"),
-                onclick: async () => await Operate.done(Domain.getTicks())
-            }),
-            $div("button-list")
-            ([
-                {
-                    tag: "button",
-                    className: "main-button long-button",
-                    children: label("New Timer"),
-                    onclick: async () => await newTimerPopup()
-                },
-                {
-                    tag: "button",
-                    className: "main-button long-button",
-                    children: label("New Schedule"),
-                    onclick: async () =>
-                    {
-                        await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getTicks());
-                    }
-                },
-            ]),
-            $div("column-flex-list tick-list")
-            (
-                await Promise.all(alerts.map(item => alermItem(item)))
-            ),
-            $div("description")
-            (
-                $tag("ul")("locale-parallel-off")
+                $div("main-panel")
                 ([
-                    $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                    $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                ])
-            ),
+                    $div("capital-interval")
+                    ([
+                        $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                    ]),
+                    $div("current-timestamp")
+                    ([
+                        $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                    ]),
+                    $div("button-list")
+                    ({
+                        tag: "button",
+                        id: "done-button",
+                        className: "default-button main-button long-button",
+                        children: label("Done"),
+                        onclick: async () => await Operate.done(Domain.getTicks())
+                    }),
+                ]),
+            ]),
+            $div("trail-page")
+            ([
+                $div("button-list")
+                ([
+                    {
+                        tag: "button",
+                        className: "main-button long-button",
+                        children: label("New Timer"),
+                        onclick: async () => await newTimerPopup()
+                    },
+                    {
+                        tag: "button",
+                        className: "main-button long-button",
+                        children: label("New Schedule"),
+                        onclick: async () =>
+                        {
+                            await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getTicks());
+                        }
+                    },
+                ]),
+                $div("column-flex-list tick-list")
+                (
+                    await Promise.all(alerts.map(item => alermItem(item)))
+                ),
+                $div("description")
+                (
+                    $tag("ul")("locale-parallel-off")
+                    ([
+                        $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                    ])
+                ),
+            ]),
             $div("screen-bar")([]),
         ]);
         export const countdownTimerScreen = async (alerts: AlermEntry[]): Promise<ScreenSource> =>
@@ -1621,7 +1677,9 @@ export module Clockworks
         });
         export const showCountdownTimerScreen = async () =>
         {
-            Storage.lastApplication.set("Countdown Timer");
+            const applicationTitle = "Countdown Timer";
+            document.body.classList.add("hide-scroll-bar");
+            Storage.lastApplication.set(applicationTitle);
             let alerts = Storage.Alerms.get();
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
@@ -1647,25 +1705,29 @@ export module Clockworks
                             const primaryStep = Math.floor(elapsed / unit);
                             if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                             {
-                                document.body.classList.add("flash");
-                                setTimeout(() => document.body.classList.remove("flash"), 1500);
+                                screenFlash();
                             }
+                            const currentColor = getSolidRainbowColor(primaryStep);
+                            setFoundationColor(currentColor);
                             previousPrimaryStep = primaryStep;
                             const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
-                            setScreenBarProgress(rate, getRainbowColor(primaryStep +1));
-                            // getProgressElement().style.width = rate.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            setScreenBarProgress(rate, nextColor);
+                            setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
                         }
                         else
                         {
                             previousPrimaryStep = 0;
                             setScreenBarProgress(null);
-                            // getProgressElement().style.width = (0).toLocaleString("en", { style: "percent" });
                             getHeaderElement().classList.remove("with-screen-prgress");
+                            const currentColor = getSolidRainbowColor(0);
+                            setFoundationColor(currentColor);
+                            setBodyColor(currentColor);
                         }
                         break;
                     case "timer":
-                        document.title = (0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
+                        setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
                         (
                             Array.from
                             (
@@ -1710,15 +1772,18 @@ export module Clockworks
         ];
         export const rainbowClockScreenBody = async () =>
         ([
-            $div("main-panel")
+            $div("primary-page")
             ([
-                $div("capital-time")
+                $div("main-panel")
                 ([
-                    $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
-                ]),
-                $div("current-date")
-                ([
-                    $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
+                    $div("capital-time")
+                    ([
+                        $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
+                    ]),
+                    $div("current-date")
+                    ([
+                        $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
+                    ]),
                 ]),
             ]),
             $div("screen-bar")([]),
@@ -1736,19 +1801,11 @@ export module Clockworks
             },
             body: await rainbowClockScreenBody()
         });
-        const rainbowColorSet =
-        [
-            "#7E3397", "#6F39A1", "#5F42A7", "#504EA9",
-            "#445DA8", "#3A6CA2", "#347C99", "#318A8C",
-            "#33977E", "#39A16F", "#42A75F", "#4EA950",
-            "#5DA844", "#6CA23A", "#7C9934", "#8A8C31",
-            "#977E33", "#A16F39", "#A75F42", "#A9504E",
-            "#A8445D", "#A23A6C", "#99347C", "#8C318A",
-        ];
-        const getRainbowColor = (index: number) => rainbowColorSet[(index *rainbowClockColorPatternMap[Storage.rainbowClockColorPattern.get()]) % rainbowColorSet.length];
         export const showRainbowClockScreen = async () =>
         {
-            Storage.lastApplication.set("Rainbow Clock");
+            const applicationTitle = "Rainbow Clock";
+            document.body.classList.add("hide-scroll-bar");
+            Storage.lastApplication.set(applicationTitle);
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
@@ -1762,8 +1819,13 @@ export module Clockworks
                         if(capitalTimeSpan.innerText !== capitalTime)
                         {
                             capitalTimeSpan.innerText = capitalTime;
+                            setTitle(capitalTime +" - " +applicationTitle);
+                            if (capitalTime.endsWith(":00:00"))
+                            {
+                                screenFlash();
+                            }
                         }
-                        break;
+                    break;
                     case "timer":
                         const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
                         const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
@@ -1771,20 +1833,14 @@ export module Clockworks
                         {
                             currentDateSpan.innerText = dateString;
                         }
+                        const getRainbowColor = rainbowClockColorPatternMap[Storage.rainbowClockColorPattern.get()];
                         const currentColor = getRainbowColor(now.getHours());
-                        if (screen.style.backgroundColor !== currentColor)
-                        {
-                            screen.style.backgroundColor = currentColor;
-                        }
+                        setFoundationColor(currentColor);
                         const hourUnit = 60 *60 *1000;
                         const minutes = (tick % hourUnit) / hourUnit;
                         const nextColor = getRainbowColor(now.getHours() +1);
                         setScreenBarProgress(minutes, nextColor);
-                        const nextBodyColor = `${nextColor}E8`;
-                        if (document.body.style.backgroundColor !== nextBodyColor)
-                        {
-                            document.body.style.backgroundColor = nextBodyColor;
-                        }
+                        setBodyColor(nextColor);
                         break;
                     case "storage":
                         await reload();
@@ -1961,7 +2017,7 @@ export module Clockworks
                     screenBar.style.backgroundColor = color;
                 }
             }
-            const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            const percentString = (percent ?? 0).toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
             if (window.innerHeight < window.innerWidth)
             {
                 if ( ! screenBar.classList.contains("horizontal"))
