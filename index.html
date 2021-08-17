@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Aug 15 2021 16:21:09 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Aug 16 2021 23:17:25 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1048,7 +1048,7 @@ button.delete-button {
   border-color: #5F42A7;
   background-color: #FFFFFF;
   overflow: auto;
-  min-width: 360px;
+  min-width: 240px;
   max-width: calc(100vw - 16px);
 }
 .popup input {
@@ -2589,6 +2589,7 @@ define("resource/config", [], {
     "localDbPrefix": "clockworks",
     "repositoryUrl": "https://github.com/wraith13/clockworks/",
     "flashIntervalPreset": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60],
+    "timerPreset": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 90, 120, 150, 180],
     "theme": {
         "original": {
             "@main-color": "#000022",
@@ -2616,6 +2617,9 @@ define("resource/lang.en", [], {
     "Cancel full screen": "Cancel full screen",
     "elapsed time": "elapsed time",
     "Stamp": "Stamp",
+    "Done": "Done",
+    "New Timer": "New Timer",
+    "New Schedule": "New Schedule",
     "days": "days",
     "m(minutes)": "m",
     "No Flash": "No Flash",
@@ -2642,6 +2646,7 @@ define("resource/lang.en", [], {
     "Updated.": "Updated.",
     "Removed.": "Removed.",
     "Reseted.": "Reseted.",
+    "Done!": "Done!",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
     "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified."
@@ -2652,6 +2657,9 @@ define("resource/lang.ja", [], {
     "Cancel full screen": "フルスクリーン解除",
     "elapsed time": "経過時間",
     "Stamp": "スタンプ",
+    "Done": "完了",
+    "New Timer": "新しいタイマー",
+    "New Schedule": "新しい予定",
     "days": "日",
     "m(minutes)": "分",
     "No Flash": "フラッシュなし",
@@ -2678,6 +2686,7 @@ define("resource/lang.ja", [], {
     "Updated.": "更新しました。",
     "Removed.": "削除しました。",
     "Reseted.": "リセットしました。",
+    "Done!": "完了！",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
     "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。"
@@ -2822,6 +2831,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         })(Storage = Clockworks.Storage || (Clockworks.Storage = {}));
         var Domain;
         (function (Domain) {
+            Domain.makeTimerLabel = function (minutes) { return minutes + " " + locale.map("m(minutes)"); };
             Domain.getTicks = function (date) {
                 if (date === void 0) { date = new Date(); }
                 return date.getTime();
@@ -2956,7 +2966,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             var Operate;
             (function (Operate) {
                 var _this = this;
-                Operate.done = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                Operate.stamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
                     var backup, toast;
                     var _this = this;
                     return __generator(this, function (_a) {
@@ -3047,6 +3057,97 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         Render.updateWindow("operate");
                         toast = Render.makePrimaryToast({
                             content: Render.$span("")("\u30EA\u30BB\u30C3\u30C8\u3057\u307E\u3057\u305F\u3002"),
+                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            Storage.Stamps.set(backup);
+                                            Render.updateWindow("operate");
+                                            return [4 /*yield*/, toast.hide()];
+                                        case 1:
+                                            _a.sent();
+                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }),
+                        });
+                        return [2 /*return*/];
+                    });
+                }); };
+                Operate.newTimer = function (i, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                    var tick, alerm, toast;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        tick = Domain.getTicks();
+                        alerm = {
+                            type: "timer",
+                            start: tick,
+                            end: tick + (i * 60 * 1000),
+                        };
+                        Storage.Alerms.add(alerm);
+                        Render.updateWindow("operate");
+                        toast = Render.makePrimaryToast({
+                            content: Render.$span("")("" + locale.map("Done!")),
+                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            Storage.Alerms.remove(alerm);
+                                            Render.updateWindow("operate");
+                                            return [4 /*yield*/, toast.hide()];
+                                        case 1:
+                                            _a.sent();
+                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }),
+                        });
+                        return [2 /*return*/];
+                    });
+                }); };
+                Operate.newSchedule = function (title, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                    var alerm, toast;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        alerm = {
+                            type: "schedule",
+                            title: title,
+                            start: Domain.getTicks(),
+                            end: end,
+                        };
+                        Storage.Alerms.add(alerm);
+                        Render.updateWindow("operate");
+                        toast = Render.makePrimaryToast({
+                            content: Render.$span("")("" + locale.map("Done!")),
+                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            Storage.Alerms.remove(alerm);
+                                            Render.updateWindow("operate");
+                                            return [4 /*yield*/, toast.hide()];
+                                        case 1:
+                                            _a.sent();
+                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }),
+                        });
+                        return [2 /*return*/];
+                    });
+                }); };
+                Operate.done = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                    var backup, toast;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        backup = Storage.Stamps.get();
+                        Storage.Stamps.add(tick);
+                        Render.updateWindow("operate");
+                        toast = Render.makePrimaryToast({
+                            content: Render.$span("")("" + locale.map("Done!")),
                             backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
@@ -3486,6 +3587,147 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     });
                 });
             };
+            Render.newTimerPopup = function () { return __awaiter(_this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                                var result, checkButtonList, checkButtonListUpdate, ui;
+                                var _this = this;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            result = false;
+                                            checkButtonList = Render.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                var _a, _b, _c;
+                                                var _this = this;
+                                                return __generator(this, function (_d) {
+                                                    switch (_d.label) {
+                                                        case 0:
+                                                            _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
+                                                            _c = [checkButtonList];
+                                                            return [4 /*yield*/, Promise.all(config_json_1.default.timerPreset.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
+                                                                    var _a;
+                                                                    var _this = this;
+                                                                    return __generator(this, function (_b) {
+                                                                        switch (_b.label) {
+                                                                            case 0:
+                                                                                _a = {
+                                                                                    tag: "button",
+                                                                                    className: "check-button"
+                                                                                };
+                                                                                return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                                            case 1: return [2 /*return*/, (_a.children = [
+                                                                                    _b.sent(),
+                                                                                    Render.$span("")(Render.labelSpan(Domain.makeTimerLabel(i)))
+                                                                                ],
+                                                                                    _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                                                        return __generator(this, function (_a) {
+                                                                                            switch (_a.label) {
+                                                                                                case 0: return [4 /*yield*/, Operate.newTimer(i)];
+                                                                                                case 1:
+                                                                                                    _a.sent();
+                                                                                                    result = true;
+                                                                                                    ui.close();
+                                                                                                    return [2 /*return*/];
+                                                                                            }
+                                                                                        });
+                                                                                    }); },
+                                                                                    _a)];
+                                                                        }
+                                                                    });
+                                                                }); }))];
+                                                        case 1: return [2 /*return*/, _b.apply(_a, _c.concat([[
+                                                                    _d.sent()
+                                                                ]]))];
+                                                    }
+                                                });
+                                            }); };
+                                            return [4 /*yield*/, checkButtonListUpdate()];
+                                        case 1:
+                                            _a.sent();
+                                            ui = Render.popup({
+                                                // className: "add-remove-tags-popup",
+                                                children: [
+                                                    Render.$tag("h2")("")(Render.label("New Timer")),
+                                                    checkButtonList,
+                                                    Render.$div("popup-operator")([{
+                                                            tag: "button",
+                                                            className: "default-button",
+                                                            children: Render.label("Close"),
+                                                            onclick: function () {
+                                                                ui.close();
+                                                            },
+                                                        }])
+                                                ],
+                                                onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                                    return [2 /*return*/, resolve(result)];
+                                                }); }); },
+                                            });
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                });
+            }); };
+            Render.schedulePrompt = function (message, _default) { return __awaiter(_this, void 0, void 0, function () {
+                var inputDate, inputTime;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            inputDate = Render.$make(HTMLInputElement)({
+                                tag: "input",
+                                type: "date",
+                                value: Domain.dateCoreStringFromTick(_default),
+                                required: "",
+                            });
+                            inputTime = Render.$make(HTMLInputElement)({
+                                tag: "input",
+                                type: "time",
+                                value: Domain.timeFullCoreStringFromTick(Domain.getTime(_default)),
+                                required: "",
+                            });
+                            return [4 /*yield*/, new Promise(function (resolve) {
+                                    var result = null;
+                                    var ui = Render.popup({
+                                        children: [
+                                            Render.$tag("h2")("")(message),
+                                            inputDate,
+                                            inputTime,
+                                            Render.$div("popup-operator")([
+                                                {
+                                                    tag: "button",
+                                                    className: "cancel-button",
+                                                    children: locale.map("Cancel"),
+                                                    onclick: function () {
+                                                        result = null;
+                                                        ui.close();
+                                                    },
+                                                },
+                                                {
+                                                    tag: "button",
+                                                    className: "default-button",
+                                                    children: locale.map("OK"),
+                                                    onclick: function () {
+                                                        result = inputDate.value + "T" + inputTime.value;
+                                                        ui.close();
+                                                    },
+                                                },
+                                            ])
+                                        ],
+                                        onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            return [2 /*return*/, resolve(result)];
+                                        }); }); },
+                                    });
+                                })];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                });
+            }); };
             Render.screenCover = function (data) {
                 var dom = Render.$make(HTMLDivElement)({
                     tag: "div",
@@ -3918,7 +4160,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [4 /*yield*/, Resource.loadSvgOrCache(0 === i ? "sleep-icon" : "flash-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[
                                                     _b.sent(),
-                                                    Render.labelSpan(0 === i ? locale.map("No Flash") : locale.map("Interval") + ": " + i + " " + locale.map("m(minutes)"))
+                                                    Render.labelSpan(0 === i ? locale.map("No Flash") : locale.map("Interval") + ": " + Domain.makeTimerLabel(i))
                                                 ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                     return __generator(this, function (_a) {
                                                         switch (_a.label) {
@@ -3945,7 +4187,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             _a = {
                                 icon: 0 === flashInterval ? "sleep-icon" : "flash-icon",
-                                title: 0 === flashInterval ? locale.map("No Flash") : locale.map("Interval") + ": " + flashInterval + " " + locale.map("m(minutes)")
+                                title: 0 === flashInterval ? locale.map("No Flash") : locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
                             };
                             return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(flashInterval)];
                         case 1: return [2 /*return*/, (_a.menu = _b.sent(),
@@ -4094,7 +4336,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     children: Render.label("Stamp"),
                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Operate.done(Domain.getTicks())];
+                                            case 0: return [4 /*yield*/, Operate.stamp(Domain.getTicks())];
                                             case 1: return [2 /*return*/, _a.sent()];
                                         }
                                     }); }); }
@@ -4245,15 +4487,44 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                                 ]), Render.$div("button-list")({
                                     tag: "button",
+                                    id: "done-button",
                                     className: "default-button main-button long-button",
-                                    children: Render.label("Stamp"),
+                                    children: Render.label("Done"),
                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0: return [4 /*yield*/, Operate.done(Domain.getTicks())];
                                             case 1: return [2 /*return*/, _a.sent()];
                                         }
                                     }); }); }
-                                })];
+                                }),
+                                Render.$div("button-list")([
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: Render.label("New Timer"),
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Render.newTimerPopup()];
+                                                case 1: return [2 /*return*/, _a.sent()];
+                                            }
+                                        }); }); }
+                                    },
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: Render.label("New Schedule"),
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("New Schedule"), Domain.getTicks())];
+                                                    case 1:
+                                                        _a.sent();
+                                                        return [2 /*return*/];
+                                                }
+                                            });
+                                        }); }
+                                    },
+                                ])];
                             _b = Render.$div("column-flex-list tick-list");
                             return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.tickItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                         case 1: return [2 /*return*/, (_a.concat([

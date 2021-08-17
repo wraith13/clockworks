@@ -4,6 +4,9 @@
     "Cancel full screen": "Cancel full screen",
     "elapsed time": "elapsed time",
     "Stamp": "Stamp",
+    "Done": "Done",
+    "New Timer": "New Timer",
+    "New Schedule": "New Schedule",
     "days": "days",
     "m(minutes)": "m",
     "No Flash": "No Flash",
@@ -30,6 +33,7 @@
     "Updated.": "Updated.",
     "Removed.": "Removed.",
     "Reseted.": "Reseted.",
+    "Done!": "Done!",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
     "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified."

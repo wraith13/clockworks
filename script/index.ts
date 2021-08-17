@@ -62,13 +62,20 @@ export module Clockworks
         theme?: "auto" | "light" | "dark";
         locale?: locale.LocaleType;
     }
-    export interface AlermEntry
+    export interface AlermTimerEntry
     {
-        type: "timer" | "schedule";
+        type: "timer";
+        start: number;
+        end: number;
+    }
+    export interface AlermScheduleEntry
+    {
+        type: "schedule";
         title: string;
         start: number;
         end: number;
     }
+    export type AlermEntry = AlermTimerEntry | AlermScheduleEntry;
     export const rainbowClockColorPatternMap =
     {
         "gradation": 1,
@@ -131,6 +138,7 @@ export module Clockworks
     }
     export module Domain
     {
+        export const makeTimerLabel = (minutes: number) => `${minutes} ${locale.map("m(minutes)")}`;
         export const getTicks = (date: Date = new Date()) => date.getTime();
         export const weekday = (tick: number) =>
             new Intl.DateTimeFormat(locale.get(), { weekday: 'long'}).format(tick);
@@ -301,7 +309,7 @@ export module Clockworks
     {
         export module Operate
         {
-            export const done = async (tick: number, onCanceled?: () => unknown) =>
+            export const stamp = async (tick: number, onCanceled?: () => unknown) =>
             {
                 const backup = Storage.Stamps.get();
                 Storage.Stamps.add(tick);
@@ -342,7 +350,7 @@ export module Clockworks
                     ),
                 });
             };
-            export const remove = async (tick: number, onCanceled?: () => unknown) =>
+            export const removeStamp = async (tick: number, onCanceled?: () => unknown) =>
             {
                 const backup = Storage.Stamps.get();
                 Storage.Stamps.remove(tick);
@@ -375,6 +383,97 @@ export module Clockworks
                         async () =>
                         {
                             Storage.Stamps.set(backup);
+                            updateWindow("operate");
+                            await toast.hide();
+                            onCanceled?.();
+                        }
+                    ),
+                });
+            };
+            export const newTimer = async (i: number, onCanceled?: () => unknown) =>
+            {
+                const tick = Domain.getTicks();
+                const alerm: AlermTimerEntry =
+                {
+                    type: "timer",
+                    start: tick,
+                    end: tick +(i *60 *1000),
+                };
+                Storage.Alerms.add(alerm);
+                updateWindow("operate");
+                const toast = makePrimaryToast
+                ({
+                    content: $span("")(`${locale.map("Done!")}`),
+                    backwardOperator: cancelTextButton
+                    (
+                        async () =>
+                        {
+                            Storage.Alerms.remove(alerm);
+                            updateWindow("operate");
+                            await toast.hide();
+                            onCanceled?.();
+                        }
+                    ),
+                });
+            };
+            export const newSchedule = async (title: string, end: number, onCanceled?: () => unknown) =>
+            {
+                const alerm: AlermScheduleEntry =
+                {
+                    type: "schedule",
+                    title,
+                    start: Domain.getTicks(),
+                    end,
+                };
+                Storage.Alerms.add(alerm);
+                updateWindow("operate");
+                const toast = makePrimaryToast
+                ({
+                    content: $span("")(`${locale.map("Done!")}`),
+                    backwardOperator: cancelTextButton
+                    (
+                        async () =>
+                        {
+                            Storage.Alerms.remove(alerm);
+                            updateWindow("operate");
+                            await toast.hide();
+                            onCanceled?.();
+                        }
+                    ),
+                });
+            };
+            export const done = async (tick: number, onCanceled?: () => unknown) =>
+            {
+                const backup = Storage.Stamps.get();
+                Storage.Stamps.add(tick);
+                updateWindow("operate");
+                const toast = makePrimaryToast
+                ({
+                    content: $span("")(`${locale.map("Done!")}`),
+                    backwardOperator: cancelTextButton
+                    (
+                        async () =>
+                        {
+                            Storage.Stamps.set(backup);
+                            updateWindow("operate");
+                            await toast.hide();
+                            onCanceled?.();
+                        }
+                    ),
+                });
+            };
+            export const removeAlert = async (item: AlermEntry, onCanceled?: () => unknown) =>
+            {
+                Storage.Alerms.remove(item);
+                updateWindow("operate");
+                const toast = makePrimaryToast
+                ({
+                    content: $span("")(`${locale.map("Removed.")}`),
+                    backwardOperator: cancelTextButton
+                    (
+                        async () =>
+                        {
+                            Storage.Alerms.add(item);
                             updateWindow("operate");
                             await toast.hide();
                             onCanceled?.();
@@ -698,6 +797,130 @@ export module Clockworks
                 }
             );
         };
+        export const newTimerPopup = async (): Promise<boolean> =>
+        {
+            return await new Promise
+            (
+                async resolve =>
+                {
+                    let result = false;
+                    const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                    const checkButtonListUpdate = async () => minamo.dom.replaceChildren
+                    (
+                        checkButtonList,
+                        [
+                            await Promise.all
+                            (
+                                config.timerPreset.map
+                                (
+                                    async (i: number) =>
+                                    ({
+                                        tag: "button",
+                                        className: `check-button`,
+                                        children:
+                                        [
+                                            await Resource.loadSvgOrCache("check-icon"),
+                                            $span("")(labelSpan(Domain.makeTimerLabel(i))),
+                                        ],
+                                        onclick: async () =>
+                                        {
+                                            await Operate.newTimer(i);
+                                            result = true;
+                                            ui.close();
+                                        }
+                                    })
+                                )
+                            )
+                        ]
+                    );
+                    await checkButtonListUpdate();
+                    const ui = popup
+                    ({
+                        // className: "add-remove-tags-popup",
+                        children:
+                        [
+                            $tag("h2")("")(label("New Timer")),
+                            checkButtonList,
+                            $div("popup-operator")
+                            ([{
+                                tag: "button",
+                                className: "default-button",
+                                children: label("Close"),
+                                onclick: () =>
+                                {
+                                    ui.close();
+                                },
+                            }])
+                        ],
+                        onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
+        export const schedulePrompt = async (message: string, title: string, _default: number): Promise<string | null> =>
+        {
+            const inputTitle = $make(HTMLInputElement)
+            ({
+                tag: "input",
+                value: title,
+                required: "",
+            });
+            const inputDate = $make(HTMLInputElement)
+            ({
+                tag: "input",
+                type: "date",
+                value: Domain.dateCoreStringFromTick(_default),
+                required: "",
+            });
+            const inputTime = $make(HTMLInputElement)
+            ({
+                tag: "input",
+                type: "time",
+                value: Domain.timeFullCoreStringFromTick(Domain.getTime(_default)),
+                required: "",
+            });
+            return await new Promise
+            (
+                resolve =>
+                {
+                    let result: string | null = null;
+                    const ui = popup
+                    ({
+                        children:
+                        [
+                            $tag("h2")("")(message),
+                            inputTitle,
+                            inputDate,
+                            inputTime,
+                            $div("popup-operator")
+                            ([
+                                {
+                                    tag: "button",
+                                    className: "cancel-button",
+                                    children: locale.map("Cancel"),
+                                    onclick: () =>
+                                    {
+                                        result = null;
+                                        ui.close();
+                                    },
+                                },
+                                {
+                                    tag: "button",
+                                    className: "default-button",
+                                    children: locale.map("OK"),
+                                    onclick: () =>
+                                    {
+                                        result = `${inputDate.value}T${inputTime.value}`;
+                                        ui.close();
+                                    },
+                                },
+                            ])
+                        ],
+                        onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
         export const screenCover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
             const dom = $make(HTMLDivElement)
@@ -884,7 +1107,7 @@ export module Clockworks
                         menuItem
                         (
                             label("Remove"),
-                            async () => await Operate.remove(tick),
+                            async () => await Operate.removeStamp(tick),
                             "delete-button"
                         )
                     ]),
@@ -903,6 +1126,77 @@ export module Clockworks
                     $span("value monospace")(Domain.timeLongStringFromTick(interval)),
                 ]),
             ]),
+        ]);
+        export const alermItem = async (item: AlermEntry) => $div("alerm-item flex-item")
+        ([
+            $div("item-header")
+            ([
+                $div("item-title")
+                ([
+                    await Resource.loadSvgOrCache("tick-icon"),
+                    $div("tick-elapsed-time")
+                    ([
+                        $span("value monospace")
+                        (
+                            "timer" === item.type ?
+                                Domain.makeTimerLabel(item.end -item.start):
+                                item.title
+                        ),
+                    ]),
+                ]),
+                $div("item-operator")
+                ([
+                    await menuButton
+                    ([
+                        menuItem
+                        (
+                            label("Edit"),
+                            async () =>
+                            {
+                                // const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
+                                // if (null !== result)
+                                // {
+                                //     const newTick = Domain.getTicks(result);
+                                //     if (tick !== Domain.getTicks(result))
+                                //     {
+                                //         if (0 <= newTick && newTick <= Domain.getTicks())
+                                //         {
+                                //             await Operate.edit(tick, newTick);
+                                //         }
+                                //         else
+                                //         {
+                                //             makeToast
+                                //             ({
+                                //                 content: label("A date and time outside the valid range was specified."),
+                                //                 isWideContent: true,
+                                //             });
+                                //         }
+                                //     }
+                                // }
+                            }
+                        ),
+                        menuItem
+                        (
+                            label("Remove"),
+                            async () => await Operate.removeAlert(item),
+                            "delete-button"
+                        )
+                    ]),
+                ]),
+            ]),
+            // $div("item-information")
+            // ([
+            //     $div("alert-due-timestamp")
+            //     ([
+            //         label("Due timestamp"),
+            //         $span("value monospace")(Domain.dateFullStringFromTick(item.end)),
+            //     ]),
+            //     $div("alert-due-rest")
+            //     ([
+            //         label("Rest"),
+            //         $span("value monospace")(Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
+            //     ]),
+            // ]),
         ]);
         export interface HeaderSegmentSource
         {
@@ -1029,7 +1323,7 @@ export module Clockworks
                 (
                     [
                         await Resource.loadSvgOrCache(0 === i ? "sleep-icon": "flash-icon"),
-                        labelSpan(0 === i ? locale.map("No Flash"): `${locale.map("Interval")}: ${i} ${locale.map("m(minutes)")}`),
+                        labelSpan(0 === i ? locale.map("No Flash"): `${locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
                     ],
                     async () =>
                     {
@@ -1043,7 +1337,7 @@ export module Clockworks
         export const screenHeaderFlashSegment = async (flashInterval: number): Promise<HeaderSegmentSource> =>
         ({
             icon: 0 === flashInterval ? "sleep-icon": "flash-icon",
-            title: 0 === flashInterval ? locale.map("No Flash"): `${locale.map("Interval")}: ${flashInterval} ${locale.map("m(minutes)")}`,
+            title: 0 === flashInterval ? locale.map("No Flash"): `${locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
             menu: await screenHeaderFlashSegmentMenu(flashInterval),
         });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
@@ -1146,7 +1440,7 @@ export module Clockworks
                 tag: "button",
                 className: "default-button main-button long-button",
                 children: label("Stamp"),
-                onclick: async () => await Operate.done(Domain.getTicks())
+                onclick: async () => await Operate.stamp(Domain.getTicks())
             }),
             $div("column-flex-list tick-list")
             (
@@ -1261,7 +1555,7 @@ export module Clockworks
             await showWindow(await neverStopwatchScreen(ticks), updateWindow);
             await updateWindow("timer");
         };
-        export const countdownTimerScreenBody = async (ticks: number[]) =>
+        export const countdownTimerScreenBody = async (alerts: AlermEntry[]) =>
         ([
             $div("capital-interval")
             ([
@@ -1274,23 +1568,32 @@ export module Clockworks
             $div("button-list")
             ({
                 tag: "button",
+                id: "done-button",
                 className: "default-button main-button long-button",
-                children: label("Stamp"),
+                children: label("Done"),
                 onclick: async () => await Operate.done(Domain.getTicks())
             }),
+            $div("button-list")
+            ([
+                {
+                    tag: "button",
+                    className: "main-button long-button",
+                    children: label("New Timer"),
+                    onclick: async () => await newTimerPopup()
+                },
+                {
+                    tag: "button",
+                    className: "main-button long-button",
+                    children: label("New Schedule"),
+                    onclick: async () =>
+                    {
+                        await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getTicks());
+                    }
+                },
+            ]),
             $div("column-flex-list tick-list")
             (
-                await Promise.all
-                (
-                    ticks.map
-                    (
-                        (tick, index) => tickItem
-                        (
-                            tick,
-                            "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
-                        )
-                    )
-                )
+                await Promise.all(alerts.map(item => alermItem(item)))
             ),
             $div("description")
             (
@@ -1302,7 +1605,7 @@ export module Clockworks
             ),
             $div("screen-bar")([]),
         ]);
-        export const countdownTimerScreen = async (ticks: number[]): Promise<ScreenSource> =>
+        export const countdownTimerScreen = async (alerts: AlermEntry[]): Promise<ScreenSource> =>
         ({
             className: "countdown-timer-screen",
             header:
@@ -1314,11 +1617,12 @@ export module Clockworks
                 ],
                 menu: neverStopwatchScreenMenu
             },
-            body: await countdownTimerScreenBody(ticks)
+            body: await countdownTimerScreenBody(alerts)
         });
         export const showCountdownTimerScreen = async () =>
         {
             Storage.lastApplication.set("Countdown Timer");
+            let alerts = Storage.Alerms.get();
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
@@ -1387,7 +1691,7 @@ export module Clockworks
                         break;
                 }
             };
-            await showWindow(await countdownTimerScreen(ticks), updateWindow);
+            await showWindow(await countdownTimerScreen(alerts), updateWindow);
             await updateWindow("timer");
         };
         export const colorMenuItem = async () =>
