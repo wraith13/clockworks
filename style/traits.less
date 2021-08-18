@@ -39,6 +39,10 @@
 {
     background-color: @base-color;
 }
+.alpha-positive-background-coloring-trait
+{
+    background-color: e(%("%s%s", @base-color, "DD"));
+}
 .negative-foreground-coloring-trait
 {
     color: @base-color;
@@ -151,4 +155,3 @@
         display: none;
     }
 }
-

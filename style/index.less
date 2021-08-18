@@ -176,7 +176,7 @@ h1
         {
             transform: skewX(-150deg);
         }
-                text-decoration: none;
+        text-decoration: none;
         min-width: 2.25rem;
         &:first-child
         {
@@ -215,7 +215,7 @@ h1
         margin-left: 0rem;
         border-left-style: solid;
         border-left-width: 1px;
-        border-left-color: @base-color !important;
+        border-left-color: e(%("%s%s", @base-color, "44")) !important;
         .icon
         {
             padding: 0.5rem 0.25rem;
@@ -334,7 +334,7 @@ h1
     right: 0px;
     bottom: 0px;
     filter: drop-shadow(0.0rem -0rem 3rem @accent-color); // #screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
-    .positive-background-coloring-trait;
+    .alpha-positive-background-coloring-trait;
     .item
     {
         border-top-color: @accent-color;
@@ -585,7 +585,7 @@ button
         flex-direction: column;
     }
     color: @accent-color;
-    .positive-background-coloring-trait;
+    .alpha-positive-background-coloring-trait;
     border-style: solid;
     border-width: 1px;
     border-radius: 0.5rem;
@@ -614,6 +614,20 @@ button
         &.current-item
         {
             .primary-operator-coloring-trait;
+        }
+        &:not(.current-item)
+        {
+            @media (hover: hover)
+            {
+                &:not(:hover)
+                {
+                    background-color: transparent;
+                }
+            }
+            @media (hover: none)
+            {
+                background-color: transparent;
+            }
         }
         & > .label + .value
         {

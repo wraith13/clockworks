@@ -3,6 +3,7 @@
     "localDbPrefix": "clockworks",
     "repositoryUrl": "https://github.com/wraith13/clockworks/",
     "rainbowColorSetDefaultIndex": 2,
+    "rainbowColorSetSolidIndexRate": 7,
     "rainbowColorSet":
     [
         "#7E3397", "#6F39A1", "#5F42A7", "#504EA9",

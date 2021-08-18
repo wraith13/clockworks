@@ -86,7 +86,7 @@ export module Clockworks
     const getRainbowColor = (index: number, baseIndex = config.rainbowColorSetDefaultIndex) =>
         config.rainbowColorSet[(index +baseIndex) % config.rainbowColorSet.length];
     const getSolidRainbowColor = (index: number, baseIndex = config.rainbowColorSetDefaultIndex) =>
-        getRainbowColor(index *7, baseIndex);
+        getRainbowColor(index *config.rainbowColorSetSolidIndexRate, baseIndex);
     const setBodyColor = (color: string) =>
     {
         const bodyColor = `${color}E8`;
@@ -2017,43 +2017,57 @@ export module Clockworks
                     screenBar.style.backgroundColor = color;
                 }
             }
-            const percentString = (percent ?? 0).toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-            if (window.innerHeight < window.innerWidth)
+            if (null !== percent)
             {
-                if ( ! screenBar.classList.contains("horizontal"))
+                const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                if (window.innerHeight < window.innerWidth)
                 {
-                    screenBar.classList.add("horizontal");
+                    if ( ! screenBar.classList.contains("horizontal"))
+                    {
+                        screenBar.classList.add("horizontal");
+                    }
+                    if (screenBar.classList.contains("vertical"))
+                    {
+                        screenBar.classList.remove("vertical");
+                    }
+                    if (screenBar.style.height !== "initial")
+                    {
+                        screenBar.style.height = "initial";
+                    }
+                    if (screenBar.style.width !== percentString)
+                    {
+                        screenBar.style.width = percentString;
+                    }
                 }
-                if (screenBar.classList.contains("vertical"))
+                else
                 {
-                    screenBar.classList.remove("vertical");
+                    if ( ! screenBar.classList.contains("vertical"))
+                    {
+                        screenBar.classList.add("vertical");
+                    }
+                    if (screenBar.classList.contains("horizontal"))
+                    {
+                        screenBar.classList.remove("horizontal");
+                    }
+                    if (screenBar.style.width !== "initial")
+                    {
+                        screenBar.style.width = "initial";
+                    }
+                    if (screenBar.style.height !== percentString)
+                    {
+                        screenBar.style.height = percentString;
+                    }
                 }
-                if (screenBar.style.height !== "initial")
+                if (screenBar.style.display !== "block")
                 {
-                    screenBar.style.height = "initial";
-                }
-                if (screenBar.style.width !== percentString)
-                {
-                    screenBar.style.width = percentString;
+                    screenBar.style.display = "block";
                 }
             }
             else
             {
-                if ( ! screenBar.classList.contains("vertical"))
+                if (screenBar.style.display !== "none")
                 {
-                    screenBar.classList.add("vertical");
-                }
-                if (screenBar.classList.contains("horizontal"))
-                {
-                    screenBar.classList.remove("horizontal");
-                }
-                if (screenBar.style.width !== "initial")
-                {
-                    screenBar.style.width = "initial";
-                }
-                if (screenBar.style.height !== percentString)
-                {
-                    screenBar.style.height = percentString;
+                    screenBar.style.display = "none";
                 }
             }
         };
