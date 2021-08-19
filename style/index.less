@@ -230,17 +230,17 @@ h1
     {
         white-space: nowrap;
     }
-    // @media (max-width:780px)
-    // {
-    //     .segment:not(.last-segment)
-    //     {
-    //         padding-right: 0.5rem;
-    //         .segment-title
-    //         {
-    //             display: none;
-    //         }
-    //     }
-    // }
+    @media (max-width:780px)
+    {
+        .segment.first-segment:not(.last-segment)
+        {
+            padding-right: 0.5rem;
+            .segment-title
+            {
+                display: none;
+            }
+        }
+    }
     button.icon-button,
     button.menu-button
     {

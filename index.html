@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Thu Aug 19 2021 10:41:03 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Aug 20 2021 05:42:28 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -572,6 +572,14 @@ h1 .segment + .menu-popup + .segment .icon svg {
 }
 h1 .segment + .menu-popup {
   white-space: nowrap;
+}
+@media (max-width: 780px) {
+  h1 .segment.first-segment:not(.last-segment) {
+    padding-right: 0.5rem;
+  }
+  h1 .segment.first-segment:not(.last-segment) .segment-title {
+    display: none;
+  }
 }
 h1 button.icon-button,
 h1 button.menu-button {
@@ -2818,15 +2826,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         var _this = this;
         Clockworks.applicationTitle = config_json_1.default.applicationTitle;
         Clockworks.application = {
-            "Clockworks": {
-                icon: "application-icon",
-                show: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, Render.showWelcomeScreen()];
-                        case 1: return [2 /*return*/, _a.sent()];
-                    }
-                }); }); },
-            },
+            // "Clockworks": <ApplicationEntry>
+            // {
+            //     icon: "application-icon",
+            //     show: async () => await Render.showWelcomeScreen(),
+            // },
             "Never Stopwatch": {
                 icon: "never-stopwatch-icon",
                 show: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -2935,12 +2939,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     return minamo_js_1.minamo.localStorage.set(rainbowClockColorPattern.makeKey(), settings);
                 };
             })(rainbowClockColorPattern = Storage.rainbowClockColorPattern || (Storage.rainbowClockColorPattern = {}));
-            var lastApplication;
-            (function (lastApplication) {
-                lastApplication.makeKey = function () { return config_json_1.default.localDbPrefix + ":lastApplication"; };
-                lastApplication.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(lastApplication.makeKey())) !== null && _a !== void 0 ? _a : "Clockworks"; };
-                lastApplication.set = function (value) { return minamo_js_1.minamo.localStorage.set(lastApplication.makeKey(), value); };
-            })(lastApplication = Storage.lastApplication || (Storage.lastApplication = {}));
         })(Storage = Clockworks.Storage || (Clockworks.Storage = {}));
         var Domain;
         (function (Domain) {
@@ -3321,6 +3319,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [2 /*return*/];
                         });
                     }); },
+                });
+            };
+            Render.internalLink = function (data) {
+                return ({
+                    tag: "a",
+                    className: data.className,
+                    href: Clockworks.makeUrl(data.href),
+                    children: data.children,
+                    onclick: function (_event) {
+                        // event.stopPropagation();
+                        Clockworks.showUrl(data.href);
+                        return false;
+                    }
                 });
             };
             Render.externalLink = function (data) {
@@ -4157,9 +4168,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            var getLastSegmentClass = function (data, ix) { return ix === data.items.length - 1 ?
-                //(! data.operator  ? "last-segment fill-header-segment": "last-segment"): undefined;
-                "last-segment" : undefined; };
+            var getLastSegmentClass = function (data, ix) {
+                return [
+                    ix === 0 ? "first-segment" : undefined,
+                    ix === data.items.length - 1 ? "last-segment" : undefined,
+                ]
+                    .filter(function (i) { return undefined !== i; })
+                    .join(" ");
+            };
             Render.screenSegmentedHeader = function (data) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b;
                 var _this = this;
@@ -4170,7 +4186,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [4 /*yield*/, Promise.all(data.items
                                     .map(function (item, ix) { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
-                                        return [2 /*return*/, (item.menu && Render.screenHeaderPopupSegment(item, getLastSegmentClass(data, ix))) ||
+                                        return [2 /*return*/, (item.href && Render.screenHeaderLinkSegment(item, getLastSegmentClass(data, ix))) ||
+                                                (item.menu && Render.screenHeaderPopupSegment(item, getLastSegmentClass(data, ix))) ||
                                                 (true && Render.screenHeaderLabelSegment(item, getLastSegmentClass(data, ix)))];
                                     });
                                 }); }))];
@@ -4227,8 +4244,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     return __generator(this, function (_c) {
                         switch (_c.label) {
                             case 0:
-                                _a = Render.$div("segment " + className);
-                                _b = {};
+                                _a = Render.internalLink;
+                                _b = {
+                                    className: "segment " + className,
+                                    href: item.href
+                                };
                                 return [4 /*yield*/, Render.screenHeaderSegmentCore(item)];
                             case 1: return [2 /*return*/, _a.apply(void 0, [(_b.children = _c.sent(),
                                         _b)])];
@@ -4304,7 +4324,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     });
                 });
             };
-            Render.screenHeaderHomeSegment = function (applicationType) { return __awaiter(_this, void 0, void 0, function () {
+            Render.screenHeaderHomeSegment = function () { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, ({
+                            icon: "application-icon",
+                            href: {},
+                            title: Clockworks.applicationTitle,
+                        })];
+                });
+            }); };
+            Render.screenHeaderApplicationSegment = function (applicationType) { return __awaiter(_this, void 0, void 0, function () {
                 var _a;
                 var _this = this;
                 return __generator(this, function (_b) {
@@ -4519,7 +4548,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 className: "welcome-screen"
                             };
                             _d = {};
-                            return [4 /*yield*/, Render.screenHeaderHomeSegment("Clockworks")];
+                            return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
                             _c.header = (_d.items = [
                                 _e.sent()
@@ -4578,14 +4607,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.showWelcomeScreen = function () { return __awaiter(_this, void 0, void 0, function () {
-                var applicationTitle, updateWindow, _a;
+                var updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            applicationTitle = "Clockworks";
                             document.body.classList.remove("hide-scroll-bar");
-                            Storage.lastApplication.set(applicationTitle);
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     switch (event) {
@@ -4697,20 +4724,25 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 className: "never-stopwatch-screen"
                             };
                             _c = {};
-                            return [4 /*yield*/, Render.screenHeaderHomeSegment("Never Stopwatch")];
+                            return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
                             _a = [
                                 _d.sent()
                             ];
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.flashInterval.get())];
+                            return [4 /*yield*/, Render.screenHeaderApplicationSegment("Never Stopwatch")];
                         case 2:
+                            _a = _a.concat([
+                                _d.sent()
+                            ]);
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.flashInterval.get())];
+                        case 3:
                             _b.header = (_c.items = _a.concat([
                                 _d.sent()
                             ]),
                                 _c.menu = Render.neverStopwatchScreenMenu,
                                 _c);
                             return [4 /*yield*/, Render.neverStopwatchScreenBody(ticks)];
-                        case 3: return [2 /*return*/, (_b.body = _d.sent(),
+                        case 4: return [2 /*return*/, (_b.body = _d.sent(),
                                 _b)];
                     }
                 });
@@ -4724,7 +4756,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             applicationTitle = "Never Stopwatch";
                             document.body.classList.add("hide-scroll-bar");
-                            Storage.lastApplication.set(applicationTitle);
                             ticks = Storage.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, _b;
@@ -4895,20 +4926,25 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 className: "countdown-timer-screen"
                             };
                             _c = {};
-                            return [4 /*yield*/, Render.screenHeaderHomeSegment("Countdown Timer")];
+                            return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
                             _a = [
                                 _d.sent()
                             ];
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.flashInterval.get())];
+                            return [4 /*yield*/, Render.screenHeaderApplicationSegment("Countdown Timer")];
                         case 2:
+                            _a = _a.concat([
+                                _d.sent()
+                            ]);
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.flashInterval.get())];
+                        case 3:
                             _b.header = (_c.items = _a.concat([
                                 _d.sent()
                             ]),
                                 _c.menu = Render.neverStopwatchScreenMenu,
                                 _c);
                             return [4 /*yield*/, Render.countdownTimerScreenBody(alerts)];
-                        case 3: return [2 /*return*/, (_b.body = _d.sent(),
+                        case 4: return [2 /*return*/, (_b.body = _d.sent(),
                                 _b)];
                     }
                 });
@@ -4921,7 +4957,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             applicationTitle = "Countdown Timer";
                             document.body.classList.add("hide-scroll-bar");
-                            Storage.lastApplication.set(applicationTitle);
                             alerts = Storage.Alerms.get();
                             ticks = Storage.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
@@ -5071,24 +5106,30 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.rainbowClockScreen = function () { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
+                var _a;
+                var _b, _c;
+                return __generator(this, function (_d) {
+                    switch (_d.label) {
                         case 0:
-                            _a = {
+                            _b = {
                                 className: "rainbow-clock-screen"
                             };
-                            _b = {};
-                            return [4 /*yield*/, Render.screenHeaderHomeSegment("Rainbow Clock")];
+                            _c = {};
+                            return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
-                            _a.header = (_b.items = [
-                                _c.sent()
-                            ],
-                                _b.menu = Render.rainbowClockScreenMenu,
-                                _b);
+                            _a = [
+                                _d.sent()
+                            ];
+                            return [4 /*yield*/, Render.screenHeaderApplicationSegment("Rainbow Clock")];
+                        case 2:
+                            _b.header = (_c.items = _a.concat([
+                                _d.sent()
+                            ]),
+                                _c.menu = Render.rainbowClockScreenMenu,
+                                _c);
                             return [4 /*yield*/, Render.rainbowClockScreenBody()];
-                        case 2: return [2 /*return*/, (_a.body = _c.sent(),
-                                _a)];
+                        case 3: return [2 /*return*/, (_b.body = _d.sent(),
+                                _b)];
                     }
                 });
             }); };
@@ -5100,7 +5141,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             applicationTitle = "Rainbow Clock";
                             document.body.classList.add("hide-scroll-bar");
-                            Storage.lastApplication.set(applicationTitle);
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, _a, capitalTime, capitalTimeSpan, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor;
                                 return __generator(this, function (_b) {
@@ -5467,6 +5507,36 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
             };
         })(Render = Clockworks.Render || (Clockworks.Render = {}));
+        Clockworks.getUrlParams = function (url) {
+            if (url === void 0) { url = location.href; }
+            var result = {};
+            url
+                .replace(/.*\?/, "")
+                .replace(/#.*/, "")
+                .split("&")
+                .map(function (kvp) { return kvp.split("="); })
+                .filter(function (kvp) { return 2 <= kvp.length; })
+                .forEach(function (kvp) { return result[kvp[0]] = decodeURIComponent(kvp[1]); });
+            return result;
+        };
+        Clockworks.getUrlHash = function (url) {
+            if (url === void 0) { url = location.href; }
+            return url.replace(/[^#]*#?/, "");
+        };
+        Clockworks.makeUrl = function (args, href) {
+            var _a;
+            if (href === void 0) { href = location.href; }
+            return href
+                .replace(/\?.*/, "")
+                .replace(/#.*/, "")
+                + "?"
+                + Object.keys(args)
+                    .filter(function (i) { return undefined !== i; })
+                    .filter(function (i) { return "hash" !== i; })
+                    .map(function (i) { return i + "=" + encodeURIComponent(args[i]); })
+                    .join("&")
+                + ("#" + ((_a = args["hash"]) !== null && _a !== void 0 ? _a : ""));
+        };
         var originalStyle = document.getElementById("style").innerText;
         var makeRegExpPart = function (text) { return text.replace(/([\\\/\.\+\?\*\[\]\(\)\{\}\|])/gmu, "\\$1"); };
         Clockworks.updateStyle = function () {
@@ -5491,7 +5561,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     case 0:
                         console.log("start!!!");
                         locale.setLocale(Storage.Settings.get().locale);
-                        // window.onpopstate = () => showPage();
+                        window.onpopstate = function () { return Clockworks.showPage(); };
                         window.addEventListener('resize', Render.onWindowResize);
                         window.addEventListener('focus', Render.onWindowFocus);
                         window.addEventListener('blur', Render.onWindowBlur);
@@ -5527,29 +5597,61 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         }); });
                         window.matchMedia('(prefers-color-scheme: dark)').addListener(Clockworks.updateStyle);
                         Clockworks.updateStyle();
-                        return [4 /*yield*/, Clockworks.showPage(Storage.lastApplication.get())];
+                        return [4 /*yield*/, Clockworks.showPage()];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
                 }
             });
         }); };
-        Clockworks.showPage = function (applicationType) { return __awaiter(_this, void 0, void 0, function () {
+        Clockworks.showPage = function (url) {
+            if (url === void 0) { url = location.href; }
+            return __awaiter(_this, void 0, void 0, function () {
+                var urlParams, applicationType, _a;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            window.scrollTo(0, 0);
+                            document.getElementById("screen-body").scrollTo(0, 0);
+                            urlParams = Clockworks.getUrlParams(url);
+                            applicationType = urlParams["application"];
+                            _a = applicationType;
+                            switch (_a) {
+                                case "Never Stopwatch": return [3 /*break*/, 1];
+                                case "Countdown Timer": return [3 /*break*/, 1];
+                                case "Rainbow Clock": return [3 /*break*/, 1];
+                            }
+                            return [3 /*break*/, 3];
+                        case 1: return [4 /*yield*/, Clockworks.application[applicationType].show()];
+                        case 2:
+                            _b.sent();
+                            return [3 /*break*/, 5];
+                        case 3: return [4 /*yield*/, Render.showWelcomeScreen()];
+                        case 4:
+                            _b.sent();
+                            return [3 /*break*/, 5];
+                        case 5: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        Clockworks.showUrl = function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var url;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        window.scrollTo(0, 0);
-                        document.getElementById("screen-body").scrollTo(0, 0);
-                        return [4 /*yield*/, Clockworks.application[applicationType].show()];
+                        url = Clockworks.makeUrl(data);
+                        return [4 /*yield*/, Clockworks.showPage(url)];
                     case 1:
                         _a.sent();
+                        history.pushState(null, Clockworks.applicationTitle, url);
                         return [2 /*return*/];
                 }
             });
         }); };
         Clockworks.reload = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, Clockworks.showPage(Storage.lastApplication.get())];
+                case 0: return [4 /*yield*/, Clockworks.showPage()];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); };
