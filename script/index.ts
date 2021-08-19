@@ -41,9 +41,14 @@ export module Clockworks
     export const applicationTitle = config.applicationTitle;
     export const application =
     {
-        "Never Stopwatch":
+        "Clockworks":
         {
             icon: <Render.Resource.KeyType>"application-icon",
+            show: async () => await Render.showWelcomeScreen(),
+        },
+        "Never Stopwatch":
+        {
+            icon: <Render.Resource.KeyType>"never-stopwatch-icon",
             show: async () => await Render.showNeverStopwatchScreen(),
         },
         "Countdown Timer":
@@ -102,7 +107,7 @@ export module Clockworks
         {
             foundation.style.backgroundColor = color;
         }
-};
+    };
     export const rainbowClockColorPatternMap =
     {
         "gradation": (index: number) => getRainbowColor(index, 0),
@@ -159,7 +164,7 @@ export module Clockworks
         export module lastApplication
         {
             export const makeKey = () => `${config.localDbPrefix}:lastApplication`;
-            export const get = () => minamo.localStorage.getOrNull<keyof typeof application>(makeKey()) ?? "Never Stopwatch";
+            export const get = () => minamo.localStorage.getOrNull<keyof typeof application>(makeKey()) ?? "Clockworks";
             export const set = (value: keyof typeof application) => minamo.localStorage.set(makeKey(), value);
         }
     }
@@ -1449,6 +1454,84 @@ export module Clockworks
                 href: config.repositoryUrl,
                 children: menuItem(labelSpan("GitHub")),
             });
+        export const welcomeScreenMenu = async () =>
+        [
+            await fullscreenMenuItem(),
+            await themeMenuItem(),
+            await languageMenuItem(),
+            await githubMenuItem(),
+        ];
+        export const welcomeScreen = async (): Promise<ScreenSource> =>
+        ({
+            className: "welcome-screen",
+            header:
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment("Clockworks"),
+                ],
+                menu: welcomeScreenMenu
+            },
+            body:
+            [
+                $div("logo")
+                ([
+                    $div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
+                    $span("logo-text")(applicationTitle)
+                ]),
+                $div("button-list")
+                ([
+                    {
+                        tag: "button",
+                        className: "default-button main-button long-button",
+                        children: labelSpan("Never Stopwatch"),
+                        onclick: async () => await showNeverStopwatchScreen(),
+                    },
+                    {
+                        tag: "button",
+                        className: "default-button main-button long-button",
+                        children: labelSpan("Countdown Timer"),
+                        onclick: async () => await showCountdownTimerScreen(),
+                    },
+                    {
+                        tag: "button",
+                        className: "default-button main-button long-button",
+                        children: labelSpan("Rainbow Clock"),
+                        onclick: async () => await showRainbowClockScreen(),
+                    },
+                ]),
+                $div("description")
+                (
+                    $tag("ul")("locale-parallel-off")
+                    ([
+                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                    ])
+                ),
+            ]
+        });
+        export const showWelcomeScreen = async () =>
+        {
+            const applicationTitle = "Clockworks";
+            document.body.classList.remove("hide-scroll-bar");
+            Storage.lastApplication.set(applicationTitle);
+            const updateWindow = async (event: UpdateWindowEventEype) =>
+            {
+                switch(event)
+                {
+                case "high-resolution-timer":
+                    break;
+                case "timer":
+                    break;
+                case "storage":
+                    break;
+                case "operate":
+                    break;
+                }
+            };
+            await showWindow(await welcomeScreen(), updateWindow);
+            await updateWindow("timer");
+        };
+
         export const neverStopwatchScreenMenu = async () =>
         [
             await fullscreenMenuItem(),
@@ -1906,6 +1989,7 @@ export module Clockworks
                 );
             }
             document.body.style.removeProperty("background-color");
+            document.getElementById("foundation").style.removeProperty("background-color");
             document.getElementById("screen").style.removeProperty("background-color");
             document.getElementById("screen").className = `${screen.className} screen`;
             minamo.dom.replaceChildren
