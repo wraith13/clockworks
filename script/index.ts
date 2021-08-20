@@ -42,29 +42,24 @@ export module Clockworks
     export interface ApplicationEntry
     {
         icon: Render.Resource.KeyType;
-        show: () => Promise<unknown>;
+        title: string;
     }
     export const application =
     {
-        // "Clockworks": <ApplicationEntry>
-        // {
-        //     icon: "application-icon",
-        //     show: async () => await Render.showWelcomeScreen(),
-        // },
-        "Never Stopwatch": <ApplicationEntry>
+        "NeverStopwatch": <ApplicationEntry>
         {
             icon: "never-stopwatch-icon",
-            show: async () => await Render.showNeverStopwatchScreen(),
+            title: "Never Stopwatch",
         },
-        "Countdown Timer": <ApplicationEntry>
+        "CountdownTimer": <ApplicationEntry>
         {
             icon: "history-icon",
-            show: async () => await Render.showCountdownTimerScreen(),
+            title: "CountdownTimer",
         },
-        "Rainbow Clock": <ApplicationEntry>
+        "RainbowClock": <ApplicationEntry>
         {
             icon: "tick-icon",
-            show: async () => await Render.showRainbowClockScreen(),
+            title: "Rainbow Clock",
         },
     };
     export interface Settings
@@ -530,7 +525,7 @@ export module Clockworks
         });
         export interface PageParams
         {
-            application?:string;
+            application?: keyof typeof application;
         }
         export const internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
         ({
@@ -1103,12 +1098,12 @@ export module Clockworks
             children,
             onclick,
         });
-        // export const menuLinkItem = (children: minamo.dom.Source, href: PageParams, className?: string) => internalLink
-        // ({
-        //     className,
-        //     href,
-        //     children,
-        // });
+        export const menuLinkItem = (children: minamo.dom.Source, href: PageParams, className?: string) => menuItem
+        (
+            children,
+            () => showUrl(href),
+            className,
+        );
         export const tickItem = async (tick: number, interval: number | null) => $div("tick-item flex-item")
         ([
             $div("item-header")
@@ -1361,17 +1356,16 @@ export module Clockworks
         export const screenHeaderApplicationSegment = async (applicationType: keyof typeof application): Promise<HeaderSegmentSource> =>
         ({
             icon: application[applicationType].icon,
-            title: applicationType,
+            title: application[applicationType].title,
             menu: await Promise.all
             (
                 Object.keys(application).map
                 (
-                    async i =>
-                    menuItem
+                    async (i: keyof typeof application) => menuLinkItem
                     (
-                        [ await Resource.loadSvgOrCache(application[i].icon), i, ],
-                        async () => await application[i].show(),
-                        applicationType === i ? "current-item": undefined
+                        [ await Resource.loadSvgOrCache(application[i].icon), application[i].title, ],
+                        { application: i },
+                        applicationType === i ? "current-item": undefined,
                     )
                 )
             )
@@ -1510,26 +1504,23 @@ export module Clockworks
                     $span("logo-text")(applicationTitle)
                 ]),
                 $div("button-list")
-                ([
-                    {
-                        tag: "button",
-                        className: "default-button main-button long-button",
-                        children: labelSpan("Never Stopwatch"),
-                        onclick: async () => await showNeverStopwatchScreen(),
-                    },
-                    {
-                        tag: "button",
-                        className: "default-button main-button long-button",
-                        children: labelSpan("Countdown Timer"),
-                        onclick: async () => await showCountdownTimerScreen(),
-                    },
-                    {
-                        tag: "button",
-                        className: "default-button main-button long-button",
-                        children: labelSpan("Rainbow Clock"),
-                        onclick: async () => await showRainbowClockScreen(),
-                    },
-                ]),
+                (
+                    Object.keys(application).map
+                    (
+                        (i: keyof typeof application) =>
+                        internalLink
+                        ({
+                            href: { application: i },
+                            children:
+                            {
+                                tag: "button",
+                                className: "default-button main-button long-button",
+                                children: labelSpan(application[i].title),
+                                // onclick: async () => await showNeverStopwatchScreen(),
+                            }
+                        }),
+                    )
+                ),
                 $div("description")
                 (
                     $tag("ul")("locale-parallel-off")
@@ -1626,7 +1617,7 @@ export module Clockworks
                 items:
                 [
                     await screenHeaderHomeSegment(),
-                    await screenHeaderApplicationSegment("Never Stopwatch"),
+                    await screenHeaderApplicationSegment("NeverStopwatch"),
                     await screenHeaderFlashSegment(Storage.flashInterval.get()),
                 ],
                 menu: neverStopwatchScreenMenu
@@ -1636,7 +1627,7 @@ export module Clockworks
         let previousPrimaryStep = 0;
         export const showNeverStopwatchScreen = async () =>
         {
-            const applicationTitle = "Never Stopwatch";
+            const applicationTitle = application["NeverStopwatch"].title;
             document.body.classList.add("hide-scroll-bar");
             let ticks = Storage.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
@@ -1780,7 +1771,7 @@ export module Clockworks
                 items:
                 [
                     await screenHeaderHomeSegment(),
-                    await screenHeaderApplicationSegment("Countdown Timer"),
+                    await screenHeaderApplicationSegment("CountdownTimer"),
                     await screenHeaderFlashSegment(Storage.flashInterval.get()),
                 ],
                 menu: neverStopwatchScreenMenu
@@ -1789,7 +1780,7 @@ export module Clockworks
         });
         export const showCountdownTimerScreen = async () =>
         {
-            const applicationTitle = "Countdown Timer";
+            const applicationTitle = application["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
             let alerts = Storage.Alerms.get();
             let ticks = Storage.Stamps.get();
@@ -1907,7 +1898,7 @@ export module Clockworks
                 items:
                 [
                     await screenHeaderHomeSegment(),
-                    await screenHeaderApplicationSegment("Rainbow Clock"),
+                    await screenHeaderApplicationSegment("RainbowClock"),
                 ],
                 menu: rainbowClockScreenMenu
             },
@@ -1915,7 +1906,7 @@ export module Clockworks
         });
         export const showRainbowClockScreen = async () =>
         {
-            const applicationTitle = "Rainbow Clock";
+            const applicationTitle = application["RainbowClock"].title;
             document.body.classList.add("hide-scroll-bar");
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
@@ -2395,13 +2386,16 @@ export module Clockworks
         href
             .replace(/\?.*/, "")
             .replace(/#.*/, "")
-            +"?"
-            +Object.keys(args)
-                .filter(i => undefined !== i)
-                .filter(i => "hash" !== i)
-                .map(i => `${i}=${encodeURIComponent(args[i])}`)
-                .join("&")
-            +`#${args["hash"] ?? ""}`;
+            +
+            (
+                "?"
+                +Object.keys(args)
+                    .filter(i => undefined !== i)
+                    .filter(i => "hash" !== i)
+                    .map(i => `${i}=${encodeURIComponent(args[i])}`)
+                    .join("&")
+                +`#${args["hash"] ?? ""}`.replace(/#$/, "")
+            ).replace(/^\?$/, "");
     const originalStyle = document.getElementById("style").innerText;
     const makeRegExpPart = (text: string) => text.replace(/([\\\/\.\+\?\*\[\]\(\)\{\}\|])/gmu, "\\$1");
     export const updateStyle = () =>
@@ -2480,10 +2474,14 @@ export module Clockworks
         const applicationType = urlParams["application"] as keyof typeof application;
         switch(applicationType)
         {
-        case "Never Stopwatch":
-        case "Countdown Timer":
-        case "Rainbow Clock":
-            await application[applicationType].show();
+        case "NeverStopwatch":
+            await Render.showNeverStopwatchScreen();
+            break;
+        case "CountdownTimer":
+            await Render.showCountdownTimerScreen();
+            break;
+        case "RainbowClock":
+            await Render.showRainbowClockScreen();
             break;
         default:
             await Render.showWelcomeScreen();
@@ -2494,7 +2492,7 @@ export module Clockworks
     {
         const url = makeUrl(data);
         await showPage(url);
-        history.pushState(null, applicationTitle, url);
+        history.pushState(null, application[data.application]?.title ?? applicationTitle, url);
     };
     export const reload = async () => await showPage();
 }
