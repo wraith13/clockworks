@@ -99,6 +99,11 @@ export module Clockworks
         {
             document.body.style.backgroundColor = bodyColor;
         }
+        const meta = document.getElementById("theme-color") as HTMLMetaElement;
+        if (meta.content !== color)
+        {
+            meta.content = color;
+        }
     };
     const setFoundationColor = (color: string) =>
     {
@@ -107,6 +112,59 @@ export module Clockworks
         {
             foundation.style.backgroundColor = color;
         }
+    };
+    const toHex = (i : number) : string =>
+    {
+        let result = Math.round(i).toString(16).toUpperCase();
+        if (1 === result.length) {
+            result = "0" +result;
+        }
+        return result;
+    };
+    const mixColors = (colorA: string, colorB: string, rate: number) =>
+    {
+        if (rate <= 0.0)
+        {
+            return colorA;
+        }
+        if (1.0 <= rate)
+        {
+            return colorB;
+        }
+        const rateA = 1.0 -rate;
+        const rateB = rate;
+        let r = 0;
+        let g = 0;
+        let b = 0;
+        if (4 === colorA.length)
+        {
+            r += parseInt(colorA.substr(1,1), 16) *0x11 *rateA;
+            g += parseInt(colorA.substr(2,1), 16) *0x11 *rateA;
+            b += parseInt(colorA.substr(3,1), 16) *0x11 *rateA;
+        }
+        if (7 === colorA.length)
+        {
+            r += parseInt(colorA.substr(1,2), 16) *rateA;
+            g += parseInt(colorA.substr(3,2), 16) *rateA;
+            b += parseInt(colorA.substr(5,2), 16) *rateA;
+        }
+        if (4 === colorB.length)
+        {
+            r += parseInt(colorB.substr(1,1), 16) *0x11 *rateB;
+            g += parseInt(colorB.substr(2,1), 16) *0x11 *rateB;
+            b += parseInt(colorB.substr(3,1), 16) *0x11 *rateB;
+        }
+        if (7 === colorB.length)
+        {
+            r += parseInt(colorB.substr(1,2), 16) *rateB;
+            g += parseInt(colorB.substr(3,2), 16) *rateB;
+            b += parseInt(colorB.substr(5,2), 16) *rateB;
+        }
+        const result = "#"
+            +toHex(r)
+            +toHex(g)
+            +toHex(b);
+        return result;
     };
     export const rainbowClockColorPatternMap =
     {
@@ -1635,6 +1693,7 @@ export module Clockworks
                 const screen = document.getElementById("screen") as HTMLDivElement;
                 const now = new Date();
                 const tick = Domain.getTicks(now);
+                const flashInterval = Storage.flashInterval.get();
                 switch(event)
                 {
                     case "high-resolution-timer":
@@ -1645,7 +1704,6 @@ export module Clockworks
                         {
                             capitalTimeSpan.innerText = capitalTime;
                         }
-                        const flashInterval = Storage.flashInterval.get();
                         if (0 < flashInterval && 0 < ticks.length)
                         {
                             const elapsed = Domain.getTicks() -ticks[0];
@@ -1661,7 +1719,7 @@ export module Clockworks
                             const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
                             const nextColor = getSolidRainbowColor(primaryStep +1);
                             setScreenBarProgress(rate, nextColor);
-                            setBodyColor(nextColor);
+                            // setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
                         }
                         else
@@ -1671,7 +1729,7 @@ export module Clockworks
                             getHeaderElement().classList.remove("with-screen-prgress");
                             const currentColor = getSolidRainbowColor(0);
                             setFoundationColor(currentColor);
-                            setBodyColor(currentColor);
+                            // setBodyColor(currentColor);
                         }
                         break;
                     case "timer":
@@ -1688,6 +1746,21 @@ export module Clockworks
                                 (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                             }
                         );
+                        if (0 < flashInterval && 0 < ticks.length)
+                        {
+                            const elapsed = Domain.getTicks() -ticks[0];
+                            const unit = flashInterval *60 *1000;
+                            const primaryStep = Math.floor(elapsed / unit);
+                            const currentColor = getSolidRainbowColor(primaryStep);
+                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            setBodyColor(mixColors(currentColor, nextColor, rate));
+                        }
+                        else
+                        {
+                            const currentColor = getSolidRainbowColor(0);
+                            setBodyColor(currentColor);
+                        }
                         break;
                     case "storage":
                         await reload();
@@ -1815,7 +1888,7 @@ export module Clockworks
                             const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
                             const nextColor = getSolidRainbowColor(primaryStep +1);
                             setScreenBarProgress(rate, nextColor);
-                            setBodyColor(nextColor);
+                            // setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
                         }
                         else
@@ -1825,7 +1898,7 @@ export module Clockworks
                             getHeaderElement().classList.remove("with-screen-prgress");
                             const currentColor = getSolidRainbowColor(0);
                             setFoundationColor(currentColor);
-                            setBodyColor(currentColor);
+                            // setBodyColor(currentColor);
                         }
                         break;
                     case "timer":
@@ -1842,6 +1915,21 @@ export module Clockworks
                                 (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                             }
                         );
+                        if (0 < flashInterval && 0 < ticks.length)
+                        {
+                            const elapsed = Domain.getTicks() -ticks[0];
+                            const unit = flashInterval *60 *1000;
+                            const primaryStep = Math.floor(elapsed / unit);
+                            const currentColor = getSolidRainbowColor(primaryStep);
+                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            setBodyColor(mixColors(currentColor, nextColor, rate));
+                        }
+                        else
+                        {
+                            const currentColor = getSolidRainbowColor(0);
+                            setBodyColor(currentColor);
+                        }
                         break;
                     case "storage":
                         await reload();
@@ -1942,7 +2030,7 @@ export module Clockworks
                         const minutes = (tick % hourUnit) / hourUnit;
                         const nextColor = getRainbowColor(now.getHours() +1);
                         setScreenBarProgress(minutes, nextColor);
-                        setBodyColor(nextColor);
+                        setBodyColor(mixColors(currentColor, nextColor, minutes));
                         break;
                     case "storage":
                         await reload();
@@ -2378,24 +2466,24 @@ export module Clockworks
         return result as Render.PageParams;
     };
     export const getUrlHash = (url: string = location.href) => url.replace(/[^#]*#?/, "");
+    export const regulateUrl = (url: string) => url.replace(/#$/, "").replace(/^\?$/, "");
     export const makeUrl =
     (
         args: {[key: string]: string} | Render.PageParams,
         href: string = location.href
-    ) =>
+    ) => regulateUrl
+    (
         href
             .replace(/\?.*/, "")
             .replace(/#.*/, "")
-            +
-            (
-                "?"
-                +Object.keys(args)
-                    .filter(i => undefined !== i)
-                    .filter(i => "hash" !== i)
-                    .map(i => `${i}=${encodeURIComponent(args[i])}`)
-                    .join("&")
-                +`#${args["hash"] ?? ""}`.replace(/#$/, "")
-            ).replace(/^\?$/, "");
+            +"?"
+            +Object.keys(args)
+                .filter(i => undefined !== i)
+                .filter(i => "hash" !== i)
+                .map(i => `${i}=${encodeURIComponent(args[i])}`)
+                .join("&")
+            +`#${args["hash"] ?? ""}`
+    );
     const originalStyle = document.getElementById("style").innerText;
     const makeRegExpPart = (text: string) => text.replace(/([\\\/\.\+\?\*\[\]\(\)\{\}\|])/gmu, "\\$1");
     export const updateStyle = () =>

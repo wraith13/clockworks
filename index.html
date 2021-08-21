@@ -1,10 +1,10 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Aug 20 2021 06:23:12 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Aug 20 2021 21:53:35 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
-<meta name="theme-color" content="#5F42A7">
+<meta name="theme-color" content="#5F42A7" id="theme-color">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Clockworks">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2857,12 +2857,61 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             if (document.body.style.backgroundColor !== bodyColor) {
                 document.body.style.backgroundColor = bodyColor;
             }
+            var meta = document.getElementById("theme-color");
+            if (meta.content !== color) {
+                meta.content = color;
+            }
         };
         var setFoundationColor = function (color) {
             var foundation = document.getElementById("foundation");
             if (foundation.style.backgroundColor !== color) {
                 foundation.style.backgroundColor = color;
             }
+        };
+        var toHex = function (i) {
+            var result = Math.round(i).toString(16).toUpperCase();
+            if (1 === result.length) {
+                result = "0" + result;
+            }
+            return result;
+        };
+        var mixColors = function (colorA, colorB, rate) {
+            if (rate <= 0.0) {
+                return colorA;
+            }
+            if (1.0 <= rate) {
+                return colorB;
+            }
+            var rateA = 1.0 - rate;
+            var rateB = rate;
+            var r = 0;
+            var g = 0;
+            var b = 0;
+            if (4 === colorA.length) {
+                r += parseInt(colorA.substr(1, 1), 16) * 0x11 * rateA;
+                g += parseInt(colorA.substr(2, 1), 16) * 0x11 * rateA;
+                b += parseInt(colorA.substr(3, 1), 16) * 0x11 * rateA;
+            }
+            if (7 === colorA.length) {
+                r += parseInt(colorA.substr(1, 2), 16) * rateA;
+                g += parseInt(colorA.substr(3, 2), 16) * rateA;
+                b += parseInt(colorA.substr(5, 2), 16) * rateA;
+            }
+            if (4 === colorB.length) {
+                r += parseInt(colorB.substr(1, 1), 16) * 0x11 * rateB;
+                g += parseInt(colorB.substr(2, 1), 16) * 0x11 * rateB;
+                b += parseInt(colorB.substr(3, 1), 16) * 0x11 * rateB;
+            }
+            if (7 === colorB.length) {
+                r += parseInt(colorB.substr(1, 2), 16) * rateB;
+                g += parseInt(colorB.substr(3, 2), 16) * rateB;
+                b += parseInt(colorB.substr(5, 2), 16) * rateB;
+            }
+            var result = "#"
+                + toHex(r)
+                + toHex(g)
+                + toHex(b);
+            return result;
         };
         Clockworks.rainbowClockColorPatternMap = {
             "gradation": function (index) { return getRainbowColor(index, 0); },
@@ -4703,13 +4752,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             document.body.classList.add("hide-scroll-bar");
                             ticks = Storage.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, _b;
+                                var screen, now, tick, flashInterval, _a, capitalTime, capitalTimeSpan, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
                                             screen = document.getElementById("screen");
                                             now = new Date();
                                             tick = Domain.getTicks(now);
+                                            flashInterval = Storage.flashInterval.get();
                                             _a = event;
                                             switch (_a) {
                                                 case "high-resolution-timer": return [3 /*break*/, 1];
@@ -4725,7 +4775,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             if (capitalTimeSpan.innerText !== capitalTime) {
                                                 capitalTimeSpan.innerText = capitalTime;
                                             }
-                                            flashInterval = Storage.flashInterval.get();
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
                                                 unit = flashInterval * 60 * 1000;
@@ -4739,7 +4788,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
                                                 nextColor = getSolidRainbowColor(primaryStep + 1);
                                                 Render.setScreenBarProgress(rate, nextColor);
-                                                setBodyColor(nextColor);
+                                                // setBodyColor(nextColor);
                                                 Render.getHeaderElement().classList.add("with-screen-prgress");
                                             }
                                             else {
@@ -4748,7 +4797,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 Render.getHeaderElement().classList.remove("with-screen-prgress");
                                                 currentColor = getSolidRainbowColor(0);
                                                 setFoundationColor(currentColor);
-                                                setBodyColor(currentColor);
+                                                // setBodyColor(currentColor);
                                             }
                                             return [3 /*break*/, 8];
                                         case 2:
@@ -4756,6 +4805,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
                                                 dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
                                             });
+                                            if (0 < flashInterval && 0 < ticks.length) {
+                                                elapsed = Domain.getTicks() - ticks[0];
+                                                unit = flashInterval * 60 * 1000;
+                                                primaryStep = Math.floor(elapsed / unit);
+                                                currentColor = getSolidRainbowColor(primaryStep);
+                                                nextColor = getSolidRainbowColor(primaryStep + 1);
+                                                rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
+                                                setBodyColor(mixColors(currentColor, nextColor, rate));
+                                            }
+                                            else {
+                                                currentColor = getSolidRainbowColor(0);
+                                                setBodyColor(currentColor);
+                                            }
                                             return [3 /*break*/, 8];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
                                         case 4:
@@ -4905,7 +4967,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             alerts = Storage.Alerms.get();
                             ticks = Storage.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, _b;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
@@ -4941,7 +5003,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
                                                 nextColor = getSolidRainbowColor(primaryStep + 1);
                                                 Render.setScreenBarProgress(rate, nextColor);
-                                                setBodyColor(nextColor);
+                                                // setBodyColor(nextColor);
                                                 Render.getHeaderElement().classList.add("with-screen-prgress");
                                             }
                                             else {
@@ -4950,7 +5012,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 Render.getHeaderElement().classList.remove("with-screen-prgress");
                                                 currentColor = getSolidRainbowColor(0);
                                                 setFoundationColor(currentColor);
-                                                setBodyColor(currentColor);
+                                                // setBodyColor(currentColor);
                                             }
                                             return [3 /*break*/, 8];
                                         case 2:
@@ -4958,6 +5020,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
                                                 dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
                                             });
+                                            if (0 < flashInterval && 0 < ticks.length) {
+                                                elapsed = Domain.getTicks() - ticks[0];
+                                                unit = flashInterval * 60 * 1000;
+                                                primaryStep = Math.floor(elapsed / unit);
+                                                currentColor = getSolidRainbowColor(primaryStep);
+                                                nextColor = getSolidRainbowColor(primaryStep + 1);
+                                                rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
+                                                setBodyColor(mixColors(currentColor, nextColor, rate));
+                                            }
+                                            else {
+                                                currentColor = getSolidRainbowColor(0);
+                                                setBodyColor(currentColor);
+                                            }
                                             return [3 /*break*/, 8];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
                                         case 4:
@@ -5126,7 +5201,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             minutes = (tick % hourUnit) / hourUnit;
                                             nextColor = getRainbowColor_1(now.getHours() + 1);
                                             Render.setScreenBarProgress(minutes, nextColor);
-                                            setBodyColor(nextColor);
+                                            setBodyColor(mixColors(currentColor, nextColor, minutes));
                                             return [3 /*break*/, 7];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
                                         case 4:
@@ -5468,20 +5543,20 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             if (url === void 0) { url = location.href; }
             return url.replace(/[^#]*#?/, "");
         };
+        Clockworks.regulateUrl = function (url) { return url.replace(/#$/, "").replace(/^\?$/, ""); };
         Clockworks.makeUrl = function (args, href) {
             var _a;
             if (href === void 0) { href = location.href; }
-            return href
+            return Clockworks.regulateUrl(href
                 .replace(/\?.*/, "")
                 .replace(/#.*/, "")
-                +
-                    ("?"
-                        + Object.keys(args)
-                            .filter(function (i) { return undefined !== i; })
-                            .filter(function (i) { return "hash" !== i; })
-                            .map(function (i) { return i + "=" + encodeURIComponent(args[i]); })
-                            .join("&")
-                        + ("#" + ((_a = args["hash"]) !== null && _a !== void 0 ? _a : "")).replace(/#$/, "")).replace(/^\?$/, "");
+                + "?"
+                + Object.keys(args)
+                    .filter(function (i) { return undefined !== i; })
+                    .filter(function (i) { return "hash" !== i; })
+                    .map(function (i) { return i + "=" + encodeURIComponent(args[i]); })
+                    .join("&")
+                + ("#" + ((_a = args["hash"]) !== null && _a !== void 0 ? _a : "")));
         };
         var originalStyle = document.getElementById("style").innerText;
         var makeRegExpPart = function (text) { return text.replace(/([\\\/\.\+\?\*\[\]\(\)\{\}\|])/gmu, "\\$1"); };
