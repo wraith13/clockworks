@@ -156,10 +156,11 @@ h1
         display: inline-block;
         svg
         {
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 2.0rem;
+            height: 2.0rem;
         }
-        margin-right: 0.25rem;
+        padding: 0.25rem;
+        // margin-right: 0.25rem;
     }
     .segment
     {
@@ -1068,6 +1069,45 @@ button
         overflow-x: hidden;
         overflow-y: auto;
         flex-grow: 1;
+
+        .hide-scroll-bar;
+        .primary-page
+        {
+            box-sizing: border-box;
+            width: 100%;
+            height: calc(100vh - 2.5rem);
+            max-height: calc(100vh - 2.5rem);
+            // .negative-foreground-coloring-trait;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 2.5rem;
+            // .default-button
+            // {
+            //     border-color: @base-color;
+            //     background-color: transparent;
+            // }
+            .down-page-link
+            {
+                position: absolute;
+                left: calc(50vw - 1.25rem);
+                bottom: 1rem; // コードで調整するのでこの値に意味はない。
+                &.icon
+                {
+                    opacity: 0.2;
+                    width: 2.5rem;
+                    height: 2.5rem;
+                    @media (hover: hover)
+                    {
+                        &:hover
+                        {
+                            opacity: 1.0;
+                        }
+                    }
+                }
+            }
+        }
         .screen-bar
         {
             z-index: -10;
@@ -1096,13 +1136,19 @@ button
 .welcome-screen
 {
     background-color: @base-color;
+    .primary-page
+    {
+        display: block !important;
+    }
     .logo
     {
-        margin: calc(100vw / 16);
+        height: calc(50vh - 5rem);
+        // margin: calc(100vw / 16);
         font-size: calc(100vw / 16);
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: center;
         & > .application-icon
         {
             width: calc(100vw / 6);
@@ -1144,15 +1190,7 @@ button
         .hide-scroll-bar;
         .primary-page
         {
-            box-sizing: border-box;
-            width: 100%;
-            height: calc(100vh - 2.5rem);
             .negative-foreground-coloring-trait;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-bottom: 2.5rem;
             .default-button
             {
                 border-color: @base-color;
@@ -1161,7 +1199,7 @@ button
         }
         .trail-page
         {
-            background-color: @base-color;
+            background-color: e(%("%s%s", @base-color, "BB"));
         }
     }
 }

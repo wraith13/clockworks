@@ -1543,6 +1543,31 @@ export module Clockworks
             await languageMenuItem(),
             await githubMenuItem(),
         ];
+        export const downPageLink = async () =>
+        ({
+            tag: "div",
+            className: "down-page-link icon",
+            children: await Resource.loadSvgOrCache("down-triangle-icon"),
+            onclick: async () => await scrollToElement(document.getElementsByClassName("trail-page")[0] as HTMLDivElement),
+        });
+        export const scrollToOffset = async (target: HTMLElement, offset: number) =>
+        {
+            let scrollTop = target.scrollTop;
+            let diff = offset -scrollTop;
+            for(let i = 0; i < 25; ++i)
+            {
+                diff *= 0.8;
+                target.scrollTo(0, offset -diff);
+                await minamo.core.timeout(10);
+            }
+            target.scrollTo(0, offset);
+        };
+        export const scrollToElement = async (target: HTMLElement) =>
+        {
+            const parent = target.parentElement;
+            const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
+            await scrollToOffset(parent, targetOffsetTop);
+        };
         export const welcomeScreen = async (): Promise<ScreenSource> =>
         ({
             className: "welcome-screen",
@@ -1556,36 +1581,47 @@ export module Clockworks
             },
             body:
             [
-                $div("logo")
+                $div("primary-page")
                 ([
-                    $div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
-                    $span("logo-text")(applicationTitle)
-                ]),
-                $div("button-list")
-                (
-                    Object.keys(application).map
-                    (
-                        (i: keyof typeof application) =>
-                        internalLink
-                        ({
-                            href: { application: i },
-                            children:
-                            {
-                                tag: "button",
-                                className: "default-button main-button long-button",
-                                children: labelSpan(application[i].title),
-                                // onclick: async () => await showNeverStopwatchScreen(),
-                            }
-                        }),
-                    )
-                ),
-                $div("description")
-                (
-                    $tag("ul")("locale-parallel-off")
+                    $div("main-panel")
                     ([
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                    ])
-                ),
+                        $div("logo")
+                        ([
+                            $div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
+                            $span("logo-text")(applicationTitle)
+                        ]),
+                        $div("button-list")
+                        (
+                            Object.keys(application).map
+                            (
+                                (i: keyof typeof application) =>
+                                internalLink
+                                ({
+                                    href: { application: i },
+                                    children:
+                                    {
+                                        tag: "button",
+                                        className: "default-button main-button long-button",
+                                        children: labelSpan(application[i].title),
+                                        // onclick: async () => await showNeverStopwatchScreen(),
+                                    }
+                                }),
+                            )
+                        ),
+                    ]),
+                    await downPageLink(),
+                ]),
+                $div("trail-page")
+                ([
+                    $div("description")
+                    (
+                        $tag("ul")("locale-parallel-off")
+                        ([
+                            $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        ])
+                    ),
+                ]),
+                $div("screen-bar")([]),
             ]
         });
         export const showWelcomeScreen = async () =>
@@ -1639,6 +1675,7 @@ export module Clockworks
                         onclick: async () => await Operate.stamp(Domain.getTicks())
                     }),
                 ]),
+                await downPageLink(),
             ]),
             $div("trail-page")
             ([
@@ -1800,6 +1837,7 @@ export module Clockworks
                         onclick: async () => await Operate.done(Domain.getTicks())
                     }),
                 ]),
+                await downPageLink(),
             ]),
             $div("trail-page")
             ([
@@ -2112,6 +2150,7 @@ export module Clockworks
             updateTitle();
             //minamo.core.timeout(100);
             resizeFlexList();
+            adjustDownPageLinkPosition();
         };
         export interface Toast
         {
@@ -2362,6 +2401,15 @@ export module Clockworks
                 }
             );
         };
+        export const adjustDownPageLinkPosition = () =>
+        {
+            const primaryPage = document.getElementsByClassName("primary-page")[0];
+            if (primaryPage)
+            {
+                const delta = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
+                Array.from(document.getElementsByClassName("down-page-link")).forEach(i => (i as HTMLElement).style.bottom = `calc(1rem + ${delta}px)`);
+            }
+        };
         let onWindowResizeTimestamp = 0;
         export const onWindowResize = () =>
         {
@@ -2373,6 +2421,7 @@ export module Clockworks
                     if (timestamp === onWindowResizeTimestamp)
                     {
                         resizeFlexList();
+                        adjustDownPageLinkPosition();
                     }
                 },
                 100,
@@ -2466,7 +2515,7 @@ export module Clockworks
         return result as Render.PageParams;
     };
     export const getUrlHash = (url: string = location.href) => url.replace(/[^#]*#?/, "");
-    export const regulateUrl = (url: string) => url.replace(/#$/, "").replace(/^\?$/, "");
+    export const regulateUrl = (url: string) => url.replace(/#$/, "").replace(/\?$/, "");
     export const makeUrl =
     (
         args: {[key: string]: string} | Render.PageParams,
@@ -2536,18 +2585,7 @@ export module Clockworks
         document.getElementById("screen-header").addEventListener
         (
             'click',
-            async () =>
-            {
-                const body = document.getElementById("screen-body");
-                let top = body.scrollTop;
-                for(let i = 0; i < 25; ++i)
-                {
-                    top *= 0.6;
-                    body.scrollTo(0, top);
-                    await minamo.core.timeout(10);
-                }
-                body.scrollTo(0, 0);
-            }
+            async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
         );
         window.matchMedia('(prefers-color-scheme: dark)').addListener(updateStyle);
         updateStyle();
