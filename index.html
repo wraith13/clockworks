@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Aug 22 2021 02:11:07 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Aug 22 2021 19:31:09 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -197,14 +197,19 @@ ul {
   padding-inline-start: 40px;
 }
 body.flash .screen {
-  animation-name: flash;
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 1.5s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-@keyframes flash {
+body.flash.tektite .screen {
+  animation-name: white-flash;
+}
+body.flash:not(.tektite) .screen {
+  animation-name: accent-flash;
+}
+@keyframes white-flash {
   0% {
     background: radial-gradient(rgba(255, 255, 255, 0.8) 0%, transparent 0%);
   }
@@ -449,6 +454,251 @@ body.flash .screen {
     background: radial-gradient(transparent 100%, rgba(255, 255, 255, 0.8) 100%);
   }
 }
+@keyframes accent-flash {
+  0% {
+    background: radial-gradient(#5F42A7 0%, transparent 0%);
+  }
+  1.25% {
+    background: radial-gradient(#5F42A7 0%, transparent 5%);
+  }
+  2.5% {
+    background: radial-gradient(#5F42A7 0%, transparent 10%);
+  }
+  3.75% {
+    background: radial-gradient(#5F42A7 0%, transparent 15%);
+  }
+  5% {
+    background: radial-gradient(#5F42A7 0%, transparent 20%);
+  }
+  6.25% {
+    background: radial-gradient(#5F42A7 0%, transparent 25%);
+  }
+  7.5% {
+    background: radial-gradient(#5F42A7 0%, transparent 30%);
+  }
+  8.75% {
+    background: radial-gradient(#5F42A7 0%, transparent 35%);
+  }
+  10% {
+    background: radial-gradient(#5F42A7 0%, transparent 40%);
+  }
+  11.25% {
+    background: radial-gradient(#5F42A7 0%, transparent 45%);
+  }
+  12.5% {
+    background: radial-gradient(#5F42A7 0%, transparent 50%);
+  }
+  13.75% {
+    background: radial-gradient(#5F42A7 0%, transparent 55%);
+  }
+  15.0% {
+    background: radial-gradient(#5F42A7 0%, transparent 60%);
+  }
+  16.25% {
+    background: radial-gradient(#5F42A7 0%, transparent 65%);
+  }
+  17.5% {
+    background: radial-gradient(#5F42A7 0%, transparent 70%);
+  }
+  18.75% {
+    background: radial-gradient(#5F42A7 0%, transparent 75%);
+  }
+  20% {
+    background: radial-gradient(#5F42A7 0%, transparent 80%);
+  }
+  21.25% {
+    background: radial-gradient(#5F42A7 0%, transparent 85%);
+  }
+  22.5% {
+    background: radial-gradient(#5F42A7 0%, transparent 90%);
+  }
+  23.75% {
+    background: radial-gradient(#5F42A7 0%, transparent 95%);
+  }
+  25% {
+    background: radial-gradient(#5F42A7 0%, transparent 100%);
+  }
+  26.25% {
+    background: radial-gradient(#5F42A7 5%, transparent 100%);
+  }
+  27.5% {
+    background: radial-gradient(#5F42A7 10%, transparent 100%);
+  }
+  28.75% {
+    background: radial-gradient(#5F42A7 15%, transparent 100%);
+  }
+  30% {
+    background: radial-gradient(#5F42A7 20%, transparent 100%);
+  }
+  31.25% {
+    background: radial-gradient(#5F42A7 25%, transparent 100%);
+  }
+  32.5% {
+    background: radial-gradient(#5F42A7 30%, transparent 100%);
+  }
+  33.75% {
+    background: radial-gradient(#5F42A7 35%, transparent 100%);
+  }
+  35% {
+    background: radial-gradient(#5F42A7 40%, transparent 100%);
+  }
+  36.25% {
+    background: radial-gradient(#5F42A7 45%, transparent 100%);
+  }
+  37.5% {
+    background: radial-gradient(#5F42A7 50%, transparent 100%);
+  }
+  38.25% {
+    background: radial-gradient(#5F42A7 55%, transparent 100%);
+  }
+  40% {
+    background: radial-gradient(#5F42A7 60%, transparent 100%);
+  }
+  41.25% {
+    background: radial-gradient(#5F42A7 65%, transparent 100%);
+  }
+  42.5% {
+    background: radial-gradient(#5F42A7 70%, transparent 100%);
+  }
+  43.75% {
+    background: radial-gradient(#5F42A7 75%, transparent 100%);
+  }
+  45% {
+    background: radial-gradient(#5F42A7 80%, transparent 100%);
+  }
+  46.25% {
+    background: radial-gradient(#5F42A7 85%, transparent 100%);
+  }
+  47.5% {
+    background: radial-gradient(#5F42A7 90%, transparent 100%);
+  }
+  48.75% {
+    background: radial-gradient(#5F42A7 95%, transparent 100%);
+  }
+  50% {
+    background: radial-gradient(transparent 0%, #5F42A7 0%);
+  }
+  51.25% {
+    background: radial-gradient(transparent 0%, #5F42A7 5%);
+  }
+  52.5% {
+    background: radial-gradient(transparent 0%, #5F42A7 10%);
+  }
+  53.75% {
+    background: radial-gradient(transparent 0%, #5F42A7 15%);
+  }
+  55% {
+    background: radial-gradient(transparent 0%, #5F42A7 20%);
+  }
+  56.25% {
+    background: radial-gradient(transparent 0%, #5F42A7 25%);
+  }
+  57.5% {
+    background: radial-gradient(transparent 0%, #5F42A7 30%);
+  }
+  58.75% {
+    background: radial-gradient(transparent 0%, #5F42A7 35%);
+  }
+  60% {
+    background: radial-gradient(transparent 0%, #5F42A7 40%);
+  }
+  61.25% {
+    background: radial-gradient(transparent 0%, #5F42A7 45%);
+  }
+  62.5% {
+    background: radial-gradient(transparent 0%, #5F42A7 50%);
+  }
+  63.75% {
+    background: radial-gradient(transparent 0%, #5F42A7 55%);
+  }
+  65% {
+    background: radial-gradient(transparent 0%, #5F42A7 60%);
+  }
+  66.25% {
+    background: radial-gradient(transparent 0%, #5F42A7 65%);
+  }
+  67.5% {
+    background: radial-gradient(transparent 0%, #5F42A7 70%);
+  }
+  68.75% {
+    background: radial-gradient(transparent 0%, #5F42A7 75%);
+  }
+  70% {
+    background: radial-gradient(transparent 0%, #5F42A7 80%);
+  }
+  71.25% {
+    background: radial-gradient(transparent 0%, #5F42A7 85%);
+  }
+  72.5% {
+    background: radial-gradient(transparent 0%, #5F42A7 90%);
+  }
+  73.75% {
+    background: radial-gradient(transparent 0%, #5F42A7 95%);
+  }
+  75% {
+    background: radial-gradient(transparent 0%, #5F42A7 100%);
+  }
+  76.25% {
+    background: radial-gradient(transparent 5%, #5F42A7 100%);
+  }
+  77.5% {
+    background: radial-gradient(transparent 10%, #5F42A7 100%);
+  }
+  78.25% {
+    background: radial-gradient(transparent 15%, #5F42A7 100%);
+  }
+  80% {
+    background: radial-gradient(transparent 20%, #5F42A7 100%);
+  }
+  81.25% {
+    background: radial-gradient(transparent 25%, #5F42A7 100%);
+  }
+  82.5% {
+    background: radial-gradient(transparent 30%, #5F42A7 100%);
+  }
+  83.75% {
+    background: radial-gradient(transparent 35%, #5F42A7 100%);
+  }
+  85% {
+    background: radial-gradient(transparent 40%, #5F42A7 100%);
+  }
+  86.25% {
+    background: radial-gradient(transparent 45%, #5F42A7 100%);
+  }
+  87.5% {
+    background: radial-gradient(transparent 50%, #5F42A7 100%);
+  }
+  88.75% {
+    background: radial-gradient(transparent 55%, #5F42A7 100%);
+  }
+  90% {
+    background: radial-gradient(transparent 60%, #5F42A7 100%);
+  }
+  91.25% {
+    background: radial-gradient(transparent 65%, #5F42A7 100%);
+  }
+  92.5% {
+    background: radial-gradient(transparent 70%, #5F42A7 100%);
+  }
+  93.75% {
+    background: radial-gradient(transparent 75%, #5F42A7 100%);
+  }
+  95% {
+    background: radial-gradient(transparent 80%, #5F42A7 100%);
+  }
+  96.25% {
+    background: radial-gradient(transparent 85%, #5F42A7 100%);
+  }
+  97.5% {
+    background: radial-gradient(transparent 90%, #5F42A7 100%);
+  }
+  98.75% {
+    background: radial-gradient(transparent 95%, #5F42A7 100%);
+  }
+  100% {
+    background: radial-gradient(transparent 100%, #5F42A7 100%);
+  }
+}
 #foundation {
   position: absolute;
   top: 0px;
@@ -561,7 +811,7 @@ h1 .segment + .menu-popup + .segment {
   margin-left: 0rem;
   border-left-style: solid;
   border-left-width: 1px;
-  border-left-color: #FFFFFF44 !important;
+  border-left-color: #FFFFFF !important;
 }
 h1 .segment + .segment .icon,
 h1 .segment + .menu-popup + .segment .icon {
@@ -638,6 +888,11 @@ h1 .progress-bar {
   left: 0px;
   top: 0px;
   height: 2.5rem;
+  border-width: 0px;
+  border-style: solid;
+  border-color: #0005;
+  box-sizing: border-box;
+  border-right-width: 1px;
 }
 h1.update .progress-bar {
   animation-name: update-progress;
@@ -660,6 +915,10 @@ h1.obsolescence .progress-bar {
   animation-duration: 3600s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
+}
+body.tektite .segment + .segment,
+body.tektite .segment + .menu-popup + .segment {
+  border-left-color: #FFFFFF44 !important;
 }
 @keyframes update-progress {
   0% {
@@ -1456,7 +1715,28 @@ button.delete-button {
   right: 0px;
   border-bottom-width: 1px;
 }
-.welcome-screen {
+body.tektite .screen h1 {
+  background-color: #00002211;
+}
+body.tektite .screen .screen-body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+body.tektite .screen .screen-body::-webkit-scrollbar {
+  display: none;
+}
+body.tektite .screen .screen-body .primary-page {
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+body.tektite .screen .screen-body .primary-page .default-button {
+  border-color: #FFFFFF;
+  background-color: transparent;
+}
+body.tektite .screen .screen-body .trail-page {
+  background-color: #FFFFFFBB;
+}
+body:not(.tektite) .screen {
   background-color: #FFFFFF;
 }
 .welcome-screen .primary-page {
@@ -1474,50 +1754,19 @@ button.delete-button {
   width: calc(100vw / 6);
   height: calc(100vw / 6);
 }
-.welcome-screen .logo > .application-icon svg {
-  color: #5F42A7;
-  fill: #5F42A7;
-}
 .welcome-screen .logo > .application-icon + .logo-text {
   margin-left: calc(100vw / 24);
 }
 .welcome-screen .logo > .logo-text {
   font-size: calc(100vw / 8);
-  color: #5F42A7;
   white-space: nowrap;
 }
-.never-stopwatch-screen h1,
-.countdown-timer-screen h1,
-.rainbow-clock-screen h1 {
-  background-color: #00002211;
+body:not(.tektite) .logo > .application-icon svg {
+  color: #5F42A7;
+  fill: #5F42A7;
 }
-.never-stopwatch-screen .screen-body,
-.countdown-timer-screen .screen-body,
-.rainbow-clock-screen .screen-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.never-stopwatch-screen .screen-body::-webkit-scrollbar,
-.countdown-timer-screen .screen-body::-webkit-scrollbar,
-.rainbow-clock-screen .screen-body::-webkit-scrollbar {
-  display: none;
-}
-.never-stopwatch-screen .screen-body .primary-page,
-.countdown-timer-screen .screen-body .primary-page,
-.rainbow-clock-screen .screen-body .primary-page {
-  color: #FFFFFF;
-  fill: #FFFFFF;
-}
-.never-stopwatch-screen .screen-body .primary-page .default-button,
-.countdown-timer-screen .screen-body .primary-page .default-button,
-.rainbow-clock-screen .screen-body .primary-page .default-button {
-  border-color: #FFFFFF;
-  background-color: transparent;
-}
-.never-stopwatch-screen .screen-body .trail-page,
-.countdown-timer-screen .screen-body .trail-page,
-.rainbow-clock-screen .screen-body .trail-page {
-  background-color: #FFFFFFBB;
+body:not(.tektite) .logo > .logo-text {
+  color: #5F42A7;
 }
 .never-stopwatch-screen .capital-interval,
 .countdown-timer-screen .capital-interval {
@@ -2703,7 +2952,7 @@ define("resource/config", [], {
         "#977E33", "#A16F39", "#A75F42", "#A9504E",
         "#A8445D", "#A23A6C", "#99347C", "#8C318A"
     ],
-    "flashIntervalPreset": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60],
+    "flashIntervalPreset": [0, 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60],
     "timerPreset": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 90, 120, 150, 180],
     "theme": {
         "original": {
@@ -2749,6 +2998,11 @@ define("resource/lang.en", [], {
     "theme.auto": "Auto ( Follows System )",
     "theme.light": "Light",
     "theme.dark": "Dark",
+    "Progress Bar Style setting": "Progress bar setting",
+    "progressBarStyle.header": "Header",
+    "progressBarStyle.auto": "Auto",
+    "progressBarStyle.horizontal": "Horizontal",
+    "progressBarStyle.vertical": "Vertical",
     "language.auto": "Auto",
     "Language setting": "Language setting",
     "Color setting": "Color setting",
@@ -2789,6 +3043,11 @@ define("resource/lang.ja", [], {
     "theme.auto": "自動 ( システムに従う )",
     "theme.light": "ライト",
     "theme.dark": "ダーク",
+    "Progress Bar Style setting": "プログレスバー設定",
+    "progressBarStyle.header": "ヘッダー",
+    "progressBarStyle.auto": "自動",
+    "progressBarStyle.horizontal": "水平",
+    "progressBarStyle.vertical": "垂直",
     "language.auto": "自動",
     "Language setting": "言語設定",
     "Color setting": "色設定",
@@ -2862,13 +3121,27 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             },
             "CountdownTimer": {
                 icon: "history-icon",
-                title: "CountdownTimer",
+                title: "Countdown Timer",
             },
             "RainbowClock": {
                 icon: "tick-icon",
                 title: "Rainbow Clock",
             },
         };
+        Clockworks.ApplicationList = Object.keys(Clockworks.application);
+        Clockworks.themeObject = {
+            "auto": null,
+            "light": null,
+            "dark": null,
+        };
+        Clockworks.ThemeList = Object.keys(Clockworks.themeObject);
+        Clockworks.progressBarStyleObject = {
+            "header": null,
+            "auto": null,
+            "horizontal": null,
+            "vertical": null,
+        };
+        Clockworks.ProgressBarStyleList = Object.keys(Clockworks.progressBarStyleObject);
         var setTitle = function (title) {
             if (document.title !== title) {
                 document.title = title;
@@ -2882,6 +3155,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             if (baseIndex === void 0) { baseIndex = config_json_1.default.rainbowColorSetDefaultIndex; }
             return getRainbowColor(index * config_json_1.default.rainbowColorSetSolidIndexRate, baseIndex);
         };
+        var setHeaderColor = function (color) {
+            var screenHeader = document.getElementById("screen-header");
+            if (color) {
+                if (screenHeader.style.backgroundColor !== color) {
+                    screenHeader.style.backgroundColor = color;
+                }
+            }
+            else {
+                if (screenHeader.style.backgroundColor) {
+                    screenHeader.style.removeProperty("background-color");
+                }
+            }
+        };
         var setBodyColor = function (color) {
             var bodyColor = color + "E8";
             if (document.body.style.backgroundColor !== bodyColor) {
@@ -2893,9 +3179,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }
         };
         var setFoundationColor = function (color) {
+            var _a;
             var foundation = document.getElementById("foundation");
             if (foundation.style.backgroundColor !== color) {
                 foundation.style.backgroundColor = color;
+            }
+            if ((_a = "header" === Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto") {
+                setHeaderColor(color);
+            }
+            else {
+                setHeaderColor(null);
             }
         };
         var toHex = function (i) {
@@ -2950,32 +3243,64 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         var Storage;
         (function (Storage) {
             Storage.lastUpdate = 0;
-            var Stamps;
-            (function (Stamps) {
-                Stamps.makeKey = function () { return config_json_1.default.localDbPrefix + ":stamps"; };
-                Stamps.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Stamps.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                Stamps.set = function (list) { return minamo_js_1.minamo.localStorage.set(Stamps.makeKey(), list); };
-                Stamps.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Stamps.makeKey()); };
-                Stamps.add = function (tick) {
-                    return Stamps.set(Stamps.get().concat(tick).sort(exports.simpleReverseComparer));
-                };
-                Stamps.remove = function (tick) {
-                    return Stamps.set(Stamps.get().filter(function (i) { return tick !== i; }).sort(exports.simpleReverseComparer));
-                };
-            })(Stamps = Storage.Stamps || (Storage.Stamps = {}));
-            var Alerms;
-            (function (Alerms) {
-                Alerms.makeKey = function () { return config_json_1.default.localDbPrefix + ":alerms"; };
-                Alerms.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Alerms.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                Alerms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alerms.makeKey(), list); };
-                Alerms.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Alerms.makeKey()); };
-                Alerms.add = function (tick) {
-                    return Alerms.set(Alerms.get().concat(tick).sort(exports.simpleReverseComparer));
-                };
-                Alerms.remove = function (tick) {
-                    return Alerms.set(Alerms.get().filter(function (i) { return JSON.stringify(tick) !== JSON.stringify(i); }).sort(exports.simpleReverseComparer));
-                };
-            })(Alerms = Storage.Alerms || (Storage.Alerms = {}));
+            var NeverStopwatch;
+            (function (NeverStopwatch) {
+                var applicationName = "NeverStopwatch";
+                var Stamps;
+                (function (Stamps) {
+                    Stamps.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":stamps"; };
+                    Stamps.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Stamps.makeKey())) !== null && _a !== void 0 ? _a : []; };
+                    Stamps.set = function (list) { return minamo_js_1.minamo.localStorage.set(Stamps.makeKey(), list); };
+                    Stamps.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Stamps.makeKey()); };
+                    Stamps.add = function (tick) {
+                        return Stamps.set(Stamps.get().concat(tick).sort(exports.simpleReverseComparer));
+                    };
+                    Stamps.remove = function (tick) {
+                        return Stamps.set(Stamps.get().filter(function (i) { return tick !== i; }).sort(exports.simpleReverseComparer));
+                    };
+                })(Stamps = NeverStopwatch.Stamps || (NeverStopwatch.Stamps = {}));
+                var flashInterval;
+                (function (flashInterval) {
+                    flashInterval.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
+                    flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+                    flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
+                })(flashInterval = NeverStopwatch.flashInterval || (NeverStopwatch.flashInterval = {}));
+            })(NeverStopwatch = Storage.NeverStopwatch || (Storage.NeverStopwatch = {}));
+            var CountdownTimer;
+            (function (CountdownTimer) {
+                var applicationName = "CountdownTimer";
+                var Alerms;
+                (function (Alerms) {
+                    Alerms.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":alerms"; };
+                    Alerms.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Alerms.makeKey())) !== null && _a !== void 0 ? _a : []; };
+                    Alerms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alerms.makeKey(), list); };
+                    Alerms.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Alerms.makeKey()); };
+                    Alerms.add = function (tick) {
+                        return Alerms.set(Alerms.get().concat(tick).sort(exports.simpleReverseComparer));
+                    };
+                    Alerms.remove = function (tick) {
+                        return Alerms.set(Alerms.get().filter(function (i) { return JSON.stringify(tick) !== JSON.stringify(i); }).sort(exports.simpleReverseComparer));
+                    };
+                })(Alerms = CountdownTimer.Alerms || (CountdownTimer.Alerms = {}));
+                var flashInterval;
+                (function (flashInterval) {
+                    flashInterval.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
+                    flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+                    flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
+                })(flashInterval = CountdownTimer.flashInterval || (CountdownTimer.flashInterval = {}));
+            })(CountdownTimer = Storage.CountdownTimer || (Storage.CountdownTimer = {}));
+            var RainbowClock;
+            (function (RainbowClock) {
+                var applicationName = "RainbowClock";
+                var colorPattern;
+                (function (colorPattern) {
+                    colorPattern.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":colorPattern"; };
+                    colorPattern.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(colorPattern.makeKey())) !== null && _a !== void 0 ? _a : "gradation"; };
+                    colorPattern.set = function (settings) {
+                        return minamo_js_1.minamo.localStorage.set(colorPattern.makeKey(), settings);
+                    };
+                })(colorPattern = RainbowClock.colorPattern || (RainbowClock.colorPattern = {}));
+            })(RainbowClock = Storage.RainbowClock || (Storage.RainbowClock = {}));
             var Settings;
             (function (Settings) {
                 Settings.makeKey = function () { return config_json_1.default.localDbPrefix + ":settings"; };
@@ -2984,20 +3309,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     return minamo_js_1.minamo.localStorage.set(Settings.makeKey(), settings);
                 };
             })(Settings = Storage.Settings || (Storage.Settings = {}));
-            var flashInterval;
-            (function (flashInterval) {
-                flashInterval.makeKey = function () { return config_json_1.default.localDbPrefix + ":flashInterval"; };
-                flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-                flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
-            })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
-            var rainbowClockColorPattern;
-            (function (rainbowClockColorPattern) {
-                rainbowClockColorPattern.makeKey = function () { return config_json_1.default.localDbPrefix + ":rainbowClockColorPattern"; };
-                rainbowClockColorPattern.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(rainbowClockColorPattern.makeKey())) !== null && _a !== void 0 ? _a : "gradation"; };
-                rainbowClockColorPattern.set = function (settings) {
-                    return minamo_js_1.minamo.localStorage.set(rainbowClockColorPattern.makeKey(), settings);
-                };
-            })(rainbowClockColorPattern = Storage.rainbowClockColorPattern || (Storage.rainbowClockColorPattern = {}));
         })(Storage = Clockworks.Storage || (Clockworks.Storage = {}));
         var Domain;
         (function (Domain) {
@@ -3135,233 +3446,239 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             var _this = this;
             var Operate;
             (function (Operate) {
-                var _this = this;
-                Operate.stamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var backup, toast;
+                var NeverStopwatch;
+                (function (NeverStopwatch) {
                     var _this = this;
-                    return __generator(this, function (_a) {
-                        backup = Storage.Stamps.get();
-                        Storage.Stamps.add(tick);
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("" + locale.map("Stamped!")),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Stamps.set(backup);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
+                    NeverStopwatch.stamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var backup, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            backup = Storage.NeverStopwatch.Stamps.get();
+                            Storage.NeverStopwatch.Stamps.add(tick);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Stamped!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.NeverStopwatch.Stamps.set(backup);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
                         });
-                        return [2 /*return*/];
-                    });
-                }); };
-                Operate.edit = function (oldTick, newTick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var backup, toast;
+                    }); };
+                    NeverStopwatch.edit = function (oldTick, newTick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var backup, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            backup = Storage.NeverStopwatch.Stamps.get();
+                            Storage.NeverStopwatch.Stamps.remove(oldTick);
+                            Storage.NeverStopwatch.Stamps.add(newTick);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Updated.")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.NeverStopwatch.Stamps.set(backup);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                    NeverStopwatch.removeStamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var backup, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            backup = Storage.NeverStopwatch.Stamps.get();
+                            Storage.NeverStopwatch.Stamps.remove(tick);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Removed.")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.NeverStopwatch.Stamps.set(backup);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                    NeverStopwatch.reset = function (onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var backup, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            backup = Storage.NeverStopwatch.Stamps.get();
+                            Storage.NeverStopwatch.Stamps.removeKey();
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("\u30EA\u30BB\u30C3\u30C8\u3057\u307E\u3057\u305F\u3002"),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.NeverStopwatch.Stamps.set(backup);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                })(NeverStopwatch = Operate.NeverStopwatch || (Operate.NeverStopwatch = {}));
+                var CountdownTimer;
+                (function (CountdownTimer) {
                     var _this = this;
-                    return __generator(this, function (_a) {
-                        backup = Storage.Stamps.get();
-                        Storage.Stamps.remove(oldTick);
-                        Storage.Stamps.add(newTick);
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("" + locale.map("Updated.")),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Stamps.set(backup);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
+                    CountdownTimer.newTimer = function (i, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var tick, alerm, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            tick = Domain.getTicks();
+                            alerm = {
+                                type: "timer",
+                                start: tick,
+                                end: tick + (i * 60 * 1000),
+                            };
+                            Storage.CountdownTimer.Alerms.add(alerm);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Done!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
                         });
-                        return [2 /*return*/];
-                    });
-                }); };
-                Operate.removeStamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var backup, toast;
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        backup = Storage.Stamps.get();
-                        Storage.Stamps.remove(tick);
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("" + locale.map("Removed.")),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Stamps.set(backup);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
+                    }); };
+                    CountdownTimer.newSchedule = function (title, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var alerm, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            alerm = {
+                                type: "schedule",
+                                title: title,
+                                start: Domain.getTicks(),
+                                end: end,
+                            };
+                            Storage.CountdownTimer.Alerms.add(alerm);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Done!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
                         });
-                        return [2 /*return*/];
-                    });
-                }); };
-                Operate.reset = function (onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var backup, toast;
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        backup = Storage.Stamps.get();
-                        Storage.Stamps.removeKey();
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("\u30EA\u30BB\u30C3\u30C8\u3057\u307E\u3057\u305F\u3002"),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Stamps.set(backup);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
+                    }); };
+                    CountdownTimer.done = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            Storage.CountdownTimer.Alerms.remove(item);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Done!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.CountdownTimer.Alerms.add(item);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
                         });
-                        return [2 /*return*/];
-                    });
-                }); };
-                Operate.newTimer = function (i, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var tick, alerm, toast;
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        tick = Domain.getTicks();
-                        alerm = {
-                            type: "timer",
-                            start: tick,
-                            end: tick + (i * 60 * 1000),
-                        };
-                        Storage.Alerms.add(alerm);
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("" + locale.map("Done!")),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Alerms.remove(alerm);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
+                    }); };
+                    CountdownTimer.removeAlarm = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            Storage.CountdownTimer.Alerms.remove(item);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Removed.")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.CountdownTimer.Alerms.add(item);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
                         });
-                        return [2 /*return*/];
-                    });
-                }); };
-                Operate.newSchedule = function (title, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var alerm, toast;
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        alerm = {
-                            type: "schedule",
-                            title: title,
-                            start: Domain.getTicks(),
-                            end: end,
-                        };
-                        Storage.Alerms.add(alerm);
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("" + locale.map("Done!")),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Alerms.remove(alerm);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
-                        });
-                        return [2 /*return*/];
-                    });
-                }); };
-                Operate.done = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var backup, toast;
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        backup = Storage.Stamps.get();
-                        Storage.Stamps.add(tick);
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("" + locale.map("Done!")),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Stamps.set(backup);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
-                        });
-                        return [2 /*return*/];
-                    });
-                }); };
-                Operate.removeAlert = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                    var toast;
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        Storage.Alerms.remove(item);
-                        Render.updateWindow("operate");
-                        toast = Render.makePrimaryToast({
-                            content: Render.$span("")("" + locale.map("Removed.")),
-                            backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            Storage.Alerms.add(item);
-                                            Render.updateWindow("operate");
-                                            return [4 /*yield*/, toast.hide()];
-                                        case 1:
-                                            _a.sent();
-                                            onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                            return [2 /*return*/];
-                                    }
-                                });
-                            }); }),
-                        });
-                        return [2 /*return*/];
-                    });
-                }); };
+                    }); };
+                })(CountdownTimer = Operate.CountdownTimer || (Operate.CountdownTimer = {}));
             })(Operate = Render.Operate || (Render.Operate = {}));
             Render.cancelTextButton = function (onCanceled) {
                 return ({
@@ -3502,7 +3819,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                 case 0:
                                                                     _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
                                                                     _c = [checkButtonList];
-                                                                    return [4 /*yield*/, Promise.all(["auto", "light", "dark"].map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                    return [4 /*yield*/, Promise.all(Clockworks.ThemeList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                             var _a;
                                                                             var _this = this;
                                                                             var _b;
@@ -3565,6 +3882,106 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                                             return [2 /*return*/, resolve(result)];
                                                         }); }); },
+                                                    });
+                                                    return [2 /*return*/];
+                                            }
+                                        });
+                                    }); })];
+                            case 1: return [2 /*return*/, _b.sent()];
+                        }
+                    });
+                });
+            };
+            Render.progressBarStyleSettingsPopup = function (settings) {
+                if (settings === void 0) { settings = Storage.Settings.get(); }
+                return __awaiter(_this, void 0, void 0, function () {
+                    var init, selected;
+                    var _this = this;
+                    var _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                init = (_a = settings.progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
+                                selected = init;
+                                return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                                        var checkButtonList, checkButtonListUpdate, ui;
+                                        var _this = this;
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0:
+                                                    checkButtonList = Render.$make(HTMLDivElement)({ className: "check-button-list" });
+                                                    checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                        var _a, _b, _c;
+                                                        var _this = this;
+                                                        return __generator(this, function (_d) {
+                                                            switch (_d.label) {
+                                                                case 0:
+                                                                    _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
+                                                                    _c = [checkButtonList];
+                                                                    return [4 /*yield*/, Promise.all(Clockworks.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                            var _a;
+                                                                            var _this = this;
+                                                                            return __generator(this, function (_b) {
+                                                                                switch (_b.label) {
+                                                                                    case 0:
+                                                                                        _a = {
+                                                                                            tag: "button",
+                                                                                            className: "check-button " + (key === selected ? "checked" : "")
+                                                                                        };
+                                                                                        return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                                                    case 1: return [2 /*return*/, (_a.children = [
+                                                                                            _b.sent(),
+                                                                                            Render.$span("")(Render.label("progressBarStyle." + key))
+                                                                                        ],
+                                                                                            _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                                                                return __generator(this, function (_a) {
+                                                                                                    switch (_a.label) {
+                                                                                                        case 0:
+                                                                                                            if (!(key !== selected)) return [3 /*break*/, 2];
+                                                                                                            selected = key;
+                                                                                                            return [4 /*yield*/, checkButtonListUpdate()];
+                                                                                                        case 1:
+                                                                                                            _a.sent();
+                                                                                                            _a.label = 2;
+                                                                                                        case 2: return [2 /*return*/];
+                                                                                                    }
+                                                                                                });
+                                                                                            }); },
+                                                                                            _a)];
+                                                                                }
+                                                                            });
+                                                                        }); }))];
+                                                                case 1: return [2 /*return*/, _b.apply(_a, _c.concat([[
+                                                                            _d.sent()
+                                                                        ]]))];
+                                                            }
+                                                        });
+                                                    }); };
+                                                    return [4 /*yield*/, checkButtonListUpdate()];
+                                                case 1:
+                                                    _a.sent();
+                                                    ui = Render.popup({
+                                                        // className: "add-remove-tags-popup",
+                                                        children: [
+                                                            Render.$tag("h2")("")(Render.label("Theme setting")),
+                                                            checkButtonList,
+                                                            Render.$div("popup-operator")([{
+                                                                    tag: "button",
+                                                                    className: "default-button",
+                                                                    children: Render.label("Close"),
+                                                                    onclick: function () {
+                                                                        ui.close();
+                                                                    },
+                                                                }])
+                                                        ],
+                                                        onClose: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                            return __generator(this, function (_a) {
+                                                                settings.progressBarStyle = selected;
+                                                                Storage.Settings.set(settings);
+                                                                resolve(init !== selected);
+                                                                return [2 /*return*/];
+                                                            });
+                                                        }); },
                                                     });
                                                     return [2 /*return*/];
                                             }
@@ -3703,7 +4120,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             };
             Render.colorSettingsPopup = function (settings) {
-                if (settings === void 0) { settings = Storage.rainbowClockColorPattern.get(); }
+                if (settings === void 0) { settings = Storage.RainbowClock.colorPattern.get(); }
                 return __awaiter(_this, void 0, void 0, function () {
                     var _this = this;
                     return __generator(this, function (_a) {
@@ -3746,7 +4163,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                                                     case 0:
                                                                                                         if (!((_a = key !== settings) !== null && _a !== void 0 ? _a : null)) return [3 /*break*/, 2];
                                                                                                         settings = key;
-                                                                                                        Storage.rainbowClockColorPattern.set(settings);
+                                                                                                        Storage.RainbowClock.colorPattern.set(settings);
                                                                                                         result = true;
                                                                                                         return [4 /*yield*/, checkButtonListUpdate()];
                                                                                                     case 1:
@@ -3834,7 +4251,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         return __generator(this, function (_a) {
                                                                                             switch (_a.label) {
-                                                                                                case 0: return [4 /*yield*/, Operate.newTimer(i)];
+                                                                                                case 0: return [4 /*yield*/, Operate.CountdownTimer.newTimer(i)];
                                                                                                 case 1:
                                                                                                     _a.sent();
                                                                                                     result = true;
@@ -4136,7 +4553,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     newTick = Domain.getTicks(result);
                                                     if (!(tick !== Domain.getTicks(result))) return [3 /*break*/, 4];
                                                     if (!(0 <= newTick && newTick <= Domain.getTicks())) return [3 /*break*/, 3];
-                                                    return [4 /*yield*/, Operate.edit(tick, newTick)];
+                                                    return [4 /*yield*/, Operate.NeverStopwatch.edit(tick, newTick)];
                                                 case 2:
                                                     _c.sent();
                                                     return [3 /*break*/, 4];
@@ -4152,7 +4569,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     }); }),
                                     Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Operate.removeStamp(tick)];
+                                            case 0: return [4 /*yield*/, Operate.NeverStopwatch.removeStamp(tick)];
                                             case 1: return [2 /*return*/, _a.sent()];
                                         }
                                     }); }); }, "delete-button")
@@ -4207,7 +4624,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     }); }),
                                     Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Operate.removeAlert(item)];
+                                            case 0: return [4 /*yield*/, Operate.CountdownTimer.removeAlarm(item)];
                                             case 1: return [2 /*return*/, _a.sent()];
                                         }
                                     }); }); }, "delete-button")
@@ -4397,7 +4814,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 icon: Clockworks.application[applicationType].icon,
                                 title: Clockworks.application[applicationType].title
                             };
-                            return [4 /*yield*/, Promise.all(Object.keys(Clockworks.application).map(function (i) { return __awaiter(_this, void 0, void 0, function () {
+                            return [4 /*yield*/, Promise.all(Clockworks.ApplicationList.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                     var _a;
                                     return __generator(this, function (_b) {
                                         switch (_b.label) {
@@ -4433,7 +4850,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     return __generator(this, function (_a) {
                                                         switch (_a.label) {
                                                             case 0:
-                                                                Storage.flashInterval.set(i);
+                                                                Storage.NeverStopwatch.flashInterval.set(i);
                                                                 return [4 /*yield*/, Clockworks.reload()];
                                                             case 1:
                                                                 _a.sent();
@@ -4521,6 +4938,23 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         }); })];
                 });
             }); };
+            Render.progressBarStyleMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, Render.menuItem(Render.label("Progress Bar Style setting"), function () { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, Render.progressBarStyleSettingsPopup()];
+                                    case 1:
+                                        if (_a.sent()) {
+                                            Clockworks.updateProgressBarStyle();
+                                        }
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); })];
+                });
+            }); };
             Render.languageMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
                 return __generator(this, function (_a) {
@@ -4541,12 +4975,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         }); })];
                 });
             }); };
-            Render.resetMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
+            Render.resetNeverStopwatchMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
                 return __generator(this, function (_a) {
                     return [2 /*return*/, Render.menuItem(Render.label("Reset"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, Operate.reset()];
+                                case 0: return [4 /*yield*/, Operate.NeverStopwatch.reset()];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); }, "delete-button")];
@@ -4574,13 +5008,18 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = _a.concat([
                                 _b.sent()
                             ]);
-                            return [4 /*yield*/, Render.languageMenuItem()];
+                            return [4 /*yield*/, Render.progressBarStyleMenuItem()];
                         case 3:
                             _a = _a.concat([
                                 _b.sent()
                             ]);
+                            return [4 /*yield*/, Render.languageMenuItem()];
+                        case 4:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
                             return [4 /*yield*/, Render.githubMenuItem()];
-                        case 4: return [2 /*return*/, _a.concat([
+                        case 5: return [2 /*return*/, _a.concat([
                                 _b.sent()
                             ])];
                     }
@@ -4677,7 +5116,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 _d.apply(void 0, [_h.sent()]),
                                                 Render.$span("logo-text")(Clockworks.applicationTitle)
                                             ]]),
-                                        Render.$div("button-list")(Object.keys(Clockworks.application).map(function (i) {
+                                        Render.$div("button-list")(Clockworks.ApplicationList.map(function (i) {
                                             return Render.internalLink({
                                                 href: { application: i },
                                                 children: {
@@ -4754,18 +5193,23 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = _a.concat([
                                 _b.sent()
                             ]);
-                            return [4 /*yield*/, Render.languageMenuItem()];
+                            return [4 /*yield*/, Render.progressBarStyleMenuItem()];
                         case 3:
                             _a = _a.concat([
                                 _b.sent()
                             ]);
-                            return [4 /*yield*/, Render.resetMenuItem()];
+                            return [4 /*yield*/, Render.languageMenuItem()];
                         case 4:
                             _a = _a.concat([
                                 _b.sent()
                             ]);
+                            return [4 /*yield*/, Render.resetNeverStopwatchMenuItem()];
+                        case 5:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
                             return [4 /*yield*/, Render.githubMenuItem()];
-                        case 5: return [2 /*return*/, _a.concat([
+                        case 6: return [2 /*return*/, _a.concat([
                                 _b.sent()
                             ])];
                     }
@@ -4791,7 +5235,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: Render.label("Stamp"),
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Operate.stamp(Domain.getTicks())];
+                                                case 0: return [4 /*yield*/, Operate.NeverStopwatch.stamp(Domain.getTicks())];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); }
@@ -4840,7 +5284,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = _a.concat([
                                 _d.sent()
                             ]);
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.flashInterval.get())];
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get())];
                         case 3:
                             _b.header = (_c.items = _a.concat([
                                 _d.sent()
@@ -4862,7 +5306,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             applicationTitle = Clockworks.application["NeverStopwatch"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            ticks = Storage.Stamps.get();
+                            ticks = Storage.NeverStopwatch.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, flashInterval, _a, capitalTime, capitalTimeSpan, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
                                 return __generator(this, function (_c) {
@@ -4871,7 +5315,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             screen = document.getElementById("screen");
                                             now = new Date();
                                             tick = Domain.getTicks(now);
-                                            flashInterval = Storage.flashInterval.get();
+                                            flashInterval = Storage.NeverStopwatch.flashInterval.get();
                                             _a = event;
                                             switch (_a) {
                                                 case "high-resolution-timer": return [3 /*break*/, 1];
@@ -4937,7 +5381,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            ticks = Storage.Stamps.get();
+                                            ticks = Storage.NeverStopwatch.Stamps.get();
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.neverStopwatchScreenBody(ticks)];
                                         case 6:
@@ -4963,7 +5407,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.countdownTimerScreenBody = function (alerts) { return __awaiter(_this, void 0, void 0, function () {
+            Render.countdownTimerScreenBody = function (alarms) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e, _f;
                 var _this = this;
                 return __generator(this, function (_g) {
@@ -4982,12 +5426,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         id: "done-button",
                                         className: "default-button main-button long-button",
                                         children: Render.label("Done"),
-                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Operate.done(Domain.getTicks())];
-                                                case 1: return [2 /*return*/, _a.sent()];
-                                            }
-                                        }); }); }
+                                        // onclick: async () => await Operate.CountdownTimer.done(Domain.getTicks())
                                     }),
                                 ])];
                             return [4 /*yield*/, Render.downPageLink()];
@@ -5027,7 +5466,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     },
                                 ])];
                             _f = Render.$div("column-flex-list tick-list");
-                            return [4 /*yield*/, Promise.all(alerts.map(function (item) { return Render.alermItem(item); }))];
+                            return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alermItem(item); }))];
                         case 2: return [2 /*return*/, (_c.concat([
                                 _d.apply(void 0, [_e.concat([
                                         _f.apply(void 0, [_g.sent()]),
@@ -5061,7 +5500,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = _a.concat([
                                 _d.sent()
                             ]);
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.flashInterval.get())];
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get())];
                         case 3:
                             _b.header = (_c.items = _a.concat([
                                 _d.sent()
@@ -5082,8 +5521,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             applicationTitle = Clockworks.application["CountdownTimer"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            alerts = Storage.Alerms.get();
-                            ticks = Storage.Stamps.get();
+                            alerts = Storage.CountdownTimer.Alerms.get();
+                            ticks = Storage.NeverStopwatch.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
                                 return __generator(this, function (_c) {
@@ -5107,7 +5546,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             if (capitalTimeSpan.innerText !== capitalTime) {
                                                 capitalTimeSpan.innerText = capitalTime;
                                             }
-                                            flashInterval = Storage.flashInterval.get();
+                                            flashInterval = Storage.CountdownTimer.flashInterval.get();
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
                                                 unit = flashInterval * 60 * 1000;
@@ -5158,7 +5597,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            ticks = Storage.Stamps.get();
+                                            ticks = Storage.NeverStopwatch.Stamps.get();
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.neverStopwatchScreenBody(ticks)];
                                         case 6:
@@ -5209,18 +5648,23 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = _a.concat([
                                 _b.sent()
                             ]);
-                            return [4 /*yield*/, Render.colorMenuItem()];
+                            return [4 /*yield*/, Render.progressBarStyleMenuItem()];
                         case 3:
                             _a = _a.concat([
                                 _b.sent()
                             ]);
-                            return [4 /*yield*/, Render.languageMenuItem()];
+                            return [4 /*yield*/, Render.colorMenuItem()];
                         case 4:
                             _a = _a.concat([
                                 _b.sent()
                             ]);
+                            return [4 /*yield*/, Render.languageMenuItem()];
+                        case 5:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
                             return [4 /*yield*/, Render.githubMenuItem()];
-                        case 5: return [2 /*return*/, _a.concat([
+                        case 6: return [2 /*return*/, _a.concat([
                                 _b.sent()
                             ])];
                     }
@@ -5312,7 +5756,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             if (currentDateSpan.innerText !== dateString) {
                                                 currentDateSpan.innerText = dateString;
                                             }
-                                            getRainbowColor_1 = Clockworks.rainbowClockColorPatternMap[Storage.rainbowClockColorPattern.get()];
+                                            getRainbowColor_1 = Clockworks.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                                             currentColor = getRainbowColor_1(now.getHours());
                                             setFoundationColor(currentColor);
                                             hourUnit = 60 * 60 * 1000;
@@ -5385,6 +5829,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     }
                                 });
                             }
+                            setFoundationColor(getSolidRainbowColor(0));
                             document.body.style.removeProperty("background-color");
                             document.getElementById("foundation").style.removeProperty("background-color");
                             document.getElementById("screen").style.removeProperty("background-color");
@@ -5469,15 +5914,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             };
             Render.getProgressElement = function () { return document.getElementById("screen-header").getElementsByClassName("progress-bar")[0]; };
             Render.setScreenBarProgress = function (percent, color) {
+                var _a;
+                var setting = (_a = Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
                 var screenBar = document.getElementsByClassName("screen-bar")[0];
-                if (color) {
-                    if (screenBar.style.backgroundColor !== color) {
-                        screenBar.style.backgroundColor = color;
+                if (null !== percent && "header" !== setting) {
+                    if (color) {
+                        if (screenBar.style.backgroundColor !== color) {
+                            screenBar.style.backgroundColor = color;
+                        }
                     }
-                }
-                if (null !== percent) {
                     var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                    if (window.innerHeight < window.innerWidth) {
+                    if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting) {
                         if (!screenBar.classList.contains("horizontal")) {
                             screenBar.classList.add("horizontal");
                         }
@@ -5513,6 +5960,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     if (screenBar.style.display !== "none") {
                         screenBar.style.display = "none";
                     }
+                }
+                var progressBar = Render.getProgressElement();
+                if (null !== percent && "header" === setting) {
+                    if (color) {
+                        if (progressBar.style.backgroundColor !== color) {
+                            progressBar.style.backgroundColor = color;
+                        }
+                    }
+                    var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                    progressBar.style.width = percentString;
+                }
+                else {
+                    progressBar.style.width = "0%";
                 }
             };
             Render.resizeFlexList = function () {
@@ -5702,6 +6162,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 document.getElementById("style").innerText = style;
             }
         };
+        Clockworks.updateProgressBarStyle = function () {
+            var _a;
+            var setting = (_a = Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
+            document.body.classList.toggle("tektite", "header" !== setting);
+            if ("header" !== setting) {
+                setHeaderColor(null);
+            }
+        };
         Clockworks.start = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -5725,6 +6193,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         }); }); });
                         window.matchMedia('(prefers-color-scheme: dark)').addListener(Clockworks.updateStyle);
                         Clockworks.updateStyle();
+                        Clockworks.updateProgressBarStyle();
                         return [4 /*yield*/, Clockworks.showPage()];
                     case 1:
                         _a.sent();

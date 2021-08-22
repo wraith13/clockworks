@@ -62,9 +62,31 @@ export module Clockworks
             title: "Rainbow Clock",
         },
     };
+    export type ApplicationType = keyof typeof application;
+    export const ApplicationList = Object.keys(application);
+    export const themeObject =
+    {
+        "auto": null,
+        "light": null,
+        "dark": null,
+    };
+    export type ThemeType = keyof typeof themeObject;
+    export const ThemeList = Object.keys(themeObject);
+
+    export const progressBarStyleObject =
+    {
+        "header": null,
+        "auto": null,
+        "horizontal": null,
+        "vertical": null,
+    };
+    export type ProgressBarStyleType = keyof typeof progressBarStyleObject;
+    export const ProgressBarStyleList = Object.keys(progressBarStyleObject);
+
     export interface Settings
     {
-        theme?: "auto" | "light" | "dark";
+        theme?: ThemeType;
+        progressBarStyle?: ProgressBarStyleType;
         locale?: locale.LocaleType;
     }
     export interface AlermTimerEntry
@@ -92,6 +114,24 @@ export module Clockworks
         config.rainbowColorSet[(index +baseIndex) % config.rainbowColorSet.length];
     const getSolidRainbowColor = (index: number, baseIndex = config.rainbowColorSetDefaultIndex) =>
         getRainbowColor(index *config.rainbowColorSetSolidIndexRate, baseIndex);
+    const setHeaderColor = (color: string | null) =>
+    {
+        const screenHeader = document.getElementById("screen-header");
+        if (color)
+        {
+            if (screenHeader.style.backgroundColor !== color)
+            {
+                screenHeader.style.backgroundColor = color;
+            }
+        }
+        else
+        {
+            if (screenHeader.style.backgroundColor)
+            {
+                screenHeader.style.removeProperty("background-color");
+            }
+        }
+    };
     const setBodyColor = (color: string) =>
     {
         const bodyColor = `${color}E8`;
@@ -111,6 +151,14 @@ export module Clockworks
         if (foundation.style.backgroundColor !== color)
         {
             foundation.style.backgroundColor = color;
+        }
+        if ("header" === Storage.Settings.get().progressBarStyle ?? "auto")
+        {
+            setHeaderColor(color);
+        }
+        else
+        {
+            setHeaderColor(null);
         }
     };
     const toHex = (i : number) : string =>
@@ -606,7 +654,7 @@ export module Clockworks
         });
         export interface PageParams
         {
-            application?: keyof typeof application;
+            application?: ApplicationType;
         }
         export const internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
         ({
@@ -724,16 +772,16 @@ export module Clockworks
                         [
                             await Promise.all
                             (
-                                ["auto", "light", "dark"].map
+                                ThemeList.map
                                 (
-                                    async (key: "auto" | "light" | "dark") =>
+                                    async (key: ThemeType) =>
                                     ({
                                         tag: "button",
                                         className: `check-button ${key === (settings.theme ?? "auto") ? "checked": ""}`,
                                         children:
                                         [
                                             await Resource.loadSvgOrCache("check-icon"),
-                                            $span("")(label(<"theme.auto" | "theme.light" | "theme.dark">`theme.${key}`)),
+                                            $span("")(label(`theme.${key}` as locale.LocaleKeyType)),
                                         ],
                                         onclick: async () =>
                                         {
@@ -770,6 +818,74 @@ export module Clockworks
                             }])
                         ],
                         onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
+        export const progressBarStyleSettingsPopup = async (settings: Settings = Storage.Settings.get()): Promise<boolean> =>
+        {
+            const init = settings.progressBarStyle ?? "auto";
+            let selected = init;
+            return await new Promise
+            (
+                async resolve =>
+                {
+                    const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                    const checkButtonListUpdate = async () => minamo.dom.replaceChildren
+                    (
+                        checkButtonList,
+                        [
+                            await Promise.all
+                            (
+                                ProgressBarStyleList.map
+                                (
+                                    async (key: ProgressBarStyleType) =>
+                                    ({
+                                        tag: "button",
+                                        className: `check-button ${key === selected ? "checked": ""}`,
+                                        children:
+                                        [
+                                            await Resource.loadSvgOrCache("check-icon"),
+                                            $span("")(label(`progressBarStyle.${key}` as locale.LocaleKeyType)),
+                                        ],
+                                        onclick: async () =>
+                                        {
+                                            if (key !== selected)
+                                            {
+                                                selected = key;
+                                                await checkButtonListUpdate();
+                                            }
+                                        }
+                                    })
+                                )
+                            )
+                        ]
+                    );
+                    await checkButtonListUpdate();
+                    const ui = popup
+                    ({
+                        // className: "add-remove-tags-popup",
+                        children:
+                        [
+                            $tag("h2")("")(label("Theme setting")),
+                            checkButtonList,
+                            $div("popup-operator")
+                            ([{
+                                tag: "button",
+                                className: "default-button",
+                                children: label("Close"),
+                                onclick: () =>
+                                {
+                                    ui.close();
+                                },
+                            }])
+                        ],
+                        onClose: async () =>
+                        {
+                            settings.progressBarStyle = selected;
+                            Storage.Settings.set(settings);
+                            resolve(init !== selected);
+                        },
                     });
                 }
             );
@@ -1434,15 +1550,15 @@ export module Clockworks
             href: { },
             title: applicationTitle,
         });
-        export const screenHeaderApplicationSegment = async (applicationType: keyof typeof application): Promise<HeaderSegmentSource> =>
+        export const screenHeaderApplicationSegment = async (applicationType: ApplicationType): Promise<HeaderSegmentSource> =>
         ({
             icon: application[applicationType].icon,
             title: application[applicationType].title,
             menu: await Promise.all
             (
-                Object.keys(application).map
+                ApplicationList.map
                 (
-                    async (i: keyof typeof application) => menuLinkItem
+                    async (i: ApplicationType) => menuLinkItem
                     (
                         [ await Resource.loadSvgOrCache(application[i].icon), application[i].title, ],
                         { application: i },
@@ -1533,6 +1649,18 @@ export module Clockworks
                     }
                 }
             );
+        export const progressBarStyleMenuItem = async () =>
+            menuItem
+            (
+                label("Progress Bar Style setting"),
+                async () =>
+                {
+                    if (await progressBarStyleSettingsPopup())
+                    {
+                        updateProgressBarStyle();
+                    }
+                }
+            );
         export const languageMenuItem = async () =>
             menuItem
             (
@@ -1563,6 +1691,7 @@ export module Clockworks
         [
             await fullscreenMenuItem(),
             await themeMenuItem(),
+            await progressBarStyleMenuItem(),
             await languageMenuItem(),
             await githubMenuItem(),
         ];
@@ -1615,9 +1744,9 @@ export module Clockworks
                         ]),
                         $div("button-list")
                         (
-                            Object.keys(application).map
+                            ApplicationList.map
                             (
-                                (i: keyof typeof application) =>
+                                (i: ApplicationType) =>
                                 internalLink
                                 ({
                                     href: { application: i },
@@ -1672,6 +1801,7 @@ export module Clockworks
         [
             await fullscreenMenuItem(),
             await themeMenuItem(),
+            await progressBarStyleMenuItem(),
             await languageMenuItem(),
             await resetNeverStopwatchMenuItem(),
             await githubMenuItem(),
@@ -2017,6 +2147,7 @@ export module Clockworks
         [
             await fullscreenMenuItem(),
             await themeMenuItem(),
+            await progressBarStyleMenuItem(),
             await colorMenuItem(),
             await languageMenuItem(),
             await githubMenuItem(),
@@ -2156,6 +2287,7 @@ export module Clockworks
                     }
                 );
             }
+            setFoundationColor(getSolidRainbowColor(0));
             document.body.style.removeProperty("background-color");
             document.getElementById("foundation").style.removeProperty("background-color");
             document.getElementById("screen").style.removeProperty("background-color");
@@ -2262,18 +2394,19 @@ export module Clockworks
         export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
         export const setScreenBarProgress = (percent: null | number, color?: string) =>
         {
+            const setting = Storage.Settings.get().progressBarStyle ?? "auto";
             const screenBar = document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
-            if (color)
+            if (null !== percent && "header" !== setting)
             {
-                if (screenBar.style.backgroundColor !== color)
+                if (color)
                 {
-                    screenBar.style.backgroundColor = color;
+                    if (screenBar.style.backgroundColor !== color)
+                    {
+                        screenBar.style.backgroundColor = color;
+                    }
                 }
-            }
-            if (null !== percent)
-            {
                 const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                if (window.innerHeight < window.innerWidth)
+                if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting)
                 {
                     if ( ! screenBar.classList.contains("horizontal"))
                     {
@@ -2322,6 +2455,23 @@ export module Clockworks
                 {
                     screenBar.style.display = "none";
                 }
+            }
+            const progressBar = getProgressElement();
+            if (null !== percent && "header" === setting)
+            {
+                if (color)
+                {
+                    if (progressBar.style.backgroundColor !== color)
+                    {
+                        progressBar.style.backgroundColor = color;
+                    }
+                }
+                const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                progressBar.style.width = percentString;
+            }
+            else
+            {
+                progressBar.style.width = "0%";
             }
         };
         export const resizeFlexList = () =>
@@ -2593,6 +2743,15 @@ export module Clockworks
             document.getElementById("style").innerText = style;
         }
     };
+    export const updateProgressBarStyle = () =>
+    {
+        const setting = Storage.Settings.get().progressBarStyle ?? "auto";
+        document.body.classList.toggle("tektite", "header" !== setting);
+        if ("header" !== setting)
+        {
+            setHeaderColor(null);
+        }
+    };
     export const start = async () =>
     {
         console.log("start!!!");
@@ -2612,6 +2771,7 @@ export module Clockworks
         );
         window.matchMedia('(prefers-color-scheme: dark)').addListener(updateStyle);
         updateStyle();
+        updateProgressBarStyle();
         await showPage();
     };
     export const showPage = async (url: string = location.href) =>
@@ -2620,7 +2780,7 @@ export module Clockworks
         document.getElementById("screen-body").scrollTo(0,0);
         const urlParams = getUrlParams(url);
         // const hash = getUrlHash(url);
-        const applicationType = urlParams["application"] as keyof typeof application;
+        const applicationType = urlParams["application"] as ApplicationType;
         switch(applicationType)
         {
         case "NeverStopwatch":
