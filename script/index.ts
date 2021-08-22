@@ -54,7 +54,7 @@ export module Clockworks
         "CountdownTimer": <ApplicationEntry>
         {
             icon: "history-icon",
-            title: "CountdownTimer",
+            title: "Countdown Timer",
         },
         "RainbowClock": <ApplicationEntry>
         {
@@ -175,27 +175,59 @@ export module Clockworks
     export module Storage
     {
         export let lastUpdate = 0;
-        export module Stamps
+        export module NeverStopwatch
         {
-            export const makeKey = () => `${config.localDbPrefix}:stamps`;
-            export const get = (): number[] => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-            export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-            export const removeKey = () => minamo.localStorage.remove(makeKey());
-            export const add = (tick: number | number[]) =>
-                set(get().concat(tick).sort(simpleReverseComparer));
-            export const remove = (tick: number) =>
-                set(get().filter(i => tick !== i).sort(simpleReverseComparer));
+            const applicationName = "NeverStopwatch";
+            export module Stamps
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:stamps`;
+                export const get = (): number[] => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
+                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+                export const removeKey = () => minamo.localStorage.remove(makeKey());
+                export const add = (tick: number | number[]) =>
+                    set(get().concat(tick).sort(simpleReverseComparer));
+                export const remove = (tick: number) =>
+                    set(get().filter(i => tick !== i).sort(simpleReverseComparer));
+            }
+            export module flashInterval
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
+                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+            }
         }
-        export module Alerms
+        export module CountdownTimer
         {
-            export const makeKey = () => `${config.localDbPrefix}:alerms`;
-            export const get = (): AlermEntry[] => minamo.localStorage.getOrNull<AlermEntry[]>(makeKey()) ?? [];
-            export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list);
-            export const removeKey = () => minamo.localStorage.remove(makeKey());
-            export const add = (tick: AlermEntry | AlermEntry[]) =>
-                set(get().concat(tick).sort(simpleReverseComparer));
-            export const remove = (tick: AlermEntry) =>
-                set(get().filter(i => JSON.stringify(tick) !== JSON.stringify(i)).sort(simpleReverseComparer));
+            const applicationName = "CountdownTimer";
+            export module Alerms
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alerms`;
+                export const get = (): AlermEntry[] => minamo.localStorage.getOrNull<AlermEntry[]>(makeKey()) ?? [];
+                export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list);
+                export const removeKey = () => minamo.localStorage.remove(makeKey());
+                export const add = (tick: AlermEntry | AlermEntry[]) =>
+                    set(get().concat(tick).sort(simpleReverseComparer));
+                export const remove = (tick: AlermEntry) =>
+                    set(get().filter(i => JSON.stringify(tick) !== JSON.stringify(i)).sort(simpleReverseComparer));
+            }
+            export module flashInterval
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
+                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+            }
+        }
+        export module RainbowClock
+        {
+            const applicationName = "RainbowClock";
+            export module colorPattern
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:colorPattern`;
+                export const get = () =>
+                    minamo.localStorage.getOrNull<rainbowClockColorPatternType>(makeKey()) ?? "gradation";
+                export const set = (settings: rainbowClockColorPatternType) =>
+                    minamo.localStorage.set(makeKey(), settings);
+            }
         }
         export module Settings
         {
@@ -203,20 +235,6 @@ export module Clockworks
             export const get = () =>
                 minamo.localStorage.getOrNull<Clockworks.Settings>(makeKey()) ?? { };
             export const set = (settings: Clockworks.Settings) =>
-                minamo.localStorage.set(makeKey(), settings);
-        }
-        export module flashInterval
-        {
-            export const makeKey = () => `${config.localDbPrefix}:flashInterval`;
-            export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
-            export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
-        }
-        export module rainbowClockColorPattern
-        {
-            export const makeKey = () => `${config.localDbPrefix}:rainbowClockColorPattern`;
-            export const get = () =>
-                minamo.localStorage.getOrNull<rainbowClockColorPatternType>(makeKey()) ?? "gradation";
-            export const set = (settings: rainbowClockColorPatternType) =>
                 minamo.localStorage.set(makeKey(), settings);
         }
     }
@@ -393,178 +411,183 @@ export module Clockworks
     {
         export module Operate
         {
-            export const stamp = async (tick: number, onCanceled?: () => unknown) =>
+            export module NeverStopwatch
             {
-                const backup = Storage.Stamps.get();
-                Storage.Stamps.add(tick);
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`${locale.map("Stamped!")}`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Stamps.set(backup);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
-            export const edit = async (oldTick: number, newTick: number, onCanceled?: () => unknown) =>
-            {
-                const backup = Storage.Stamps.get();
-                Storage.Stamps.remove(oldTick);
-                Storage.Stamps.add(newTick);
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`${locale.map("Updated.")}`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Stamps.set(backup);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
-            export const removeStamp = async (tick: number, onCanceled?: () => unknown) =>
-            {
-                const backup = Storage.Stamps.get();
-                Storage.Stamps.remove(tick);
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`${locale.map("Removed.")}`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Stamps.set(backup);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
-            export const reset = async (onCanceled?: () => unknown) =>
-            {
-                const backup = Storage.Stamps.get();
-                Storage.Stamps.removeKey();
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`リセットしました。`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Stamps.set(backup);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
-            export const newTimer = async (i: number, onCanceled?: () => unknown) =>
-            {
-                const tick = Domain.getTicks();
-                const alerm: AlermTimerEntry =
+                export const stamp = async (tick: number, onCanceled?: () => unknown) =>
                 {
-                    type: "timer",
-                    start: tick,
-                    end: tick +(i *60 *1000),
+                    const backup = Storage.NeverStopwatch.Stamps.get();
+                    Storage.NeverStopwatch.Stamps.add(tick);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Stamped!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.NeverStopwatch.Stamps.set(backup);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
                 };
-                Storage.Alerms.add(alerm);
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`${locale.map("Done!")}`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Alerms.remove(alerm);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
-            export const newSchedule = async (title: string, end: number, onCanceled?: () => unknown) =>
-            {
-                const alerm: AlermScheduleEntry =
+                export const edit = async (oldTick: number, newTick: number, onCanceled?: () => unknown) =>
                 {
-                    type: "schedule",
-                    title,
-                    start: Domain.getTicks(),
-                    end,
+                    const backup = Storage.NeverStopwatch.Stamps.get();
+                    Storage.NeverStopwatch.Stamps.remove(oldTick);
+                    Storage.NeverStopwatch.Stamps.add(newTick);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Updated.")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.NeverStopwatch.Stamps.set(backup);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
                 };
-                Storage.Alerms.add(alerm);
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`${locale.map("Done!")}`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Alerms.remove(alerm);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
-            export const done = async (tick: number, onCanceled?: () => unknown) =>
+                export const removeStamp = async (tick: number, onCanceled?: () => unknown) =>
+                {
+                    const backup = Storage.NeverStopwatch.Stamps.get();
+                    Storage.NeverStopwatch.Stamps.remove(tick);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Removed.")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.NeverStopwatch.Stamps.set(backup);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const reset = async (onCanceled?: () => unknown) =>
+                {
+                    const backup = Storage.NeverStopwatch.Stamps.get();
+                    Storage.NeverStopwatch.Stamps.removeKey();
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`リセットしました。`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.NeverStopwatch.Stamps.set(backup);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+            }
+            export module CountdownTimer
             {
-                const backup = Storage.Stamps.get();
-                Storage.Stamps.add(tick);
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`${locale.map("Done!")}`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Stamps.set(backup);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
-            export const removeAlert = async (item: AlermEntry, onCanceled?: () => unknown) =>
-            {
-                Storage.Alerms.remove(item);
-                updateWindow("operate");
-                const toast = makePrimaryToast
-                ({
-                    content: $span("")(`${locale.map("Removed.")}`),
-                    backwardOperator: cancelTextButton
-                    (
-                        async () =>
-                        {
-                            Storage.Alerms.add(item);
-                            updateWindow("operate");
-                            await toast.hide();
-                            onCanceled?.();
-                        }
-                    ),
-                });
-            };
+                export const newTimer = async (i: number, onCanceled?: () => unknown) =>
+                {
+                    const tick = Domain.getTicks();
+                    const alerm: AlermTimerEntry =
+                    {
+                        type: "timer",
+                        start: tick,
+                        end: tick +(i *60 *1000),
+                    };
+                    Storage.CountdownTimer.Alerms.add(alerm);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Done!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const newSchedule = async (title: string, end: number, onCanceled?: () => unknown) =>
+                {
+                    const alerm: AlermScheduleEntry =
+                    {
+                        type: "schedule",
+                        title,
+                        start: Domain.getTicks(),
+                        end,
+                    };
+                    Storage.CountdownTimer.Alerms.add(alerm);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Done!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const done = async (item: AlermEntry, onCanceled?: () => unknown) =>
+                {
+                    Storage.CountdownTimer.Alerms.remove(item);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Done!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.CountdownTimer.Alerms.add(item);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const removeAlarm = async (item: AlermEntry, onCanceled?: () => unknown) =>
+                {
+                    Storage.CountdownTimer.Alerms.remove(item);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Removed.")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.CountdownTimer.Alerms.add(item);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+            }
         }
         export const cancelTextButton = (onCanceled: () => unknown) =>
         ({
@@ -834,7 +857,7 @@ export module Clockworks
                 }
             );
         };
-        export const colorSettingsPopup = async (settings = Storage.rainbowClockColorPattern.get()): Promise<boolean> =>
+        export const colorSettingsPopup = async (settings = Storage.RainbowClock.colorPattern.get()): Promise<boolean> =>
         {
             return await new Promise
             (
@@ -864,7 +887,7 @@ export module Clockworks
                                             if (key !== settings ?? null)
                                             {
                                                 settings = key;
-                                                Storage.rainbowClockColorPattern.set(settings);
+                                                Storage.RainbowClock.colorPattern.set(settings);
                                                 result = true;
                                                 await checkButtonListUpdate();
                                             }
@@ -925,7 +948,7 @@ export module Clockworks
                                         ],
                                         onclick: async () =>
                                         {
-                                            await Operate.newTimer(i);
+                                            await Operate.CountdownTimer.newTimer(i);
                                             result = true;
                                             ui.close();
                                         }
@@ -1191,7 +1214,7 @@ export module Clockworks
                                     {
                                         if (0 <= newTick && newTick <= Domain.getTicks())
                                         {
-                                            await Operate.edit(tick, newTick);
+                                            await Operate.NeverStopwatch.edit(tick, newTick);
                                         }
                                         else
                                         {
@@ -1208,7 +1231,7 @@ export module Clockworks
                         menuItem
                         (
                             label("Remove"),
-                            async () => await Operate.removeStamp(tick),
+                            async () => await Operate.NeverStopwatch.removeStamp(tick),
                             "delete-button"
                         )
                     ]),
@@ -1279,7 +1302,7 @@ export module Clockworks
                         menuItem
                         (
                             label("Remove"),
-                            async () => await Operate.removeAlert(item),
+                            async () => await Operate.CountdownTimer.removeAlarm(item),
                             "delete-button"
                         )
                     ]),
@@ -1287,12 +1310,12 @@ export module Clockworks
             ]),
             // $div("item-information")
             // ([
-            //     $div("alert-due-timestamp")
+            //     $div("alarm-due-timestamp")
             //     ([
             //         label("Due timestamp"),
             //         $span("value monospace")(Domain.dateFullStringFromTick(item.end)),
             //     ]),
-            //     $div("alert-due-rest")
+            //     $div("alarm-due-rest")
             //     ([
             //         label("Rest"),
             //         $span("value monospace")(Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
@@ -1441,7 +1464,7 @@ export module Clockworks
                     ],
                     async () =>
                     {
-                        Storage.flashInterval.set(i);
+                        Storage.NeverStopwatch.flashInterval.set(i);
                         await reload();
                     },
                     flashInterval === i ? "current-item": undefined
@@ -1523,11 +1546,11 @@ export module Clockworks
                     }
                 }
             );
-        export const resetMenuItem = async () =>
+        export const resetNeverStopwatchMenuItem = async () =>
             menuItem
             (
                 label("Reset"),
-                async () => await Operate.reset(),
+                async () => await Operate.NeverStopwatch.reset(),
                 "delete-button"
             );
         export const githubMenuItem = async () =>
@@ -1650,7 +1673,7 @@ export module Clockworks
             await fullscreenMenuItem(),
             await themeMenuItem(),
             await languageMenuItem(),
-            await resetMenuItem(),
+            await resetNeverStopwatchMenuItem(),
             await githubMenuItem(),
         ];
         export const neverStopwatchScreenBody = async (ticks: number[]) =>
@@ -1672,7 +1695,7 @@ export module Clockworks
                         tag: "button",
                         className: "default-button main-button long-button",
                         children: label("Stamp"),
-                        onclick: async () => await Operate.stamp(Domain.getTicks())
+                        onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
                     }),
                 ]),
                 await downPageLink(),
@@ -1713,7 +1736,7 @@ export module Clockworks
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("NeverStopwatch"),
-                    await screenHeaderFlashSegment(Storage.flashInterval.get()),
+                    await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
                 ],
                 menu: neverStopwatchScreenMenu
             },
@@ -1724,13 +1747,13 @@ export module Clockworks
         {
             const applicationTitle = application["NeverStopwatch"].title;
             document.body.classList.add("hide-scroll-bar");
-            let ticks = Storage.Stamps.get();
+            let ticks = Storage.NeverStopwatch.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
                 const now = new Date();
                 const tick = Domain.getTicks(now);
-                const flashInterval = Storage.flashInterval.get();
+                const flashInterval = Storage.NeverStopwatch.flashInterval.get();
                 switch(event)
                 {
                     case "high-resolution-timer":
@@ -1804,7 +1827,7 @@ export module Clockworks
                         break;
                     case "operate":
                         previousPrimaryStep = 0;
-                        ticks = Storage.Stamps.get();
+                        ticks = Storage.NeverStopwatch.Stamps.get();
                         replaceScreenBody(await neverStopwatchScreenBody(ticks));
                         resizeFlexList();
                         await updateWindow("timer");
@@ -1814,7 +1837,7 @@ export module Clockworks
             await showWindow(await neverStopwatchScreen(ticks), updateWindow);
             await updateWindow("timer");
         };
-        export const countdownTimerScreenBody = async (alerts: AlermEntry[]) =>
+        export const countdownTimerScreenBody = async (alarms: AlermEntry[]) =>
         ([
             $div("primary-page")
             ([
@@ -1834,7 +1857,7 @@ export module Clockworks
                         id: "done-button",
                         className: "default-button main-button long-button",
                         children: label("Done"),
-                        onclick: async () => await Operate.done(Domain.getTicks())
+                        // onclick: async () => await Operate.CountdownTimer.done(Domain.getTicks())
                     }),
                 ]),
                 await downPageLink(),
@@ -1861,7 +1884,7 @@ export module Clockworks
                 ]),
                 $div("column-flex-list tick-list")
                 (
-                    await Promise.all(alerts.map(item => alermItem(item)))
+                    await Promise.all(alarms.map(item => alermItem(item)))
                 ),
                 $div("description")
                 (
@@ -1883,7 +1906,7 @@ export module Clockworks
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("CountdownTimer"),
-                    await screenHeaderFlashSegment(Storage.flashInterval.get()),
+                    await screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get()),
                 ],
                 menu: neverStopwatchScreenMenu
             },
@@ -1893,8 +1916,8 @@ export module Clockworks
         {
             const applicationTitle = application["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
-            let alerts = Storage.Alerms.get();
-            let ticks = Storage.Stamps.get();
+            let alerts = Storage.CountdownTimer.Alerms.get();
+            let ticks = Storage.NeverStopwatch.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
@@ -1910,7 +1933,7 @@ export module Clockworks
                         {
                             capitalTimeSpan.innerText = capitalTime;
                         }
-                        const flashInterval = Storage.flashInterval.get();
+                        const flashInterval = Storage.CountdownTimer.flashInterval.get();
                         if (0 < flashInterval && 0 < ticks.length)
                         {
                             const elapsed = Domain.getTicks() -ticks[0];
@@ -1974,7 +1997,7 @@ export module Clockworks
                         break;
                     case "operate":
                         previousPrimaryStep = 0;
-                        ticks = Storage.Stamps.get();
+                        ticks = Storage.NeverStopwatch.Stamps.get();
                         replaceScreenBody(await neverStopwatchScreenBody(ticks));
                         resizeFlexList();
                         await updateWindow("timer");
@@ -2061,7 +2084,7 @@ export module Clockworks
                         {
                             currentDateSpan.innerText = dateString;
                         }
-                        const getRainbowColor = rainbowClockColorPatternMap[Storage.rainbowClockColorPattern.get()];
+                        const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                         const currentColor = getRainbowColor(now.getHours());
                         setFoundationColor(currentColor);
                         const hourUnit = 60 *60 *1000;
