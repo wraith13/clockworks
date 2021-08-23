@@ -330,7 +330,7 @@ h1
     }
     @media (max-width:780px)
     {
-        .segment.first-segment:not(.last-segment)
+        .segment:not(.last-segment)
         {
             padding-right: 0.5rem;
             .segment-title
@@ -684,6 +684,10 @@ button
     top: calc(10px + 1.5rem);
     right: 0.0rem;
     z-index: 99999;
+}
+.menu-popup,
+.bare-popup
+{
     max-height: calc(100vh - 15rem);
     overflow: hidden;
     overflow-y: auto;
@@ -1198,6 +1202,35 @@ button
             //     border-color: @base-color;
             //     background-color: transparent;
             // }
+            .flash-interval
+            {
+                cursor: pointer;
+                // position: absolute;
+                // top: 0px;
+                // right: 0px;
+                margin-left: auto;
+                margin-right: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                opacity: 0.5;
+                @media (hover: hover)
+                {
+                    &:hover
+                    {
+                        opacity: 1.0;
+                    }
+                }
+                font-size: 1.2rem;
+                svg
+                {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    margin-right: 0.25rem;
+                }
+                padding: 0.5rem;
+            }
             .down-page-link
             {
                 position: absolute;
@@ -1305,6 +1338,29 @@ body:not(.tektite)
         {
             font-size: calc(100vw / 8);
             white-space: nowrap;
+        }
+        @media (max-height:480px)
+        {
+            height: 5.0rem;
+            padding-top: 1rem;
+            & > .application-icon
+            {
+                width: 4.0rem;
+                height: 4.0rem;
+            }
+            & > .application-icon + .logo-text
+            {
+                margin-left: 1.0rem;
+            }
+            & > .logo-text
+            {
+                font-size: 3.0rem;
+                white-space: nowrap;
+            }
+        }
+        @media (min-height:640px)
+        {
+            margin-bottom: 10vh;
         }
     }
 }

@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Aug 22 2021 19:31:09 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Aug 23 2021 01:24:42 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -826,10 +826,10 @@ h1 .segment + .menu-popup {
   white-space: nowrap;
 }
 @media (max-width: 780px) {
-  h1 .segment.first-segment:not(.last-segment) {
+  h1 .segment:not(.last-segment) {
     padding-right: 0.5rem;
   }
-  h1 .segment.first-segment:not(.last-segment) .segment-title {
+  h1 .segment:not(.last-segment) .segment-title {
     display: none;
   }
 }
@@ -1214,6 +1214,12 @@ button.delete-button {
   top: calc(10px + 1.5rem);
   right: 0rem;
   z-index: 99999;
+}
+.menu-popup:not(.show) {
+  display: none;
+}
+.menu-popup,
+.bare-popup {
   max-height: calc(100vh - 15rem);
   overflow: hidden;
   overflow-y: auto;
@@ -1225,18 +1231,19 @@ button.delete-button {
   line-height: 1.5rem;
   font-size: 1.5rem;
 }
-.menu-popup:not(.show) {
-  display: none;
-}
 .menu-popup,
-.menu-popup > a {
+.bare-popup,
+.menu-popup > a,
+.bare-popup > a {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   flex-direction: column;
 }
 .menu-popup a,
-.menu-popup button {
+.bare-popup a,
+.menu-popup button,
+.bare-popup button {
   border-radius: 0px;
   margin: 0px !important;
   border-style: none;
@@ -1250,60 +1257,79 @@ button.delete-button {
   align-items: center;
 }
 .menu-popup a svg,
-.menu-popup button svg {
+.bare-popup a svg,
+.menu-popup button svg,
+.bare-popup button svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-left: -0.25rem;
   margin-right: 0.5rem;
 }
 .menu-popup a.current-item,
-.menu-popup button.current-item {
+.bare-popup a.current-item,
+.menu-popup button.current-item,
+.bare-popup button.current-item {
   cursor: pointer;
   color: #FFFFFF;
   fill: #FFFFFF;
 }
 @media (hover: hover) {
   .menu-popup a.current-item:not(:hover),
-  .menu-popup button.current-item:not(:hover) {
+  .bare-popup a.current-item:not(:hover),
+  .menu-popup button.current-item:not(:hover),
+  .bare-popup button.current-item:not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
   .menu-popup a.current-item:hover,
-  .menu-popup button.current-item:hover {
+  .bare-popup a.current-item:hover,
+  .menu-popup button.current-item:hover,
+  .bare-popup button.current-item:hover {
     border-color: #6F7F00;
     background-color: #6F7F00;
   }
 }
 @media (hover: none) {
   .menu-popup a.current-item,
-  .menu-popup button.current-item {
+  .bare-popup a.current-item,
+  .menu-popup button.current-item,
+  .bare-popup button.current-item {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
 @media (hover: hover) {
   .menu-popup a:not(.current-item):not(:hover),
-  .menu-popup button:not(.current-item):not(:hover) {
+  .bare-popup a:not(.current-item):not(:hover),
+  .menu-popup button:not(.current-item):not(:hover),
+  .bare-popup button:not(.current-item):not(:hover) {
     background-color: transparent;
   }
 }
 @media (hover: none) {
   .menu-popup a:not(.current-item),
-  .menu-popup button:not(.current-item) {
+  .bare-popup a:not(.current-item),
+  .menu-popup button:not(.current-item),
+  .bare-popup button:not(.current-item) {
     background-color: transparent;
   }
 }
 .menu-popup a > .label + .value,
-.menu-popup button > .label + .value {
+.bare-popup a > .label + .value,
+.menu-popup button > .label + .value,
+.bare-popup button > .label + .value {
   margin-left: 0.5rem;
   text-align: right;
   flex-grow: 1;
 }
 .menu-popup a:not(.current-item):not(:hover) > .label + .value,
-.menu-popup button:not(.current-item):not(:hover) > .label + .value {
+.bare-popup a:not(.current-item):not(:hover) > .label + .value,
+.menu-popup button:not(.current-item):not(:hover) > .label + .value,
+.bare-popup button:not(.current-item):not(:hover) > .label + .value {
   color: #888;
 }
-.menu-popup a button {
+.menu-popup a button,
+.bare-popup a button {
   width: 100%;
 }
 .hide {
@@ -1680,6 +1706,28 @@ button.delete-button {
   justify-content: center;
   padding-bottom: 2.5rem;
 }
+.screen > .screen-body .primary-page .flash-interval {
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+@media (hover: hover) {
+  .screen > .screen-body .primary-page .flash-interval:hover {
+    opacity: 1;
+  }
+}
+.screen > .screen-body .primary-page .flash-interval svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.25rem;
+}
 .screen > .screen-body .primary-page .down-page-link {
   position: absolute;
   left: calc(50vw - 1.25rem);
@@ -1760,6 +1808,28 @@ body:not(.tektite) .screen {
 .welcome-screen .logo > .logo-text {
   font-size: calc(100vw / 8);
   white-space: nowrap;
+}
+@media (max-height: 480px) {
+  .welcome-screen .logo {
+    height: 5rem;
+    padding-top: 1rem;
+  }
+  .welcome-screen .logo > .application-icon {
+    width: 4rem;
+    height: 4rem;
+  }
+  .welcome-screen .logo > .application-icon + .logo-text {
+    margin-left: 1rem;
+  }
+  .welcome-screen .logo > .logo-text {
+    font-size: 3rem;
+    white-space: nowrap;
+  }
+}
+@media (min-height: 640px) {
+  .welcome-screen .logo {
+    margin-bottom: 10vh;
+  }
 }
 body:not(.tektite) .logo > .application-icon svg {
   color: #5F42A7;
@@ -3300,6 +3370,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         return minamo_js_1.minamo.localStorage.set(colorPattern.makeKey(), settings);
                     };
                 })(colorPattern = RainbowClock.colorPattern || (RainbowClock.colorPattern = {}));
+                var flashInterval;
+                (function (flashInterval) {
+                    flashInterval.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
+                    flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 60; };
+                    flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
+                })(flashInterval = RainbowClock.flashInterval || (RainbowClock.flashInterval = {}));
             })(RainbowClock = Storage.RainbowClock || (Storage.RainbowClock = {}));
             var Settings;
             (function (Settings) {
@@ -4831,7 +4907,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.screenHeaderFlashSegmentMenu = function (flashInterval) { return __awaiter(_this, void 0, void 0, function () {
+            Render.screenHeaderFlashSegmentMenu = function (flashInterval, setter) { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -4850,7 +4926,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     return __generator(this, function (_a) {
                                                         switch (_a.label) {
                                                             case 0:
-                                                                Storage.NeverStopwatch.flashInterval.set(i);
+                                                                setter(i);
                                                                 return [4 /*yield*/, Clockworks.reload()];
                                                             case 1:
                                                                 _a.sent();
@@ -4865,7 +4941,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.screenHeaderFlashSegment = function (flashInterval) { return __awaiter(_this, void 0, void 0, function () {
+            Render.screenHeaderFlashSegment = function (flashInterval, setter) { return __awaiter(_this, void 0, void 0, function () {
                 var _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
@@ -4874,7 +4950,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 icon: 0 === flashInterval ? "sleep-icon" : "flash-icon",
                                 title: 0 === flashInterval ? locale.map("No Flash") : locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
                             };
-                            return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(flashInterval)];
+                            return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(flashInterval, setter)];
                         case 1: return [2 /*return*/, (_a.menu = _b.sent(),
                                 _a)];
                     }
@@ -5215,45 +5291,95 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.neverStopwatchScreenBody = function (ticks) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e;
+            Render.flashIntervalLabel = function (entry) { return __awaiter(_this, void 0, void 0, function () {
+                var _a;
                 var _this = this;
-                return __generator(this, function (_f) {
-                    switch (_f.label) {
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _a = {
+                                tag: "div",
+                                className: "flash-interval"
+                            };
+                            return [4 /*yield*/, Resource.loadSvgOrCache(entry.icon)];
+                        case 1: return [2 /*return*/, (_a.children = [
+                                _b.sent(),
+                                entry.title
+                            ],
+                                _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
+                                    var _a, _b;
+                                    var _c;
+                                    return __generator(this, function (_d) {
+                                        switch (_d.label) {
+                                            case 0:
+                                                _a = Render.popup;
+                                                _c = {
+                                                    className: "bare-popup"
+                                                };
+                                                if (!("function" === typeof entry.menu)) return [3 /*break*/, 2];
+                                                return [4 /*yield*/, entry.menu()];
+                                            case 1:
+                                                _b = _d.sent();
+                                                return [3 /*break*/, 3];
+                                            case 2:
+                                                _b = entry.menu;
+                                                _d.label = 3;
+                                            case 3: return [2 /*return*/, _a.apply(void 0, [(_c.children = _b,
+                                                        _c)])];
+                                        }
+                                    });
+                                }); },
+                                _a)];
+                    }
+                });
+            }); };
+            Render.neverStopwatchScreenBody = function (ticks) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b, _c, _d, _e, _f, _g, _h;
+                var _this = this;
+                return __generator(this, function (_j) {
+                    switch (_j.label) {
                         case 0:
                             _a = Render.$div("primary-page");
-                            _b = [Render.$div("main-panel")([
-                                    Render.$div("capital-interval")([
-                                        Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                                    ]),
-                                    Render.$div("current-timestamp")([
-                                        Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
-                                    ]),
-                                    Render.$div("button-list")({
-                                        tag: "button",
-                                        className: "default-button main-button long-button",
-                                        children: Render.label("Stamp"),
-                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Operate.NeverStopwatch.stamp(Domain.getTicks())];
-                                                case 1: return [2 /*return*/, _a.sent()];
-                                            }
-                                        }); }); }
-                                    }),
+                            _b = Render.$div("main-panel");
+                            _c = [Render.$div("capital-interval")([
+                                    Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                ]),
+                                Render.$div("current-timestamp")([
+                                    Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                                 ])];
-                            return [4 /*yield*/, Render.downPageLink()];
-                        case 1:
-                            _c = [
-                                _a.apply(void 0, [_b.concat([
-                                        _f.sent()
+                            _d = Render.flashIntervalLabel;
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get(), Storage.NeverStopwatch.flashInterval.set)];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_j.sent()])];
+                        case 2:
+                            _e = [
+                                _b.apply(void 0, [_c.concat([
+                                        _j.sent(),
+                                        Render.$div("button-list")({
+                                            tag: "button",
+                                            className: "default-button main-button long-button",
+                                            children: Render.label("Stamp"),
+                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0: return [4 /*yield*/, Operate.NeverStopwatch.stamp(Domain.getTicks())];
+                                                    case 1: return [2 /*return*/, _a.sent()];
+                                                }
+                                            }); }); }
+                                        })
                                     ])])
                             ];
-                            _d = Render.$div("trail-page");
-                            _e = Render.$div("column-flex-list tick-list");
+                            return [4 /*yield*/, Render.downPageLink()];
+                        case 3:
+                            _f = [
+                                _a.apply(void 0, [_e.concat([
+                                        _j.sent()
+                                    ])])
+                            ];
+                            _g = Render.$div("trail-page");
+                            _h = Render.$div("column-flex-list tick-list");
                             return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.tickItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
-                        case 2: return [2 /*return*/, (_c.concat([
-                                _d.apply(void 0, [[
-                                        _e.apply(void 0, [_f.sent()]),
+                        case 4: return [2 /*return*/, (_f.concat([
+                                _g.apply(void 0, [[
+                                        _h.apply(void 0, [_j.sent()]),
                                         Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                             Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
@@ -5281,18 +5407,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             ];
                             return [4 /*yield*/, Render.screenHeaderApplicationSegment("NeverStopwatch")];
                         case 2:
-                            _a = _a.concat([
-                                _d.sent()
-                            ]);
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get())];
-                        case 3:
                             _b.header = (_c.items = _a.concat([
                                 _d.sent()
                             ]),
                                 _c.menu = Render.neverStopwatchScreenMenu,
                                 _c);
                             return [4 /*yield*/, Render.neverStopwatchScreenBody(ticks)];
-                        case 4: return [2 /*return*/, (_b.body = _d.sent(),
+                        case 3: return [2 /*return*/, (_b.body = _d.sent(),
                                 _b)];
                     }
                 });
@@ -5408,36 +5529,44 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.countdownTimerScreenBody = function (alarms) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j;
                 var _this = this;
-                return __generator(this, function (_g) {
-                    switch (_g.label) {
+                return __generator(this, function (_k) {
+                    switch (_k.label) {
                         case 0:
                             _a = Render.$div("primary-page");
-                            _b = [Render.$div("main-panel")([
-                                    Render.$div("capital-interval")([
-                                        Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                                    ]),
-                                    Render.$div("current-timestamp")([
-                                        Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
-                                    ]),
-                                    Render.$div("button-list")({
-                                        tag: "button",
-                                        id: "done-button",
-                                        className: "default-button main-button long-button",
-                                        children: Render.label("Done"),
-                                        // onclick: async () => await Operate.CountdownTimer.done(Domain.getTicks())
-                                    }),
+                            _b = Render.$div("main-panel");
+                            _c = [Render.$div("capital-interval")([
+                                    Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                ]),
+                                Render.$div("current-timestamp")([
+                                    Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                                 ])];
-                            return [4 /*yield*/, Render.downPageLink()];
-                        case 1:
-                            _c = [
-                                _a.apply(void 0, [_b.concat([
-                                        _g.sent()
+                            _d = Render.flashIntervalLabel;
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set)];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
+                        case 2:
+                            _e = [
+                                _b.apply(void 0, [_c.concat([
+                                        _k.sent(),
+                                        Render.$div("button-list")({
+                                            tag: "button",
+                                            id: "done-button",
+                                            className: "default-button main-button long-button",
+                                            children: Render.label("Done"),
+                                            // onclick: async () => await Operate.CountdownTimer.done(Domain.getTicks())
+                                        })
                                     ])])
                             ];
-                            _d = Render.$div("trail-page");
-                            _e = [Render.$div("button-list")([
+                            return [4 /*yield*/, Render.downPageLink()];
+                        case 3:
+                            _f = [
+                                _a.apply(void 0, [_e.concat([
+                                        _k.sent()
+                                    ])])
+                            ];
+                            _g = Render.$div("trail-page");
+                            _h = [Render.$div("button-list")([
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -5465,11 +5594,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _f = Render.$div("column-flex-list tick-list");
+                            _j = Render.$div("column-flex-list tick-list");
                             return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alermItem(item); }))];
-                        case 2: return [2 /*return*/, (_c.concat([
-                                _d.apply(void 0, [_e.concat([
-                                        _f.apply(void 0, [_g.sent()]),
+                        case 4: return [2 /*return*/, (_f.concat([
+                                _g.apply(void 0, [_h.concat([
+                                        _j.apply(void 0, [_k.sent()]),
                                         Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                             Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
@@ -5497,18 +5626,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             ];
                             return [4 /*yield*/, Render.screenHeaderApplicationSegment("CountdownTimer")];
                         case 2:
-                            _a = _a.concat([
-                                _d.sent()
-                            ]);
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get())];
-                        case 3:
                             _b.header = (_c.items = _a.concat([
                                 _d.sent()
                             ]),
                                 _c.menu = Render.neverStopwatchScreenMenu,
                                 _c);
                             return [4 /*yield*/, Render.countdownTimerScreenBody(alerts)];
-                        case 4: return [2 /*return*/, (_b.body = _d.sent(),
+                        case 3: return [2 /*return*/, (_b.body = _d.sent(),
                                 _b)];
                     }
                 });
@@ -5671,20 +5795,30 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.rainbowClockScreenBody = function () { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    return [2 /*return*/, ([
-                            Render.$div("primary-page")([
-                                Render.$div("main-panel")([
-                                    Render.$div("capital-time")([
-                                        Render.$span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
-                                    ]),
-                                    Render.$div("current-date")([
-                                        Render.$span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
-                                    ]),
+                var _a, _b, _c, _d;
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
+                        case 0:
+                            _a = Render.$div("primary-page");
+                            _b = Render.$div("main-panel");
+                            _c = [Render.$div("current-date")([
+                                    Render.$span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
                                 ]),
-                            ]),
-                            Render.$div("screen-bar")([]),
-                        ])];
+                                Render.$div("capital-time")([
+                                    Render.$span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
+                                ])];
+                            _d = Render.flashIntervalLabel;
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.RainbowClock.flashInterval.get(), Storage.RainbowClock.flashInterval.set)];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_e.sent()])];
+                        case 2: return [2 /*return*/, ([
+                                _a.apply(void 0, [[
+                                        _b.apply(void 0, [_c.concat([
+                                                _e.sent()
+                                            ])])
+                                    ]]),
+                                Render.$div("screen-bar")([])
+                            ])];
+                    }
                 });
             }); };
             Render.rainbowClockScreen = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -5724,7 +5858,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             applicationTitle = Clockworks.application["RainbowClock"].title;
                             document.body.classList.add("hide-scroll-bar");
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor;
                                 return __generator(this, function (_b) {
                                     switch (_b.label) {
                                         case 0:
@@ -5745,8 +5879,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             if (capitalTimeSpan.innerText !== capitalTime) {
                                                 capitalTimeSpan.innerText = capitalTime;
                                                 setTitle(capitalTime + " - " + applicationTitle);
-                                                if (capitalTime.endsWith(":00:00")) {
-                                                    Render.screenFlash();
+                                                if (capitalTime.endsWith(":00")) {
+                                                    flashInterval = Storage.NeverStopwatch.flashInterval.get();
+                                                    if (0 < flashInterval) {
+                                                        if (0 === (now.getMinutes() % flashInterval)) {
+                                                            Render.screenFlash();
+                                                        }
+                                                    }
                                                 }
                                             }
                                             return [3 /*break*/, 7];
@@ -5969,10 +6108,20 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         }
                     }
                     var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                    progressBar.style.width = percentString;
+                    if (progressBar.style.width !== percentString) {
+                        progressBar.style.width = percentString;
+                    }
+                    if (progressBar.style.borderRightWidth !== "1px") {
+                        progressBar.style.borderRightWidth = "1px";
+                    }
                 }
                 else {
-                    progressBar.style.width = "0%";
+                    if (progressBar.style.width !== "0%") {
+                        progressBar.style.width = "0%";
+                    }
+                    if (progressBar.style.borderRightWidth !== "0px") {
+                        progressBar.style.borderRightWidth = "0px";
+                    }
                 }
             };
             Render.resizeFlexList = function () {
@@ -6205,9 +6354,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             if (url === void 0) { url = location.href; }
             return __awaiter(_this, void 0, void 0, function () {
                 var urlParams, applicationType, _a;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
+                var _b;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
                         case 0:
+                            (_b = Render.getScreenCover()) === null || _b === void 0 ? void 0 : _b.click();
                             window.scrollTo(0, 0);
                             document.getElementById("screen-body").scrollTo(0, 0);
                             urlParams = Clockworks.getUrlParams(url);
@@ -6221,19 +6372,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [3 /*break*/, 7];
                         case 1: return [4 /*yield*/, Render.showNeverStopwatchScreen()];
                         case 2:
-                            _b.sent();
+                            _c.sent();
                             return [3 /*break*/, 9];
                         case 3: return [4 /*yield*/, Render.showCountdownTimerScreen()];
                         case 4:
-                            _b.sent();
+                            _c.sent();
                             return [3 /*break*/, 9];
                         case 5: return [4 /*yield*/, Render.showRainbowClockScreen()];
                         case 6:
-                            _b.sent();
+                            _c.sent();
                             return [3 /*break*/, 9];
                         case 7: return [4 /*yield*/, Render.showWelcomeScreen()];
                         case 8:
-                            _b.sent();
+                            _c.sent();
                             return [3 /*break*/, 9];
                         case 9: return [2 /*return*/];
                     }

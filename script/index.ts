@@ -276,6 +276,12 @@ export module Clockworks
                 export const set = (settings: rainbowClockColorPatternType) =>
                     minamo.localStorage.set(makeKey(), settings);
             }
+            export module flashInterval
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 60;
+                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+            }
         }
         export module Settings
         {
@@ -1567,7 +1573,7 @@ export module Clockworks
                 )
             )
         });
-        export const screenHeaderFlashSegmentMenu = async (flashInterval: number): Promise<minamo.dom.Source> => await Promise.all
+        export const screenHeaderFlashSegmentMenu = async (flashInterval: number, setter: (i: number) => unknown): Promise<minamo.dom.Source> => await Promise.all
         (
             config.flashIntervalPreset.map
             (
@@ -1580,18 +1586,18 @@ export module Clockworks
                     ],
                     async () =>
                     {
-                        Storage.NeverStopwatch.flashInterval.set(i);
+                        setter(i);
                         await reload();
                     },
                     flashInterval === i ? "current-item": undefined
                 )
             )
         );
-        export const screenHeaderFlashSegment = async (flashInterval: number): Promise<HeaderSegmentSource> =>
+        export const screenHeaderFlashSegment = async (flashInterval: number, setter: (i: number) => unknown): Promise<HeaderSegmentSource> =>
         ({
             icon: 0 === flashInterval ? "sleep-icon": "flash-icon",
             title: 0 === flashInterval ? locale.map("No Flash"): `${locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
-            menu: await screenHeaderFlashSegmentMenu(flashInterval),
+            menu: await screenHeaderFlashSegmentMenu(flashInterval, setter),
         });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
         (
@@ -1806,6 +1812,21 @@ export module Clockworks
             await resetNeverStopwatchMenuItem(),
             await githubMenuItem(),
         ];
+        export const flashIntervalLabel = async (entry: HeaderSegmentSource) =>
+        ({
+            tag: "div",
+            className: "flash-interval",
+            children:
+            [
+                await Resource.loadSvgOrCache(entry.icon),
+                entry.title,
+            ],
+            onclick: async () => popup
+            ({
+                className: "bare-popup",
+                children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
+            }),
+        });
         export const neverStopwatchScreenBody = async (ticks: number[]) =>
         ([
             $div("primary-page")
@@ -1820,6 +1841,14 @@ export module Clockworks
                     ([
                         $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                     ]),
+                    await flashIntervalLabel
+                    (
+                        await screenHeaderFlashSegment
+                        (
+                            Storage.NeverStopwatch.flashInterval.get(),
+                            Storage.NeverStopwatch.flashInterval.set
+                        )
+                    ),
                     $div("button-list")
                     ({
                         tag: "button",
@@ -1866,7 +1895,7 @@ export module Clockworks
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("NeverStopwatch"),
-                    await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
+                    // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
                 ],
                 menu: neverStopwatchScreenMenu
             },
@@ -1981,6 +2010,14 @@ export module Clockworks
                     ([
                         $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                     ]),
+                    await flashIntervalLabel
+                    (
+                        await screenHeaderFlashSegment
+                        (
+                            Storage.CountdownTimer.flashInterval.get(),
+                            Storage.CountdownTimer.flashInterval.set
+                        )
+                    ),
                     $div("button-list")
                     ({
                         tag: "button",
@@ -2036,7 +2073,7 @@ export module Clockworks
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("CountdownTimer"),
-                    await screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get()),
+                    // await screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get()),
                 ],
                 menu: neverStopwatchScreenMenu
             },
@@ -2158,14 +2195,22 @@ export module Clockworks
             ([
                 $div("main-panel")
                 ([
-                    $div("capital-time")
-                    ([
-                        $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
-                    ]),
                     $div("current-date")
                     ([
                         $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
                     ]),
+                    $div("capital-time")
+                    ([
+                        $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
+                    ]),
+                    await flashIntervalLabel
+                    (
+                        await screenHeaderFlashSegment
+                        (
+                            Storage.RainbowClock.flashInterval.get(),
+                            Storage.RainbowClock.flashInterval.set
+                        )
+                    ),
                 ]),
             ]),
             $div("screen-bar")([]),
@@ -2202,9 +2247,16 @@ export module Clockworks
                         {
                             capitalTimeSpan.innerText = capitalTime;
                             setTitle(capitalTime +" - " +applicationTitle);
-                            if (capitalTime.endsWith(":00:00"))
+                            if (capitalTime.endsWith(":00"))
                             {
-                                screenFlash();
+                                const flashInterval = Storage.NeverStopwatch.flashInterval.get();
+                                if (0 < flashInterval)
+                                {
+                                    if (0 === (now.getMinutes() % flashInterval))
+                                    {
+                                        screenFlash();
+                                    }
+                                }
                             }
                         }
                     break;
@@ -2467,11 +2519,25 @@ export module Clockworks
                     }
                 }
                 const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                progressBar.style.width = percentString;
+                if (progressBar.style.width !== percentString)
+                {
+                    progressBar.style.width = percentString;
+                }
+                if (progressBar.style.borderRightWidth !== "1px")
+                {
+                    progressBar.style.borderRightWidth = "1px";
+                }
             }
             else
             {
-                progressBar.style.width = "0%";
+                if (progressBar.style.width !== "0%")
+                {
+                    progressBar.style.width = "0%";
+                }
+                if (progressBar.style.borderRightWidth !== "0px")
+                {
+                    progressBar.style.borderRightWidth = "0px";
+                }
             }
         };
         export const resizeFlexList = () =>
@@ -2776,6 +2842,7 @@ export module Clockworks
     };
     export const showPage = async (url: string = location.href) =>
     {
+        Render.getScreenCover()?.click();
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
         const urlParams = getUrlParams(url);
