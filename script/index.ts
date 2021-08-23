@@ -2249,7 +2249,7 @@ export module Clockworks
                             setTitle(capitalTime +" - " +applicationTitle);
                             if (capitalTime.endsWith(":00"))
                             {
-                                const flashInterval = Storage.NeverStopwatch.flashInterval.get();
+                                const flashInterval = Storage.RainbowClock.flashInterval.get();
                                 if (0 < flashInterval)
                                 {
                                     if (0 === (now.getMinutes() % flashInterval))
