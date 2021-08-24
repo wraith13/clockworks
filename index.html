@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Aug 23 2021 20:44:03 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Aug 23 2021 21:00:06 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1750,6 +1750,7 @@ button.delete-button {
   border-style: solid;
   border-color: #0005;
   box-sizing: border-box;
+  overflow: hidden;
 }
 .screen > .screen-body .screen-bar.horizontal {
   top: 0px;
@@ -1783,6 +1784,19 @@ body.tektite .screen .screen-body .primary-page .default-button {
 }
 body.tektite .screen .screen-body .trail-page {
   background-color: #FFFFFFBB;
+}
+body.tektite.flash .screen-bar .screen-bar-flash-layer {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  animation-name: white-flash;
+  animation-direction: normal;
+  animation-delay: 0s;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
 }
 body:not(.tektite) .screen {
   background-color: #FFFFFF;
@@ -5215,7 +5229,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                     ])),
                                 ]),
-                                Render.$div("screen-bar")([])
+                                Render.screenBar()
                             ],
                                 _f)];
                     }
@@ -5333,6 +5347,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
+            Render.screenBar = function () { return Render.$div("screen-bar")(Render.$div("screen-bar-flash-layer")([])); };
             Render.neverStopwatchScreenBody = function (ticks) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e, _f, _g, _h;
                 var _this = this;
@@ -5385,7 +5400,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                         ]))
                                     ]]),
-                                Render.$div("screen-bar")([])
+                                Render.screenBar()
                             ]))];
                     }
                 });
@@ -5604,7 +5619,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                         ]))
                                     ])]),
-                                Render.$div("screen-bar")([])
+                                Render.screenBar()
                             ]))];
                     }
                 });
@@ -5816,7 +5831,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 _e.sent()
                                             ])])
                                     ]]),
-                                Render.$div("screen-bar")([])
+                                Render.screenBar()
                             ])];
                     }
                 });
@@ -6073,8 +6088,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         if (screenBar.style.height !== "initial") {
                             screenBar.style.height = "initial";
                         }
+                        if (screenBar.style.maxHeight !== "initial") {
+                            screenBar.style.maxHeight = "initial";
+                        }
                         if (screenBar.style.width !== percentString) {
                             screenBar.style.width = percentString;
+                        }
+                        if (screenBar.style.maxWidth !== percentString) {
+                            screenBar.style.maxWidth = percentString;
                         }
                     }
                     else {
@@ -6087,8 +6108,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         if (screenBar.style.width !== "initial") {
                             screenBar.style.width = "initial";
                         }
+                        if (screenBar.style.maxWidth !== "initial") {
+                            screenBar.style.maxWidth = "initial";
+                        }
                         if (screenBar.style.height !== percentString) {
                             screenBar.style.height = percentString;
+                        }
+                        if (screenBar.style.maxHeight !== percentString) {
+                            screenBar.style.maxHeight = percentString;
                         }
                     }
                     if (screenBar.style.display !== "block") {

@@ -1779,7 +1779,7 @@ export module Clockworks
                         ])
                     ),
                 ]),
-                $div("screen-bar")([]),
+                screenBar(),
             ]
         });
         export const showWelcomeScreen = async () =>
@@ -1827,6 +1827,7 @@ export module Clockworks
                 children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
             }),
         });
+        export const screenBar = () => $div("screen-bar")($div("screen-bar-flash-layer")([]));
         export const neverStopwatchScreenBody = async (ticks: number[]) =>
         ([
             $div("primary-page")
@@ -1884,7 +1885,7 @@ export module Clockworks
                     ])
                 ),
             ]),
-            $div("screen-bar")([]),
+            screenBar(),
         ]);
         export const neverStopwatchScreen = async (ticks: number[]): Promise<ScreenSource> =>
         ({
@@ -2062,7 +2063,7 @@ export module Clockworks
                     ])
                 ),
             ]),
-            $div("screen-bar")([]),
+            screenBar(),
         ]);
         export const countdownTimerScreen = async (alerts: AlermEntry[]): Promise<ScreenSource> =>
         ({
@@ -2213,7 +2214,7 @@ export module Clockworks
                     ),
                 ]),
             ]),
-            $div("screen-bar")([]),
+            screenBar(),
         ]);
         export const rainbowClockScreen = async (): Promise<ScreenSource> =>
         ({
@@ -2472,9 +2473,17 @@ export module Clockworks
                     {
                         screenBar.style.height = "initial";
                     }
+                    if (screenBar.style.maxHeight !== "initial")
+                    {
+                        screenBar.style.maxHeight = "initial";
+                    }
                     if (screenBar.style.width !== percentString)
                     {
                         screenBar.style.width = percentString;
+                    }
+                    if (screenBar.style.maxWidth !== percentString)
+                    {
+                        screenBar.style.maxWidth = percentString;
                     }
                 }
                 else
@@ -2491,9 +2500,17 @@ export module Clockworks
                     {
                         screenBar.style.width = "initial";
                     }
+                    if (screenBar.style.maxWidth !== "initial")
+                    {
+                        screenBar.style.maxWidth = "initial";
+                    }
                     if (screenBar.style.height !== percentString)
                     {
                         screenBar.style.height = percentString;
+                    }
+                    if (screenBar.style.maxHeight !== percentString)
+                    {
+                        screenBar.style.maxHeight = percentString;
                     }
                 }
                 if (screenBar.style.display !== "block")

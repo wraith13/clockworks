@@ -1273,6 +1273,7 @@ button
                 right: 0px;
                 border-bottom-width: 1px;
             }
+            overflow: hidden;
         }
     }
 }
@@ -1301,6 +1302,27 @@ body.tektite
                 background-color: e(%("%s%s", @base-color, "BB"));
             }
         }
+    }
+    &.flash
+    {
+        .screen-bar
+        {
+            .screen-bar-flash-layer
+            {
+                position: fixed;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                left: 0px;
+                animation-name: white-flash;
+                animation-direction: normal;
+                animation-delay: 0s;
+                animation-duration: 1.5s;
+                animation-timing-function: ease-in-out;
+                animation-fill-mode: both;
+            }
+        }
+
     }
 }
 body:not(.tektite)
