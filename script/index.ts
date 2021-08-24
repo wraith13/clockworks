@@ -463,6 +463,32 @@ export module Clockworks
     }
     export module Render
     {
+        export const fullscreenEnabled = () => document.fullscreenEnabled ?? (document as any).webkitFullscreenEnabled;
+        export const fullscreenElement = () => (document.fullscreenElement ?? ((document as any).webkitFullscreenElement) ?? null);
+        export const requestFullscreen = async (element: Element = document.documentElement) =>
+        {
+            if (element.requestFullscreen)
+            {
+                await element.requestFullscreen();
+            }
+            else
+            if ((element as any).webkitRequestFullscreen)
+            {
+                await ((element as any).webkitRequestFullscreen)();
+            }
+        };
+        export const exitFullscreen = async () =>
+        {
+            if (document.exitFullscreen)
+            {
+                await document.exitFullscreen();
+            }
+            else
+            if ((document as any).webkitCancelFullScreen)
+            {
+                await ((document as any).webkitCancelFullScreen)();
+            }
+        };
         export module Operate
         {
             export module NeverStopwatch
@@ -1626,22 +1652,21 @@ export module Clockworks
             document.body.classList.add("flash");
             setTimeout(() => document.body.classList.remove("flash"), 1500);
         };
-        export const fullscreenMenuItem = async () =>
-            document.fullscreenEnabled ?
-                (
-                    null === document.fullscreenElement ?
-                        menuItem
-                        (
-                            label("Full screen"),
-                            async () => await document.body.requestFullscreen(),
-                        ):
-                        menuItem
-                        (
-                            label("Cancel full screen"),
-                            async () => await document.exitFullscreen(),
-                        )
-                ):
-                [];
+        export const fullscreenMenuItem = async () => fullscreenEnabled() ?
+            (
+                null === fullscreenElement() ?
+                    menuItem
+                    (
+                        label("Full screen"),
+                        async () => await requestFullscreen()
+                    ):
+                    menuItem
+                    (
+                        label("Cancel full screen"),
+                        async () => await exitFullscreen()
+                    )
+            ):
+            [];
                 
         export const themeMenuItem = async () =>
             menuItem
@@ -2744,13 +2769,16 @@ export module Clockworks
                     switch(event.key.toLowerCase())
                     {
                         case "f":
-                            if(null === document.fullscreenElement)
+                            if (fullscreenEnabled())
                             {
-                                document.body.requestFullscreen();
-                            }
-                            else
-                            {
-                                document.exitFullscreen();
+                                if(null === fullscreenElement())
+                                {
+                                    requestFullscreen();
+                                }
+                                else
+                                {
+                                    exitFullscreen();
+                                }
                             }
                             break;
                     }

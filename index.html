@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Aug 23 2021 21:00:06 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Aug 24 2021 21:06:16 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3534,6 +3534,49 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         var Render;
         (function (Render) {
             var _this = this;
+            Render.fullscreenEnabled = function () { var _a; return (_a = document.fullscreenEnabled) !== null && _a !== void 0 ? _a : document.webkitFullscreenEnabled; };
+            Render.fullscreenElement = function () { var _a, _b; return ((_b = (_a = document.fullscreenElement) !== null && _a !== void 0 ? _a : (document.webkitFullscreenElement)) !== null && _b !== void 0 ? _b : null); };
+            Render.requestFullscreen = function (element) {
+                if (element === void 0) { element = document.documentElement; }
+                return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!element.requestFullscreen) return [3 /*break*/, 2];
+                                return [4 /*yield*/, element.requestFullscreen()];
+                            case 1:
+                                _a.sent();
+                                return [3 /*break*/, 4];
+                            case 2:
+                                if (!element.webkitRequestFullscreen) return [3 /*break*/, 4];
+                                return [4 /*yield*/, (element.webkitRequestFullscreen)()];
+                            case 3:
+                                _a.sent();
+                                _a.label = 4;
+                            case 4: return [2 /*return*/];
+                        }
+                    });
+                });
+            };
+            Render.exitFullscreen = function () { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!document.exitFullscreen) return [3 /*break*/, 2];
+                            return [4 /*yield*/, document.exitFullscreen()];
+                        case 1:
+                            _a.sent();
+                            return [3 /*break*/, 4];
+                        case 2:
+                            if (!document.webkitCancelFullScreen) return [3 /*break*/, 4];
+                            return [4 /*yield*/, (document.webkitCancelFullScreen)()];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4: return [2 /*return*/];
+                    }
+                });
+            }); };
             var Operate;
             (function (Operate) {
                 var NeverStopwatch;
@@ -4994,17 +5037,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             Render.fullscreenMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
                 return __generator(this, function (_a) {
-                    return [2 /*return*/, document.fullscreenEnabled ?
-                            (null === document.fullscreenElement ?
+                    return [2 /*return*/, Render.fullscreenEnabled() ?
+                            (null === Render.fullscreenElement() ?
                                 Render.menuItem(Render.label("Full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, document.body.requestFullscreen()];
+                                        case 0: return [4 /*yield*/, Render.requestFullscreen()];
                                         case 1: return [2 /*return*/, _a.sent()];
                                     }
                                 }); }); }) :
                                 Render.menuItem(Render.label("Cancel full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, document.exitFullscreen()];
+                                        case 0: return [4 /*yield*/, Render.exitFullscreen()];
                                         case 1: return [2 /*return*/, _a.sent()];
                                     }
                                 }); }); })) :
@@ -6278,11 +6321,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     if (["input", "textarea"].indexOf(focusedElementTagName) < 0) {
                         switch (event.key.toLowerCase()) {
                             case "f":
-                                if (null === document.fullscreenElement) {
-                                    document.body.requestFullscreen();
-                                }
-                                else {
-                                    document.exitFullscreen();
+                                if (Render.fullscreenEnabled()) {
+                                    if (null === Render.fullscreenElement()) {
+                                        Render.requestFullscreen();
+                                    }
+                                    else {
+                                        Render.exitFullscreen();
+                                    }
                                 }
                                 break;
                         }
