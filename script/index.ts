@@ -899,7 +899,7 @@ export module Clockworks
                         // className: "add-remove-tags-popup",
                         children:
                         [
-                            $tag("h2")("")(label("Theme setting")),
+                            $tag("h2")("")(label("Progress Bar Style setting")),
                             checkButtonList,
                             $div("popup-operator")
                             ([{

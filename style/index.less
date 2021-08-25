@@ -1196,6 +1196,7 @@ button
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
             padding-bottom: 2.5rem;
             // .default-button
             // {
@@ -1383,6 +1384,25 @@ body:not(.tektite)
         @media (min-height:640px)
         {
             margin-bottom: 10vh;
+        }
+    }
+    .button-list
+    {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        a
+        {
+            //  .long-button との調整
+            width: 100%;
+            max-width: calc(640px + (2rem + 2px));
+            margin: 0.5rem 1rem;
+            .long-button
+            {
+                margin: 0px;
+            }
         }
     }
 }
