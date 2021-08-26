@@ -2785,6 +2785,18 @@ export module Clockworks
                 }
             }
         };
+        export const onFullscreenChange = (_event: Event) =>
+        {
+            onWindowResize();
+        };
+        export const onWebkitFullscreenChange = (_event: Event) =>
+        {
+            onWindowResize();
+            if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document))
+            {
+                document.body.classList.toggle("fxxking-ipad-fullscreen", fullscreenElement());
+            }
+        };
     }
     export const getUrlParams = (url: string = location.href) =>
     {
@@ -2880,6 +2892,8 @@ export module Clockworks
             'click',
             async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
         );
+        document.addEventListener('fullscreenchange', Render.onFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', Render.onWebkitFullscreenChange);
         window.matchMedia('(prefers-color-scheme: dark)').addListener(updateStyle);
         updateStyle();
         updateProgressBarStyle();
