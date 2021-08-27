@@ -1667,7 +1667,6 @@ export module Clockworks
                     )
             ):
             [];
-                
         export const themeMenuItem = async () =>
             menuItem
             (
