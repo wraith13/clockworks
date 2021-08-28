@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Aug 27 2021 05:27:03 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sat Aug 28 2021 15:50:18 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -195,6 +195,12 @@ ul {
   padding-block-end: 1em;
   padding-inline-end: 16px;
   padding-inline-start: 40px;
+}
+body.sleep-mouse {
+  cursor: none;
+}
+body.sleep-mouse * {
+  cursor: none !important;
 }
 body.flash .screen {
   animation-direction: normal;
@@ -3572,7 +3578,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             case 3:
                                 _a.sent();
                                 _a.label = 4;
-                            case 4: return [2 /*return*/];
+                            case 4:
+                                if (!document.body.classList.contains("sleep-mouse")) {
+                                    document.body.classList.add("sleep-mouse");
+                                }
+                                return [2 /*return*/];
                         }
                     });
                 });
@@ -3592,7 +3602,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 3:
                             _a.sent();
                             _a.label = 4;
-                        case 4: return [2 /*return*/];
+                        case 4:
+                            if (document.body.classList.contains("sleep-mouse")) {
+                                document.body.classList.remove("sleep-mouse");
+                            }
+                            return [2 /*return*/];
                     }
                 });
             }); };
@@ -6353,6 +6367,24 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 }
             };
+            var lastMouseMouseAt = 0;
+            Render.onMouseMove = function (_evnet) {
+                if (Render.fullscreenEnabled()) {
+                    var now_1 = lastMouseMouseAt = new Date().getTime();
+                    if (document.body.classList.contains("sleep-mouse")) {
+                        document.body.classList.remove("sleep-mouse");
+                    }
+                    if (Render.fullscreenElement()) {
+                        setTimeout(function () {
+                            if (Render.fullscreenElement() && now_1 === lastMouseMouseAt) {
+                                if (!document.body.classList.contains("sleep-mouse")) {
+                                    document.body.classList.add("sleep-mouse");
+                                }
+                            }
+                        }, 3000);
+                    }
+                }
+            };
             Render.onFullscreenChange = function (_event) {
                 Render.onWindowResize();
             };
@@ -6427,22 +6459,23 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         console.log("start!!!");
                         locale.setLocale(Storage.Settings.get().locale);
                         window.onpopstate = function () { return Clockworks.showPage(); };
-                        window.addEventListener('resize', Render.onWindowResize);
-                        window.addEventListener('focus', Render.onWindowFocus);
-                        window.addEventListener('blur', Render.onWindowBlur);
-                        window.addEventListener('storage', Render.onUpdateStorage);
-                        window.addEventListener('compositionstart', Render.onCompositionStart);
-                        window.addEventListener('compositionend', Render.onCompositionEnd);
-                        window.addEventListener('keydown', Render.onKeydown);
+                        window.addEventListener("resize", Render.onWindowResize);
+                        window.addEventListener("focus", Render.onWindowFocus);
+                        window.addEventListener("blur", Render.onWindowBlur);
+                        window.addEventListener("storage", Render.onUpdateStorage);
+                        window.addEventListener("compositionstart", Render.onCompositionStart);
+                        window.addEventListener("compositionend", Render.onCompositionEnd);
+                        window.addEventListener("keydown", Render.onKeydown);
                         document.getElementById("screen-header").addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.scrollToOffset(document.getElementById("screen-body"), 0)];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); });
-                        document.addEventListener('fullscreenchange', Render.onFullscreenChange);
-                        document.addEventListener('webkitfullscreenchange', Render.onWebkitFullscreenChange);
-                        window.matchMedia('(prefers-color-scheme: dark)').addListener(Clockworks.updateStyle);
+                        window.addEventListener("mousemove", Render.onMouseMove);
+                        document.addEventListener("fullscreenchange", Render.onFullscreenChange);
+                        document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
+                        window.matchMedia("(prefers-color-scheme: dark)").addListener(Clockworks.updateStyle);
                         Clockworks.updateStyle();
                         Clockworks.updateProgressBarStyle();
                         return [4 /*yield*/, Clockworks.showPage()];

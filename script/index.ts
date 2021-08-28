@@ -476,6 +476,10 @@ export module Clockworks
             {
                 await ((element as any).webkitRequestFullscreen)();
             }
+            if ( ! document.body.classList.contains("sleep-mouse"))
+            {
+                document.body.classList.add("sleep-mouse");
+            }
         };
         export const exitFullscreen = async () =>
         {
@@ -487,6 +491,10 @@ export module Clockworks
             if ((document as any).webkitCancelFullScreen)
             {
                 await ((document as any).webkitCancelFullScreen)();
+            }
+            if (document.body.classList.contains("sleep-mouse"))
+            {
+                document.body.classList.remove("sleep-mouse");
             }
         };
         export module Operate
@@ -2784,6 +2792,35 @@ export module Clockworks
                 }
             }
         };
+        let lastMouseMouseAt = 0;
+        export const onMouseMove = (_evnet: MouseEvent) =>
+        {
+            if (fullscreenEnabled())
+            {
+                const now = lastMouseMouseAt = new Date().getTime();
+                if (document.body.classList.contains("sleep-mouse"))
+                {
+                    document.body.classList.remove("sleep-mouse");
+                }
+                if (fullscreenElement())
+                {
+                    setTimeout
+                    (
+                        () =>
+                        {
+                            if (fullscreenElement() && now === lastMouseMouseAt)
+                            {
+                                if ( ! document.body.classList.contains("sleep-mouse"))
+                                {
+                                    document.body.classList.add("sleep-mouse");
+                                }
+                            }
+                        },
+                        3000
+                    );
+                }
+            }
+        };
         export const onFullscreenChange = (_event: Event) =>
         {
             onWindowResize();
@@ -2879,21 +2916,22 @@ export module Clockworks
         console.log("start!!!");
         locale.setLocale(Storage.Settings.get().locale);
         window.onpopstate = () => showPage();
-        window.addEventListener('resize', Render.onWindowResize);
-        window.addEventListener('focus', Render.onWindowFocus);
-        window.addEventListener('blur', Render.onWindowBlur);
-        window.addEventListener('storage', Render.onUpdateStorage);
-        window.addEventListener('compositionstart', Render.onCompositionStart);
-        window.addEventListener('compositionend', Render.onCompositionEnd);
-        window.addEventListener('keydown', Render.onKeydown);
+        window.addEventListener("resize", Render.onWindowResize);
+        window.addEventListener("focus", Render.onWindowFocus);
+        window.addEventListener("blur", Render.onWindowBlur);
+        window.addEventListener("storage", Render.onUpdateStorage);
+        window.addEventListener("compositionstart", Render.onCompositionStart);
+        window.addEventListener("compositionend", Render.onCompositionEnd);
+        window.addEventListener("keydown", Render.onKeydown);
         document.getElementById("screen-header").addEventListener
         (
             'click',
             async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
         );
-        document.addEventListener('fullscreenchange', Render.onFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', Render.onWebkitFullscreenChange);
-        window.matchMedia('(prefers-color-scheme: dark)').addListener(updateStyle);
+        window.addEventListener("mousemove", Render.onMouseMove)
+        document.addEventListener("fullscreenchange", Render.onFullscreenChange);
+        document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
+        window.matchMedia("(prefers-color-scheme: dark)").addListener(updateStyle);
         updateStyle();
         updateProgressBarStyle();
         await showPage();
