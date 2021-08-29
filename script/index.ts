@@ -717,7 +717,7 @@ export module Clockworks
             children: data.children,
         });
         export const $make = minamo.dom.make;
-        export const $tag = (tag: string) => (className: string | object) => (children: minamo.dom.Source) =>
+        export const $tag = (tag: string) => (className: string | minamo.dom.AlphaObjectSource) => (children: minamo.dom.Source) =>
             "string" === typeof className ?
             {
                 tag,
@@ -2928,7 +2928,7 @@ export module Clockworks
             'click',
             async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
         );
-        window.addEventListener("mousemove", Render.onMouseMove)
+        window.addEventListener("mousemove", Render.onMouseMove);
         document.addEventListener("fullscreenchange", Render.onFullscreenChange);
         document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
         window.matchMedia("(prefers-color-scheme: dark)").addListener(updateStyle);
