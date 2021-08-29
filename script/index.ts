@@ -251,7 +251,7 @@ export module Clockworks
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alerms`;
                 export const get = (): AlermEntry[] => minamo.localStorage.getOrNull<AlermEntry[]>(makeKey()) ?? [];
-                export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list);
+                export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => -i.end)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
                 export const add = (tick: AlermEntry | AlermEntry[]) =>
                     set(get().concat(tick).sort(simpleReverseComparer));
@@ -296,6 +296,15 @@ export module Clockworks
     {
         export const makeTimerLabel = (minutes: number) => `${minutes} ${locale.map("m(minutes)")}`;
         export const getTicks = (date: Date = new Date()) => date.getTime();
+        export const getAppropriateTicks = (date: Date = new Date()) =>
+        {
+            const TenMinutesLater = date.getTime() +(10 *60 *1000);
+            const FloorHour = new Date(TenMinutesLater);
+            FloorHour.setMinutes(0);
+            FloorHour.setSeconds(0);
+            FloorHour.setMilliseconds(0);
+            return FloorHour.getTime() +(60 *60 *1000);
+        };
         export const weekday = (tick: number) =>
             new Intl.DateTimeFormat(locale.get(), { weekday: 'long'}).format(tick);
         export const dateCoreStringFromTick = (tick: null | number): string =>
@@ -356,6 +365,24 @@ export module Clockworks
             else
             {
                 return `${dateCoreStringFromTick(tick)} ${timeFullCoreStringFromTick(getTime(tick))}`;
+            }
+        };
+        export const timeShortCoreStringFromTick = (tick: null | number): string =>
+        {
+            if (null === tick)
+            {
+                return "N/A";
+            }
+            else
+            if (tick < 0)
+            {
+                return `-${timeShortCoreStringFromTick(-tick)}`;
+            }
+            else
+            {
+                const hour = Math.floor(tick /(60 *60 *1000)) %24;
+                const minute = Math.floor(tick /(60 *1000)) %60;
+                return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}`;
             }
         };
         export const timeLongCoreStringFromTick = (tick: null | number): string =>
@@ -630,6 +657,35 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.CountdownTimer.Alerms.remove(alerm);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const edit = async (item: AlermScheduleEntry, title: string, end: number, onCanceled?: () => unknown) =>
+                {
+                    const oldSchedule = item;
+                    const newSchedule: AlermScheduleEntry =
+                    {
+                        type: item.type,
+                        title,
+                        start: oldSchedule.start,
+                        end,
+                    };
+                    Storage.CountdownTimer.Alerms.remove(oldSchedule);
+                    Storage.CountdownTimer.Alerms.add(newSchedule);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.CountdownTimer.Alerms.remove(newSchedule);
+                                Storage.CountdownTimer.Alerms.add(oldSchedule);
                                 updateWindow("operate");
                                 await toast.hide();
                                 onCanceled?.();
@@ -1137,7 +1193,7 @@ export module Clockworks
                 }
             );
         };
-        export const schedulePrompt = async (message: string, title: string, _default: number): Promise<string | null> =>
+        export const schedulePrompt = async (message: string, title: string, tick: number): Promise<{ title: string, tick: number } | null> =>
         {
             const inputTitle = $make(HTMLInputElement)
             ({
@@ -1149,21 +1205,21 @@ export module Clockworks
             ({
                 tag: "input",
                 type: "date",
-                value: Domain.dateCoreStringFromTick(_default),
+                value: Domain.dateCoreStringFromTick(tick),
                 required: "",
             });
             const inputTime = $make(HTMLInputElement)
             ({
                 tag: "input",
                 type: "time",
-                value: Domain.timeFullCoreStringFromTick(Domain.getTime(_default)),
+                value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
                 required: "",
             });
             return await new Promise
             (
                 resolve =>
                 {
-                    let result: string | null = null;
+                    let result: { title: string, tick: number } | null = null;
                     const ui = popup
                     ({
                         children:
@@ -1190,7 +1246,11 @@ export module Clockworks
                                     children: locale.map("OK"),
                                     onclick: () =>
                                     {
-                                        result = `${inputDate.value}T${inputTime.value}`;
+                                        result =
+                                        {
+                                            title: inputTitle.value,
+                                            tick: Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
+                                        };
                                         ui.close();
                                     },
                                 },
@@ -1428,33 +1488,34 @@ export module Clockworks
                 ([
                     await menuButton
                     ([
-                        menuItem
-                        (
-                            label("Edit"),
-                            async () =>
-                            {
-                                // const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
-                                // if (null !== result)
-                                // {
-                                //     const newTick = Domain.getTicks(result);
-                                //     if (tick !== Domain.getTicks(result))
-                                //     {
-                                //         if (0 <= newTick && newTick <= Domain.getTicks())
-                                //         {
-                                //             await Operate.edit(tick, newTick);
-                                //         }
-                                //         else
-                                //         {
-                                //             makeToast
-                                //             ({
-                                //                 content: label("A date and time outside the valid range was specified."),
-                                //                 isWideContent: true,
-                                //             });
-                                //         }
-                                //     }
-                                // }
-                            }
-                        ),
+                        "schedule" === item.type ?
+                            menuItem
+                            (
+                                label("Edit"),
+                                async () =>
+                                {
+                                    const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
+                                    if (null !== result)
+                                    {
+                                        if (item.title !== result.title || item.end !== result.tick)
+                                        {
+                                            if (Domain.getTicks() < result.tick)
+                                            {
+                                                await Operate.CountdownTimer.edit(item, result.title, result.tick);
+                                            }
+                                            else
+                                            {
+                                                makeToast
+                                                ({
+                                                    content: label("A date and time outside the valid range was specified."),
+                                                    isWideContent: true,
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            ):
+                            [],
                         menuItem
                         (
                             label("Remove"),
@@ -1464,19 +1525,19 @@ export module Clockworks
                     ]),
                 ]),
             ]),
-            // $div("item-information")
-            // ([
-            //     $div("alarm-due-timestamp")
-            //     ([
-            //         label("Due timestamp"),
-            //         $span("value monospace")(Domain.dateFullStringFromTick(item.end)),
-            //     ]),
-            //     $div("alarm-due-rest")
-            //     ([
-            //         label("Rest"),
-            //         $span("value monospace")(Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
-            //     ]),
-            // ]),
+            $div("item-information")
+            ([
+                $div("alarm-due-timestamp")
+                ([
+                    label("Due timestamp"),
+                    $span("value monospace")(Domain.dateFullStringFromTick(item.end)),
+                ]),
+                $div("alarm-due-rest")
+                ([
+                    label("Rest"),
+                    $span("value monospace")(Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
+                ]),
+            ]),
         ]);
         export interface HeaderSegmentSource
         {
@@ -2057,7 +2118,13 @@ export module Clockworks
                         id: "done-button",
                         className: "default-button main-button long-button",
                         children: label("Done"),
-                        // onclick: async () => await Operate.CountdownTimer.done(Domain.getTicks())
+                        onclick: async () =>
+                        {
+                            if (0 < alarms.length)
+                            {
+                                await Operate.CountdownTimer.done(alarms[0]);
+                            }
+                        }
                     }),
                 ]),
                 await downPageLink(),
@@ -2070,7 +2137,7 @@ export module Clockworks
                         tag: "button",
                         className: "main-button long-button",
                         children: label("New Timer"),
-                        onclick: async () => await newTimerPopup()
+                        onclick: async () => await newTimerPopup(),
                     },
                     {
                         tag: "button",
@@ -2078,7 +2145,22 @@ export module Clockworks
                         children: label("New Schedule"),
                         onclick: async () =>
                         {
-                            await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getTicks());
+                            const result = await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks());
+                            if (result)
+                            {
+                                if (Domain.getTicks() < result.tick)
+                                {
+                                    await Operate.CountdownTimer.newSchedule(result.title, result.tick);
+                                }
+                                else
+                                {
+                                    makeToast
+                                    ({
+                                        content: label("A date and time outside the valid range was specified."),
+                                        isWideContent: true,
+                                    });
+                                }
+                            }
                         }
                     },
                 ]),
@@ -2117,7 +2199,6 @@ export module Clockworks
             const applicationTitle = application["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
             let alerts = Storage.CountdownTimer.Alerms.get();
-            let ticks = Storage.NeverStopwatch.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
@@ -2126,7 +2207,7 @@ export module Clockworks
                 switch(event)
                 {
                     case "high-resolution-timer":
-                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick -ticks[0]: 0);
+                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end -tick, 0): 0);
                         const capitalTime = Domain.dateStringFromTick(tick);
                         const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                         if(capitalTimeSpan.innerText !== capitalTime)
@@ -2134,19 +2215,19 @@ export module Clockworks
                             capitalTimeSpan.innerText = capitalTime;
                         }
                         const flashInterval = Storage.CountdownTimer.flashInterval.get();
-                        if (0 < flashInterval && 0 < ticks.length)
+                        if (0 < flashInterval && 0 < alerts.length)
                         {
-                            const elapsed = Domain.getTicks() -ticks[0];
-                            const unit = flashInterval *60 *1000;
-                            const primaryStep = Math.floor(elapsed / unit);
-                            if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
+                            const rest = alerts[0].end - Domain.getTicks();
+                            const unit = alerts[0].end - alerts[0].start;
+                            const primaryStep = Math.floor(rest / unit);
+                            if (rest <= 0)
                             {
                                 screenFlash();
                             }
                             const currentColor = getSolidRainbowColor(primaryStep);
                             setFoundationColor(currentColor);
                             previousPrimaryStep = primaryStep;
-                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            const rate = (Math.min(Domain.getTicks() - alerts[0].start), unit) /unit;
                             const nextColor = getSolidRainbowColor(primaryStep +1);
                             setScreenBarProgress(rate, nextColor);
                             // setBodyColor(nextColor);
@@ -2163,7 +2244,7 @@ export module Clockworks
                         }
                         break;
                     case "timer":
-                        setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
+                        setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end -tick, 0)) +" - " +applicationTitle: applicationTitle);
                         (
                             Array.from
                             (
@@ -2173,17 +2254,17 @@ export module Clockworks
                         (
                             (dom, index) =>
                             {
-                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
+                                (dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end -tick, 0));
                             }
                         );
-                        if (0 < flashInterval && 0 < ticks.length)
+                        if (0 < flashInterval && 0 < alerts.length)
                         {
-                            const elapsed = Domain.getTicks() -ticks[0];
+                            const rest = alerts[0].end - Domain.getTicks();
                             const unit = flashInterval *60 *1000;
-                            const primaryStep = Math.floor(elapsed / unit);
+                            const primaryStep = Math.floor(rest / unit);
                             const currentColor = getSolidRainbowColor(primaryStep);
                             const nextColor = getSolidRainbowColor(primaryStep +1);
-                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            const rate = (Math.min(Domain.getTicks() - alerts[0].start), unit) /unit;
                             setBodyColor(mixColors(currentColor, nextColor, rate));
                         }
                         else
@@ -2197,8 +2278,8 @@ export module Clockworks
                         break;
                     case "operate":
                         previousPrimaryStep = 0;
-                        ticks = Storage.NeverStopwatch.Stamps.get();
-                        replaceScreenBody(await neverStopwatchScreenBody(ticks));
+                        alerts = Storage.CountdownTimer.Alerms.get();
+                        replaceScreenBody(await countdownTimerScreenBody(alerts));
                         resizeFlexList();
                         await updateWindow("timer");
                         break;

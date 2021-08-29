@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Aug 28 2021 21:35:04 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Aug 29 2021 17:48:56 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3062,7 +3062,7 @@ define("resource/config", [], {
         "#A8445D", "#A23A6C", "#99347C", "#8C318A"
     ],
     "flashIntervalPreset": [0, 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60],
-    "timerPreset": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 90, 120, 150, 180],
+    "timerPreset": [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60],
     "theme": {
         "original": {
             "@main-color": "#000022",
@@ -3098,6 +3098,8 @@ define("resource/lang.en", [], {
     "No Flash": "No Flash",
     "Timestamp": "Timestamp",
     "Interval": "Interval",
+    "Due timestamp": "Due timestamp",
+    "Rest": "Rest",
     "Remove": "Remove",
     "Reset": "Reset",
     "OK": "OK",
@@ -3125,6 +3127,7 @@ define("resource/lang.en", [], {
     "Removed.": "Removed.",
     "Reseted.": "Reseted.",
     "Done!": "Done!",
+    "Saved!": "Saved!",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
     "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified."
@@ -3143,6 +3146,8 @@ define("resource/lang.ja", [], {
     "No Flash": "フラッシュなし",
     "Timestamp": "日時",
     "Interval": "間隔",
+    "Due timestamp": "期限日時",
+    "Rest": "残り時間",
     "Remove": "削除",
     "Reset": "リセット",
     "OK": "OK",
@@ -3170,6 +3175,7 @@ define("resource/lang.ja", [], {
     "Removed.": "削除しました。",
     "Reseted.": "リセットしました。",
     "Done!": "完了！",
+    "Saved!": "保存しました！",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
     "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。"
@@ -3382,7 +3388,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 (function (Alerms) {
                     Alerms.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":alerms"; };
                     Alerms.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Alerms.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                    Alerms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alerms.makeKey(), list); };
+                    Alerms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alerms.makeKey(), list.sort(minamo_js_1.minamo.core.comparer.make(function (i) { return -i.end; }))); };
                     Alerms.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Alerms.makeKey()); };
                     Alerms.add = function (tick) {
                         return Alerms.set(Alerms.get().concat(tick).sort(exports.simpleReverseComparer));
@@ -3432,6 +3438,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 if (date === void 0) { date = new Date(); }
                 return date.getTime();
             };
+            Domain.getAppropriateTicks = function (date) {
+                if (date === void 0) { date = new Date(); }
+                var TenMinutesLater = date.getTime() + (10 * 60 * 1000);
+                var FloorHour = new Date(TenMinutesLater);
+                FloorHour.setMinutes(0);
+                FloorHour.setSeconds(0);
+                FloorHour.setMilliseconds(0);
+                return FloorHour.getTime() + (60 * 60 * 1000);
+            };
             Domain.weekday = function (tick) {
                 return new Intl.DateTimeFormat(locale.get(), { weekday: 'long' }).format(tick);
             };
@@ -3477,6 +3492,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
                 else {
                     return Domain.dateCoreStringFromTick(tick) + " " + Domain.timeFullCoreStringFromTick(Domain.getTime(tick));
+                }
+            };
+            Domain.timeShortCoreStringFromTick = function (tick) {
+                if (null === tick) {
+                    return "N/A";
+                }
+                else if (tick < 0) {
+                    return "-" + Domain.timeShortCoreStringFromTick(-tick);
+                }
+                else {
+                    var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
+                    var minute = Math.floor(tick / (60 * 1000)) % 60;
+                    return ("00" + hour).slice(-2) + ":" + ("00" + minute).slice(-2);
                 }
             };
             Domain.timeLongCoreStringFromTick = function (tick) {
@@ -3779,6 +3807,41 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 Storage.CountdownTimer.Alerms.remove(alerm);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                    CountdownTimer.edit = function (item, title, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var oldSchedule, newSchedule, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            oldSchedule = item;
+                            newSchedule = {
+                                type: item.type,
+                                title: title,
+                                start: oldSchedule.start,
+                                end: end,
+                            };
+                            Storage.CountdownTimer.Alerms.remove(oldSchedule);
+                            Storage.CountdownTimer.Alerms.add(newSchedule);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Saved!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.CountdownTimer.Alerms.remove(newSchedule);
+                                                Storage.CountdownTimer.Alerms.add(oldSchedule);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -4465,7 +4528,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.schedulePrompt = function (message, title, _default) { return __awaiter(_this, void 0, void 0, function () {
+            Render.schedulePrompt = function (message, title, tick) { return __awaiter(_this, void 0, void 0, function () {
                 var inputTitle, inputDate, inputTime;
                 var _this = this;
                 return __generator(this, function (_a) {
@@ -4479,13 +4542,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             inputDate = Render.$make(HTMLInputElement)({
                                 tag: "input",
                                 type: "date",
-                                value: Domain.dateCoreStringFromTick(_default),
+                                value: Domain.dateCoreStringFromTick(tick),
                                 required: "",
                             });
                             inputTime = Render.$make(HTMLInputElement)({
                                 tag: "input",
                                 type: "time",
-                                value: Domain.timeFullCoreStringFromTick(Domain.getTime(_default)),
+                                value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
                                 required: "",
                             });
                             return [4 /*yield*/, new Promise(function (resolve) {
@@ -4511,7 +4574,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     className: "default-button",
                                                     children: locale.map("OK"),
                                                     onclick: function () {
-                                                        result = inputDate.value + "T" + inputTime.value;
+                                                        var _a, _b;
+                                                        result =
+                                                            {
+                                                                title: inputTitle.value,
+                                                                tick: (_b = (_a = Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick,
+                                                            };
                                                         ui.close();
                                                     },
                                                 },
@@ -4783,11 +4851,32 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             ];
                             _e = Render.$div("item-operator");
                             return [4 /*yield*/, Render.menuButton([
-                                    Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
-                                        return __generator(this, function (_a) {
-                                            return [2 /*return*/];
-                                        });
-                                    }); }),
+                                    "schedule" === item.type ?
+                                        Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                            var result;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("Edit"), item.title, item.end)];
+                                                    case 1:
+                                                        result = _a.sent();
+                                                        if (!(null !== result)) return [3 /*break*/, 4];
+                                                        if (!(item.title !== result.title || item.end !== result.tick)) return [3 /*break*/, 4];
+                                                        if (!(Domain.getTicks() < result.tick)) return [3 /*break*/, 3];
+                                                        return [4 /*yield*/, Operate.CountdownTimer.edit(item, result.title, result.tick)];
+                                                    case 2:
+                                                        _a.sent();
+                                                        return [3 /*break*/, 4];
+                                                    case 3:
+                                                        Render.makeToast({
+                                                            content: Render.label("A date and time outside the valid range was specified."),
+                                                            isWideContent: true,
+                                                        });
+                                                        _a.label = 4;
+                                                    case 4: return [2 /*return*/];
+                                                }
+                                            });
+                                        }); }) :
+                                        [],
                                     Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0: return [4 /*yield*/, Operate.CountdownTimer.removeAlarm(item)];
@@ -4800,7 +4889,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             _e.apply(void 0, [[
                                                     _f.sent()
                                                 ]])
-                                        ])])
+                                        ])]),
+                                    Render.$div("item-information")([
+                                        Render.$div("alarm-due-timestamp")([
+                                            Render.label("Due timestamp"),
+                                            Render.$span("value monospace")(Domain.dateFullStringFromTick(item.end)),
+                                        ]),
+                                        Render.$div("alarm-due-rest")([
+                                            Render.label("Rest"),
+                                            Render.$span("value monospace")(Domain.timeLongStringFromTick(item.end - Domain.getTicks())),
+                                        ]),
+                                    ])
                                 ]])];
                     }
                 });
@@ -5645,7 +5744,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             id: "done-button",
                                             className: "default-button main-button long-button",
                                             children: Render.label("Done"),
-                                            // onclick: async () => await Operate.CountdownTimer.done(Domain.getTicks())
+                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            if (!(0 < alarms.length)) return [3 /*break*/, 2];
+                                                            return [4 /*yield*/, Operate.CountdownTimer.done(alarms[0])];
+                                                        case 1:
+                                                            _a.sent();
+                                                            _a.label = 2;
+                                                        case 2: return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); }
                                         })
                                     ])])
                             ];
@@ -5667,19 +5778,32 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 case 0: return [4 /*yield*/, Render.newTimerPopup()];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
-                                        }); }); }
+                                        }); }); },
                                     },
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
                                         children: Render.label("New Schedule"),
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                            var result;
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getTicks())];
+                                                    case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks())];
                                                     case 1:
+                                                        result = _a.sent();
+                                                        if (!result) return [3 /*break*/, 4];
+                                                        if (!(Domain.getTicks() < result.tick)) return [3 /*break*/, 3];
+                                                        return [4 /*yield*/, Operate.CountdownTimer.newSchedule(result.title, result.tick)];
+                                                    case 2:
                                                         _a.sent();
-                                                        return [2 /*return*/];
+                                                        return [3 /*break*/, 4];
+                                                    case 3:
+                                                        Render.makeToast({
+                                                            content: Render.label("A date and time outside the valid range was specified."),
+                                                            isWideContent: true,
+                                                        });
+                                                        _a.label = 4;
+                                                    case 4: return [2 /*return*/];
                                                 }
                                             });
                                         }); }
@@ -5729,7 +5853,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.showCountdownTimerScreen = function () { return __awaiter(_this, void 0, void 0, function () {
-                var applicationTitle, alerts, ticks, updateWindow, _a;
+                var applicationTitle, alerts, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
@@ -5737,9 +5861,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             applicationTitle = Clockworks.application["CountdownTimer"].title;
                             document.body.classList.add("hide-scroll-bar");
                             alerts = Storage.CountdownTimer.Alerms.get();
-                            ticks = Storage.NeverStopwatch.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, rest, unit, primaryStep, currentColor, rate, nextColor, currentColor, rest, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
@@ -5755,24 +5878,24 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 8];
                                         case 1:
-                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick - ticks[0] : 0);
+                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end - tick, 0) : 0);
                                             capitalTime = Domain.dateStringFromTick(tick);
                                             capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                             if (capitalTimeSpan.innerText !== capitalTime) {
                                                 capitalTimeSpan.innerText = capitalTime;
                                             }
                                             flashInterval = Storage.CountdownTimer.flashInterval.get();
-                                            if (0 < flashInterval && 0 < ticks.length) {
-                                                elapsed = Domain.getTicks() - ticks[0];
-                                                unit = flashInterval * 60 * 1000;
-                                                primaryStep = Math.floor(elapsed / unit);
-                                                if (primaryStep === previousPrimaryStep + 1 && (elapsed % unit) < 5 * 1000) {
+                                            if (0 < flashInterval && 0 < alerts.length) {
+                                                rest = alerts[0].end - Domain.getTicks();
+                                                unit = alerts[0].end - alerts[0].start;
+                                                primaryStep = Math.floor(rest / unit);
+                                                if (rest <= 0) {
                                                     Render.screenFlash();
                                                 }
                                                 currentColor = getSolidRainbowColor(primaryStep);
                                                 setFoundationColor(currentColor);
                                                 previousPrimaryStep = primaryStep;
-                                                rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
+                                                rate = (Math.min(Domain.getTicks() - alerts[0].start), unit) / unit;
                                                 nextColor = getSolidRainbowColor(primaryStep + 1);
                                                 Render.setScreenBarProgress(rate, nextColor);
                                                 // setBodyColor(nextColor);
@@ -5788,17 +5911,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 8];
                                         case 2:
-                                            setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + applicationTitle : applicationTitle);
+                                            setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end - tick, 0)) + " - " + applicationTitle : applicationTitle);
                                             Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
-                                                dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
+                                                dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end - tick, 0));
                                             });
-                                            if (0 < flashInterval && 0 < ticks.length) {
-                                                elapsed = Domain.getTicks() - ticks[0];
+                                            if (0 < flashInterval && 0 < alerts.length) {
+                                                rest = alerts[0].end - Domain.getTicks();
                                                 unit = flashInterval * 60 * 1000;
-                                                primaryStep = Math.floor(elapsed / unit);
+                                                primaryStep = Math.floor(rest / unit);
                                                 currentColor = getSolidRainbowColor(primaryStep);
                                                 nextColor = getSolidRainbowColor(primaryStep + 1);
-                                                rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
+                                                rate = (Math.min(Domain.getTicks() - alerts[0].start), unit) / unit;
                                                 setBodyColor(mixColors(currentColor, nextColor, rate));
                                             }
                                             else {
@@ -5812,9 +5935,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            ticks = Storage.NeverStopwatch.Stamps.get();
+                                            alerts = Storage.CountdownTimer.Alerms.get();
                                             _b = Render.replaceScreenBody;
-                                            return [4 /*yield*/, Render.neverStopwatchScreenBody(ticks)];
+                                            return [4 /*yield*/, Render.countdownTimerScreenBody(alerts)];
                                         case 6:
                                             _b.apply(void 0, [_c.sent()]);
                                             Render.resizeFlexList();

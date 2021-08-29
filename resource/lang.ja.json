@@ -12,6 +12,8 @@
     "No Flash": "フラッシュなし",
     "Timestamp": "日時",
     "Interval": "間隔",
+    "Due timestamp": "期限日時",
+    "Rest": "残り時間",
     "Remove": "削除",
     "Reset": "リセット",
     "OK": "OK",
@@ -39,6 +41,7 @@
     "Removed.": "削除しました。",
     "Reseted.": "リセットしました。",
     "Done!": "完了！",
+    "Saved!": "保存しました！",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
     "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。"
