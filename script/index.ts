@@ -251,7 +251,7 @@ export module Clockworks
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alerms`;
                 export const get = (): AlermEntry[] => minamo.localStorage.getOrNull<AlermEntry[]>(makeKey()) ?? [];
-                export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => -i.end)));
+                export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
                 export const add = (tick: AlermEntry | AlermEntry[]) =>
                     set(get().concat(tick).sort(simpleReverseComparer));
@@ -261,6 +261,12 @@ export module Clockworks
             export module flashInterval
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
+                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+            }
+            export module ColorIndex
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:colorIndex`;
                 export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
                 export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
             }
@@ -1467,6 +1473,9 @@ export module Clockworks
                 ]),
             ]),
         ]);
+        export const alermTitle = (item: AlermEntry) => "timer" === item.type ?
+            `${Domain.makeTimerLabel((item.end -item.start) /(60 *1000))} ${locale.map("Timer")}`:
+            item.title;
         export const alermItem = async (item: AlermEntry) => $div("alerm-item flex-item")
         ([
             $div("item-header")
@@ -1474,15 +1483,7 @@ export module Clockworks
                 $div("item-title")
                 ([
                     await Resource.loadSvgOrCache("tick-icon"),
-                    $div("tick-elapsed-time")
-                    ([
-                        $span("value monospace")
-                        (
-                            "timer" === item.type ?
-                                Domain.makeTimerLabel(item.end -item.start):
-                                item.title
-                        ),
-                    ]),
+                    $div("tick-elapsed-time")([$span("value monospace")(alermTitle(item)),]),
                 ]),
                 $div("item-operator")
                 ([
@@ -1927,9 +1928,21 @@ export module Clockworks
             ([
                 $div("main-panel")
                 ([
-                    $div("capital-interval")
+                    $div("current-item")
                     ([
-                        $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                        $div("previous-timestamp")
+                        ([
+                            $span("value monospace")
+                            (
+                                0 < ticks.length ?
+                                    Domain.dateFullStringFromTick(ticks[0]):
+                                    ""
+                            ),
+                        ]),
+                        $div("capital-interval")
+                        ([
+                            $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                        ]),
                     ]),
                     $div("current-timestamp")
                     ([
@@ -2096,13 +2109,34 @@ export module Clockworks
             ([
                 $div("main-panel")
                 ([
-                    $div("capital-interval")
+                    $div("current-item")
                     ([
-                        $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                        $div("current-title")
+                        ([
+                            $span("value monospace")
+                            (
+                                0 < alarms.length ?
+                                    alermTitle(alarms[0]):
+                                    ""
+                            ),
+                        ]),
+                        $div("current-due-timestamp")
+                        ([
+                            $span("value monospace")
+                            (
+                                0 < alarms.length ?
+                                    Domain.dateStringFromTick(alarms[0].end):
+                                    ""
+                            ),
+                        ]),
+                        $div("capital-interval")
+                        ([
+                            $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                        ]),
                     ]),
                     $div("current-timestamp")
                     ([
-                        $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                        $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
                     ]),
                     await flashIntervalLabel
                     (
@@ -2123,6 +2157,7 @@ export module Clockworks
                             if (0 < alarms.length)
                             {
                                 await Operate.CountdownTimer.done(alarms[0]);
+                                Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() +1) % config.rainbowColorSet.length);
                             }
                         }
                     }),
@@ -2199,6 +2234,7 @@ export module Clockworks
             const applicationTitle = application["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
             let alerts = Storage.CountdownTimer.Alerms.get();
+            let lashFlashAt = 0;
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
@@ -2215,20 +2251,28 @@ export module Clockworks
                             capitalTimeSpan.innerText = capitalTime;
                         }
                         const flashInterval = Storage.CountdownTimer.flashInterval.get();
-                        if (0 < flashInterval && 0 < alerts.length)
+                        if (0 < alerts.length)
                         {
-                            const rest = alerts[0].end - Domain.getTicks();
-                            const unit = alerts[0].end - alerts[0].start;
-                            const primaryStep = Math.floor(rest / unit);
-                            if (rest <= 0)
+                            const rest = alerts[0].end - tick;
+                            const unit = flashInterval *60 *1000;
+                            const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
+                            if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -alerts[0].start))
                             {
                                 screenFlash();
+                                lashFlashAt = tick;
                             }
-                            const currentColor = getSolidRainbowColor(primaryStep);
+                            const cycle = "timer" === alerts[0].type ? 3000: 10000;
+                            if (rest <= 0 && lashFlashAt +cycle <= tick)
+                            {
+                                screenFlash();
+                                lashFlashAt = tick;
+                            }
+                            const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setFoundationColor(currentColor);
                             previousPrimaryStep = primaryStep;
-                            const rate = (Math.min(Domain.getTicks() - alerts[0].start), unit) /unit;
-                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const span = alerts[0].end - alerts[0].start;
+                            const rate = Math.min(tick - alerts[0].start, span) /span;
+                            const nextColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
                             setScreenBarProgress(rate, nextColor);
                             // setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
@@ -2238,7 +2282,7 @@ export module Clockworks
                             previousPrimaryStep = 0;
                             setScreenBarProgress(null);
                             getHeaderElement().classList.remove("with-screen-prgress");
-                            const currentColor = getSolidRainbowColor(0);
+                            const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setFoundationColor(currentColor);
                             // setBodyColor(currentColor);
                         }
@@ -2259,12 +2303,12 @@ export module Clockworks
                         );
                         if (0 < flashInterval && 0 < alerts.length)
                         {
-                            const rest = alerts[0].end - Domain.getTicks();
+                            const rest = alerts[0].end - tick;
                             const unit = flashInterval *60 *1000;
                             const primaryStep = Math.floor(rest / unit);
                             const currentColor = getSolidRainbowColor(primaryStep);
                             const nextColor = getSolidRainbowColor(primaryStep +1);
-                            const rate = (Math.min(Domain.getTicks() - alerts[0].start), unit) /unit;
+                            const rate = (Math.min(tick - alerts[0].start), unit) /unit;
                             setBodyColor(mixColors(currentColor, nextColor, rate));
                         }
                         else

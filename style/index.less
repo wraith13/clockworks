@@ -1449,13 +1449,19 @@ body:not(.tektite)
         }
     }
 }
-.never-stopwatch-screen,
-.countdown-timer-screen
+.never-stopwatch-screen .screen-body,
+.countdown-timer-screen .screen-body
 {
     // h1.with-screen-prgress
     // {
     //     background-color: e(%("%s%s", @main-color, "11"));
     // }
+    .current-item
+    {
+        align-items: start;
+        display: flex;
+        flex-direction: column;
+    }
     .capital-interval
     {
         text-align: center;
@@ -1466,6 +1472,9 @@ body:not(.tektite)
             line-height: 100%;
         }
     }
+    .previous-timestamp,
+    .current-title,
+    .current-due-timestamp,
     .current-timestamp
     {
         text-align: center;
