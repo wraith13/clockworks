@@ -1943,10 +1943,10 @@ export module Clockworks
                         ([
                             $span("value monospace")(Domain.timeLongStringFromTick(0)),
                         ]),
-                    ]),
-                    $div("current-timestamp")
-                    ([
-                        $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                        $div("current-timestamp")
+                        ([
+                            $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                        ]),
                     ]),
                     await flashIntervalLabel
                     (
@@ -2096,6 +2096,7 @@ export module Clockworks
                         ticks = Storage.NeverStopwatch.Stamps.get();
                         replaceScreenBody(await neverStopwatchScreenBody(ticks));
                         resizeFlexList();
+                        adjustDownPageLinkPosition();
                         await updateWindow("timer");
                         break;
                 }
@@ -2109,35 +2110,55 @@ export module Clockworks
             ([
                 $div("main-panel")
                 ([
-                    $div("current-item")
-                    ([
-                        $div("current-title")
+                    0 < alarms.length ?
+                        $div
+                        (
+                            "timer" === alarms[0].type ?
+                                "current-item timer-item":
+                                "current-item schedule-item"
+                        )
                         ([
-                            $span("value monospace")
-                            (
-                                0 < alarms.length ?
-                                    alermTitle(alarms[0]):
-                                    ""
-                            ),
-                        ]),
-                        $div("current-due-timestamp")
+                            0 < alarms.length ?
+                            [
+                                $div("current-title")
+                                ([
+                                    $span("value monospace")(alermTitle(alarms[0])),
+                                ]),
+                                $div
+                                (
+                                    "timer" === alarms[0].type ?
+                                        "current-due-timestamp":
+                                        "current-due-timestamp"
+                                )
+                                ([
+                                    $span("value monospace")
+                                    (
+                                        "timer" === alarms[0].type ?
+                                            Domain.dateFullStringFromTick(alarms[0].end):
+                                            Domain.dateStringFromTick(alarms[0].end)
+                                    ),
+                                ]),
+                            ]: [],
+                            $div("capital-interval")
+                            ([
+                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                            ]),
+                            $div("current-timestamp")
+                            ([
+                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                            ]),
+                        ]):
+                        $div("current-item")
                         ([
-                            $span("value monospace")
-                            (
-                                0 < alarms.length ?
-                                    Domain.dateStringFromTick(alarms[0].end):
-                                    ""
-                            ),
+                            $div("capital-interval")
+                            ([
+                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                            ]),
+                            $div("current-timestamp")
+                            ([
+                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                            ]),
                         ]),
-                        $div("capital-interval")
-                        ([
-                            $span("value monospace")(Domain.timeLongStringFromTick(0)),
-                        ]),
-                    ]),
-                    $div("current-timestamp")
-                    ([
-                        $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                    ]),
                     await flashIntervalLabel
                     (
                         await screenHeaderFlashSegment
@@ -2326,6 +2347,8 @@ export module Clockworks
                         replaceScreenBody(await countdownTimerScreenBody(alerts));
                         resizeFlexList();
                         await updateWindow("timer");
+                        await Render.scrollToOffset(document.getElementById("screen-body"), 0);
+                        adjustDownPageLinkPosition();
                         break;
                 }
             };

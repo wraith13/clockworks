@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Aug 29 2021 20:28:14 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Aug 30 2021 06:12:11 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1621,28 +1621,34 @@ button.delete-button {
   min-height: 1.4em;
   margin-right: 4px;
 }
-.tick-item {
+.tick-item,
+.alerm-item {
   position: relative;
 }
-.tick-item .item-header {
+.tick-item .item-header,
+.alerm-item .item-header {
   display: flex;
   padding: 0.5rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-.tick-item .item-header .item-title {
+.tick-item .item-header .item-title,
+.alerm-item .item-header .item-title {
   max-width: calc(100% - 180px);
 }
-.tick-item .item-information {
+.tick-item .item-information,
+.alerm-item .item-information {
   background-color: #8884;
   padding: 0.5rem;
   margin: 0px;
 }
-.tick-item .item-information * {
+.tick-item .item-information *,
+.alerm-item .item-information * {
   line-height: 1.4em;
 }
-.tick-item .item-information .label {
+.tick-item .item-information .label,
+.alerm-item .item-information .label {
   font-size: 1rem;
   opacity: 0.4;
   margin-right: -50%;
@@ -1651,10 +1657,12 @@ button.delete-button {
   white-space: nowrap;
   max-width: calc(100% - 180px);
 }
-.tick-item .item-information .label::after {
+.tick-item .item-information .label::after,
+.alerm-item .item-information .label::after {
   content: ":";
 }
-.tick-item .item-information .value {
+.tick-item .item-information .value,
+.alerm-item .item-information .value {
   font-size: 1rem;
   opacity: 0.4;
   float: right;
@@ -1886,7 +1894,6 @@ body:not(.tektite) .logo > .logo-text {
 .never-stopwatch-screen .screen-body .capital-interval,
 .countdown-timer-screen .screen-body .capital-interval {
   text-align: center;
-  padding-top: 16px;
 }
 .never-stopwatch-screen .screen-body .capital-interval .value,
 .countdown-timer-screen .screen-body .capital-interval .value {
@@ -1902,7 +1909,6 @@ body:not(.tektite) .logo > .logo-text {
 .never-stopwatch-screen .screen-body .current-timestamp,
 .countdown-timer-screen .screen-body .current-timestamp {
   text-align: center;
-  padding-top: 8px;
   opacity: 0.5;
 }
 .never-stopwatch-screen .screen-body .previous-timestamp .value,
@@ -5565,9 +5571,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$div("capital-interval")([
                                         Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                                     ]),
-                                ]),
-                                Render.$div("current-timestamp")([
-                                    Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                                    Render.$div("current-timestamp")([
+                                        Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                                    ]),
                                 ])];
                             _d = Render.flashIntervalLabel;
                             return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get(), Storage.NeverStopwatch.flashInterval.set)];
@@ -5730,6 +5736,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         case 6:
                                             _b.apply(void 0, [_c.sent()]);
                                             Render.resizeFlexList();
+                                            Render.adjustDownPageLinkPosition();
                                             return [4 /*yield*/, updateWindow("timer")];
                                         case 7:
                                             _c.sent();
@@ -5758,24 +5765,38 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
-                            _c = [Render.$div("current-item")([
-                                    Render.$div("current-title")([
-                                        Render.$span("value monospace")(0 < alarms.length ?
-                                            Render.alermTitle(alarms[0]) :
-                                            ""),
-                                    ]),
-                                    Render.$div("current-due-timestamp")([
-                                        Render.$span("value monospace")(0 < alarms.length ?
-                                            Domain.dateStringFromTick(alarms[0].end) :
-                                            ""),
-                                    ]),
-                                    Render.$div("capital-interval")([
-                                        Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                                    ]),
-                                ]),
-                                Render.$div("current-timestamp")([
-                                    Render.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                                ])];
+                            _c = [0 < alarms.length ?
+                                    Render.$div("timer" === alarms[0].type ?
+                                        "current-item timer-item" :
+                                        "current-item schedule-item")([
+                                        0 < alarms.length ?
+                                            [
+                                                Render.$div("current-title")([
+                                                    Render.$span("value monospace")(Render.alermTitle(alarms[0])),
+                                                ]),
+                                                Render.$div("timer" === alarms[0].type ?
+                                                    "current-due-timestamp" :
+                                                    "current-due-timestamp")([
+                                                    Render.$span("value monospace")("timer" === alarms[0].type ?
+                                                        Domain.dateFullStringFromTick(alarms[0].end) :
+                                                        Domain.dateStringFromTick(alarms[0].end)),
+                                                ]),
+                                            ] : [],
+                                        Render.$div("capital-interval")([
+                                            Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                        ]),
+                                        Render.$div("current-timestamp")([
+                                            Render.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                        ]),
+                                    ]) :
+                                    Render.$div("current-item")([
+                                        Render.$div("capital-interval")([
+                                            Render.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                        ]),
+                                        Render.$div("current-timestamp")([
+                                            Render.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                        ]),
+                                    ])];
                             _d = Render.flashIntervalLabel;
                             return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set)];
                         case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
@@ -5922,7 +5943,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 case "storage": return [3 /*break*/, 3];
                                                 case "operate": return [3 /*break*/, 5];
                                             }
-                                            return [3 /*break*/, 8];
+                                            return [3 /*break*/, 9];
                                         case 1:
                                             screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end - tick, 0) : 0);
                                             capitalTime = Domain.dateStringFromTick(tick);
@@ -5962,7 +5983,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 setFoundationColor(currentColor);
                                                 // setBodyColor(currentColor);
                                             }
-                                            return [3 /*break*/, 8];
+                                            return [3 /*break*/, 9];
                                         case 2:
                                             setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end - tick, 0)) + " - " + applicationTitle : applicationTitle);
                                             Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
@@ -5981,11 +6002,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 currentColor = getSolidRainbowColor(0);
                                                 setBodyColor(currentColor);
                                             }
-                                            return [3 /*break*/, 8];
+                                            return [3 /*break*/, 9];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
                                         case 4:
                                             _c.sent();
-                                            return [3 /*break*/, 8];
+                                            return [3 /*break*/, 9];
                                         case 5:
                                             previousPrimaryStep = 0;
                                             alerts = Storage.CountdownTimer.Alerms.get();
@@ -5997,8 +6018,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [4 /*yield*/, updateWindow("timer")];
                                         case 7:
                                             _c.sent();
-                                            return [3 /*break*/, 8];
-                                        case 8: return [2 /*return*/];
+                                            return [4 /*yield*/, Render.scrollToOffset(document.getElementById("screen-body"), 0)];
+                                        case 8:
+                                            _c.sent();
+                                            Render.adjustDownPageLinkPosition();
+                                            return [3 /*break*/, 9];
+                                        case 9: return [2 /*return*/];
                                     }
                                 });
                             }); };

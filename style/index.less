@@ -1093,7 +1093,8 @@ button
     }
     .positive-foreground-coloring-trait;
 }
-.tick-item
+.tick-item,
+.alerm-item
 {
     position: relative;
     // padding: 0.5rem;
@@ -1117,9 +1118,6 @@ button
             max-width: calc(100% - 180px);
         }
     }
-}
-.tick-item
-{
     .item-information
     {
         background-color: #8884;
@@ -1449,41 +1447,44 @@ body:not(.tektite)
         }
     }
 }
-.never-stopwatch-screen .screen-body,
-.countdown-timer-screen .screen-body
+.never-stopwatch-screen,
+.countdown-timer-screen
 {
     // h1.with-screen-prgress
     // {
     //     background-color: e(%("%s%s", @main-color, "11"));
     // }
-    .current-item
+    .screen-body
     {
-        align-items: start;
-        display: flex;
-        flex-direction: column;
-    }
-    .capital-interval
-    {
-        text-align: center;
-        padding-top: 16px;
-        .value
+        .current-item
         {
-            font-size: 7vw;
-            line-height: 100%;
+            align-items: start;
+            display: flex;
+            flex-direction: column;
         }
-    }
-    .previous-timestamp,
-    .current-title,
-    .current-due-timestamp,
-    .current-timestamp
-    {
-        text-align: center;
-        padding-top: 8px;
-        opacity: 0.5;
-        .value
+        .capital-interval
         {
-            font-size: 4.4vw;
-            line-height: 100%;
+            text-align: center;
+            // padding-top: 16px;
+            .value
+            {
+                font-size: 7vw;
+                line-height: 100%;
+            }
+        }
+        .previous-timestamp,
+        .current-title,
+        .current-due-timestamp,
+        .current-timestamp
+        {
+            text-align: center;
+            // padding-top: 8px;
+            opacity: 0.5;
+            .value
+            {
+                font-size: 4.4vw;
+                line-height: 100%;
+            }
         }
     }
 }
