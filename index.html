@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Aug 30 2021 06:12:11 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Aug 30 2021 20:38:44 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1760,6 +1760,9 @@ body.fxxking-ipad-fullscreen .screen {
   .screen > .screen-body .primary-page .down-page-link.icon:hover {
     opacity: 1;
   }
+}
+.screen > .screen-body .primary-page .down-page-link.reverse-down-page-link.icon {
+  transform: scale(1, -1);
 }
 .screen > .screen-body .screen-bar {
   z-index: -10;
@@ -5321,6 +5324,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
+            Render.isStrictShowPrimaryPage = function () {
+                var body = document.getElementById("screen-body");
+                var primaryPage = document.getElementsByClassName("primary-page")[0];
+                var primaryPageOffsetTop = Math.min(primaryPage.offsetTop - body.offsetTop, body.scrollHeight - body.clientHeight);
+                return primaryPageOffsetTop === body.scrollTop;
+            };
             Render.downPageLink = function () { return __awaiter(_this, void 0, void 0, function () {
                 var _a;
                 var _this = this;
@@ -5333,12 +5342,23 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             };
                             return [4 /*yield*/, Resource.loadSvgOrCache("down-triangle-icon")];
                         case 1: return [2 /*return*/, (_a.children = _b.sent(),
-                                _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0: return [4 /*yield*/, Render.scrollToElement(document.getElementsByClassName("trail-page")[0])];
-                                        case 1: return [2 /*return*/, _a.sent()];
-                                    }
-                                }); }); },
+                                _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                if (!Render.isStrictShowPrimaryPage()) return [3 /*break*/, 2];
+                                                return [4 /*yield*/, Render.scrollToElement(document.getElementsByClassName("trail-page")[0])];
+                                            case 1:
+                                                _a.sent();
+                                                return [3 /*break*/, 4];
+                                            case 2: return [4 /*yield*/, Render.scrollToElement(document.getElementsByClassName("primary-page")[0])];
+                                            case 3:
+                                                _a.sent();
+                                                _a.label = 4;
+                                            case 4: return [2 /*return*/];
+                                        }
+                                    });
+                                }); },
                                 _a)];
                     }
                 });
@@ -6253,9 +6273,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             if (undefined === updateWindowTimer) {
                                 updateWindowTimer = setInterval(function () { var _a; return (_a = Render.updateWindow) === null || _a === void 0 ? void 0 : _a.call(Render, "high-resolution-timer"); }, 36);
                                 updateWindowTimer = setInterval(function () { var _a; return (_a = Render.updateWindow) === null || _a === void 0 ? void 0 : _a.call(Render, "timer"); }, 360);
-                                document.addEventListener("scroll", function () {
+                                document.getElementById("screen-body").addEventListener("scroll", function () {
                                     var _a;
-                                    if (document.body.scrollTop <= 0) {
+                                    Render.adjustDownPageLinkDirection();
+                                    if (document.getElementById("screen-body").scrollTop <= 0) {
                                         (_a = Render.updateWindow) === null || _a === void 0 ? void 0 : _a.call(Render, "scroll");
                                     }
                                 });
@@ -6499,6 +6520,21 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     var delta_1 = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
                     Array.from(document.getElementsByClassName("down-page-link")).forEach(function (i) { return i.style.bottom = "calc(1rem + " + delta_1 + "px)"; });
                 }
+            };
+            Render.adjustDownPageLinkDirection = function () {
+                return Array.from(document.getElementsByClassName("down-page-link"))
+                    .forEach(function (i) {
+                    if (Render.isStrictShowPrimaryPage()) {
+                        if (i.classList.contains("reverse-down-page-link")) {
+                            i.classList.remove("reverse-down-page-link");
+                        }
+                    }
+                    else {
+                        if (!i.classList.contains("reverse-down-page-link")) {
+                            i.classList.add("reverse-down-page-link");
+                        }
+                    }
+                });
             };
             var onWindowResizeTimestamp = 0;
             Render.onWindowResize = function () {

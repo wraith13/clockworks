@@ -1795,12 +1795,29 @@ export module Clockworks
             await languageMenuItem(),
             await githubMenuItem(),
         ];
+        export const isStrictShowPrimaryPage = () =>
+        {
+            const body = document.getElementById("screen-body");
+            const primaryPage = document.getElementsByClassName("primary-page")[0] as HTMLDivElement;
+            const primaryPageOffsetTop = Math.min(primaryPage.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
+            return primaryPageOffsetTop === body.scrollTop;
+        };
         export const downPageLink = async () =>
         ({
             tag: "div",
             className: "down-page-link icon",
             children: await Resource.loadSvgOrCache("down-triangle-icon"),
-            onclick: async () => await scrollToElement(document.getElementsByClassName("trail-page")[0] as HTMLDivElement),
+            onclick: async () =>
+            {
+                if (isStrictShowPrimaryPage())
+                {
+                    await scrollToElement(document.getElementsByClassName("trail-page")[0] as HTMLDivElement);
+                }
+                else
+                {
+                    await scrollToElement(document.getElementsByClassName("primary-page")[0] as HTMLDivElement);
+                }
+            },
         });
         export const scrollToOffset = async (target: HTMLElement, offset: number) =>
         {
@@ -2508,12 +2525,13 @@ export module Clockworks
                     () => Render.updateWindow?.("timer"),
                     360
                 );
-                document.addEventListener
+                document.getElementById("screen-body").addEventListener
                 (
                     "scroll",
                     () =>
                     {
-                        if (document.body.scrollTop <= 0)
+                        adjustDownPageLinkDirection();
+                        if (document.getElementById("screen-body").scrollTop <= 0)
                         {
                             Render.updateWindow?.("scroll");
                         }
@@ -2846,6 +2864,28 @@ export module Clockworks
                 Array.from(document.getElementsByClassName("down-page-link")).forEach(i => (i as HTMLElement).style.bottom = `calc(1rem + ${delta}px)`);
             }
         };
+        export const adjustDownPageLinkDirection = () =>
+            Array.from(document.getElementsByClassName("down-page-link"))
+                .forEach
+                (
+                    i =>
+                    {
+                        if (isStrictShowPrimaryPage())
+                        {
+                            if (i.classList.contains("reverse-down-page-link"))
+                            {
+                                i.classList.remove("reverse-down-page-link");
+                            }
+                        }
+                        else
+                        {
+                            if ( ! i.classList.contains("reverse-down-page-link"))
+                            {
+                                i.classList.add("reverse-down-page-link");
+                            }
+                        }
+                    }
+                );
         let onWindowResizeTimestamp = 0;
         export const onWindowResize = () =>
         {
