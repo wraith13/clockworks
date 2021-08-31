@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Aug 30 2021 20:38:44 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Aug 31 2021 05:08:41 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -5623,7 +5623,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     ])])
                             ];
                             _g = Render.$div("trail-page");
-                            _h = Render.$div("column-flex-list tick-list");
+                            _h = Render.$div("row-flex-list tick-list");
                             return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.tickItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                         case 4: return [2 /*return*/, (_f.concat([
                                 _g.apply(void 0, [[
@@ -5895,7 +5895,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _j = Render.$div("column-flex-list tick-list");
+                            _j = Render.$div("row-flex-list tick-list");
                             return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alermItem(item); }))];
                         case 4: return [2 /*return*/, (_f.concat([
                                 _g.apply(void 0, [_h.concat([

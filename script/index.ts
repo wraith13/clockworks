@@ -1985,7 +1985,7 @@ export module Clockworks
             ]),
             $div("trail-page")
             ([
-                $div("column-flex-list tick-list")
+                $div("row-flex-list tick-list")
                 (
                     await Promise.all
                     (
@@ -2237,7 +2237,7 @@ export module Clockworks
                         }
                     },
                 ]),
-                $div("column-flex-list tick-list")
+                $div("row-flex-list tick-list")
                 (
                     await Promise.all(alarms.map(item => alermItem(item)))
                 ),
