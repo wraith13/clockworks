@@ -1153,6 +1153,55 @@ export module Clockworks
                 }
             );
         };
+        export const timePrompt = async (message: string, tick: number = 0): Promise<number | null> =>
+        {
+            const inputTime = $make(HTMLInputElement)
+            ({
+                tag: "input",
+                type: "time",
+                value: Domain.timeLongCoreStringFromTick(tick),
+                required: "",
+            });
+            return await new Promise
+            (
+                resolve =>
+                {
+                    let result: number | null = null;
+                    const ui = popup
+                    ({
+                        children:
+                        [
+                            $tag("h2")("")(message),
+                            inputTime,
+                            $div("popup-operator")
+                            ([
+                                {
+                                    tag: "button",
+                                    className: "cancel-button",
+                                    children: locale.map("Cancel"),
+                                    onclick: () =>
+                                    {
+                                        result = null;
+                                        ui.close();
+                                    },
+                                },
+                                {
+                                    tag: "button",
+                                    className: "default-button",
+                                    children: locale.map("OK"),
+                                    onclick: () =>
+                                    {
+                                        result = Domain.parseDate(`2020-01-01T${inputTime.value}`)?.getTime() ?? tick;
+                                        ui.close();
+                                    },
+                                },
+                            ])
+                        ],
+                        onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
         export const newTimerPopup = async (): Promise<boolean> =>
         {
             return await new Promise
