@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Aug 31 2021 05:08:41 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Aug 31 2021 22:06:51 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1761,7 +1761,7 @@ body.fxxking-ipad-fullscreen .screen {
     opacity: 1;
   }
 }
-.screen > .screen-body .primary-page .down-page-link.reverse-down-page-link.icon {
+.screen > .screen-body .primary-page .down-page-link:not(.reverse-down-page-link).icon {
   transform: scale(1, -1);
 }
 .screen > .screen-body .screen-bar {
@@ -3124,6 +3124,7 @@ define("resource/lang.en", [], {
     "m(minutes)": "m",
     "Timer": "Timer",
     "No Flash": "No Flash",
+    "00:00:00 only": "00:00:00 only",
     "Timestamp": "Timestamp",
     "Interval": "Interval",
     "Due timestamp": "Due timestamp",
@@ -3173,6 +3174,7 @@ define("resource/lang.ja", [], {
     "m(minutes)": "分",
     "Timer": "タイマー",
     "No Flash": "フラッシュなし",
+    "00:00:00 only": "00:00:00 のみ",
     "Timestamp": "日時",
     "Interval": "間隔",
     "Due timestamp": "期限日時",
@@ -3259,17 +3261,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         var _this = this;
         Clockworks.applicationTitle = config_json_1.default.applicationTitle;
         Clockworks.application = {
-            "NeverStopwatch": {
-                icon: "never-stopwatch-icon",
-                title: "Never Stopwatch",
+            "RainbowClock": {
+                icon: "tick-icon",
+                title: "Rainbow Clock",
             },
             "CountdownTimer": {
                 icon: "history-icon",
                 title: "Countdown Timer",
             },
-            "RainbowClock": {
-                icon: "tick-icon",
-                title: "Rainbow Clock",
+            "NeverStopwatch": {
+                icon: "never-stopwatch-icon",
+                title: "Never Stopwatch",
             },
         };
         Clockworks.ApplicationList = Object.keys(Clockworks.application);
@@ -5130,7 +5132,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.screenHeaderFlashSegmentMenu = function (flashInterval, setter) { return __awaiter(_this, void 0, void 0, function () {
+            Render.screenHeaderFlashSegmentMenu = function (flashInterval, setter, zeroIcon, zeroLabel) { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -5141,10 +5143,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     switch (_b.label) {
                                         case 0:
                                             _a = Render.menuItem;
-                                            return [4 /*yield*/, Resource.loadSvgOrCache(0 === i ? "sleep-icon" : "flash-icon")];
+                                            return [4 /*yield*/, Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[
                                                     _b.sent(),
-                                                    Render.labelSpan(0 === i ? locale.map("No Flash") : locale.map("Interval") + ": " + Domain.makeTimerLabel(i))
+                                                    Render.labelSpan(0 === i ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeTimerLabel(i))
                                                 ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                     return __generator(this, function (_a) {
                                                         switch (_a.label) {
@@ -5164,21 +5166,25 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.screenHeaderFlashSegment = function (flashInterval, setter) { return __awaiter(_this, void 0, void 0, function () {
-                var _a;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            _a = {
-                                icon: 0 === flashInterval ? "sleep-icon" : "flash-icon",
-                                title: 0 === flashInterval ? locale.map("No Flash") : locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
-                            };
-                            return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(flashInterval, setter)];
-                        case 1: return [2 /*return*/, (_a.menu = _b.sent(),
-                                _a)];
-                    }
+            Render.screenHeaderFlashSegment = function (flashInterval, setter, zeroIcon, zeroLabel) {
+                if (zeroIcon === void 0) { zeroIcon = "sleep-icon"; }
+                if (zeroLabel === void 0) { zeroLabel = "No Flash"; }
+                return __awaiter(_this, void 0, void 0, function () {
+                    var _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                _a = {
+                                    icon: 0 === flashInterval ? zeroIcon : "flash-icon",
+                                    title: 0 === flashInterval ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
+                                };
+                                return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(flashInterval, setter, zeroIcon, zeroLabel)];
+                            case 1: return [2 /*return*/, (_a.menu = _b.sent(),
+                                    _a)];
+                        }
+                    });
                 });
-            }); };
+            };
             Render.replaceScreenBody = function (body) { return minamo_js_1.minamo.dom.replaceChildren(document.getElementsByClassName("screen-body")[0], body); };
             var Resource;
             (function (Resource) {
@@ -5818,7 +5824,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         ]),
                                     ])];
                             _d = Render.flashIntervalLabel;
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set)];
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
                         case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
                         case 2:
                             _e = [
@@ -5974,11 +5980,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             flashInterval = Storage.CountdownTimer.flashInterval.get();
                                             if (0 < alerts.length) {
                                                 rest = alerts[0].end - tick;
-                                                unit = flashInterval * 60 * 1000;
-                                                primaryStep = 0 < unit ? Math.floor(rest / unit) : 0;
-                                                if ((primaryStep + 1 === previousPrimaryStep && -5 * 1000 < (rest % unit) && 500 < tick - alerts[0].start)) {
-                                                    Render.screenFlash();
-                                                    lashFlashAt = tick;
+                                                if (0 < flashInterval) {
+                                                    unit = flashInterval * 60 * 1000;
+                                                    primaryStep = 0 < unit ? Math.floor(rest / unit) : 0;
+                                                    if ((primaryStep + 1 === previousPrimaryStep && -5 * 1000 < (rest % unit) && 500 < tick - alerts[0].start)) {
+                                                        Render.screenFlash();
+                                                        lashFlashAt = tick;
+                                                    }
+                                                    previousPrimaryStep = primaryStep;
                                                 }
                                                 cycle = "timer" === alerts[0].type ? 3000 : 10000;
                                                 if (rest <= 0 && lashFlashAt + cycle <= tick) {
@@ -5987,7 +5996,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 }
                                                 currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                                                 setFoundationColor(currentColor);
-                                                previousPrimaryStep = primaryStep;
                                                 span = alerts[0].end - alerts[0].start;
                                                 rate = Math.min(tick - alerts[0].start, span) / span;
                                                 nextColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() + 1);

@@ -46,20 +46,20 @@ export module Clockworks
     }
     export const application =
     {
-        "NeverStopwatch": <ApplicationEntry>
+        "RainbowClock": <ApplicationEntry>
         {
-            icon: "never-stopwatch-icon",
-            title: "Never Stopwatch",
+            icon: "tick-icon",
+            title: "Rainbow Clock",
         },
         "CountdownTimer": <ApplicationEntry>
         {
             icon: "history-icon",
             title: "Countdown Timer",
         },
-        "RainbowClock": <ApplicationEntry>
+        "NeverStopwatch": <ApplicationEntry>
         {
-            icon: "tick-icon",
-            title: "Rainbow Clock",
+            icon: "never-stopwatch-icon",
+            title: "Never Stopwatch",
         },
     };
     export type ApplicationType = keyof typeof application;
@@ -1669,7 +1669,7 @@ export module Clockworks
                 )
             )
         });
-        export const screenHeaderFlashSegmentMenu = async (flashInterval: number, setter: (i: number) => unknown): Promise<minamo.dom.Source> => await Promise.all
+        export const screenHeaderFlashSegmentMenu = async (flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: locale.LocaleKeyType): Promise<minamo.dom.Source> => await Promise.all
         (
             config.flashIntervalPreset.map
             (
@@ -1677,8 +1677,8 @@ export module Clockworks
                 menuItem
                 (
                     [
-                        await Resource.loadSvgOrCache(0 === i ? "sleep-icon": "flash-icon"),
-                        labelSpan(0 === i ? locale.map("No Flash"): `${locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                        await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
+                        labelSpan(0 === i ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
                     ],
                     async () =>
                     {
@@ -1689,11 +1689,11 @@ export module Clockworks
                 )
             )
         );
-        export const screenHeaderFlashSegment = async (flashInterval: number, setter: (i: number) => unknown): Promise<HeaderSegmentSource> =>
+        export const screenHeaderFlashSegment = async (flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: locale.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
         ({
-            icon: 0 === flashInterval ? "sleep-icon": "flash-icon",
-            title: 0 === flashInterval ? locale.map("No Flash"): `${locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
-            menu: await screenHeaderFlashSegmentMenu(flashInterval, setter),
+            icon: 0 === flashInterval ? zeroIcon: "flash-icon",
+            title: 0 === flashInterval ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
+            menu: await screenHeaderFlashSegmentMenu(flashInterval, setter, zeroIcon, zeroLabel),
         });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
         (
@@ -2181,7 +2181,9 @@ export module Clockworks
                         await screenHeaderFlashSegment
                         (
                             Storage.CountdownTimer.flashInterval.get(),
-                            Storage.CountdownTimer.flashInterval.set
+                            Storage.CountdownTimer.flashInterval.set,
+                            "flash-icon",
+                            "00:00:00 only"
                         )
                     ),
                     $div("button-list")
@@ -2292,12 +2294,16 @@ export module Clockworks
                         if (0 < alerts.length)
                         {
                             const rest = alerts[0].end - tick;
-                            const unit = flashInterval *60 *1000;
-                            const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
-                            if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -alerts[0].start))
+                            if (0 < flashInterval)
                             {
-                                screenFlash();
-                                lashFlashAt = tick;
+                                const unit = flashInterval *60 *1000;
+                                const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
+                                if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -alerts[0].start))
+                                {
+                                    screenFlash();
+                                    lashFlashAt = tick;
+                                }
+                                previousPrimaryStep = primaryStep;
                             }
                             const cycle = "timer" === alerts[0].type ? 3000: 10000;
                             if (rest <= 0 && lashFlashAt +cycle <= tick)
@@ -2307,7 +2313,6 @@ export module Clockworks
                             }
                             const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setFoundationColor(currentColor);
-                            previousPrimaryStep = primaryStep;
                             const span = alerts[0].end - alerts[0].start;
                             const rate = Math.min(tick - alerts[0].start, span) /span;
                             const nextColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
