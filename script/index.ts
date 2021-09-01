@@ -243,6 +243,13 @@ export module Clockworks
                 export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
                 export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
             }
+            export module recentlyFlashInterval
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
+                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+                export const add = (value: number) => set(get().concat([value]));
+            }
         }
         export module CountdownTimer
         {
@@ -263,6 +270,13 @@ export module Clockworks
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
                 export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
                 export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+            }
+            export module recentlyFlashInterval
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
+                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+                export const add = (value: number) => set(get().concat([value]));
             }
             export module ColorIndex
             {
