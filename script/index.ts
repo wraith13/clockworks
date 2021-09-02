@@ -1217,13 +1217,17 @@ export module Clockworks
                 {
                     let result = false;
                     const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                    const timerPreset = config.timerPreset
+                        .concat(Storage.CountdownTimer.recentlyTimer.get())
+                        .sort(minamo.core.comparer.make([i => i]))
+                        .filter((i, ix, list) => ix === list.indexOf(i));
                     const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                     (
                         checkButtonList,
                         [
                             await Promise.all
                             (
-                                config.timerPreset.map
+                                timerPreset.map
                                 (
                                     async (i: number) =>
                                     ({
@@ -1242,7 +1246,7 @@ export module Clockworks
                                         }
                                     })
                                 )
-                            )
+                            ),
                         ]
                     );
                     await checkButtonListUpdate();
@@ -1254,15 +1258,33 @@ export module Clockworks
                             $tag("h2")("")(label("New Timer")),
                             checkButtonList,
                             $div("popup-operator")
-                            ([{
-                                tag: "button",
-                                className: "default-button",
-                                children: label("Close"),
-                                onclick: () =>
+                            ([
                                 {
-                                    ui.close();
+                                    tag: "button",
+                                    className: "cancel-button",
+                                    children: label("input a time"),
+                                    onclick: async () =>
+                                    {
+                                        const minutes = await timePrompt(locale.map("input a time"), 0);
+                                        if (null !== minutes)
+                                        {
+                                            Storage.CountdownTimer.recentlyTimer.add(minutes);
+                                            await Operate.CountdownTimer.newTimer(minutes);
+                                            result = true;
+                                            ui.close();
+                                        }
+                                    }
                                 },
-                            }])
+                                {
+                                    tag: "button",
+                                    className: "default-button",
+                                    children: label("Close"),
+                                    onclick: () =>
+                                    {
+                                        ui.close();
+                                    },
+                                }
+                            ])
                         ],
                         onClose: async () => resolve(result),
                     });
