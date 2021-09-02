@@ -248,7 +248,7 @@ export module Clockworks
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
                 export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
                 export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set(get().concat([value]));
+                export const add = (value: number) => set(get().concat([value]).filter((_i, ix) => ix < 3));
             }
         }
         export module CountdownTimer
@@ -276,7 +276,14 @@ export module Clockworks
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
                 export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
                 export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set(get().concat([value]));
+                export const add = (value: number) => set(get().concat([value]).filter((_i, ix) => ix < 3));
+            }
+            export module recentlyTimer
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyTimer`;
+                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
+                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+                export const add = (value: number) => set(get().concat([value]).filter((_i, ix) => ix < 8));
             }
             export module ColorIndex
             {
