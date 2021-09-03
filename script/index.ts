@@ -514,6 +514,21 @@ export module Clockworks
             }
             return null;
         };
+        export const parseTime = (time: string | null): number | null =>
+        {
+            if (null !== time)
+            {
+                try
+                {
+                    return parseDate(`2020-01-01T${time}`).getTime() -parseDate(`2020-01-01T00:00:00`).getTime();
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            return null;
+        };
     }
     export module Render
     {
@@ -1198,7 +1213,7 @@ export module Clockworks
                                     children: locale.map("OK"),
                                     onclick: () =>
                                     {
-                                        result = Domain.parseDate(`2020-01-01T${inputTime.value}`)?.getTime() ?? tick;
+                                        result = Domain.parseTime(inputTime.value) ?? tick;
                                         ui.close();
                                     },
                                 },
@@ -1265,9 +1280,10 @@ export module Clockworks
                                     children: label("input a time"),
                                     onclick: async () =>
                                     {
-                                        const minutes = await timePrompt(locale.map("input a time"), 0);
-                                        if (null !== minutes)
+                                        const tick = await timePrompt(locale.map("input a time"), 0);
+                                        if (null !== tick)
                                         {
+                                            const minutes = tick /(60 *1000);
                                             Storage.CountdownTimer.recentlyTimer.add(minutes);
                                             await Operate.CountdownTimer.newTimer(minutes);
                                             result = true;
