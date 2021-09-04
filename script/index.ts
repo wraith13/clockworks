@@ -248,7 +248,12 @@ export module Clockworks
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
                 export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
                 export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set(get().concat([value]).filter((_i, ix) => ix < 3));
+                export const add = (value: number) => set
+                (
+                    [value].concat(get())
+                        .filter((i, ix, list) => ix === list.indexOf(i))
+                        .filter((_i, ix) => ix < config.recentlyFlashIntervalMaxHistory)
+                );
             }
         }
         export module CountdownTimer
@@ -276,14 +281,24 @@ export module Clockworks
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
                 export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
                 export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set(get().concat([value]).filter((_i, ix) => ix < 3));
+                export const add = (value: number) => set
+                (
+                    [value].concat(get())
+                        .filter((i, ix, list) => ix === list.indexOf(i))
+                        .filter((_i, ix) => ix < config.recentlyFlashIntervalMaxHistory)
+                );
             }
             export module recentlyTimer
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyTimer`;
                 export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
                 export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set(get().concat([value]).filter((_i, ix) => ix < 8));
+                export const add = (value: number) => set
+                (
+                    [value].concat(get())
+                        .filter((i, ix, list) => ix === list.indexOf(i))
+                        .filter((_i, ix) => ix < config.recentlyTimerMaxHistory)
+                );
             }
             export module ColorIndex
             {
@@ -1777,31 +1792,60 @@ export module Clockworks
                 )
             )
         });
-        export const screenHeaderFlashSegmentMenu = async (flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: locale.LocaleKeyType): Promise<minamo.dom.Source> => await Promise.all
+        export const screenHeaderFlashSegmentMenu = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: locale.LocaleKeyType): Promise<minamo.dom.Source> =>
         (
-            config.flashIntervalPreset.map
+            await Promise.all
             (
-                async i =>
+                flashIntervalPreset.map
+                (
+                    async i =>
+                    menuItem
+                    (
+                        [
+                            await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
+                            labelSpan(0 === i ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                        ],
+                        async () =>
+                        {
+                            setter(i);
+                            await reload();
+                        },
+                        flashInterval === i ? "current-item": undefined
+                    )
+                )
+            )
+        )
+        .concat
+        (
+            adder ?
+            [
                 menuItem
                 (
                     [
-                        await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
-                        labelSpan(0 === i ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                        await Resource.loadSvgOrCache("flash-icon"),
+                        label("input a time"),
                     ],
                     async () =>
                     {
-                        setter(i);
+                        const tick = await timePrompt(locale.map("input a time"), 0);
+                        if (null !== tick)
+                        {
+                            const minutes = tick /(60 *1000);
+                            adder(minutes);
+                            setter(minutes);
+                        }
                         await reload();
+                        getScreenCoverList().forEach(i => i.click());
                     },
-                    flashInterval === i ? "current-item": undefined
                 )
-            )
+            ]:
+            []
         );
-        export const screenHeaderFlashSegment = async (flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: locale.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
+        export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: locale.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
         ({
             icon: 0 === flashInterval ? zeroIcon: "flash-icon",
             title: 0 === flashInterval ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
-            menu: await screenHeaderFlashSegmentMenu(flashInterval, setter, zeroIcon, zeroLabel),
+            menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
         });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
         (
@@ -2077,6 +2121,11 @@ export module Clockworks
                     (
                         await screenHeaderFlashSegment
                         (
+                            Storage.NeverStopwatch.recentlyFlashInterval.add,
+                            config.flashIntervalPreset
+                                .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
+                                .sort(minamo.core.comparer.make([i => i]))
+                                .filter((i, ix, list) => ix === list.indexOf(i)),
                             Storage.NeverStopwatch.flashInterval.get(),
                             Storage.NeverStopwatch.flashInterval.set
                         )
@@ -2288,6 +2337,11 @@ export module Clockworks
                     (
                         await screenHeaderFlashSegment
                         (
+                            Storage.CountdownTimer.recentlyFlashInterval.add,
+                            config.flashIntervalPreset
+                                .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
+                                .sort(minamo.core.comparer.make([i => i]))
+                                .filter((i, ix, list) => ix === list.indexOf(i)),
                             Storage.CountdownTimer.flashInterval.get(),
                             Storage.CountdownTimer.flashInterval.set,
                             "flash-icon",
@@ -2518,6 +2572,11 @@ export module Clockworks
                     (
                         await screenHeaderFlashSegment
                         (
+                            null,
+                            config.flashIntervalPreset,
+                                // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
+                                // .sort(minamo.core.comparer.make([i => i]))
+                                // .filter((i, ix, list) => ix === list.indexOf(i)),
                             Storage.RainbowClock.flashInterval.get(),
                             Storage.RainbowClock.flashInterval.set
                         )

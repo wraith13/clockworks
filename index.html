@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Aug 31 2021 22:06:51 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Sep 03 2021 22:00:38 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3090,6 +3090,8 @@ define("resource/config", [], {
     ],
     "flashIntervalPreset": [0, 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60],
     "timerPreset": [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60],
+    "recentlyFlashIntervalMaxHistory": 3,
+    "recentlyTimerMaxHistory": 8,
     "theme": {
         "original": {
             "@main-color": "#000022",
@@ -3122,6 +3124,7 @@ define("resource/lang.en", [], {
     "New Schedule": "New Schedule",
     "days": "days",
     "m(minutes)": "m",
+    "input a time": "input a time",
     "Timer": "Timer",
     "No Flash": "No Flash",
     "00:00:00 only": "00:00:00 only",
@@ -3172,6 +3175,7 @@ define("resource/lang.ja", [], {
     "New Schedule": "新しい予定",
     "days": "日",
     "m(minutes)": "分",
+    "input a time": "時間を入力する",
     "Timer": "タイマー",
     "No Flash": "フラッシュなし",
     "00:00:00 only": "00:00:00 のみ",
@@ -3411,6 +3415,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
                     flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
                 })(flashInterval = NeverStopwatch.flashInterval || (NeverStopwatch.flashInterval = {}));
+                var recentlyFlashInterval;
+                (function (recentlyFlashInterval) {
+                    recentlyFlashInterval.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
+                    recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+                    recentlyFlashInterval.set = function (list) { return minamo_js_1.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+                    recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
+                        .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                        .filter(function (_i, ix) { return ix < config_json_1.default.recentlyFlashIntervalMaxHistory; })); };
+                })(recentlyFlashInterval = NeverStopwatch.recentlyFlashInterval || (NeverStopwatch.recentlyFlashInterval = {}));
             })(NeverStopwatch = Storage.NeverStopwatch || (Storage.NeverStopwatch = {}));
             var CountdownTimer;
             (function (CountdownTimer) {
@@ -3434,6 +3447,24 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
                     flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
                 })(flashInterval = CountdownTimer.flashInterval || (CountdownTimer.flashInterval = {}));
+                var recentlyFlashInterval;
+                (function (recentlyFlashInterval) {
+                    recentlyFlashInterval.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
+                    recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+                    recentlyFlashInterval.set = function (list) { return minamo_js_1.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+                    recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
+                        .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                        .filter(function (_i, ix) { return ix < config_json_1.default.recentlyFlashIntervalMaxHistory; })); };
+                })(recentlyFlashInterval = CountdownTimer.recentlyFlashInterval || (CountdownTimer.recentlyFlashInterval = {}));
+                var recentlyTimer;
+                (function (recentlyTimer) {
+                    recentlyTimer.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":recentlyTimer"; };
+                    recentlyTimer.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(recentlyTimer.makeKey())) !== null && _a !== void 0 ? _a : []; };
+                    recentlyTimer.set = function (list) { return minamo_js_1.minamo.localStorage.set(recentlyTimer.makeKey(), list); };
+                    recentlyTimer.add = function (value) { return recentlyTimer.set([value].concat(recentlyTimer.get())
+                        .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                        .filter(function (_i, ix) { return ix < config_json_1.default.recentlyTimerMaxHistory; })); };
+                })(recentlyTimer = CountdownTimer.recentlyTimer || (CountdownTimer.recentlyTimer = {}));
                 var ColorIndex;
                 (function (ColorIndex) {
                     ColorIndex.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":colorIndex"; };
@@ -3613,6 +3644,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 if (null !== date) {
                     try {
                         return new Date(Date.parse(date));
+                    }
+                    catch (_a) {
+                        return null;
+                    }
+                }
+                return null;
+            };
+            Domain.parseTime = function (time) {
+                if (null !== time) {
+                    try {
+                        return Domain.parseDate("2020-01-01T" + time).getTime() - Domain.parseDate("2020-01-01T00:00:00").getTime();
                     }
                     catch (_a) {
                         return null;
@@ -4479,18 +4521,74 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     });
                 });
             };
+            Render.timePrompt = function (message, tick) {
+                if (tick === void 0) { tick = 0; }
+                return __awaiter(_this, void 0, void 0, function () {
+                    var inputTime;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                inputTime = Render.$make(HTMLInputElement)({
+                                    tag: "input",
+                                    type: "time",
+                                    value: Domain.timeLongCoreStringFromTick(tick),
+                                    required: "",
+                                });
+                                return [4 /*yield*/, new Promise(function (resolve) {
+                                        var result = null;
+                                        var ui = Render.popup({
+                                            children: [
+                                                Render.$tag("h2")("")(message),
+                                                inputTime,
+                                                Render.$div("popup-operator")([
+                                                    {
+                                                        tag: "button",
+                                                        className: "cancel-button",
+                                                        children: locale.map("Cancel"),
+                                                        onclick: function () {
+                                                            result = null;
+                                                            ui.close();
+                                                        },
+                                                    },
+                                                    {
+                                                        tag: "button",
+                                                        className: "default-button",
+                                                        children: locale.map("OK"),
+                                                        onclick: function () {
+                                                            var _a;
+                                                            result = (_a = Domain.parseTime(inputTime.value)) !== null && _a !== void 0 ? _a : tick;
+                                                            ui.close();
+                                                        },
+                                                    },
+                                                ])
+                                            ],
+                                            onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                                return [2 /*return*/, resolve(result)];
+                                            }); }); },
+                                        });
+                                    })];
+                            case 1: return [2 /*return*/, _a.sent()];
+                        }
+                    });
+                });
+            };
             Render.newTimerPopup = function () { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                                var result, checkButtonList, checkButtonListUpdate, ui;
+                                var result, checkButtonList, timerPreset, checkButtonListUpdate, ui;
                                 var _this = this;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
                                             result = false;
                                             checkButtonList = Render.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            timerPreset = config_json_1.default.timerPreset
+                                                .concat(Storage.CountdownTimer.recentlyTimer.get())
+                                                .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
+                                                .filter(function (i, ix, list) { return ix === list.indexOf(i); });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c;
                                                 var _this = this;
@@ -4499,7 +4597,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         case 0:
                                                             _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
                                                             _c = [checkButtonList];
-                                                            return [4 /*yield*/, Promise.all(config_json_1.default.timerPreset.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
+                                                            return [4 /*yield*/, Promise.all(timerPreset.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                                                     var _a;
                                                                     var _this = this;
                                                                     return __generator(this, function (_b) {
@@ -4544,14 +4642,41 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 children: [
                                                     Render.$tag("h2")("")(Render.label("New Timer")),
                                                     checkButtonList,
-                                                    Render.$div("popup-operator")([{
+                                                    Render.$div("popup-operator")([
+                                                        {
+                                                            tag: "button",
+                                                            className: "cancel-button",
+                                                            children: Render.label("input a time"),
+                                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                                var tick, minutes;
+                                                                return __generator(this, function (_a) {
+                                                                    switch (_a.label) {
+                                                                        case 0: return [4 /*yield*/, Render.timePrompt(locale.map("input a time"), 0)];
+                                                                        case 1:
+                                                                            tick = _a.sent();
+                                                                            if (!(null !== tick)) return [3 /*break*/, 3];
+                                                                            minutes = tick / (60 * 1000);
+                                                                            Storage.CountdownTimer.recentlyTimer.add(minutes);
+                                                                            return [4 /*yield*/, Operate.CountdownTimer.newTimer(minutes)];
+                                                                        case 2:
+                                                                            _a.sent();
+                                                                            result = true;
+                                                                            ui.close();
+                                                                            _a.label = 3;
+                                                                        case 3: return [2 /*return*/];
+                                                                    }
+                                                                });
+                                                            }); }
+                                                        },
+                                                        {
                                                             tag: "button",
                                                             className: "default-button",
                                                             children: Render.label("Close"),
                                                             onclick: function () {
                                                                 ui.close();
                                                             },
-                                                        }])
+                                                        }
+                                                    ])
                                                 ],
                                                 onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                                     return [2 /*return*/, resolve(result)];
@@ -5132,11 +5257,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.screenHeaderFlashSegmentMenu = function (flashInterval, setter, zeroIcon, zeroLabel) { return __awaiter(_this, void 0, void 0, function () {
+            Render.screenHeaderFlashSegmentMenu = function (adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b, _c, _d;
                 var _this = this;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, Promise.all(config_json_1.default.flashIntervalPreset.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
+                        case 0: return [4 /*yield*/, Promise.all(flashIntervalPreset.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                 var _a;
                                 var _this = this;
                                 return __generator(this, function (_b) {
@@ -5162,11 +5288,47 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     }
                                 });
                             }); }))];
-                        case 1: return [2 /*return*/, _a.sent()];
+                        case 1:
+                            _b = (_a = (_e.sent()))
+                                .concat;
+                            if (!adder) return [3 /*break*/, 3];
+                            _d = Render.menuItem;
+                            return [4 /*yield*/, Resource.loadSvgOrCache("flash-icon")];
+                        case 2:
+                            _c = [
+                                _d.apply(void 0, [[
+                                        _e.sent(),
+                                        Render.label("input a time")
+                                    ], function () { return __awaiter(_this, void 0, void 0, function () {
+                                        var tick, minutes;
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Render.timePrompt(locale.map("input a time"), 0)];
+                                                case 1:
+                                                    tick = _a.sent();
+                                                    if (null !== tick) {
+                                                        minutes = tick / (60 * 1000);
+                                                        adder(minutes);
+                                                        setter(minutes);
+                                                    }
+                                                    return [4 /*yield*/, Clockworks.reload()];
+                                                case 2:
+                                                    _a.sent();
+                                                    Render.getScreenCoverList().forEach(function (i) { return i.click(); });
+                                                    return [2 /*return*/];
+                                            }
+                                        });
+                                    }); }])
+                            ];
+                            return [3 /*break*/, 4];
+                        case 3:
+                            _c = [];
+                            _e.label = 4;
+                        case 4: return [2 /*return*/, _b.apply(_a, [_c])];
                     }
                 });
             }); };
-            Render.screenHeaderFlashSegment = function (flashInterval, setter, zeroIcon, zeroLabel) {
+            Render.screenHeaderFlashSegment = function (adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel) {
                 if (zeroIcon === void 0) { zeroIcon = "sleep-icon"; }
                 if (zeroLabel === void 0) { zeroLabel = "No Flash"; }
                 return __awaiter(_this, void 0, void 0, function () {
@@ -5178,7 +5340,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     icon: 0 === flashInterval ? zeroIcon : "flash-icon",
                                     title: 0 === flashInterval ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
                                 };
-                                return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(flashInterval, setter, zeroIcon, zeroLabel)];
+                                return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel)];
                             case 1: return [2 /*return*/, (_a.menu = _b.sent(),
                                     _a)];
                         }
@@ -5602,7 +5764,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     ]),
                                 ])];
                             _d = Render.flashIntervalLabel;
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get(), Storage.NeverStopwatch.flashInterval.set)];
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.NeverStopwatch.recentlyFlashInterval.add, config_json_1.default.flashIntervalPreset
+                                    .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
+                                    .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
+                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.NeverStopwatch.flashInterval.get(), Storage.NeverStopwatch.flashInterval.set)];
                         case 1: return [4 /*yield*/, _d.apply(void 0, [_j.sent()])];
                         case 2:
                             _e = [
@@ -5824,7 +5989,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         ]),
                                     ])];
                             _d = Render.flashIntervalLabel;
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.recentlyFlashInterval.add, config_json_1.default.flashIntervalPreset
+                                    .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
+                                    .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
+                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
                         case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
                         case 2:
                             _e = [
@@ -6128,7 +6296,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
                                 ])];
                             _d = Render.flashIntervalLabel;
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.RainbowClock.flashInterval.get(), Storage.RainbowClock.flashInterval.set)];
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(null, config_json_1.default.flashIntervalPreset, 
+                                // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
+                                // .sort(minamo.core.comparer.make([i => i]))
+                                // .filter((i, ix, list) => ix === list.indexOf(i)),
+                                Storage.RainbowClock.flashInterval.get(), Storage.RainbowClock.flashInterval.set)];
                         case 1: return [4 /*yield*/, _d.apply(void 0, [_e.sent()])];
                         case 2: return [2 /*return*/, ([
                                 _a.apply(void 0, [[
