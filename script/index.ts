@@ -5,6 +5,71 @@ import localeJa from "../resource/lang.ja.json";
 import resource from "../resource/images.json";
 export const simpleComparer = minamo.core.comparer.basic;
 export const simpleReverseComparer = <T>(a: T, b: T) => -simpleComparer(a, b);
+export const setProperty = <T, U>(object: T, key: string, value: U) =>
+{
+    const isUpdate = value !== object[key];
+    if (isUpdate)
+    {
+        object[key] = value;
+    }
+    const result =
+    {
+        object,
+        key,
+        value,
+        isUpdate,
+    };
+    return result;
+};
+export const addCSSClass = <T extends Element>(element: T, className: string) =>
+{
+    const isUpdate = ! element.classList.contains(className);
+    if (isUpdate)
+    {
+        element.classList.add(className);
+    }
+    const result =
+    {
+        element,
+        className,
+        isUpdate,
+    };
+    return result;
+};
+export const removeCSSClass = <T extends Element>(element: T, className: string) =>
+{
+    const isUpdate = element.classList.contains(className);
+    if (isUpdate)
+    {
+        element.classList.remove(className);
+    }
+    const result =
+    {
+        element,
+        className,
+        isUpdate,
+    };
+    return result;
+};
+export const toggleCSSClass = <T extends Element>(element: T, className: string, toggle: boolean) =>
+    toggle ?
+        addCSSClass(element, className):
+        removeCSSClass(element, className);
+export const removeCSSStyleProperty = <T extends CSSStyleDeclaration>(object: T, key: string) =>
+{
+    const isUpdate = undefined !== object[key];
+    if (isUpdate)
+    {
+        object.removeProperty(key);
+    }
+    const result =
+    {
+        object,
+        key,
+        isUpdate,
+    };
+    return result;
+};
 export module locale
 {
     export const master =
@@ -119,39 +184,24 @@ export module Clockworks
         const screenHeader = document.getElementById("screen-header");
         if (color)
         {
-            if (screenHeader.style.backgroundColor !== color)
-            {
-                screenHeader.style.backgroundColor = color;
-            }
+            setProperty(screenHeader.style, "backgroundColor", color);
         }
         else
         {
-            if (screenHeader.style.backgroundColor)
-            {
-                screenHeader.style.removeProperty("background-color");
-            }
+            removeCSSStyleProperty(screenHeader.style, "background-color");
         }
     };
     const setBodyColor = (color: string) =>
     {
         const bodyColor = `${color}E8`;
-        if (document.body.style.backgroundColor !== bodyColor)
-        {
-            document.body.style.backgroundColor = bodyColor;
-        }
+        setProperty(document.body.style, "backgroundColor", bodyColor);
         const meta = document.getElementById("theme-color") as HTMLMetaElement;
-        if (meta.content !== color)
-        {
-            meta.content = color;
-        }
+        setProperty(meta, "content", color);
     };
     const setFoundationColor = (color: string) =>
     {
         const foundation = document.getElementById("foundation");
-        if (foundation.style.backgroundColor !== color)
-        {
-            foundation.style.backgroundColor = color;
-        }
+        setProperty(foundation.style, "backgroundColor", color);
         if ("header" === Storage.Settings.get().progressBarStyle ?? "auto")
         {
             setHeaderColor(color);
@@ -2200,10 +2250,7 @@ export module Clockworks
                         (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick -ticks[0]: 0);
                         const capitalTime = Domain.dateStringFromTick(tick);
                         const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        if(capitalTimeSpan.innerText !== capitalTime)
-                        {
-                            capitalTimeSpan.innerText = capitalTime;
-                        }
+                        setProperty(capitalTimeSpan, "innerText", capitalTime);
                         if (0 < flashInterval && 0 < ticks.length)
                         {
                             const elapsed = Domain.getTicks() -ticks[0];
@@ -2448,10 +2495,7 @@ export module Clockworks
                         (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end -tick, 0): 0);
                         const capitalTime = Domain.dateStringFromTick(tick);
                         const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        if(capitalTimeSpan.innerText !== capitalTime)
-                        {
-                            capitalTimeSpan.innerText = capitalTime;
-                        }
+                        setProperty(capitalTimeSpan, "innerText", capitalTime);
                         const flashInterval = Storage.CountdownTimer.flashInterval.get();
                         if (0 < alerts.length)
                         {
@@ -2613,9 +2657,8 @@ export module Clockworks
                     case "high-resolution-timer":
                         const capitalTime = Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
                         const capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        if(capitalTimeSpan.innerText !== capitalTime)
+                        if (setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate)
                         {
-                            capitalTimeSpan.innerText = capitalTime;
                             setTitle(capitalTime +" - " +applicationTitle);
                             if (capitalTime.endsWith(":00"))
                             {
@@ -2633,10 +2676,7 @@ export module Clockworks
                     case "timer":
                         const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
                         const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        if(currentDateSpan.innerText !== dateString)
-                        {
-                            currentDateSpan.innerText = dateString;
-                        }
+                        setProperty(currentDateSpan, "innerText", dateString);
                         const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                         const currentColor = getRainbowColor(now.getHours());
                         setFoundationColor(currentColor);
@@ -2823,108 +2863,48 @@ export module Clockworks
             {
                 if (color)
                 {
-                    if (screenBar.style.backgroundColor !== color)
-                    {
-                        screenBar.style.backgroundColor = color;
-                    }
+                    setProperty(screenBar.style, "backgroundColor", color);
                 }
                 const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting)
                 {
-                    if ( ! screenBar.classList.contains("horizontal"))
-                    {
-                        screenBar.classList.add("horizontal");
-                    }
-                    if (screenBar.classList.contains("vertical"))
-                    {
-                        screenBar.classList.remove("vertical");
-                    }
-                    if (screenBar.style.height !== "initial")
-                    {
-                        screenBar.style.height = "initial";
-                    }
-                    if (screenBar.style.maxHeight !== "initial")
-                    {
-                        screenBar.style.maxHeight = "initial";
-                    }
-                    if (screenBar.style.width !== percentString)
-                    {
-                        screenBar.style.width = percentString;
-                    }
-                    if (screenBar.style.maxWidth !== percentString)
-                    {
-                        screenBar.style.maxWidth = percentString;
-                    }
+                    addCSSClass(screenBar, "horizontal");
+                    removeCSSClass(screenBar, "vertical");
+                    setProperty(screenBar.style, "height", "initial");
+                    setProperty(screenBar.style, "maxHeight", "initial");
+                    setProperty(screenBar.style, "width", percentString);
+                    setProperty(screenBar.style, "maxWidth", percentString);
                 }
                 else
                 {
-                    if ( ! screenBar.classList.contains("vertical"))
-                    {
-                        screenBar.classList.add("vertical");
-                    }
-                    if (screenBar.classList.contains("horizontal"))
-                    {
-                        screenBar.classList.remove("horizontal");
-                    }
-                    if (screenBar.style.width !== "initial")
-                    {
-                        screenBar.style.width = "initial";
-                    }
-                    if (screenBar.style.maxWidth !== "initial")
-                    {
-                        screenBar.style.maxWidth = "initial";
-                    }
-                    if (screenBar.style.height !== percentString)
-                    {
-                        screenBar.style.height = percentString;
-                    }
-                    if (screenBar.style.maxHeight !== percentString)
-                    {
-                        screenBar.style.maxHeight = percentString;
-                    }
+                    addCSSClass(screenBar, "vertical");
+                    removeCSSClass(screenBar, "horizontal");
+                    setProperty(screenBar.style, "width", "initial");
+                    setProperty(screenBar.style, "maxWidth", "initial");
+                    setProperty(screenBar.style, "height", percentString);
+                    setProperty(screenBar.style, "maxHeight", percentString);
                 }
-                if (screenBar.style.display !== "block")
-                {
-                    screenBar.style.display = "block";
-                }
+                setProperty(screenBar.style, "display", "block");
             }
             else
             {
-                if (screenBar.style.display !== "none")
-                {
-                    screenBar.style.display = "none";
-                }
+                setProperty(screenBar.style, "display", "none");
             }
             const progressBar = getProgressElement();
             if (null !== percent && "header" === setting)
             {
                 if (color)
                 {
-                    if (progressBar.style.backgroundColor !== color)
-                    {
-                        progressBar.style.backgroundColor = color;
-                    }
+                    setProperty(progressBar.style, "backgroundColor", color);
                 }
                 const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                if (progressBar.style.width !== percentString)
-                {
-                    progressBar.style.width = percentString;
-                }
-                if (progressBar.style.borderRightWidth !== "1px")
-                {
-                    progressBar.style.borderRightWidth = "1px";
-                }
+                setProperty(progressBar.style, "width", percentString);
+                setProperty(progressBar.style, "borderRightWidth", "1px");
             }
             else
             {
-                if (progressBar.style.width !== "0%")
-                {
-                    progressBar.style.width = "0%";
-                }
-                if (progressBar.style.borderRightWidth !== "0px")
-                {
-                    progressBar.style.borderRightWidth = "0px";
-                }
+                setProperty(progressBar.style, "width", "0%");
+                setProperty(progressBar.style, "borderRightWidth", "0px");
             }
         };
         export const resizeFlexList = () =>
@@ -3038,26 +3018,7 @@ export module Clockworks
         };
         export const adjustDownPageLinkDirection = () =>
             Array.from(document.getElementsByClassName("down-page-link"))
-                .forEach
-                (
-                    i =>
-                    {
-                        if (isStrictShowPrimaryPage())
-                        {
-                            if (i.classList.contains("reverse-down-page-link"))
-                            {
-                                i.classList.remove("reverse-down-page-link");
-                            }
-                        }
-                        else
-                        {
-                            if ( ! i.classList.contains("reverse-down-page-link"))
-                            {
-                                i.classList.add("reverse-down-page-link");
-                            }
-                        }
-                    }
-                );
+                .forEach(i => toggleCSSClass(i, "reverse-down-page-link", ! isStrictShowPrimaryPage()));
         let onWindowResizeTimestamp = 0;
         export const onWindowResize = () =>
         {
