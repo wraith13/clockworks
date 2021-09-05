@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Sep 04 2021 19:26:04 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Sep 05 2021 05:51:42 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3071,6 +3071,75 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
                 dom.appendChildren(parent, newChildren, refChild);
                 return parent;
             };
+            dom.getElementsByClassName = function (parent, className) {
+                return Array.from(parent.getElementsByClassName(className));
+            };
+            dom.getDivsByClassName = function (parent, className) {
+                return dom.getElementsByClassName(parent, className);
+            };
+            dom.getSpansByClassName = function (parent, className) {
+                return dom.getElementsByClassName(parent, className);
+            };
+            dom.getButtonsByClassName = function (parent, className) {
+                return dom.getElementsByClassName(parent, className);
+            };
+            dom.getChildNodes = function (parent) {
+                return Array.from(parent.childNodes);
+            };
+            dom.setProperty = function (object, key, value) {
+                var isUpdate = value !== object[key];
+                if (isUpdate) {
+                    object[key] = value;
+                }
+                var result = {
+                    object: object,
+                    key: key,
+                    value: value,
+                    isUpdate: isUpdate,
+                };
+                return result;
+            };
+            dom.removeCSSStyleProperty = function (object, key) {
+                var isUpdate = undefined !== object[key];
+                if (isUpdate) {
+                    object.removeProperty(key);
+                }
+                var result = {
+                    object: object,
+                    key: key,
+                    isUpdate: isUpdate,
+                };
+                return result;
+            };
+            dom.addCSSClass = function (element, className) {
+                var isUpdate = !element.classList.contains(className);
+                if (isUpdate) {
+                    element.classList.add(className);
+                }
+                var result = {
+                    element: element,
+                    className: className,
+                    isUpdate: isUpdate,
+                };
+                return result;
+            };
+            dom.removeCSSClass = function (element, className) {
+                var isUpdate = element.classList.contains(className);
+                if (isUpdate) {
+                    element.classList.remove(className);
+                }
+                var result = {
+                    element: element,
+                    className: className,
+                    isUpdate: isUpdate,
+                };
+                return result;
+            };
+            dom.toggleCSSClass = function (element, className, toggle) {
+                return toggle ?
+                    dom.addCSSClass(element, className) :
+                    dom.removeCSSClass(element, className);
+            };
         })(dom = minamo.dom || (minamo.dom = {}));
     })(minamo = exports.minamo || (exports.minamo = {}));
 });
@@ -3229,72 +3298,13 @@ define("resource/images", [], {
 define("script/index", ["require", "exports", "script/minamo.js/index", "resource/config", "resource/lang.en", "resource/lang.ja"], function (require, exports, minamo_js_1, config_json_1, lang_en_json_1, lang_ja_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Clockworks = exports.locale = exports.removeCSSStyleProperty = exports.toggleCSSClass = exports.removeCSSClass = exports.addCSSClass = exports.setProperty = exports.simpleReverseComparer = exports.simpleComparer = void 0;
+    exports.Clockworks = exports.locale = exports.simpleReverseComparer = exports.simpleComparer = void 0;
     config_json_1 = __importDefault(config_json_1);
     lang_en_json_1 = __importDefault(lang_en_json_1);
     lang_ja_json_1 = __importDefault(lang_ja_json_1);
     exports.simpleComparer = minamo_js_1.minamo.core.comparer.basic;
     var simpleReverseComparer = function (a, b) { return -exports.simpleComparer(a, b); };
     exports.simpleReverseComparer = simpleReverseComparer;
-    var setProperty = function (object, key, value) {
-        var isUpdate = value !== object[key];
-        if (isUpdate) {
-            object[key] = value;
-        }
-        var result = {
-            object: object,
-            key: key,
-            value: value,
-            isUpdate: isUpdate,
-        };
-        return result;
-    };
-    exports.setProperty = setProperty;
-    var addCSSClass = function (element, className) {
-        var isUpdate = !element.classList.contains(className);
-        if (isUpdate) {
-            element.classList.add(className);
-        }
-        var result = {
-            element: element,
-            className: className,
-            isUpdate: isUpdate,
-        };
-        return result;
-    };
-    exports.addCSSClass = addCSSClass;
-    var removeCSSClass = function (element, className) {
-        var isUpdate = element.classList.contains(className);
-        if (isUpdate) {
-            element.classList.remove(className);
-        }
-        var result = {
-            element: element,
-            className: className,
-            isUpdate: isUpdate,
-        };
-        return result;
-    };
-    exports.removeCSSClass = removeCSSClass;
-    var toggleCSSClass = function (element, className, toggle) {
-        return toggle ?
-            exports.addCSSClass(element, className) :
-            exports.removeCSSClass(element, className);
-    };
-    exports.toggleCSSClass = toggleCSSClass;
-    var removeCSSStyleProperty = function (object, key) {
-        var isUpdate = undefined !== object[key];
-        if (isUpdate) {
-            object.removeProperty(key);
-        }
-        var result = {
-            object: object,
-            key: key,
-            isUpdate: isUpdate,
-        };
-        return result;
-    };
-    exports.removeCSSStyleProperty = removeCSSStyleProperty;
     var locale;
     (function (locale_1) {
         locale_1.master = {
@@ -3367,22 +3377,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         var setHeaderColor = function (color) {
             var screenHeader = document.getElementById("screen-header");
             if (color) {
-                exports.setProperty(screenHeader.style, "backgroundColor", color);
+                minamo_js_1.minamo.dom.setProperty(screenHeader.style, "backgroundColor", color);
             }
             else {
-                exports.removeCSSStyleProperty(screenHeader.style, "background-color");
+                minamo_js_1.minamo.dom.removeCSSStyleProperty(screenHeader.style, "background-color");
             }
         };
         var setBodyColor = function (color) {
             var bodyColor = color + "E8";
-            exports.setProperty(document.body.style, "backgroundColor", bodyColor);
+            minamo_js_1.minamo.dom.setProperty(document.body.style, "backgroundColor", bodyColor);
             var meta = document.getElementById("theme-color");
-            exports.setProperty(meta, "content", color);
+            minamo_js_1.minamo.dom.setProperty(meta, "content", color);
         };
         var setFoundationColor = function (color) {
             var _a;
             var foundation = document.getElementById("foundation");
-            exports.setProperty(foundation.style, "backgroundColor", color);
+            minamo_js_1.minamo.dom.setProperty(foundation.style, "backgroundColor", color);
             if ((_a = "header" === Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto") {
                 setHeaderColor(color);
             }
@@ -4841,7 +4851,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 };
                 return result;
             };
-            Render.getScreenCoverList = function () { return Array.from(document.getElementsByClassName("screen-cover")); };
+            Render.getScreenCoverList = function () { return minamo_js_1.minamo.dom.getDivsByClassName(document, "screen-cover"); };
             Render.getScreenCover = function () { return Render.getScreenCoverList().filter(function (_i, ix, list) { return (ix + 1) === list.length; })[0]; };
             Render.hasScreenCover = function () { return 0 < Render.getScreenCoverList().length; };
             Render.popup = function (data) {
@@ -5156,7 +5166,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.getCloseButton = function () { return Render.getHeaderElement().getElementsByClassName("close-button")[0]; };
+            Render.getCloseButton = function () { return minamo_js_1.minamo.dom.getButtonsByClassName(Render.getHeaderElement(), "close-button")[0]; };
             Render.screenHeaderSegmentCore = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _a;
                 return __generator(this, function (_b) {
@@ -5396,7 +5406,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     });
                 });
             };
-            Render.replaceScreenBody = function (body) { return minamo_js_1.minamo.dom.replaceChildren(document.getElementsByClassName("screen-body")[0], body); };
+            Render.replaceScreenBody = function (body) { return minamo_js_1.minamo.dom.replaceChildren(minamo_js_1.minamo.dom.getDivsByClassName(document, "screen-body")[0], body); };
             var Resource;
             (function (Resource) {
                 var _this = this;
@@ -5543,7 +5553,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             Render.isStrictShowPrimaryPage = function () {
                 var body = document.getElementById("screen-body");
-                var primaryPage = document.getElementsByClassName("primary-page")[0];
+                var primaryPage = minamo_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0];
                 var primaryPageOffsetTop = Math.min(primaryPage.offsetTop - body.offsetTop, body.scrollHeight - body.clientHeight);
                 return primaryPageOffsetTop === body.scrollTop;
             };
@@ -5564,11 +5574,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 if (!Render.isStrictShowPrimaryPage()) return [3 /*break*/, 2];
-                                                return [4 /*yield*/, Render.scrollToElement(document.getElementsByClassName("trail-page")[0])];
+                                                return [4 /*yield*/, Render.scrollToElement(minamo_js_1.minamo.dom.getDivsByClassName(document, "trail-page")[0])];
                                             case 1:
                                                 _a.sent();
                                                 return [3 /*break*/, 4];
-                                            case 2: return [4 /*yield*/, Render.scrollToElement(document.getElementsByClassName("primary-page")[0])];
+                                            case 2: return [4 /*yield*/, Render.scrollToElement(minamo_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0])];
                                             case 3:
                                                 _a.sent();
                                                 _a.label = 4;
@@ -5917,7 +5927,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick - ticks[0] : 0);
                                             capitalTime = Domain.dateStringFromTick(tick);
                                             capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
-                                            exports.setProperty(capitalTimeSpan, "innerText", capitalTime);
+                                            minamo_js_1.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                             if (0 < flashInterval && 0 < ticks.length) {
                                                 elapsed = Domain.getTicks() - ticks[0];
                                                 unit = flashInterval * 60 * 1000;
@@ -5945,7 +5955,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 2:
                                             setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + applicationTitle : applicationTitle);
-                                            Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
+                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                                                .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
                                             });
                                             if (0 < flashInterval && 0 < ticks.length) {
@@ -6189,7 +6200,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end - tick, 0) : 0);
                                             capitalTime = Domain.dateStringFromTick(tick);
                                             capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
-                                            exports.setProperty(capitalTimeSpan, "innerText", capitalTime);
+                                            minamo_js_1.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                             flashInterval = Storage.CountdownTimer.flashInterval.get();
                                             if (0 < alerts.length) {
                                                 rest = alerts[0].end - tick;
@@ -6227,7 +6238,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 9];
                                         case 2:
                                             setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end - tick, 0)) + " - " + applicationTitle : applicationTitle);
-                                            Array.from(screen.getElementsByClassName("tick-list")[0].childNodes).forEach(function (dom, index) {
+                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                                                .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end - tick, 0));
                                             });
                                             if (0 < flashInterval && 0 < alerts.length) {
@@ -6413,7 +6425,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         case 1:
                                             capitalTime = Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
                                             capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0];
-                                            if (exports.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate) {
+                                            if (minamo_js_1.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate) {
                                                 setTitle(capitalTime + " - " + applicationTitle);
                                                 if (capitalTime.endsWith(":00")) {
                                                     flashInterval = Storage.RainbowClock.flashInterval.get();
@@ -6428,7 +6440,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         case 2:
                                             dateString = Domain.dateCoreStringFromTick(tick) + " " + Domain.weekday(tick);
                                             currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0];
-                                            exports.setProperty(currentDateSpan, "innerText", dateString);
+                                            minamo_js_1.minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                                             getRainbowColor_1 = Clockworks.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                                             currentColor = getRainbowColor_1(now.getHours());
                                             setFoundationColor(currentColor);
@@ -6464,7 +6476,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             Render.updateTitle = function () {
                 var _a, _b, _c;
-                document.title = (_c = (_b = (_a = Array.from(Render.getHeaderElement().getElementsByClassName("segment-title"))) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : Clockworks.applicationTitle;
+                document.title = (_c = (_b = (_a = minamo_js_1.minamo.dom.getDivsByClassName(Render.getHeaderElement(), "segment-title")) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : Clockworks.applicationTitle;
             };
             var updateWindowTimer = undefined;
             Render.getHeaderElement = function () { return document.getElementById("screen-header"); };
@@ -6593,42 +6605,42 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 var screenBar = document.getElementsByClassName("screen-bar")[0];
                 if (null !== percent && "header" !== setting) {
                     if (color) {
-                        exports.setProperty(screenBar.style, "backgroundColor", color);
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "backgroundColor", color);
                     }
                     var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                     if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting) {
-                        exports.addCSSClass(screenBar, "horizontal");
-                        exports.removeCSSClass(screenBar, "vertical");
-                        exports.setProperty(screenBar.style, "height", "initial");
-                        exports.setProperty(screenBar.style, "maxHeight", "initial");
-                        exports.setProperty(screenBar.style, "width", percentString);
-                        exports.setProperty(screenBar.style, "maxWidth", percentString);
+                        minamo_js_1.minamo.dom.addCSSClass(screenBar, "horizontal");
+                        minamo_js_1.minamo.dom.removeCSSClass(screenBar, "vertical");
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "height", "initial");
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "maxHeight", "initial");
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "width", percentString);
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "maxWidth", percentString);
                     }
                     else {
-                        exports.addCSSClass(screenBar, "vertical");
-                        exports.removeCSSClass(screenBar, "horizontal");
-                        exports.setProperty(screenBar.style, "width", "initial");
-                        exports.setProperty(screenBar.style, "maxWidth", "initial");
-                        exports.setProperty(screenBar.style, "height", percentString);
-                        exports.setProperty(screenBar.style, "maxHeight", percentString);
+                        minamo_js_1.minamo.dom.addCSSClass(screenBar, "vertical");
+                        minamo_js_1.minamo.dom.removeCSSClass(screenBar, "horizontal");
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "width", "initial");
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "maxWidth", "initial");
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "height", percentString);
+                        minamo_js_1.minamo.dom.setProperty(screenBar.style, "maxHeight", percentString);
                     }
-                    exports.setProperty(screenBar.style, "display", "block");
+                    minamo_js_1.minamo.dom.setProperty(screenBar.style, "display", "block");
                 }
                 else {
-                    exports.setProperty(screenBar.style, "display", "none");
+                    minamo_js_1.minamo.dom.setProperty(screenBar.style, "display", "none");
                 }
                 var progressBar = Render.getProgressElement();
                 if (null !== percent && "header" === setting) {
                     if (color) {
-                        exports.setProperty(progressBar.style, "backgroundColor", color);
+                        minamo_js_1.minamo.dom.setProperty(progressBar.style, "backgroundColor", color);
                     }
                     var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                    exports.setProperty(progressBar.style, "width", percentString);
-                    exports.setProperty(progressBar.style, "borderRightWidth", "1px");
+                    minamo_js_1.minamo.dom.setProperty(progressBar.style, "width", percentString);
+                    minamo_js_1.minamo.dom.setProperty(progressBar.style, "borderRightWidth", "1px");
                 }
                 else {
-                    exports.setProperty(progressBar.style, "width", "0%");
-                    exports.setProperty(progressBar.style, "borderRightWidth", "0px");
+                    minamo_js_1.minamo.dom.setProperty(progressBar.style, "width", "0%");
+                    minamo_js_1.minamo.dom.setProperty(progressBar.style, "borderRightWidth", "0px");
                 }
             };
             Render.resizeFlexList = function () {
@@ -6636,19 +6648,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 var maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
                 var FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
                 var border = FontRemUnit * 26 + 10;
-                Array.from(document.getElementsByClassName("menu-popup")).forEach(function (header) {
-                    header.classList.toggle("locale-parallel-on", 2 <= minColumns);
-                    header.classList.toggle("locale-parallel-off", minColumns < 2);
+                minamo_js_1.minamo.dom.getDivsByClassName(document, "menu-popup").forEach(function (header) {
+                    minamo_js_1.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
+                    minamo_js_1.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
                 });
                 [document.getElementById("screen-toast")].forEach(function (header) {
-                    header.classList.toggle("locale-parallel-on", 2 <= minColumns);
-                    header.classList.toggle("locale-parallel-off", minColumns < 2);
+                    minamo_js_1.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
+                    minamo_js_1.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
                 });
-                Array.from(document.getElementsByClassName("button-list")).forEach(function (header) {
-                    header.classList.toggle("locale-parallel-on", true);
-                    header.classList.toggle("locale-parallel-off", false);
+                minamo_js_1.minamo.dom.getDivsByClassName(document, "button-list").forEach(function (header) {
+                    minamo_js_1.minamo.dom.toggleCSSClass(header, "locale-parallel-on", true);
+                    minamo_js_1.minamo.dom.toggleCSSClass(header, "locale-parallel-off", false);
                 });
-                Array.from(document.getElementsByClassName("column-flex-list")).forEach(function (list) {
+                minamo_js_1.minamo.dom.getDivsByClassName(document, "column-flex-list").forEach(function (list) {
                     var length = list.childNodes.length;
                     list.classList.forEach(function (i) {
                         if (/^max-column-\d+$/.test(i)) {
@@ -6656,24 +6668,24 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         }
                     });
                     if (length <= 1 || maxColumns <= 1) {
-                        list.style.height = undefined;
+                        minamo_js_1.minamo.dom.removeCSSStyleProperty(list.style, "height");
                     }
                     else {
                         var height = window.innerHeight - list.offsetTop;
                         var itemHeight = list.childNodes[0].offsetHeight + 1;
                         var columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
                         var row = Math.max(Math.ceil(length / columns), Math.min(length, Math.floor(height / itemHeight)));
-                        list.style.height = row * itemHeight + "px";
-                        list.classList.add("max-column-" + columns);
+                        minamo_js_1.minamo.dom.setProperty(list.style, "height", row * itemHeight + "px");
+                        minamo_js_1.minamo.dom.addCSSClass(list, "max-column-" + columns);
                     }
                     if (0 < length) {
                         var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
-                        list.classList.toggle("locale-parallel-on", border < itemWidth);
-                        list.classList.toggle("locale-parallel-off", itemWidth <= border);
+                        minamo_js_1.minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
+                        minamo_js_1.minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
                     }
                     list.classList.toggle("empty-list", length <= 0);
                 });
-                Array.from(document.getElementsByClassName("row-flex-list")).forEach(function (list) {
+                minamo_js_1.minamo.dom.getDivsByClassName(document, "row-flex-list").forEach(function (list) {
                     var length = list.childNodes.length;
                     list.classList.forEach(function (i) {
                         if (/^max-column-\d+$/.test(i)) {
@@ -6688,24 +6700,25 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         var columns = list.classList.contains("compact-flex-list") ?
                             Math.min(maxColumns, length) :
                             Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
-                        list.classList.add("max-column-" + columns);
+                        minamo_js_1.minamo.dom.addCSSClass(list, "max-column-" + columns);
                         var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
-                        list.classList.toggle("locale-parallel-on", border < itemWidth);
-                        list.classList.toggle("locale-parallel-off", itemWidth <= border);
+                        minamo_js_1.minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
+                        minamo_js_1.minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
                     }
-                    list.classList.toggle("empty-list", length <= 0);
+                    minamo_js_1.minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
                 });
             };
             Render.adjustDownPageLinkPosition = function () {
                 var primaryPage = document.getElementsByClassName("primary-page")[0];
                 if (primaryPage) {
                     var delta_1 = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
-                    Array.from(document.getElementsByClassName("down-page-link")).forEach(function (i) { return i.style.bottom = "calc(1rem + " + delta_1 + "px)"; });
+                    minamo_js_1.minamo.dom.getDivsByClassName(document, "down-page-link")
+                        .forEach(function (i) { return minamo_js_1.minamo.dom.setProperty(i.style, "bottom", "calc(1rem + " + delta_1 + "px)"); });
                 }
             };
             Render.adjustDownPageLinkDirection = function () {
-                return Array.from(document.getElementsByClassName("down-page-link"))
-                    .forEach(function (i) { return exports.toggleCSSClass(i, "reverse-down-page-link", !Render.isStrictShowPrimaryPage()); });
+                return minamo_js_1.minamo.dom.getDivsByClassName(document, "down-page-link")
+                    .forEach(function (i) { return minamo_js_1.minamo.dom.toggleCSSClass(i, "reverse-down-page-link", !Render.isStrictShowPrimaryPage()); });
             };
             var onWindowResizeTimestamp = 0;
             Render.onWindowResize = function () {
@@ -6750,9 +6763,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 if (!Render.isComposing(event)) {
                     switch (event.key) {
                         case "Enter":
-                            Array.from(document.getElementsByClassName("popup"))
+                            minamo_js_1.minamo.dom.getElementsByClassName(document, "popup")
                                 .filter(function (_i, ix, list) { return (ix + 1) === list.length; })
-                                .forEach(function (popup) { var _a, _b; return (_b = (_a = Array.from(popup.getElementsByClassName("default-button"))) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
+                                .forEach(function (popup) { var _a, _b; return (_b = (_a = minamo_js_1.minamo.dom.getElementsByClassName(popup, "default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
                             break;
                         case "Escape":
                             (_b = ((_a = Render.getScreenCover()) !== null && _a !== void 0 ? _a : Render.getCloseButton())) === null || _b === void 0 ? void 0 : _b.click();

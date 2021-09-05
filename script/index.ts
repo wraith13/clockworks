@@ -5,71 +5,6 @@ import localeJa from "../resource/lang.ja.json";
 import resource from "../resource/images.json";
 export const simpleComparer = minamo.core.comparer.basic;
 export const simpleReverseComparer = <T>(a: T, b: T) => -simpleComparer(a, b);
-export const setProperty = <T, U>(object: T, key: string, value: U) =>
-{
-    const isUpdate = value !== object[key];
-    if (isUpdate)
-    {
-        object[key] = value;
-    }
-    const result =
-    {
-        object,
-        key,
-        value,
-        isUpdate,
-    };
-    return result;
-};
-export const addCSSClass = <T extends Element>(element: T, className: string) =>
-{
-    const isUpdate = ! element.classList.contains(className);
-    if (isUpdate)
-    {
-        element.classList.add(className);
-    }
-    const result =
-    {
-        element,
-        className,
-        isUpdate,
-    };
-    return result;
-};
-export const removeCSSClass = <T extends Element>(element: T, className: string) =>
-{
-    const isUpdate = element.classList.contains(className);
-    if (isUpdate)
-    {
-        element.classList.remove(className);
-    }
-    const result =
-    {
-        element,
-        className,
-        isUpdate,
-    };
-    return result;
-};
-export const toggleCSSClass = <T extends Element>(element: T, className: string, toggle: boolean) =>
-    toggle ?
-        addCSSClass(element, className):
-        removeCSSClass(element, className);
-export const removeCSSStyleProperty = <T extends CSSStyleDeclaration>(object: T, key: string) =>
-{
-    const isUpdate = undefined !== object[key];
-    if (isUpdate)
-    {
-        object.removeProperty(key);
-    }
-    const result =
-    {
-        object,
-        key,
-        isUpdate,
-    };
-    return result;
-};
 export module locale
 {
     export const master =
@@ -184,24 +119,24 @@ export module Clockworks
         const screenHeader = document.getElementById("screen-header");
         if (color)
         {
-            setProperty(screenHeader.style, "backgroundColor", color);
+            minamo.dom.setProperty(screenHeader.style, "backgroundColor", color);
         }
         else
         {
-            removeCSSStyleProperty(screenHeader.style, "background-color");
+            minamo.dom.removeCSSStyleProperty(screenHeader.style, "background-color");
         }
     };
     const setBodyColor = (color: string) =>
     {
         const bodyColor = `${color}E8`;
-        setProperty(document.body.style, "backgroundColor", bodyColor);
+        minamo.dom.setProperty(document.body.style, "backgroundColor", bodyColor);
         const meta = document.getElementById("theme-color") as HTMLMetaElement;
-        setProperty(meta, "content", color);
+        minamo.dom.setProperty(meta, "content", color);
     };
     const setFoundationColor = (color: string) =>
     {
         const foundation = document.getElementById("foundation");
-        setProperty(foundation.style, "backgroundColor", color);
+        minamo.dom.setProperty(foundation.style, "backgroundColor", color);
         if ("header" === Storage.Settings.get().progressBarStyle ?? "auto")
         {
             setHeaderColor(color);
@@ -1470,7 +1405,7 @@ export module Clockworks
             };
             return result;
         };
-        export const getScreenCoverList = () => Array.from(document.getElementsByClassName("screen-cover")) as HTMLDivElement[];
+        export const getScreenCoverList = () => minamo.dom.getDivsByClassName(document, "screen-cover");
         export const getScreenCover = () => getScreenCoverList().filter((_i, ix, list) => (ix +1) === list.length)[0];
         export const hasScreenCover = () => 0 < getScreenCoverList().length;
         export const popup =
@@ -1492,7 +1427,7 @@ export module Clockworks
                 {
                     console.log("popup.click!");
                     event.stopPropagation();
-                    //(Array.from(document.getElementsByClassName("screen-cover")) as HTMLDivElement[]).forEach(i => i.click());
+                    //getScreenCoverList.forEach(i => i.click());
                 },
             });
             const close = async () =>
@@ -1758,7 +1693,7 @@ export module Clockworks
             data.menu ? await menuButton(data.menu): [],
             data.operator ? $div("header-operator")(data.operator): [],
         ];
-        export const getCloseButton = () => getHeaderElement().getElementsByClassName("close-button")[0] as HTMLButtonElement;
+        export const getCloseButton = () => minamo.dom.getButtonsByClassName(getHeaderElement(), "close-button")[0];
         export const screenHeaderSegmentCore = async (item: HeaderSegmentSource) =>
         [
             $div("icon")(await Resource.loadSvgOrCache(item.icon)),
@@ -1899,7 +1834,7 @@ export module Clockworks
         });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
         (
-            document.getElementsByClassName("screen-body")[0],
+            minamo.dom.getDivsByClassName(document, "screen-body")[0],
             body
         );
 
@@ -2000,7 +1935,7 @@ export module Clockworks
         export const isStrictShowPrimaryPage = () =>
         {
             const body = document.getElementById("screen-body");
-            const primaryPage = document.getElementsByClassName("primary-page")[0] as HTMLDivElement;
+            const primaryPage = minamo.dom.getDivsByClassName(document, "primary-page")[0];
             const primaryPageOffsetTop = Math.min(primaryPage.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
             return primaryPageOffsetTop === body.scrollTop;
         };
@@ -2013,11 +1948,11 @@ export module Clockworks
             {
                 if (isStrictShowPrimaryPage())
                 {
-                    await scrollToElement(document.getElementsByClassName("trail-page")[0] as HTMLDivElement);
+                    await scrollToElement(minamo.dom.getDivsByClassName(document, "trail-page")[0]);
                 }
                 else
                 {
-                    await scrollToElement(document.getElementsByClassName("primary-page")[0] as HTMLDivElement);
+                    await scrollToElement(minamo.dom.getDivsByClassName(document, "primary-page")[0]);
                 }
             },
         });
@@ -2250,7 +2185,7 @@ export module Clockworks
                         (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick -ticks[0]: 0);
                         const capitalTime = Domain.dateStringFromTick(tick);
                         const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        setProperty(capitalTimeSpan, "innerText", capitalTime);
+                        minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                         if (0 < flashInterval && 0 < ticks.length)
                         {
                             const elapsed = Domain.getTicks() -ticks[0];
@@ -2281,18 +2216,14 @@ export module Clockworks
                         break;
                     case "timer":
                         setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
-                        (
-                            Array.from
+                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                            .forEach
                             (
-                                (screen.getElementsByClassName("tick-list")[0] as HTMLDivElement).childNodes
-                            ) as HTMLDivElement[]
-                        ).forEach
-                        (
-                            (dom, index) =>
-                            {
-                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
-                            }
-                        );
+                                (dom, index) =>
+                                {
+                                    (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
+                                }
+                            );
                         if (0 < flashInterval && 0 < ticks.length)
                         {
                             const elapsed = Domain.getTicks() -ticks[0];
@@ -2495,7 +2426,7 @@ export module Clockworks
                         (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end -tick, 0): 0);
                         const capitalTime = Domain.dateStringFromTick(tick);
                         const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        setProperty(capitalTimeSpan, "innerText", capitalTime);
+                        minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                         const flashInterval = Storage.CountdownTimer.flashInterval.get();
                         if (0 < alerts.length)
                         {
@@ -2538,18 +2469,14 @@ export module Clockworks
                         break;
                     case "timer":
                         setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end -tick, 0)) +" - " +applicationTitle: applicationTitle);
-                        (
-                            Array.from
+                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                            .forEach
                             (
-                                (screen.getElementsByClassName("tick-list")[0] as HTMLDivElement).childNodes
-                            ) as HTMLDivElement[]
-                        ).forEach
-                        (
-                            (dom, index) =>
-                            {
-                                (dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end -tick, 0));
-                            }
-                        );
+                                (dom, index) =>
+                                {
+                                    (dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end -tick, 0));
+                                }
+                            );
                         if (0 < flashInterval && 0 < alerts.length)
                         {
                             const rest = alerts[0].end - tick;
@@ -2657,7 +2584,7 @@ export module Clockworks
                     case "high-resolution-timer":
                         const capitalTime = Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
                         const capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        if (setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate)
+                        if (minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate)
                         {
                             setTitle(capitalTime +" - " +applicationTitle);
                             if (capitalTime.endsWith(":00"))
@@ -2676,7 +2603,7 @@ export module Clockworks
                     case "timer":
                         const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
                         const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                        setProperty(currentDateSpan, "innerText", dateString);
+                        minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                         const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                         const currentColor = getRainbowColor(now.getHours());
                         setFoundationColor(currentColor);
@@ -2699,8 +2626,8 @@ export module Clockworks
         };
         export const updateTitle = () =>
         {
-            document.title = Array.from(getHeaderElement().getElementsByClassName("segment-title"))
-                ?.map((div: HTMLDivElement) => div.innerText)
+            document.title = minamo.dom.getDivsByClassName(getHeaderElement(), "segment-title")
+                ?.map(div => div.innerText)
                 // ?.reverse()
                 ?.join(" / ")
                 ?? applicationTitle;
@@ -2863,48 +2790,48 @@ export module Clockworks
             {
                 if (color)
                 {
-                    setProperty(screenBar.style, "backgroundColor", color);
+                    minamo.dom.setProperty(screenBar.style, "backgroundColor", color);
                 }
                 const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting)
                 {
-                    addCSSClass(screenBar, "horizontal");
-                    removeCSSClass(screenBar, "vertical");
-                    setProperty(screenBar.style, "height", "initial");
-                    setProperty(screenBar.style, "maxHeight", "initial");
-                    setProperty(screenBar.style, "width", percentString);
-                    setProperty(screenBar.style, "maxWidth", percentString);
+                    minamo.dom.addCSSClass(screenBar, "horizontal");
+                    minamo.dom.removeCSSClass(screenBar, "vertical");
+                    minamo.dom.setProperty(screenBar.style, "height", "initial");
+                    minamo.dom.setProperty(screenBar.style, "maxHeight", "initial");
+                    minamo.dom.setProperty(screenBar.style, "width", percentString);
+                    minamo.dom.setProperty(screenBar.style, "maxWidth", percentString);
                 }
                 else
                 {
-                    addCSSClass(screenBar, "vertical");
-                    removeCSSClass(screenBar, "horizontal");
-                    setProperty(screenBar.style, "width", "initial");
-                    setProperty(screenBar.style, "maxWidth", "initial");
-                    setProperty(screenBar.style, "height", percentString);
-                    setProperty(screenBar.style, "maxHeight", percentString);
+                    minamo.dom.addCSSClass(screenBar, "vertical");
+                    minamo.dom.removeCSSClass(screenBar, "horizontal");
+                    minamo.dom.setProperty(screenBar.style, "width", "initial");
+                    minamo.dom.setProperty(screenBar.style, "maxWidth", "initial");
+                    minamo.dom.setProperty(screenBar.style, "height", percentString);
+                    minamo.dom.setProperty(screenBar.style, "maxHeight", percentString);
                 }
-                setProperty(screenBar.style, "display", "block");
+                minamo.dom.setProperty(screenBar.style, "display", "block");
             }
             else
             {
-                setProperty(screenBar.style, "display", "none");
+                minamo.dom.setProperty(screenBar.style, "display", "none");
             }
             const progressBar = getProgressElement();
             if (null !== percent && "header" === setting)
             {
                 if (color)
                 {
-                    setProperty(progressBar.style, "backgroundColor", color);
+                    minamo.dom.setProperty(progressBar.style, "backgroundColor", color);
                 }
                 const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                setProperty(progressBar.style, "width", percentString);
-                setProperty(progressBar.style, "borderRightWidth", "1px");
+                minamo.dom.setProperty(progressBar.style, "width", percentString);
+                minamo.dom.setProperty(progressBar.style, "borderRightWidth", "1px");
             }
             else
             {
-                setProperty(progressBar.style, "width", "0%");
-                setProperty(progressBar.style, "borderRightWidth", "0px");
+                minamo.dom.setProperty(progressBar.style, "width", "0%");
+                minamo.dom.setProperty(progressBar.style, "borderRightWidth", "0px");
             }
         };
         export const resizeFlexList = () =>
@@ -2913,31 +2840,31 @@ export module Clockworks
             const maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
             const FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
             const border = FontRemUnit *26 +10;
-            (Array.from(document.getElementsByClassName("menu-popup")) as HTMLDivElement[]).forEach
+            minamo.dom.getDivsByClassName(document, "menu-popup").forEach
             (
                 header =>
                 {
-                    header.classList.toggle("locale-parallel-on", 2 <= minColumns);
-                    header.classList.toggle("locale-parallel-off", minColumns < 2);
+                    minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
+                    minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
                 }
             );
             [document.getElementById("screen-toast") as HTMLDivElement].forEach
             (
                 header =>
                 {
-                    header.classList.toggle("locale-parallel-on", 2 <= minColumns);
-                    header.classList.toggle("locale-parallel-off", minColumns < 2);
+                    minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
+                    minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
                 }
             );
-            (Array.from(document.getElementsByClassName("button-list")) as HTMLDivElement[]).forEach
+            minamo.dom.getDivsByClassName(document, "button-list").forEach
             (
                 header =>
                 {
-                    header.classList.toggle("locale-parallel-on", true);
-                    header.classList.toggle("locale-parallel-off", false);
+                    minamo.dom.toggleCSSClass(header, "locale-parallel-on", true);
+                    minamo.dom.toggleCSSClass(header, "locale-parallel-off", false);
                 }
             );
-            (Array.from(document.getElementsByClassName("column-flex-list")) as HTMLDivElement[]).forEach
+            minamo.dom.getDivsByClassName(document, "column-flex-list").forEach
             (
                 list =>
                 {
@@ -2954,7 +2881,7 @@ export module Clockworks
                     );
                     if (length <= 1 || maxColumns <= 1)
                     {
-                        list.style.height = undefined;
+                        minamo.dom.removeCSSStyleProperty(list.style, "height");
                     }
                     else
                     {
@@ -2962,19 +2889,19 @@ export module Clockworks
                         const itemHeight = (list.childNodes[0] as HTMLElement).offsetHeight +1;
                         const columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
                         const row = Math.max(Math.ceil(length /columns), Math.min(length, Math.floor(height / itemHeight)));
-                        list.style.height = `${row *itemHeight}px`;
-                        list.classList.add(`max-column-${columns}`);
+                        minamo.dom.setProperty(list.style, "height", `${row *itemHeight}px`);
+                        minamo.dom.addCSSClass(list, `max-column-${columns}`);
                     }
                     if (0 < length)
                     {
                         const itemWidth = Math.min(window.innerWidth, (list.childNodes[0] as HTMLElement).offsetWidth);
-                        list.classList.toggle("locale-parallel-on", border < itemWidth);
-                        list.classList.toggle("locale-parallel-off", itemWidth <= border);
+                        minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
+                        minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
                     }
                     list.classList.toggle("empty-list", length <= 0);
                 }
             );
-            (Array.from(document.getElementsByClassName("row-flex-list")) as HTMLDivElement[]).forEach
+            minamo.dom.getDivsByClassName(document, "row-flex-list").forEach
             (
                 list =>
                 {
@@ -2998,12 +2925,12 @@ export module Clockworks
                         const columns = list.classList.contains("compact-flex-list") ?
                             Math.min(maxColumns, length):
                             Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
-                        list.classList.add(`max-column-${columns}`);
+                        minamo.dom.addCSSClass(list, `max-column-${columns}`);
                         const itemWidth = Math.min(window.innerWidth, (list.childNodes[0] as HTMLElement).offsetWidth);
-                        list.classList.toggle("locale-parallel-on", border < itemWidth);
-                        list.classList.toggle("locale-parallel-off", itemWidth <= border);
+                        minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
+                        minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
                     }
-                    list.classList.toggle("empty-list", length <= 0);
+                    minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
                 }
             );
         };
@@ -3013,12 +2940,13 @@ export module Clockworks
             if (primaryPage)
             {
                 const delta = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
-                Array.from(document.getElementsByClassName("down-page-link")).forEach(i => (i as HTMLElement).style.bottom = `calc(1rem + ${delta}px)`);
+                minamo.dom.getDivsByClassName(document, "down-page-link")
+                    .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
             }
         };
         export const adjustDownPageLinkDirection = () =>
-            Array.from(document.getElementsByClassName("down-page-link"))
-                .forEach(i => toggleCSSClass(i, "reverse-down-page-link", ! isStrictShowPrimaryPage()));
+            minamo.dom.getDivsByClassName(document, "down-page-link")
+                .forEach(i => minamo.dom.toggleCSSClass(i, "reverse-down-page-link", ! isStrictShowPrimaryPage()));
         let onWindowResizeTimestamp = 0;
         export const onWindowResize = () =>
         {
@@ -3083,9 +3011,9 @@ export module Clockworks
                 switch(event.key)
                 {
                     case "Enter":
-                        (Array.from(document.getElementsByClassName("popup")) as HTMLDivElement[])
+                        minamo.dom.getElementsByClassName<HTMLDivElement>(document, "popup")
                             .filter((_i, ix, list) => (ix +1) === list.length)
-                            .forEach(popup => (Array.from(popup.getElementsByClassName("default-button")) as HTMLButtonElement[])?.[0]?.click());
+                            .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "default-button")?.[0]?.click());
                         break;
                     case "Escape":
                         (getScreenCover() ?? getCloseButton())?.click();
