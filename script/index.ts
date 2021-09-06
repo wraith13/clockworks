@@ -529,6 +529,18 @@ export module Clockworks
             }
             return null;
         };
+        const timezoneOffsetSignString = (offset: number): string => 0 === offset ? "±": (0 < offset ? "-": "+"); // ※ JavaScript 上のタイムゾーンオフセットとUTC表記は + / - が逆転する
+        const timezoneOffsetTimeString = (offset: number): string =>
+        {
+            if (offset < 0)
+            {
+                return timezoneOffsetTimeString(-offset);
+            }
+            const hours = `00${Math.floor(offset /60)}`.slice(-2);
+            const minutes = `00${offset %60}`.slice(-2);
+            return `${hours}:${minutes}`;
+        };
+        export const timezoneOffsetString = (offset: number) => `UTC${timezoneOffsetSignString(offset)}${timezoneOffsetTimeString(offset)}`;
     }
     export module Render
     {
