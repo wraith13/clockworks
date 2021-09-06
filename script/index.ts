@@ -786,6 +786,10 @@ export module Clockworks
                     });
                 };
             }
+            export module RainbowClock
+            {
+
+            }
         }
         export const cancelTextButton = (onCanceled: () => unknown) =>
         ({
@@ -1376,6 +1380,73 @@ export module Clockworks
                                         {
                                             title: inputTitle.value,
                                             tick: Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
+                                        };
+                                        ui.close();
+                                    },
+                                },
+                            ])
+                        ],
+                        onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
+        export const timezonePrompt = async (message: string, title: string, offset: number): Promise<{ title: string, offset: number } | null> =>
+        {
+            const inputTitle = $make(HTMLInputElement)
+            ({
+                tag: "input",
+                value: title,
+                required: "",
+            });
+            const selectOffset = $make(HTMLSelectElement)
+            ({
+                tag: "select",
+                value: offset,
+                children: config.timezoneOffsetList.map
+                (
+                    i =>
+                    ({
+                        tag: "option",
+                        value: i,
+                        children: Domain.timezoneOffsetString(i),
+                    })
+                )
+            });
+            return await new Promise
+            (
+                resolve =>
+                {
+                    let result: { title: string, offset: number } | null = null;
+                    const ui = popup
+                    ({
+                        children:
+                        [
+                            $tag("h2")("")(message),
+                            inputTitle,
+                            selectOffset,
+                            $div("popup-operator")
+                            ([
+                                {
+                                    tag: "button",
+                                    className: "cancel-button",
+                                    children: locale.map("Cancel"),
+                                    onclick: () =>
+                                    {
+                                        result = null;
+                                        ui.close();
+                                    },
+                                },
+                                {
+                                    tag: "button",
+                                    className: "default-button",
+                                    children: locale.map("OK"),
+                                    onclick: () =>
+                                    {
+                                        result =
+                                        {
+                                            title: inputTitle.value,
+                                            offset: Number.parseInt(selectOffset.value),
                                         };
                                         ui.close();
                                     },

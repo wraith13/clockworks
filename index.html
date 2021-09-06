@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Sep 05 2021 05:51:42 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Sep 07 2021 05:44:35 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1769,7 +1769,7 @@ body.fxxking-ipad-fullscreen .screen {
   position: fixed;
   border-width: 0px;
   border-style: solid;
-  border-color: #0005;
+  border-color: #0008;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1777,13 +1777,13 @@ body.fxxking-ipad-fullscreen .screen {
   top: 0px;
   bottom: 0px;
   left: 0px;
-  border-right-width: 1px;
+  border-right-width: 0.2vw;
 }
 .screen > .screen-body .screen-bar.vertical {
   top: 0px;
   left: 0px;
   right: 0px;
-  border-bottom-width: 1px;
+  border-bottom-width: 0.2vh;
 }
 body.tektite .screen h1 {
   background-color: #00002211;
@@ -3180,7 +3180,10 @@ define("resource/config", [], {
             "@accent-color": "#5F42A7",
             "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
         }
-    }
+    },
+    "timezoneOffsetList": [
+        -720, -660, -600, -570, -540, -480, -420, -360, -300, -240, -210, -180, -120, -60, 0, 60, 120, 180, 210, 240, 270, 300, 330, 345, 360, 390, 420, 480, 525, 540, 570, 600, 630, 660, 720, 765, 780, 840
+    ]
 });
 define("resource/lang.en", [], {
     "$name": "English",
@@ -3721,6 +3724,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
                 return null;
             };
+            var timezoneOffsetSignString = function (offset) { return 0 === offset ? "±" : (0 < offset ? "-" : "+"); }; // ※ JavaScript 上のタイムゾーンオフセットとUTC表記は + / - が逆転する
+            var timezoneOffsetTimeString = function (offset) {
+                if (offset < 0) {
+                    return timezoneOffsetTimeString(-offset);
+                }
+                var hours = ("00" + Math.floor(offset / 60)).slice(-2);
+                var minutes = ("00" + offset % 60).slice(-2);
+                return hours + ":" + minutes;
+            };
+            Domain.timezoneOffsetString = function (offset) { return "UTC" + timezoneOffsetSignString(offset) + timezoneOffsetTimeString(offset); };
         })(Domain = Clockworks.Domain || (Clockworks.Domain = {}));
         var Render;
         (function (Render) {
