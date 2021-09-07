@@ -103,6 +103,11 @@ export module Clockworks
         end: number;
     }
     export type AlermEntry = AlermTimerEntry | AlermScheduleEntry;
+    export interface TimezoneEntry
+    {
+        title: string;
+        offset: number;
+    }
     const setTitle = (title: string) =>
     {
         if (document.title !== title)
@@ -251,9 +256,9 @@ export module Clockworks
                 export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
                 export const add = (tick: AlermEntry | AlermEntry[]) =>
-                    set(get().concat(tick).sort(simpleReverseComparer));
+                    set(get().concat(tick));
                 export const remove = (tick: AlermEntry) =>
-                    set(get().filter(i => JSON.stringify(tick) !== JSON.stringify(i)).sort(simpleReverseComparer));
+                    set(get().filter(i => JSON.stringify(tick) !== JSON.stringify(i)));
             }
             export module flashInterval
             {
@@ -309,6 +314,18 @@ export module Clockworks
                 export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 60;
                 export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
             }
+            export module Timezone
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:timezones`;
+                export const get = (): TimezoneEntry[] => minamo.localStorage.getOrNull<TimezoneEntry[]>(makeKey()) ?? [];
+                export const set = (list: TimezoneEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make([i => i.offset])));
+                export const removeKey = () => minamo.localStorage.remove(makeKey());
+                export const add = (entry: TimezoneEntry | TimezoneEntry[]) =>
+                    set(get().concat(entry));
+                export const remove = (entry: TimezoneEntry) =>
+                    set(get().filter(i => JSON.stringify(entry) !== JSON.stringify(i)));
+            }
+            
         }
         export module Settings
         {
