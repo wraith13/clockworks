@@ -616,7 +616,8 @@ label
         }
     }
 }
-input
+input,
+select
 {
     margin: 4px;
     padding: 4px 16px;
@@ -812,7 +813,8 @@ button
     overflow: auto;
     min-width: 240px;
     max-width: calc(100vw - 16px);
-    input
+    input,
+    select
     {
         width: calc(100% - 8px);
     }
@@ -1268,7 +1270,7 @@ body.fxxking-ipad-fullscreen
                 {
                     transform: scale(1, -1);
                 }
-        }
+            }
         }
         .screen-bar
         {
@@ -1283,14 +1285,14 @@ body.fxxking-ipad-fullscreen
                 top: 0px;
                 bottom: 0px;
                 left: 0px;
-                border-right-width: 0.2vw;
+                border-right-width: 1px;
             }
             &.vertical
             {
                 top: 0px;
                 left: 0px;
                 right: 0px;
-                border-bottom-width: 0.2vh;
+                border-bottom-width: 1px;
             }
             overflow: hidden;
         }

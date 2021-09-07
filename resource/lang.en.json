@@ -7,6 +7,7 @@
     "Done": "Done",
     "New Timer": "New Timer",
     "New Schedule": "New Schedule",
+    "New Time zone": "New Time zone",
     "days": "days",
     "m(minutes)": "m",
     "input a time": "input a time",
@@ -47,5 +48,6 @@
     "Saved!": "Saved!",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
-    "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified."
+    "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified.",
+    "Not support daylight savings time.": "Not support daylight savings time."
 }

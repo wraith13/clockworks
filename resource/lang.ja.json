@@ -7,6 +7,7 @@
     "Done": "完了",
     "New Timer": "新しいタイマー",
     "New Schedule": "新しい予定",
+    "New Time zone": "新しいタイムゾーン",
     "days": "日",
     "m(minutes)": "分",
     "input a time": "時間を入力する",
@@ -47,5 +48,6 @@
     "Saved!": "保存しました！",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
-    "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。"
+    "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。",
+    "Not support daylight savings time.": "夏時間はサポートしていません。"
 }

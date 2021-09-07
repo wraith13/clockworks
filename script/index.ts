@@ -1403,15 +1403,20 @@ export module Clockworks
             ({
                 tag: "select",
                 value: offset,
-                children: config.timezoneOffsetList.map
-                (
-                    i =>
-                    ({
-                        tag: "option",
-                        value: i,
-                        children: Domain.timezoneOffsetString(i),
-                    })
-                )
+                children: config.timezoneOffsetList
+                    .concat([ offset ])
+                    .filter((i, ix, list) => ix === list.indexOf(i))
+                    .sort()
+                    .map
+                    (
+                        i =>
+                        ({
+                            tag: "option",
+                            value: i,
+                            children: Domain.timezoneOffsetString(i),
+                            selected: i === offset ? "selected": undefined,
+                        })
+                    )
             });
             return await new Promise
             (
@@ -2636,6 +2641,49 @@ export module Clockworks
                         )
                     ),
                 ]),
+                await downPageLink(),
+            ]),
+            $div("trail-page")
+            ([
+                $div("button-list")
+                ([
+                    {
+                        tag: "button",
+                        className: "main-button long-button",
+                        children: label("New Time zone"),
+                        onclick: async () =>
+                        {
+                            const result = await timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset());
+                            if (result)
+                            {
+                                // if (Domain.getTicks() < result.tick)
+                                // {
+                                //     await Operate.CountdownTimer.newSchedule(result.title, result.tick);
+                                // }
+                                // else
+                                // {
+                                //     makeToast
+                                //     ({
+                                //         content: label("A date and time outside the valid range was specified."),
+                                //         isWideContent: true,
+                                //     });
+                                // }
+                            }
+                        }
+                    },
+                ]),
+                // $div("row-flex-list tick-list")
+                // (
+                //     await Promise.all(alarms.map(item => alermItem(item)))
+                // ),
+                $div("description")
+                (
+                    $tag("ul")("locale-parallel-off")
+                    ([
+                        $tag("li")("")(label("Not support daylight savings time.")),
+                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                    ])
+                ),
             ]),
             screenBar(),
         ]);

@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Sep 07 2021 05:44:35 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Sep 07 2021 18:38:40 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1097,7 +1097,8 @@ label {
     color: #6F7F00;
   }
 }
-input {
+input,
+select {
   margin: 4px;
   padding: 4px 16px;
   border-radius: 32px;
@@ -1373,7 +1374,8 @@ button.delete-button {
   min-width: 240px;
   max-width: calc(100vw - 16px);
 }
-.popup input {
+.popup input,
+.popup select {
   width: calc(100% - 8px);
 }
 .popup .popup-operator {
@@ -1777,13 +1779,13 @@ body.fxxking-ipad-fullscreen .screen {
   top: 0px;
   bottom: 0px;
   left: 0px;
-  border-right-width: 0.2vw;
+  border-right-width: 1px;
 }
 .screen > .screen-body .screen-bar.vertical {
   top: 0px;
   left: 0px;
   right: 0px;
-  border-bottom-width: 0.2vh;
+  border-bottom-width: 1px;
 }
 body.tektite .screen h1 {
   background-color: #00002211;
@@ -3194,6 +3196,7 @@ define("resource/lang.en", [], {
     "Done": "Done",
     "New Timer": "New Timer",
     "New Schedule": "New Schedule",
+    "New Time zone": "New Time zone",
     "days": "days",
     "m(minutes)": "m",
     "input a time": "input a time",
@@ -3234,7 +3237,8 @@ define("resource/lang.en", [], {
     "Saved!": "Saved!",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
-    "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified."
+    "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified.",
+    "Not support daylight savings time.": "Not support daylight savings time."
 });
 define("resource/lang.ja", [], {
     "$name": "日本語",
@@ -3245,6 +3249,7 @@ define("resource/lang.ja", [], {
     "Done": "完了",
     "New Timer": "新しいタイマー",
     "New Schedule": "新しい予定",
+    "New Time zone": "新しいタイムゾーン",
     "days": "日",
     "m(minutes)": "分",
     "input a time": "時間を入力する",
@@ -3285,7 +3290,8 @@ define("resource/lang.ja", [], {
     "Saved!": "保存しました！",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
-    "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。"
+    "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。",
+    "Not support daylight savings time.": "夏時間はサポートしていません。"
 });
 define("resource/images", [], {
     "application-icon": "./image/clockworks.1024.svg",
@@ -4828,6 +4834,74 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
+            Render.timezonePrompt = function (message, title, offset) { return __awaiter(_this, void 0, void 0, function () {
+                var inputTitle, selectOffset;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            inputTitle = Render.$make(HTMLInputElement)({
+                                tag: "input",
+                                value: title,
+                                required: "",
+                            });
+                            selectOffset = Render.$make(HTMLSelectElement)({
+                                tag: "select",
+                                value: offset,
+                                children: config_json_1.default.timezoneOffsetList
+                                    .concat([offset])
+                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                                    .sort()
+                                    .map(function (i) {
+                                    return ({
+                                        tag: "option",
+                                        value: i,
+                                        children: Domain.timezoneOffsetString(i),
+                                        selected: i === offset ? "selected" : undefined,
+                                    });
+                                })
+                            });
+                            return [4 /*yield*/, new Promise(function (resolve) {
+                                    var result = null;
+                                    var ui = Render.popup({
+                                        children: [
+                                            Render.$tag("h2")("")(message),
+                                            inputTitle,
+                                            selectOffset,
+                                            Render.$div("popup-operator")([
+                                                {
+                                                    tag: "button",
+                                                    className: "cancel-button",
+                                                    children: locale.map("Cancel"),
+                                                    onclick: function () {
+                                                        result = null;
+                                                        ui.close();
+                                                    },
+                                                },
+                                                {
+                                                    tag: "button",
+                                                    className: "default-button",
+                                                    children: locale.map("OK"),
+                                                    onclick: function () {
+                                                        result =
+                                                            {
+                                                                title: inputTitle.value,
+                                                                offset: Number.parseInt(selectOffset.value),
+                                                            };
+                                                        ui.close();
+                                                    },
+                                                },
+                                            ])
+                                        ],
+                                        onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            return [2 /*return*/, resolve(result)];
+                                        }); }); },
+                                    });
+                                })];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                });
+            }); };
             Render.screenCover = function (data) {
                 var dom = Render.$make(HTMLDivElement)({
                     tag: "div",
@@ -6353,9 +6427,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.rainbowClockScreenBody = function () { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d;
-                return __generator(this, function (_e) {
-                    switch (_e.label) {
+                var _a, _b, _c, _d, _e;
+                var _this = this;
+                return __generator(this, function (_f) {
+                    switch (_f.label) {
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
@@ -6371,13 +6446,60 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 // .sort(minamo.core.comparer.make([i => i]))
                                 // .filter((i, ix, list) => ix === list.indexOf(i)),
                                 Storage.RainbowClock.flashInterval.get(), Storage.RainbowClock.flashInterval.set)];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_e.sent()])];
-                        case 2: return [2 /*return*/, ([
-                                _a.apply(void 0, [[
-                                        _b.apply(void 0, [_c.concat([
-                                                _e.sent()
-                                            ])])
-                                    ]]),
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_f.sent()])];
+                        case 2:
+                            _e = [
+                                _b.apply(void 0, [_c.concat([
+                                        _f.sent()
+                                    ])])
+                            ];
+                            return [4 /*yield*/, Render.downPageLink()];
+                        case 3: return [2 /*return*/, ([
+                                _a.apply(void 0, [_e.concat([
+                                        _f.sent()
+                                    ])]),
+                                Render.$div("trail-page")([
+                                    Render.$div("button-list")([
+                                        {
+                                            tag: "button",
+                                            className: "main-button long-button",
+                                            children: Render.label("New Time zone"),
+                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                var result;
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset())];
+                                                        case 1:
+                                                            result = _a.sent();
+                                                            if (result) {
+                                                                // if (Domain.getTicks() < result.tick)
+                                                                // {
+                                                                //     await Operate.CountdownTimer.newSchedule(result.title, result.tick);
+                                                                // }
+                                                                // else
+                                                                // {
+                                                                //     makeToast
+                                                                //     ({
+                                                                //         content: label("A date and time outside the valid range was specified."),
+                                                                //         isWideContent: true,
+                                                                //     });
+                                                                // }
+                                                            }
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); }
+                                        },
+                                    ]),
+                                    // $div("row-flex-list tick-list")
+                                    // (
+                                    //     await Promise.all(alarms.map(item => alermItem(item)))
+                                    // ),
+                                    Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
+                                        Render.$tag("li")("")(Render.label("Not support daylight savings time.")),
+                                        Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                    ])),
+                                ]),
                                 Render.screenBar()
                             ])];
                     }
