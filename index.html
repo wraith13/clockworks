@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Sep 08 2021 18:31:54 GMT+0900 (GMT+09:00) -->
+<!-- build at: Thu Sep 09 2021 05:20:58 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1623,34 +1623,40 @@ button.delete-button {
   min-height: 1.4em;
   margin-right: 4px;
 }
-.tick-item,
-.alerm-item {
+.stamp-item,
+.alarm-item,
+.timezone-item {
   position: relative;
 }
-.tick-item .item-header,
-.alerm-item .item-header {
+.stamp-item .item-header,
+.alarm-item .item-header,
+.timezone-item .item-header {
   display: flex;
   padding: 0.5rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-.tick-item .item-header .item-title,
-.alerm-item .item-header .item-title {
+.stamp-item .item-header .item-title,
+.alarm-item .item-header .item-title,
+.timezone-item .item-header .item-title {
   max-width: calc(100% - 180px);
 }
-.tick-item .item-information,
-.alerm-item .item-information {
+.stamp-item .item-information,
+.alarm-item .item-information,
+.timezone-item .item-information {
   background-color: #8884;
   padding: 0.5rem;
   margin: 0px;
 }
-.tick-item .item-information *,
-.alerm-item .item-information * {
+.stamp-item .item-information *,
+.alarm-item .item-information *,
+.timezone-item .item-information * {
   line-height: 1.4em;
 }
-.tick-item .item-information .label,
-.alerm-item .item-information .label {
+.stamp-item .item-information .label,
+.alarm-item .item-information .label,
+.timezone-item .item-information .label {
   font-size: 1rem;
   opacity: 0.4;
   margin-right: -50%;
@@ -1659,12 +1665,14 @@ button.delete-button {
   white-space: nowrap;
   max-width: calc(100% - 180px);
 }
-.tick-item .item-information .label::after,
-.alerm-item .item-information .label::after {
+.stamp-item .item-information .label::after,
+.alarm-item .item-information .label::after,
+.timezone-item .item-information .label::after {
   content: ":";
 }
-.tick-item .item-information .value,
-.alerm-item .item-information .value {
+.stamp-item .item-information .value,
+.alarm-item .item-information .value,
+.timezone-item .item-information .value {
   font-size: 1rem;
   opacity: 0.4;
   float: right;
@@ -3497,19 +3505,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             var CountdownTimer;
             (function (CountdownTimer) {
                 var applicationName = "CountdownTimer";
-                var Alerms;
-                (function (Alerms) {
-                    Alerms.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":alerms"; };
-                    Alerms.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Alerms.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                    Alerms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alerms.makeKey(), list.sort(minamo_js_1.minamo.core.comparer.make(function (i) { return i.end; }))); };
-                    Alerms.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Alerms.makeKey()); };
-                    Alerms.add = function (tick) {
-                        return Alerms.set(Alerms.get().concat(tick));
+                var Alarms;
+                (function (Alarms) {
+                    Alarms.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":alarms"; };
+                    Alarms.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Alarms.makeKey())) !== null && _a !== void 0 ? _a : []; };
+                    Alarms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alarms.makeKey(), list.sort(minamo_js_1.minamo.core.comparer.make(function (i) { return i.end; }))); };
+                    Alarms.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Alarms.makeKey()); };
+                    Alarms.add = function (tick) {
+                        return Alarms.set(Alarms.get().concat(tick));
                     };
-                    Alerms.remove = function (tick) {
-                        return Alerms.set(Alerms.get().filter(function (i) { return JSON.stringify(tick) !== JSON.stringify(i); }));
+                    Alarms.remove = function (tick) {
+                        return Alarms.set(Alarms.get().filter(function (i) { return JSON.stringify(tick) !== JSON.stringify(i); }));
                     };
-                })(Alerms = CountdownTimer.Alerms || (CountdownTimer.Alerms = {}));
+                })(Alarms = CountdownTimer.Alarms || (CountdownTimer.Alarms = {}));
                 var flashInterval;
                 (function (flashInterval) {
                     flashInterval.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
@@ -3928,16 +3936,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 (function (CountdownTimer) {
                     var _this = this;
                     CountdownTimer.newTimer = function (i, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var tick, alerm, toast;
+                        var tick, alarm, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
                             tick = Domain.getTicks();
-                            alerm = {
+                            alarm = {
                                 type: "timer",
                                 start: tick,
                                 end: tick + (i * 60 * 1000),
                             };
-                            Storage.CountdownTimer.Alerms.add(alerm);
+                            Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Done!")),
@@ -3945,7 +3953,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                                Storage.CountdownTimer.Alarms.remove(alarm);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -3960,16 +3968,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     CountdownTimer.newSchedule = function (title, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var alerm, toast;
+                        var alarm, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            alerm = {
+                            alarm = {
                                 type: "schedule",
                                 title: title,
                                 start: Domain.getTicks(),
                                 end: end,
                             };
-                            Storage.CountdownTimer.Alerms.add(alerm);
+                            Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Done!")),
@@ -3977,7 +3985,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                                Storage.CountdownTimer.Alarms.remove(alarm);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -4002,8 +4010,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 start: oldSchedule.start,
                                 end: end,
                             };
-                            Storage.CountdownTimer.Alerms.remove(oldSchedule);
-                            Storage.CountdownTimer.Alerms.add(newSchedule);
+                            Storage.CountdownTimer.Alarms.remove(oldSchedule);
+                            Storage.CountdownTimer.Alarms.add(newSchedule);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Saved!")),
@@ -4011,8 +4019,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                Storage.CountdownTimer.Alerms.remove(newSchedule);
-                                                Storage.CountdownTimer.Alerms.add(oldSchedule);
+                                                Storage.CountdownTimer.Alarms.remove(newSchedule);
+                                                Storage.CountdownTimer.Alarms.add(oldSchedule);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -4030,7 +4038,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         var toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            Storage.CountdownTimer.Alerms.remove(item);
+                            Storage.CountdownTimer.Alarms.remove(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Done!")),
@@ -4038,7 +4046,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                Storage.CountdownTimer.Alerms.add(item);
+                                                Storage.CountdownTimer.Alarms.add(item);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -4056,7 +4064,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         var toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            Storage.CountdownTimer.Alerms.remove(item);
+                            Storage.CountdownTimer.Alarms.remove(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Removed.")),
@@ -4064,7 +4072,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                Storage.CountdownTimer.Alerms.add(item);
+                                                Storage.CountdownTimer.Alarms.add(item);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -5075,13 +5083,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             };
             Render.menuLinkItem = function (children, href, className) { return Render.menuItem(children, function () { return Clockworks.showUrl(href); }, className); };
-            Render.tickItem = function (tick, interval) { return __awaiter(_this, void 0, void 0, function () {
+            Render.stampItem = function (tick, interval) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e;
                 var _this = this;
                 return __generator(this, function (_f) {
                     switch (_f.label) {
                         case 0:
-                            _a = Render.$div("tick-item flex-item");
+                            _a = Render.$div("stamp-item flex-item");
                             _b = Render.$div("item-header");
                             _c = Render.$div("item-title");
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
@@ -5150,16 +5158,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.alermTitle = function (item) { return "timer" === item.type ?
+            Render.alarmTitle = function (item) { return "timer" === item.type ?
                 Domain.makeTimerLabel((item.end - item.start) / (60 * 1000)) + " " + locale.map("Timer") :
                 item.title; };
-            Render.alermItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
+            Render.alarmItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e;
                 var _this = this;
                 return __generator(this, function (_f) {
                     switch (_f.label) {
                         case 0:
-                            _a = Render.$div("alerm-item flex-item");
+                            _a = Render.$div("alarm-item flex-item");
                             _b = Render.$div("item-header");
                             _c = Render.$div("item-title");
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
@@ -5167,7 +5175,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _d = [
                                 _c.apply(void 0, [[
                                         _f.sent(),
-                                        Render.$div("tick-elapsed-time")([Render.$span("value monospace")(Render.alermTitle(item)),])
+                                        Render.$div("tick-elapsed-time")([Render.$span("value monospace")(Render.alarmTitle(item)),])
                                     ]])
                             ];
                             _e = Render.$div("item-operator");
@@ -5219,6 +5227,73 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         Render.$div("alarm-due-rest")([
                                             Render.label("Rest"),
                                             Render.$span("value monospace")(Domain.timeLongStringFromTick(item.end - Domain.getTicks())),
+                                        ]),
+                                    ])
+                                ]])];
+                    }
+                });
+            }); };
+            Render.timezoneItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b, _c, _d, _e;
+                return __generator(this, function (_f) {
+                    switch (_f.label) {
+                        case 0:
+                            _a = Render.$div("timezone-item flex-item");
+                            _b = Render.$div("item-header");
+                            _c = Render.$div("item-title");
+                            return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                        case 1:
+                            _d = [
+                                _c.apply(void 0, [[
+                                        _f.sent(),
+                                        Render.$div("tick-elapsed-time")([Render.$span("value monospace")(item.title),])
+                                    ]])
+                            ];
+                            _e = Render.$div("item-operator");
+                            return [4 /*yield*/, Render.menuButton([
+                                // menuItem
+                                // (
+                                //     label("Edit"),
+                                //     async () =>
+                                //     {
+                                //         const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
+                                //         if (null !== result)
+                                //         {
+                                //             if (item.title !== result.title || item.end !== result.tick)
+                                //             {
+                                //                 if (Domain.getTicks() < result.tick)
+                                //                 {
+                                //                     await Operate.CountdownTimer.edit(item, result.title, result.tick);
+                                //                 }
+                                //                 else
+                                //                 {
+                                //                     makeToast
+                                //                     ({
+                                //                         content: label("A date and time outside the valid range was specified."),
+                                //                         isWideContent: true,
+                                //                     });
+                                //                 }
+                                //             }
+                                //         }
+                                //     }
+                                // ),
+                                // menuItem
+                                // (
+                                //     label("Remove"),
+                                //     async () => await Operate.CountdownTimer.removeAlarm(item),
+                                //     "delete-button"
+                                // )
+                                ])];
+                        case 2: return [2 /*return*/, _a.apply(void 0, [[
+                                    _b.apply(void 0, [_d.concat([
+                                            _e.apply(void 0, [[
+                                                    _f.sent()
+                                                ]])
+                                        ])]),
+                                    Render.$div("item-information")([
+                                        Render.$div("alarm-due-timestamp")([
+                                            Render.label("Due timestamp"),
+                                            Render.$span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                                         ]),
                                     ])
                                 ]])];
@@ -5954,8 +6029,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     ])])
                             ];
                             _g = Render.$div("trail-page");
-                            _h = Render.$div("row-flex-list tick-list");
-                            return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.tickItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
+                            _h = Render.$div("row-flex-list stamp-list");
+                            return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                         case 4: return [2 /*return*/, (_f.concat([
                                 _g.apply(void 0, [[
                                         _h.apply(void 0, [_j.sent()]),
@@ -6122,7 +6197,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         0 < alarms.length ?
                                             [
                                                 Render.$div("current-title")([
-                                                    Render.$span("value monospace")(Render.alermTitle(alarms[0])),
+                                                    Render.$span("value monospace")(Render.alarmTitle(alarms[0])),
                                                 ]),
                                                 Render.$div("timer" === alarms[0].type ?
                                                     "current-due-timestamp" :
@@ -6228,8 +6303,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _j = Render.$div("row-flex-list tick-list");
-                            return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alermItem(item); }))];
+                            _j = Render.$div("row-flex-list alarm-list");
+                            return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alarmItem(item); }))];
                         case 4: return [2 /*return*/, (_f.concat([
                                 _g.apply(void 0, [_h.concat([
                                         _j.apply(void 0, [_k.sent()]),
@@ -6279,7 +6354,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             applicationTitle = Clockworks.application["CountdownTimer"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            alerts = Storage.CountdownTimer.Alerms.get();
+                            alerts = Storage.CountdownTimer.Alarms.get();
                             lashFlashAt = 0;
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, rest, unit, primaryStep, cycle, currentColor, span, rate, nextColor, currentColor, rest, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
@@ -6363,7 +6438,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 9];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            alerts = Storage.CountdownTimer.Alerms.get();
+                                            alerts = Storage.CountdownTimer.Alarms.get();
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.countdownTimerScreenBody(alerts)];
                                         case 6:
@@ -6440,11 +6515,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.rainbowClockScreenBody = function () { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e;
+            Render.rainbowClockScreenBody = function (timezones) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j;
                 var _this = this;
-                return __generator(this, function (_f) {
-                    switch (_f.label) {
+                return __generator(this, function (_k) {
+                    switch (_k.label) {
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
@@ -6460,66 +6535,69 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 // .sort(minamo.core.comparer.make([i => i]))
                                 // .filter((i, ix, list) => ix === list.indexOf(i)),
                                 Storage.RainbowClock.flashInterval.get(), Storage.RainbowClock.flashInterval.set)];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_f.sent()])];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
                         case 2:
                             _e = [
                                 _b.apply(void 0, [_c.concat([
-                                        _f.sent()
+                                        _k.sent()
                                     ])])
                             ];
                             return [4 /*yield*/, Render.downPageLink()];
-                        case 3: return [2 /*return*/, ([
+                        case 3:
+                            _f = [
                                 _a.apply(void 0, [_e.concat([
-                                        _f.sent()
+                                        _k.sent()
+                                    ])])
+                            ];
+                            _g = Render.$div("trail-page");
+                            _h = [Render.$div("button-list")([
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: Render.label("New Time zone"),
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                            var result;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset())];
+                                                    case 1:
+                                                        result = _a.sent();
+                                                        if (result) {
+                                                            // if (Domain.getTicks() < result.tick)
+                                                            // {
+                                                            //     await Operate.CountdownTimer.newSchedule(result.title, result.tick);
+                                                            // }
+                                                            // else
+                                                            // {
+                                                            //     makeToast
+                                                            //     ({
+                                                            //         content: label("A date and time outside the valid range was specified."),
+                                                            //         isWideContent: true,
+                                                            //     });
+                                                            // }
+                                                        }
+                                                        return [2 /*return*/];
+                                                }
+                                            });
+                                        }); }
+                                    },
+                                ])];
+                            _j = Render.$div("row-flex-list timezone-list");
+                            return [4 /*yield*/, Promise.all(timezones.map(function (item) { return Render.timezoneItem(item); }))];
+                        case 4: return [2 /*return*/, (_f.concat([
+                                _g.apply(void 0, [_h.concat([
+                                        _j.apply(void 0, [_k.sent()]),
+                                        Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
+                                            Render.$tag("li")("")(Render.label("Not support daylight savings time.")),
+                                            Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                        ]))
                                     ])]),
-                                Render.$div("trail-page")([
-                                    Render.$div("button-list")([
-                                        {
-                                            tag: "button",
-                                            className: "main-button long-button",
-                                            children: Render.label("New Time zone"),
-                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                var result;
-                                                return __generator(this, function (_a) {
-                                                    switch (_a.label) {
-                                                        case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset())];
-                                                        case 1:
-                                                            result = _a.sent();
-                                                            if (result) {
-                                                                // if (Domain.getTicks() < result.tick)
-                                                                // {
-                                                                //     await Operate.CountdownTimer.newSchedule(result.title, result.tick);
-                                                                // }
-                                                                // else
-                                                                // {
-                                                                //     makeToast
-                                                                //     ({
-                                                                //         content: label("A date and time outside the valid range was specified."),
-                                                                //         isWideContent: true,
-                                                                //     });
-                                                                // }
-                                                            }
-                                                            return [2 /*return*/];
-                                                    }
-                                                });
-                                            }); }
-                                        },
-                                    ]),
-                                    // $div("row-flex-list tick-list")
-                                    // (
-                                    //     await Promise.all(alarms.map(item => alermItem(item)))
-                                    // ),
-                                    Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
-                                        Render.$tag("li")("")(Render.label("Not support daylight savings time.")),
-                                        Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                    ])),
-                                ]),
                                 Render.screenBar()
-                            ])];
+                            ]))];
                     }
                 });
             }); };
-            Render.rainbowClockScreen = function () { return __awaiter(_this, void 0, void 0, function () {
+            Render.rainbowClockScreen = function (timezones) { return __awaiter(_this, void 0, void 0, function () {
                 var _a;
                 var _b, _c;
                 return __generator(this, function (_d) {
@@ -6541,20 +6619,21 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             ]),
                                 _c.menu = Render.rainbowClockScreenMenu,
                                 _c);
-                            return [4 /*yield*/, Render.rainbowClockScreenBody()];
+                            return [4 /*yield*/, Render.rainbowClockScreenBody(timezones)];
                         case 3: return [2 /*return*/, (_b.body = _d.sent(),
                                 _b)];
                     }
                 });
             }); };
             Render.showRainbowClockScreen = function () { return __awaiter(_this, void 0, void 0, function () {
-                var applicationTitle, updateWindow, _a;
+                var applicationTitle, timezones, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
                             applicationTitle = Clockworks.application["RainbowClock"].title;
                             document.body.classList.add("hide-scroll-bar");
+                            timezones = Storage.RainbowClock.Timezone.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor;
                                 return __generator(this, function (_b) {
@@ -6612,7 +6691,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 });
                             }); };
                             _a = Render.showWindow;
-                            return [4 /*yield*/, Render.rainbowClockScreen()];
+                            return [4 /*yield*/, Render.rainbowClockScreen(timezones)];
                         case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent(), updateWindow])];
                         case 2:
                             _b.sent();

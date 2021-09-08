@@ -89,20 +89,20 @@ export module Clockworks
         progressBarStyle?: ProgressBarStyleType;
         locale?: locale.LocaleType;
     }
-    export interface AlermTimerEntry
+    export interface AlarmTimerEntry
     {
         type: "timer";
         start: number;
         end: number;
     }
-    export interface AlermScheduleEntry
+    export interface AlarmScheduleEntry
     {
         type: "schedule";
         title: string;
         start: number;
         end: number;
     }
-    export type AlermEntry = AlermTimerEntry | AlermScheduleEntry;
+    export type AlarmEntry = AlarmTimerEntry | AlarmScheduleEntry;
     export interface TimezoneEntry
     {
         title: string;
@@ -249,15 +249,15 @@ export module Clockworks
         export module CountdownTimer
         {
             const applicationName = "CountdownTimer";
-            export module Alerms
+            export module Alarms
             {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alerms`;
-                export const get = (): AlermEntry[] => minamo.localStorage.getOrNull<AlermEntry[]>(makeKey()) ?? [];
-                export const set = (list: AlermEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
+                export const get = (): AlarmEntry[] => minamo.localStorage.getOrNull<AlarmEntry[]>(makeKey()) ?? [];
+                export const set = (list: AlarmEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (tick: AlermEntry | AlermEntry[]) =>
+                export const add = (tick: AlarmEntry | AlarmEntry[]) =>
                     set(get().concat(tick));
-                export const remove = (tick: AlermEntry) =>
+                export const remove = (tick: AlarmEntry) =>
                     set(get().filter(i => JSON.stringify(tick) !== JSON.stringify(i)));
             }
             export module flashInterval
@@ -686,13 +686,13 @@ export module Clockworks
                 export const newTimer = async (i: number, onCanceled?: () => unknown) =>
                 {
                     const tick = Domain.getTicks();
-                    const alerm: AlermTimerEntry =
+                    const alarm: AlarmTimerEntry =
                     {
                         type: "timer",
                         start: tick,
                         end: tick +(i *60 *1000),
                     };
-                    Storage.CountdownTimer.Alerms.add(alerm);
+                    Storage.CountdownTimer.Alarms.add(alarm);
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
@@ -701,7 +701,7 @@ export module Clockworks
                         (
                             async () =>
                             {
-                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                Storage.CountdownTimer.Alarms.remove(alarm);
                                 updateWindow("operate");
                                 await toast.hide();
                                 onCanceled?.();
@@ -711,14 +711,14 @@ export module Clockworks
                 };
                 export const newSchedule = async (title: string, end: number, onCanceled?: () => unknown) =>
                 {
-                    const alerm: AlermScheduleEntry =
+                    const alarm: AlarmScheduleEntry =
                     {
                         type: "schedule",
                         title,
                         start: Domain.getTicks(),
                         end,
                     };
-                    Storage.CountdownTimer.Alerms.add(alerm);
+                    Storage.CountdownTimer.Alarms.add(alarm);
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
@@ -727,7 +727,7 @@ export module Clockworks
                         (
                             async () =>
                             {
-                                Storage.CountdownTimer.Alerms.remove(alerm);
+                                Storage.CountdownTimer.Alarms.remove(alarm);
                                 updateWindow("operate");
                                 await toast.hide();
                                 onCanceled?.();
@@ -735,18 +735,18 @@ export module Clockworks
                         ),
                     });
                 };
-                export const edit = async (item: AlermScheduleEntry, title: string, end: number, onCanceled?: () => unknown) =>
+                export const edit = async (item: AlarmScheduleEntry, title: string, end: number, onCanceled?: () => unknown) =>
                 {
                     const oldSchedule = item;
-                    const newSchedule: AlermScheduleEntry =
+                    const newSchedule: AlarmScheduleEntry =
                     {
                         type: item.type,
                         title,
                         start: oldSchedule.start,
                         end,
                     };
-                    Storage.CountdownTimer.Alerms.remove(oldSchedule);
-                    Storage.CountdownTimer.Alerms.add(newSchedule);
+                    Storage.CountdownTimer.Alarms.remove(oldSchedule);
+                    Storage.CountdownTimer.Alarms.add(newSchedule);
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
@@ -755,8 +755,8 @@ export module Clockworks
                         (
                             async () =>
                             {
-                                Storage.CountdownTimer.Alerms.remove(newSchedule);
-                                Storage.CountdownTimer.Alerms.add(oldSchedule);
+                                Storage.CountdownTimer.Alarms.remove(newSchedule);
+                                Storage.CountdownTimer.Alarms.add(oldSchedule);
                                 updateWindow("operate");
                                 await toast.hide();
                                 onCanceled?.();
@@ -764,9 +764,9 @@ export module Clockworks
                         ),
                     });
                 };
-                export const done = async (item: AlermEntry, onCanceled?: () => unknown) =>
+                export const done = async (item: AlarmEntry, onCanceled?: () => unknown) =>
                 {
-                    Storage.CountdownTimer.Alerms.remove(item);
+                    Storage.CountdownTimer.Alarms.remove(item);
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
@@ -775,7 +775,7 @@ export module Clockworks
                         (
                             async () =>
                             {
-                                Storage.CountdownTimer.Alerms.add(item);
+                                Storage.CountdownTimer.Alarms.add(item);
                                 updateWindow("operate");
                                 await toast.hide();
                                 onCanceled?.();
@@ -783,9 +783,9 @@ export module Clockworks
                         ),
                     });
                 };
-                export const removeAlarm = async (item: AlermEntry, onCanceled?: () => unknown) =>
+                export const removeAlarm = async (item: AlarmEntry, onCanceled?: () => unknown) =>
                 {
-                    Storage.CountdownTimer.Alerms.remove(item);
+                    Storage.CountdownTimer.Alarms.remove(item);
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
@@ -794,7 +794,7 @@ export module Clockworks
                         (
                             async () =>
                             {
-                                Storage.CountdownTimer.Alerms.add(item);
+                                Storage.CountdownTimer.Alarms.add(item);
                                 updateWindow("operate");
                                 await toast.hide();
                                 onCanceled?.();
@@ -1620,7 +1620,7 @@ export module Clockworks
             () => showUrl(href),
             className,
         );
-        export const tickItem = async (tick: number, interval: number | null) => $div("tick-item flex-item")
+        export const stampItem = async (tick: number, interval: number | null) => $div("stamp-item flex-item")
         ([
             $div("item-header")
             ([
@@ -1686,17 +1686,17 @@ export module Clockworks
                 ]),
             ]),
         ]);
-        export const alermTitle = (item: AlermEntry) => "timer" === item.type ?
+        export const alarmTitle = (item: AlarmEntry) => "timer" === item.type ?
             `${Domain.makeTimerLabel((item.end -item.start) /(60 *1000))} ${locale.map("Timer")}`:
             item.title;
-        export const alermItem = async (item: AlermEntry) => $div("alerm-item flex-item")
+        export const alarmItem = async (item: AlarmEntry) => $div("alarm-item flex-item")
         ([
             $div("item-header")
             ([
                 $div("item-title")
                 ([
                     await Resource.loadSvgOrCache("tick-icon"),
-                    $div("tick-elapsed-time")([$span("value monospace")(alermTitle(item)),]),
+                    $div("tick-elapsed-time")([$span("value monospace")(alarmTitle(item)),]),
                 ]),
                 $div("item-operator")
                 ([
@@ -1750,6 +1750,63 @@ export module Clockworks
                 ([
                     label("Rest"),
                     $span("value monospace")(Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
+                ]),
+            ]),
+        ]);
+        export const timezoneItem = async (item: TimezoneEntry) => $div("timezone-item flex-item")
+        ([
+            $div("item-header")
+            ([
+                $div("item-title")
+                ([
+                    await Resource.loadSvgOrCache("tick-icon"),
+                    $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
+                ]),
+                $div("item-operator")
+                ([
+                    await menuButton
+                    ([
+                        // menuItem
+                        // (
+                        //     label("Edit"),
+                        //     async () =>
+                        //     {
+                        //         const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
+                        //         if (null !== result)
+                        //         {
+                        //             if (item.title !== result.title || item.end !== result.tick)
+                        //             {
+                        //                 if (Domain.getTicks() < result.tick)
+                        //                 {
+                        //                     await Operate.CountdownTimer.edit(item, result.title, result.tick);
+                        //                 }
+                        //                 else
+                        //                 {
+                        //                     makeToast
+                        //                     ({
+                        //                         content: label("A date and time outside the valid range was specified."),
+                        //                         isWideContent: true,
+                        //                     });
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
+                        // ),
+                        // menuItem
+                        // (
+                        //     label("Remove"),
+                        //     async () => await Operate.CountdownTimer.removeAlarm(item),
+                        //     "delete-button"
+                        // )
+                    ]),
+                ]),
+            ]),
+            $div("item-information")
+            ([
+                $div("alarm-due-timestamp")
+                ([
+                    label("Due timestamp"),
+                    $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                 ]),
             ]),
         ]);
@@ -2232,13 +2289,13 @@ export module Clockworks
             ]),
             $div("trail-page")
             ([
-                $div("row-flex-list tick-list")
+                $div("row-flex-list stamp-list")
                 (
                     await Promise.all
                     (
                         ticks.map
                         (
-                            (tick, index) => tickItem
+                            (tick, index) => stampItem
                             (
                                 tick,
                                 "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
@@ -2361,7 +2418,7 @@ export module Clockworks
             await showWindow(await neverStopwatchScreen(ticks), updateWindow);
             await updateWindow("timer");
         };
-        export const countdownTimerScreenBody = async (alarms: AlermEntry[]) =>
+        export const countdownTimerScreenBody = async (alarms: AlarmEntry[]) =>
         ([
             $div("primary-page")
             ([
@@ -2379,7 +2436,7 @@ export module Clockworks
                             [
                                 $div("current-title")
                                 ([
-                                    $span("value monospace")(alermTitle(alarms[0])),
+                                    $span("value monospace")(alarmTitle(alarms[0])),
                                 ]),
                                 $div
                                 (
@@ -2484,9 +2541,9 @@ export module Clockworks
                         }
                     },
                 ]),
-                $div("row-flex-list tick-list")
+                $div("row-flex-list alarm-list")
                 (
-                    await Promise.all(alarms.map(item => alermItem(item)))
+                    await Promise.all(alarms.map(item => alarmItem(item)))
                 ),
                 $div("description")
                 (
@@ -2499,7 +2556,7 @@ export module Clockworks
             ]),
             screenBar(),
         ]);
-        export const countdownTimerScreen = async (alerts: AlermEntry[]): Promise<ScreenSource> =>
+        export const countdownTimerScreen = async (alerts: AlarmEntry[]): Promise<ScreenSource> =>
         ({
             className: "countdown-timer-screen",
             header:
@@ -2518,7 +2575,7 @@ export module Clockworks
         {
             const applicationTitle = application["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
-            let alerts = Storage.CountdownTimer.Alerms.get();
+            let alerts = Storage.CountdownTimer.Alarms.get();
             let lashFlashAt = 0;
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
@@ -2603,7 +2660,7 @@ export module Clockworks
                         break;
                     case "operate":
                         previousPrimaryStep = 0;
-                        alerts = Storage.CountdownTimer.Alerms.get();
+                        alerts = Storage.CountdownTimer.Alarms.get();
                         replaceScreenBody(await countdownTimerScreenBody(alerts));
                         resizeFlexList();
                         await updateWindow("timer");
@@ -2630,7 +2687,7 @@ export module Clockworks
             await languageMenuItem(),
             await githubMenuItem(),
         ];
-        export const rainbowClockScreenBody = async () =>
+        export const rainbowClockScreenBody = async (timezones: TimezoneEntry[]) =>
         ([
             $div("primary-page")
             ([
@@ -2689,10 +2746,10 @@ export module Clockworks
                         }
                     },
                 ]),
-                // $div("row-flex-list tick-list")
-                // (
-                //     await Promise.all(alarms.map(item => alermItem(item)))
-                // ),
+                $div("row-flex-list timezone-list")
+                (
+                    await Promise.all(timezones.map(item => timezoneItem(item)))
+                ),
                 $div("description")
                 (
                     $tag("ul")("locale-parallel-off")
@@ -2704,7 +2761,7 @@ export module Clockworks
             ]),
             screenBar(),
         ]);
-        export const rainbowClockScreen = async (): Promise<ScreenSource> =>
+        export const rainbowClockScreen = async (timezones: TimezoneEntry[]): Promise<ScreenSource> =>
         ({
             className: "rainbow-clock-screen",
             header:
@@ -2716,12 +2773,13 @@ export module Clockworks
                 ],
                 menu: rainbowClockScreenMenu
             },
-            body: await rainbowClockScreenBody()
+            body: await rainbowClockScreenBody(timezones)
         });
         export const showRainbowClockScreen = async () =>
         {
             const applicationTitle = application["RainbowClock"].title;
             document.body.classList.add("hide-scroll-bar");
+            let timezones = Storage.RainbowClock.Timezone.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
@@ -2769,7 +2827,7 @@ export module Clockworks
                         break;
                 }
             };
-            await showWindow(await rainbowClockScreen(), updateWindow);
+            await showWindow(await rainbowClockScreen(timezones), updateWindow);
             await updateWindow("timer");
         };
         export const updateTitle = () =>
