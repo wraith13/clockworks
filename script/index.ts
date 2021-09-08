@@ -1423,7 +1423,7 @@ export module Clockworks
                 children: config.timezoneOffsetList
                     .concat([ offset ])
                     .filter((i, ix, list) => ix === list.indexOf(i))
-                    .sort()
+                    .sort(simpleComparer)
                     .map
                     (
                         i =>

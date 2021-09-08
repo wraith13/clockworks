@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Sep 07 2021 18:38:40 GMT+0900 (GMT+09:00) -->
+<!-- build at: Wed Sep 08 2021 18:31:54 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1366,7 +1366,7 @@ button.delete-button {
 }
 .popup {
   border-style: solid;
-  border-width: 1px;
+  border-width: 2px;
   border-radius: 16px;
   border-color: #5F42A7;
   background-color: #FFFFFF;
@@ -1749,6 +1749,7 @@ body.fxxking-ipad-fullscreen .screen {
   margin-right: 0.25rem;
 }
 .screen > .screen-body .primary-page .down-page-link {
+  cursor: pointer;
   position: absolute;
   left: calc(50vw - 1.25rem);
   bottom: 1rem;
@@ -3503,10 +3504,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     Alerms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alerms.makeKey(), list.sort(minamo_js_1.minamo.core.comparer.make(function (i) { return i.end; }))); };
                     Alerms.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Alerms.makeKey()); };
                     Alerms.add = function (tick) {
-                        return Alerms.set(Alerms.get().concat(tick).sort(exports.simpleReverseComparer));
+                        return Alerms.set(Alerms.get().concat(tick));
                     };
                     Alerms.remove = function (tick) {
-                        return Alerms.set(Alerms.get().filter(function (i) { return JSON.stringify(tick) !== JSON.stringify(i); }).sort(exports.simpleReverseComparer));
+                        return Alerms.set(Alerms.get().filter(function (i) { return JSON.stringify(tick) !== JSON.stringify(i); }));
                     };
                 })(Alerms = CountdownTimer.Alerms || (CountdownTimer.Alerms = {}));
                 var flashInterval;
@@ -3557,6 +3558,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 60; };
                     flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
                 })(flashInterval = RainbowClock.flashInterval || (RainbowClock.flashInterval = {}));
+                var Timezone;
+                (function (Timezone) {
+                    Timezone.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":timezones"; };
+                    Timezone.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : []; };
+                    Timezone.set = function (list) { return minamo_js_1.minamo.localStorage.set(Timezone.makeKey(), list.sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i.offset; }]))); };
+                    Timezone.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Timezone.makeKey()); };
+                    Timezone.add = function (entry) {
+                        return Timezone.set(Timezone.get().concat(entry));
+                    };
+                    Timezone.remove = function (entry) {
+                        return Timezone.set(Timezone.get().filter(function (i) { return JSON.stringify(entry) !== JSON.stringify(i); }));
+                    };
+                })(Timezone = RainbowClock.Timezone || (RainbowClock.Timezone = {}));
             })(RainbowClock = Storage.RainbowClock || (Storage.RainbowClock = {}));
             var Settings;
             (function (Settings) {
@@ -4851,7 +4865,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 children: config_json_1.default.timezoneOffsetList
                                     .concat([offset])
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); })
-                                    .sort()
+                                    .sort(exports.simpleComparer)
                                     .map(function (i) {
                                     return ({
                                         tag: "option",
