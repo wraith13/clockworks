@@ -338,8 +338,10 @@ export module Clockworks
     }
     export module Domain
     {
+        export const utcOffsetRate = 60 *1000;
         export const makeTimerLabel = (minutes: number) => `${minutes} ${locale.map("m(minutes)")}`;
         export const getTicks = (date: Date = new Date()) => date.getTime();
+        export const getUTCTicks = (date: Date = new Date()) => getTicks(date) +(date.getTimezoneOffset() *utcOffsetRate);
         export const getAppropriateTicks = (date: Date = new Date()) =>
         {
             const TenMinutesLater = date.getTime() +(10 *60 *1000);
@@ -1862,6 +1864,18 @@ export module Clockworks
                     $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                 ]),
             ]),
+            $div("item-panel")
+            ([
+                $div("item-time-bar")([]),
+                $div("item-date")
+                ([
+                    $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
+                ]),
+                $div("item-time")
+                ([
+                    $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
+                ]),
+            ])
         ]);
         export interface HeaderSegmentSource
         {
@@ -2846,8 +2860,21 @@ export module Clockworks
                                     }
                                 }
                             }
+                            const utc = Domain.getUTCTicks(now);
+                            minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "timezone-list")[0])
+                            .forEach
+                            (
+                                (dom, index) =>
+                                {
+                                    const currentTick = utc -(timezones[index].offset *Domain.utcOffsetRate);
+                                    const panel = minamo.dom.getDivsByClassName(dom, "item-panel")[0];
+                                    // const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                    minamo.dom.setProperty(minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) +" " +Domain.weekday(currentTick));
+                                    minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
+                                }
+                            );
                         }
-                    break;
+                        break;
                     case "timer":
                         const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
                         const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;

@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Thu Sep 09 2021 18:26:08 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Sep 10 2021 07:05:10 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3591,10 +3591,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         })(Storage = Clockworks.Storage || (Clockworks.Storage = {}));
         var Domain;
         (function (Domain) {
+            Domain.utcOffsetRate = 60 * 1000;
             Domain.makeTimerLabel = function (minutes) { return minutes + " " + locale.map("m(minutes)"); };
             Domain.getTicks = function (date) {
                 if (date === void 0) { date = new Date(); }
                 return date.getTime();
+            };
+            Domain.getUTCTicks = function (date) {
+                if (date === void 0) { date = new Date(); }
+                return Domain.getTicks(date) + (date.getTimezoneOffset() * Domain.utcOffsetRate);
             };
             Domain.getAppropriateTicks = function (date) {
                 if (date === void 0) { date = new Date(); }
@@ -5376,6 +5381,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             Render.label("Due timestamp"),
                                             Render.$span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                                         ]),
+                                    ]),
+                                    Render.$div("item-panel")([
+                                        Render.$div("item-time-bar")([]),
+                                        Render.$div("item-date")([
+                                            Render.$span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() - item.offset)),
+                                        ]),
+                                        Render.$div("item-time")([
+                                            Render.$span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() - item.offset))),
+                                        ]),
                                     ])
                                 ]])];
                     }
@@ -6707,7 +6721,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             document.body.classList.add("hide-scroll-bar");
                             timezones = Storage.RainbowClock.Timezone.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor, _b;
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, utc_1, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor, _b;
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
@@ -6735,6 +6749,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         }
                                                     }
                                                 }
+                                                utc_1 = Domain.getUTCTicks(now);
+                                                minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "timezone-list")[0])
+                                                    .forEach(function (dom, index) {
+                                                    var currentTick = utc_1 - (timezones[index].offset * Domain.utcOffsetRate);
+                                                    var panel = minamo_js_1.minamo.dom.getDivsByClassName(dom, "item-panel")[0];
+                                                    // const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                                    minamo_js_1.minamo.dom.setProperty(minamo_js_1.minamo.dom.getDivsByClassName(minamo_js_1.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) + " " + Domain.weekday(currentTick));
+                                                    minamo_js_1.minamo.dom.getDivsByClassName(minamo_js_1.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
+                                                });
                                             }
                                             return [3 /*break*/, 9];
                                         case 2:
