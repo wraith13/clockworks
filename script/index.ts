@@ -696,7 +696,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Done!")}`),
+                        content: $span("")(`${locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -722,7 +722,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Done!")}`),
+                        content: $span("")(`${locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -805,7 +805,71 @@ export module Clockworks
             }
             export module RainbowClock
             {
-
+                export const add = async (item: TimezoneEntry, onCanceled?: () => unknown) =>
+                {
+                    Storage.RainbowClock.Timezone.add(item);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.RainbowClock.Timezone.remove(item);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const edit = async (item: TimezoneEntry, title: string, offset: number, onCanceled?: () => unknown) =>
+                {
+                    const oldTimezone = item;
+                    const newTimezone: TimezoneEntry =
+                    {
+                        title,
+                        offset,
+                    };
+                    Storage.RainbowClock.Timezone.remove(oldTimezone);
+                    Storage.RainbowClock.Timezone.add(newTimezone);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.RainbowClock.Timezone.remove(newTimezone);
+                                Storage.RainbowClock.Timezone.add(oldTimezone);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const remove = async (item: TimezoneEntry, onCanceled?: () => unknown) =>
+                {
+                    Storage.RainbowClock.Timezone.remove(item);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Removed.")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.RainbowClock.Timezone.add(item);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
             }
         }
         export const cancelTextButton = (onCanceled: () => unknown) =>
@@ -1766,38 +1830,27 @@ export module Clockworks
                 ([
                     await menuButton
                     ([
-                        // menuItem
-                        // (
-                        //     label("Edit"),
-                        //     async () =>
-                        //     {
-                        //         const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
-                        //         if (null !== result)
-                        //         {
-                        //             if (item.title !== result.title || item.end !== result.tick)
-                        //             {
-                        //                 if (Domain.getTicks() < result.tick)
-                        //                 {
-                        //                     await Operate.CountdownTimer.edit(item, result.title, result.tick);
-                        //                 }
-                        //                 else
-                        //                 {
-                        //                     makeToast
-                        //                     ({
-                        //                         content: label("A date and time outside the valid range was specified."),
-                        //                         isWideContent: true,
-                        //                     });
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
-                        // ),
-                        // menuItem
-                        // (
-                        //     label("Remove"),
-                        //     async () => await Operate.CountdownTimer.removeAlarm(item),
-                        //     "delete-button"
-                        // )
+                        menuItem
+                        (
+                            label("Edit"),
+                            async () =>
+                            {
+                                const result = await timezonePrompt(locale.map("Edit"), item.title, item.offset);
+                                if (null !== result)
+                                {
+                                    if (item.title !== result.title || item.offset !== result.offset)
+                                    {
+                                        await Operate.RainbowClock.edit(item, result.title, result.offset);
+                                    }
+                                }
+                            }
+                        ),
+                        menuItem
+                        (
+                            label("Remove"),
+                            async () => await Operate.RainbowClock.remove(item),
+                            "delete-button"
+                        )
                     ]),
                 ]),
             ]),
@@ -2730,18 +2783,7 @@ export module Clockworks
                             const result = await timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset());
                             if (result)
                             {
-                                // if (Domain.getTicks() < result.tick)
-                                // {
-                                //     await Operate.CountdownTimer.newSchedule(result.title, result.tick);
-                                // }
-                                // else
-                                // {
-                                //     makeToast
-                                //     ({
-                                //         content: label("A date and time outside the valid range was specified."),
-                                //         isWideContent: true,
-                                //     });
-                                // }
+                                await Operate.RainbowClock.add({ title: result.title, offset: result.offset, });
                             }
                         }
                     },
@@ -2823,7 +2865,12 @@ export module Clockworks
                         await reload();
                         break;
                     case "operate":
+                        timezones = Storage.RainbowClock.Timezone.get();
+                        replaceScreenBody(await rainbowClockScreenBody(timezones));
+                        resizeFlexList();
                         await updateWindow("timer");
+                        await Render.scrollToOffset(document.getElementById("screen-body"), 0);
+                        adjustDownPageLinkPosition();
                         break;
                 }
             };

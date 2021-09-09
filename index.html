@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Thu Sep 09 2021 05:20:58 GMT+0900 (GMT+09:00) -->
+<!-- build at: Thu Sep 09 2021 18:26:08 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3193,7 +3193,7 @@ define("resource/config", [], {
         }
     },
     "timezoneOffsetList": [
-        -720, -660, -600, -570, -540, -480, -420, -360, -300, -240, -210, -180, -120, -60, 0, 60, 120, 180, 210, 240, 270, 300, 330, 345, 360, 390, 420, 480, 525, 540, 570, 600, 630, 660, 720, 765, 780, 840
+        -840, -780, -765, -720, -660, -630, -600, -570, -540, -525, -480, -420, -390, -360, -345, -330, -300, -270, -240, -210, -180, -120, -60, 0, 60, 120, 180, 210, 240, 300, 360, 420, 480, 540, 570, 600, 660, 720
     ]
 });
 define("resource/lang.en", [], {
@@ -3948,7 +3948,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Done!")),
+                                content: Render.$span("")("" + locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -3980,7 +3980,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Done!")),
+                                content: Render.$span("")("" + locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -4087,6 +4087,95 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                 })(CountdownTimer = Operate.CountdownTimer || (Operate.CountdownTimer = {}));
+                var RainbowClock;
+                (function (RainbowClock) {
+                    var _this = this;
+                    RainbowClock.add = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            Storage.RainbowClock.Timezone.add(item);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Saved!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.RainbowClock.Timezone.remove(item);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                    RainbowClock.edit = function (item, title, offset, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var oldTimezone, newTimezone, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            oldTimezone = item;
+                            newTimezone = {
+                                title: title,
+                                offset: offset,
+                            };
+                            Storage.RainbowClock.Timezone.remove(oldTimezone);
+                            Storage.RainbowClock.Timezone.add(newTimezone);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Saved!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.RainbowClock.Timezone.remove(newTimezone);
+                                                Storage.RainbowClock.Timezone.add(oldTimezone);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                    RainbowClock.remove = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            Storage.RainbowClock.Timezone.remove(item);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Removed.")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.RainbowClock.Timezone.add(item);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                })(RainbowClock = Operate.RainbowClock || (Operate.RainbowClock = {}));
             })(Operate = Render.Operate || (Render.Operate = {}));
             Render.cancelTextButton = function (onCanceled) {
                 return ({
@@ -5235,6 +5324,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             Render.timezoneItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e;
+                var _this = this;
                 return __generator(this, function (_f) {
                     switch (_f.label) {
                         case 0:
@@ -5251,38 +5341,29 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             ];
                             _e = Render.$div("item-operator");
                             return [4 /*yield*/, Render.menuButton([
-                                // menuItem
-                                // (
-                                //     label("Edit"),
-                                //     async () =>
-                                //     {
-                                //         const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
-                                //         if (null !== result)
-                                //         {
-                                //             if (item.title !== result.title || item.end !== result.tick)
-                                //             {
-                                //                 if (Domain.getTicks() < result.tick)
-                                //                 {
-                                //                     await Operate.CountdownTimer.edit(item, result.title, result.tick);
-                                //                 }
-                                //                 else
-                                //                 {
-                                //                     makeToast
-                                //                     ({
-                                //                         content: label("A date and time outside the valid range was specified."),
-                                //                         isWideContent: true,
-                                //                     });
-                                //                 }
-                                //             }
-                                //         }
-                                //     }
-                                // ),
-                                // menuItem
-                                // (
-                                //     label("Remove"),
-                                //     async () => await Operate.CountdownTimer.removeAlarm(item),
-                                //     "delete-button"
-                                // )
+                                    Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                        var result;
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("Edit"), item.title, item.offset)];
+                                                case 1:
+                                                    result = _a.sent();
+                                                    if (!(null !== result)) return [3 /*break*/, 3];
+                                                    if (!(item.title !== result.title || item.offset !== result.offset)) return [3 /*break*/, 3];
+                                                    return [4 /*yield*/, Operate.RainbowClock.edit(item, result.title, result.offset)];
+                                                case 2:
+                                                    _a.sent();
+                                                    _a.label = 3;
+                                                case 3: return [2 /*return*/];
+                                            }
+                                        });
+                                    }); }),
+                                    Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, Operate.RainbowClock.remove(item)];
+                                            case 1: return [2 /*return*/, _a.sent()];
+                                        }
+                                    }); }); }, "delete-button")
                                 ])];
                         case 2: return [2 /*return*/, _a.apply(void 0, [[
                                     _b.apply(void 0, [_d.concat([
@@ -6562,21 +6643,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset())];
                                                     case 1:
                                                         result = _a.sent();
-                                                        if (result) {
-                                                            // if (Domain.getTicks() < result.tick)
-                                                            // {
-                                                            //     await Operate.CountdownTimer.newSchedule(result.title, result.tick);
-                                                            // }
-                                                            // else
-                                                            // {
-                                                            //     makeToast
-                                                            //     ({
-                                                            //         content: label("A date and time outside the valid range was specified."),
-                                                            //         isWideContent: true,
-                                                            //     });
-                                                            // }
-                                                        }
-                                                        return [2 /*return*/];
+                                                        if (!result) return [3 /*break*/, 3];
+                                                        return [4 /*yield*/, Operate.RainbowClock.add({ title: result.title, offset: result.offset, })];
+                                                    case 2:
+                                                        _a.sent();
+                                                        _a.label = 3;
+                                                    case 3: return [2 /*return*/];
                                                 }
                                             });
                                         }); }
@@ -6635,9 +6707,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             document.body.classList.add("hide-scroll-bar");
                             timezones = Storage.RainbowClock.Timezone.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor;
-                                return __generator(this, function (_b) {
-                                    switch (_b.label) {
+                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, dateString, currentDateSpan, getRainbowColor_1, currentColor, hourUnit, minutes, nextColor, _b;
+                                return __generator(this, function (_c) {
+                                    switch (_c.label) {
                                         case 0:
                                             screen = document.getElementById("screen");
                                             now = new Date();
@@ -6649,7 +6721,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 case "storage": return [3 /*break*/, 3];
                                                 case "operate": return [3 /*break*/, 5];
                                             }
-                                            return [3 /*break*/, 7];
+                                            return [3 /*break*/, 9];
                                         case 1:
                                             capitalTime = Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
                                             capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0];
@@ -6664,7 +6736,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     }
                                                 }
                                             }
-                                            return [3 /*break*/, 7];
+                                            return [3 /*break*/, 9];
                                         case 2:
                                             dateString = Domain.dateCoreStringFromTick(tick) + " " + Domain.weekday(tick);
                                             currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0];
@@ -6677,16 +6749,27 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             nextColor = getRainbowColor_1(now.getHours() + 1);
                                             Render.setScreenBarProgress(minutes, nextColor);
                                             setBodyColor(mixColors(currentColor, nextColor, minutes));
-                                            return [3 /*break*/, 7];
+                                            return [3 /*break*/, 9];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
                                         case 4:
-                                            _b.sent();
-                                            return [3 /*break*/, 7];
-                                        case 5: return [4 /*yield*/, updateWindow("timer")];
+                                            _c.sent();
+                                            return [3 /*break*/, 9];
+                                        case 5:
+                                            timezones = Storage.RainbowClock.Timezone.get();
+                                            _b = Render.replaceScreenBody;
+                                            return [4 /*yield*/, Render.rainbowClockScreenBody(timezones)];
                                         case 6:
-                                            _b.sent();
-                                            return [3 /*break*/, 7];
-                                        case 7: return [2 /*return*/];
+                                            _b.apply(void 0, [_c.sent()]);
+                                            Render.resizeFlexList();
+                                            return [4 /*yield*/, updateWindow("timer")];
+                                        case 7:
+                                            _c.sent();
+                                            return [4 /*yield*/, Render.scrollToOffset(document.getElementById("screen-body"), 0)];
+                                        case 8:
+                                            _c.sent();
+                                            Render.adjustDownPageLinkPosition();
+                                            return [3 /*break*/, 9];
+                                        case 9: return [2 /*return*/];
                                     }
                                 });
                             }); };
