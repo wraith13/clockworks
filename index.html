@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Sep 10 2021 07:05:10 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Sep 10 2021 07:19:27 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6226,7 +6226,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 2:
                                             setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + applicationTitle : applicationTitle);
-                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "stamp-list")[0])
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
                                             });
@@ -6509,7 +6509,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 9];
                                         case 2:
                                             setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end - tick, 0)) + " - " + applicationTitle : applicationTitle);
-                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "alarm-list")[0])
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end - tick, 0));
                                             });

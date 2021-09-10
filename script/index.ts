@@ -2445,7 +2445,7 @@ export module Clockworks
                         break;
                     case "timer":
                         setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
-                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "stamp-list")[0])
                             .forEach
                             (
                                 (dom, index) =>
@@ -2698,7 +2698,7 @@ export module Clockworks
                         break;
                     case "timer":
                         setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end -tick, 0)) +" - " +applicationTitle: applicationTitle);
-                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "tick-list")[0])
+                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "alarm-list")[0])
                             .forEach
                             (
                                 (dom, index) =>
