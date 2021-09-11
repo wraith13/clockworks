@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Sep 10 2021 07:19:27 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sat Sep 11 2021 10:44:24 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1676,6 +1676,40 @@ button.delete-button {
   font-size: 1rem;
   opacity: 0.4;
   float: right;
+}
+.timezone-item .item-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.timezone-item .item-panel .item-panel-body {
+  color: #FFFFFF;
+  fill: #FFFFFF;
+  position: relative;
+  z-index: 20;
+  padding: 1rem;
+}
+.timezone-item .item-panel .item-panel-body .item-date {
+  opacity: 0.666;
+  line-height: 140%;
+}
+.timezone-item .item-panel .item-panel-body .item-time {
+  font-size: 2rem;
+  line-height: 140%;
+}
+.timezone-item .item-panel .item-time-bar {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  border-width: 0px;
+  border-style: solid;
+  border-color: #0005;
+  box-sizing: border-box;
+  border-right-width: 1px;
+  z-index: 10;
 }
 .item-operator {
   position: relative;
@@ -5383,13 +5417,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         ]),
                                     ]),
                                     Render.$div("item-panel")([
+                                        Render.$div("item-panel-body")([
+                                            Render.$div("item-date")([
+                                                Render.$span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() - item.offset)),
+                                            ]),
+                                            Render.$div("item-time")([
+                                                Render.$span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() - item.offset))),
+                                            ]),
+                                        ]),
                                         Render.$div("item-time-bar")([]),
-                                        Render.$div("item-date")([
-                                            Render.$span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() - item.offset)),
-                                        ]),
-                                        Render.$div("item-time")([
-                                            Render.$span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() - item.offset))),
-                                        ]),
                                     ])
                                 ]])];
                     }
@@ -6752,9 +6788,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 utc_1 = Domain.getUTCTicks(now);
                                                 minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "timezone-list")[0])
                                                     .forEach(function (dom, index) {
+                                                    var getRainbowColor = Clockworks.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                                                     var currentTick = utc_1 - (timezones[index].offset * Domain.utcOffsetRate);
                                                     var panel = minamo_js_1.minamo.dom.getDivsByClassName(dom, "item-panel")[0];
-                                                    // const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                                    var timeBar = minamo_js_1.minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                                    var currentHours = new Date(currentTick).getHours();
+                                                    var currentColor = getRainbowColor(currentHours);
+                                                    var hourUnit = 60 * 60 * 1000;
+                                                    var minutes = (currentTick % hourUnit) / hourUnit;
+                                                    var nextColor = getRainbowColor(currentHours + 1);
+                                                    minamo_js_1.minamo.dom.setProperty(panel.style, "backgroundColor", currentColor);
+                                                    minamo_js_1.minamo.dom.setProperty(timeBar.style, "backgroundColor", nextColor);
+                                                    var percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                                    minamo_js_1.minamo.dom.setProperty(timeBar.style, "width", percentString);
                                                     minamo_js_1.minamo.dom.setProperty(minamo_js_1.minamo.dom.getDivsByClassName(minamo_js_1.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) + " " + Domain.weekday(currentTick));
                                                     minamo_js_1.minamo.dom.getDivsByClassName(minamo_js_1.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
                                                 });

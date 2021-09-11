@@ -1866,15 +1866,18 @@ export module Clockworks
             ]),
             $div("item-panel")
             ([
+                $div("item-panel-body")
+                ([
+                    $div("item-date")
+                    ([
+                        $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
+                    ]),
+                    $div("item-time")
+                    ([
+                        $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
+                    ]),
+                ]),
                 $div("item-time-bar")([]),
-                $div("item-date")
-                ([
-                    $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
-                ]),
-                $div("item-time")
-                ([
-                    $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
-                ]),
             ])
         ]);
         export interface HeaderSegmentSource
@@ -2866,9 +2869,19 @@ export module Clockworks
                             (
                                 (dom, index) =>
                                 {
+                                    const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                                     const currentTick = utc -(timezones[index].offset *Domain.utcOffsetRate);
                                     const panel = minamo.dom.getDivsByClassName(dom, "item-panel")[0];
-                                    // const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                    const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                    const currentHours = new Date(currentTick).getHours();
+                                    const currentColor = getRainbowColor(currentHours);
+                                    const hourUnit = 60 *60 *1000;
+                                    const minutes = (currentTick % hourUnit) / hourUnit;
+                                    const nextColor = getRainbowColor(currentHours +1);
+                                    minamo.dom.setProperty(panel.style, "backgroundColor", currentColor);
+                                    minamo.dom.setProperty(timeBar.style, "backgroundColor", nextColor);
+                                    const percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                    minamo.dom.setProperty(timeBar.style, "width", percentString);
                                     minamo.dom.setProperty(minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) +" " +Domain.weekday(currentTick));
                                     minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
                                 }

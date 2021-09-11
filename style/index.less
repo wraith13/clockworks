@@ -1152,6 +1152,48 @@ button
         }
     }
 }
+.timezone-item
+{
+    .item-panel
+    {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        .item-panel-body
+        {
+            .negative-foreground-coloring-trait;
+            position: relative;
+            z-index: 20;
+            padding: 1rem;
+            .item-date
+            {
+                opacity: 0.666;
+                line-height: 140%;
+            }
+            .item-time
+            {
+                font-size: 2rem;
+                line-height: 140%;
+            }
+        }
+        .item-time-bar
+        {
+            position: absolute;
+            // background-color: @progress-bar-color;
+            left: 0px;
+            top: 0px;
+            height: 100%;
+            border-width: 0px;
+            border-style: solid;
+            border-color: #0005;
+            box-sizing: border-box;
+            border-right-width: 1px;
+            z-index: 10;
+        }
+    }
+}
 .item-operator
 {
     position: relative;
