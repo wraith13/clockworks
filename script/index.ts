@@ -317,7 +317,9 @@ export module Clockworks
             export module Timezone
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:timezones`;
-                export const get = (): TimezoneEntry[] => minamo.localStorage.getOrNull<TimezoneEntry[]>(makeKey()) ?? [];
+                export const get = (): TimezoneEntry[] =>
+                    minamo.localStorage.getOrNull<TimezoneEntry[]>(makeKey())
+                    ?? config.initialTimezoneList.map(i => ({ title: locale.map(i.title as locale.LocaleKeyType), offset: i.offset }));
                 export const set = (list: TimezoneEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make([i => i.offset])));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
                 export const add = (entry: TimezoneEntry | TimezoneEntry[]) =>
@@ -1548,19 +1550,21 @@ export module Clockworks
         };
         export const screenCover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
+            const onclick = async () =>
+            {
+                console.log("screen-cover.click!");
+                dom.onclick = undefined;
+                data.onclick();
+                close();
+            };
             const dom = $make(HTMLDivElement)
             ({
                 tag: "div",
                 className: "screen-cover fade-in",
                 children: data.children,
-                onclick: async () =>
-                {
-                    console.log("screen-cover.click!");
-                    dom.onclick = undefined;
-                    data.onclick();
-                    close();
-                }
+                // onclick,
             });
+            dom.addEventListener("mousedown", onclick);
             const close = async () =>
             {
                 dom.classList.remove("fade-in");
@@ -1601,6 +1605,7 @@ export module Clockworks
                     //getScreenCoverList.forEach(i => i.click());
                 },
             });
+            dom.addEventListener("mousedown", event => event.stopPropagation());
             const close = async () =>
             {
                 await data?.onClose();

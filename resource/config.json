@@ -44,5 +44,32 @@
     "timezoneOffsetList":
     [
         -840, -780, -765, -720, -660, -630, -600, -570, -540, -525, -480, -420, -390, -360, -345, -330, -300, -270, -240, -210, -180, -120, -60, 0, 60, 120, 180, 210, 240, 300, 360, 420, 480, 540, 570, 600, 660, 720
+    ],
+    "initialTimezoneList":
+    [
+        {
+            "title": "timezone.Tokyo",
+            "offset": -540
+        },
+        {
+            "title": "timezone.Delhi",
+            "offset": -330
+        },
+        {
+            "title": "timezone.Istanbul",
+            "offset": -180
+        },
+        {
+            "title": "timezone.London",
+            "offset": 0
+        },
+        {
+            "title": "timezone.New York",
+            "offset": 300
+        },
+        {
+            "title": "timezone.Seattle",
+            "offset": 480
+        }
     ]
 }

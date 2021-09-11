@@ -1161,18 +1161,20 @@ button
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        z-index: 0;
         .item-panel-body
         {
             .negative-foreground-coloring-trait;
             position: relative;
             z-index: 20;
             padding: 1rem;
-            .item-date
+            .item-date .value
             {
                 opacity: 0.666;
+                font-size: 1rem;
                 line-height: 140%;
             }
-            .item-time
+            .item-time .value
             {
                 font-size: 2rem;
                 line-height: 140%;
