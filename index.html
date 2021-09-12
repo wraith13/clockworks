@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Sep 11 2021 21:52:49 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Sep 12 2021 03:40:12 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3278,6 +3278,7 @@ define("resource/lang.en", [], {
     "Interval": "Interval",
     "Due timestamp": "Due timestamp",
     "Rest": "Rest",
+    "Time zone offset": "Time zone",
     "Remove": "Remove",
     "Reset": "Reset",
     "OK": "OK",
@@ -3337,6 +3338,7 @@ define("resource/lang.ja", [], {
     "Interval": "間隔",
     "Due timestamp": "期限日時",
     "Rest": "残り時間",
+    "Time zone offset": "タイムゾーン",
     "Remove": "削除",
     "Reset": "リセット",
     "OK": "OK",
@@ -5098,10 +5100,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             Render.screenCover = function (data) {
                 var onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        console.log("screen-cover.click!");
-                        dom.onclick = undefined;
-                        data.onclick();
-                        close();
+                        if (dom === (lastMouseDownTarget !== null && lastMouseDownTarget !== void 0 ? lastMouseDownTarget : dom)) {
+                            console.log("screen-cover.click!");
+                            dom.onclick = undefined;
+                            data.onclick();
+                            close();
+                        }
                         return [2 /*return*/];
                     });
                 }); };
@@ -5109,9 +5113,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     tag: "div",
                     className: "screen-cover fade-in",
                     children: data.children,
-                    // onclick,
+                    onclick: onclick,
                 });
-                dom.addEventListener("mousedown", onclick);
+                // dom.addEventListener("mousedown", onclick);
                 var close = function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
@@ -5150,7 +5154,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); },
                 });
-                dom.addEventListener("mousedown", function (event) { return event.stopPropagation(); });
                 var close = function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
@@ -5458,7 +5461,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         ])]),
                                     Render.$div("item-information")([
                                         Render.$div("alarm-due-timestamp")([
-                                            Render.label("Due timestamp"),
+                                            Render.label("Time zone offset"),
                                             Render.$span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                                         ]),
                                     ]),
@@ -5690,6 +5693,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         switch (_a.label) {
                                                             case 0:
                                                                 setter(i);
+                                                                Render.clearLastMouseDownTarget();
+                                                                Render.getScreenCoverList().forEach(function (i) { return i.click(); });
                                                                 return [4 /*yield*/, Clockworks.reload()];
                                                             case 1:
                                                                 _a.sent();
@@ -5715,7 +5720,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         var tick, minutes;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.timePrompt(locale.map("input a time"), 0)];
+                                                case 0:
+                                                    Render.clearLastMouseDownTarget();
+                                                    Render.getScreenCoverList().forEach(function (i) { return i.click(); });
+                                                    return [4 /*yield*/, Render.timePrompt(locale.map("input a time"), 0)];
                                                 case 1:
                                                     tick = _a.sent();
                                                     if (null !== tick) {
@@ -5726,7 +5734,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     return [4 /*yield*/, Clockworks.reload()];
                                                 case 2:
                                                     _a.sent();
-                                                    Render.getScreenCoverList().forEach(function (i) { return i.click(); });
                                                     return [2 /*return*/];
                                             }
                                         });
@@ -7241,6 +7248,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     document.body.classList.toggle("fxxking-ipad-fullscreen", Render.fullscreenElement());
                 }
             };
+            var lastMouseDownTarget = null;
+            Render.onMouseDown = function (event) { return lastMouseDownTarget = event.target; };
+            Render.onMouseUp = function (_evnet) { return setTimeout(Render.clearLastMouseDownTarget, 10); };
+            Render.clearLastMouseDownTarget = function () { return lastMouseDownTarget = null; };
         })(Render = Clockworks.Render || (Clockworks.Render = {}));
         Clockworks.getUrlParams = function (url) {
             if (url === void 0) { url = location.href; }
@@ -7320,6 +7331,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             }
                         }); }); });
                         window.addEventListener("mousemove", Render.onMouseMove);
+                        window.addEventListener("mousedown", Render.onMouseDown);
+                        window.addEventListener("mouseup", Render.onMouseUp);
                         document.addEventListener("fullscreenchange", Render.onFullscreenChange);
                         document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
                         window.matchMedia("(prefers-color-scheme: dark)").addListener(Clockworks.updateStyle);

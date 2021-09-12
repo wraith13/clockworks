@@ -1552,19 +1552,22 @@ export module Clockworks
         {
             const onclick = async () =>
             {
-                console.log("screen-cover.click!");
-                dom.onclick = undefined;
-                data.onclick();
-                close();
+                if (dom === (lastMouseDownTarget ?? dom))
+                {
+                    console.log("screen-cover.click!");
+                    dom.onclick = undefined;
+                    data.onclick();
+                    close();
+                }
             };
             const dom = $make(HTMLDivElement)
             ({
                 tag: "div",
                 className: "screen-cover fade-in",
                 children: data.children,
-                // onclick,
+                onclick,
             });
-            dom.addEventListener("mousedown", onclick);
+            // dom.addEventListener("mousedown", onclick);
             const close = async () =>
             {
                 dom.classList.remove("fade-in");
@@ -1605,7 +1608,6 @@ export module Clockworks
                     //getScreenCoverList.forEach(i => i.click());
                 },
             });
-            dom.addEventListener("mousedown", event => event.stopPropagation());
             const close = async () =>
             {
                 await data?.onClose();
@@ -1865,7 +1867,7 @@ export module Clockworks
             ([
                 $div("alarm-due-timestamp")
                 ([
-                    label("Due timestamp"),
+                    label("Time zone offset"),
                     $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                 ]),
             ]),
@@ -2030,7 +2032,9 @@ export module Clockworks
                         async () =>
                         {
                             setter(i);
-                            await reload();
+                            clearLastMouseDownTarget();
+                            getScreenCoverList().forEach(i => i.click());
+                                await reload();
                         },
                         flashInterval === i ? "current-item": undefined
                     )
@@ -2049,6 +2053,8 @@ export module Clockworks
                     ],
                     async () =>
                     {
+                        clearLastMouseDownTarget();
+                        getScreenCoverList().forEach(i => i.click());
                         const tick = await timePrompt(locale.map("input a time"), 0);
                         if (null !== tick)
                         {
@@ -2057,7 +2063,6 @@ export module Clockworks
                             setter(minutes);
                         }
                         await reload();
-                        getScreenCoverList().forEach(i => i.click());
                     },
                 )
             ]:
@@ -3380,6 +3385,10 @@ export module Clockworks
                 document.body.classList.toggle("fxxking-ipad-fullscreen", fullscreenElement());
             }
         };
+        let lastMouseDownTarget: EventTarget = null;
+        export const onMouseDown = (event: MouseEvent) => lastMouseDownTarget = event.target;
+        export const onMouseUp = (_evnet: MouseEvent) => setTimeout(clearLastMouseDownTarget, 10);
+        export const clearLastMouseDownTarget = () => lastMouseDownTarget = null;
     }
     export const getUrlParams = (url: string = location.href) =>
     {
@@ -3476,6 +3485,8 @@ export module Clockworks
             async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
         );
         window.addEventListener("mousemove", Render.onMouseMove);
+        window.addEventListener("mousedown", Render.onMouseDown);
+        window.addEventListener("mouseup", Render.onMouseUp);
         document.addEventListener("fullscreenchange", Render.onFullscreenChange);
         document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
         window.matchMedia("(prefers-color-scheme: dark)").addListener(updateStyle);
