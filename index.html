@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Sep 12 2021 03:40:12 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Sep 13 2021 03:13:47 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1691,6 +1691,11 @@ button.delete-button {
   position: relative;
   z-index: 20;
   padding: 1rem;
+}
+.timezone-item .item-panel .item-panel-body .item-utc-offset .value {
+  opacity: 0.666;
+  font-size: 1rem;
+  line-height: 140%;
 }
 .timezone-item .item-panel .item-panel-body .item-date .value {
   opacity: 0.666;
@@ -5459,14 +5464,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     _f.sent()
                                                 ]])
                                         ])]),
-                                    Render.$div("item-information")([
-                                        Render.$div("alarm-due-timestamp")([
-                                            Render.label("Time zone offset"),
-                                            Render.$span("value monospace")(Domain.timezoneOffsetString(item.offset)),
-                                        ]),
-                                    ]),
                                     Render.$div("item-panel")([
                                         Render.$div("item-panel-body")([
+                                            Render.$div("item-utc-offset")([
+                                                Render.$span("value monospace")(Domain.timezoneOffsetString(item.offset)),
+                                            ]),
                                             Render.$div("item-date")([
                                                 Render.$span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() - item.offset)),
                                             ]),

@@ -1863,18 +1863,14 @@ export module Clockworks
                     ]),
                 ]),
             ]),
-            $div("item-information")
-            ([
-                $div("alarm-due-timestamp")
-                ([
-                    label("Time zone offset"),
-                    $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
-                ]),
-            ]),
             $div("item-panel")
             ([
                 $div("item-panel-body")
                 ([
+                    $div("item-utc-offset")
+                    ([
+                        $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
+                    ]),
                     $div("item-date")
                     ([
                         $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
