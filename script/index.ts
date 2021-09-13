@@ -562,6 +562,112 @@ export module Clockworks
             return `${hours}:${minutes}`;
         };
         export const timezoneOffsetString = (offset: number) => `UTC${timezoneOffsetSignString(offset)}${timezoneOffsetTimeString(offset)}`;
+        export const parseOrNull = (json: string) =>
+        {
+            if (null !== json && undefined !== json)
+            {
+                try
+                {
+                    return JSON.parse(json);
+                }
+                catch(error)
+                {
+                    console.error(error);
+                }
+            }
+            return null;
+        };
+        export const parseStampCore = (item: any): number | null =>
+        {
+            if ("number" === typeof item && item <= Domain.getTicks())
+            {
+                return item;
+            }
+            return null;
+        };
+        export const parseStamp = (json: string): number | null => parseStampCore(parseOrNull(json));
+        export const parseAlarmCore = (item: any): AlarmEntry | null =>
+        {
+            if (null !== item && undefined !== item && "object" === typeof item)
+            {
+                if
+                (
+                    "timer" === item.type &&
+                    "number" === typeof item.start &&
+                    "number" === typeof item.end &&
+                    item.start < item.end
+                )
+                {
+                    const result =
+                    {
+                        type: item.type,
+                        start: item.start,
+                        end: item.end,
+                    };
+                    return result;
+                }
+                if
+                (
+                    "timer" === item.type &&
+                    "new" === item.start &&
+                    "number" === typeof item.end &&
+                    0 < item.end
+                )
+                {
+                    const start = getTicks();
+                    const result =
+                    {
+                        type: item.type,
+                        start: start,
+                        end: start +item.end,
+                    };
+                    return result;
+                }
+                if
+                (
+                    "schedule" === item.type &&
+                    "string" === typeof item.title &&
+                    "number" === typeof item.start &&
+                    "number" === typeof item.end &&
+                    item.start < item.end
+                )
+                {
+                    const result =
+                    {
+                        type: item.type,
+                        title: item.title,
+                        start: item.start,
+                        end: item.end,
+                    };
+                    return result;
+                }
+            }
+            return null;
+        };
+        export const parseAlarm = (json: string): AlarmEntry | null => parseAlarmCore(parseOrNull(json));
+        export const parseTimezoneCore = (item: any): TimezoneEntry | null =>
+        {
+            if (null !== item && undefined !== item && "object" === typeof item)
+            {
+                if
+                (
+                    "string" === typeof item.title &&
+                    0 < item.title.trim().length &&
+                    "number" === typeof item.offset &&
+                    -960 <= item.offset && item.offset <= 960
+                )
+                {
+                    const result =
+                    {
+                        title: item.title.trim(),
+                        offset: item.offset,
+                    };
+                    return result;
+                }
+            }
+            return null;
+        };
+        export const parseTimezone = (json: string): TimezoneEntry | null => parseTimezoneCore(parseOrNull(json));
     }
     export module Render
     {
@@ -2406,7 +2512,7 @@ export module Clockworks
             body: await neverStopwatchScreenBody(ticks)
         });
         let previousPrimaryStep = 0;
-        export const showNeverStopwatchScreen = async () =>
+        export const showNeverStopwatchScreen = async (_item: number | null) =>
         {
             const applicationTitle = application["NeverStopwatch"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -2647,7 +2753,7 @@ export module Clockworks
             },
             body: await countdownTimerScreenBody(alerts)
         });
-        export const showCountdownTimerScreen = async () =>
+        export const showCountdownTimerScreen = async (_item: AlarmEntry | null) =>
         {
             const applicationTitle = application["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -2840,7 +2946,7 @@ export module Clockworks
             },
             body: await rainbowClockScreenBody(timezones)
         });
-        export const showRainbowClockScreen = async () =>
+        export const showRainbowClockScreen = async (_item: TimezoneEntry | null) =>
         {
             const applicationTitle = application["RainbowClock"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -3498,16 +3604,17 @@ export module Clockworks
         const urlParams = getUrlParams(url);
         // const hash = getUrlHash(url);
         const applicationType = urlParams["application"] as ApplicationType;
+        const item = urlParams["item"];
         switch(applicationType)
         {
         case "NeverStopwatch":
-            await Render.showNeverStopwatchScreen();
+            await Render.showNeverStopwatchScreen(Domain.parseStamp(item));
             break;
         case "CountdownTimer":
-            await Render.showCountdownTimerScreen();
+            await Render.showCountdownTimerScreen(Domain.parseAlarm(item));
             break;
         case "RainbowClock":
-            await Render.showRainbowClockScreen();
+            await Render.showRainbowClockScreen(Domain.parseTimezone(item));
             break;
         default:
             await Render.showWelcomeScreen();
