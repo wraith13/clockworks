@@ -1299,28 +1299,40 @@ body.fxxking-ipad-fullscreen
                 }
                 padding: 0.5rem;
             }
-            .down-page-link
+            .page-footer
             {
-                cursor: pointer;
                 position: absolute;
-                left: calc(50vw - 1.25rem);
-                bottom: 1rem; // コードで調整するのでこの値に意味はない。
-                &.icon
+                left: 0px;
+                right: 0px;
+                bottom: 0px;
+                padding-bottom: 0.5rem; // コードで調整するのでこの値に意味はない。
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
+                .down-page-link
                 {
-                    opacity: 0.2;
-                    width: 2.5rem;
-                    height: 2.5rem;
-                    @media (hover: hover)
+                    cursor: pointer;
+                    // position: absolute;
+                    // left: calc(50vw - 1.25rem);
+                    // bottom: 1rem; // コードで調整するのでこの値に意味はない。
+                    &.icon
                     {
-                        &:hover
+                        opacity: 0.2;
+                        width: 2.0rem;
+                        height: 2.0rem;
+                        @media (hover: hover)
                         {
-                            opacity: 1.0;
+                            &:hover
+                            {
+                                opacity: 1.0;
+                            }
                         }
                     }
-                }
-                &:not(.reverse-down-page-link).icon
-                {
-                    transform: scale(1, -1);
+                    &:not(.reverse-down-page-link).icon
+                    {
+                        transform: scale(1, -1);
+                    }
                 }
             }
         }

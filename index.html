@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Sep 13 2021 03:13:47 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Sep 13 2021 18:35:40 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1797,23 +1797,31 @@ body.fxxking-ipad-fullscreen .screen {
   height: 1.5rem;
   margin-right: 0.25rem;
 }
-.screen > .screen-body .primary-page .down-page-link {
-  cursor: pointer;
+.screen > .screen-body .primary-page .page-footer {
   position: absolute;
-  left: calc(50vw - 1.25rem);
-  bottom: 1rem;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
 }
-.screen > .screen-body .primary-page .down-page-link.icon {
+.screen > .screen-body .primary-page .page-footer .down-page-link {
+  cursor: pointer;
+}
+.screen > .screen-body .primary-page .page-footer .down-page-link.icon {
   opacity: 0.2;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
 }
 @media (hover: hover) {
-  .screen > .screen-body .primary-page .down-page-link.icon:hover {
+  .screen > .screen-body .primary-page .page-footer .down-page-link.icon:hover {
     opacity: 1;
   }
 }
-.screen > .screen-body .primary-page .down-page-link:not(.reverse-down-page-link).icon {
+.screen > .screen-body .primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
   transform: scale(1, -1);
 }
 .screen > .screen-body .screen-bar {
@@ -3851,6 +3859,82 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return hours + ":" + minutes;
             };
             Domain.timezoneOffsetString = function (offset) { return "UTC" + timezoneOffsetSignString(offset) + timezoneOffsetTimeString(offset); };
+            Domain.parseOrNull = function (json) {
+                if (null !== json && undefined !== json) {
+                    try {
+                        return JSON.parse(json);
+                    }
+                    catch (error) {
+                        console.error(error);
+                    }
+                }
+                return null;
+            };
+            Domain.parseStampCore = function (item) {
+                if ("number" === typeof item && item <= Domain.getTicks()) {
+                    return item;
+                }
+                return null;
+            };
+            Domain.parseStamp = function (json) { return Domain.parseStampCore(Domain.parseOrNull(json)); };
+            Domain.parseAlarmCore = function (item) {
+                if (null !== item && undefined !== item && "object" === typeof item) {
+                    if ("timer" === item.type &&
+                        "number" === typeof item.start &&
+                        "number" === typeof item.end &&
+                        item.start < item.end) {
+                        var result = {
+                            type: item.type,
+                            start: item.start,
+                            end: item.end,
+                        };
+                        return result;
+                    }
+                    if ("timer" === item.type &&
+                        "new" === item.start &&
+                        "number" === typeof item.end &&
+                        0 < item.end) {
+                        var start_1 = Domain.getTicks();
+                        var result = {
+                            type: item.type,
+                            start: start_1,
+                            end: start_1 + item.end,
+                        };
+                        return result;
+                    }
+                    if ("schedule" === item.type &&
+                        "string" === typeof item.title &&
+                        "number" === typeof item.start &&
+                        "number" === typeof item.end &&
+                        item.start < item.end) {
+                        var result = {
+                            type: item.type,
+                            title: item.title,
+                            start: item.start,
+                            end: item.end,
+                        };
+                        return result;
+                    }
+                }
+                return null;
+            };
+            Domain.parseAlarm = function (json) { return Domain.parseAlarmCore(Domain.parseOrNull(json)); };
+            Domain.parseTimezoneCore = function (item) {
+                if (null !== item && undefined !== item && "object" === typeof item) {
+                    if ("string" === typeof item.title &&
+                        0 < item.title.trim().length &&
+                        "number" === typeof item.offset &&
+                        -960 <= item.offset && item.offset <= 960) {
+                        var result = {
+                            title: item.title.trim(),
+                            offset: item.offset,
+                        };
+                        return result;
+                    }
+                }
+                return null;
+            };
+            Domain.parseTimezone = function (json) { return Domain.parseTimezoneCore(Domain.parseOrNull(json)); };
         })(Domain = Clockworks.Domain || (Clockworks.Domain = {}));
         var Render;
         (function (Render) {
@@ -5993,22 +6077,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.welcomeScreen = function () { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e;
-                var _f, _g;
-                return __generator(this, function (_h) {
-                    switch (_h.label) {
+                var _a, _b, _c, _d, _e, _f;
+                var _g, _h;
+                return __generator(this, function (_j) {
+                    switch (_j.label) {
                         case 0:
-                            _f = {
+                            _g = {
                                 className: "welcome-screen"
                             };
-                            _g = {};
+                            _h = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
-                            _f.header = (_g.items = [
-                                _h.sent()
+                            _g.header = (_h.items = [
+                                _j.sent()
                             ],
-                                _g.menu = Render.welcomeScreenMenu,
-                                _g);
+                                _h.menu = Render.welcomeScreenMenu,
+                                _h);
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
                             _c = Render.$div("logo");
@@ -6018,7 +6102,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _e = [
                                 _b.apply(void 0, [[
                                         _c.apply(void 0, [[
-                                                _d.apply(void 0, [_h.sent()]),
+                                                _d.apply(void 0, [_j.sent()]),
                                                 Render.$span("logo-text")(Clockworks.applicationTitle)
                                             ]]),
                                         Render.$div("button-list")(Clockworks.ApplicationList.map(function (i) {
@@ -6034,10 +6118,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }))
                                     ]])
                             ];
+                            _f = Render.$div("page-footer");
                             return [4 /*yield*/, Render.downPageLink()];
-                        case 3: return [2 /*return*/, (_f.body = [
+                        case 3: return [2 /*return*/, (_g.body = [
                                 _a.apply(void 0, [_e.concat([
-                                        _h.sent()
+                                        _f.apply(void 0, [[
+                                                _j.sent()
+                                            ]])
                                     ])]),
                                 Render.$div("trail-page")([
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
@@ -6046,7 +6133,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 ]),
                                 Render.screenBar()
                             ],
-                                _f)];
+                                _g)];
                     }
                 });
             }); };
@@ -6164,10 +6251,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             Render.screenBar = function () { return Render.$div("screen-bar")(Render.$div("screen-bar-flash-layer")([])); };
             Render.neverStopwatchScreenBody = function (ticks) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j;
                 var _this = this;
-                return __generator(this, function (_j) {
-                    switch (_j.label) {
+                return __generator(this, function (_k) {
+                    switch (_k.label) {
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
@@ -6189,11 +6276,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
                                     .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.NeverStopwatch.flashInterval.get(), Storage.NeverStopwatch.flashInterval.set)];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_j.sent()])];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
                         case 2:
                             _e = [
                                 _b.apply(void 0, [_c.concat([
-                                        _j.sent(),
+                                        _k.sent(),
                                         Render.$div("button-list")({
                                             tag: "button",
                                             className: "default-button main-button long-button",
@@ -6207,19 +6294,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         })
                                     ])])
                             ];
+                            _f = Render.$div("page-footer");
                             return [4 /*yield*/, Render.downPageLink()];
                         case 3:
-                            _f = [
+                            _g = [
                                 _a.apply(void 0, [_e.concat([
-                                        _j.sent()
+                                        _f.apply(void 0, [[
+                                                _k.sent()
+                                            ]])
                                     ])])
                             ];
-                            _g = Render.$div("trail-page");
-                            _h = Render.$div("row-flex-list stamp-list");
+                            _h = Render.$div("trail-page");
+                            _j = Render.$div("row-flex-list stamp-list");
                             return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
-                        case 4: return [2 /*return*/, (_f.concat([
-                                _g.apply(void 0, [[
-                                        _h.apply(void 0, [_j.sent()]),
+                        case 4: return [2 /*return*/, (_g.concat([
+                                _h.apply(void 0, [[
+                                        _j.apply(void 0, [_k.sent()]),
                                         Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                             Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
@@ -6259,7 +6349,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             var previousPrimaryStep = 0;
-            Render.showNeverStopwatchScreen = function () { return __awaiter(_this, void 0, void 0, function () {
+            Render.showNeverStopwatchScreen = function (_item) { return __awaiter(_this, void 0, void 0, function () {
                 var applicationTitle, ticks, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
@@ -6347,7 +6437,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         case 6:
                                             _b.apply(void 0, [_c.sent()]);
                                             Render.resizeFlexList();
-                                            Render.adjustDownPageLinkPosition();
+                                            Render.adjustPageFooterPosition();
                                             return [4 /*yield*/, updateWindow("timer")];
                                         case 7:
                                             _c.sent();
@@ -6369,10 +6459,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.countdownTimerScreenBody = function (alarms) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
                 var _this = this;
-                return __generator(this, function (_k) {
-                    switch (_k.label) {
+                return __generator(this, function (_l) {
+                    switch (_l.label) {
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
@@ -6413,11 +6503,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
                                     .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_l.sent()])];
                         case 2:
                             _e = [
                                 _b.apply(void 0, [_c.concat([
-                                        _k.sent(),
+                                        _l.sent(),
                                         Render.$div("button-list")({
                                             tag: "button",
                                             id: "done-button",
@@ -6440,15 +6530,18 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         })
                                     ])])
                             ];
+                            _f = Render.$div("page-footer");
                             return [4 /*yield*/, Render.downPageLink()];
                         case 3:
-                            _f = [
+                            _g = [
                                 _a.apply(void 0, [_e.concat([
-                                        _k.sent()
+                                        _f.apply(void 0, [[
+                                                _l.sent()
+                                            ]])
                                     ])])
                             ];
-                            _g = Render.$div("trail-page");
-                            _h = [Render.$div("button-list")([
+                            _h = Render.$div("trail-page");
+                            _j = [Render.$div("button-list")([
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -6489,11 +6582,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _j = Render.$div("row-flex-list alarm-list");
+                            _k = Render.$div("row-flex-list alarm-list");
                             return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alarmItem(item); }))];
-                        case 4: return [2 /*return*/, (_f.concat([
-                                _g.apply(void 0, [_h.concat([
-                                        _j.apply(void 0, [_k.sent()]),
+                        case 4: return [2 /*return*/, (_g.concat([
+                                _h.apply(void 0, [_j.concat([
+                                        _k.apply(void 0, [_l.sent()]),
                                         Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                             Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
@@ -6532,7 +6625,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.showCountdownTimerScreen = function () { return __awaiter(_this, void 0, void 0, function () {
+            Render.showCountdownTimerScreen = function (_item) { return __awaiter(_this, void 0, void 0, function () {
                 var applicationTitle, alerts, lashFlashAt, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
@@ -6636,7 +6729,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [4 /*yield*/, Render.scrollToOffset(document.getElementById("screen-body"), 0)];
                                         case 8:
                                             _c.sent();
-                                            Render.adjustDownPageLinkPosition();
+                                            Render.adjustPageFooterPosition();
                                             return [3 /*break*/, 9];
                                         case 9: return [2 /*return*/];
                                     }
@@ -6702,10 +6795,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.rainbowClockScreenBody = function (timezones) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
                 var _this = this;
-                return __generator(this, function (_k) {
-                    switch (_k.label) {
+                return __generator(this, function (_l) {
+                    switch (_l.label) {
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
@@ -6721,22 +6814,25 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 // .sort(minamo.core.comparer.make([i => i]))
                                 // .filter((i, ix, list) => ix === list.indexOf(i)),
                                 Storage.RainbowClock.flashInterval.get(), Storage.RainbowClock.flashInterval.set)];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_l.sent()])];
                         case 2:
                             _e = [
                                 _b.apply(void 0, [_c.concat([
-                                        _k.sent()
+                                        _l.sent()
                                     ])])
                             ];
+                            _f = Render.$div("page-footer");
                             return [4 /*yield*/, Render.downPageLink()];
                         case 3:
-                            _f = [
+                            _g = [
                                 _a.apply(void 0, [_e.concat([
-                                        _k.sent()
+                                        _f.apply(void 0, [[
+                                                _l.sent()
+                                            ]])
                                     ])])
                             ];
-                            _g = Render.$div("trail-page");
-                            _h = [Render.$div("button-list")([
+                            _h = Render.$div("trail-page");
+                            _j = [Render.$div("button-list")([
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -6759,11 +6855,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _j = Render.$div("row-flex-list timezone-list");
+                            _k = Render.$div("row-flex-list timezone-list");
                             return [4 /*yield*/, Promise.all(timezones.map(function (item) { return Render.timezoneItem(item); }))];
-                        case 4: return [2 /*return*/, (_f.concat([
-                                _g.apply(void 0, [_h.concat([
-                                        _j.apply(void 0, [_k.sent()]),
+                        case 4: return [2 /*return*/, (_g.concat([
+                                _h.apply(void 0, [_j.concat([
+                                        _k.apply(void 0, [_l.sent()]),
                                         Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                             Render.$tag("li")("")(Render.label("Not support daylight savings time.")),
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
@@ -6802,7 +6898,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.showRainbowClockScreen = function () { return __awaiter(_this, void 0, void 0, function () {
+            Render.showRainbowClockScreen = function (_item) { return __awaiter(_this, void 0, void 0, function () {
                 var applicationTitle, timezones, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
@@ -6891,7 +6987,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [4 /*yield*/, Render.scrollToOffset(document.getElementById("screen-body"), 0)];
                                         case 8:
                                             _c.sent();
-                                            Render.adjustDownPageLinkPosition();
+                                            Render.adjustPageFooterPosition();
                                             return [3 /*break*/, 9];
                                         case 9: return [2 /*return*/];
                                     }
@@ -6964,7 +7060,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Render.updateTitle();
                             //minamo.core.timeout(100);
                             Render.resizeFlexList();
-                            Render.adjustDownPageLinkPosition();
+                            Render.adjustPageFooterPosition();
                             return [2 /*return*/];
                     }
                 });
@@ -7143,12 +7239,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     minamo_js_1.minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
                 });
             };
-            Render.adjustDownPageLinkPosition = function () {
+            Render.adjustPageFooterPosition = function () {
                 var primaryPage = document.getElementsByClassName("primary-page")[0];
                 if (primaryPage) {
                     var delta_1 = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
-                    minamo_js_1.minamo.dom.getDivsByClassName(document, "down-page-link")
-                        .forEach(function (i) { return minamo_js_1.minamo.dom.setProperty(i.style, "bottom", "calc(1rem + " + delta_1 + "px)"); });
+                    minamo_js_1.minamo.dom.getDivsByClassName(document, "page-footer")
+                        .forEach(function (i) { return minamo_js_1.minamo.dom.setProperty(i.style, "paddingBottom", "calc(0.5rem + " + delta_1 + "px)"); });
+                    // minamo.dom.getDivsByClassName(document, "down-page-link")
+                    //     .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
                 }
             };
             Render.adjustDownPageLinkDirection = function () {
@@ -7161,7 +7259,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 setTimeout(function () {
                     if (timestamp === onWindowResizeTimestamp) {
                         Render.resizeFlexList();
-                        Render.adjustDownPageLinkPosition();
+                        Render.adjustPageFooterPosition();
                     }
                 }, 100);
             };
@@ -7350,7 +7448,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         Clockworks.showPage = function (url) {
             if (url === void 0) { url = location.href; }
             return __awaiter(_this, void 0, void 0, function () {
-                var urlParams, applicationType, _a;
+                var urlParams, applicationType, item, _a;
                 var _b;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
@@ -7360,6 +7458,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             document.getElementById("screen-body").scrollTo(0, 0);
                             urlParams = Clockworks.getUrlParams(url);
                             applicationType = urlParams["application"];
+                            item = urlParams["item"];
                             _a = applicationType;
                             switch (_a) {
                                 case "NeverStopwatch": return [3 /*break*/, 1];
@@ -7367,15 +7466,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 case "RainbowClock": return [3 /*break*/, 5];
                             }
                             return [3 /*break*/, 7];
-                        case 1: return [4 /*yield*/, Render.showNeverStopwatchScreen()];
+                        case 1: return [4 /*yield*/, Render.showNeverStopwatchScreen(Domain.parseStamp(item))];
                         case 2:
                             _c.sent();
                             return [3 /*break*/, 9];
-                        case 3: return [4 /*yield*/, Render.showCountdownTimerScreen()];
+                        case 3: return [4 /*yield*/, Render.showCountdownTimerScreen(Domain.parseAlarm(item))];
                         case 4:
                             _c.sent();
                             return [3 /*break*/, 9];
-                        case 5: return [4 /*yield*/, Render.showRainbowClockScreen()];
+                        case 5: return [4 /*yield*/, Render.showRainbowClockScreen(Domain.parseTimezone(item))];
                         case 6:
                             _c.sent();
                             return [3 /*break*/, 9];

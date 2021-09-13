@@ -2359,7 +2359,10 @@ export module Clockworks
                             )
                         ),
                     ]),
-                    await downPageLink(),
+                    $div("page-footer")
+                    ([
+                        await downPageLink(),
+                    ]),
                 ]),
                 $div("trail-page")
                 ([
@@ -2467,8 +2470,11 @@ export module Clockworks
                         onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
                     }),
                 ]),
-                await downPageLink(),
-            ]),
+                $div("page-footer")
+                ([
+                    await downPageLink(),
+                ]),
+        ]),
             $div("trail-page")
             ([
                 $div("row-flex-list stamp-list")
@@ -2592,7 +2598,7 @@ export module Clockworks
                         ticks = Storage.NeverStopwatch.Stamps.get();
                         replaceScreenBody(await neverStopwatchScreenBody(ticks));
                         resizeFlexList();
-                        adjustDownPageLinkPosition();
+                        adjustPageFooterPosition();
                         await updateWindow("timer");
                         break;
                 }
@@ -2686,8 +2692,11 @@ export module Clockworks
                         }
                     }),
                 ]),
-                await downPageLink(),
-            ]),
+                $div("page-footer")
+                ([
+                    await downPageLink(),
+                ]),
+        ]),
             $div("trail-page")
             ([
                 $div("button-list")
@@ -2847,7 +2856,7 @@ export module Clockworks
                         resizeFlexList();
                         await updateWindow("timer");
                         await Render.scrollToOffset(document.getElementById("screen-body"), 0);
-                        adjustDownPageLinkPosition();
+                        adjustPageFooterPosition();
                         break;
                 }
             };
@@ -2897,8 +2906,11 @@ export module Clockworks
                         )
                     ),
                 ]),
-                await downPageLink(),
-            ]),
+                $div("page-footer")
+                ([
+                    await downPageLink(),
+                ]),
+        ]),
             $div("trail-page")
             ([
                 $div("button-list")
@@ -3022,7 +3034,7 @@ export module Clockworks
                         resizeFlexList();
                         await updateWindow("timer");
                         await Render.scrollToOffset(document.getElementById("screen-body"), 0);
-                        adjustDownPageLinkPosition();
+                        adjustPageFooterPosition();
                         break;
                 }
             };
@@ -3100,7 +3112,7 @@ export module Clockworks
             updateTitle();
             //minamo.core.timeout(100);
             resizeFlexList();
-            adjustDownPageLinkPosition();
+            adjustPageFooterPosition();
         };
         export interface Toast
         {
@@ -3339,14 +3351,16 @@ export module Clockworks
                 }
             );
         };
-        export const adjustDownPageLinkPosition = () =>
+        export const adjustPageFooterPosition = () =>
         {
             const primaryPage = document.getElementsByClassName("primary-page")[0];
             if (primaryPage)
             {
                 const delta = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
-                minamo.dom.getDivsByClassName(document, "down-page-link")
-                    .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
+                minamo.dom.getDivsByClassName(document, "page-footer")
+                    .forEach(i => minamo.dom.setProperty(i.style, "paddingBottom", `calc(0.5rem + ${delta}px)`));
+                // minamo.dom.getDivsByClassName(document, "down-page-link")
+                //     .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
             }
         };
         export const adjustDownPageLinkDirection = () =>
@@ -3363,7 +3377,7 @@ export module Clockworks
                     if (timestamp === onWindowResizeTimestamp)
                     {
                         resizeFlexList();
-                        adjustDownPageLinkPosition();
+                        adjustPageFooterPosition();
                     }
                 },
                 100,
