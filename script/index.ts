@@ -2134,6 +2134,27 @@ export module Clockworks
                 )
             )
         });
+        export const screenHeaderStampSegment = async (item: number | null, ticks: number[]): Promise<HeaderSegmentSource> =>
+        ({
+            icon: "tick-icon",
+            title: Domain.dateFullStringFromTick(item),
+            menu: await Promise.all
+            (
+                ticks
+                    .concat([item])
+                    .sort(minamo.core.comparer.make([i => -i]))
+                    .filter((i, ix, list) => ix === list.indexOf(i))
+                    .map
+                    (
+                        async i => menuLinkItem
+                        (
+                            [ await Resource.loadSvgOrCache("tick-icon"), Domain.dateFullStringFromTick(i), ],
+                            { application: "NeverStopwatch", item: JSON.stringify(i), },
+                            item === i ? "current-item": undefined,
+                        )
+                    )
+            )
+        });
         export const screenHeaderFlashSegmentMenu = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: locale.LocaleKeyType): Promise<minamo.dom.Source> =>
         (
             await Promise.all
@@ -2451,9 +2472,13 @@ export module Clockworks
                         ([
                             $span("value monospace")
                             (
-                                0 < ticks.length ?
-                                    Domain.dateFullStringFromTick(ticks[0]):
-                                    ""
+                                null !== item ?
+                                    Domain.dateFullStringFromTick(item):
+                                    (
+                                        0 < ticks.length ?
+                                        Domain.dateFullStringFromTick(ticks[0]):
+                                        ""
+                                    )
                             ),
                         ]),
                         $div("capital-interval")
@@ -2488,8 +2513,9 @@ export module Clockworks
                 ]),
                 $div("page-footer")
                 ([
-                    item ?
-                        [
+                    null !== item ?
+                        $div("button-list")
+                        ([
                             internalLink
                             ({
                                 href: { application: "NeverStopwatch", },
@@ -2508,35 +2534,37 @@ export module Clockworks
                                     // onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
                                 }:
                                 []
-                        ]:
+                        ]):
                         await downPageLink(),
                 ]),
-        ]),
-            $div("trail-page")
-            ([
-                $div("row-flex-list stamp-list")
-                (
-                    await Promise.all
+            ]),
+            null !== item ?
+                []:
+                $div("trail-page")
+                ([
+                    $div("row-flex-list stamp-list")
                     (
-                        ticks.map
+                        await Promise.all
                         (
-                            (tick, index) => stampItem
+                            ticks.map
                             (
-                                tick,
-                                "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
+                                (tick, index) => stampItem
+                                (
+                                    tick,
+                                    "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
+                                )
                             )
                         )
-                    )
-                ),
-                $div("description")
-                (
-                    $tag("ul")("locale-parallel-off")
-                    ([
-                        $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                    ])
-                ),
-            ]),
+                    ),
+                    $div("description")
+                    (
+                        $tag("ul")("locale-parallel-off")
+                        ([
+                            $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                            $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        ])
+                    ),
+                ]),
             screenBar(),
         ]);
         export const neverStopwatchScreen = async (item: number | null, ticks: number[]): Promise<ScreenSource> =>
@@ -2549,7 +2577,10 @@ export module Clockworks
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("NeverStopwatch"),
                     // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
-                ],
+                    null !== item ?
+                        await screenHeaderStampSegment(item, ticks):
+                        null,
+                ].filter(i => i),
                 menu: neverStopwatchScreenMenu
             },
             body: await neverStopwatchScreenBody(item, ticks)
