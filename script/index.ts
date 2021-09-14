@@ -1000,6 +1000,7 @@ export module Clockworks
         export interface PageParams
         {
             application?: ApplicationType;
+            item?: string;
         }
         export const internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
         ({
@@ -1803,14 +1804,19 @@ export module Clockworks
         ([
             $div("item-header")
             ([
-                $div("item-title")
-                ([
-                    await Resource.loadSvgOrCache("tick-icon"),
-                    $div("tick-elapsed-time")
-                    ([
-                        $span("value monospace")(label("elapsed time")),
-                    ]),
-                ]),
+                internalLink
+                ({
+                    className: "item-title",
+                    href: { application: "NeverStopwatch", item: JSON.stringify(tick), },
+                    children:
+                    [
+                        await Resource.loadSvgOrCache("tick-icon"),
+                        $div("tick-elapsed-time")
+                        ([
+                            $span("value monospace")(label("elapsed time")),
+                        ]),
+                    ]
+                }),
                 $div("item-operator")
                 ([
                     await menuButton
@@ -1872,11 +1878,16 @@ export module Clockworks
         ([
             $div("item-header")
             ([
-                $div("item-title")
-                ([
-                    await Resource.loadSvgOrCache("tick-icon"),
-                    $div("tick-elapsed-time")([$span("value monospace")(alarmTitle(item)),]),
-                ]),
+                internalLink
+                ({
+                    className: "item-title",
+                    href: { application: "CountdownTimer", item: JSON.stringify(item), },
+                    children:
+                    [
+                        await Resource.loadSvgOrCache("tick-icon"),
+                        $div("tick-elapsed-time")([$span("value monospace")(alarmTitle(item)),]),
+                    ]
+                }),
                 $div("item-operator")
                 ([
                     await menuButton
@@ -1936,11 +1947,16 @@ export module Clockworks
         ([
             $div("item-header")
             ([
-                $div("item-title")
-                ([
-                    await Resource.loadSvgOrCache("tick-icon"),
-                    $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
-                ]),
+                internalLink
+                ({
+                    className: "item-title",
+                    href: { application: "RainbowClock", item: JSON.stringify(item), },
+                    children:
+                    [
+                        await Resource.loadSvgOrCache("tick-icon"),
+                        $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
+                    ]
+                }),
                 $div("item-operator")
                 ([
                     await menuButton
@@ -2423,7 +2439,7 @@ export module Clockworks
             }),
         });
         export const screenBar = () => $div("screen-bar")($div("screen-bar-flash-layer")([]));
-        export const neverStopwatchScreenBody = async (ticks: number[]) =>
+        export const neverStopwatchScreenBody = async (item: number | null, ticks: number[]) =>
         ([
             $div("primary-page")
             ([
@@ -2472,7 +2488,28 @@ export module Clockworks
                 ]),
                 $div("page-footer")
                 ([
-                    await downPageLink(),
+                    item ?
+                        [
+                            internalLink
+                            ({
+                                href: { application: "NeverStopwatch", },
+                                children:
+                                {
+                                    tag: "button",
+                                    className: "default-button main-button long-button",
+                                    children: "閉じる / Close",
+                                }
+                            }),
+                            ticks.indexOf(item) < 0 ?
+                                {
+                                    tag: "button",
+                                    className: "default-button main-button long-button",
+                                    children: "保存 / Save",
+                                    // onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
+                                }:
+                                []
+                        ]:
+                        await downPageLink(),
                 ]),
         ]),
             $div("trail-page")
@@ -2502,7 +2539,7 @@ export module Clockworks
             ]),
             screenBar(),
         ]);
-        export const neverStopwatchScreen = async (ticks: number[]): Promise<ScreenSource> =>
+        export const neverStopwatchScreen = async (item: number | null, ticks: number[]): Promise<ScreenSource> =>
         ({
             className: "never-stopwatch-screen",
             header:
@@ -2515,10 +2552,10 @@ export module Clockworks
                 ],
                 menu: neverStopwatchScreenMenu
             },
-            body: await neverStopwatchScreenBody(ticks)
+            body: await neverStopwatchScreenBody(item, ticks)
         });
         let previousPrimaryStep = 0;
-        export const showNeverStopwatchScreen = async (_item: number | null) =>
+        export const showNeverStopwatchScreen = async (item: number | null) =>
         {
             const applicationTitle = application["NeverStopwatch"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -2596,14 +2633,14 @@ export module Clockworks
                     case "operate":
                         previousPrimaryStep = 0;
                         ticks = Storage.NeverStopwatch.Stamps.get();
-                        replaceScreenBody(await neverStopwatchScreenBody(ticks));
+                        replaceScreenBody(await neverStopwatchScreenBody(item, ticks));
                         resizeFlexList();
                         adjustPageFooterPosition();
                         await updateWindow("timer");
                         break;
                 }
             };
-            await showWindow(await neverStopwatchScreen(ticks), updateWindow);
+            await showWindow(await neverStopwatchScreen(item, ticks), updateWindow);
             await updateWindow("timer");
         };
         export const countdownTimerScreenBody = async (alarms: AlarmEntry[]) =>

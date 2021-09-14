@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Sep 13 2021 18:35:40 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Sep 14 2021 01:44:07 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -5351,22 +5351,28 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             Render.menuLinkItem = function (children, href, className) { return Render.menuItem(children, function () { return Clockworks.showUrl(href); }, className); };
             Render.stampItem = function (tick, interval) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e;
+                var _f;
                 var _this = this;
-                return __generator(this, function (_f) {
-                    switch (_f.label) {
+                return __generator(this, function (_g) {
+                    switch (_g.label) {
                         case 0:
                             _a = Render.$div("stamp-item flex-item");
                             _b = Render.$div("item-header");
-                            _c = Render.$div("item-title");
+                            _c = Render.internalLink;
+                            _f = {
+                                className: "item-title",
+                                href: { application: "NeverStopwatch", item: JSON.stringify(tick), }
+                            };
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
                             _d = [
-                                _c.apply(void 0, [[
-                                        _f.sent(),
+                                _c.apply(void 0, [(_f.children = [
+                                        _g.sent(),
                                         Render.$div("tick-elapsed-time")([
                                             Render.$span("value monospace")(Render.label("elapsed time")),
                                         ])
-                                    ]])
+                                    ],
+                                        _f)])
                             ];
                             _e = Render.$div("item-operator");
                             return [4 /*yield*/, Render.menuButton([
@@ -5407,7 +5413,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 2: return [2 /*return*/, _a.apply(void 0, [[
                                     _b.apply(void 0, [_d.concat([
                                             _e.apply(void 0, [[
-                                                    _f.sent()
+                                                    _g.sent()
                                                 ]])
                                         ])]),
                                     Render.$div("item-information")([
@@ -5429,20 +5435,26 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 item.title; };
             Render.alarmItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e;
+                var _f;
                 var _this = this;
-                return __generator(this, function (_f) {
-                    switch (_f.label) {
+                return __generator(this, function (_g) {
+                    switch (_g.label) {
                         case 0:
                             _a = Render.$div("alarm-item flex-item");
                             _b = Render.$div("item-header");
-                            _c = Render.$div("item-title");
+                            _c = Render.internalLink;
+                            _f = {
+                                className: "item-title",
+                                href: { application: "CountdownTimer", item: JSON.stringify(item), }
+                            };
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
                             _d = [
-                                _c.apply(void 0, [[
-                                        _f.sent(),
+                                _c.apply(void 0, [(_f.children = [
+                                        _g.sent(),
                                         Render.$div("tick-elapsed-time")([Render.$span("value monospace")(Render.alarmTitle(item)),])
-                                    ]])
+                                    ],
+                                        _f)])
                             ];
                             _e = Render.$div("item-operator");
                             return [4 /*yield*/, Render.menuButton([
@@ -5482,7 +5494,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 2: return [2 /*return*/, _a.apply(void 0, [[
                                     _b.apply(void 0, [_d.concat([
                                             _e.apply(void 0, [[
-                                                    _f.sent()
+                                                    _g.sent()
                                                 ]])
                                         ])]),
                                     Render.$div("item-information")([
@@ -5501,20 +5513,26 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             Render.timezoneItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e;
+                var _f;
                 var _this = this;
-                return __generator(this, function (_f) {
-                    switch (_f.label) {
+                return __generator(this, function (_g) {
+                    switch (_g.label) {
                         case 0:
                             _a = Render.$div("timezone-item flex-item");
                             _b = Render.$div("item-header");
-                            _c = Render.$div("item-title");
+                            _c = Render.internalLink;
+                            _f = {
+                                className: "item-title",
+                                href: { application: "RainbowClock", item: JSON.stringify(item), }
+                            };
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
                             _d = [
-                                _c.apply(void 0, [[
-                                        _f.sent(),
+                                _c.apply(void 0, [(_f.children = [
+                                        _g.sent(),
                                         Render.$div("tick-elapsed-time")([Render.$span("value monospace")(item.title),])
-                                    ]])
+                                    ],
+                                        _f)])
                             ];
                             _e = Render.$div("item-operator");
                             return [4 /*yield*/, Render.menuButton([
@@ -5545,7 +5563,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 2: return [2 /*return*/, _a.apply(void 0, [[
                                     _b.apply(void 0, [_d.concat([
                                             _e.apply(void 0, [[
-                                                    _f.sent()
+                                                    _g.sent()
                                                 ]])
                                         ])]),
                                     Render.$div("item-panel")([
@@ -6250,11 +6268,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.screenBar = function () { return Render.$div("screen-bar")(Render.$div("screen-bar-flash-layer")([])); };
-            Render.neverStopwatchScreenBody = function (ticks) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+            Render.neverStopwatchScreenBody = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
                 var _this = this;
-                return __generator(this, function (_k) {
-                    switch (_k.label) {
+                return __generator(this, function (_l) {
+                    switch (_l.label) {
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("main-panel");
@@ -6276,11 +6294,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
                                     .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.NeverStopwatch.flashInterval.get(), Storage.NeverStopwatch.flashInterval.set)];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_k.sent()])];
+                        case 1: return [4 /*yield*/, _d.apply(void 0, [_l.sent()])];
                         case 2:
                             _e = [
                                 _b.apply(void 0, [_c.concat([
-                                        _k.sent(),
+                                        _l.sent(),
                                         Render.$div("button-list")({
                                             tag: "button",
                                             className: "default-button main-button long-button",
@@ -6295,21 +6313,44 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     ])])
                             ];
                             _f = Render.$div("page-footer");
-                            return [4 /*yield*/, Render.downPageLink()];
-                        case 3:
+                            if (!item) return [3 /*break*/, 3];
                             _g = [
+                                Render.internalLink({
+                                    href: { application: "NeverStopwatch", },
+                                    children: {
+                                        tag: "button",
+                                        className: "default-button main-button long-button",
+                                        children: "閉じる / Close",
+                                    }
+                                }),
+                                ticks.indexOf(item) < 0 ?
+                                    {
+                                        tag: "button",
+                                        className: "default-button main-button long-button",
+                                        children: "保存 / Save",
+                                        // onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
+                                    } :
+                                    []
+                            ];
+                            return [3 /*break*/, 5];
+                        case 3: return [4 /*yield*/, Render.downPageLink()];
+                        case 4:
+                            _g = _l.sent();
+                            _l.label = 5;
+                        case 5:
+                            _h = [
                                 _a.apply(void 0, [_e.concat([
                                         _f.apply(void 0, [[
-                                                _k.sent()
+                                                _g
                                             ]])
                                     ])])
                             ];
-                            _h = Render.$div("trail-page");
-                            _j = Render.$div("row-flex-list stamp-list");
+                            _j = Render.$div("trail-page");
+                            _k = Render.$div("row-flex-list stamp-list");
                             return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
-                        case 4: return [2 /*return*/, (_g.concat([
-                                _h.apply(void 0, [[
-                                        _j.apply(void 0, [_k.sent()]),
+                        case 6: return [2 /*return*/, (_h.concat([
+                                _j.apply(void 0, [[
+                                        _k.apply(void 0, [_l.sent()]),
                                         Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                             Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
@@ -6320,7 +6361,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.neverStopwatchScreen = function (ticks) { return __awaiter(_this, void 0, void 0, function () {
+            Render.neverStopwatchScreen = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
                 var _a;
                 var _b, _c;
                 return __generator(this, function (_d) {
@@ -6342,14 +6383,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             ]),
                                 _c.menu = Render.neverStopwatchScreenMenu,
                                 _c);
-                            return [4 /*yield*/, Render.neverStopwatchScreenBody(ticks)];
+                            return [4 /*yield*/, Render.neverStopwatchScreenBody(item, ticks)];
                         case 3: return [2 /*return*/, (_b.body = _d.sent(),
                                 _b)];
                     }
                 });
             }); };
             var previousPrimaryStep = 0;
-            Render.showNeverStopwatchScreen = function (_item) { return __awaiter(_this, void 0, void 0, function () {
+            Render.showNeverStopwatchScreen = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var applicationTitle, ticks, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
@@ -6433,7 +6474,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             previousPrimaryStep = 0;
                                             ticks = Storage.NeverStopwatch.Stamps.get();
                                             _b = Render.replaceScreenBody;
-                                            return [4 /*yield*/, Render.neverStopwatchScreenBody(ticks)];
+                                            return [4 /*yield*/, Render.neverStopwatchScreenBody(item, ticks)];
                                         case 6:
                                             _b.apply(void 0, [_c.sent()]);
                                             Render.resizeFlexList();
@@ -6447,7 +6488,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 });
                             }); };
                             _a = Render.showWindow;
-                            return [4 /*yield*/, Render.neverStopwatchScreen(ticks)];
+                            return [4 /*yield*/, Render.neverStopwatchScreen(item, ticks)];
                         case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent(), updateWindow])];
                         case 2:
                             _b.sent();
