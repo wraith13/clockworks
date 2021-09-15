@@ -2134,6 +2134,7 @@ export module Clockworks
                 )
             )
         });
+
         export const screenHeaderStampSegment = async (item: number | null, ticks: number[]): Promise<HeaderSegmentSource> =>
         ({
             icon: "tick-icon",
@@ -2148,9 +2149,30 @@ export module Clockworks
                     (
                         async i => menuLinkItem
                         (
-                            [ await Resource.loadSvgOrCache("tick-icon"), Domain.dateFullStringFromTick(i), ],
+                            [ await Resource.loadSvgOrCache("tick-icon"), $span("monospace")(Domain.dateFullStringFromTick(i)), ],
                             { application: "NeverStopwatch", item: JSON.stringify(i), },
                             item === i ? "current-item": undefined,
+                        )
+                    )
+            )
+        });
+        export const screenHeaderTimezoneSegment = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]): Promise<HeaderSegmentSource> =>
+        ({
+            icon: "tick-icon",
+            title: item.title,
+            menu: await Promise.all
+            (
+                timezones
+                    .concat([item])
+                    .sort(minamo.core.comparer.make([i => i.offset]))
+                    .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
+                    .map
+                    (
+                        async i => menuLinkItem
+                        (
+                            [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
+                            { application: "RainbowClock", item: JSON.stringify(i), },
+                            JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
             )
@@ -2596,17 +2618,18 @@ export module Clockworks
                 const screen = document.getElementById("screen") as HTMLDivElement;
                 const now = new Date();
                 const tick = Domain.getTicks(now);
+                const current = item ?? ticks[0] ?? null;
                 const flashInterval = Storage.NeverStopwatch.flashInterval.get();
                 switch(event)
                 {
                     case "high-resolution-timer":
-                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick -ticks[0]: 0);
+                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(tick -(current ?? tick));
                         const capitalTime = Domain.dateStringFromTick(tick);
                         const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                         minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
-                        if (0 < flashInterval && 0 < ticks.length)
+                        if (0 < flashInterval && null !== current)
                         {
-                            const elapsed = Domain.getTicks() -ticks[0];
+                            const elapsed = Domain.getTicks() -current;
                             const unit = flashInterval *60 *1000;
                             const primaryStep = Math.floor(elapsed / unit);
                             if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
@@ -2616,7 +2639,7 @@ export module Clockworks
                             const currentColor = getSolidRainbowColor(primaryStep);
                             setFoundationColor(currentColor);
                             previousPrimaryStep = primaryStep;
-                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            const rate = ((Domain.getTicks() -current) %unit) /unit;
                             const nextColor = getSolidRainbowColor(primaryStep +1);
                             setScreenBarProgress(rate, nextColor);
                             // setBodyColor(nextColor);
@@ -2633,8 +2656,11 @@ export module Clockworks
                         }
                         break;
                     case "timer":
-                        setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() -ticks[0]) +" - " +applicationTitle: applicationTitle);
-                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "stamp-list")[0])
+                        setTitle(Domain.timeShortStringFromTick(tick -(current ?? tick)) +" - " +applicationTitle);
+                        const stampListDiv = minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
+                        if (stampListDiv)
+                        {
+                            minamo.dom.getChildNodes<HTMLDivElement>(stampListDiv)
                             .forEach
                             (
                                 (dom, index) =>
@@ -2642,14 +2668,15 @@ export module Clockworks
                                     (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                                 }
                             );
+                        }
                         if (0 < flashInterval && 0 < ticks.length)
                         {
-                            const elapsed = Domain.getTicks() -ticks[0];
+                            const elapsed = Domain.getTicks() -current;
                             const unit = flashInterval *60 *1000;
                             const primaryStep = Math.floor(elapsed / unit);
                             const currentColor = getSolidRainbowColor(primaryStep);
                             const nextColor = getSolidRainbowColor(primaryStep +1);
-                            const rate = ((Domain.getTicks() -ticks[0]) %unit) /unit;
+                            const rate = ((Domain.getTicks() -current) %unit) /unit;
                             setBodyColor(mixColors(currentColor, nextColor, rate));
                         }
                         else
@@ -3012,7 +3039,7 @@ export module Clockworks
             ]),
             screenBar(),
         ]);
-        export const rainbowClockScreen = async (timezones: TimezoneEntry[]): Promise<ScreenSource> =>
+        export const rainbowClockScreen = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]): Promise<ScreenSource> =>
         ({
             className: "rainbow-clock-screen",
             header:
@@ -3021,12 +3048,15 @@ export module Clockworks
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("RainbowClock"),
-                ],
+                    null !== item ?
+                        await screenHeaderTimezoneSegment(item, timezones):
+                        null,
+                ].filter(i => i),
                 menu: rainbowClockScreenMenu
             },
             body: await rainbowClockScreenBody(timezones)
         });
-        export const showRainbowClockScreen = async (_item: TimezoneEntry | null) =>
+        export const showRainbowClockScreen = async (item: TimezoneEntry | null) =>
         {
             const applicationTitle = application["RainbowClock"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -3106,7 +3136,7 @@ export module Clockworks
                         break;
                 }
             };
-            await showWindow(await rainbowClockScreen(timezones), updateWindow);
+            await showWindow(await rainbowClockScreen(item, timezones), updateWindow);
             await updateWindow("timer");
         };
         export const updateTitle = () =>

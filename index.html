@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Sep 14 2021 22:22:46 GMT+0900 (GMT+09:00) -->
+<!-- build at: Wed Sep 15 2021 09:43:54 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1111,7 +1111,7 @@ select {
 button {
   cursor: pointer;
   margin: 4px;
-  padding: 4px 16px;
+  padding: 4px 12px;
   border-radius: 32px;
   border-style: solid;
   border-width: 1px;
@@ -5798,8 +5798,39 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             case 0:
                                                 _a = Render.menuLinkItem;
                                                 return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
-                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Domain.dateFullStringFromTick(i)], { application: "NeverStopwatch", item: JSON.stringify(i), },
+                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.$span("monospace")(Domain.dateFullStringFromTick(i))], { application: "NeverStopwatch", item: JSON.stringify(i), },
                                                     item === i ? "current-item" : undefined])];
+                                        }
+                                    });
+                                }); }))];
+                        case 1: return [2 /*return*/, (_a.menu = _b.sent(),
+                                _a)];
+                    }
+                });
+            }); };
+            Render.screenHeaderTimezoneSegment = function (item, timezones) { return __awaiter(_this, void 0, void 0, function () {
+                var _a;
+                var _this = this;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _a = {
+                                icon: "tick-icon",
+                                title: item.title
+                            };
+                            return [4 /*yield*/, Promise.all(timezones
+                                    .concat([item])
+                                    .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i.offset; }]))
+                                    .filter(function (i, ix, list) { return ix === list.map(function (a) { return JSON.stringify(a); }).indexOf(JSON.stringify(i)); })
+                                    .map(function (i) { return __awaiter(_this, void 0, void 0, function () {
+                                    var _a;
+                                    return __generator(this, function (_b) {
+                                        switch (_b.label) {
+                                            case 0:
+                                                _a = Render.menuLinkItem;
+                                                return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(i.title), Render.$span("value monospace")(Domain.timezoneOffsetString(i.offset))], { application: "RainbowClock", item: JSON.stringify(i), },
+                                                    JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                         }
                                     });
                                 }); }))];
@@ -6457,13 +6488,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             document.body.classList.add("hide-scroll-bar");
                             ticks = Storage.NeverStopwatch.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, flashInterval, _a, capitalTime, capitalTimeSpan, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
-                                return __generator(this, function (_c) {
-                                    switch (_c.label) {
+                                var screen, now, tick, current, flashInterval, _a, capitalTime, capitalTimeSpan, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, stampListDiv, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
+                                var _c;
+                                return __generator(this, function (_d) {
+                                    switch (_d.label) {
                                         case 0:
                                             screen = document.getElementById("screen");
                                             now = new Date();
                                             tick = Domain.getTicks(now);
+                                            current = (_c = item !== null && item !== void 0 ? item : ticks[0]) !== null && _c !== void 0 ? _c : null;
                                             flashInterval = Storage.NeverStopwatch.flashInterval.get();
                                             _a = event;
                                             switch (_a) {
@@ -6474,12 +6507,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 8];
                                         case 1:
-                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < ticks.length ? tick - ticks[0] : 0);
+                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(tick - (current !== null && current !== void 0 ? current : tick));
                                             capitalTime = Domain.dateStringFromTick(tick);
                                             capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                             minamo_js_1.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
-                                            if (0 < flashInterval && 0 < ticks.length) {
-                                                elapsed = Domain.getTicks() - ticks[0];
+                                            if (0 < flashInterval && null !== current) {
+                                                elapsed = Domain.getTicks() - current;
                                                 unit = flashInterval * 60 * 1000;
                                                 primaryStep = Math.floor(elapsed / unit);
                                                 if (primaryStep === previousPrimaryStep + 1 && (elapsed % unit) < 5 * 1000) {
@@ -6488,7 +6521,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 currentColor = getSolidRainbowColor(primaryStep);
                                                 setFoundationColor(currentColor);
                                                 previousPrimaryStep = primaryStep;
-                                                rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
+                                                rate = ((Domain.getTicks() - current) % unit) / unit;
                                                 nextColor = getSolidRainbowColor(primaryStep + 1);
                                                 Render.setScreenBarProgress(rate, nextColor);
                                                 // setBodyColor(nextColor);
@@ -6504,18 +6537,21 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 8];
                                         case 2:
-                                            setTitle(0 < ticks.length ? Domain.timeShortStringFromTick(Domain.getTicks() - ticks[0]) + " - " + applicationTitle : applicationTitle);
-                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "stamp-list")[0])
-                                                .forEach(function (dom, index) {
-                                                dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
-                                            });
+                                            setTitle(Domain.timeShortStringFromTick(tick - (current !== null && current !== void 0 ? current : tick)) + " - " + applicationTitle);
+                                            stampListDiv = minamo_js_1.minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
+                                            if (stampListDiv) {
+                                                minamo_js_1.minamo.dom.getChildNodes(stampListDiv)
+                                                    .forEach(function (dom, index) {
+                                                    dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Domain.getTicks() - ticks[index]);
+                                                });
+                                            }
                                             if (0 < flashInterval && 0 < ticks.length) {
-                                                elapsed = Domain.getTicks() - ticks[0];
+                                                elapsed = Domain.getTicks() - current;
                                                 unit = flashInterval * 60 * 1000;
                                                 primaryStep = Math.floor(elapsed / unit);
                                                 currentColor = getSolidRainbowColor(primaryStep);
                                                 nextColor = getSolidRainbowColor(primaryStep + 1);
-                                                rate = ((Domain.getTicks() - ticks[0]) % unit) / unit;
+                                                rate = ((Domain.getTicks() - current) % unit) / unit;
                                                 setBodyColor(mixColors(currentColor, nextColor, rate));
                                             }
                                             else {
@@ -6525,7 +6561,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 8];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
                                         case 4:
-                                            _c.sent();
+                                            _d.sent();
                                             return [3 /*break*/, 8];
                                         case 5:
                                             previousPrimaryStep = 0;
@@ -6533,12 +6569,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.neverStopwatchScreenBody(item, ticks)];
                                         case 6:
-                                            _b.apply(void 0, [_c.sent()]);
+                                            _b.apply(void 0, [_d.sent()]);
                                             Render.resizeFlexList();
                                             Render.adjustPageFooterPosition();
                                             return [4 /*yield*/, updateWindow("timer")];
                                         case 7:
-                                            _c.sent();
+                                            _d.sent();
                                             return [3 /*break*/, 8];
                                         case 8: return [2 /*return*/];
                                     }
@@ -6968,35 +7004,47 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.rainbowClockScreen = function (timezones) { return __awaiter(_this, void 0, void 0, function () {
-                var _a;
-                var _b, _c;
-                return __generator(this, function (_d) {
-                    switch (_d.label) {
+            Render.rainbowClockScreen = function (item, timezones) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b;
+                var _c, _d;
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
                         case 0:
-                            _b = {
+                            _c = {
                                 className: "rainbow-clock-screen"
                             };
-                            _c = {};
+                            _d = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
                             _a = [
-                                _d.sent()
+                                _e.sent()
                             ];
                             return [4 /*yield*/, Render.screenHeaderApplicationSegment("RainbowClock")];
                         case 2:
-                            _b.header = (_c.items = _a.concat([
-                                _d.sent()
-                            ]),
-                                _c.menu = Render.rainbowClockScreenMenu,
-                                _c);
+                            _a = _a.concat([
+                                _e.sent()
+                            ]);
+                            if (!(null !== item)) return [3 /*break*/, 4];
+                            return [4 /*yield*/, Render.screenHeaderTimezoneSegment(item, timezones)];
+                        case 3:
+                            _b = _e.sent();
+                            return [3 /*break*/, 5];
+                        case 4:
+                            _b = null;
+                            _e.label = 5;
+                        case 5:
+                            _c.header = (_d.items = _a.concat([
+                                _b
+                            ]).filter(function (i) { return i; }),
+                                _d.menu = Render.rainbowClockScreenMenu,
+                                _d);
                             return [4 /*yield*/, Render.rainbowClockScreenBody(timezones)];
-                        case 3: return [2 /*return*/, (_b.body = _d.sent(),
-                                _b)];
+                        case 6: return [2 /*return*/, (_c.body = _e.sent(),
+                                _c)];
                     }
                 });
             }); };
-            Render.showRainbowClockScreen = function (_item) { return __awaiter(_this, void 0, void 0, function () {
+            Render.showRainbowClockScreen = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var applicationTitle, timezones, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
@@ -7092,7 +7140,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 });
                             }); };
                             _a = Render.showWindow;
-                            return [4 /*yield*/, Render.rainbowClockScreen(timezones)];
+                            return [4 /*yield*/, Render.rainbowClockScreen(item, timezones)];
                         case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent(), updateWindow])];
                         case 2:
                             _b.sent();
