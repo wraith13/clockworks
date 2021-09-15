@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Sep 15 2021 09:43:54 GMT+0900 (GMT+09:00) -->
+<!-- build at: Wed Sep 15 2021 22:42:07 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -7186,6 +7186,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 updateWindowTimer = setInterval(function () { var _a; return (_a = Render.updateWindow) === null || _a === void 0 ? void 0 : _a.call(Render, "timer"); }, 360);
                                 document.getElementById("screen-body").addEventListener("scroll", function () {
                                     var _a;
+                                    Render.adjustPageFooterPosition();
                                     Render.adjustDownPageLinkDirection();
                                     if (document.getElementById("screen-body").scrollTop <= 0) {
                                         (_a = Render.updateWindow) === null || _a === void 0 ? void 0 : _a.call(Render, "scroll");
@@ -7388,9 +7389,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             Render.adjustPageFooterPosition = function () {
                 var primaryPage = document.getElementsByClassName("primary-page")[0];
                 if (primaryPage) {
-                    var delta_1 = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
+                    var body = document.getElementById("screen-body");
+                    var primaryPage_1 = minamo_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0];
+                    var primaryPageOffsetTop = Math.min(primaryPage_1.offsetTop - body.offsetTop, body.scrollHeight - body.clientHeight);
+                    var scroll_1 = body.scrollTop - primaryPageOffsetTop;
+                    var delta_1 = Math.max(primaryPage_1.clientHeight - (body.clientHeight + scroll_1), 0);
                     minamo_js_1.minamo.dom.getDivsByClassName(document, "page-footer")
-                        .forEach(function (i) { return minamo_js_1.minamo.dom.setProperty(i.style, "paddingBottom", "calc(0.5rem + " + delta_1 + "px)"); });
+                        .forEach(function (i) { return minamo_js_1.minamo.dom.setProperty(i.style, "paddingBottom", "calc(1rem + " + delta_1 + "px)"); });
                     // minamo.dom.getDivsByClassName(document, "down-page-link")
                     //     .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
                 }

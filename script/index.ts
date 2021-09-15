@@ -3184,6 +3184,7 @@ export module Clockworks
                     "scroll",
                     () =>
                     {
+                        adjustPageFooterPosition();
                         adjustDownPageLinkDirection();
                         if (document.getElementById("screen-body").scrollTop <= 0)
                         {
@@ -3454,9 +3455,13 @@ export module Clockworks
             const primaryPage = document.getElementsByClassName("primary-page")[0];
             if (primaryPage)
             {
-                const delta = primaryPage.clientHeight - document.getElementById("screen-body").clientHeight;
+                const body = document.getElementById("screen-body");
+                const primaryPage = minamo.dom.getDivsByClassName(document, "primary-page")[0];
+                const primaryPageOffsetTop = Math.min(primaryPage.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
+                const scroll = body.scrollTop -primaryPageOffsetTop;
+                const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +scroll), 0);
                 minamo.dom.getDivsByClassName(document, "page-footer")
-                    .forEach(i => minamo.dom.setProperty(i.style, "paddingBottom", `calc(0.5rem + ${delta}px)`));
+                    .forEach(i => minamo.dom.setProperty(i.style, "paddingBottom", `calc(1rem + ${delta}px)`));
                 // minamo.dom.getDivsByClassName(document, "down-page-link")
                 //     .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
             }
