@@ -2335,13 +2335,13 @@ export module Clockworks
             await languageMenuItem(),
             await githubMenuItem(),
         ];
-        export const isStrictShowPrimaryPage = () =>
+        export const getBodyScrollTop = (topChild = minamo.dom.getDivsByClassName(document, "primary-page")[0]) =>
         {
             const body = document.getElementById("screen-body");
-            const primaryPage = minamo.dom.getDivsByClassName(document, "primary-page")[0];
-            const primaryPageOffsetTop = Math.min(primaryPage.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
-            return primaryPageOffsetTop === body.scrollTop;
+            const primaryPageOffsetTop = Math.min(topChild.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
+            return body.scrollTop -primaryPageOffsetTop;
         };
+        export const isStrictShowPrimaryPage = () => 0 === getBodyScrollTop();
         export const downPageLink = async () =>
         ({
             tag: "div",
@@ -3456,10 +3456,7 @@ export module Clockworks
             if (primaryPage)
             {
                 const body = document.getElementById("screen-body");
-                const primaryPage = minamo.dom.getDivsByClassName(document, "primary-page")[0];
-                const primaryPageOffsetTop = Math.min(primaryPage.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
-                const scroll = body.scrollTop -primaryPageOffsetTop;
-                const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +scroll), 0);
+                const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +getBodyScrollTop()), 0);
                 minamo.dom.getDivsByClassName(document, "page-footer")
                     .forEach(i => minamo.dom.setProperty(i.style, "paddingBottom", `calc(1rem + ${delta}px)`));
                 // minamo.dom.getDivsByClassName(document, "down-page-link")
