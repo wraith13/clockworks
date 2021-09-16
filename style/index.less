@@ -1535,12 +1535,13 @@ body:not(.tektite)
         }
         .capital-interval
         {
-            text-align: center;
+            // text-align: center;
             // padding-top: 16px;
             .value
             {
                 font-size: 7vw;
                 line-height: 100%;
+                .primary-text-font-size-trait;
             }
         }
         .previous-timestamp,
@@ -1555,7 +1556,8 @@ body:not(.tektite)
             {
                 font-size: 4.4vw;
                 line-height: 100%;
-            }
+                .second-text-font-size-trait;
+        }
         }
     }
 }
@@ -1574,11 +1576,12 @@ body:not(.tektite)
             .capital-time
             {
                 // text-align: center;
-                padding-bottom: 16px;
+                // padding-bottom: 16px;
                 .value
                 {
                     font-size: 15vw;
                     line-height: 100%;
+                    .primary-text-font-size-trait;
                 }
             }
             .current-title,
@@ -1592,6 +1595,7 @@ body:not(.tektite)
                 {
                     font-size: 6vw;
                     line-height: 120%; // 本当は 100% にしておきたいが 100% だと Safari で日本語文字上部が表示されない。
+                    .second-text-font-size-trait;
                 }
             }
         }

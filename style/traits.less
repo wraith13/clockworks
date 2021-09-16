@@ -155,3 +155,25 @@
         display: none;
     }
 }
+.primary-text-font-size-trait
+{
+    @media (orientation: landscape)
+    {
+        font-size: calc((100vh - 6rem) * 0.2);
+        @media (max-height: 480px)
+        {
+            font-size: 4rem;
+        }
+    }
+}
+.second-text-font-size-trait
+{
+    @media (orientation: landscape)
+    {
+        font-size: calc((100vh - 6rem) * 0.1);
+        @media (max-height: 480px)
+        {
+            font-size: 2rem;
+        }
+    }
+}
