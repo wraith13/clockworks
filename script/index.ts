@@ -729,6 +729,26 @@ export module Clockworks
                         ),
                     });
                 };
+                export const save = async (tick: number, onCanceled?: () => unknown) =>
+                {
+                    const backup = Storage.NeverStopwatch.Stamps.get();
+                    Storage.NeverStopwatch.Stamps.add(tick);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.NeverStopwatch.Stamps.set(backup);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
                 export const edit = async (oldTick: number, newTick: number, onCanceled?: () => unknown) =>
                 {
                     const backup = Storage.NeverStopwatch.Stamps.get();
@@ -934,6 +954,7 @@ export module Clockworks
                         ),
                     });
                 };
+                export const save = add;
                 export const edit = async (item: TimezoneEntry, title: string, offset: number, onCanceled?: () => unknown) =>
                 {
                     const oldTimezone = item;
@@ -2553,7 +2574,7 @@ export module Clockworks
                                     tag: "button",
                                     className: "default-button main-button long-button",
                                     children: "保存 / Save",
-                                    // onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
+                                    onclick: async () => await Operate.NeverStopwatch.save(item),
                                 }:
                                 []
                         ]):
@@ -2973,20 +2994,51 @@ export module Clockworks
             await languageMenuItem(),
             await githubMenuItem(),
         ];
-        export const rainbowClockScreenBody = async (timezones: TimezoneEntry[]) =>
+        export const rainbowClockScreenBody = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]) =>
         ([
             $div("primary-page")
             ([
                 $div("main-panel")
                 ([
+                    null !== item ?
+                        $div("current-title")
+                        ([
+                            $span("value")(item.title),
+                        ]):
+                        [],
                     $div("current-date")
                     ([
-                        $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getTicks())),
+                        $span("value monospace")
+                        (
+                            Domain.dateCoreStringFromTick
+                            (
+                                null !== item ?
+                                    Domain.getUTCTicks() -item.offset:
+                                    Domain.getTicks()
+                            )
+                        ),
                     ]),
                     $div("capital-time")
                     ([
-                        $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getTicks()))),
+                        $span("value monospace")
+                        (
+                            Domain.timeFullCoreStringFromTick
+                            (
+                                Domain.getTime
+                                (
+                                    null !== item ?
+                                        Domain.getUTCTicks() -item.offset:
+                                        Domain.getTicks()
+                                )
+                            )
+                        ),
                     ]),
+                    null !== item ?
+                        $div("current-utc-offset")
+                        ([
+                            $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
+                        ]):
+                        [],
                     await flashIntervalLabel
                     (
                         await screenHeaderFlashSegment
@@ -3003,40 +3055,64 @@ export module Clockworks
                 ]),
                 $div("page-footer")
                 ([
-                    await downPageLink(),
-                ]),
-        ]),
-            $div("trail-page")
-            ([
-                $div("button-list")
-                ([
-                    {
-                        tag: "button",
-                        className: "main-button long-button",
-                        children: label("New Time zone"),
-                        onclick: async () =>
-                        {
-                            const result = await timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset());
-                            if (result)
-                            {
-                                await Operate.RainbowClock.add({ title: result.title, offset: result.offset, });
-                            }
-                        }
-                    },
-                ]),
-                $div("row-flex-list timezone-list")
-                (
-                    await Promise.all(timezones.map(item => timezoneItem(item)))
-                ),
-                $div("description")
-                (
-                    $tag("ul")("locale-parallel-off")
-                    ([
-                        $tag("li")("")(label("Not support daylight savings time.")),
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                    ])
-                ),
+                    null !== item ?
+                        $div("button-list")
+                        ([
+                            internalLink
+                            ({
+                                href: { application: "RainbowClock", },
+                                children:
+                                {
+                                    tag: "button",
+                                    className: "default-button main-button long-button",
+                                    children: "閉じる / Close",
+                                }
+                            }),
+                            timezones.map(i => JSON.stringify(i)).indexOf(JSON.stringify(item)) < 0 ?
+                                {
+                                    tag: "button",
+                                    className: "default-button main-button long-button",
+                                    children: "保存 / Save",
+                                    onclick: async () => await Operate.RainbowClock.save(item),
+                                }:
+                                []
+                        ]):
+                        await downPageLink(),
+                    ]),
             ]),
+            null !== item ?
+                []:
+                $div("trail-page")
+                ([
+                    $div("button-list")
+                    ([
+                        {
+                            tag: "button",
+                            className: "main-button long-button",
+                            children: label("New Time zone"),
+                            onclick: async () =>
+                            {
+                                const result = await timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset());
+                                if (result)
+                                {
+                                    await Operate.RainbowClock.add({ title: result.title, offset: result.offset, });
+                                }
+                            }
+                        },
+                    ]),
+                    $div("row-flex-list timezone-list")
+                    (
+                        await Promise.all(timezones.map(item => timezoneItem(item)))
+                    ),
+                    $div("description")
+                    (
+                        $tag("ul")("locale-parallel-off")
+                        ([
+                            $tag("li")("")(label("Not support daylight savings time.")),
+                            $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        ])
+                    ),
+                ]),
             screenBar(),
         ]);
         export const rainbowClockScreen = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]): Promise<ScreenSource> =>
@@ -3054,7 +3130,7 @@ export module Clockworks
                 ].filter(i => i),
                 menu: rainbowClockScreenMenu
             },
-            body: await rainbowClockScreenBody(timezones)
+            body: await rainbowClockScreenBody(item, timezones),
         });
         export const showRainbowClockScreen = async (item: TimezoneEntry | null) =>
         {
@@ -3065,7 +3141,10 @@ export module Clockworks
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
                 const now = new Date();
-                const tick = Domain.getTicks(now);
+                const tick = null !== item ?
+                    (Domain.getUTCTicks(now) -(item.offset *Domain.utcOffsetRate)):
+                    Domain.getTicks(now);
+                const currentNow = new Date(tick);
                 switch(event)
                 {
                     case "high-resolution-timer":
@@ -3079,7 +3158,7 @@ export module Clockworks
                                 const flashInterval = Storage.RainbowClock.flashInterval.get();
                                 if (0 < flashInterval)
                                 {
-                                    if (0 === (now.getMinutes() % flashInterval))
+                                    if (0 === (currentNow.getMinutes() % flashInterval))
                                     {
                                         screenFlash();
                                     }
@@ -3115,11 +3194,11 @@ export module Clockworks
                         const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                         minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                         const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
-                        const currentColor = getRainbowColor(now.getHours());
+                        const currentColor = getRainbowColor(currentNow.getHours());
                         setFoundationColor(currentColor);
                         const hourUnit = 60 *60 *1000;
                         const minutes = (tick % hourUnit) / hourUnit;
-                        const nextColor = getRainbowColor(now.getHours() +1);
+                        const nextColor = getRainbowColor(currentNow.getHours() +1);
                         setScreenBarProgress(minutes, nextColor);
                         setBodyColor(mixColors(currentColor, nextColor, minutes));
                         break;
@@ -3128,7 +3207,7 @@ export module Clockworks
                         break;
                     case "operate":
                         timezones = Storage.RainbowClock.Timezone.get();
-                        replaceScreenBody(await rainbowClockScreenBody(timezones));
+                        replaceScreenBody(await rainbowClockScreenBody(item, timezones));
                         resizeFlexList();
                         await updateWindow("timer");
                         await Render.scrollToOffset(document.getElementById("screen-body"), 0);
