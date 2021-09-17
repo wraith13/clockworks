@@ -159,7 +159,14 @@
 {
     @media (orientation: landscape)
     {
-        font-size: calc((100vh - 6rem) * 0.2);
+        @media (max-height: 960px) and (min-width: 1920px)
+        {
+            font-size: calc((100vh - 6rem) * 0.2);
+        }
+        @media (max-height: 480px) and (min-width: 960px)
+        {
+            font-size: calc((100vh - 6rem) * 0.2);
+        }
         @media (max-height: 480px)
         {
             font-size: 4rem;
@@ -170,7 +177,14 @@
 {
     @media (orientation: landscape)
     {
-        font-size: calc((100vh - 6rem) * 0.1);
+        @media (max-height: 960px) and (min-width: 1920px)
+        {
+            font-size: calc((100vh - 6rem) * 0.1);
+        }
+        @media (max-height: 480px) and (min-width: 960px)
+        {
+            font-size: calc((100vh - 6rem) * 0.1);
+        }
         @media (max-height: 480px)
         {
             font-size: 2rem;

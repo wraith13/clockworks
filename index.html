@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Sep 17 2021 08:43:21 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Sep 17 2021 09:04:12 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -139,7 +139,12 @@
 .hide-scroll-bar::-webkit-scrollbar {
   display: none;
 }
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+  .primary-text-font-size-trait {
+    font-size: calc((100vh - 6rem) * 0.2);
+  }
+}
+@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
   .primary-text-font-size-trait {
     font-size: calc((100vh - 6rem) * 0.2);
   }
@@ -149,7 +154,12 @@
     font-size: 4rem;
   }
 }
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+  .second-text-font-size-trait {
+    font-size: calc((100vh - 6rem) * 0.1);
+  }
+}
+@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
   .second-text-font-size-trait {
     font-size: calc((100vh - 6rem) * 0.1);
   }
@@ -1980,7 +1990,13 @@ body:not(.tektite) .logo > .logo-text {
   font-size: 7vw;
   line-height: 100%;
 }
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+  .never-stopwatch-screen .screen-body .capital-interval .value,
+  .countdown-timer-screen .screen-body .capital-interval .value {
+    font-size: calc((100vh - 6rem) * 0.2);
+  }
+}
+@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
   .never-stopwatch-screen .screen-body .capital-interval .value,
   .countdown-timer-screen .screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
@@ -2014,7 +2030,19 @@ body:not(.tektite) .logo > .logo-text {
   font-size: 4.4vw;
   line-height: 100%;
 }
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+  .never-stopwatch-screen .screen-body .previous-timestamp .value,
+  .countdown-timer-screen .screen-body .previous-timestamp .value,
+  .never-stopwatch-screen .screen-body .current-title .value,
+  .countdown-timer-screen .screen-body .current-title .value,
+  .never-stopwatch-screen .screen-body .current-due-timestamp .value,
+  .countdown-timer-screen .screen-body .current-due-timestamp .value,
+  .never-stopwatch-screen .screen-body .current-timestamp .value,
+  .countdown-timer-screen .screen-body .current-timestamp .value {
+    font-size: calc((100vh - 6rem) * 0.1);
+  }
+}
+@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
   .never-stopwatch-screen .screen-body .previous-timestamp .value,
   .countdown-timer-screen .screen-body .previous-timestamp .value,
   .never-stopwatch-screen .screen-body .current-title .value,
@@ -2042,7 +2070,12 @@ body:not(.tektite) .logo > .logo-text {
   font-size: 15vw;
   line-height: 100%;
 }
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+  .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+    font-size: calc((100vh - 6rem) * 0.2);
+  }
+}
+@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
   .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
@@ -2063,7 +2096,14 @@ body:not(.tektite) .logo > .logo-text {
   font-size: 6vw;
   line-height: 120%;
 }
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+  .rainbow-clock-screen .screen-body .main-panel .current-title .value,
+  .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
+  .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+    font-size: calc((100vh - 6rem) * 0.1);
+  }
+}
+@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
   .rainbow-clock-screen .screen-body .main-panel .current-title .value,
   .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
   .rainbow-clock-screen .screen-body .main-panel .current-date .value {
