@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Sep 17 2021 09:04:12 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Sep 17 2021 22:48:56 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -139,34 +139,60 @@
 .hide-scroll-bar::-webkit-scrollbar {
   display: none;
 }
-@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+.primary-text-font-size-core-trait {
+  font-size: calc((100vh - 6rem) * 0.2);
+}
+@media (max-height: 720px) and (min-width: 960px) {
   .primary-text-font-size-trait {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
+@media (max-height: 480px) and (min-width: 720px) {
   .primary-text-font-size-trait {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) {
+@media (max-height: 480px) and (min-width: 480px) {
   .primary-text-font-size-trait {
     font-size: 4rem;
   }
 }
-@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+@media (max-height: 360px) and (min-width: 360px) {
+  .primary-text-font-size-trait {
+    font-size: 3rem;
+  }
+}
+@media (max-height: 240px) and (min-width: 240px) {
+  .primary-text-font-size-trait {
+    font-size: 2rem;
+  }
+}
+.second-text-font-size-core-trait {
+  font-size: calc((100vh - 6rem) * 0.1);
+}
+@media (max-height: 720px) and (min-width: 960px) {
   .second-text-font-size-trait {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
+@media (max-height: 480px) and (min-width: 720px) {
   .second-text-font-size-trait {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) {
+@media (max-height: 480px) and (min-width: 480px) {
   .second-text-font-size-trait {
     font-size: 2rem;
+  }
+}
+@media (max-height: 360px) and (min-width: 360px) {
+  .second-text-font-size-trait {
+    font-size: 1.5rem;
+  }
+}
+@media (max-height: 240px) and (min-width: 240px) {
+  .second-text-font-size-trait {
+    font-size: 1rem;
   }
 }
 * {
@@ -1801,10 +1827,9 @@ body.fxxking-ipad-fullscreen .screen {
   max-height: calc(100vh - 2.5rem);
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
   flex-direction: column;
-  padding-bottom: 2.5rem;
 }
 .screen > .screen-body .primary-page .flash-interval {
   cursor: pointer;
@@ -1828,11 +1853,16 @@ body.fxxking-ipad-fullscreen .screen {
   height: 1.5rem;
   margin-right: 0.25rem;
 }
+.screen > .screen-body .primary-page .page-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-grow: 9;
+}
 .screen > .screen-body .primary-page .page-footer {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
+  flex-grow: 0;
   padding-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -1890,9 +1920,23 @@ body.tektite .screen .screen-body .primary-page {
   color: #FFFFFF;
   fill: #FFFFFF;
 }
-body.tektite .screen .screen-body .primary-page .default-button {
+body.tektite .screen .screen-body .primary-page button {
+  color: #FFFFFF;
   border-color: #FFFFFF;
   background-color: transparent;
+}
+@media (hover: hover) {
+  body.tektite .screen .screen-body .primary-page button:hover {
+    background-color: #FFFFFF11;
+  }
+}
+body.tektite .screen .screen-body .primary-page button:not(.default-button) {
+  border-color: #FFFFFF88;
+}
+@media (hover: hover) {
+  body.tektite .screen .screen-body .primary-page button:not(.default-button):hover {
+    border-color: #FFFFFF;
+  }
 }
 body.tektite .screen .screen-body .trail-page {
   background-color: #FFFFFFBB;
@@ -1912,9 +1956,6 @@ body.tektite.flash .screen-bar .screen-bar-flash-layer {
 }
 body:not(.tektite) .screen .screen-body {
   background-color: #FFFFFF;
-}
-.welcome-screen .primary-page {
-  display: block !important;
 }
 .welcome-screen .logo {
   height: calc(50vh - 5rem);
@@ -1990,22 +2031,34 @@ body:not(.tektite) .logo > .logo-text {
   font-size: 7vw;
   line-height: 100%;
 }
-@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+@media (max-height: 720px) and (min-width: 960px) {
   .never-stopwatch-screen .screen-body .capital-interval .value,
   .countdown-timer-screen .screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
+@media (max-height: 480px) and (min-width: 720px) {
   .never-stopwatch-screen .screen-body .capital-interval .value,
   .countdown-timer-screen .screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) {
+@media (max-height: 480px) and (min-width: 480px) {
   .never-stopwatch-screen .screen-body .capital-interval .value,
   .countdown-timer-screen .screen-body .capital-interval .value {
     font-size: 4rem;
+  }
+}
+@media (max-height: 360px) and (min-width: 360px) {
+  .never-stopwatch-screen .screen-body .capital-interval .value,
+  .countdown-timer-screen .screen-body .capital-interval .value {
+    font-size: 3rem;
+  }
+}
+@media (max-height: 240px) and (min-width: 240px) {
+  .never-stopwatch-screen .screen-body .capital-interval .value,
+  .countdown-timer-screen .screen-body .capital-interval .value {
+    font-size: 2rem;
   }
 }
 .never-stopwatch-screen .screen-body .previous-timestamp,
@@ -2030,7 +2083,7 @@ body:not(.tektite) .logo > .logo-text {
   font-size: 4.4vw;
   line-height: 100%;
 }
-@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+@media (max-height: 720px) and (min-width: 960px) {
   .never-stopwatch-screen .screen-body .previous-timestamp .value,
   .countdown-timer-screen .screen-body .previous-timestamp .value,
   .never-stopwatch-screen .screen-body .current-title .value,
@@ -2042,7 +2095,7 @@ body:not(.tektite) .logo > .logo-text {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
+@media (max-height: 480px) and (min-width: 720px) {
   .never-stopwatch-screen .screen-body .previous-timestamp .value,
   .countdown-timer-screen .screen-body .previous-timestamp .value,
   .never-stopwatch-screen .screen-body .current-title .value,
@@ -2054,7 +2107,7 @@ body:not(.tektite) .logo > .logo-text {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) {
+@media (max-height: 480px) and (min-width: 480px) {
   .never-stopwatch-screen .screen-body .previous-timestamp .value,
   .countdown-timer-screen .screen-body .previous-timestamp .value,
   .never-stopwatch-screen .screen-body .current-title .value,
@@ -2066,23 +2119,57 @@ body:not(.tektite) .logo > .logo-text {
     font-size: 2rem;
   }
 }
+@media (max-height: 360px) and (min-width: 360px) {
+  .never-stopwatch-screen .screen-body .previous-timestamp .value,
+  .countdown-timer-screen .screen-body .previous-timestamp .value,
+  .never-stopwatch-screen .screen-body .current-title .value,
+  .countdown-timer-screen .screen-body .current-title .value,
+  .never-stopwatch-screen .screen-body .current-due-timestamp .value,
+  .countdown-timer-screen .screen-body .current-due-timestamp .value,
+  .never-stopwatch-screen .screen-body .current-timestamp .value,
+  .countdown-timer-screen .screen-body .current-timestamp .value {
+    font-size: 1.5rem;
+  }
+}
+@media (max-height: 240px) and (min-width: 240px) {
+  .never-stopwatch-screen .screen-body .previous-timestamp .value,
+  .countdown-timer-screen .screen-body .previous-timestamp .value,
+  .never-stopwatch-screen .screen-body .current-title .value,
+  .countdown-timer-screen .screen-body .current-title .value,
+  .never-stopwatch-screen .screen-body .current-due-timestamp .value,
+  .countdown-timer-screen .screen-body .current-due-timestamp .value,
+  .never-stopwatch-screen .screen-body .current-timestamp .value,
+  .countdown-timer-screen .screen-body .current-timestamp .value {
+    font-size: 1rem;
+  }
+}
 .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
   font-size: 15vw;
   line-height: 100%;
 }
-@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+@media (max-height: 720px) and (min-width: 960px) {
   .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
+@media (max-height: 480px) and (min-width: 720px) {
   .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) {
+@media (max-height: 480px) and (min-width: 480px) {
   .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
     font-size: 4rem;
+  }
+}
+@media (max-height: 360px) and (min-width: 360px) {
+  .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+    font-size: 3rem;
+  }
+}
+@media (max-height: 240px) and (min-width: 240px) {
+  .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+    font-size: 2rem;
   }
 }
 .rainbow-clock-screen .screen-body .main-panel .current-title,
@@ -2096,25 +2183,39 @@ body:not(.tektite) .logo > .logo-text {
   font-size: 6vw;
   line-height: 120%;
 }
-@media (orientation: landscape) and (max-height: 960px) and (min-width: 1920px) {
+@media (max-height: 720px) and (min-width: 960px) {
   .rainbow-clock-screen .screen-body .main-panel .current-title .value,
   .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
   .rainbow-clock-screen .screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) and (min-width: 960px) {
+@media (max-height: 480px) and (min-width: 720px) {
   .rainbow-clock-screen .screen-body .main-panel .current-title .value,
   .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
   .rainbow-clock-screen .screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
-@media (orientation: landscape) and (max-height: 480px) {
+@media (max-height: 480px) and (min-width: 480px) {
   .rainbow-clock-screen .screen-body .main-panel .current-title .value,
   .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
   .rainbow-clock-screen .screen-body .main-panel .current-date .value {
     font-size: 2rem;
+  }
+}
+@media (max-height: 360px) and (min-width: 360px) {
+  .rainbow-clock-screen .screen-body .main-panel .current-title .value,
+  .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
+  .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+    font-size: 1.5rem;
+  }
+}
+@media (max-height: 240px) and (min-width: 240px) {
+  .rainbow-clock-screen .screen-body .main-panel .current-title .value,
+  .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
+  .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+    font-size: 1rem;
   }
 }
 @keyframes late-fade-in {
@@ -6304,53 +6405,56 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.welcomeScreen = function () { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f;
-                var _g, _h;
-                return __generator(this, function (_j) {
-                    switch (_j.label) {
+                var _a, _b, _c, _d, _e, _f, _g;
+                var _h, _j;
+                return __generator(this, function (_k) {
+                    switch (_k.label) {
                         case 0:
-                            _g = {
+                            _h = {
                                 className: "welcome-screen"
                             };
-                            _h = {};
+                            _j = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
-                            _g.header = (_h.items = [
-                                _j.sent()
+                            _h.header = (_j.items = [
+                                _k.sent()
                             ],
-                                _h.menu = Render.welcomeScreenMenu,
-                                _h);
+                                _j.menu = Render.welcomeScreenMenu,
+                                _j);
                             _a = Render.$div("primary-page");
-                            _b = Render.$div("main-panel");
-                            _c = Render.$div("logo");
-                            _d = Render.$div("application-icon icon");
+                            _b = Render.$div("page-body");
+                            _c = Render.$div("main-panel");
+                            _d = Render.$div("logo");
+                            _e = Render.$div("application-icon icon");
                             return [4 /*yield*/, Resource.loadSvgOrCache("application-icon")];
                         case 2:
-                            _e = [
+                            _f = [
                                 _b.apply(void 0, [[
                                         _c.apply(void 0, [[
-                                                _d.apply(void 0, [_j.sent()]),
-                                                Render.$span("logo-text")(Clockworks.applicationTitle)
-                                            ]]),
-                                        Render.$div("button-list")(Clockworks.ApplicationList.map(function (i) {
-                                            return Render.internalLink({
-                                                href: { application: i },
-                                                children: {
-                                                    tag: "button",
-                                                    className: "default-button main-button long-button",
-                                                    children: Render.labelSpan(Clockworks.application[i].title),
-                                                    // onclick: async () => await showNeverStopwatchScreen(),
-                                                }
-                                            });
-                                        }))
+                                                _d.apply(void 0, [[
+                                                        _e.apply(void 0, [_k.sent()]),
+                                                        Render.$span("logo-text")(Clockworks.applicationTitle)
+                                                    ]]),
+                                                Render.$div("button-list")(Clockworks.ApplicationList.map(function (i) {
+                                                    return Render.internalLink({
+                                                        href: { application: i },
+                                                        children: {
+                                                            tag: "button",
+                                                            className: "default-button main-button long-button",
+                                                            children: Render.labelSpan(Clockworks.application[i].title),
+                                                            // onclick: async () => await showNeverStopwatchScreen(),
+                                                        }
+                                                    });
+                                                }))
+                                            ]])
                                     ]])
                             ];
-                            _f = Render.$div("page-footer");
+                            _g = Render.$div("page-footer");
                             return [4 /*yield*/, Render.downPageLink()];
-                        case 3: return [2 /*return*/, (_g.body = [
-                                _a.apply(void 0, [_e.concat([
-                                        _f.apply(void 0, [[
-                                                _j.sent()
+                        case 3: return [2 /*return*/, (_h.body = [
+                                _a.apply(void 0, [_f.concat([
+                                        _g.apply(void 0, [[
+                                                _k.sent()
                                             ]])
                                     ])]),
                                 Render.$div("trail-page")([
@@ -6360,7 +6464,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 ]),
                                 Render.screenBar()
                             ],
-                                _g)];
+                                _h)];
                     }
                 });
             }); };
@@ -6478,14 +6582,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             Render.screenBar = function () { return Render.$div("screen-bar")(Render.$div("screen-bar-flash-layer")([])); };
             Render.neverStopwatchScreenBody = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
                 var _this = this;
-                return __generator(this, function (_m) {
-                    switch (_m.label) {
+                return __generator(this, function (_o) {
+                    switch (_o.label) {
                         case 0:
                             _a = Render.$div("primary-page");
-                            _b = Render.$div("main-panel");
-                            _c = [Render.$div("current-item")([
+                            _b = Render.$div("page-body");
+                            _c = Render.$div("main-panel");
+                            _d = [Render.$div("current-item")([
                                     Render.$div("previous-timestamp")([
                                         Render.$span("value monospace")(null !== item ?
                                             Domain.dateFullStringFromTick(item) :
@@ -6500,44 +6605,46 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         Render.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                                     ]),
                                 ])];
-                            _d = Render.flashIntervalLabel;
+                            _e = Render.flashIntervalLabel;
                             return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.NeverStopwatch.recentlyFlashInterval.add, config_json_1.default.flashIntervalPreset
                                     .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
                                     .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.NeverStopwatch.flashInterval.get(), Storage.NeverStopwatch.flashInterval.set)];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_m.sent()])];
+                        case 1: return [4 /*yield*/, _e.apply(void 0, [_o.sent()])];
                         case 2:
-                            _e = [
-                                _b.apply(void 0, [_c.concat([
-                                        _m.sent(),
-                                        Render.$div("button-list")({
-                                            tag: "button",
-                                            className: "default-button main-button long-button",
-                                            children: Render.label("Stamp"),
-                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                                switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, Operate.NeverStopwatch.stamp(Domain.getTicks())];
-                                                    case 1: return [2 /*return*/, _a.sent()];
-                                                }
-                                            }); }); }
-                                        })
-                                    ])])
+                            _f = [
+                                _b.apply(void 0, [[
+                                        _c.apply(void 0, [_d.concat([
+                                                _o.sent(),
+                                                Render.$div("button-list")({
+                                                    tag: "button",
+                                                    className: "default-button main-button long-button",
+                                                    children: Render.label("Stamp"),
+                                                    onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                                        switch (_a.label) {
+                                                            case 0: return [4 /*yield*/, Operate.NeverStopwatch.stamp(Domain.getTicks())];
+                                                            case 1: return [2 /*return*/, _a.sent()];
+                                                        }
+                                                    }); }); }
+                                                })
+                                            ])])
+                                    ]])
                             ];
-                            _f = Render.$div("page-footer");
+                            _g = Render.$div("page-footer");
                             if (!(null !== item)) return [3 /*break*/, 3];
-                            _g = Render.$div("button-list")([
+                            _h = Render.$div("button-list")([
                                 Render.internalLink({
                                     href: { application: "NeverStopwatch", },
                                     children: {
                                         tag: "button",
-                                        className: "default-button main-button long-button",
+                                        className: "main-button long-button",
                                         children: "閉じる / Close",
                                     }
                                 }),
                                 ticks.indexOf(item) < 0 ?
                                     {
                                         tag: "button",
-                                        className: "default-button main-button long-button",
+                                        className: "main-button long-button",
                                         children: "保存 / Save",
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
@@ -6551,34 +6658,34 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [3 /*break*/, 5];
                         case 3: return [4 /*yield*/, Render.downPageLink()];
                         case 4:
-                            _g = _m.sent();
-                            _m.label = 5;
+                            _h = _o.sent();
+                            _o.label = 5;
                         case 5:
-                            _h = [
-                                _a.apply(void 0, [_e.concat([
-                                        _f.apply(void 0, [[
-                                                _g
+                            _j = [
+                                _a.apply(void 0, [_f.concat([
+                                        _g.apply(void 0, [[
+                                                _h
                                             ]])
                                     ])])
                             ];
                             if (!(null !== item)) return [3 /*break*/, 6];
-                            _j = [];
+                            _k = [];
                             return [3 /*break*/, 8];
                         case 6:
-                            _k = Render.$div("trail-page");
-                            _l = Render.$div("row-flex-list stamp-list");
+                            _l = Render.$div("trail-page");
+                            _m = Render.$div("row-flex-list stamp-list");
                             return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                         case 7:
-                            _j = _k.apply(void 0, [[
-                                    _l.apply(void 0, [_m.sent()]),
+                            _k = _l.apply(void 0, [[
+                                    _m.apply(void 0, [_o.sent()]),
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                         Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                     ]))
                                 ]]);
-                            _m.label = 8;
-                        case 8: return [2 /*return*/, (_h.concat([
-                                _j,
+                            _o.label = 8;
+                        case 8: return [2 /*return*/, (_j.concat([
+                                _k,
                                 Render.screenBar()
                             ]))];
                     }
@@ -6744,14 +6851,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.countdownTimerScreenBody = function (alarms) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
                 var _this = this;
-                return __generator(this, function (_l) {
-                    switch (_l.label) {
+                return __generator(this, function (_m) {
+                    switch (_m.label) {
                         case 0:
                             _a = Render.$div("primary-page");
-                            _b = Render.$div("main-panel");
-                            _c = [0 < alarms.length ?
+                            _b = Render.$div("page-body");
+                            _c = Render.$div("main-panel");
+                            _d = [0 < alarms.length ?
                                     Render.$div("timer" === alarms[0].type ?
                                         "current-item timer-item" :
                                         "current-item schedule-item")([
@@ -6783,50 +6891,52 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             Render.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
                                         ]),
                                     ])];
-                            _d = Render.flashIntervalLabel;
+                            _e = Render.flashIntervalLabel;
                             return [4 /*yield*/, Render.screenHeaderFlashSegment(Storage.CountdownTimer.recentlyFlashInterval.add, config_json_1.default.flashIntervalPreset
                                     .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
                                     .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_l.sent()])];
+                        case 1: return [4 /*yield*/, _e.apply(void 0, [_m.sent()])];
                         case 2:
-                            _e = [
-                                _b.apply(void 0, [_c.concat([
-                                        _l.sent(),
-                                        Render.$div("button-list")({
-                                            tag: "button",
-                                            id: "done-button",
-                                            className: "default-button main-button long-button",
-                                            children: Render.label("Done"),
-                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                return __generator(this, function (_a) {
-                                                    switch (_a.label) {
-                                                        case 0:
-                                                            if (!(0 < alarms.length)) return [3 /*break*/, 2];
-                                                            return [4 /*yield*/, Operate.CountdownTimer.done(alarms[0])];
-                                                        case 1:
-                                                            _a.sent();
-                                                            Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() + 1) % config_json_1.default.rainbowColorSet.length);
-                                                            _a.label = 2;
-                                                        case 2: return [2 /*return*/];
-                                                    }
-                                                });
-                                            }); }
-                                        })
-                                    ])])
+                            _f = [
+                                _b.apply(void 0, [[
+                                        _c.apply(void 0, [_d.concat([
+                                                _m.sent(),
+                                                Render.$div("button-list")({
+                                                    tag: "button",
+                                                    id: "done-button",
+                                                    className: "default-button main-button long-button",
+                                                    children: Render.label("Done"),
+                                                    onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                        return __generator(this, function (_a) {
+                                                            switch (_a.label) {
+                                                                case 0:
+                                                                    if (!(0 < alarms.length)) return [3 /*break*/, 2];
+                                                                    return [4 /*yield*/, Operate.CountdownTimer.done(alarms[0])];
+                                                                case 1:
+                                                                    _a.sent();
+                                                                    Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() + 1) % config_json_1.default.rainbowColorSet.length);
+                                                                    _a.label = 2;
+                                                                case 2: return [2 /*return*/];
+                                                            }
+                                                        });
+                                                    }); }
+                                                })
+                                            ])])
+                                    ]])
                             ];
-                            _f = Render.$div("page-footer");
+                            _g = Render.$div("page-footer");
                             return [4 /*yield*/, Render.downPageLink()];
                         case 3:
-                            _g = [
-                                _a.apply(void 0, [_e.concat([
-                                        _f.apply(void 0, [[
-                                                _l.sent()
+                            _h = [
+                                _a.apply(void 0, [_f.concat([
+                                        _g.apply(void 0, [[
+                                                _m.sent()
                                             ]])
                                     ])])
                             ];
-                            _h = Render.$div("trail-page");
-                            _j = [Render.$div("button-list")([
+                            _j = Render.$div("trail-page");
+                            _k = [Render.$div("button-list")([
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -6867,11 +6977,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _k = Render.$div("row-flex-list alarm-list");
+                            _l = Render.$div("row-flex-list alarm-list");
                             return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alarmItem(item); }))];
-                        case 4: return [2 /*return*/, (_g.concat([
-                                _h.apply(void 0, [_j.concat([
-                                        _k.apply(void 0, [_l.sent()]),
+                        case 4: return [2 /*return*/, (_h.concat([
+                                _j.apply(void 0, [_k.concat([
+                                        _l.apply(void 0, [_m.sent()]),
                                         Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                             Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                             Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
@@ -7080,14 +7190,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.rainbowClockScreenBody = function (item, timezones) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
                 var _this = this;
-                return __generator(this, function (_o) {
-                    switch (_o.label) {
+                return __generator(this, function (_p) {
+                    switch (_p.label) {
                         case 0:
                             _a = Render.$div("primary-page");
-                            _b = Render.$div("main-panel");
-                            _c = [null !== item ?
+                            _b = Render.$div("page-body");
+                            _c = Render.$div("main-panel");
+                            _d = [null !== item ?
                                     Render.$div("current-title")([
                                         Render.$span("value")(item.title),
                                     ]) :
@@ -7107,34 +7218,36 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         Render.$span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                                     ]) :
                                     []];
-                            _d = Render.flashIntervalLabel;
+                            _e = Render.flashIntervalLabel;
                             return [4 /*yield*/, Render.screenHeaderFlashSegment(null, config_json_1.default.flashIntervalPreset, 
                                 // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
                                 // .sort(minamo.core.comparer.make([i => i]))
                                 // .filter((i, ix, list) => ix === list.indexOf(i)),
                                 Storage.RainbowClock.flashInterval.get(), Storage.RainbowClock.flashInterval.set)];
-                        case 1: return [4 /*yield*/, _d.apply(void 0, [_o.sent()])];
+                        case 1: return [4 /*yield*/, _e.apply(void 0, [_p.sent()])];
                         case 2:
-                            _e = [
-                                _b.apply(void 0, [_c.concat([
-                                        _o.sent()
-                                    ])])
+                            _f = [
+                                _b.apply(void 0, [[
+                                        _c.apply(void 0, [_d.concat([
+                                                _p.sent()
+                                            ])])
+                                    ]])
                             ];
-                            _f = Render.$div("page-footer");
+                            _g = Render.$div("page-footer");
                             if (!(null !== item)) return [3 /*break*/, 3];
-                            _g = Render.$div("button-list")([
+                            _h = Render.$div("button-list")([
                                 Render.internalLink({
                                     href: { application: "RainbowClock", },
                                     children: {
                                         tag: "button",
-                                        className: "default-button main-button long-button",
+                                        className: "main-button long-button",
                                         children: "閉じる / Close",
                                     }
                                 }),
                                 timezones.map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item)) < 0 ?
                                     {
                                         tag: "button",
-                                        className: "default-button main-button long-button",
+                                        className: "main-button long-button",
                                         children: "保存 / Save",
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
@@ -7148,22 +7261,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [3 /*break*/, 5];
                         case 3: return [4 /*yield*/, Render.downPageLink()];
                         case 4:
-                            _g = _o.sent();
-                            _o.label = 5;
+                            _h = _p.sent();
+                            _p.label = 5;
                         case 5:
-                            _h = [
-                                _a.apply(void 0, [_e.concat([
-                                        _f.apply(void 0, [[
-                                                _g
+                            _j = [
+                                _a.apply(void 0, [_f.concat([
+                                        _g.apply(void 0, [[
+                                                _h
                                             ]])
                                     ])])
                             ];
                             if (!(null !== item)) return [3 /*break*/, 6];
-                            _j = [];
+                            _k = [];
                             return [3 /*break*/, 8];
                         case 6:
-                            _k = Render.$div("trail-page");
-                            _l = [Render.$div("button-list")([
+                            _l = Render.$div("trail-page");
+                            _m = [Render.$div("button-list")([
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -7186,19 +7299,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _m = Render.$div("row-flex-list timezone-list");
+                            _o = Render.$div("row-flex-list timezone-list");
                             return [4 /*yield*/, Promise.all(timezones.map(function (item) { return Render.timezoneItem(item); }))];
                         case 7:
-                            _j = _k.apply(void 0, [_l.concat([
-                                    _m.apply(void 0, [_o.sent()]),
+                            _k = _l.apply(void 0, [_m.concat([
+                                    _o.apply(void 0, [_p.sent()]),
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                         Render.$tag("li")("")(Render.label("Not support daylight savings time.")),
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                     ]))
                                 ])]);
-                            _o.label = 8;
-                        case 8: return [2 /*return*/, (_h.concat([
-                                _j,
+                            _p.label = 8;
+                        case 8: return [2 /*return*/, (_j.concat([
+                                _k,
                                 Render.screenBar()
                             ]))];
                     }

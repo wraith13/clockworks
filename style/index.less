@@ -1259,13 +1259,13 @@ body.fxxking-ipad-fullscreen
             width: 100%;
             height: calc(100vh - 2.5rem);
             max-height: calc(100vh - 2.5rem);
-            // .negative-foreground-coloring-trait;
             position: relative;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: stretch;
+            justify-content: stretch;
             flex-direction: column;
-            padding-bottom: 2.5rem;
+            // .negative-foreground-coloring-trait;
+            // padding-bottom: 2.5rem;
             // .default-button
             // {
             //     border-color: @base-color;
@@ -1300,12 +1300,22 @@ body.fxxking-ipad-fullscreen
                 }
                 padding: 0.5rem;
             }
+            .page-body
+            {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                flex-grow: 9;
+            }
             .page-footer
             {
-                position: absolute;
-                left: 0px;
-                right: 0px;
-                bottom: 0px;
+                flex-grow: 0;
+                // position: absolute;
+                // left: 0px;
+                // right: 0px;
+                // bottom: 0px;
                 padding-bottom: 0.5rem; // コードで調整するのでこの値に意味はない。
                 display: flex;
                 align-items: center;
@@ -1377,10 +1387,31 @@ body.tektite
             .primary-page
             {
                 .negative-foreground-coloring-trait;
-                .default-button
+                button
                 {
+                    color: @base-color;
                     border-color: @base-color;
                     background-color: transparent;
+                    @media (hover: hover)
+                    {
+                        &:hover
+                        {
+                            background-color: e(%("%s%s", @base-color, "11"));
+                        }
+                    }
+                    &:not(.default-button)
+                    {
+                        border-color: e(%("%s%s", @base-color, "88"));
+                        // opacity: 0.5;
+                        @media (hover: hover)
+                        {
+                            &:hover
+                            {
+                                border-color: @base-color;
+                                // opacity: 1.0;
+                            }
+                        }
+                    }
                 }
             }
             .trail-page
@@ -1423,10 +1454,6 @@ body:not(.tektite)
 }
 .welcome-screen
 {
-    .primary-page
-    {
-        display: block !important;
-    }
     .logo
     {
         height: calc(50vh - 5rem);

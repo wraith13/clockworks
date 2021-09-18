@@ -2413,31 +2413,34 @@ export module Clockworks
             [
                 $div("primary-page")
                 ([
-                    $div("main-panel")
+                    $div("page-body")
                     ([
-                        $div("logo")
+                        $div("main-panel")
                         ([
-                            $div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
-                            $span("logo-text")(applicationTitle)
-                        ]),
-                        $div("button-list")
-                        (
-                            ApplicationList.map
+                            $div("logo")
+                            ([
+                                $div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
+                                $span("logo-text")(applicationTitle)
+                            ]),
+                            $div("button-list")
                             (
-                                (i: ApplicationType) =>
-                                internalLink
-                                ({
-                                    href: { application: i },
-                                    children:
-                                    {
-                                        tag: "button",
-                                        className: "default-button main-button long-button",
-                                        children: labelSpan(application[i].title),
-                                        // onclick: async () => await showNeverStopwatchScreen(),
-                                    }
-                                }),
-                            )
-                        ),
+                                ApplicationList.map
+                                (
+                                    (i: ApplicationType) =>
+                                    internalLink
+                                    ({
+                                        href: { application: i },
+                                        children:
+                                        {
+                                            tag: "button",
+                                            className: "default-button main-button long-button",
+                                            children: labelSpan(application[i].title),
+                                            // onclick: async () => await showNeverStopwatchScreen(),
+                                        }
+                                    }),
+                                )
+                            ),
+                        ]),
                     ]),
                     $div("page-footer")
                     ([
@@ -2507,52 +2510,55 @@ export module Clockworks
         ([
             $div("primary-page")
             ([
-                $div("main-panel")
+                $div("page-body")
                 ([
-                    $div("current-item")
+                    $div("main-panel")
                     ([
-                        $div("previous-timestamp")
+                        $div("current-item")
                         ([
-                            $span("value monospace")
-                            (
-                                null !== item ?
-                                    Domain.dateFullStringFromTick(item):
-                                    (
-                                        0 < ticks.length ?
-                                        Domain.dateFullStringFromTick(ticks[0]):
-                                        ""
-                                    )
-                            ),
+                            $div("previous-timestamp")
+                            ([
+                                $span("value monospace")
+                                (
+                                    null !== item ?
+                                        Domain.dateFullStringFromTick(item):
+                                        (
+                                            0 < ticks.length ?
+                                            Domain.dateFullStringFromTick(ticks[0]):
+                                            ""
+                                        )
+                                ),
+                            ]),
+                            $div("capital-interval")
+                            ([
+                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                            ]),
+                            $div("current-timestamp")
+                            ([
+                                $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                            ]),
                         ]),
-                        $div("capital-interval")
-                        ([
-                            $span("value monospace")(Domain.timeLongStringFromTick(0)),
-                        ]),
-                        $div("current-timestamp")
-                        ([
-                            $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
-                        ]),
-                    ]),
-                    await flashIntervalLabel
-                    (
-                        await screenHeaderFlashSegment
+                        await flashIntervalLabel
                         (
-                            Storage.NeverStopwatch.recentlyFlashInterval.add,
-                            config.flashIntervalPreset
-                                .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
-                                .sort(minamo.core.comparer.make([i => i]))
-                                .filter((i, ix, list) => ix === list.indexOf(i)),
-                            Storage.NeverStopwatch.flashInterval.get(),
-                            Storage.NeverStopwatch.flashInterval.set
-                        )
-                    ),
-                    $div("button-list")
-                    ({
-                        tag: "button",
-                        className: "default-button main-button long-button",
-                        children: label("Stamp"),
-                        onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
-                    }),
+                            await screenHeaderFlashSegment
+                            (
+                                Storage.NeverStopwatch.recentlyFlashInterval.add,
+                                config.flashIntervalPreset
+                                    .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
+                                    .sort(minamo.core.comparer.make([i => i]))
+                                    .filter((i, ix, list) => ix === list.indexOf(i)),
+                                Storage.NeverStopwatch.flashInterval.get(),
+                                Storage.NeverStopwatch.flashInterval.set
+                            )
+                        ),
+                        $div("button-list")
+                        ({
+                            tag: "button",
+                            className: "default-button main-button long-button",
+                            children: label("Stamp"),
+                            onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
+                        }),
+                    ]),
                 ]),
                 $div("page-footer")
                 ([
@@ -2565,14 +2571,14 @@ export module Clockworks
                                 children:
                                 {
                                     tag: "button",
-                                    className: "default-button main-button long-button",
+                                    className: "main-button long-button",
                                     children: "閉じる / Close",
                                 }
                             }),
                             ticks.indexOf(item) < 0 ?
                                 {
                                     tag: "button",
-                                    className: "default-button main-button long-button",
+                                    className: "main-button long-button",
                                     children: "保存 / Save",
                                     onclick: async () => await Operate.NeverStopwatch.save(item),
                                 }:
@@ -2726,93 +2732,96 @@ export module Clockworks
         ([
             $div("primary-page")
             ([
-                $div("main-panel")
+                $div("page-body")
                 ([
-                    0 < alarms.length ?
-                        $div
-                        (
-                            "timer" === alarms[0].type ?
-                                "current-item timer-item":
-                                "current-item schedule-item"
-                        )
-                        ([
-                            0 < alarms.length ?
-                            [
-                                $div("current-title")
-                                ([
-                                    $span("value monospace")(alarmTitle(alarms[0])),
-                                ]),
-                                $div
-                                (
-                                    "timer" === alarms[0].type ?
-                                        "current-due-timestamp":
-                                        "current-due-timestamp"
-                                )
-                                ([
-                                    $span("value monospace")
+                    $div("main-panel")
+                    ([
+                        0 < alarms.length ?
+                            $div
+                            (
+                                "timer" === alarms[0].type ?
+                                    "current-item timer-item":
+                                    "current-item schedule-item"
+                            )
+                            ([
+                                0 < alarms.length ?
+                                [
+                                    $div("current-title")
+                                    ([
+                                        $span("value monospace")(alarmTitle(alarms[0])),
+                                    ]),
+                                    $div
                                     (
                                         "timer" === alarms[0].type ?
-                                            Domain.dateFullStringFromTick(alarms[0].end):
-                                            Domain.dateStringFromTick(alarms[0].end)
-                                    ),
+                                            "current-due-timestamp":
+                                            "current-due-timestamp"
+                                    )
+                                    ([
+                                        $span("value monospace")
+                                        (
+                                            "timer" === alarms[0].type ?
+                                                Domain.dateFullStringFromTick(alarms[0].end):
+                                                Domain.dateStringFromTick(alarms[0].end)
+                                        ),
+                                    ]),
+                                ]: [],
+                                $div("capital-interval")
+                                ([
+                                    $span("value monospace")(Domain.timeLongStringFromTick(0)),
                                 ]),
-                            ]: [],
-                            $div("capital-interval")
+                                $div("current-timestamp")
+                                ([
+                                    $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                ]),
+                            ]):
+                            $div("current-item")
                             ([
-                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                $div("capital-interval")
+                                ([
+                                    $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                ]),
+                                $div("current-timestamp")
+                                ([
+                                    $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                ]),
                             ]),
-                            $div("current-timestamp")
-                            ([
-                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                            ]),
-                        ]):
-                        $div("current-item")
-                        ([
-                            $div("capital-interval")
-                            ([
-                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
-                            ]),
-                            $div("current-timestamp")
-                            ([
-                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                            ]),
-                        ]),
-                    await flashIntervalLabel
-                    (
-                        await screenHeaderFlashSegment
+                        await flashIntervalLabel
                         (
-                            Storage.CountdownTimer.recentlyFlashInterval.add,
-                            config.flashIntervalPreset
-                                .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
-                                .sort(minamo.core.comparer.make([i => i]))
-                                .filter((i, ix, list) => ix === list.indexOf(i)),
-                            Storage.CountdownTimer.flashInterval.get(),
-                            Storage.CountdownTimer.flashInterval.set,
-                            "flash-icon",
-                            "00:00:00 only"
-                        )
-                    ),
-                    $div("button-list")
-                    ({
-                        tag: "button",
-                        id: "done-button",
-                        className: "default-button main-button long-button",
-                        children: label("Done"),
-                        onclick: async () =>
-                        {
-                            if (0 < alarms.length)
+                            await screenHeaderFlashSegment
+                            (
+                                Storage.CountdownTimer.recentlyFlashInterval.add,
+                                config.flashIntervalPreset
+                                    .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
+                                    .sort(minamo.core.comparer.make([i => i]))
+                                    .filter((i, ix, list) => ix === list.indexOf(i)),
+                                Storage.CountdownTimer.flashInterval.get(),
+                                Storage.CountdownTimer.flashInterval.set,
+                                "flash-icon",
+                                "00:00:00 only"
+                            )
+                        ),
+                        $div("button-list")
+                        ({
+                            tag: "button",
+                            id: "done-button",
+                            className: "default-button main-button long-button",
+                            children: label("Done"),
+                            onclick: async () =>
                             {
-                                await Operate.CountdownTimer.done(alarms[0]);
-                                Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() +1) % config.rainbowColorSet.length);
+                                if (0 < alarms.length)
+                                {
+                                    await Operate.CountdownTimer.done(alarms[0]);
+                                    Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() +1) % config.rainbowColorSet.length);
+                                }
                             }
-                        }
-                    }),
+                        }),
+                    ]),
                 ]),
                 $div("page-footer")
                 ([
                     await downPageLink(),
                 ]),
-        ]),
+            ]),
             $div("trail-page")
             ([
                 $div("button-list")
@@ -2998,60 +3007,63 @@ export module Clockworks
         ([
             $div("primary-page")
             ([
-                $div("main-panel")
+                $div("page-body")
                 ([
-                    null !== item ?
-                        $div("current-title")
+                    $div("main-panel")
+                    ([
+                        null !== item ?
+                            $div("current-title")
+                            ([
+                                $span("value")(item.title),
+                            ]):
+                            [],
+                        $div("current-date")
                         ([
-                            $span("value")(item.title),
-                        ]):
-                        [],
-                    $div("current-date")
-                    ([
-                        $span("value monospace")
-                        (
-                            Domain.dateCoreStringFromTick
+                            $span("value monospace")
                             (
-                                null !== item ?
-                                    Domain.getUTCTicks() -item.offset:
-                                    Domain.getTicks()
-                            )
-                        ),
-                    ]),
-                    $div("capital-time")
-                    ([
-                        $span("value monospace")
-                        (
-                            Domain.timeFullCoreStringFromTick
-                            (
-                                Domain.getTime
+                                Domain.dateCoreStringFromTick
                                 (
                                     null !== item ?
                                         Domain.getUTCTicks() -item.offset:
                                         Domain.getTicks()
                                 )
+                            ),
+                        ]),
+                        $div("capital-time")
+                        ([
+                            $span("value monospace")
+                            (
+                                Domain.timeFullCoreStringFromTick
+                                (
+                                    Domain.getTime
+                                    (
+                                        null !== item ?
+                                            Domain.getUTCTicks() -item.offset:
+                                            Domain.getTicks()
+                                    )
+                                )
+                            ),
+                        ]),
+                        null !== item ?
+                            $div("current-utc-offset")
+                            ([
+                                $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
+                            ]):
+                            [],
+                        await flashIntervalLabel
+                        (
+                            await screenHeaderFlashSegment
+                            (
+                                null,
+                                config.flashIntervalPreset,
+                                    // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
+                                    // .sort(minamo.core.comparer.make([i => i]))
+                                    // .filter((i, ix, list) => ix === list.indexOf(i)),
+                                Storage.RainbowClock.flashInterval.get(),
+                                Storage.RainbowClock.flashInterval.set
                             )
                         ),
                     ]),
-                    null !== item ?
-                        $div("current-utc-offset")
-                        ([
-                            $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
-                        ]):
-                        [],
-                    await flashIntervalLabel
-                    (
-                        await screenHeaderFlashSegment
-                        (
-                            null,
-                            config.flashIntervalPreset,
-                                // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
-                                // .sort(minamo.core.comparer.make([i => i]))
-                                // .filter((i, ix, list) => ix === list.indexOf(i)),
-                            Storage.RainbowClock.flashInterval.get(),
-                            Storage.RainbowClock.flashInterval.set
-                        )
-                    ),
                 ]),
                 $div("page-footer")
                 ([
@@ -3064,14 +3076,14 @@ export module Clockworks
                                 children:
                                 {
                                     tag: "button",
-                                    className: "default-button main-button long-button",
+                                    className: "main-button long-button",
                                     children: "閉じる / Close",
                                 }
                             }),
                             timezones.map(i => JSON.stringify(i)).indexOf(JSON.stringify(item)) < 0 ?
                                 {
                                     tag: "button",
-                                    className: "default-button main-button long-button",
+                                    className: "main-button long-button",
                                     children: "保存 / Save",
                                     onclick: async () => await Operate.RainbowClock.save(item),
                                 }:
