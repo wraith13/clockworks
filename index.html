@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Sep 19 2021 05:32:17 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Sep 19 2021 06:14:45 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4418,6 +4418,32 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [2 /*return*/];
                         });
                     }); };
+                    CountdownTimer.save = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            Storage.CountdownTimer.Alarms.add(item);
+                            Render.updateWindow("operate");
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Saved!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.CountdownTimer.Alarms.remove(item);
+                                                Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
                     CountdownTimer.edit = function (item, title, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
                         var oldSchedule, newSchedule, toast;
                         var _this = this;
@@ -5847,6 +5873,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 0:
                             _a = [Render.$div("progress-bar")([])];
                             return [4 /*yield*/, Promise.all(data.items
+                                    .filter(function (i) { return i; })
                                     .map(function (item, ix) { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         return [2 /*return*/, (item.href && Render.screenHeaderLinkSegment(item, getLastSegmentClass(data, ix))) ||
@@ -6046,6 +6073,37 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                                             case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.$span("monospace")(Domain.dateFullStringFromTick(i))], { application: "NeverStopwatch", item: JSON.stringify(i), },
                                                     item === i ? "current-item" : undefined])];
+                                        }
+                                    });
+                                }); }))];
+                        case 1: return [2 /*return*/, (_a.menu = _b.sent(),
+                                _a)];
+                    }
+                });
+            }); };
+            Render.screenHeaderAlarmSegment = function (item, alarms) { return __awaiter(_this, void 0, void 0, function () {
+                var _a;
+                var _this = this;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _a = {
+                                icon: "tick-icon",
+                                title: Render.alarmTitle(item)
+                            };
+                            return [4 /*yield*/, Promise.all(alarms
+                                    .concat([item])
+                                    .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i.end; }]))
+                                    .filter(function (i, ix, list) { return ix === list.map(function (a) { return JSON.stringify(a); }).indexOf(JSON.stringify(i)); })
+                                    .map(function (i) { return __awaiter(_this, void 0, void 0, function () {
+                                    var _a;
+                                    return __generator(this, function (_b) {
+                                        switch (_b.label) {
+                                            case 0:
+                                                _a = Render.menuLinkItem;
+                                                return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(Render.alarmTitle(i)), Render.$span("value monospace")(Domain.dateStringFromTick(i.end))], { application: "CountdownTimer", item: JSON.stringify(i), },
+                                                    JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                         }
                                     });
                                 }); }))];
@@ -6726,7 +6784,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 5:
                             _c.header = (_d.items = _a.concat([
                                 _b
-                            ]).filter(function (i) { return i; }),
+                            ]),
                                 _d.menu = Render.neverStopwatchScreenMenu,
                                 _d);
                             return [4 /*yield*/, Render.neverStopwatchScreenBody(item, ticks)];
@@ -6850,30 +6908,30 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.countdownTimerScreenBody = function (alarms) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+            Render.countdownTimerScreenBody = function (item, alarms) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
                 var _this = this;
-                return __generator(this, function (_m) {
-                    switch (_m.label) {
+                return __generator(this, function (_p) {
+                    switch (_p.label) {
                         case 0:
                             _a = Render.$div("primary-page");
                             _b = Render.$div("page-body");
                             _c = Render.$div("main-panel");
-                            _d = [0 < alarms.length ?
-                                    Render.$div("timer" === alarms[0].type ?
+                            _d = [(item !== null && item !== void 0 ? item : alarms[0]) ?
+                                    Render.$div("timer" === (item !== null && item !== void 0 ? item : alarms[0]).type ?
                                         "current-item timer-item" :
                                         "current-item schedule-item")([
-                                        0 < alarms.length ?
+                                        (item !== null && item !== void 0 ? item : alarms[0]) ?
                                             [
                                                 Render.$div("current-title")([
-                                                    Render.$span("value monospace")(Render.alarmTitle(alarms[0])),
+                                                    Render.$span("value monospace")(Render.alarmTitle(item !== null && item !== void 0 ? item : alarms[0])),
                                                 ]),
-                                                Render.$div("timer" === alarms[0].type ?
+                                                Render.$div("timer" === (item !== null && item !== void 0 ? item : alarms[0]).type ?
                                                     "current-due-timestamp" :
                                                     "current-due-timestamp")([
-                                                    Render.$span("value monospace")("timer" === alarms[0].type ?
-                                                        Domain.dateFullStringFromTick(alarms[0].end) :
-                                                        Domain.dateStringFromTick(alarms[0].end)),
+                                                    Render.$span("value monospace")("timer" === (item !== null && item !== void 0 ? item : alarms[0]).type ?
+                                                        Domain.dateFullStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end) :
+                                                        Domain.dateStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)),
                                                 ]),
                                             ] : [],
                                         Render.$div("capital-interval")([
@@ -6896,12 +6954,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
                                     .sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i; }]))
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); }), Storage.CountdownTimer.flashInterval.get(), Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
-                        case 1: return [4 /*yield*/, _e.apply(void 0, [_m.sent()])];
+                        case 1: return [4 /*yield*/, _e.apply(void 0, [_p.sent()])];
                         case 2:
                             _f = [
                                 _b.apply(void 0, [[
                                         _c.apply(void 0, [_d.concat([
-                                                _m.sent(),
+                                                _p.sent(),
                                                 Render.$div("button-list")({
                                                     tag: "button",
                                                     id: "done-button",
@@ -6911,8 +6969,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         return __generator(this, function (_a) {
                                                             switch (_a.label) {
                                                                 case 0:
-                                                                    if (!(0 < alarms.length)) return [3 /*break*/, 2];
-                                                                    return [4 /*yield*/, Operate.CountdownTimer.done(alarms[0])];
+                                                                    if (!(item !== null && item !== void 0 ? item : alarms[0])) return [3 /*break*/, 2];
+                                                                    return [4 /*yield*/, Operate.CountdownTimer.done(item !== null && item !== void 0 ? item : alarms[0])];
                                                                 case 1:
                                                                     _a.sent();
                                                                     Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() + 1) % config_json_1.default.rainbowColorSet.length);
@@ -6926,17 +6984,49 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     ]])
                             ];
                             _g = Render.$div("page-footer");
-                            return [4 /*yield*/, Render.downPageLink()];
-                        case 3:
-                            _h = [
+                            if (!(null !== item)) return [3 /*break*/, 3];
+                            _h = Render.$div("button-list")([
+                                Render.internalLink({
+                                    href: { application: "CountdownTimer", },
+                                    children: {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: "閉じる / Close",
+                                    }
+                                }),
+                                alarms.map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item)) < 0 ?
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: "保存 / Save",
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Operate.CountdownTimer.save(item)];
+                                                case 1: return [2 /*return*/, _a.sent()];
+                                            }
+                                        }); }); },
+                                    } :
+                                    []
+                            ]);
+                            return [3 /*break*/, 5];
+                        case 3: return [4 /*yield*/, Render.downPageLink()];
+                        case 4:
+                            _h = _p.sent();
+                            _p.label = 5;
+                        case 5:
+                            _j = [
                                 _a.apply(void 0, [_f.concat([
                                         _g.apply(void 0, [[
-                                                _m.sent()
+                                                _h
                                             ]])
                                     ])])
                             ];
-                            _j = Render.$div("trail-page");
-                            _k = [Render.$div("button-list")([
+                            if (!(null !== item)) return [3 /*break*/, 6];
+                            _k = [];
+                            return [3 /*break*/, 8];
+                        case 6:
+                            _l = Render.$div("trail-page");
+                            _m = [Render.$div("button-list")([
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -6977,67 +7067,84 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         }); }
                                     },
                                 ])];
-                            _l = Render.$div("row-flex-list alarm-list");
+                            _o = Render.$div("row-flex-list alarm-list");
                             return [4 /*yield*/, Promise.all(alarms.map(function (item) { return Render.alarmItem(item); }))];
-                        case 4: return [2 /*return*/, (_h.concat([
-                                _j.apply(void 0, [_k.concat([
-                                        _l.apply(void 0, [_m.sent()]),
-                                        Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
-                                            Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                            Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                        ]))
-                                    ])]),
+                        case 7:
+                            _k = _l.apply(void 0, [_m.concat([
+                                    _o.apply(void 0, [_p.sent()]),
+                                    Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
+                                        Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                        Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                    ]))
+                                ])]);
+                            _p.label = 8;
+                        case 8: return [2 /*return*/, (_j.concat([
+                                _k,
                                 Render.screenBar()
                             ]))];
                     }
                 });
             }); };
-            Render.countdownTimerScreen = function (alerts) { return __awaiter(_this, void 0, void 0, function () {
-                var _a;
-                var _b, _c;
-                return __generator(this, function (_d) {
-                    switch (_d.label) {
+            Render.countdownTimerScreen = function (item, alarms) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b;
+                var _c, _d;
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
                         case 0:
-                            _b = {
+                            _c = {
                                 className: "countdown-timer-screen"
                             };
-                            _c = {};
+                            _d = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
                             _a = [
-                                _d.sent()
+                                _e.sent()
                             ];
                             return [4 /*yield*/, Render.screenHeaderApplicationSegment("CountdownTimer")];
                         case 2:
-                            _b.header = (_c.items = _a.concat([
-                                _d.sent()
+                            _a = _a.concat([
+                                _e.sent()
+                            ]);
+                            if (!(null !== item)) return [3 /*break*/, 4];
+                            return [4 /*yield*/, Render.screenHeaderAlarmSegment(item, alarms)];
+                        case 3:
+                            _b = _e.sent();
+                            return [3 /*break*/, 5];
+                        case 4:
+                            _b = null;
+                            _e.label = 5;
+                        case 5:
+                            _c.header = (_d.items = _a.concat([
+                                _b
                             ]),
-                                _c.menu = Render.neverStopwatchScreenMenu,
-                                _c);
-                            return [4 /*yield*/, Render.countdownTimerScreenBody(alerts)];
-                        case 3: return [2 /*return*/, (_b.body = _d.sent(),
-                                _b)];
+                                _d.menu = Render.neverStopwatchScreenMenu,
+                                _d);
+                            return [4 /*yield*/, Render.countdownTimerScreenBody(item, alarms)];
+                        case 6: return [2 /*return*/, (_c.body = _e.sent(),
+                                _c)];
                     }
                 });
             }); };
-            Render.showCountdownTimerScreen = function (_item) { return __awaiter(_this, void 0, void 0, function () {
-                var applicationTitle, alerts, lashFlashAt, updateWindow, _a;
+            Render.showCountdownTimerScreen = function (item) { return __awaiter(_this, void 0, void 0, function () {
+                var applicationTitle, alarms, lashFlashAt, updateWindow, _a;
                 var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
                             applicationTitle = Clockworks.application["CountdownTimer"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            alerts = Storage.CountdownTimer.Alarms.get();
+                            alarms = Storage.CountdownTimer.Alarms.get();
                             lashFlashAt = 0;
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
-                                var screen, now, tick, _a, capitalTime, capitalTimeSpan, flashInterval, rest, unit, primaryStep, cycle, currentColor, span, rate, nextColor, currentColor, rest, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
-                                return __generator(this, function (_c) {
-                                    switch (_c.label) {
+                                var screen, now, tick, current, _a, capitalTime, capitalTimeSpan, flashInterval, rest, unit, primaryStep, cycle, currentColor, span, rate, nextColor, currentColor, alarmListDiv, rest, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
+                                var _c;
+                                return __generator(this, function (_d) {
+                                    switch (_d.label) {
                                         case 0:
                                             screen = document.getElementById("screen");
                                             now = new Date();
                                             tick = Domain.getTicks(now);
+                                            current = (_c = item !== null && item !== void 0 ? item : alarms[0]) !== null && _c !== void 0 ? _c : null;
                                             _a = event;
                                             switch (_a) {
                                                 case "high-resolution-timer": return [3 /*break*/, 1];
@@ -7047,31 +7154,32 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 9];
                                         case 1:
-                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end - tick, 0) : 0);
+                                            screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText =
+                                                Domain.timeLongStringFromTick(current ? Math.max(current.end - tick, 0) : 0);
                                             capitalTime = Domain.dateStringFromTick(tick);
                                             capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                             minamo_js_1.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                             flashInterval = Storage.CountdownTimer.flashInterval.get();
-                                            if (0 < alerts.length) {
-                                                rest = alerts[0].end - tick;
+                                            if (current) {
+                                                rest = current.end - tick;
                                                 if (0 < flashInterval) {
                                                     unit = flashInterval * 60 * 1000;
                                                     primaryStep = 0 < unit ? Math.floor(rest / unit) : 0;
-                                                    if ((primaryStep + 1 === previousPrimaryStep && -5 * 1000 < (rest % unit) && 500 < tick - alerts[0].start)) {
+                                                    if ((primaryStep + 1 === previousPrimaryStep && -5 * 1000 < (rest % unit) && 500 < tick - current.start)) {
                                                         Render.screenFlash();
                                                         lashFlashAt = tick;
                                                     }
                                                     previousPrimaryStep = primaryStep;
                                                 }
-                                                cycle = "timer" === alerts[0].type ? 3000 : 10000;
+                                                cycle = "timer" === current.type ? 3000 : 10000;
                                                 if (rest <= 0 && lashFlashAt + cycle <= tick) {
                                                     Render.screenFlash();
                                                     lashFlashAt = tick;
                                                 }
                                                 currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                                                 setFoundationColor(currentColor);
-                                                span = alerts[0].end - alerts[0].start;
-                                                rate = Math.min(tick - alerts[0].start, span) / span;
+                                                span = current.end - current.start;
+                                                rate = Math.min(tick - current.start, span) / span;
                                                 nextColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() + 1);
                                                 Render.setScreenBarProgress(rate, nextColor);
                                                 // setBodyColor(nextColor);
@@ -7087,18 +7195,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             }
                                             return [3 /*break*/, 9];
                                         case 2:
-                                            setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end - tick, 0)) + " - " + applicationTitle : applicationTitle);
-                                            minamo_js_1.minamo.dom.getChildNodes(minamo_js_1.minamo.dom.getDivsByClassName(screen, "alarm-list")[0])
-                                                .forEach(function (dom, index) {
-                                                dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end - tick, 0));
-                                            });
-                                            if (0 < flashInterval && 0 < alerts.length) {
-                                                rest = alerts[0].end - tick;
+                                            setTitle(current ? Domain.timeShortStringFromTick(Math.max(current.end - tick, 0)) + " - " + applicationTitle : applicationTitle);
+                                            alarmListDiv = minamo_js_1.minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
+                                            if (alarmListDiv) {
+                                                minamo_js_1.minamo.dom.getChildNodes(alarmListDiv)
+                                                    .forEach(function (dom, index) {
+                                                    dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText =
+                                                        Domain.timeShortStringFromTick(Math.max(alarms[index].end - tick, 0));
+                                                });
+                                            }
+                                            if (0 < flashInterval && 0 < alarms.length) {
+                                                rest = current.end - tick;
                                                 unit = flashInterval * 60 * 1000;
                                                 primaryStep = Math.floor(rest / unit);
                                                 currentColor = getSolidRainbowColor(primaryStep);
                                                 nextColor = getSolidRainbowColor(primaryStep + 1);
-                                                rate = (Math.min(tick - alerts[0].start), unit) / unit;
+                                                rate = (Math.min(tick - current.start), unit) / unit;
                                                 setBodyColor(mixColors(currentColor, nextColor, rate));
                                             }
                                             else {
@@ -7108,22 +7220,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [3 /*break*/, 9];
                                         case 3: return [4 /*yield*/, Clockworks.reload()];
                                         case 4:
-                                            _c.sent();
+                                            _d.sent();
                                             return [3 /*break*/, 9];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            alerts = Storage.CountdownTimer.Alarms.get();
+                                            alarms = Storage.CountdownTimer.Alarms.get();
                                             _b = Render.replaceScreenBody;
-                                            return [4 /*yield*/, Render.countdownTimerScreenBody(alerts)];
+                                            return [4 /*yield*/, Render.countdownTimerScreenBody(item, alarms)];
                                         case 6:
-                                            _b.apply(void 0, [_c.sent()]);
+                                            _b.apply(void 0, [_d.sent()]);
                                             Render.resizeFlexList();
                                             return [4 /*yield*/, updateWindow("timer")];
                                         case 7:
-                                            _c.sent();
+                                            _d.sent();
                                             return [4 /*yield*/, Render.scrollToOffset(document.getElementById("screen-body"), 0)];
                                         case 8:
-                                            _c.sent();
+                                            _d.sent();
                                             Render.adjustPageFooterPosition();
                                             return [3 /*break*/, 9];
                                         case 9: return [2 /*return*/];
@@ -7131,7 +7243,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 });
                             }); };
                             _a = Render.showWindow;
-                            return [4 /*yield*/, Render.countdownTimerScreen(alerts)];
+                            return [4 /*yield*/, Render.countdownTimerScreen(item, alarms)];
                         case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent(), updateWindow])];
                         case 2:
                             _b.sent();
@@ -7348,7 +7460,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         case 5:
                             _c.header = (_d.items = _a.concat([
                                 _b
-                            ]).filter(function (i) { return i; }),
+                            ]),
                                 _d.menu = Render.rainbowClockScreenMenu,
                                 _d);
                             return [4 /*yield*/, Render.rainbowClockScreenBody(item, timezones)];

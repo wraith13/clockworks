@@ -865,6 +865,25 @@ export module Clockworks
                         ),
                     });
                 };
+                export const save = async (item: AlarmEntry, onCanceled?: () => unknown) =>
+                {
+                    Storage.CountdownTimer.Alarms.add(item);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.CountdownTimer.Alarms.remove(item);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
                 export const edit = async (item: AlarmScheduleEntry, title: string, end: number, onCanceled?: () => unknown) =>
                 {
                     const oldSchedule = item;
@@ -2059,6 +2078,7 @@ export module Clockworks
                 await Promise.all
                 (
                     data.items
+                    .filter(i => i)
                     .map
                     (
                         async (item, ix) =>
@@ -2173,6 +2193,27 @@ export module Clockworks
                             [ await Resource.loadSvgOrCache("tick-icon"), $span("monospace")(Domain.dateFullStringFromTick(i)), ],
                             { application: "NeverStopwatch", item: JSON.stringify(i), },
                             item === i ? "current-item": undefined,
+                        )
+                    )
+            )
+        });
+        export const screenHeaderAlarmSegment = async (item: AlarmEntry | null, alarms: AlarmEntry[]): Promise<HeaderSegmentSource> =>
+        ({
+            icon: "tick-icon",
+            title: alarmTitle(item),
+            menu: await Promise.all
+            (
+                alarms
+                    .concat([item])
+                    .sort(minamo.core.comparer.make([i => i.end]))
+                    .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
+                    .map
+                    (
+                        async i => menuLinkItem
+                        (
+                            [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
+                            { application: "CountdownTimer", item: JSON.stringify(i), },
+                            JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
             )
@@ -2629,7 +2670,7 @@ export module Clockworks
                     null !== item ?
                         await screenHeaderStampSegment(item, ticks):
                         null,
-                ].filter(i => i),
+                ],
                 menu: neverStopwatchScreenMenu
             },
             body: await neverStopwatchScreenBody(item, ticks)
@@ -2728,7 +2769,7 @@ export module Clockworks
             await showWindow(await neverStopwatchScreen(item, ticks), updateWindow);
             await updateWindow("timer");
         };
-        export const countdownTimerScreenBody = async (alarms: AlarmEntry[]) =>
+        export const countdownTimerScreenBody = async (item: AlarmEntry | null, alarms: AlarmEntry[]) =>
         ([
             $div("primary-page")
             ([
@@ -2736,32 +2777,32 @@ export module Clockworks
                 ([
                     $div("main-panel")
                     ([
-                        0 < alarms.length ?
+                        (item ?? alarms[0]) ?
                             $div
                             (
-                                "timer" === alarms[0].type ?
+                                "timer" === (item ?? alarms[0]).type ?
                                     "current-item timer-item":
                                     "current-item schedule-item"
                             )
                             ([
-                                0 < alarms.length ?
+                                (item ?? alarms[0]) ?
                                 [
                                     $div("current-title")
                                     ([
-                                        $span("value monospace")(alarmTitle(alarms[0])),
+                                        $span("value monospace")(alarmTitle(item ?? alarms[0])),
                                     ]),
                                     $div
                                     (
-                                        "timer" === alarms[0].type ?
+                                        "timer" === (item ?? alarms[0]).type ?
                                             "current-due-timestamp":
                                             "current-due-timestamp"
                                     )
                                     ([
                                         $span("value monospace")
                                         (
-                                            "timer" === alarms[0].type ?
-                                                Domain.dateFullStringFromTick(alarms[0].end):
-                                                Domain.dateStringFromTick(alarms[0].end)
+                                            "timer" === (item ?? alarms[0]).type ?
+                                                Domain.dateFullStringFromTick((item ?? alarms[0]).end):
+                                                Domain.dateStringFromTick((item ?? alarms[0]).end)
                                         ),
                                     ]),
                                 ]: [],
@@ -2808,9 +2849,9 @@ export module Clockworks
                             children: label("Done"),
                             onclick: async () =>
                             {
-                                if (0 < alarms.length)
+                                if (item ?? alarms[0])
                                 {
-                                    await Operate.CountdownTimer.done(alarms[0]);
+                                    await Operate.CountdownTimer.done(item ?? alarms[0]);
                                     Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() +1) % config.rainbowColorSet.length);
                                 }
                             }
@@ -2819,60 +2860,84 @@ export module Clockworks
                 ]),
                 $div("page-footer")
                 ([
-                    await downPageLink(),
+                    null !== item ?
+                        $div("button-list")
+                        ([
+                            internalLink
+                            ({
+                                href: { application: "CountdownTimer", },
+                                children:
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "閉じる / Close",
+                                }
+                            }),
+                            alarms.map(i => JSON.stringify(i)).indexOf(JSON.stringify(item)) < 0 ?
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "保存 / Save",
+                                    onclick: async () => await Operate.CountdownTimer.save(item),
+                                }:
+                                []
+                        ]):
+                        await downPageLink(),
                 ]),
             ]),
-            $div("trail-page")
-            ([
-                $div("button-list")
+            null !== item ?
+                []:
+                $div("trail-page")
                 ([
-                    {
-                        tag: "button",
-                        className: "main-button long-button",
-                        children: label("New Timer"),
-                        onclick: async () => await newTimerPopup(),
-                    },
-                    {
-                        tag: "button",
-                        className: "main-button long-button",
-                        children: label("New Schedule"),
-                        onclick: async () =>
+                    $div("button-list")
+                    ([
                         {
-                            const result = await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks());
-                            if (result)
+                            tag: "button",
+                            className: "main-button long-button",
+                            children: label("New Timer"),
+                            onclick: async () => await newTimerPopup(),
+                        },
+                        {
+                            tag: "button",
+                            className: "main-button long-button",
+                            children: label("New Schedule"),
+                            onclick: async () =>
                             {
-                                if (Domain.getTicks() < result.tick)
+                                const result = await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks());
+                                if (result)
                                 {
-                                    await Operate.CountdownTimer.newSchedule(result.title, result.tick);
-                                }
-                                else
-                                {
-                                    makeToast
-                                    ({
-                                        content: label("A date and time outside the valid range was specified."),
-                                        isWideContent: true,
-                                    });
+                                    if (Domain.getTicks() < result.tick)
+                                    {
+                                        await Operate.CountdownTimer.newSchedule(result.title, result.tick);
+                                    }
+                                    else
+                                    {
+                                        makeToast
+                                        ({
+                                            content: label("A date and time outside the valid range was specified."),
+                                            isWideContent: true,
+                                        });
+                                    }
                                 }
                             }
-                        }
-                    },
+                        },
+                    ]),
+                    $div("row-flex-list alarm-list")
+                    (
+                        await Promise.all(alarms.map(item => alarmItem(item)))
+                    ),
+                    $div("description")
+                    (
+                        $tag("ul")("locale-parallel-off")
+                        ([
+                            $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                            $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        ])
+                    ),
                 ]),
-                $div("row-flex-list alarm-list")
-                (
-                    await Promise.all(alarms.map(item => alarmItem(item)))
-                ),
-                $div("description")
-                (
-                    $tag("ul")("locale-parallel-off")
-                    ([
-                        $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                    ])
-                ),
-            ]),
             screenBar(),
         ]);
-        export const countdownTimerScreen = async (alerts: AlarmEntry[]): Promise<ScreenSource> =>
+        export const countdownTimerScreen = async (item: AlarmEntry | null, alarms: AlarmEntry[]): Promise<ScreenSource> =>
         ({
             className: "countdown-timer-screen",
             header:
@@ -2881,46 +2946,50 @@ export module Clockworks
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("CountdownTimer"),
-                    // await screenHeaderFlashSegment(Storage.CountdownTimer.flashInterval.get()),
+                    null !== item ?
+                        await screenHeaderAlarmSegment(item, alarms):
+                        null,
                 ],
                 menu: neverStopwatchScreenMenu
             },
-            body: await countdownTimerScreenBody(alerts)
+            body: await countdownTimerScreenBody(item, alarms)
         });
-        export const showCountdownTimerScreen = async (_item: AlarmEntry | null) =>
+        export const showCountdownTimerScreen = async (item: AlarmEntry | null) =>
         {
             const applicationTitle = application["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
-            let alerts = Storage.CountdownTimer.Alarms.get();
+            let alarms = Storage.CountdownTimer.Alarms.get();
             let lashFlashAt = 0;
             const updateWindow = async (event: UpdateWindowEventEype) =>
             {
                 const screen = document.getElementById("screen") as HTMLDivElement;
                 const now = new Date();
                 const tick = Domain.getTicks(now);
+                const current = item ?? alarms[0] ?? null;
                 switch(event)
                 {
                     case "high-resolution-timer":
-                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(0 < alerts.length ? Math.max(alerts[0].end -tick, 0): 0);
+                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
+                            Domain.timeLongStringFromTick(current ? Math.max(current.end -tick, 0): 0);
                         const capitalTime = Domain.dateStringFromTick(tick);
                         const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                         minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                         const flashInterval = Storage.CountdownTimer.flashInterval.get();
-                        if (0 < alerts.length)
+                        if (current)
                         {
-                            const rest = alerts[0].end - tick;
+                            const rest = current.end - tick;
                             if (0 < flashInterval)
                             {
                                 const unit = flashInterval *60 *1000;
                                 const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
-                                if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -alerts[0].start))
+                                if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -current.start))
                                 {
                                     screenFlash();
                                     lashFlashAt = tick;
                                 }
                                 previousPrimaryStep = primaryStep;
                             }
-                            const cycle = "timer" === alerts[0].type ? 3000: 10000;
+                            const cycle = "timer" === current.type ? 3000: 10000;
                             if (rest <= 0 && lashFlashAt +cycle <= tick)
                             {
                                 screenFlash();
@@ -2928,8 +2997,8 @@ export module Clockworks
                             }
                             const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setFoundationColor(currentColor);
-                            const span = alerts[0].end - alerts[0].start;
-                            const rate = Math.min(tick - alerts[0].start, span) /span;
+                            const span = current.end - current.start;
+                            const rate = Math.min(tick - current.start, span) /span;
                             const nextColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
                             setScreenBarProgress(rate, nextColor);
                             // setBodyColor(nextColor);
@@ -2946,23 +3015,28 @@ export module Clockworks
                         }
                         break;
                     case "timer":
-                        setTitle(0 < alerts.length ? Domain.timeShortStringFromTick(Math.max(alerts[0].end -tick, 0)) +" - " +applicationTitle: applicationTitle);
-                        minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "alarm-list")[0])
+                        setTitle(current ? Domain.timeShortStringFromTick(Math.max(current.end -tick, 0)) +" - " +applicationTitle: applicationTitle);
+                        const alarmListDiv = minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
+                        if (alarmListDiv)
+                        {
+                            minamo.dom.getChildNodes<HTMLDivElement>(alarmListDiv)
                             .forEach
                             (
                                 (dom, index) =>
                                 {
-                                    (dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Math.max(alerts[index].end -tick, 0));
+                                    (dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
+                                        Domain.timeShortStringFromTick(Math.max(alarms[index].end -tick, 0));
                                 }
                             );
-                        if (0 < flashInterval && 0 < alerts.length)
+                        }
+                        if (0 < flashInterval && 0 < alarms.length)
                         {
-                            const rest = alerts[0].end - tick;
+                            const rest = current.end - tick;
                             const unit = flashInterval *60 *1000;
                             const primaryStep = Math.floor(rest / unit);
                             const currentColor = getSolidRainbowColor(primaryStep);
                             const nextColor = getSolidRainbowColor(primaryStep +1);
-                            const rate = (Math.min(tick - alerts[0].start), unit) /unit;
+                            const rate = (Math.min(tick - current.start), unit) /unit;
                             setBodyColor(mixColors(currentColor, nextColor, rate));
                         }
                         else
@@ -2976,8 +3050,8 @@ export module Clockworks
                         break;
                     case "operate":
                         previousPrimaryStep = 0;
-                        alerts = Storage.CountdownTimer.Alarms.get();
-                        replaceScreenBody(await countdownTimerScreenBody(alerts));
+                        alarms = Storage.CountdownTimer.Alarms.get();
+                        replaceScreenBody(await countdownTimerScreenBody(item, alarms));
                         resizeFlexList();
                         await updateWindow("timer");
                         await Render.scrollToOffset(document.getElementById("screen-body"), 0);
@@ -2985,7 +3059,7 @@ export module Clockworks
                         break;
                 }
             };
-            await showWindow(await countdownTimerScreen(alerts), updateWindow);
+            await showWindow(await countdownTimerScreen(item, alarms), updateWindow);
             await updateWindow("timer");
         };
         export const colorMenuItem = async () =>
@@ -3090,7 +3164,7 @@ export module Clockworks
                                 []
                         ]):
                         await downPageLink(),
-                    ]),
+                ]),
             ]),
             null !== item ?
                 []:
@@ -3139,7 +3213,7 @@ export module Clockworks
                     null !== item ?
                         await screenHeaderTimezoneSegment(item, timezones):
                         null,
-                ].filter(i => i),
+                ],
                 menu: rainbowClockScreenMenu
             },
             body: await rainbowClockScreenBody(item, timezones),
