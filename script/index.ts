@@ -1695,6 +1695,57 @@ export module Clockworks
                 }
             );
         };
+        export const sharePopup = async (_url: string = location.href): Promise<boolean> => await new Promise
+        (
+            async resolve =>
+            {
+                let result = false;
+                const ui = popup
+                ({
+                    // className: "add-remove-tags-popup",
+                    children:
+                    [
+                        $tag("h2")("")(labelSpan("シェア / Share")),
+                        $div("menu-button-list")
+                        ([
+                            {
+                                tag: "button",
+                                className: "menu-item-button",
+                                children: $span("")(labelSpan("Tweet / ツイート")),
+                                onclick: async () =>
+                                {
+                                    result = true;
+                                    ui.close();
+                                }
+                            },
+                            {
+                                tag: "button",
+                                className: "menu-item-button",
+                                children: $span("")(labelSpan("Copy URL / URL をコピー")),
+                                onclick: async () =>
+                                {
+                                    result = true;
+                                    ui.close();
+                                }
+                            }
+                        ]),
+                        $div("popup-operator")
+                        ([
+                            {
+                                tag: "button",
+                                className: "default-button",
+                                children: label("Close"),
+                                onclick: () =>
+                                {
+                                    ui.close();
+                                },
+                            }
+                        ])
+                    ],
+                    onClose: async () => resolve(result),
+                });
+            }
+        );
         export const screenCover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
             const onclick = async () =>
@@ -2064,10 +2115,10 @@ export module Clockworks
             header: HeaderSource;
             body: minamo.dom.Source;
         }
-        const getLastSegmentClass = (data:HeaderSource, ix: number) =>
+        const getLastSegmentClass = (ix: number, items: HeaderSegmentSource[]) =>
             [
                 ix === 0 ? "first-segment": undefined,
-                ix === data.items.length -1 ? "last-segment": undefined,
+                ix === items.length -1 ? "last-segment": undefined,
             ]
             .filter(i => undefined !== i)
             .join(" ");
@@ -2081,10 +2132,10 @@ export module Clockworks
                     .filter(i => i)
                     .map
                     (
-                        async (item, ix) =>
-                            (item.href && screenHeaderLinkSegment(item, getLastSegmentClass(data,ix))) ||
-                            (item.menu && screenHeaderPopupSegment(item, getLastSegmentClass(data,ix))) ||
-                            (true && screenHeaderLabelSegment(item, getLastSegmentClass(data,ix)))
+                        async (item, ix, list) =>
+                            (item.href && screenHeaderLinkSegment(item, getLastSegmentClass(ix, list))) ||
+                            (item.menu && screenHeaderPopupSegment(item, getLastSegmentClass(ix, list))) ||
+                            (true && screenHeaderLabelSegment(item, getLastSegmentClass(ix, list)))
                     )
                 )
             ).reduce((a, b) => (a as any[]).concat(b), []),
@@ -2257,7 +2308,7 @@ export module Clockworks
                             setter(i);
                             clearLastMouseDownTarget();
                             getScreenCoverList().forEach(i => i.click());
-                                await reload();
+                            await reload();
                         },
                         flashInterval === i ? "current-item": undefined
                     )
@@ -2623,7 +2674,12 @@ export module Clockworks
                                     children: "保存 / Save",
                                     onclick: async () => await Operate.NeverStopwatch.save(item),
                                 }:
-                                []
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "シェア / Share",
+                                    onclick: async () => await sharePopup(),
+                                }
                         ]):
                         await downPageLink(),
                 ]),
@@ -2880,7 +2936,12 @@ export module Clockworks
                                     children: "保存 / Save",
                                     onclick: async () => await Operate.CountdownTimer.save(item),
                                 }:
-                                []
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "シェア / Share",
+                                    onclick: async () => await sharePopup(),
+                                }
                         ]):
                         await downPageLink(),
                 ]),
@@ -3161,7 +3222,12 @@ export module Clockworks
                                     children: "保存 / Save",
                                     onclick: async () => await Operate.RainbowClock.save(item),
                                 }:
-                                []
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "シェア / Share",
+                                    onclick: async () => await sharePopup(),
+                                }
                         ]):
                         await downPageLink(),
                 ]),
@@ -3251,28 +3317,33 @@ export module Clockworks
                                 }
                             }
                             const utc = Domain.getUTCTicks(now);
-                            minamo.dom.getChildNodes<HTMLDivElement>(minamo.dom.getDivsByClassName(screen, "timezone-list")[0])
-                            .forEach
-                            (
-                                (dom, index) =>
-                                {
-                                    const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
-                                    const currentTick = utc -(timezones[index].offset *Domain.utcOffsetRate);
-                                    const panel = minamo.dom.getDivsByClassName(dom, "item-panel")[0];
-                                    const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
-                                    const currentHours = new Date(currentTick).getHours();
-                                    const currentColor = getRainbowColor(currentHours);
-                                    const hourUnit = 60 *60 *1000;
-                                    const minutes = (currentTick % hourUnit) / hourUnit;
-                                    const nextColor = getRainbowColor(currentHours +1);
-                                    minamo.dom.setProperty(panel.style, "backgroundColor", currentColor);
-                                    minamo.dom.setProperty(timeBar.style, "backgroundColor", nextColor);
-                                    const percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                                    minamo.dom.setProperty(timeBar.style, "width", percentString);
-                                    minamo.dom.setProperty(minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) +" " +Domain.weekday(currentTick));
-                                    minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
-                                }
-                            );
+
+                            const timezoneListDiv = minamo.dom.getDivsByClassName(screen, "timezone-list")[0];
+                            if (timezoneListDiv)
+                            {
+                                minamo.dom.getChildNodes<HTMLDivElement>(timezoneListDiv)
+                                .forEach
+                                (
+                                    (dom, index) =>
+                                    {
+                                        const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
+                                        const currentTick = utc -(timezones[index].offset *Domain.utcOffsetRate);
+                                        const panel = minamo.dom.getDivsByClassName(dom, "item-panel")[0];
+                                        const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                        const currentHours = new Date(currentTick).getHours();
+                                        const currentColor = getRainbowColor(currentHours);
+                                        const hourUnit = 60 *60 *1000;
+                                        const minutes = (currentTick % hourUnit) / hourUnit;
+                                        const nextColor = getRainbowColor(currentHours +1);
+                                        minamo.dom.setProperty(panel.style, "backgroundColor", currentColor);
+                                        minamo.dom.setProperty(timeBar.style, "backgroundColor", nextColor);
+                                        const percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                                        minamo.dom.setProperty(timeBar.style, "width", percentString);
+                                        minamo.dom.setProperty(minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) +" " +Domain.weekday(currentTick));
+                                        minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
+                                    }
+                                );
+                            }
                         }
                         break;
                     case "timer":
