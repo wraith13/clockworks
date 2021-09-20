@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Sep 19 2021 22:38:39 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Sep 20 2021 19:00:44 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4507,6 +4507,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             }); };
             var Operate;
             (function (Operate) {
+                Operate.copyToClipboard = function (text, displayText) {
+                    if (displayText === void 0) { displayText = "\"" + text + "\""; }
+                    var pre = minamo_js_1.minamo.dom.make(HTMLPreElement)({
+                        children: text,
+                    });
+                    document.body.appendChild(pre);
+                    document.getSelection().selectAllChildren(pre);
+                    document.execCommand("copy");
+                    document.body.removeChild(pre);
+                    Render.makeToast({ content: "Copied " + displayText + " to the clipboard.", });
+                };
                 var NeverStopwatch;
                 (function (NeverStopwatch) {
                     var _this = this;
@@ -5755,17 +5766,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.sharePopup = function (_url) {
-                if (_url === void 0) { _url = location.href; }
+            Render.sharePopup = function (title, url) {
+                if (url === void 0) { url = location.href; }
                 return __awaiter(_this, void 0, void 0, function () {
                     var _this = this;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                                    var result, ui;
+                                    var ui;
                                     var _this = this;
                                     return __generator(this, function (_a) {
-                                        result = false;
                                         ui = Render.popup({
                                             // className: "add-remove-tags-popup",
                                             children: [
@@ -5777,7 +5787,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         children: Render.$span("")(Render.labelSpan("Tweet / ツイート")),
                                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                             return __generator(this, function (_a) {
-                                                                result = true;
+                                                                location.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('【' + title + '】 ' + url + ' ');
                                                                 ui.close();
                                                                 return [2 /*return*/];
                                                             });
@@ -5789,7 +5799,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                         children: Render.$span("")(Render.labelSpan("Copy URL / URL をコピー")),
                                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                             return __generator(this, function (_a) {
-                                                                result = true;
+                                                                Operate.copyToClipboard(url, "URL");
                                                                 ui.close();
                                                                 return [2 /*return*/];
                                                             });
@@ -5808,7 +5818,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 ])
                                             ],
                                             onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                                return [2 /*return*/, resolve(result)];
+                                                return [2 /*return*/, resolve()];
                                             }); }); },
                                         });
                                         return [2 /*return*/];
@@ -7077,7 +7087,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: "シェア / Share",
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.sharePopup()];
+                                                case 0: return [4 /*yield*/, Render.sharePopup("Elapsed Time / 経過時間")];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -7382,7 +7392,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: "シェア / Share",
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.sharePopup()];
+                                                case 0: return [4 /*yield*/, Render.sharePopup(Render.alarmTitle(item))];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -7754,7 +7764,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: "シェア / Share",
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.sharePopup()];
+                                                case 0: return [4 /*yield*/, Render.sharePopup(item.title)];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },

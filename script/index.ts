@@ -707,6 +707,18 @@ export module Clockworks
         };
         export module Operate
         {
+            export const copyToClipboard = (text: string, displayText = `"${text}"`) =>
+            {
+                const pre = minamo.dom.make(HTMLPreElement)
+                ({
+                    children: text,
+                });
+                document.body.appendChild(pre);
+                document.getSelection().selectAllChildren(pre);
+                document.execCommand("copy");
+                document.body.removeChild(pre);
+                makeToast({ content: `Copied ${displayText} to the clipboard.`,});
+            };
             export module NeverStopwatch
             {
                 export const stamp = async (tick: number, onCanceled?: () => unknown) =>
@@ -1695,11 +1707,10 @@ export module Clockworks
                 }
             );
         };
-        export const sharePopup = async (_url: string = location.href): Promise<boolean> => await new Promise
+        export const sharePopup = async (title: string, url: string = location.href) => await new Promise<void>
         (
             async resolve =>
             {
-                let result = false;
                 const ui = popup
                 ({
                     // className: "add-remove-tags-popup",
@@ -1714,7 +1725,7 @@ export module Clockworks
                                 children: $span("")(labelSpan("Tweet / ツイート")),
                                 onclick: async () =>
                                 {
-                                    result = true;
+                                    location.href='https://twitter.com/intent/tweet?text='+encodeURIComponent('【'+title+'】 '+url +' ');
                                     ui.close();
                                 }
                             },
@@ -1724,7 +1735,7 @@ export module Clockworks
                                 children: $span("")(labelSpan("Copy URL / URL をコピー")),
                                 onclick: async () =>
                                 {
-                                    result = true;
+                                    Operate.copyToClipboard(url, "URL");
                                     ui.close();
                                 }
                             }
@@ -1742,7 +1753,7 @@ export module Clockworks
                             }
                         ])
                     ],
-                    onClose: async () => resolve(result),
+                    onClose: async () => resolve(),
                 });
             }
         );
@@ -2678,7 +2689,7 @@ export module Clockworks
                                     tag: "button",
                                     className: "main-button long-button",
                                     children: "シェア / Share",
-                                    onclick: async () => await sharePopup(),
+                                    onclick: async () => await sharePopup("Elapsed Time / 経過時間"),
                                 }
                         ]):
                         await downPageLink(),
@@ -2940,7 +2951,7 @@ export module Clockworks
                                     tag: "button",
                                     className: "main-button long-button",
                                     children: "シェア / Share",
-                                    onclick: async () => await sharePopup(),
+                                    onclick: async () => await sharePopup(alarmTitle(item)),
                                 }
                         ]):
                         await downPageLink(),
@@ -3226,7 +3237,7 @@ export module Clockworks
                                     tag: "button",
                                     className: "main-button long-button",
                                     children: "シェア / Share",
-                                    onclick: async () => await sharePopup(),
+                                    onclick: async () => await sharePopup(item.title),
                                 }
                         ]):
                         await downPageLink(),
