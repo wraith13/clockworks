@@ -2580,6 +2580,7 @@ export module Clockworks
                     break;
                 }
             };
+            setBodyColor(getSolidRainbowColor(0));
             await showWindow(await welcomeScreen(), updateWindow);
             await updateWindow("timer");
         };
