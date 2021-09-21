@@ -516,7 +516,7 @@ export module Clockworks
             {
                 const days = Math.floor(tick / (24 *60 *60 *1000));
                 return 0 < days ?
-                    `${days.toLocaleString()} ${locale.map("days")} ${timeFullCoreStringFromTick(tick)}`:
+                    `${days.toLocaleString()} ${locale.map("days")} ${10 < days ? timeShortCoreStringFromTick(tick): timeLongCoreStringFromTick(tick)}`:
                     timeFullCoreStringFromTick(tick);
             }
         };

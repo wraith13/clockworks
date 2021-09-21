@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Sep 20 2021 19:00:44 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Sep 20 2021 22:19:09 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4338,7 +4338,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 else {
                     var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                     return 0 < days ?
-                        days.toLocaleString() + " " + locale.map("days") + " " + Domain.timeFullCoreStringFromTick(tick) :
+                        days.toLocaleString() + " " + locale.map("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
                         Domain.timeFullCoreStringFromTick(tick);
                 }
             };
