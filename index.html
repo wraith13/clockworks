@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Sep 22 2021 03:04:45 GMT+0900 (GMT+09:00) -->
+<!-- build at: Thu Sep 23 2021 00:06:49 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3837,6 +3837,7 @@ define("resource/lang.en", [], {
     "Saved!": "Saved!",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
+    "You can use links like these too:": "You can use links like these too:",
     "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified.",
     "Not support daylight savings time.": "Not support daylight savings time.",
     "timezone.Tokyo": "Tokyo",
@@ -3897,6 +3898,7 @@ define("resource/lang.ja", [], {
     "Saved!": "保存しました！",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
+    "You can use links like these too:": "次のようなリンクを使う事もできます:",
     "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。",
     "Not support daylight savings time.": "夏時間はサポートしていません。",
     "timezone.Tokyo": "東京",
@@ -4200,7 +4202,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         var Domain;
         (function (Domain) {
             Domain.utcOffsetRate = 60 * 1000;
-            Domain.makeTimerLabel = function (minutes) { return minutes + " " + locale.map("m(minutes)"); };
+            Domain.makeMinutesTimerLabel = function (minutes) { return Domain.makeTimerLabel(minutes * 60 * 1000); };
+            Domain.makeTimerLabel = function (timer) {
+                var minutes = timer / (60 * 1000);
+                return minutes + " " + locale.map("m(minutes)");
+            };
             Domain.getTicks = function (date) {
                 if (date === void 0) { date = new Date(); }
                 return date.getTime();
@@ -4393,6 +4399,37 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return null;
             };
             Domain.parseStamp = function (json) { return Domain.parseStampCore(Domain.parseOrNull(json)); };
+            Domain.parseTimer = function (timer) {
+                try {
+                    switch (typeof timer) {
+                        case "number":
+                            return timer;
+                        case "string":
+                            if (timer.endsWith("ms")) {
+                                return parseFloat(timer.substr(0, timer.length - 2));
+                            }
+                            else if (timer.endsWith("s")) {
+                                return parseFloat(timer.substr(0, timer.length - 1)) * 1000;
+                            }
+                            else if (timer.endsWith("m")) {
+                                return parseFloat(timer.substr(0, timer.length - 1)) * 60 * 1000;
+                            }
+                            else if (timer.endsWith("h")) {
+                                return parseFloat(timer.substr(0, timer.length - 1)) * 60 * 60 * 1000;
+                            }
+                            else if (timer.endsWith("d")) {
+                                return parseFloat(timer.substr(0, timer.length - 1)) + 24 * 60 * 60 * 1000;
+                            }
+                            else {
+                                return parseFloat(timer.substr(0, timer.length - 2));
+                            }
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                }
+                return null;
+            };
             Domain.parseAlarmCore = function (item) {
                 if (null !== item && undefined !== item && "object" === typeof item) {
                     if ("timer" === item.type &&
@@ -4406,15 +4443,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         };
                         return result;
                     }
+                    var newTimer = Domain.parseTimer(item.end);
                     if ("timer" === item.type &&
                         "new" === item.start &&
-                        "number" === typeof item.end &&
-                        0 < item.end) {
+                        "number" === typeof newTimer &&
+                        0 < newTimer) {
                         var start_1 = Domain.getTicks();
                         var result = {
                             type: item.type,
                             start: start_1,
-                            end: start_1 + item.end,
+                            end: start_1 + newTimer,
                         };
                         return result;
                     }
@@ -4434,6 +4472,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
                 return null;
             };
+            Domain.makeNewTimerUrl = function (timer) { return "?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22" + timer + "%22%7D"; };
             Domain.parseAlarm = function (json) { return Domain.parseAlarmCore(Domain.parseOrNull(json)); };
             Domain.parseTimezoneCore = function (item) {
                 if (null !== item && undefined !== item && "object" === typeof item) {
@@ -5553,7 +5592,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                                 return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
-                                                                                    Render.$span("")(Render.labelSpan(Domain.makeTimerLabel(i)))
+                                                                                    Render.$span("")(Render.labelSpan(Domain.makeMinutesTimerLabel(i)))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         return __generator(this, function (_a) {
@@ -6075,7 +6114,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.alarmTitle = function (item) { return "timer" === item.type ?
-                Domain.makeTimerLabel((item.end - item.start) / (60 * 1000)) + " " + locale.map("Timer") :
+                Domain.makeTimerLabel(item.end - item.start) + " " + locale.map("Timer") :
                 item.title; };
             Render.alarmItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e;
@@ -6529,7 +6568,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [4 /*yield*/, Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[
                                                     _b.sent(),
-                                                    Render.labelSpan(0 === i ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeTimerLabel(i))
+                                                    Render.labelSpan(0 === i ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeMinutesTimerLabel(i))
                                                 ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                     return __generator(this, function (_a) {
                                                         switch (_a.label) {
@@ -6599,7 +6638,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             case 0:
                                 _a = {
                                     icon: 0 === flashInterval ? zeroIcon : "flash-icon",
-                                    title: 0 === flashInterval ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
+                                    title: 0 === flashInterval ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeMinutesTimerLabel(flashInterval)
                                 };
                                 return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel)];
                             case 1: return [2 /*return*/, (_a.menu = _b.sent(),
@@ -7467,6 +7506,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                         Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                        Render.$tag("li")("")([Render.label("You can use links like these too:"), ["90s", "3m"].map(function (i) { return ({ tag: "a", href: Domain.makeNewTimerUrl(i), children: Domain.makeTimerLabel(Domain.parseTimer(i)), }); })]),
                                     ]))
                                 ])]);
                             _p.label = 8;

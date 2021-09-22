@@ -341,7 +341,12 @@ export module Clockworks
     export module Domain
     {
         export const utcOffsetRate = 60 *1000;
-        export const makeTimerLabel = (minutes: number) => `${minutes} ${locale.map("m(minutes)")}`;
+        export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
+        export const makeTimerLabel = (timer: number) =>
+        {
+            const minutes = timer / (60 *1000);
+            return `${minutes} ${locale.map("m(minutes)")}`;
+        };
         export const getTicks = (date: Date = new Date()) => date.getTime();
         export const getUTCTicks = (date: Date = new Date()) => getTicks(date) +(date.getTimezoneOffset() *utcOffsetRate);
         export const getAppropriateTicks = (date: Date = new Date()) =>
@@ -586,6 +591,51 @@ export module Clockworks
             return null;
         };
         export const parseStamp = (json: string): number | null => parseStampCore(parseOrNull(json));
+        export const parseTimer = (timer: any) =>
+        {
+            try
+            {
+                switch(typeof timer)
+                {
+                case "number":
+                    return timer;
+                case "string":
+                    if (timer.endsWith("ms"))
+                    {
+                        return parseFloat(timer.substr(0, timer.length -2));
+                    }
+                    else
+                    if (timer.endsWith("s"))
+                    {
+                        return parseFloat(timer.substr(0, timer.length -1)) *1000;
+                    }
+                    else
+                    if (timer.endsWith("m"))
+                    {
+                        return parseFloat(timer.substr(0, timer.length -1)) *60 *1000;
+                    }
+                    else
+                    if (timer.endsWith("h"))
+                    {
+                        return parseFloat(timer.substr(0, timer.length -1)) *60 *60 *1000;
+                    }
+                    else
+                    if (timer.endsWith("d"))
+                    {
+                        return parseFloat(timer.substr(0, timer.length -1)) +24 *60 *60 *1000;
+                    }
+                    else
+                    {
+                        return parseFloat(timer.substr(0, timer.length -2));
+                    }
+                }
+            }
+            catch(err)
+            {
+                console.error(err);
+            }
+            return null;
+        };
         export const parseAlarmCore = (item: any): AlarmEntry | null =>
         {
             if (null !== item && undefined !== item && "object" === typeof item)
@@ -606,12 +656,13 @@ export module Clockworks
                     };
                     return result;
                 }
+                const newTimer = parseTimer(item.end);
                 if
                 (
                     "timer" === item.type &&
                     "new" === item.start &&
-                    "number" === typeof item.end &&
-                    0 < item.end
+                    "number" === typeof newTimer &&
+                    0 < newTimer
                 )
                 {
                     const start = getTicks();
@@ -619,7 +670,7 @@ export module Clockworks
                     {
                         type: item.type,
                         start: start,
-                        end: start +item.end,
+                        end: start +newTimer,
                     };
                     return result;
                 }
@@ -644,6 +695,7 @@ export module Clockworks
             }
             return null;
         };
+        export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
         export const parseAlarm = (json: string): AlarmEntry | null => parseAlarmCore(parseOrNull(json));
         export const parseTimezoneCore = (item: any): TimezoneEntry | null =>
         {
@@ -1511,7 +1563,7 @@ export module Clockworks
                                         children:
                                         [
                                             await Resource.loadSvgOrCache("check-icon"),
-                                            $span("")(labelSpan(Domain.makeTimerLabel(i))),
+                                            $span("")(labelSpan(Domain.makeMinutesTimerLabel(i))),
                                         ],
                                         onclick: async () =>
                                         {
@@ -1974,7 +2026,7 @@ export module Clockworks
             ]),
         ]);
         export const alarmTitle = (item: AlarmEntry) => "timer" === item.type ?
-            `${Domain.makeTimerLabel((item.end -item.start) /(60 *1000))} ${locale.map("Timer")}`:
+            `${Domain.makeTimerLabel(item.end -item.start)} ${locale.map("Timer")}`:
             item.title;
         export const alarmItem = async (item: AlarmEntry) => $div("alarm-item flex-item")
         ([
@@ -2312,7 +2364,7 @@ export module Clockworks
                     (
                         [
                             await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
-                            labelSpan(0 === i ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                            labelSpan(0 === i ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeMinutesTimerLabel(i)}`),
                         ],
                         async () =>
                         {
@@ -2356,7 +2408,7 @@ export module Clockworks
         export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: locale.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
         ({
             icon: 0 === flashInterval ? zeroIcon: "flash-icon",
-            title: 0 === flashInterval ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
+            title: 0 === flashInterval ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeMinutesTimerLabel(flashInterval)}`,
             menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
         });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
@@ -3005,6 +3057,7 @@ export module Clockworks
                         ([
                             $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                             $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                            $tag("li")("")([label("You can use links like these too:"), ["90s", "3m" ].map(i => ({ tag: "a", href: Domain.makeNewTimerUrl(i), children: Domain.makeTimerLabel(Domain.parseTimer(i)), }))]),
                         ])
                     ),
                 ]),
