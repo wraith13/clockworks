@@ -7,5 +7,6 @@
     "flash-icon": "./image/sun.1024.svg",
     "sleep-icon": "./image/moon.1024.svg",
     "tick-icon": "./image/tick.1024.svg",
+    "pin-icon": "./image/pin.1024.svg",
     "down-triangle-icon": "./image/down-triangle.1024.svg"
 }

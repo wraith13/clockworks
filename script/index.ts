@@ -2055,7 +2055,7 @@ export module Clockworks
                     href: { application: "RainbowClock", item: JSON.stringify(item), },
                     children:
                     [
-                        await Resource.loadSvgOrCache("tick-icon"),
+                        await Resource.loadSvgOrCache("pin-icon"),
                         $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
                     ]
                 }),
@@ -2282,7 +2282,7 @@ export module Clockworks
         });
         export const screenHeaderTimezoneSegment = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]): Promise<HeaderSegmentSource> =>
         ({
-            icon: "tick-icon",
+            icon: "pin-icon",
             title: item.title,
             menu: await Promise.all
             (
