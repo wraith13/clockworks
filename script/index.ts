@@ -602,31 +602,31 @@ export module Clockworks
                 case "string":
                     if (timer.endsWith("ms"))
                     {
-                        return parseFloat(timer.substr(0, timer.length -2));
+                        return parseFloat(timer.substr(0, timer.length -2).trim());
                     }
                     else
                     if (timer.endsWith("s"))
                     {
-                        return parseFloat(timer.substr(0, timer.length -1)) *1000;
+                        return parseFloat(timer.substr(0, timer.length -1).trim()) *1000;
                     }
                     else
                     if (timer.endsWith("m"))
                     {
-                        return parseFloat(timer.substr(0, timer.length -1)) *60 *1000;
+                        return parseFloat(timer.substr(0, timer.length -1).trim()) *60 *1000;
                     }
                     else
                     if (timer.endsWith("h"))
                     {
-                        return parseFloat(timer.substr(0, timer.length -1)) *60 *60 *1000;
+                        return parseFloat(timer.substr(0, timer.length -1).trim()) *60 *60 *1000;
                     }
                     else
                     if (timer.endsWith("d"))
                     {
-                        return parseFloat(timer.substr(0, timer.length -1)) +24 *60 *60 *1000;
+                        return parseFloat(timer.substr(0, timer.length -1).trim()) +24 *60 *60 *1000;
                     }
                     else
                     {
-                        return parseFloat(timer.substr(0, timer.length -2));
+                        return parseInt(timer.trim());
                     }
                 }
             }
@@ -3057,7 +3057,7 @@ export module Clockworks
                         ([
                             $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                             $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                            $tag("li")("")([label("You can use links like these too:"), ["90s", "3m" ].map(i => ({ tag: "a", href: Domain.makeNewTimerUrl(i), children: Domain.makeTimerLabel(Domain.parseTimer(i)), }))]),
+                            $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${Domain.makeTimerLabel(Domain.parseTimer(i))} ${locale.map("Timer")}`, }))]),
                         ])
                     ),
                 ]),
@@ -3167,7 +3167,7 @@ export module Clockworks
                         }
                         else
                         {
-                            const currentColor = getSolidRainbowColor(0);
+                            const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setBodyColor(currentColor);
                         }
                         break;

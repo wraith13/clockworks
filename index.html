@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Thu Sep 23 2021 00:06:49 GMT+0900 (GMT+09:00) -->
+<!-- build at: Thu Sep 23 2021 02:20:57 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3799,7 +3799,7 @@ define("resource/lang.en", [], {
     "days": "days",
     "m(minutes)": "m",
     "input a time": "input a time",
-    "Timer": "Timer",
+    "Timer": "timer",
     "No Flash": "No Flash",
     "00:00:00 only": "00:00:00 only",
     "Timestamp": "Timestamp",
@@ -4406,22 +4406,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return timer;
                         case "string":
                             if (timer.endsWith("ms")) {
-                                return parseFloat(timer.substr(0, timer.length - 2));
+                                return parseFloat(timer.substr(0, timer.length - 2).trim());
                             }
                             else if (timer.endsWith("s")) {
-                                return parseFloat(timer.substr(0, timer.length - 1)) * 1000;
+                                return parseFloat(timer.substr(0, timer.length - 1).trim()) * 1000;
                             }
                             else if (timer.endsWith("m")) {
-                                return parseFloat(timer.substr(0, timer.length - 1)) * 60 * 1000;
+                                return parseFloat(timer.substr(0, timer.length - 1).trim()) * 60 * 1000;
                             }
                             else if (timer.endsWith("h")) {
-                                return parseFloat(timer.substr(0, timer.length - 1)) * 60 * 60 * 1000;
+                                return parseFloat(timer.substr(0, timer.length - 1).trim()) * 60 * 60 * 1000;
                             }
                             else if (timer.endsWith("d")) {
-                                return parseFloat(timer.substr(0, timer.length - 1)) + 24 * 60 * 60 * 1000;
+                                return parseFloat(timer.substr(0, timer.length - 1).trim()) + 24 * 60 * 60 * 1000;
                             }
                             else {
-                                return parseFloat(timer.substr(0, timer.length - 2));
+                                return parseInt(timer.trim());
                             }
                     }
                 }
@@ -7506,7 +7506,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                         Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                        Render.$tag("li")("")([Render.label("You can use links like these too:"), ["90s", "3m"].map(function (i) { return ({ tag: "a", href: Domain.makeNewTimerUrl(i), children: Domain.makeTimerLabel(Domain.parseTimer(i)), }); })]),
+                                        Render.$tag("li")("")([Render.label("You can use links like these too:"), ["1500ms", "90s", "3m", "1h", "1d"].map(function (i) { return ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: Domain.makeTimerLabel(Domain.parseTimer(i)) + " " + locale.map("Timer"), }); })]),
                                     ]))
                                 ])]);
                             _p.label = 8;
@@ -7646,7 +7646,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 setBodyColor(mixColors(currentColor, nextColor, rate));
                                             }
                                             else {
-                                                currentColor = getSolidRainbowColor(0);
+                                                currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                                                 setBodyColor(currentColor);
                                             }
                                             return [3 /*break*/, 9];
