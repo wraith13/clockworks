@@ -980,6 +980,8 @@ export module Clockworks
                 export const done = async (item: AlarmEntry, onCanceled?: () => unknown) =>
                 {
                     Storage.CountdownTimer.Alarms.remove(item);
+                    const color = Storage.CountdownTimer.ColorIndex.get();
+                    Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
@@ -989,7 +991,28 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.CountdownTimer.Alarms.add(item);
+                                Storage.CountdownTimer.ColorIndex.set(color);
                                 updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const doneTemprary = async (item: AlarmEntry, onCanceled?: () => unknown) =>
+                {
+                    const color = Storage.CountdownTimer.ColorIndex.get();
+                    Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
+                    showUrl({ application: "CountdownTimer", });
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Done!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.CountdownTimer.ColorIndex.set(color);
+                                showUrl({ application: "CountdownTimer", item: JSON.stringify(item), });
                                 await toast.hide();
                                 onCanceled?.();
                             }
@@ -2914,6 +2937,8 @@ export module Clockworks
             await showWindow(await neverStopwatchScreen(item, ticks), updateWindow);
             await updateWindow("timer");
         };
+        export const isSavedAlarm = (item: AlarmEntry | null, alarms: AlarmEntry[]) => 0 <= alarms.map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
+
         export const countdownTimerScreenBody = async (item: AlarmEntry | null, alarms: AlarmEntry[]) =>
         ([
             $div("primary-page")
@@ -2994,10 +3019,17 @@ export module Clockworks
                             children: label("Done"),
                             onclick: async () =>
                             {
-                                if (item ?? alarms[0])
+                                const current = item ?? alarms[0];
+                                if (current)
                                 {
-                                    await Operate.CountdownTimer.done(item ?? alarms[0]);
-                                    Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() +1) % config.rainbowColorSet.length);
+                                    if (isSavedAlarm(item, alarms))
+                                    {
+                                        await Operate.CountdownTimer.done(current);
+                                    }
+                                    else
+                                    {
+                                        await Operate.CountdownTimer.doneTemprary(current);
+                                    }
                                 }
                             }
                         }),
@@ -3018,18 +3050,18 @@ export module Clockworks
                                     children: "閉じる / Close",
                                 }
                             }),
-                            alarms.map(i => JSON.stringify(i)).indexOf(JSON.stringify(item)) < 0 ?
-                                {
-                                    tag: "button",
-                                    className: "main-button long-button",
-                                    children: "保存 / Save",
-                                    onclick: async () => await Operate.CountdownTimer.save(item),
-                                }:
+                            isSavedAlarm(item, alarms) ?
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
                                     children: "シェア / Share",
                                     onclick: async () => await sharePopup(alarmTitle(item)),
+                                }:
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "保存 / Save",
+                                    onclick: async () => await Operate.CountdownTimer.save(item),
                                 }
                         ]):
                         await downPageLink(),
@@ -4046,28 +4078,40 @@ export module Clockworks
         const urlParams = getUrlParams(url);
         // const hash = getUrlHash(url);
         const applicationType = urlParams["application"] as ApplicationType;
-        const item = urlParams["item"];
+        const itemJson = urlParams["item"];
         switch(applicationType)
         {
         case "NeverStopwatch":
-            await Render.showNeverStopwatchScreen(Domain.parseStamp(item));
+            await Render.showNeverStopwatchScreen(Domain.parseStamp(itemJson));
             break;
         case "CountdownTimer":
-            await Render.showCountdownTimerScreen(Domain.parseAlarm(item));
+            const item = Domain.parseAlarm(itemJson);
+            if (JSON.stringify(item) !== itemJson)
+            {
+                showUrl({ application: applicationType, item: JSON.stringify(item), });
+                return false;
+            }
+            else
+            {
+                await Render.showCountdownTimerScreen(item);
+            }
             break;
         case "RainbowClock":
-            await Render.showRainbowClockScreen(Domain.parseTimezone(item));
+            await Render.showRainbowClockScreen(Domain.parseTimezone(itemJson));
             break;
         default:
             await Render.showWelcomeScreen();
             break;
         }
+        return true;
     };
     export const showUrl = async (data: Render.PageParams) =>
     {
         const url = makeUrl(data);
-        await showPage(url);
-        history.pushState(null, application[data.application]?.title ?? applicationTitle, url);
+        if (await showPage(url))
+        {
+            history.pushState(null, application[data.application]?.title ?? applicationTitle, url);
+        }
     };
     export const reload = async () => await showPage();
 }

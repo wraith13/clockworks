@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Sep 24 2021 09:40:57 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sat Sep 25 2021 02:30:36 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4828,10 +4828,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     CountdownTimer.done = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var toast;
+                        var color, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
                             Storage.CountdownTimer.Alarms.remove(item);
+                            color = Storage.CountdownTimer.ColorIndex.get();
+                            Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_1.default.rainbowColorSet.length);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Done!")),
@@ -4840,7 +4842,35 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 Storage.CountdownTimer.Alarms.add(item);
+                                                Storage.CountdownTimer.ColorIndex.set(color);
                                                 Render.updateWindow("operate");
+                                                return [4 /*yield*/, toast.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); }),
+                            });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                    CountdownTimer.doneTemprary = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                        var color, toast;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            color = Storage.CountdownTimer.ColorIndex.get();
+                            Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_1.default.rainbowColorSet.length);
+                            Clockworks.showUrl({ application: "CountdownTimer", });
+                            toast = Render.makePrimaryToast({
+                                content: Render.$span("")("" + locale.map("Done!")),
+                                backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Storage.CountdownTimer.ColorIndex.set(color);
+                                                Clockworks.showUrl({ application: "CountdownTimer", item: JSON.stringify(item), });
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
                                                 _a.sent();
@@ -7363,6 +7393,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
+            Render.isSavedAlarm = function (item, alarms) { return 0 <= alarms.map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item)); };
             Render.countdownTimerScreenBody = function (item, alarms) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
                 var _this = this;
@@ -7421,16 +7452,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     className: "default-button main-button long-button",
                                                     children: Render.label("Done"),
                                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                        var current;
                                                         return __generator(this, function (_a) {
                                                             switch (_a.label) {
                                                                 case 0:
-                                                                    if (!(item !== null && item !== void 0 ? item : alarms[0])) return [3 /*break*/, 2];
-                                                                    return [4 /*yield*/, Operate.CountdownTimer.done(item !== null && item !== void 0 ? item : alarms[0])];
+                                                                    current = item !== null && item !== void 0 ? item : alarms[0];
+                                                                    if (!current) return [3 /*break*/, 4];
+                                                                    if (!Render.isSavedAlarm(item, alarms)) return [3 /*break*/, 2];
+                                                                    return [4 /*yield*/, Operate.CountdownTimer.done(current)];
                                                                 case 1:
                                                                     _a.sent();
-                                                                    Storage.CountdownTimer.ColorIndex.set((Storage.CountdownTimer.ColorIndex.get() + 1) % config_json_1.default.rainbowColorSet.length);
-                                                                    _a.label = 2;
-                                                                case 2: return [2 /*return*/];
+                                                                    return [3 /*break*/, 4];
+                                                                case 2: return [4 /*yield*/, Operate.CountdownTimer.doneTemprary(current)];
+                                                                case 3:
+                                                                    _a.sent();
+                                                                    _a.label = 4;
+                                                                case 4: return [2 /*return*/];
                                                             }
                                                         });
                                                     }); }
@@ -7449,18 +7486,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                alarms.map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item)) < 0 ?
-                                    {
-                                        tag: "button",
-                                        className: "main-button long-button",
-                                        children: "保存 / Save",
-                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Operate.CountdownTimer.save(item)];
-                                                case 1: return [2 /*return*/, _a.sent()];
-                                            }
-                                        }); }); },
-                                    } :
+                                Render.isSavedAlarm(item, alarms) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -7468,6 +7494,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
                                                 case 0: return [4 /*yield*/, Render.sharePopup(Render.alarmTitle(item))];
+                                                case 1: return [2 /*return*/, _a.sent()];
+                                            }
+                                        }); }); },
+                                    } :
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: "保存 / Save",
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Operate.CountdownTimer.save(item)];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -8505,7 +8542,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         Clockworks.showPage = function (url) {
             if (url === void 0) { url = location.href; }
             return __awaiter(_this, void 0, void 0, function () {
-                var urlParams, applicationType, item, _a;
+                var urlParams, applicationType, itemJson, _a, item;
                 var _b;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
@@ -8515,31 +8552,37 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             document.getElementById("screen-body").scrollTo(0, 0);
                             urlParams = Clockworks.getUrlParams(url);
                             applicationType = urlParams["application"];
-                            item = urlParams["item"];
+                            itemJson = urlParams["item"];
                             _a = applicationType;
                             switch (_a) {
                                 case "NeverStopwatch": return [3 /*break*/, 1];
                                 case "CountdownTimer": return [3 /*break*/, 3];
-                                case "RainbowClock": return [3 /*break*/, 5];
+                                case "RainbowClock": return [3 /*break*/, 7];
                             }
-                            return [3 /*break*/, 7];
-                        case 1: return [4 /*yield*/, Render.showNeverStopwatchScreen(Domain.parseStamp(item))];
+                            return [3 /*break*/, 9];
+                        case 1: return [4 /*yield*/, Render.showNeverStopwatchScreen(Domain.parseStamp(itemJson))];
                         case 2:
                             _c.sent();
-                            return [3 /*break*/, 9];
-                        case 3: return [4 /*yield*/, Render.showCountdownTimerScreen(Domain.parseAlarm(item))];
-                        case 4:
+                            return [3 /*break*/, 11];
+                        case 3:
+                            item = Domain.parseAlarm(itemJson);
+                            if (!(JSON.stringify(item) !== itemJson)) return [3 /*break*/, 4];
+                            Clockworks.showUrl({ application: applicationType, item: JSON.stringify(item), });
+                            return [2 /*return*/, false];
+                        case 4: return [4 /*yield*/, Render.showCountdownTimerScreen(item)];
+                        case 5:
                             _c.sent();
-                            return [3 /*break*/, 9];
-                        case 5: return [4 /*yield*/, Render.showRainbowClockScreen(Domain.parseTimezone(item))];
-                        case 6:
-                            _c.sent();
-                            return [3 /*break*/, 9];
-                        case 7: return [4 /*yield*/, Render.showWelcomeScreen()];
+                            _c.label = 6;
+                        case 6: return [3 /*break*/, 11];
+                        case 7: return [4 /*yield*/, Render.showRainbowClockScreen(Domain.parseTimezone(itemJson))];
                         case 8:
                             _c.sent();
-                            return [3 /*break*/, 9];
-                        case 9: return [2 /*return*/];
+                            return [3 /*break*/, 11];
+                        case 9: return [4 /*yield*/, Render.showWelcomeScreen()];
+                        case 10:
+                            _c.sent();
+                            return [3 /*break*/, 11];
+                        case 11: return [2 /*return*/, true];
                     }
                 });
             });
@@ -8553,8 +8596,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         url = Clockworks.makeUrl(data);
                         return [4 /*yield*/, Clockworks.showPage(url)];
                     case 1:
-                        _c.sent();
-                        history.pushState(null, (_b = (_a = Clockworks.application[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : Clockworks.applicationTitle, url);
+                        if (_c.sent()) {
+                            history.pushState(null, (_b = (_a = Clockworks.application[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : Clockworks.applicationTitle, url);
+                        }
                         return [2 /*return*/];
                 }
             });
