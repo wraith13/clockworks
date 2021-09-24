@@ -2171,6 +2171,7 @@ export module Clockworks
             items: HeaderSegmentSource[];
             menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
             operator?: minamo.dom.Source;
+            parent?: PageParams;
         }
         export interface ScreenSource
         {
@@ -2202,6 +2203,29 @@ export module Clockworks
                     )
                 )
             ).reduce((a, b) => (a as any[]).concat(b), []),
+            data.parent ?
+                {
+                    tag: "button",
+                    className: "icon-button close-button",
+                    children:
+                    [
+                        await Resource.loadSvgOrCache("cross-icon"),
+                    ],
+                    onclick: (event: MouseEvent) =>
+                    {
+                        event.stopPropagation();
+                        // if ("" !== getFilterText() || getHeaderElement().classList.contains("header-operator-has-focus"))
+                        // {
+                        //     setFilterText("");
+                        //     blurFilterInputElement();
+                        // }
+                        // else
+                        // {
+                            showUrl(data.parent);
+                        // }
+                    },
+                }:
+                [],
             data.menu ? await menuButton(data.menu): [],
             data.operator ? $div("header-operator")(data.operator): [],
         ];
@@ -2562,7 +2586,7 @@ export module Clockworks
                 [
                     await screenHeaderHomeSegment(),
                 ],
-                menu: welcomeScreenMenu
+                menu: welcomeScreenMenu,
             },
             body:
             [
@@ -2791,7 +2815,8 @@ export module Clockworks
                         await screenHeaderStampSegment(item, ticks):
                         null,
                 ],
-                menu: neverStopwatchScreenMenu
+                menu: neverStopwatchScreenMenu,
+                parent: null === item ? { }: { application: "NeverStopwatch" },
             },
             body: await neverStopwatchScreenBody(item, ticks)
         });
@@ -3076,7 +3101,8 @@ export module Clockworks
                         await screenHeaderAlarmSegment(item, alarms):
                         null,
                 ],
-                menu: neverStopwatchScreenMenu
+                menu: neverStopwatchScreenMenu,
+                parent: null === item ? { }: { application: "CountdownTimer" },
             },
             body: await countdownTimerScreenBody(item, alarms)
         });
@@ -3345,7 +3371,8 @@ export module Clockworks
                         await screenHeaderTimezoneSegment(item, timezones):
                         null,
                 ],
-                menu: rainbowClockScreenMenu
+                menu: rainbowClockScreenMenu,
+                parent: null === item ? { }: { application: "RainbowClock" },
             },
             body: await rainbowClockScreenBody(item, timezones),
         });

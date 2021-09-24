@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Thu Sep 23 2021 02:20:57 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Sep 24 2021 09:40:57 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3913,6 +3913,7 @@ define("resource/images", [], {
     "never-stopwatch-icon": "./image/never-stopwatch.1024.svg",
     "history-icon": "./image/history.1024.svg",
     "ellipsis-icon": "./image/ellipsis.1024.svg",
+    "cross-icon": "./image/cross.1024.svg",
     "check-icon": "./image/check.1024.svg",
     "flash-icon": "./image/sun.1024.svg",
     "sleep-icon": "./image/moon.1024.svg",
@@ -6276,10 +6277,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     .join(" ");
             };
             Render.screenSegmentedHeader = function (data) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b;
+                var _a, _b, _c;
+                var _d;
                 var _this = this;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
                         case 0:
                             _a = [Render.$div("progress-bar")([])];
                             return [4 /*yield*/, Promise.all(data.items
@@ -6293,18 +6295,49 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 }); }))];
                         case 1:
                             _a = _a.concat([
-                                (_c.sent()).reduce(function (a, b) { return a.concat(b); }, [])
+                                (_e.sent()).reduce(function (a, b) { return a.concat(b); }, [])
                             ]);
-                            if (!data.menu) return [3 /*break*/, 3];
-                            return [4 /*yield*/, Render.menuButton(data.menu)];
+                            if (!data.parent) return [3 /*break*/, 3];
+                            _d = {
+                                tag: "button",
+                                className: "icon-button close-button"
+                            };
+                            return [4 /*yield*/, Resource.loadSvgOrCache("cross-icon")];
                         case 2:
-                            _b = _c.sent();
+                            _b = (_d.children = [
+                                _e.sent()
+                            ],
+                                _d.onclick = function (event) {
+                                    event.stopPropagation();
+                                    // if ("" !== getFilterText() || getHeaderElement().classList.contains("header-operator-has-focus"))
+                                    // {
+                                    //     setFilterText("");
+                                    //     blurFilterInputElement();
+                                    // }
+                                    // else
+                                    // {
+                                    Clockworks.showUrl(data.parent);
+                                    // }
+                                },
+                                _d);
                             return [3 /*break*/, 4];
                         case 3:
                             _b = [];
-                            _c.label = 4;
-                        case 4: return [2 /*return*/, _a.concat([
-                                _b,
+                            _e.label = 4;
+                        case 4:
+                            _a = _a.concat([
+                                _b
+                            ]);
+                            if (!data.menu) return [3 /*break*/, 6];
+                            return [4 /*yield*/, Render.menuButton(data.menu)];
+                        case 5:
+                            _c = _e.sent();
+                            return [3 /*break*/, 7];
+                        case 6:
+                            _c = [];
+                            _e.label = 7;
+                        case 7: return [2 /*return*/, _a.concat([
+                                _c,
                                 data.operator ? Render.$div("header-operator")(data.operator) : []
                             ])];
                     }
@@ -7207,6 +7240,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 _b
                             ]),
                                 _d.menu = Render.neverStopwatchScreenMenu,
+                                _d.parent = null === item ? {} : { application: "NeverStopwatch" },
                                 _d);
                             return [4 /*yield*/, Render.neverStopwatchScreenBody(item, ticks)];
                         case 6: return [2 /*return*/, (_c.body = _e.sent(),
@@ -7550,6 +7584,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 _b
                             ]),
                                 _d.menu = Render.neverStopwatchScreenMenu,
+                                _d.parent = null === item ? {} : { application: "CountdownTimer" },
                                 _d);
                             return [4 /*yield*/, Render.countdownTimerScreenBody(item, alarms)];
                         case 6: return [2 /*return*/, (_c.body = _e.sent(),
@@ -7904,6 +7939,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 _b
                             ]),
                                 _d.menu = Render.rainbowClockScreenMenu,
+                                _d.parent = null === item ? {} : { application: "RainbowClock" },
                                 _d);
                             return [4 /*yield*/, Render.rainbowClockScreenBody(item, timezones)];
                         case 6: return [2 /*return*/, (_c.body = _e.sent(),
@@ -8551,6 +8587,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
 </svg>
 </div><div id="ellipsis-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M512,407C569.951,407 617,454.049 617,512C617,569.951 569.951,617 512,617C454.049,617 407,569.951 407,512C407,454.049 454.049,407 512,407ZM197,407C254.951,407 302,454.049 302,512C302,569.951 254.951,617 197,617C139.049,617 92,569.951 92,512C92,454.049 139.049,407 197,407ZM827,407C884.951,407 932,454.049 932,512C932,569.951 884.951,617 827,617C769.049,617 722,569.951 722,512C722,454.049 769.049,407 827,407Z"/>
+</svg>
+</div><div id="cross-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path d="M511.925,385.49L270.232,144.198C253.641,127.634 226.724,127.656 210.16,144.247L179.748,174.71C163.184,191.301 163.206,218.219 179.797,234.782L421.49,476.075L180.198,717.768C163.634,734.359 163.656,761.276 180.247,777.84L210.71,808.252C227.301,824.816 254.219,824.794 270.782,808.203L512.075,566.51L753.768,807.802C770.359,824.366 797.276,824.344 813.84,807.753L844.252,777.29C860.816,760.699 860.794,733.781 844.203,717.218L602.51,475.925L843.802,234.232C860.366,217.641 860.344,190.724 843.753,174.16L813.29,143.748C796.699,127.184 769.781,127.206 753.218,143.797L511.925,385.49Z"/>
 </svg>
 </div><div id="check-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M397.173,601.266L245.487,448.854C228.743,432.031 201.491,431.966 184.667,448.709L123.702,509.384C106.879,526.128 106.814,553.38 123.557,570.204L366.256,814.062C382.999,830.886 410.252,830.951 427.075,814.207L874.15,369.261C890.973,352.517 891.038,325.265 874.295,308.441L813.62,247.476C796.877,230.653 769.624,230.588 752.8,247.331L397.173,601.266Z"/>
