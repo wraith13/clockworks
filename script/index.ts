@@ -226,6 +226,7 @@ export module Clockworks
                     set(get().concat(tick).sort(simpleReverseComparer));
                 export const remove = (tick: number) =>
                     set(get().filter(i => tick !== i).sort(simpleReverseComparer));
+                export const isSaved = (tick: number) => 0 <= get().indexOf(tick);
             }
             export module flashInterval
             {
@@ -255,10 +256,12 @@ export module Clockworks
                 export const get = (): AlarmEntry[] => minamo.localStorage.getOrNull<AlarmEntry[]>(makeKey()) ?? [];
                 export const set = (list: AlarmEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (tick: AlarmEntry | AlarmEntry[]) =>
-                    set(get().concat(tick));
-                export const remove = (tick: AlarmEntry) =>
-                    set(get().filter(i => JSON.stringify(tick) !== JSON.stringify(i)));
+                export const add = (item: AlarmEntry | AlarmEntry[]) =>
+                    set(get().concat(item));
+                export const remove = (item: AlarmEntry) =>
+                    set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
+                export const isSaved = (item: AlarmEntry) =>
+                    0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
             }
             export module flashInterval
             {
@@ -326,6 +329,8 @@ export module Clockworks
                     set(get().concat(entry));
                 export const remove = (entry: TimezoneEntry) =>
                     set(get().filter(i => JSON.stringify(entry) !== JSON.stringify(i)));
+                export const isSaved = (entry: TimezoneEntry) =>
+                    0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(entry));
             }
             
         }
@@ -1996,42 +2001,7 @@ export module Clockworks
                 }),
                 $div("item-operator")
                 ([
-                    await menuButton
-                    ([
-                        menuItem
-                        (
-                            label("Edit"),
-                            async () =>
-                            {
-                                const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
-                                if (null !== result)
-                                {
-                                    const newTick = Domain.getTicks(result);
-                                    if (tick !== Domain.getTicks(result))
-                                    {
-                                        if (0 <= newTick && newTick <= Domain.getTicks())
-                                        {
-                                            await Operate.NeverStopwatch.edit(tick, newTick);
-                                        }
-                                        else
-                                        {
-                                            makeToast
-                                            ({
-                                                content: label("A date and time outside the valid range was specified."),
-                                                isWideContent: true,
-                                            });
-                                        }
-                                    }
-                                }
-                            }
-                        ),
-                        menuItem
-                        (
-                            label("Remove"),
-                            async () => await Operate.NeverStopwatch.removeStamp(tick),
-                            "delete-button"
-                        )
-                    ]),
+                    await menuButton(await stampItemMenu(tick)),
                 ]),
             ]),
             $div("item-information")
@@ -2048,6 +2018,42 @@ export module Clockworks
                 ]),
             ]),
         ]);
+        export const stampItemMenu = async (tick: number) =>
+        [
+            menuItem
+            (
+                label("Edit"),
+                async () =>
+                {
+                    const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
+                    if (null !== result)
+                    {
+                        const newTick = Domain.getTicks(result);
+                        if (tick !== Domain.getTicks(result))
+                        {
+                            if (0 <= newTick && newTick <= Domain.getTicks())
+                            {
+                                await Operate.NeverStopwatch.edit(tick, newTick);
+                            }
+                            else
+                            {
+                                makeToast
+                                ({
+                                    content: label("A date and time outside the valid range was specified."),
+                                    isWideContent: true,
+                                });
+                            }
+                        }
+                    }
+                }
+            ),
+            menuItem
+            (
+                label("Remove"),
+                async () => await Operate.NeverStopwatch.removeStamp(tick),
+                "delete-button"
+            )
+        ];
         export const alarmTitle = (item: AlarmEntry) => "timer" === item.type ?
             `${Domain.makeTimerLabel(item.end -item.start)} ${locale.map("Timer")}`:
             item.title;
@@ -2067,43 +2073,7 @@ export module Clockworks
                 }),
                 $div("item-operator")
                 ([
-                    await menuButton
-                    ([
-                        "schedule" === item.type ?
-                            menuItem
-                            (
-                                label("Edit"),
-                                async () =>
-                                {
-                                    const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
-                                    if (null !== result)
-                                    {
-                                        if (item.title !== result.title || item.end !== result.tick)
-                                        {
-                                            if (Domain.getTicks() < result.tick)
-                                            {
-                                                await Operate.CountdownTimer.edit(item, result.title, result.tick);
-                                            }
-                                            else
-                                            {
-                                                makeToast
-                                                ({
-                                                    content: label("A date and time outside the valid range was specified."),
-                                                    isWideContent: true,
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                            ):
-                            [],
-                        menuItem
-                        (
-                            label("Remove"),
-                            async () => await Operate.CountdownTimer.removeAlarm(item),
-                            "delete-button"
-                        )
-                    ]),
+                    await menuButton(await alarmItemMenu(item)),
                 ]),
             ]),
             $div("item-information")
@@ -2120,6 +2090,43 @@ export module Clockworks
                 ]),
             ]),
         ]);
+        export const alarmItemMenu = async (item: AlarmEntry) =>
+        [
+            "schedule" === item.type ?
+                menuItem
+                (
+                    label("Edit"),
+                    async () =>
+                    {
+                        const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
+                        if (null !== result)
+                        {
+                            if (item.title !== result.title || item.end !== result.tick)
+                            {
+                                if (Domain.getTicks() < result.tick)
+                                {
+                                    await Operate.CountdownTimer.edit(item, result.title, result.tick);
+                                }
+                                else
+                                {
+                                    makeToast
+                                    ({
+                                        content: label("A date and time outside the valid range was specified."),
+                                        isWideContent: true,
+                                    });
+                                }
+                            }
+                        }
+                    }
+                ):
+                [],
+            menuItem
+            (
+                label("Remove"),
+                async () => await Operate.CountdownTimer.removeAlarm(item),
+                "delete-button"
+            )
+        ];
         export const timezoneItem = async (item: TimezoneEntry) => $div("timezone-item flex-item")
         ([
             $div("item-header")
@@ -2136,30 +2143,7 @@ export module Clockworks
                 }),
                 $div("item-operator")
                 ([
-                    await menuButton
-                    ([
-                        menuItem
-                        (
-                            label("Edit"),
-                            async () =>
-                            {
-                                const result = await timezonePrompt(locale.map("Edit"), item.title, item.offset);
-                                if (null !== result)
-                                {
-                                    if (item.title !== result.title || item.offset !== result.offset)
-                                    {
-                                        await Operate.RainbowClock.edit(item, result.title, result.offset);
-                                    }
-                                }
-                            }
-                        ),
-                        menuItem
-                        (
-                            label("Remove"),
-                            async () => await Operate.RainbowClock.remove(item),
-                            "delete-button"
-                        )
-                    ]),
+                    await menuButton(await timezoneItemMenu(item)),
                 ]),
             ]),
             $div("item-panel")
@@ -2182,6 +2166,30 @@ export module Clockworks
                 $div("item-time-bar")([]),
             ])
         ]);
+        export const timezoneItemMenu = async (item: TimezoneEntry) =>
+        [
+            menuItem
+            (
+                label("Edit"),
+                async () =>
+                {
+                    const result = await timezonePrompt(locale.map("Edit"), item.title, item.offset);
+                    if (null !== result)
+                    {
+                        if (item.title !== result.title || item.offset !== result.offset)
+                        {
+                            await Operate.RainbowClock.edit(item, result.title, result.offset);
+                        }
+                    }
+                }
+            ),
+            menuItem
+            (
+                label("Remove"),
+                async () => await Operate.RainbowClock.remove(item),
+                "delete-button"
+            )
+        ];
         export interface HeaderSegmentSource
         {
             icon: Resource.KeyType;
@@ -2778,18 +2786,18 @@ export module Clockworks
                                     children: "閉じる / Close",
                                 }
                             }),
-                            ticks.indexOf(item) < 0 ?
-                                {
-                                    tag: "button",
-                                    className: "main-button long-button",
-                                    children: "保存 / Save",
-                                    onclick: async () => await Operate.NeverStopwatch.save(item),
-                                }:
+                            Storage.NeverStopwatch.Stamps.isSaved(item) ?
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
                                     children: "シェア / Share",
                                     onclick: async () => await sharePopup("Elapsed Time / 経過時間"),
+                                }:
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "保存 / Save",
+                                    onclick: async () => await Operate.NeverStopwatch.save(item),
                                 }
                         ]):
                         await downPageLink(),
@@ -2827,19 +2835,27 @@ export module Clockworks
         export const neverStopwatchScreen = async (item: number | null, ticks: number[]): Promise<ScreenSource> =>
         ({
             className: "never-stopwatch-screen",
-            header:
+            header: null === item ?
             {
                 items:
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("NeverStopwatch"),
                     // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
-                    null !== item ?
-                        await screenHeaderStampSegment(item, ticks):
-                        null,
                 ],
                 menu: neverStopwatchScreenMenu,
-                parent: null === item ? { }: { application: "NeverStopwatch" },
+                parent: { },
+            }:
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment(),
+                    await screenHeaderApplicationSegment("NeverStopwatch"),
+                    // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
+                    await screenHeaderStampSegment(item, ticks),
+                ],
+                menu: Storage.NeverStopwatch.Stamps.isSaved(item) ? () => stampItemMenu(item): undefined,
+                parent: { application: "NeverStopwatch" },
             },
             body: await neverStopwatchScreenBody(item, ticks)
         });
@@ -2937,8 +2953,6 @@ export module Clockworks
             await showWindow(await neverStopwatchScreen(item, ticks), updateWindow);
             await updateWindow("timer");
         };
-        export const isSavedAlarm = (item: AlarmEntry | null, alarms: AlarmEntry[]) => 0 <= alarms.map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
-
         export const countdownTimerScreenBody = async (item: AlarmEntry | null, alarms: AlarmEntry[]) =>
         ([
             $div("primary-page")
@@ -3022,7 +3036,7 @@ export module Clockworks
                                 const current = item ?? alarms[0];
                                 if (current)
                                 {
-                                    if (isSavedAlarm(item, alarms))
+                                    if (Storage.CountdownTimer.Alarms.isSaved(item))
                                     {
                                         await Operate.CountdownTimer.done(current);
                                     }
@@ -3050,18 +3064,18 @@ export module Clockworks
                                     children: "閉じる / Close",
                                 }
                             }),
-                            isSavedAlarm(item, alarms) ?
-                                {
-                                    tag: "button",
-                                    className: "main-button long-button",
-                                    children: "シェア / Share",
-                                    onclick: async () => await sharePopup(alarmTitle(item)),
-                                }:
+                            Storage.CountdownTimer.Alarms.isSaved(item) ?
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
                                     children: "保存 / Save",
                                     onclick: async () => await Operate.CountdownTimer.save(item),
+                                }:
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "シェア / Share",
+                                    onclick: async () => await sharePopup(alarmTitle(item)),
                                 }
                         ]):
                         await downPageLink(),
@@ -3123,18 +3137,25 @@ export module Clockworks
         export const countdownTimerScreen = async (item: AlarmEntry | null, alarms: AlarmEntry[]): Promise<ScreenSource> =>
         ({
             className: "countdown-timer-screen",
-            header:
+            header: null === item ?
             {
                 items:
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("CountdownTimer"),
-                    null !== item ?
-                        await screenHeaderAlarmSegment(item, alarms):
-                        null,
                 ],
                 menu: neverStopwatchScreenMenu,
-                parent: null === item ? { }: { application: "CountdownTimer" },
+                parent: { },
+            }:
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment(),
+                    await screenHeaderApplicationSegment("CountdownTimer"),
+                    await screenHeaderAlarmSegment(item, alarms),
+                ],
+                menu: Storage.CountdownTimer.Alarms.isSaved(item) ? () => alarmItemMenu(item): undefined,
+                parent: { application: "CountdownTimer" },
             },
             body: await countdownTimerScreenBody(item, alarms)
         });
@@ -3338,18 +3359,18 @@ export module Clockworks
                                     children: "閉じる / Close",
                                 }
                             }),
-                            timezones.map(i => JSON.stringify(i)).indexOf(JSON.stringify(item)) < 0 ?
-                                {
-                                    tag: "button",
-                                    className: "main-button long-button",
-                                    children: "保存 / Save",
-                                    onclick: async () => await Operate.RainbowClock.save(item),
-                                }:
+                            Storage.RainbowClock.Timezone.isSaved(item) ?
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
                                     children: "シェア / Share",
                                     onclick: async () => await sharePopup(item.title),
+                                }:
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "保存 / Save",
+                                    onclick: async () => await Operate.RainbowClock.save(item),
                                 }
                         ]):
                         await downPageLink(),
@@ -3393,18 +3414,25 @@ export module Clockworks
         export const rainbowClockScreen = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]): Promise<ScreenSource> =>
         ({
             className: "rainbow-clock-screen",
-            header:
+            header: null === item ?
             {
                 items:
                 [
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("RainbowClock"),
-                    null !== item ?
-                        await screenHeaderTimezoneSegment(item, timezones):
-                        null,
                 ],
                 menu: rainbowClockScreenMenu,
-                parent: null === item ? { }: { application: "RainbowClock" },
+                parent: { },
+            }:
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment(),
+                    await screenHeaderApplicationSegment("RainbowClock"),
+                    await screenHeaderTimezoneSegment(item, timezones),
+                ],
+                menu: Storage.RainbowClock.Timezone.isSaved(item) ? () => timezoneItemMenu(item): undefined,
+                parent: { application: "RainbowClock" },
             },
             body: await rainbowClockScreenBody(item, timezones),
         });

@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Sep 25 2021 02:30:36 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Sep 26 2021 00:51:22 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4093,6 +4093,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     Stamps.remove = function (tick) {
                         return Stamps.set(Stamps.get().filter(function (i) { return tick !== i; }).sort(exports.simpleReverseComparer));
                     };
+                    Stamps.isSaved = function (tick) { return 0 <= Stamps.get().indexOf(tick); };
                 })(Stamps = NeverStopwatch.Stamps || (NeverStopwatch.Stamps = {}));
                 var flashInterval;
                 (function (flashInterval) {
@@ -4119,11 +4120,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     Alarms.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Alarms.makeKey())) !== null && _a !== void 0 ? _a : []; };
                     Alarms.set = function (list) { return minamo_js_1.minamo.localStorage.set(Alarms.makeKey(), list.sort(minamo_js_1.minamo.core.comparer.make(function (i) { return i.end; }))); };
                     Alarms.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Alarms.makeKey()); };
-                    Alarms.add = function (tick) {
-                        return Alarms.set(Alarms.get().concat(tick));
+                    Alarms.add = function (item) {
+                        return Alarms.set(Alarms.get().concat(item));
                     };
-                    Alarms.remove = function (tick) {
-                        return Alarms.set(Alarms.get().filter(function (i) { return JSON.stringify(tick) !== JSON.stringify(i); }));
+                    Alarms.remove = function (item) {
+                        return Alarms.set(Alarms.get().filter(function (i) { return JSON.stringify(item) !== JSON.stringify(i); }));
+                    };
+                    Alarms.isSaved = function (item) {
+                        return 0 <= Alarms.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item));
                     };
                 })(Alarms = CountdownTimer.Alarms || (CountdownTimer.Alarms = {}));
                 var flashInterval;
@@ -4188,6 +4192,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     };
                     Timezone.remove = function (entry) {
                         return Timezone.set(Timezone.get().filter(function (i) { return JSON.stringify(entry) !== JSON.stringify(i); }));
+                    };
+                    Timezone.isSaved = function (entry) {
+                        return 0 <= Timezone.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(entry));
                     };
                 })(Timezone = RainbowClock.Timezone || (RainbowClock.Timezone = {}));
             })(RainbowClock = Storage.RainbowClock || (Storage.RainbowClock = {}));
@@ -6064,70 +6071,37 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             };
             Render.menuLinkItem = function (children, href, className) { return Render.menuItem(children, function () { return Clockworks.showUrl(href); }, className); };
             Render.stampItem = function (tick, interval) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e;
-                var _f;
-                var _this = this;
-                return __generator(this, function (_g) {
-                    switch (_g.label) {
+                var _a, _b, _c, _d, _e, _f;
+                var _g;
+                return __generator(this, function (_h) {
+                    switch (_h.label) {
                         case 0:
                             _a = Render.$div("stamp-item flex-item");
                             _b = Render.$div("item-header");
                             _c = Render.internalLink;
-                            _f = {
+                            _g = {
                                 className: "item-title",
                                 href: { application: "NeverStopwatch", item: JSON.stringify(tick), }
                             };
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
                             _d = [
-                                _c.apply(void 0, [(_f.children = [
-                                        _g.sent(),
+                                _c.apply(void 0, [(_g.children = [
+                                        _h.sent(),
                                         Render.$div("tick-elapsed-time")([
                                             Render.$span("value monospace")(Render.label("elapsed time")),
                                         ])
                                     ],
-                                        _f)])
+                                        _g)])
                             ];
                             _e = Render.$div("item-operator");
-                            return [4 /*yield*/, Render.menuButton([
-                                    Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
-                                        var result, _a, _b, newTick;
-                                        return __generator(this, function (_c) {
-                                            switch (_c.label) {
-                                                case 0:
-                                                    _b = (_a = Domain).parseDate;
-                                                    return [4 /*yield*/, Render.dateTimePrompt(locale.map("Edit"), tick)];
-                                                case 1:
-                                                    result = _b.apply(_a, [_c.sent()]);
-                                                    if (!(null !== result)) return [3 /*break*/, 4];
-                                                    newTick = Domain.getTicks(result);
-                                                    if (!(tick !== Domain.getTicks(result))) return [3 /*break*/, 4];
-                                                    if (!(0 <= newTick && newTick <= Domain.getTicks())) return [3 /*break*/, 3];
-                                                    return [4 /*yield*/, Operate.NeverStopwatch.edit(tick, newTick)];
-                                                case 2:
-                                                    _c.sent();
-                                                    return [3 /*break*/, 4];
-                                                case 3:
-                                                    Render.makeToast({
-                                                        content: Render.label("A date and time outside the valid range was specified."),
-                                                        isWideContent: true,
-                                                    });
-                                                    _c.label = 4;
-                                                case 4: return [2 /*return*/];
-                                            }
-                                        });
-                                    }); }),
-                                    Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Operate.NeverStopwatch.removeStamp(tick)];
-                                            case 1: return [2 /*return*/, _a.sent()];
-                                        }
-                                    }); }); }, "delete-button")
-                                ])];
-                        case 2: return [2 /*return*/, _a.apply(void 0, [[
+                            _f = Render.menuButton;
+                            return [4 /*yield*/, Render.stampItemMenu(tick)];
+                        case 2: return [4 /*yield*/, _f.apply(void 0, [_h.sent()])];
+                        case 3: return [2 /*return*/, _a.apply(void 0, [[
                                     _b.apply(void 0, [_d.concat([
                                             _e.apply(void 0, [[
-                                                    _g.sent()
+                                                    _h.sent()
                                                 ]])
                                         ])]),
                                     Render.$div("item-information")([
@@ -6144,71 +6118,79 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
+            Render.stampItemMenu = function (tick) { return __awaiter(_this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, [
+                            Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                var result, _a, _b, newTick;
+                                return __generator(this, function (_c) {
+                                    switch (_c.label) {
+                                        case 0:
+                                            _b = (_a = Domain).parseDate;
+                                            return [4 /*yield*/, Render.dateTimePrompt(locale.map("Edit"), tick)];
+                                        case 1:
+                                            result = _b.apply(_a, [_c.sent()]);
+                                            if (!(null !== result)) return [3 /*break*/, 4];
+                                            newTick = Domain.getTicks(result);
+                                            if (!(tick !== Domain.getTicks(result))) return [3 /*break*/, 4];
+                                            if (!(0 <= newTick && newTick <= Domain.getTicks())) return [3 /*break*/, 3];
+                                            return [4 /*yield*/, Operate.NeverStopwatch.edit(tick, newTick)];
+                                        case 2:
+                                            _c.sent();
+                                            return [3 /*break*/, 4];
+                                        case 3:
+                                            Render.makeToast({
+                                                content: Render.label("A date and time outside the valid range was specified."),
+                                                isWideContent: true,
+                                            });
+                                            _c.label = 4;
+                                        case 4: return [2 /*return*/];
+                                    }
+                                });
+                            }); }),
+                            Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, Operate.NeverStopwatch.removeStamp(tick)];
+                                    case 1: return [2 /*return*/, _a.sent()];
+                                }
+                            }); }); }, "delete-button")
+                        ]];
+                });
+            }); };
             Render.alarmTitle = function (item) { return "timer" === item.type ?
                 Domain.makeTimerLabel(item.end - item.start) + " " + locale.map("Timer") :
                 item.title; };
             Render.alarmItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e;
-                var _f;
-                var _this = this;
-                return __generator(this, function (_g) {
-                    switch (_g.label) {
+                var _a, _b, _c, _d, _e, _f;
+                var _g;
+                return __generator(this, function (_h) {
+                    switch (_h.label) {
                         case 0:
                             _a = Render.$div("alarm-item flex-item");
                             _b = Render.$div("item-header");
                             _c = Render.internalLink;
-                            _f = {
+                            _g = {
                                 className: "item-title",
                                 href: { application: "CountdownTimer", item: JSON.stringify(item), }
                             };
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
                             _d = [
-                                _c.apply(void 0, [(_f.children = [
-                                        _g.sent(),
+                                _c.apply(void 0, [(_g.children = [
+                                        _h.sent(),
                                         Render.$div("tick-elapsed-time")([Render.$span("value monospace")(Render.alarmTitle(item)),])
                                     ],
-                                        _f)])
+                                        _g)])
                             ];
                             _e = Render.$div("item-operator");
-                            return [4 /*yield*/, Render.menuButton([
-                                    "schedule" === item.type ?
-                                        Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
-                                            var result;
-                                            return __generator(this, function (_a) {
-                                                switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("Edit"), item.title, item.end)];
-                                                    case 1:
-                                                        result = _a.sent();
-                                                        if (!(null !== result)) return [3 /*break*/, 4];
-                                                        if (!(item.title !== result.title || item.end !== result.tick)) return [3 /*break*/, 4];
-                                                        if (!(Domain.getTicks() < result.tick)) return [3 /*break*/, 3];
-                                                        return [4 /*yield*/, Operate.CountdownTimer.edit(item, result.title, result.tick)];
-                                                    case 2:
-                                                        _a.sent();
-                                                        return [3 /*break*/, 4];
-                                                    case 3:
-                                                        Render.makeToast({
-                                                            content: Render.label("A date and time outside the valid range was specified."),
-                                                            isWideContent: true,
-                                                        });
-                                                        _a.label = 4;
-                                                    case 4: return [2 /*return*/];
-                                                }
-                                            });
-                                        }); }) :
-                                        [],
-                                    Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Operate.CountdownTimer.removeAlarm(item)];
-                                            case 1: return [2 /*return*/, _a.sent()];
-                                        }
-                                    }); }); }, "delete-button")
-                                ])];
-                        case 2: return [2 /*return*/, _a.apply(void 0, [[
+                            _f = Render.menuButton;
+                            return [4 /*yield*/, Render.alarmItemMenu(item)];
+                        case 2: return [4 /*yield*/, _f.apply(void 0, [_h.sent()])];
+                        case 3: return [2 /*return*/, _a.apply(void 0, [[
                                     _b.apply(void 0, [_d.concat([
                                             _e.apply(void 0, [[
-                                                    _g.sent()
+                                                    _h.sent()
                                                 ]])
                                         ])]),
                                     Render.$div("item-information")([
@@ -6225,59 +6207,75 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.timezoneItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b, _c, _d, _e;
-                var _f;
+            Render.alarmItemMenu = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
-                return __generator(this, function (_g) {
-                    switch (_g.label) {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, [
+                            "schedule" === item.type ?
+                                Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                    var result;
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("Edit"), item.title, item.end)];
+                                            case 1:
+                                                result = _a.sent();
+                                                if (!(null !== result)) return [3 /*break*/, 4];
+                                                if (!(item.title !== result.title || item.end !== result.tick)) return [3 /*break*/, 4];
+                                                if (!(Domain.getTicks() < result.tick)) return [3 /*break*/, 3];
+                                                return [4 /*yield*/, Operate.CountdownTimer.edit(item, result.title, result.tick)];
+                                            case 2:
+                                                _a.sent();
+                                                return [3 /*break*/, 4];
+                                            case 3:
+                                                Render.makeToast({
+                                                    content: Render.label("A date and time outside the valid range was specified."),
+                                                    isWideContent: true,
+                                                });
+                                                _a.label = 4;
+                                            case 4: return [2 /*return*/];
+                                        }
+                                    });
+                                }); }) :
+                                [],
+                            Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, Operate.CountdownTimer.removeAlarm(item)];
+                                    case 1: return [2 /*return*/, _a.sent()];
+                                }
+                            }); }); }, "delete-button")
+                        ]];
+                });
+            }); };
+            Render.timezoneItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
+                var _a, _b, _c, _d, _e, _f;
+                var _g;
+                return __generator(this, function (_h) {
+                    switch (_h.label) {
                         case 0:
                             _a = Render.$div("timezone-item flex-item");
                             _b = Render.$div("item-header");
                             _c = Render.internalLink;
-                            _f = {
+                            _g = {
                                 className: "item-title",
                                 href: { application: "RainbowClock", item: JSON.stringify(item), }
                             };
                             return [4 /*yield*/, Resource.loadSvgOrCache("pin-icon")];
                         case 1:
                             _d = [
-                                _c.apply(void 0, [(_f.children = [
-                                        _g.sent(),
+                                _c.apply(void 0, [(_g.children = [
+                                        _h.sent(),
                                         Render.$div("tick-elapsed-time")([Render.$span("value monospace")(item.title),])
                                     ],
-                                        _f)])
+                                        _g)])
                             ];
                             _e = Render.$div("item-operator");
-                            return [4 /*yield*/, Render.menuButton([
-                                    Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
-                                        var result;
-                                        return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("Edit"), item.title, item.offset)];
-                                                case 1:
-                                                    result = _a.sent();
-                                                    if (!(null !== result)) return [3 /*break*/, 3];
-                                                    if (!(item.title !== result.title || item.offset !== result.offset)) return [3 /*break*/, 3];
-                                                    return [4 /*yield*/, Operate.RainbowClock.edit(item, result.title, result.offset)];
-                                                case 2:
-                                                    _a.sent();
-                                                    _a.label = 3;
-                                                case 3: return [2 /*return*/];
-                                            }
-                                        });
-                                    }); }),
-                                    Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Operate.RainbowClock.remove(item)];
-                                            case 1: return [2 /*return*/, _a.sent()];
-                                        }
-                                    }); }); }, "delete-button")
-                                ])];
-                        case 2: return [2 /*return*/, _a.apply(void 0, [[
+                            _f = Render.menuButton;
+                            return [4 /*yield*/, Render.timezoneItemMenu(item)];
+                        case 2: return [4 /*yield*/, _f.apply(void 0, [_h.sent()])];
+                        case 3: return [2 /*return*/, _a.apply(void 0, [[
                                     _b.apply(void 0, [_d.concat([
                                             _e.apply(void 0, [[
-                                                    _g.sent()
+                                                    _h.sent()
                                                 ]])
                                         ])]),
                                     Render.$div("item-panel")([
@@ -6296,6 +6294,36 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     ])
                                 ]])];
                     }
+                });
+            }); };
+            Render.timezoneItemMenu = function (item) { return __awaiter(_this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, [
+                            Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                var result;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("Edit"), item.title, item.offset)];
+                                        case 1:
+                                            result = _a.sent();
+                                            if (!(null !== result)) return [3 /*break*/, 3];
+                                            if (!(item.title !== result.title || item.offset !== result.offset)) return [3 /*break*/, 3];
+                                            return [4 /*yield*/, Operate.RainbowClock.edit(item, result.title, result.offset)];
+                                        case 2:
+                                            _a.sent();
+                                            _a.label = 3;
+                                        case 3: return [2 /*return*/];
+                                    }
+                                });
+                            }); }),
+                            Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, Operate.RainbowClock.remove(item)];
+                                    case 1: return [2 /*return*/, _a.sent()];
+                                }
+                            }); }); }, "delete-button")
+                        ]];
                 });
             }); };
             var getLastSegmentClass = function (ix, items) {
@@ -7173,18 +7201,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                ticks.indexOf(item) < 0 ?
-                                    {
-                                        tag: "button",
-                                        className: "main-button long-button",
-                                        children: "保存 / Save",
-                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Operate.NeverStopwatch.save(item)];
-                                                case 1: return [2 /*return*/, _a.sent()];
-                                            }
-                                        }); }); },
-                                    } :
+                                Storage.NeverStopwatch.Stamps.isSaved(item) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -7192,6 +7209,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
                                                 case 0: return [4 /*yield*/, Render.sharePopup("Elapsed Time / 経過時間")];
+                                                case 1: return [2 /*return*/, _a.sent()];
+                                            }
+                                        }); }); },
+                                    } :
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: "保存 / Save",
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Operate.NeverStopwatch.save(item)];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -7234,47 +7262,58 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.neverStopwatchScreen = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b;
-                var _c, _d;
-                return __generator(this, function (_e) {
-                    switch (_e.label) {
+                var _a, _b, _c;
+                var _d, _e, _f;
+                return __generator(this, function (_g) {
+                    switch (_g.label) {
                         case 0:
-                            _c = {
+                            _d = {
                                 className: "never-stopwatch-screen"
                             };
-                            _d = {};
+                            if (!(null === item)) return [3 /*break*/, 3];
+                            _e = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
-                            _a = [
-                                _e.sent()
+                            _b = [
+                                _g.sent()
                             ];
                             return [4 /*yield*/, Render.screenHeaderApplicationSegment("NeverStopwatch")];
                         case 2:
-                            _a = _a.concat([
-                                _e.sent()
-                            ]);
-                            if (!
-                            // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
-                            (null !== item)) 
-                            // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
-                            return [3 /*break*/, 4];
-                            return [4 /*yield*/, Render.screenHeaderStampSegment(item, ticks)];
-                        case 3:
-                            _b = _e.sent();
-                            return [3 /*break*/, 5];
-                        case 4:
-                            _b = null;
-                            _e.label = 5;
-                        case 5:
-                            _c.header = (_d.items = _a.concat([
-                                _b
+                            _a = (_e.items = _b.concat([
+                                _g.sent()
                             ]),
-                                _d.menu = Render.neverStopwatchScreenMenu,
-                                _d.parent = null === item ? {} : { application: "NeverStopwatch" },
-                                _d);
+                                _e.menu = Render.neverStopwatchScreenMenu,
+                                _e.parent = {},
+                                _e);
+                            return [3 /*break*/, 7];
+                        case 3:
+                            _f = {};
+                            return [4 /*yield*/, Render.screenHeaderHomeSegment()];
+                        case 4:
+                            _c = [
+                                _g.sent()
+                            ];
+                            return [4 /*yield*/, Render.screenHeaderApplicationSegment("NeverStopwatch")];
+                        case 5:
+                            _c = _c.concat([
+                                _g.sent()
+                            ]);
+                            // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
+                            return [4 /*yield*/, Render.screenHeaderStampSegment(item, ticks)];
+                        case 6:
+                            _a = (_f.items = _c.concat([
+                                // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
+                                _g.sent()
+                            ]),
+                                _f.menu = Storage.NeverStopwatch.Stamps.isSaved(item) ? function () { return Render.stampItemMenu(item); } : undefined,
+                                _f.parent = { application: "NeverStopwatch" },
+                                _f);
+                            _g.label = 7;
+                        case 7:
+                            _d.header = _a;
                             return [4 /*yield*/, Render.neverStopwatchScreenBody(item, ticks)];
-                        case 6: return [2 /*return*/, (_c.body = _e.sent(),
-                                _c)];
+                        case 8: return [2 /*return*/, (_d.body = _g.sent(),
+                                _d)];
                     }
                 });
             }); };
@@ -7393,7 +7432,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
-            Render.isSavedAlarm = function (item, alarms) { return 0 <= alarms.map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item)); };
             Render.countdownTimerScreenBody = function (item, alarms) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
                 var _this = this;
@@ -7458,7 +7496,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                 case 0:
                                                                     current = item !== null && item !== void 0 ? item : alarms[0];
                                                                     if (!current) return [3 /*break*/, 4];
-                                                                    if (!Render.isSavedAlarm(item, alarms)) return [3 /*break*/, 2];
+                                                                    if (!Storage.CountdownTimer.Alarms.isSaved(item)) return [3 /*break*/, 2];
                                                                     return [4 /*yield*/, Operate.CountdownTimer.done(current)];
                                                                 case 1:
                                                                     _a.sent();
@@ -7486,18 +7524,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                Render.isSavedAlarm(item, alarms) ?
-                                    {
-                                        tag: "button",
-                                        className: "main-button long-button",
-                                        children: "シェア / Share",
-                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.sharePopup(Render.alarmTitle(item))];
-                                                case 1: return [2 /*return*/, _a.sent()];
-                                            }
-                                        }); }); },
-                                    } :
+                                Storage.CountdownTimer.Alarms.isSaved(item) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -7505,6 +7532,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
                                                 case 0: return [4 /*yield*/, Operate.CountdownTimer.save(item)];
+                                                case 1: return [2 /*return*/, _a.sent()];
+                                            }
+                                        }); }); },
+                                    } :
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: "シェア / Share",
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Render.sharePopup(Render.alarmTitle(item))];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -7589,43 +7627,56 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.countdownTimerScreen = function (item, alarms) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b;
-                var _c, _d;
-                return __generator(this, function (_e) {
-                    switch (_e.label) {
+                var _a, _b, _c;
+                var _d, _e, _f;
+                return __generator(this, function (_g) {
+                    switch (_g.label) {
                         case 0:
-                            _c = {
+                            _d = {
                                 className: "countdown-timer-screen"
                             };
-                            _d = {};
+                            if (!(null === item)) return [3 /*break*/, 3];
+                            _e = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
-                            _a = [
-                                _e.sent()
+                            _b = [
+                                _g.sent()
                             ];
                             return [4 /*yield*/, Render.screenHeaderApplicationSegment("CountdownTimer")];
                         case 2:
-                            _a = _a.concat([
-                                _e.sent()
-                            ]);
-                            if (!(null !== item)) return [3 /*break*/, 4];
-                            return [4 /*yield*/, Render.screenHeaderAlarmSegment(item, alarms)];
-                        case 3:
-                            _b = _e.sent();
-                            return [3 /*break*/, 5];
-                        case 4:
-                            _b = null;
-                            _e.label = 5;
-                        case 5:
-                            _c.header = (_d.items = _a.concat([
-                                _b
+                            _a = (_e.items = _b.concat([
+                                _g.sent()
                             ]),
-                                _d.menu = Render.neverStopwatchScreenMenu,
-                                _d.parent = null === item ? {} : { application: "CountdownTimer" },
-                                _d);
+                                _e.menu = Render.neverStopwatchScreenMenu,
+                                _e.parent = {},
+                                _e);
+                            return [3 /*break*/, 7];
+                        case 3:
+                            _f = {};
+                            return [4 /*yield*/, Render.screenHeaderHomeSegment()];
+                        case 4:
+                            _c = [
+                                _g.sent()
+                            ];
+                            return [4 /*yield*/, Render.screenHeaderApplicationSegment("CountdownTimer")];
+                        case 5:
+                            _c = _c.concat([
+                                _g.sent()
+                            ]);
+                            return [4 /*yield*/, Render.screenHeaderAlarmSegment(item, alarms)];
+                        case 6:
+                            _a = (_f.items = _c.concat([
+                                _g.sent()
+                            ]),
+                                _f.menu = Storage.CountdownTimer.Alarms.isSaved(item) ? function () { return Render.alarmItemMenu(item); } : undefined,
+                                _f.parent = { application: "CountdownTimer" },
+                                _f);
+                            _g.label = 7;
+                        case 7:
+                            _d.header = _a;
                             return [4 /*yield*/, Render.countdownTimerScreenBody(item, alarms)];
-                        case 6: return [2 /*return*/, (_c.body = _e.sent(),
-                                _c)];
+                        case 8: return [2 /*return*/, (_d.body = _g.sent(),
+                                _d)];
                     }
                 });
             }); };
@@ -7860,18 +7911,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                timezones.map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item)) < 0 ?
-                                    {
-                                        tag: "button",
-                                        className: "main-button long-button",
-                                        children: "保存 / Save",
-                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Operate.RainbowClock.save(item)];
-                                                case 1: return [2 /*return*/, _a.sent()];
-                                            }
-                                        }); }); },
-                                    } :
+                                Storage.RainbowClock.Timezone.isSaved(item) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -7879,6 +7919,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
                                                 case 0: return [4 /*yield*/, Render.sharePopup(item.title)];
+                                                case 1: return [2 /*return*/, _a.sent()];
+                                            }
+                                        }); }); },
+                                    } :
+                                    {
+                                        tag: "button",
+                                        className: "main-button long-button",
+                                        children: "保存 / Save",
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Operate.RainbowClock.save(item)];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -7944,43 +7995,56 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.rainbowClockScreen = function (item, timezones) { return __awaiter(_this, void 0, void 0, function () {
-                var _a, _b;
-                var _c, _d;
-                return __generator(this, function (_e) {
-                    switch (_e.label) {
+                var _a, _b, _c;
+                var _d, _e, _f;
+                return __generator(this, function (_g) {
+                    switch (_g.label) {
                         case 0:
-                            _c = {
+                            _d = {
                                 className: "rainbow-clock-screen"
                             };
-                            _d = {};
+                            if (!(null === item)) return [3 /*break*/, 3];
+                            _e = {};
                             return [4 /*yield*/, Render.screenHeaderHomeSegment()];
                         case 1:
-                            _a = [
-                                _e.sent()
+                            _b = [
+                                _g.sent()
                             ];
                             return [4 /*yield*/, Render.screenHeaderApplicationSegment("RainbowClock")];
                         case 2:
-                            _a = _a.concat([
-                                _e.sent()
-                            ]);
-                            if (!(null !== item)) return [3 /*break*/, 4];
-                            return [4 /*yield*/, Render.screenHeaderTimezoneSegment(item, timezones)];
-                        case 3:
-                            _b = _e.sent();
-                            return [3 /*break*/, 5];
-                        case 4:
-                            _b = null;
-                            _e.label = 5;
-                        case 5:
-                            _c.header = (_d.items = _a.concat([
-                                _b
+                            _a = (_e.items = _b.concat([
+                                _g.sent()
                             ]),
-                                _d.menu = Render.rainbowClockScreenMenu,
-                                _d.parent = null === item ? {} : { application: "RainbowClock" },
-                                _d);
+                                _e.menu = Render.rainbowClockScreenMenu,
+                                _e.parent = {},
+                                _e);
+                            return [3 /*break*/, 7];
+                        case 3:
+                            _f = {};
+                            return [4 /*yield*/, Render.screenHeaderHomeSegment()];
+                        case 4:
+                            _c = [
+                                _g.sent()
+                            ];
+                            return [4 /*yield*/, Render.screenHeaderApplicationSegment("RainbowClock")];
+                        case 5:
+                            _c = _c.concat([
+                                _g.sent()
+                            ]);
+                            return [4 /*yield*/, Render.screenHeaderTimezoneSegment(item, timezones)];
+                        case 6:
+                            _a = (_f.items = _c.concat([
+                                _g.sent()
+                            ]),
+                                _f.menu = Storage.RainbowClock.Timezone.isSaved(item) ? function () { return Render.timezoneItemMenu(item); } : undefined,
+                                _f.parent = { application: "RainbowClock" },
+                                _f);
+                            _g.label = 7;
+                        case 7:
+                            _d.header = _a;
                             return [4 /*yield*/, Render.rainbowClockScreenBody(item, timezones)];
-                        case 6: return [2 /*return*/, (_c.body = _e.sent(),
-                                _c)];
+                        case 8: return [2 /*return*/, (_d.body = _g.sent(),
+                                _d)];
                     }
                 });
             }); };
