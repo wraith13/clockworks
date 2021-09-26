@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Sep 26 2021 00:51:22 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Sep 26 2021 22:46:24 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -8603,10 +8603,36 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
             });
         }); };
+        Clockworks.itemState = function (itemJson, item) {
+            if (itemJson) {
+                if (item) {
+                    if (JSON.stringify(item) !== itemJson) {
+                        return "irregular";
+                    }
+                }
+                else {
+                    return "invalid";
+                }
+            }
+            return "regular";
+        };
+        Clockworks.regulateLocation = function (application, itemJson, item) {
+            switch (Clockworks.itemState(itemJson, item)) {
+                case "regular":
+                    break;
+                case "regular":
+                    Clockworks.showUrl({ application: application, item: JSON.stringify(item), });
+                    return false;
+                case "invalid":
+                    Clockworks.showUrl({ application: application, });
+                    return false;
+            }
+            return true;
+        };
         Clockworks.showPage = function (url) {
             if (url === void 0) { url = location.href; }
             return __awaiter(_this, void 0, void 0, function () {
-                var urlParams, applicationType, itemJson, _a, item;
+                var urlParams, applicationType, itemJson, _a, item, item, item;
                 var _b;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
@@ -8620,33 +8646,42 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = applicationType;
                             switch (_a) {
                                 case "NeverStopwatch": return [3 /*break*/, 1];
-                                case "CountdownTimer": return [3 /*break*/, 3];
-                                case "RainbowClock": return [3 /*break*/, 7];
+                                case "CountdownTimer": return [3 /*break*/, 5];
+                                case "RainbowClock": return [3 /*break*/, 9];
                             }
-                            return [3 /*break*/, 9];
-                        case 1: return [4 /*yield*/, Render.showNeverStopwatchScreen(Domain.parseStamp(itemJson))];
+                            return [3 /*break*/, 13];
+                        case 1:
+                            item = Domain.parseStamp(itemJson);
+                            if (!Clockworks.regulateLocation(applicationType, itemJson, item)) return [3 /*break*/, 3];
+                            return [4 /*yield*/, Render.showNeverStopwatchScreen(item)];
                         case 2:
                             _c.sent();
-                            return [3 /*break*/, 11];
-                        case 3:
-                            item = Domain.parseAlarm(itemJson);
-                            if (!(JSON.stringify(item) !== itemJson)) return [3 /*break*/, 4];
-                            Clockworks.showUrl({ application: applicationType, item: JSON.stringify(item), });
-                            return [2 /*return*/, false];
-                        case 4: return [4 /*yield*/, Render.showCountdownTimerScreen(item)];
+                            return [3 /*break*/, 4];
+                        case 3: return [2 /*return*/, false];
+                        case 4: return [3 /*break*/, 15];
                         case 5:
+                            item = Domain.parseAlarm(itemJson);
+                            if (!Clockworks.regulateLocation(applicationType, itemJson, item)) return [3 /*break*/, 7];
+                            return [4 /*yield*/, Render.showCountdownTimerScreen(item)];
+                        case 6:
                             _c.sent();
-                            _c.label = 6;
-                        case 6: return [3 /*break*/, 11];
-                        case 7: return [4 /*yield*/, Render.showRainbowClockScreen(Domain.parseTimezone(itemJson))];
-                        case 8:
-                            _c.sent();
-                            return [3 /*break*/, 11];
-                        case 9: return [4 /*yield*/, Render.showWelcomeScreen()];
+                            return [3 /*break*/, 8];
+                        case 7: return [2 /*return*/, false];
+                        case 8: return [3 /*break*/, 15];
+                        case 9:
+                            item = Domain.parseTimezone(itemJson);
+                            if (!Clockworks.regulateLocation(applicationType, itemJson, item)) return [3 /*break*/, 11];
+                            return [4 /*yield*/, Render.showRainbowClockScreen(item)];
                         case 10:
                             _c.sent();
-                            return [3 /*break*/, 11];
-                        case 11: return [2 /*return*/, true];
+                            return [3 /*break*/, 12];
+                        case 11: return [2 /*return*/, false];
+                        case 12: return [3 /*break*/, 15];
+                        case 13: return [4 /*yield*/, Render.showWelcomeScreen()];
+                        case 14:
+                            _c.sent();
+                            return [3 /*break*/, 15];
+                        case 15: return [2 /*return*/, true];
                     }
                 });
             });

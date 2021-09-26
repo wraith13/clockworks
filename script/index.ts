@@ -4098,6 +4098,39 @@ export module Clockworks
         updateProgressBarStyle();
         await showPage();
     };
+    export const itemState = <T>(itemJson: string, item: T) =>
+    {
+        if (itemJson)
+        {
+            if (item)
+            {
+                if (JSON.stringify(item) !== itemJson)
+                {
+                    return "irregular";
+                }
+            }
+            else
+            {
+                return "invalid";
+            }
+        }
+        return "regular";
+    };
+    export const regulateLocation = <T>(application: ApplicationType, itemJson: string, item: T) =>
+    {
+        switch(itemState(itemJson, item))
+        {
+        case "regular":
+            break;
+        case "regular":
+            showUrl({ application, item: JSON.stringify(item), });
+            return false;
+        case "invalid":
+            showUrl({ application, });
+            return false;
+        }
+        return true;
+    };
     export const showPage = async (url: string = location.href) =>
     {
         Render.getScreenCover()?.click();
@@ -4110,22 +4143,44 @@ export module Clockworks
         switch(applicationType)
         {
         case "NeverStopwatch":
-            await Render.showNeverStopwatchScreen(Domain.parseStamp(itemJson));
-            break;
+            {
+                const item = Domain.parseStamp(itemJson);
+                if (regulateLocation(applicationType, itemJson, item))
+                {
+                    await Render.showNeverStopwatchScreen(item);
+                }
+                else
+                {
+                    return false;
+                }
+                break;
+            }
         case "CountdownTimer":
-            const item = Domain.parseAlarm(itemJson);
-            if (JSON.stringify(item) !== itemJson)
             {
-                showUrl({ application: applicationType, item: JSON.stringify(item), });
-                return false;
+                const item = Domain.parseAlarm(itemJson);
+                if (regulateLocation(applicationType, itemJson, item))
+                {
+                    await Render.showCountdownTimerScreen(item);
+                }
+                else
+                {
+                    return false;
+                }
+                break;
             }
-            else
-            {
-                await Render.showCountdownTimerScreen(item);
-            }
-            break;
         case "RainbowClock":
-            await Render.showRainbowClockScreen(Domain.parseTimezone(itemJson));
+            {
+                const item = Domain.parseTimezone(itemJson);
+                if (regulateLocation(applicationType, itemJson, item))
+                {
+                    await Render.showRainbowClockScreen(item);
+                }
+                else
+                {
+                    return false;
+                }
+                break;
+            }
             break;
         default:
             await Render.showWelcomeScreen();
