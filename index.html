@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Sep 27 2021 11:57:06 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Sep 28 2021 00:01:59 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4673,7 +4673,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             case 0:
                                                 Storage.NeverStopwatch.Stamps.set(backup);
                                                 if (isOpend) {
-                                                    Clockworks.showUrl({ application: "NeverStopwatch", item: urlParams });
+                                                    Clockworks.showUrl(Render.makePageParams("NeverStopwatch", tick));
                                                 }
                                                 else {
                                                     Render.updateWindow("operate");
@@ -4889,7 +4889,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 Storage.CountdownTimer.ColorIndex.set(color);
-                                                Clockworks.showUrl({ application: "CountdownTimer", item: JSON.stringify(item), });
+                                                Clockworks.showUrl(Render.makePageParams("CountdownTimer", item));
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
                                                 _a.sent();
@@ -4923,7 +4923,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             case 0:
                                                 Storage.CountdownTimer.Alarms.add(item);
                                                 if (isOpend) {
-                                                    Clockworks.showUrl({ application: "CountdownTimer", item: urlParams });
+                                                    Clockworks.showUrl(Render.makePageParams("CountdownTimer", item));
                                                 }
                                                 else {
                                                     Render.updateWindow("operate");
@@ -5025,7 +5025,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             case 0:
                                                 Storage.RainbowClock.Timezone.add(item);
                                                 if (isOpend) {
-                                                    Clockworks.showUrl({ application: "RainbowClock", item: urlParams });
+                                                    Clockworks.showUrl(Render.makePageParams("RainbowClock", item));
                                                 }
                                                 else {
                                                     Render.updateWindow("operate");
@@ -5059,6 +5059,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [2 /*return*/];
                         });
                     }); },
+                });
+            };
+            Render.makePageParams = function (application, item) {
+                return ({
+                    application: application,
+                    item: JSON.stringify(item)
                 });
             };
             Render.internalLink = function (data) {
@@ -6117,7 +6123,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _c = Render.internalLink;
                             _g = {
                                 className: "item-title",
-                                href: { application: "NeverStopwatch", item: JSON.stringify(tick), }
+                                href: Render.makePageParams("NeverStopwatch", tick)
                             };
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
@@ -6208,7 +6214,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _c = Render.internalLink;
                             _g = {
                                 className: "item-title",
-                                href: { application: "CountdownTimer", item: JSON.stringify(item), }
+                                href: Render.makePageParams("CountdownTimer", item)
                             };
                             return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
                         case 1:
@@ -6293,7 +6299,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _c = Render.internalLink;
                             _g = {
                                 className: "item-title",
-                                href: { application: "RainbowClock", item: JSON.stringify(item), }
+                                href: Render.makePageParams("RainbowClock", item)
                             };
                             return [4 /*yield*/, Resource.loadSvgOrCache("pin-icon")];
                         case 1:
@@ -6608,7 +6614,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             case 0:
                                                 _a = Render.menuLinkItem;
                                                 return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
-                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.$span("monospace")(Domain.dateFullStringFromTick(i))], { application: "NeverStopwatch", item: JSON.stringify(i), },
+                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.$span("monospace")(Domain.dateFullStringFromTick(i))], Render.makePageParams("NeverStopwatch", i),
                                                     item === i ? "current-item" : undefined])];
                                         }
                                     });
@@ -6639,7 +6645,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             case 0:
                                                 _a = Render.menuLinkItem;
                                                 return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
-                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(Render.alarmTitle(i)), Render.$span("value monospace")(Domain.dateStringFromTick(i.end))], { application: "CountdownTimer", item: JSON.stringify(i), },
+                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(Render.alarmTitle(i)), Render.$span("value monospace")(Domain.dateStringFromTick(i.end))], Render.makePageParams("CountdownTimer", i),
                                                     JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                         }
                                     });
@@ -6670,7 +6676,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             case 0:
                                                 _a = Render.menuLinkItem;
                                                 return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
-                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(i.title), Render.$span("value monospace")(Domain.timezoneOffsetString(i.offset))], { application: "RainbowClock", item: JSON.stringify(i), },
+                                            case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(i.title), Render.$span("value monospace")(Domain.timezoneOffsetString(i.offset))], Render.makePageParams("RainbowClock", i),
                                                     JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                         }
                                     });
@@ -8657,7 +8663,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 case "regular":
                     break;
                 case "regular":
-                    Clockworks.showUrl({ application: application, item: JSON.stringify(item), });
+                    Clockworks.showUrl(Render.makePageParams(application, item));
                     return false;
                 case "invalid":
                     Clockworks.showUrl({ application: application, });

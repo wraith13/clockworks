@@ -863,7 +863,7 @@ export module Clockworks
                                 Storage.NeverStopwatch.Stamps.set(backup);
                                 if (isOpend)
                                 {
-                                    showUrl({ application: "NeverStopwatch", item: urlParams });
+                                    showUrl(makePageParams("NeverStopwatch", tick));
                                 }
                                 else
                                 {
@@ -1033,7 +1033,7 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.CountdownTimer.ColorIndex.set(color);
-                                showUrl({ application: "CountdownTimer", item: JSON.stringify(item), });
+                                showUrl(makePageParams("CountdownTimer", item));
                                 await toast.hide();
                                 onCanceled?.();
                             }
@@ -1063,7 +1063,7 @@ export module Clockworks
                                 Storage.CountdownTimer.Alarms.add(item);
                                 if (isOpend)
                                 {
-                                    showUrl({ application: "CountdownTimer", item: urlParams });
+                                    showUrl(makePageParams("CountdownTimer", item));
                                 }
                                 else
                                 {
@@ -1148,7 +1148,7 @@ export module Clockworks
                                 Storage.RainbowClock.Timezone.add(item);
                                 if (isOpend)
                                 {
-                                    showUrl({ application: "RainbowClock", item: urlParams });
+                                    showUrl(makePageParams("RainbowClock", item));
                                 }
                                 else
                                 {
@@ -1177,11 +1177,17 @@ export module Clockworks
                 });
             },
         });
+        export type PageItemType = number | AlarmEntry | TimezoneEntry;
         export interface PageParams
         {
             application?: ApplicationType;
             item?: string;
         }
+        export const makePageParams = (application: ApplicationType, item: PageItemType): PageParams =>
+        ({
+            application,
+            item: JSON.stringify(item)
+        });
         export const internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
         ({
             tag: "a",
@@ -2037,7 +2043,7 @@ export module Clockworks
                 internalLink
                 ({
                     className: "item-title",
-                    href: { application: "NeverStopwatch", item: JSON.stringify(tick), },
+                    href: makePageParams("NeverStopwatch", tick),
                     children:
                     [
                         await Resource.loadSvgOrCache("tick-icon"),
@@ -2112,7 +2118,7 @@ export module Clockworks
                 internalLink
                 ({
                     className: "item-title",
-                    href: { application: "CountdownTimer", item: JSON.stringify(item), },
+                    href: makePageParams("CountdownTimer", item),
                     children:
                     [
                         await Resource.loadSvgOrCache("tick-icon"),
@@ -2182,7 +2188,7 @@ export module Clockworks
                 internalLink
                 ({
                     className: "item-title",
-                    href: { application: "RainbowClock", item: JSON.stringify(item), },
+                    href: makePageParams("RainbowClock", item),
                     children:
                     [
                         await Resource.loadSvgOrCache("pin-icon"),
@@ -2408,7 +2414,7 @@ export module Clockworks
                         async i => menuLinkItem
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), $span("monospace")(Domain.dateFullStringFromTick(i)), ],
-                            { application: "NeverStopwatch", item: JSON.stringify(i), },
+                            makePageParams("NeverStopwatch", i),
                             item === i ? "current-item": undefined,
                         )
                     )
@@ -2429,7 +2435,7 @@ export module Clockworks
                         async i => menuLinkItem
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
-                            { application: "CountdownTimer", item: JSON.stringify(i), },
+                            makePageParams("CountdownTimer", i),
                             JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
@@ -2450,7 +2456,7 @@ export module Clockworks
                         async i => menuLinkItem
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
-                            { application: "RainbowClock", item: JSON.stringify(i), },
+                            makePageParams("RainbowClock", i),
                             JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
@@ -4052,7 +4058,7 @@ export module Clockworks
             .map(kvp => kvp.split("="))
             .filter(kvp => 2 <= kvp.length)
             .forEach(kvp => result[kvp[0]] = decodeURIComponent(kvp[1]));
-        return result as Render.PageParams;
+        return result;
     };
     export const getUrlHash = (url: string = location.href) => url.replace(/[^#]*#?/, "");
     export const regulateUrl = (url: string) => url.replace(/#$/, "").replace(/\?$/, "");
@@ -4164,14 +4170,14 @@ export module Clockworks
         }
         return "regular";
     };
-    export const regulateLocation = <T>(application: ApplicationType, itemJson: string, item: T) =>
+    export const regulateLocation = <T extends Render.PageItemType>(application: ApplicationType, itemJson: string, item: T) =>
     {
         switch(itemState(itemJson, item))
         {
         case "regular":
             break;
         case "regular":
-            showUrl({ application, item: JSON.stringify(item), });
+            showUrl(Render.makePageParams(application, item));
             return false;
         case "invalid":
             showUrl({ application, });
