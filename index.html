@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Sep 26 2021 22:46:24 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Sep 27 2021 11:57:06 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4652,12 +4652,19 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     NeverStopwatch.removeStamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var backup, toast;
+                        var urlParams, isOpend, backup, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
+                            urlParams = Clockworks.getUrlParams(location.href)["item"];
+                            isOpend = !!urlParams;
                             backup = Storage.NeverStopwatch.Stamps.get();
                             Storage.NeverStopwatch.Stamps.remove(tick);
-                            Render.updateWindow("operate");
+                            if (isOpend) {
+                                Clockworks.showUrl({ application: "NeverStopwatch", });
+                            }
+                            else {
+                                Render.updateWindow("operate");
+                            }
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Removed.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
@@ -4665,7 +4672,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 Storage.NeverStopwatch.Stamps.set(backup);
-                                                Render.updateWindow("operate");
+                                                if (isOpend) {
+                                                    Clockworks.showUrl({ application: "NeverStopwatch", item: urlParams });
+                                                }
+                                                else {
+                                                    Render.updateWindow("operate");
+                                                }
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
                                                 _a.sent();
@@ -4891,11 +4903,18 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     CountdownTimer.removeAlarm = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var toast;
+                        var urlParams, isOpend, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
+                            urlParams = Clockworks.getUrlParams(location.href)["item"];
+                            isOpend = !!urlParams;
                             Storage.CountdownTimer.Alarms.remove(item);
-                            Render.updateWindow("operate");
+                            if (isOpend) {
+                                Clockworks.showUrl({ application: "CountdownTimer", });
+                            }
+                            else {
+                                Render.updateWindow("operate");
+                            }
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Removed.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
@@ -4903,7 +4922,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 Storage.CountdownTimer.Alarms.add(item);
-                                                Render.updateWindow("operate");
+                                                if (isOpend) {
+                                                    Clockworks.showUrl({ application: "CountdownTimer", item: urlParams });
+                                                }
+                                                else {
+                                                    Render.updateWindow("operate");
+                                                }
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
                                                 _a.sent();
@@ -4981,11 +5005,18 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     RainbowClock.remove = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var toast;
+                        var urlParams, isOpend, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
+                            urlParams = Clockworks.getUrlParams(location.href)["item"];
+                            isOpend = !!urlParams;
                             Storage.RainbowClock.Timezone.remove(item);
-                            Render.updateWindow("operate");
+                            if (isOpend) {
+                                Clockworks.showUrl({ application: "RainbowClock", });
+                            }
+                            else {
+                                Render.updateWindow("operate");
+                            }
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale.map("Removed.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
@@ -4993,7 +5024,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         switch (_a.label) {
                                             case 0:
                                                 Storage.RainbowClock.Timezone.add(item);
-                                                Render.updateWindow("operate");
+                                                if (isOpend) {
+                                                    Clockworks.showUrl({ application: "RainbowClock", item: urlParams });
+                                                }
+                                                else {
+                                                    Render.updateWindow("operate");
+                                                }
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
                                                 _a.sent();

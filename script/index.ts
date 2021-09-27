@@ -841,9 +841,18 @@ export module Clockworks
                 };
                 export const removeStamp = async (tick: number, onCanceled?: () => unknown) =>
                 {
+                    const urlParams = getUrlParams(location.href)["item"];
+                    const isOpend = !! urlParams;
                     const backup = Storage.NeverStopwatch.Stamps.get();
                     Storage.NeverStopwatch.Stamps.remove(tick);
-                    updateWindow("operate");
+                    if (isOpend)
+                    {
+                        showUrl({ application: "NeverStopwatch", });
+                    }
+                    else
+                    {
+                        updateWindow("operate");
+                    }
                     const toast = makePrimaryToast
                     ({
                         content: $span("")(`${locale.map("Removed.")}`),
@@ -852,7 +861,14 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.NeverStopwatch.Stamps.set(backup);
-                                updateWindow("operate");
+                                if (isOpend)
+                                {
+                                    showUrl({ application: "NeverStopwatch", item: urlParams });
+                                }
+                                else
+                                {
+                                    updateWindow("operate");
+                                }
                                 await toast.hide();
                                 onCanceled?.();
                             }
@@ -1026,8 +1042,17 @@ export module Clockworks
                 };
                 export const removeAlarm = async (item: AlarmEntry, onCanceled?: () => unknown) =>
                 {
+                    const urlParams = getUrlParams(location.href)["item"];
+                    const isOpend = !! urlParams;
                     Storage.CountdownTimer.Alarms.remove(item);
-                    updateWindow("operate");
+                    if (isOpend)
+                    {
+                        showUrl({ application: "CountdownTimer", });
+                    }
+                    else
+                    {
+                        updateWindow("operate");
+                    }
                     const toast = makePrimaryToast
                     ({
                         content: $span("")(`${locale.map("Removed.")}`),
@@ -1036,7 +1061,14 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.CountdownTimer.Alarms.add(item);
-                                updateWindow("operate");
+                                if (isOpend)
+                                {
+                                    showUrl({ application: "CountdownTimer", item: urlParams });
+                                }
+                                else
+                                {
+                                    updateWindow("operate");
+                                }
                                 await toast.hide();
                                 onCanceled?.();
                             }
@@ -1095,8 +1127,17 @@ export module Clockworks
                 };
                 export const remove = async (item: TimezoneEntry, onCanceled?: () => unknown) =>
                 {
+                    const urlParams = getUrlParams(location.href)["item"];
+                    const isOpend = !! urlParams;
                     Storage.RainbowClock.Timezone.remove(item);
-                    updateWindow("operate");
+                    if (isOpend)
+                    {
+                        showUrl({ application: "RainbowClock", });
+                    }
+                    else
+                    {
+                        updateWindow("operate");
+                    }
                     const toast = makePrimaryToast
                     ({
                         content: $span("")(`${locale.map("Removed.")}`),
@@ -1105,7 +1146,14 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.RainbowClock.Timezone.add(item);
-                                updateWindow("operate");
+                                if (isOpend)
+                                {
+                                    showUrl({ application: "RainbowClock", item: urlParams });
+                                }
+                                else
+                                {
+                                    updateWindow("operate");
+                                }
                                 await toast.hide();
                                 onCanceled?.();
                             }
