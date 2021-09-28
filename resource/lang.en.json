@@ -40,6 +40,7 @@
     "solid": "Solid",
     "roll-back": "Cancel",
     "roll-backed": "Canceled.",
+    "This action cannot be undone. Do you want to continue?": "This action cannot be undone. Do you want to continue?",
     "Close": "Close",
     "Stamped!": "Stamped!",
     "Updated.": "Updated.",

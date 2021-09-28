@@ -40,6 +40,7 @@
     "solid": "ソリッド",
     "roll-back": "取り消す",
     "roll-backed": "取り消しました。",
+    "This action cannot be undone. Do you want to continue?": "この操作は取り消せません。続行しますか？",
     "Close": "閉じる",
     "Stamped!": "スタンプ！",
     "Updated.": "更新しました。",

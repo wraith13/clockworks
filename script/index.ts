@@ -875,25 +875,29 @@ export module Clockworks
                         ),
                     });
                 };
-                export const reset = async (onCanceled?: () => unknown) =>
+                export const reset = async (_onCanceled?: () => unknown) =>
                 {
-                    const backup = Storage.NeverStopwatch.Stamps.get();
-                    Storage.NeverStopwatch.Stamps.removeKey();
-                    updateWindow("operate");
-                    const toast = makePrimaryToast
-                    ({
-                        content: $span("")(`リセットしました。`),
-                        backwardOperator: cancelTextButton
-                        (
-                            async () =>
-                            {
-                                Storage.NeverStopwatch.Stamps.set(backup);
-                                updateWindow("operate");
-                                await toast.hide();
-                                onCanceled?.();
-                            }
-                        ),
-                    });
+                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    {
+                        // const backup = Storage.NeverStopwatch.Stamps.get();
+                        Storage.NeverStopwatch.Stamps.removeKey();
+                        updateWindow("operate");
+                        // const toast =
+                        makePrimaryToast
+                        ({
+                            content: $span("")(`リセットしました。`),
+                            // backwardOperator: cancelTextButton
+                            // (
+                            //     async () =>
+                            //     {
+                            //         Storage.NeverStopwatch.Stamps.set(backup);
+                            //         updateWindow("operate");
+                            //         await toast.hide();
+                            //         onCanceled?.();
+                            //     }
+                            // ),
+                        });
+                    }
                 };
             }
             export module CountdownTimer
@@ -1232,6 +1236,68 @@ export module Clockworks
             $span("locale-parallel")(locale.parallel(label)),
             $span("locale-map")(locale.map(label)),
         ]);
+        // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
+        // {
+        //     await minamo.core.timeout(100); // この wait をかましてないと呼び出し元のポップアップメニューが window.prompt が表示されてる間、ずっと表示される事になる。
+        //     return await new Promise(resolve => resolve(window.prompt(message, _default)?.trim() ?? null));
+        // };
+        // export const customPrompt = async (message?: string, _default?: string): Promise<string | null> =>
+        // {
+        //     const input = $make(HTMLInputElement)
+        //     ({
+        //         tag: "input",
+        //         type: "text",
+        //         value: _default,
+        //     });
+        //     return await new Promise
+        //     (
+        //         resolve =>
+        //         {
+        //             let result: string | null = null;
+        //             const ui = popup
+        //             ({
+        //                 children:
+        //                 [
+        //                     $tag("h2")("")(message ?? locale.map("please input")),
+        //                     input,
+        //                     $div("popup-operator")
+        //                     ([
+        //                         {
+        //                             tag: "button",
+        //                             className: "cancel-button",
+        //                             children: locale.map("Cancel"),
+        //                             onclick: () =>
+        //                             {
+        //                                 result = null;
+        //                                 ui.close();
+        //                             },
+        //                         },
+        //                         {
+        //                             tag: "button",
+        //                             className: "default-button",
+        //                             children: locale.map("OK"),
+        //                             onclick: () =>
+        //                             {
+        //                                 result = input.value;
+        //                                 ui.close();
+        //                             },
+        //                         },
+        //                     ]),
+        //                 ],
+        //                 onClose: async () => resolve(result),
+        //             });
+        //             input.setSelectionRange(0, _default?.length ?? 0);
+        //             input.focus();
+        //         }
+        //     );
+        // };
+        // // export const prompt = systemPrompt;
+        // export const prompt = customPrompt;
+        // // export const alert = (message: string) => window.alert(message);
+        // export const alert = (message: string) => makeToast({ content: message, });
+
+        export const systemConfirm = (message: string) => window.confirm(message);
+        // export const confirm = systemConfirm;
         export const dateTimePrompt = async (message: string, _default: number): Promise<string | null> =>
         {
             const inputDate = $make(HTMLInputElement)
