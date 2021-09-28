@@ -875,28 +875,13 @@ export module Clockworks
                         ),
                     });
                 };
-                export const reset = async (_onCanceled?: () => unknown) =>
+                export const removeAllStamps = async () =>
                 {
                     if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
                     {
-                        // const backup = Storage.NeverStopwatch.Stamps.get();
                         Storage.NeverStopwatch.Stamps.removeKey();
                         updateWindow("operate");
-                        // const toast =
-                        makePrimaryToast
-                        ({
-                            content: $span("")(`リセットしました。`),
-                            // backwardOperator: cancelTextButton
-                            // (
-                            //     async () =>
-                            //     {
-                            //         Storage.NeverStopwatch.Stamps.set(backup);
-                            //         updateWindow("operate");
-                            //         await toast.hide();
-                            //         onCanceled?.();
-                            //     }
-                            // ),
-                        });
+                        makePrimaryToast({ content: $span("")(`${locale.map("Removed all stamps!")}`), });
                     }
                 };
             }
@@ -2668,8 +2653,8 @@ export module Clockworks
         export const resetNeverStopwatchMenuItem = async () =>
             menuItem
             (
-                label("Reset"),
-                async () => await Operate.NeverStopwatch.reset(),
+                label("Remove all stamps"),
+                async () => await Operate.NeverStopwatch.removeAllStamps(),
                 "delete-button"
             );
         export const githubMenuItem = async () =>
