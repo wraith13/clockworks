@@ -1064,6 +1064,15 @@ export module Clockworks
                         ),
                     });
                 };
+                export const removeAllAlarms = async () =>
+                {
+                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    {
+                        Storage.CountdownTimer.Alarms.removeKey();
+                        updateWindow("operate");
+                        makePrimaryToast({ content: $span("")(`${locale.map("Removed all alarms!")}`), });
+                    }
+                };
             }
             export module RainbowClock
             {
@@ -1148,6 +1157,15 @@ export module Clockworks
                             }
                         ),
                     });
+                };
+                export const reset = async () =>
+                {
+                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    {
+                        Storage.RainbowClock.Timezone.removeKey();
+                        updateWindow("operate");
+                        makePrimaryToast({ content: $span("")(`${locale.map("Initialized timezone list!")}`), });
+                    }
                 };
             }
         }
@@ -2657,6 +2675,20 @@ export module Clockworks
                 async () => await Operate.NeverStopwatch.removeAllStamps(),
                 "delete-button"
             );
+        export const resetCountdownTimerMenuItem = async () =>
+            menuItem
+            (
+                label("Remove all alarms"),
+                async () => await Operate.CountdownTimer.removeAllAlarms(),
+                "delete-button"
+            );
+        export const resetRainbowClockMenuItem = async () =>
+            menuItem
+            (
+                label("Initialize timezone list"),
+                async () => await Operate.RainbowClock.reset(),
+                "delete-button"
+            );
         export const githubMenuItem = async () =>
             externalLink
             ({
@@ -2796,7 +2828,6 @@ export module Clockworks
             await showWindow(await welcomeScreen(), updateWindow);
             await updateWindow("timer");
         };
-
         export const neverStopwatchScreenMenu = async () =>
         [
             await fullscreenMenuItem(),
@@ -3058,6 +3089,15 @@ export module Clockworks
             await showWindow(await neverStopwatchScreen(item, ticks), updateWindow);
             await updateWindow("timer");
         };
+        export const countdownTimerScreenMenu = async () =>
+        [
+            await fullscreenMenuItem(),
+            await themeMenuItem(),
+            await progressBarStyleMenuItem(),
+            await languageMenuItem(),
+            await resetCountdownTimerMenuItem(),
+            await githubMenuItem(),
+        ];
         export const countdownTimerScreenBody = async (item: AlarmEntry | null, alarms: AlarmEntry[]) =>
         ([
             $div("primary-page")
@@ -3173,14 +3213,14 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
-                                    children: "保存 / Save",
-                                    onclick: async () => await Operate.CountdownTimer.save(item),
+                                    children: "シェア / Share",
+                                    onclick: async () => await sharePopup(alarmTitle(item)),
                                 }:
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
-                                    children: "シェア / Share",
-                                    onclick: async () => await sharePopup(alarmTitle(item)),
+                                    children: "保存 / Save",
+                                    onclick: async () => await Operate.CountdownTimer.save(item),
                                 }
                         ]):
                         await downPageLink(),
@@ -3249,7 +3289,7 @@ export module Clockworks
                     await screenHeaderHomeSegment(),
                     await screenHeaderApplicationSegment("CountdownTimer"),
                 ],
-                menu: neverStopwatchScreenMenu,
+                menu: countdownTimerScreenMenu,
                 parent: { },
             }:
             {
@@ -3385,6 +3425,7 @@ export module Clockworks
             await progressBarStyleMenuItem(),
             await colorMenuItem(),
             await languageMenuItem(),
+            await resetRainbowClockMenuItem(),
             await githubMenuItem(),
         ];
         export const rainbowClockScreenBody = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]) =>

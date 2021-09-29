@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Sep 29 2021 00:20:58 GMT+0900 (GMT+09:00) -->
+<!-- build at: Wed Sep 29 2021 00:57:23 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3810,6 +3810,10 @@ define("resource/lang.en", [], {
     "Remove": "Remove",
     "Remove all stamps": "Remove all stamps",
     "Removed all stamps!": "Removed all stamps!",
+    "Remove all alarms": "Remove all alarms",
+    "Removed all alarms!": "Removed all alarms!",
+    "Initialize timezone list": "Initialize timezone list",
+    "Initialized timezone list!": "Initialized timezone list!",
     "OK": "OK",
     "Cancel": "Cancel",
     "Edit": "Edit",
@@ -3873,6 +3877,10 @@ define("resource/lang.ja", [], {
     "Remove": "削除",
     "Remove all stamps": "全てのスタンプを削除",
     "Removed all stamps!": "全てのスタンプを削除しました！",
+    "Remove all alarms": "全てのアラームを削除",
+    "Removed all alarms!": "全てのアラームを削除しました！",
+    "Initialize timezone list": "タイムゾーンリストを初期化",
+    "Initialized timezone list!": "タイムゾーンリストを初期化しました！",
     "OK": "OK",
     "Cancel": "キャンセル",
     "Edit": "編集",
@@ -4927,6 +4935,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [2 /*return*/];
                         });
                     }); };
+                    CountdownTimer.removeAllAlarms = function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            if (Render.systemConfirm(locale.map("This action cannot be undone. Do you want to continue?"))) {
+                                Storage.CountdownTimer.Alarms.removeKey();
+                                Render.updateWindow("operate");
+                                Render.makePrimaryToast({ content: Render.$span("")("" + locale.map("Removed all alarms!")), });
+                            }
+                            return [2 /*return*/];
+                        });
+                    }); };
                 })(CountdownTimer = Operate.CountdownTimer || (Operate.CountdownTimer = {}));
                 var RainbowClock;
                 (function (RainbowClock) {
@@ -5026,6 +5044,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     });
                                 }); }),
                             });
+                            return [2 /*return*/];
+                        });
+                    }); };
+                    RainbowClock.reset = function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            if (Render.systemConfirm(locale.map("This action cannot be undone. Do you want to continue?"))) {
+                                Storage.RainbowClock.Timezone.removeKey();
+                                Render.updateWindow("operate");
+                                Render.makePrimaryToast({ content: Render.$span("")("" + locale.map("Initialized timezone list!")), });
+                            }
                             return [2 /*return*/];
                         });
                     }); };
@@ -6934,6 +6962,28 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         }); }); }, "delete-button")];
                 });
             }); };
+            Render.resetCountdownTimerMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, Render.menuItem(Render.label("Remove all alarms"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, Operate.CountdownTimer.removeAllAlarms()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); }, "delete-button")];
+                });
+            }); };
+            Render.resetRainbowClockMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, Render.menuItem(Render.label("Initialize timezone list"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, Operate.RainbowClock.reset()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); }, "delete-button")];
+                });
+            }); };
             Render.githubMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     return [2 /*return*/, Render.externalLink({
@@ -7522,6 +7572,42 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
+            Render.countdownTimerScreenMenu = function () { return __awaiter(_this, void 0, void 0, function () {
+                var _a;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, Render.fullscreenMenuItem()];
+                        case 1:
+                            _a = [
+                                _b.sent()
+                            ];
+                            return [4 /*yield*/, Render.themeMenuItem()];
+                        case 2:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
+                            return [4 /*yield*/, Render.progressBarStyleMenuItem()];
+                        case 3:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
+                            return [4 /*yield*/, Render.languageMenuItem()];
+                        case 4:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
+                            return [4 /*yield*/, Render.resetCountdownTimerMenuItem()];
+                        case 5:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
+                            return [4 /*yield*/, Render.githubMenuItem()];
+                        case 6: return [2 /*return*/, _a.concat([
+                                _b.sent()
+                            ])];
+                    }
+                });
+            }); };
             Render.countdownTimerScreenBody = function (item, alarms) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
                 var _this = this;
@@ -7618,10 +7704,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
-                                        children: "保存 / Save",
+                                        children: "シェア / Share",
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Operate.CountdownTimer.save(item)];
+                                                case 0: return [4 /*yield*/, Render.sharePopup(Render.alarmTitle(item))];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -7629,10 +7715,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
-                                        children: "シェア / Share",
+                                        children: "保存 / Save",
                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.sharePopup(Render.alarmTitle(item))];
+                                                case 0: return [4 /*yield*/, Operate.CountdownTimer.save(item)];
                                                 case 1: return [2 /*return*/, _a.sent()];
                                             }
                                         }); }); },
@@ -7737,7 +7823,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = (_e.items = _b.concat([
                                 _g.sent()
                             ]),
-                                _e.menu = Render.neverStopwatchScreenMenu,
+                                _e.menu = Render.countdownTimerScreenMenu,
                                 _e.parent = {},
                                 _e);
                             return [3 /*break*/, 7];
@@ -7939,8 +8025,13 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             _a = _a.concat([
                                 _b.sent()
                             ]);
+                            return [4 /*yield*/, Render.resetRainbowClockMenuItem()];
+                        case 6:
+                            _a = _a.concat([
+                                _b.sent()
+                            ]);
                             return [4 /*yield*/, Render.githubMenuItem()];
-                        case 6: return [2 /*return*/, _a.concat([
+                        case 7: return [2 /*return*/, _a.concat([
                                 _b.sent()
                             ])];
                     }
