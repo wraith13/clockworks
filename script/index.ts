@@ -589,12 +589,18 @@ export module Clockworks
         };
         export const parseStampCore = (item: any): number | null =>
         {
-            if ("number" === typeof item && item <= Domain.getTicks())
+            const now = Domain.getTicks();
+            if ("new" === item)
+            {
+                return now;
+            }
+            if ("number" === typeof item && item <= now)
             {
                 return item;
             }
             return null;
         };
+        export const makeStampUrl = (item: "new" | number) => makeUrl({ application: "NeverStopwatch", item: JSON.stringify(item), });
         export const parseStamp = (json: string): number | null => parseStampCore(parseOrNull(json));
         export const parseTimer = (timer: any) =>
         {
@@ -700,7 +706,17 @@ export module Clockworks
             }
             return null;
         };
-        export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
+        export const makeNewTimerUrl = (timer: string) => makeUrl
+        ({
+            application: "CountdownTimer",
+            item: JSON.stringify
+            ({
+                type: "timer",
+                start: "new",
+                end: timer,
+            }),
+        });
+        // export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
         export const parseAlarm = (json: string): AlarmEntry | null => parseAlarmCore(parseOrNull(json));
         export const parseTimezoneCore = (item: any): TimezoneEntry | null =>
         {
@@ -2963,6 +2979,7 @@ export module Clockworks
                         ([
                             $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                             $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                            $tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: locale.map("Stamp"), }, ]),
                         ])
                     ),
                 ]),
@@ -4244,7 +4261,8 @@ export module Clockworks
         updateProgressBarStyle();
         await showPage();
     };
-    export const itemState = <T>(itemJson: string, item: T) =>
+    export type ItemStateType = "nothing" | "regular" | "irregular" | "invalid";
+    export const itemState = <T>(itemJson: string, item: T): ItemStateType =>
     {
         if (itemJson)
         {
@@ -4259,16 +4277,19 @@ export module Clockworks
             {
                 return "invalid";
             }
+            return "regular";
         }
-        return "regular";
+        return "nothing";
     };
     export const regulateLocation = <T extends Render.PageItemType>(application: ApplicationType, itemJson: string, item: T) =>
     {
         switch(itemState(itemJson, item))
         {
+        case "nothing":
+            return true;
         case "regular":
-            break;
-        case "regular":
+            return true;
+        case "irregular":
             showUrl(Render.makePageParams(application, item));
             return false;
         case "invalid":

@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Sep 29 2021 00:57:23 GMT+0900 (GMT+09:00) -->
+<!-- build at: Thu Sep 30 2021 22:31:02 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3843,6 +3843,7 @@ define("resource/lang.en", [], {
     "Saved!": "Saved!",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
+    "You can use a link like this too:": "You can use a link like this too:",
     "You can use links like these too:": "You can use links like these too:",
     "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified.",
     "Not support daylight savings time.": "Not support daylight savings time.",
@@ -3910,6 +3911,7 @@ define("resource/lang.ja", [], {
     "Saved!": "保存しました！",
     "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
     "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
+    "You can use a link like this too:": "次のようなリンクを使う事もできます:",
     "You can use links like these too:": "次のようなリンクを使う事もできます:",
     "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。",
     "Not support daylight savings time.": "夏時間はサポートしていません。",
@@ -4413,11 +4415,16 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return null;
             };
             Domain.parseStampCore = function (item) {
-                if ("number" === typeof item && item <= Domain.getTicks()) {
+                var now = Domain.getTicks();
+                if ("new" === item) {
+                    return now;
+                }
+                if ("number" === typeof item && item <= now) {
                     return item;
                 }
                 return null;
             };
+            Domain.makeStampUrl = function (item) { return Clockworks.makeUrl({ application: "NeverStopwatch", item: JSON.stringify(item), }); };
             Domain.parseStamp = function (json) { return Domain.parseStampCore(Domain.parseOrNull(json)); };
             Domain.parseTimer = function (timer) {
                 try {
@@ -4492,7 +4499,15 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 }
                 return null;
             };
-            Domain.makeNewTimerUrl = function (timer) { return "?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22" + timer + "%22%7D"; };
+            Domain.makeNewTimerUrl = function (timer) { return Clockworks.makeUrl({
+                application: "CountdownTimer",
+                item: JSON.stringify({
+                    type: "timer",
+                    start: "new",
+                    end: timer,
+                }),
+            }); };
+            // export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
             Domain.parseAlarm = function (json) { return Domain.parseAlarmCore(Domain.parseOrNull(json)); };
             Domain.parseTimezoneCore = function (item) {
                 if (null !== item && undefined !== item && "object" === typeof item) {
@@ -7391,6 +7406,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                         Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                        Render.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: locale.map("Stamp"), },]),
                                     ]))
                                 ]]);
                             _o.label = 8;
@@ -8794,14 +8810,17 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 else {
                     return "invalid";
                 }
+                return "regular";
             }
-            return "regular";
+            return "nothing";
         };
         Clockworks.regulateLocation = function (application, itemJson, item) {
             switch (Clockworks.itemState(itemJson, item)) {
+                case "nothing":
+                    return true;
                 case "regular":
-                    break;
-                case "regular":
+                    return true;
+                case "irregular":
                     Clockworks.showUrl(Render.makePageParams(application, item));
                     return false;
                 case "invalid":
