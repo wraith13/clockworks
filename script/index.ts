@@ -95,6 +95,12 @@ export module Clockworks
         start: number;
         end: number;
     }
+    export interface AlarmNewTimerEntry
+    {
+        type: "timer";
+        start: "new";
+        end: string;
+    }
     export interface AlarmScheduleEntry
     {
         type: "schedule";
@@ -600,7 +606,7 @@ export module Clockworks
             }
             return null;
         };
-        export const makeStampUrl = (item: "new" | number) => makeUrl({ application: "NeverStopwatch", item: JSON.stringify(item), });
+        export const makeStampUrl = (item: "new" | number) => makeUrl(makePageParams("NeverStopwatch", item));
         export const parseStamp = (json: string): number | null => parseStampCore(parseOrNull(json));
         export const parseTimer = (timer: any) =>
         {
@@ -707,15 +713,17 @@ export module Clockworks
             return null;
         };
         export const makeNewTimerUrl = (timer: string) => makeUrl
-        ({
-            application: "CountdownTimer",
-            item: JSON.stringify
-            ({
-                type: "timer",
-                start: "new",
-                end: timer,
-            }),
-        });
+        (
+            makePageParams
+            (
+                "CountdownTimer",
+                {
+                    type: "timer",
+                    start: "new",
+                    end: timer,
+                },
+            )
+        );
         // export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
         export const parseAlarm = (json: string): AlarmEntry | null => parseAlarmCore(parseOrNull(json));
         export const parseTimezoneCore = (item: any): TimezoneEntry | null =>
@@ -1199,17 +1207,6 @@ export module Clockworks
                     wait: 3000,
                 });
             },
-        });
-        export type PageItemType = number | AlarmEntry | TimezoneEntry;
-        export interface PageParams
-        {
-            application?: ApplicationType;
-            item?: string;
-        }
-        export const makePageParams = (application: ApplicationType, item: PageItemType): PageParams =>
-        ({
-            application,
-            item: JSON.stringify(item)
         });
         export const internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
         ({
@@ -4157,6 +4154,17 @@ export module Clockworks
         export const onMouseUp = (_evnet: MouseEvent) => setTimeout(clearLastMouseDownTarget, 10);
         export const clearLastMouseDownTarget = () => lastMouseDownTarget = null;
     }
+    export type PageItemType = number | "new" | AlarmEntry | AlarmNewTimerEntry | TimezoneEntry;
+    export interface PageParams
+    {
+        application?: ApplicationType;
+        item?: PageItemType;
+    }
+    export const makePageParams = (application: ApplicationType, item: PageItemType): PageParams =>
+    ({
+        application,
+        item
+    });
     export const getUrlParams = (url: string = location.href) =>
     {
         const result: { [key: string]: string } = { };
@@ -4169,11 +4177,11 @@ export module Clockworks
             .forEach(kvp => result[kvp[0]] = decodeURIComponent(kvp[1]));
         return result;
     };
-    export const getUrlHash = (url: string = location.href) => url.replace(/[^#]*#?/, "");
-    export const regulateUrl = (url: string) => url.replace(/#$/, "").replace(/\?$/, "");
-    export const makeUrl =
+    export const getUrlHash = (url: string = location.href) => decodeURIComponent(url.replace(/[^#]*#?/, ""));
+    export const regulateUrl = (url: string) => url.replace(/\?#/, "#").replace(/#$/, "").replace(/\?$/, "");
+    export const makeUrlRaw =
     (
-        args: {[key: string]: string} | Render.PageParams,
+        args: {[key: string]: string} | PageParams,
         href: string = location.href
     ) => regulateUrl
     (
@@ -4187,6 +4195,23 @@ export module Clockworks
                 .map(i => `${i}=${encodeURIComponent(args[i])}`)
                 .join("&")
             +`#${args["hash"] ?? ""}`
+    );
+    export const makeUrl =
+    (
+        args: PageParams,
+        href: string = location.href
+    ) => makeUrlRaw
+    (
+        {
+            hash: args.application ?
+                (
+                    args.item ?
+                        `${args.application}/${JSON.stringify(args.item)}`:
+                        args.application
+                ):
+                "",
+        },
+        href
     );
     const originalStyle = document.getElementById("style").innerText;
     const makeRegExpPart = (text: string) => text.replace(/([\\\/\.\+\?\*\[\]\(\)\{\}\|])/gmu, "\\$1");
@@ -4281,7 +4306,7 @@ export module Clockworks
         }
         return "nothing";
     };
-    export const regulateLocation = <T extends Render.PageItemType>(application: ApplicationType, itemJson: string, item: T) =>
+    export const regulateLocation = <T extends PageItemType>(application: ApplicationType, itemJson: string, item: T) =>
     {
         switch(itemState(itemJson, item))
         {
@@ -4290,7 +4315,7 @@ export module Clockworks
         case "regular":
             return true;
         case "irregular":
-            showUrl(Render.makePageParams(application, item));
+            showUrl(makePageParams(application, item));
             return false;
         case "invalid":
             showUrl({ application, });
@@ -4303,10 +4328,10 @@ export module Clockworks
         Render.getScreenCover()?.click();
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
-        const urlParams = getUrlParams(url);
-        // const hash = getUrlHash(url);
-        const applicationType = urlParams["application"] as ApplicationType;
-        const itemJson = urlParams["item"];
+        // const urlParams = getUrlParams(url);
+        const hash = getUrlHash(url).split("/");
+        const applicationType = hash[0] as ApplicationType;
+        const itemJson = hash[1];
         switch(applicationType)
         {
         case "NeverStopwatch":
@@ -4355,7 +4380,7 @@ export module Clockworks
         }
         return true;
     };
-    export const showUrl = async (data: Render.PageParams) =>
+    export const showUrl = async (data: PageParams) =>
     {
         const url = makeUrl(data);
         if (await showPage(url))
