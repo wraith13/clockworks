@@ -95,7 +95,7 @@ export module Clockworks
         start: number;
         end: number;
     }
-    export interface AlarmNewTimerEntry
+    export interface AlarmNewTimerEntry // URL インターフェイスとしてのみの利用。
     {
         type: "timer";
         start: "new";
@@ -4206,7 +4206,7 @@ export module Clockworks
             hash: args.application ?
                 (
                     args.item ?
-                        `${args.application}/${JSON.stringify(args.item)}`:
+                        `${args.application}/${encodeURIComponent(JSON.stringify(args.item))}`:
                         args.application
                 ):
                 "",
@@ -4315,10 +4315,10 @@ export module Clockworks
         case "regular":
             return true;
         case "irregular":
-            showUrl(makePageParams(application, item));
+            rewriteShowUrl(makePageParams(application, item));
             return false;
         case "invalid":
-            showUrl({ application, });
+            rewriteShowUrl({ application, });
             return false;
         }
         return true;
@@ -4386,6 +4386,14 @@ export module Clockworks
         if (await showPage(url))
         {
             history.pushState(null, application[data.application]?.title ?? applicationTitle, url);
+        }
+    };
+    export const rewriteShowUrl = async (data: PageParams) =>
+    {
+        const url = makeUrl(data);
+        if (await showPage(url))
+        {
+            history.replaceState(null, application[data.application]?.title ?? applicationTitle, url);
         }
     };
     export const reload = async () => await showPage();

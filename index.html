@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Oct 02 2021 00:33:23 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sat Oct 02 2021 01:20:04 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -1995,6 +1995,16 @@ body.fxxking-ipad-fullscreen .screen {
 }
 body.tektite .screen h1 {
   background-color: #00002211;
+}
+@media (hover: hover) {
+  body.tektite .screen h1 .segment:not(.label-segment):hover {
+    background-color: #FFFFFF11;
+  }
+}
+@media (hover: hover) {
+  body.tektite .screen h1 > button:hover {
+    background-color: #FFFFFF22;
+  }
 }
 body.tektite .screen .screen-body {
   -ms-overflow-style: none;
@@ -8742,7 +8752,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             return Clockworks.makeUrlRaw({
                 hash: args.application ?
                     (args.item ?
-                        args.application + "/" + JSON.stringify(args.item) :
+                        args.application + "/" + encodeURIComponent(JSON.stringify(args.item)) :
                         args.application) :
                     "",
             }, href);
@@ -8829,10 +8839,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 case "regular":
                     return true;
                 case "irregular":
-                    Clockworks.showUrl(Clockworks.makePageParams(application, item));
+                    Clockworks.rewriteShowUrl(Clockworks.makePageParams(application, item));
                     return false;
                 case "invalid":
-                    Clockworks.showUrl({ application: application, });
+                    Clockworks.rewriteShowUrl({ application: application, });
                     return false;
             }
             return true;
@@ -8905,6 +8915,22 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     case 1:
                         if (_c.sent()) {
                             history.pushState(null, (_b = (_a = Clockworks.application[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : Clockworks.applicationTitle, url);
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        Clockworks.rewriteShowUrl = function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var url;
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        url = Clockworks.makeUrl(data);
+                        return [4 /*yield*/, Clockworks.showPage(url)];
+                    case 1:
+                        if (_c.sent()) {
+                            history.replaceState(null, (_b = (_a = Clockworks.application[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : Clockworks.applicationTitle, url);
                         }
                         return [2 /*return*/];
                 }

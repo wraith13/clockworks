@@ -1397,6 +1397,26 @@ body.tektite
         h1
         {
             background-color: e(%("%s%s", @main-color, "11"));
+            .segment:not(.label-segment)
+            {
+                @media (hover: hover)
+                {
+                    &:hover
+                    {
+                        background-color: e(%("%s%s", @base-color, "11"));
+                    }
+                }
+            }
+            & > button
+            {
+                @media (hover: hover)
+                {
+                    &:hover
+                    {
+                        background-color: e(%("%s%s", @base-color, "22"));
+                    }
+                }
+            }
         }
         .screen-body
         {
