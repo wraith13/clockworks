@@ -353,27 +353,27 @@ export module Clockworks
     {
         export const utcOffsetRate = 60 *1000;
         export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
-        export const makeTimerLabel = (timer: number): string =>
+        export const makeTimerLabel = (timer: number) =>
         {
             if (timer < 0)
             {
-                return makeTimerLabel(-timer);
+                return `-${makeTimerLabel(-timer)}`;
             }
             const days = Math.floor(timer / (24 * 60 * 60 * 1000));
             const hours = Math.floor(timer / (60 * 60 * 1000)) % 24;
             const minutes = Math.floor(timer / (60 * 1000)) % 60;
             const seconds = Math.floor(timer / 1000) % 60;
-            const milliseconds = timer % 1000;
+            const milliseconds = Math.floor(timer) % 1000;
             let result = "";
             if ("" !== result || 0 < days)
             {
                 if ("" === result)
                 {
-                    result = `${days}` +locale.map("days");
+                    result = `${days} ` +locale.map("days");
                 }
                 else
                 {
-                    result += ` ${days}` +locale.map("days");
+                    result += ` ${days} ` +locale.map("days");
                 }
             }
             if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours)
@@ -404,6 +404,7 @@ export module Clockworks
                 if (0 < milliseconds)
                 {
                     trail = `.` +`00${milliseconds}`.substr(-3);
+                    trail = trail.replace(/0+$/, "");
                 }
                 if ("" === result)
                 {
@@ -418,6 +419,7 @@ export module Clockworks
             {
                 result = `${minutes} ${locale.map("m(minutes)")}`;
             }
+            console.log({ timer, result, });
             return result;
             // const minutes = (timer / (60 * 1000));
             // return `${minutes} ${locale.map("m(minutes)")}`;
@@ -703,7 +705,7 @@ export module Clockworks
                     else
                     if (timer.endsWith("d"))
                     {
-                        return parseFloat(timer.substr(0, timer.length -1).trim()) +24 *60 *60 *1000;
+                        return parseFloat(timer.substr(0, timer.length -1).trim()) *24 *60 *60 *1000;
                     }
                     else
                     {

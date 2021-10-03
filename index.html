@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Oct 03 2021 14:44:42 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Oct 03 2021 15:38:38 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4244,20 +4244,20 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             Domain.makeMinutesTimerLabel = function (minutes) { return Domain.makeTimerLabel(minutes * 60 * 1000); };
             Domain.makeTimerLabel = function (timer) {
                 if (timer < 0) {
-                    return Domain.makeTimerLabel(-timer);
+                    return "-" + Domain.makeTimerLabel(-timer);
                 }
                 var days = Math.floor(timer / (24 * 60 * 60 * 1000));
                 var hours = Math.floor(timer / (60 * 60 * 1000)) % 24;
                 var minutes = Math.floor(timer / (60 * 1000)) % 60;
                 var seconds = Math.floor(timer / 1000) % 60;
-                var milliseconds = timer % 1000;
+                var milliseconds = Math.floor(timer) % 1000;
                 var result = "";
                 if ("" !== result || 0 < days) {
                     if ("" === result) {
-                        result = "" + days + locale.map("days");
+                        result = days + " " + locale.map("days");
                     }
                     else {
-                        result += " " + days + locale.map("days");
+                        result += " " + days + " " + locale.map("days");
                     }
                 }
                 if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
@@ -4280,6 +4280,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     var trail = "";
                     if (0 < milliseconds) {
                         trail = "." + ("00" + milliseconds).substr(-3);
+                        trail = trail.replace(/0+$/, "");
                     }
                     if ("" === result) {
                         result = "" + seconds + trail + " " + locale.map("seconds");
@@ -4291,6 +4292,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 if ("" === result) {
                     result = minutes + " " + locale.map("m(minutes)");
                 }
+                console.log({ timer: timer, result: result, });
                 return result;
                 // const minutes = (timer / (60 * 1000));
                 // return `${minutes} ${locale.map("m(minutes)")}`;
@@ -4511,7 +4513,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 return parseFloat(timer.substr(0, timer.length - 1).trim()) * 60 * 60 * 1000;
                             }
                             else if (timer.endsWith("d")) {
-                                return parseFloat(timer.substr(0, timer.length - 1).trim()) + 24 * 60 * 60 * 1000;
+                                return parseFloat(timer.substr(0, timer.length - 1).trim()) * 24 * 60 * 60 * 1000;
                             }
                             else {
                                 return parseInt(timer.trim());
