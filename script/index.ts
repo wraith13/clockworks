@@ -353,10 +353,74 @@ export module Clockworks
     {
         export const utcOffsetRate = 60 *1000;
         export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
-        export const makeTimerLabel = (timer: number) =>
+        export const makeTimerLabel = (timer: number): string =>
         {
-            const minutes = timer / (60 *1000);
-            return `${minutes} ${locale.map("m(minutes)")}`;
+            if (timer < 0)
+            {
+                return makeTimerLabel(-timer);
+            }
+            const days = Math.floor(timer / (24 * 60 * 60 * 1000));
+            const hours = Math.floor(timer / (60 * 60 * 1000)) % 24;
+            const minutes = Math.floor(timer / (60 * 1000)) % 60;
+            const seconds = Math.floor(timer / 1000) % 60;
+            const milliseconds = timer % 1000;
+            let result = "";
+            if ("" !== result || 0 < days)
+            {
+                if ("" === result)
+                {
+                    result = `${days}` +locale.map("days");
+                }
+                else
+                {
+                    result += ` ${days}` +locale.map("days");
+                }
+            }
+            if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours)
+            {
+                if ("" === result)
+                {
+                    result = `${hours} ` +locale.map("hours");
+                }
+                else
+                {
+                    result += ` ` +`0${hours}`.substr(-2) +` ` +locale.map("hours");
+                }
+            }
+            if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes)
+            {
+                if ("" === result)
+                {
+                    result = `${minutes} ` +locale.map("minutes");
+                }
+                else
+                {
+                    result += ` ` +`0${minutes}`.substr(-2) +` ` +locale.map("minutes");
+                }
+            }
+            if (0 < seconds || 0 < milliseconds)
+            {
+                let trail = "";
+                if (0 < milliseconds)
+                {
+                    trail = `.` +`00${milliseconds}`.substr(-3);
+                }
+                if ("" === result)
+                {
+                    result = `${seconds}${trail} ` +locale.map("seconds");
+                }
+                else
+                {
+                    result += ` ` +`0${seconds}`.substr(-2) +trail +` ` +locale.map("seconds");
+                }
+            }
+            if ("" === result)
+            {
+                result = `${minutes} ${locale.map("m(minutes)")}`;
+            }
+            return result;
+            // const minutes = (timer / (60 * 1000));
+            // return `${minutes} ${locale.map("m(minutes)")}`;
         };
         export const getTicks = (date: Date = new Date()) => date.getTime();
         export const getUTCTicks = (date: Date = new Date()) => getTicks(date) +(date.getTimezoneOffset() *utcOffsetRate);

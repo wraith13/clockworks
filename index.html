@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Oct 02 2021 01:20:04 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Oct 03 2021 14:44:42 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3808,7 +3808,10 @@ define("resource/lang.en", [], {
     "New Schedule": "New Schedule",
     "New Time zone": "New Time zone",
     "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
     "m(minutes)": "m",
+    "seconds": "seconds",
     "input a time": "input a time",
     "Timer": "timer",
     "No Flash": "No Flash",
@@ -3876,7 +3879,10 @@ define("resource/lang.ja", [], {
     "New Schedule": "新しい予定",
     "New Time zone": "新しいタイムゾーン",
     "days": "日",
+    "hours": "時間",
+    "minutes": "分",
     "m(minutes)": "分",
+    "seconds": "秒",
     "input a time": "時間を入力する",
     "Timer": "タイマー",
     "No Flash": "フラッシュなし",
@@ -4237,8 +4243,57 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             Domain.utcOffsetRate = 60 * 1000;
             Domain.makeMinutesTimerLabel = function (minutes) { return Domain.makeTimerLabel(minutes * 60 * 1000); };
             Domain.makeTimerLabel = function (timer) {
-                var minutes = timer / (60 * 1000);
-                return minutes + " " + locale.map("m(minutes)");
+                if (timer < 0) {
+                    return Domain.makeTimerLabel(-timer);
+                }
+                var days = Math.floor(timer / (24 * 60 * 60 * 1000));
+                var hours = Math.floor(timer / (60 * 60 * 1000)) % 24;
+                var minutes = Math.floor(timer / (60 * 1000)) % 60;
+                var seconds = Math.floor(timer / 1000) % 60;
+                var milliseconds = timer % 1000;
+                var result = "";
+                if ("" !== result || 0 < days) {
+                    if ("" === result) {
+                        result = "" + days + locale.map("days");
+                    }
+                    else {
+                        result += " " + days + locale.map("days");
+                    }
+                }
+                if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
+                    if ("" === result) {
+                        result = hours + " " + locale.map("hours");
+                    }
+                    else {
+                        result += " " + ("0" + hours).substr(-2) + " " + locale.map("hours");
+                    }
+                }
+                if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
+                    if ("" === result) {
+                        result = minutes + " " + locale.map("minutes");
+                    }
+                    else {
+                        result += " " + ("0" + minutes).substr(-2) + " " + locale.map("minutes");
+                    }
+                }
+                if (0 < seconds || 0 < milliseconds) {
+                    var trail = "";
+                    if (0 < milliseconds) {
+                        trail = "." + ("00" + milliseconds).substr(-3);
+                    }
+                    if ("" === result) {
+                        result = "" + seconds + trail + " " + locale.map("seconds");
+                    }
+                    else {
+                        result += " " + ("0" + seconds).substr(-2) + trail + " " + locale.map("seconds");
+                    }
+                }
+                if ("" === result) {
+                    result = minutes + " " + locale.map("m(minutes)");
+                }
+                return result;
+                // const minutes = (timer / (60 * 1000));
+                // return `${minutes} ${locale.map("m(minutes)")}`;
             };
             Domain.getTicks = function (date) {
                 if (date === void 0) { date = new Date(); }
