@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Oct 03 2021 15:38:38 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Oct 04 2021 22:15:47 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -4744,11 +4744,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     NeverStopwatch.removeStamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var urlParams, isOpend, backup, toast;
+                        var isOpend, backup, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            urlParams = Clockworks.getUrlParams(location.href)["item"];
-                            isOpend = !!urlParams;
+                            isOpend = !!Clockworks.getUrlHash(location.href).split("/")[1];
                             backup = Storage.NeverStopwatch.Stamps.get();
                             Storage.NeverStopwatch.Stamps.remove(tick);
                             if (isOpend) {
@@ -4978,11 +4977,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     CountdownTimer.removeAlarm = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var urlParams, isOpend, toast;
+                        var isOpend, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            urlParams = Clockworks.getUrlParams(location.href)["item"];
-                            isOpend = !!urlParams;
+                            isOpend = !!Clockworks.getUrlHash(location.href).split("/")[1];
                             Storage.CountdownTimer.Alarms.remove(item);
                             if (isOpend) {
                                 Clockworks.showUrl({ application: "CountdownTimer", });
@@ -5090,11 +5088,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         });
                     }); };
                     RainbowClock.remove = function (item, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                        var urlParams, isOpend, toast;
+                        var isOpend, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            urlParams = Clockworks.getUrlParams(location.href)["item"];
-                            isOpend = !!urlParams;
+                            isOpend = !!Clockworks.getUrlHash(location.href).split("/")[1];
                             Storage.RainbowClock.Timezone.remove(item);
                             if (isOpend) {
                                 Clockworks.showUrl({ application: "RainbowClock", });

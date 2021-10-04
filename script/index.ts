@@ -931,8 +931,8 @@ export module Clockworks
                 };
                 export const removeStamp = async (tick: number, onCanceled?: () => unknown) =>
                 {
-                    const urlParams = getUrlParams(location.href)["item"];
-                    const isOpend = !! urlParams;
+                    // const urlParams = getUrlParams(location.href)["item"];
+                    const isOpend = !! getUrlHash(location.href).split("/")[1];
                     const backup = Storage.NeverStopwatch.Stamps.get();
                     Storage.NeverStopwatch.Stamps.remove(tick);
                     if (isOpend)
@@ -1121,8 +1121,8 @@ export module Clockworks
                 };
                 export const removeAlarm = async (item: AlarmEntry, onCanceled?: () => unknown) =>
                 {
-                    const urlParams = getUrlParams(location.href)["item"];
-                    const isOpend = !! urlParams;
+                    // const urlParams = getUrlParams(location.href)["item"];
+                    const isOpend = !! getUrlHash(location.href).split("/")[1];
                     Storage.CountdownTimer.Alarms.remove(item);
                     if (isOpend)
                     {
@@ -1215,8 +1215,8 @@ export module Clockworks
                 };
                 export const remove = async (item: TimezoneEntry, onCanceled?: () => unknown) =>
                 {
-                    const urlParams = getUrlParams(location.href)["item"];
-                    const isOpend = !! urlParams;
+                    // const urlParams = getUrlParams(location.href)["item"];
+                    const isOpend = !! getUrlHash(location.href).split("/")[1];
                     Storage.RainbowClock.Timezone.remove(item);
                     if (isOpend)
                     {
