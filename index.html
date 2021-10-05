@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Oct 04 2021 22:15:47 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Oct 05 2021 10:04:31 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3831,6 +3831,7 @@ define("resource/lang.en", [], {
     "OK": "OK",
     "Cancel": "Cancel",
     "Edit": "Edit",
+    "Edit start time": "Edit start time",
     "Theme setting": "Theme setting",
     "theme.auto": "Auto ( Follows System )",
     "theme.light": "Light",
@@ -3902,6 +3903,7 @@ define("resource/lang.ja", [], {
     "OK": "OK",
     "Cancel": "キャンセル",
     "Edit": "編集",
+    "Edit start time": "起点編集",
     "Theme setting": "テーマ設定",
     "theme.auto": "自動 ( システムに従う )",
     "theme.light": "ライト",
@@ -4885,7 +4887,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             return [2 /*return*/];
                         });
                     }); };
-                    CountdownTimer.edit = function (item, title, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+                    CountdownTimer.edit = function (item, title, start, end, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
                         var oldSchedule, newSchedule, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
@@ -4893,7 +4895,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             newSchedule = {
                                 type: item.type,
                                 title: title,
-                                start: oldSchedule.start,
+                                start: start,
                                 end: end,
                             };
                             Storage.CountdownTimer.Alarms.remove(oldSchedule);
@@ -5965,6 +5967,62 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }
                 });
             }); };
+            Render.dateIimePrompt = function (message, tick) { return __awaiter(_this, void 0, void 0, function () {
+                var inputDate, inputTime;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            inputDate = Render.$make(HTMLInputElement)({
+                                tag: "input",
+                                type: "date",
+                                value: Domain.dateCoreStringFromTick(tick),
+                                required: "",
+                            });
+                            inputTime = Render.$make(HTMLInputElement)({
+                                tag: "input",
+                                type: "time",
+                                value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
+                                required: "",
+                            });
+                            return [4 /*yield*/, new Promise(function (resolve) {
+                                    var result = null;
+                                    var ui = Render.popup({
+                                        children: [
+                                            Render.$tag("h2")("")(message),
+                                            inputDate,
+                                            inputTime,
+                                            Render.$div("popup-operator")([
+                                                {
+                                                    tag: "button",
+                                                    className: "cancel-button",
+                                                    children: locale.map("Cancel"),
+                                                    onclick: function () {
+                                                        result = null;
+                                                        ui.close();
+                                                    },
+                                                },
+                                                {
+                                                    tag: "button",
+                                                    className: "default-button",
+                                                    children: locale.map("OK"),
+                                                    onclick: function () {
+                                                        var _a, _b;
+                                                        result = (_b = (_a = Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick;
+                                                        ui.close();
+                                                    },
+                                                },
+                                            ])
+                                        ],
+                                        onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                            return [2 /*return*/, resolve(result)];
+                                        }); }); },
+                                    });
+                                })];
+                        case 1: return [2 /*return*/, _a.sent()];
+                    }
+                });
+            }); };
             Render.timezonePrompt = function (message, title, offset) { return __awaiter(_this, void 0, void 0, function () {
                 var inputTitle, selectOffset;
                 var _this = this;
@@ -6401,30 +6459,56 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return __generator(this, function (_a) {
                     return [2 /*return*/, [
                             "schedule" === item.type ?
-                                Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
-                                    var result;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("Edit"), item.title, item.end)];
-                                            case 1:
-                                                result = _a.sent();
-                                                if (!(null !== result)) return [3 /*break*/, 4];
-                                                if (!(item.title !== result.title || item.end !== result.tick)) return [3 /*break*/, 4];
-                                                if (!(Domain.getTicks() < result.tick)) return [3 /*break*/, 3];
-                                                return [4 /*yield*/, Operate.CountdownTimer.edit(item, result.title, result.tick)];
-                                            case 2:
-                                                _a.sent();
-                                                return [3 /*break*/, 4];
-                                            case 3:
-                                                Render.makeToast({
-                                                    content: Render.label("A date and time outside the valid range was specified."),
-                                                    isWideContent: true,
-                                                });
-                                                _a.label = 4;
-                                            case 4: return [2 /*return*/];
-                                        }
-                                    });
-                                }); }) :
+                                [
+                                    Render.menuItem(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                        var result;
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Render.schedulePrompt(locale.map("Edit"), item.title, item.end)];
+                                                case 1:
+                                                    result = _a.sent();
+                                                    if (!(null !== result)) return [3 /*break*/, 4];
+                                                    if (!(item.title !== result.title || item.end !== result.tick)) return [3 /*break*/, 4];
+                                                    if (!(Domain.getTicks() < result.tick)) return [3 /*break*/, 3];
+                                                    return [4 /*yield*/, Operate.CountdownTimer.edit(item, result.title, item.start, result.tick)];
+                                                case 2:
+                                                    _a.sent();
+                                                    return [3 /*break*/, 4];
+                                                case 3:
+                                                    Render.makeToast({
+                                                        content: Render.label("A date and time outside the valid range was specified."),
+                                                        isWideContent: true,
+                                                    });
+                                                    _a.label = 4;
+                                                case 4: return [2 /*return*/];
+                                            }
+                                        });
+                                    }); }),
+                                    Render.menuItem(Render.label("Edit start time"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                        var result;
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0: return [4 /*yield*/, Render.dateIimePrompt(locale.map("Edit start time"), item.start)];
+                                                case 1:
+                                                    result = _a.sent();
+                                                    if (!(null !== result)) return [3 /*break*/, 4];
+                                                    if (!(item.start !== result)) return [3 /*break*/, 4];
+                                                    if (!(result < Domain.getTicks())) return [3 /*break*/, 3];
+                                                    return [4 /*yield*/, Operate.CountdownTimer.edit(item, item.title, result, item.end)];
+                                                case 2:
+                                                    _a.sent();
+                                                    return [3 /*break*/, 4];
+                                                case 3:
+                                                    Render.makeToast({
+                                                        content: Render.label("A date and time outside the valid range was specified."),
+                                                        isWideContent: true,
+                                                    });
+                                                    _a.label = 4;
+                                                case 4: return [2 /*return*/];
+                                            }
+                                        });
+                                    }); })
+                                ] :
                                 [],
                             Render.menuItem(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 switch (_a.label) {

@@ -1048,14 +1048,14 @@ export module Clockworks
                         ),
                     });
                 };
-                export const edit = async (item: AlarmScheduleEntry, title: string, end: number, onCanceled?: () => unknown) =>
+                export const edit = async (item: AlarmScheduleEntry, title: string, start: number, end: number, onCanceled?: () => unknown) =>
                 {
                     const oldSchedule = item;
                     const newSchedule: AlarmScheduleEntry =
                     {
                         type: item.type,
                         title,
-                        start: oldSchedule.start,
+                        start,
                         end,
                     };
                     Storage.CountdownTimer.Alarms.remove(oldSchedule);
@@ -1917,6 +1917,63 @@ export module Clockworks
                 }
             );
         };
+        export const dateIimePrompt = async (message: string, tick: number): Promise<number | null> =>
+        {
+            const inputDate = $make(HTMLInputElement)
+            ({
+                tag: "input",
+                type: "date",
+                value: Domain.dateCoreStringFromTick(tick),
+                required: "",
+            });
+            const inputTime = $make(HTMLInputElement)
+            ({
+                tag: "input",
+                type: "time",
+                value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
+                required: "",
+            });
+            return await new Promise
+            (
+                resolve =>
+                {
+                    let result: number | null = null;
+                    const ui = popup
+                    ({
+                        children:
+                        [
+                            $tag("h2")("")(message),
+                            inputDate,
+                            inputTime,
+                            $div("popup-operator")
+                            ([
+                                {
+                                    tag: "button",
+                                    className: "cancel-button",
+                                    children: locale.map("Cancel"),
+                                    onclick: () =>
+                                    {
+                                        result = null;
+                                        ui.close();
+                                    },
+                                },
+                                {
+                                    tag: "button",
+                                    className: "default-button",
+                                    children: locale.map("OK"),
+                                    onclick: () =>
+                                    {
+                                        result = Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick;
+                                        ui.close();
+                                    },
+                                },
+                            ])
+                        ],
+                        onClose: async () => resolve(result),
+                    });
+                }
+            );
+        };
         export const timezonePrompt = async (message: string, title: string, offset: number): Promise<{ title: string, offset: number } | null> =>
         {
             const inputTitle = $make(HTMLInputElement)
@@ -2295,32 +2352,60 @@ export module Clockworks
         export const alarmItemMenu = async (item: AlarmEntry) =>
         [
             "schedule" === item.type ?
-                menuItem
-                (
-                    label("Edit"),
-                    async () =>
-                    {
-                        const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
-                        if (null !== result)
+                [
+                    menuItem
+                    (
+                        label("Edit"),
+                        async () =>
                         {
-                            if (item.title !== result.title || item.end !== result.tick)
+                            const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
+                            if (null !== result)
                             {
-                                if (Domain.getTicks() < result.tick)
+                                if (item.title !== result.title || item.end !== result.tick)
                                 {
-                                    await Operate.CountdownTimer.edit(item, result.title, result.tick);
-                                }
-                                else
-                                {
-                                    makeToast
-                                    ({
-                                        content: label("A date and time outside the valid range was specified."),
-                                        isWideContent: true,
-                                    });
+                                    if (Domain.getTicks() < result.tick)
+                                    {
+                                        await Operate.CountdownTimer.edit(item, result.title, item.start, result.tick);
+                                    }
+                                    else
+                                    {
+                                        makeToast
+                                        ({
+                                            content: label("A date and time outside the valid range was specified."),
+                                            isWideContent: true,
+                                        });
+                                    }
                                 }
                             }
                         }
-                    }
-                ):
+                    ),
+                    menuItem
+                    (
+                        label("Edit start time"),
+                        async () =>
+                        {
+                            const result = await dateIimePrompt(locale.map("Edit start time"), item.start);
+                            if (null !== result)
+                            {
+                                if (item.start !== result)
+                                {
+                                    if (result < Domain.getTicks())
+                                    {
+                                        await Operate.CountdownTimer.edit(item, item.title, result, item.end);
+                                    }
+                                    else
+                                    {
+                                        makeToast
+                                        ({
+                                            content: label("A date and time outside the valid range was specified."),
+                                            isWideContent: true,
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    )
+                ]:
                 [],
             menuItem
             (

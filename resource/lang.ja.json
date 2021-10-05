@@ -32,6 +32,7 @@
     "OK": "OK",
     "Cancel": "キャンセル",
     "Edit": "編集",
+    "Edit start time": "起点編集",
     "Theme setting": "テーマ設定",
     "theme.auto": "自動 ( システムに従う )",
     "theme.light": "ライト",
