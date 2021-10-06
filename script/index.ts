@@ -119,6 +119,11 @@ export module Clockworks
         title: string;
         offset: number;
     }
+    export interface EventEntry
+    {
+        title: string;
+        tick: number;
+    }
     const setTitle = (title: string) =>
     {
         if (document.title !== title)
@@ -314,17 +319,17 @@ export module Clockworks
         export module ElapsedTimer
         {
             const applicationName = "ElapsedTimer";
-            export module Alarms
+            export module Events
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
-                export const get = (): AlarmScheduleEntry[] => minamo.localStorage.getOrNull<AlarmScheduleEntry[]>(makeKey()) ?? [];
-                export const set = (list: AlarmScheduleEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
+                export const get = (): EventEntry[] => minamo.localStorage.getOrNull<EventEntry[]>(makeKey()) ?? [];
+                export const set = (list: EventEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.tick)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (item: AlarmScheduleEntry | AlarmScheduleEntry[]) =>
+                export const add = (item: EventEntry | EventEntry[]) =>
                     set(get().concat(item));
-                export const remove = (item: AlarmScheduleEntry) =>
+                export const remove = (item: EventEntry) =>
                     set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
-                export const isSaved = (item: AlarmScheduleEntry) =>
+                export const isSaved = (item: EventEntry) =>
                     0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
             }
             export module flashInterval
@@ -833,6 +838,44 @@ export module Clockworks
         );
         // export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
         export const parseAlarm = (json: string): AlarmEntry | null => parseAlarmCore(parseOrNull(json));
+        export const parseEventCore = (item: any): EventEntry | null =>
+        {
+            if (null !== item && undefined !== item && "object" === typeof item)
+            {
+                if
+                (
+                    "string" === typeof item.title &&
+                    0 < item.title.trim().length &&
+                    "new" === item.start
+                )
+                {
+                    const result =
+                    {
+                        title: item.title.trim(),
+                        tick: getTicks(),
+                    };
+                    return result;
+                }
+                if
+                (
+                    "string" === typeof item.title &&
+                    0 < item.title.trim().length &&
+                    "number" === typeof item.tick
+                )
+                {
+                    const result =
+                    {
+                        title: item.title.trim(),
+                        tick: item.tick,
+                    };
+                    return result;
+                }
+            }
+            return null;
+        };
+        export const parseEvent = (json: string): EventEntry | null => parseEventCore(parseOrNull(json));
+
+
         export const parseTimezoneCore = (item: any): TimezoneEntry | null =>
         {
             if (null !== item && undefined !== item && "object" === typeof item)
@@ -1121,6 +1164,10 @@ export module Clockworks
                 export const done = async (item: AlarmEntry, onCanceled?: () => unknown) =>
                 {
                     Storage.CountdownTimer.Alarms.remove(item);
+                    if ("schedule" === item.type)
+                    {
+                        Storage.ElapsedTimer.Events.add({ title: item.title, tick: item.end, });
+                    }
                     const color = Storage.CountdownTimer.ColorIndex.get();
                     Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
                     updateWindow("operate");
@@ -1132,6 +1179,10 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.CountdownTimer.Alarms.add(item);
+                                if ("schedule" === item.type)
+                                {
+                                    Storage.ElapsedTimer.Events.remove({ title: item.title, tick: item.end, });
+                                }
                                 Storage.CountdownTimer.ColorIndex.set(color);
                                 updateWindow("operate");
                                 await toast.hide();
@@ -1200,6 +1251,123 @@ export module Clockworks
                     if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
                     {
                         Storage.CountdownTimer.Alarms.removeKey();
+                        updateWindow("operate");
+                        makePrimaryToast({ content: $span("")(`${locale.map("Removed all alarms!")}`), });
+                    }
+                };
+            }
+            export module ElapsedTimer
+            {
+                export const newEvent = async (title: string, tick: number, onCanceled?: () => unknown) =>
+                {
+                    const event: EventEntry =
+                    {
+                        title,
+                        tick,
+                    };
+                    Storage.ElapsedTimer.Events.add(event);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.ElapsedTimer.Events.remove(event);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const save = async (item: EventEntry, onCanceled?: () => unknown) =>
+                {
+                    Storage.ElapsedTimer.Events.add(item);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.ElapsedTimer.Events.remove(item);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const edit = async (item: EventEntry, title: string, tick: number, onCanceled?: () => unknown) =>
+                {
+                    const oldSchedule = item;
+                    const newSchedule: EventEntry =
+                    {
+                        title,
+                        tick,
+                    };
+                    Storage.ElapsedTimer.Events.remove(oldSchedule);
+                    Storage.ElapsedTimer.Events.add(newSchedule);
+                    updateWindow("operate");
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Saved!")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.ElapsedTimer.Events.remove(newSchedule);
+                                Storage.ElapsedTimer.Events.add(oldSchedule);
+                                updateWindow("operate");
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const removeEvent = async (item: EventEntry, onCanceled?: () => unknown) =>
+                {
+                    // const urlParams = getUrlParams(location.href)["item"];
+                    const isOpend = !! getUrlHash(location.href).split("/")[1];
+                    Storage.ElapsedTimer.Events.remove(item);
+                    if (isOpend)
+                    {
+                        showUrl({ application: "ElapsedTimer", });
+                    }
+                    else
+                    {
+                        updateWindow("operate");
+                    }
+                    const toast = makePrimaryToast
+                    ({
+                        content: $span("")(`${locale.map("Removed.")}`),
+                        backwardOperator: cancelTextButton
+                        (
+                            async () =>
+                            {
+                                Storage.ElapsedTimer.Events.add(item);
+                                if (isOpend)
+                                {
+                                    showUrl(makePageParams("ElapsedTimer", item));
+                                }
+                                else
+                                {
+                                    updateWindow("operate");
+                                }
+                                await toast.hide();
+                                onCanceled?.();
+                            }
+                        ),
+                    });
+                };
+                export const removeAllEvents = async () =>
+                {
+                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    {
+                        Storage.ElapsedTimer.Events.removeKey();
                         updateWindow("operate");
                         makePrimaryToast({ content: $span("")(`${locale.map("Removed all alarms!")}`), });
                     }
@@ -4345,7 +4513,7 @@ export module Clockworks
         export const onMouseUp = (_evnet: MouseEvent) => setTimeout(clearLastMouseDownTarget, 10);
         export const clearLastMouseDownTarget = () => lastMouseDownTarget = null;
     }
-    export type PageItemType = number | "new" | AlarmEntry | AlarmNewTimerEntry | TimezoneEntry;
+    export type PageItemType = number | "new" | AlarmEntry | AlarmNewTimerEntry | EventEntry | TimezoneEntry;
     export interface PageParams
     {
         application?: ApplicationType;
