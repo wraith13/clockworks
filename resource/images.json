@@ -2,6 +2,7 @@
     "application-icon": "./image/clockworks.1024.svg",
     "never-stopwatch-icon": "./image/never-stopwatch.1024.svg",
     "history-icon": "./image/history.1024.svg",
+    "elapsed-icon": "./image/elapsed.1024.svg",
     "ellipsis-icon": "./image/ellipsis.1024.svg",
     "cross-icon": "./image/cross.1024.svg",
     "check-icon": "./image/check.1024.svg",

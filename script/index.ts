@@ -56,6 +56,11 @@ export module Clockworks
             icon: "history-icon",
             title: "Countdown Timer",
         },
+        "ElapsedTimer": <ApplicationEntry>
+        {
+            icon: "elapsed-icon",
+            title: "Elapsed Timer",
+        },
         "NeverStopwatch": <ApplicationEntry>
         {
             icon: "never-stopwatch-icon",
@@ -229,7 +234,7 @@ export module Clockworks
                 export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
                 export const add = (tick: number | number[]) =>
-                    set(get().concat(tick).sort(simpleReverseComparer));
+                    set(get().concat(tick).sort(simpleReverseComparer).slice(0, 100));
                 export const remove = (tick: number) =>
                     set(get().filter(i => tick !== i).sort(simpleReverseComparer));
                 export const isSaved = (tick: number) => 0 <= get().indexOf(tick);
@@ -304,6 +309,41 @@ export module Clockworks
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:colorIndex`;
                 export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
                 export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+            }
+        }
+        export module ElapsedTimer
+        {
+            const applicationName = "ElapsedTimer";
+            export module Alarms
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
+                export const get = (): AlarmScheduleEntry[] => minamo.localStorage.getOrNull<AlarmScheduleEntry[]>(makeKey()) ?? [];
+                export const set = (list: AlarmScheduleEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
+                export const removeKey = () => minamo.localStorage.remove(makeKey());
+                export const add = (item: AlarmScheduleEntry | AlarmScheduleEntry[]) =>
+                    set(get().concat(item));
+                export const remove = (item: AlarmScheduleEntry) =>
+                    set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
+                export const isSaved = (item: AlarmScheduleEntry) =>
+                    0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
+            }
+            export module flashInterval
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
+                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
+            }
+            export module recentlyFlashInterval
+            {
+                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
+                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
+                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+                export const add = (value: number) => set
+                (
+                    [value].concat(get())
+                        .filter((i, ix, list) => ix === list.indexOf(i))
+                        .filter((_i, ix) => ix < config.recentlyFlashIntervalMaxHistory)
+                );
             }
         }
         export module RainbowClock
@@ -4499,6 +4539,19 @@ export module Clockworks
                 break;
             }
         case "CountdownTimer":
+            {
+                const item = Domain.parseAlarm(itemJson);
+                if (regulateLocation(applicationType, itemJson, item))
+                {
+                    await Render.showCountdownTimerScreen(item);
+                }
+                else
+                {
+                    return false;
+                }
+                break;
+            }
+        case "ElapsedTimer":
             {
                 const item = Domain.parseAlarm(itemJson);
                 if (regulateLocation(applicationType, itemJson, item))
