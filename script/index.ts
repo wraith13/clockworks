@@ -396,7 +396,8 @@ export module Clockworks
     }
     export module Domain
     {
-        export const flashIntervalPreset = config.flashIntervalPreset.map(i => i * 60 * 1000);
+        export const flashIntervalPreset = config.flashIntervalPreset.map(i => parseTimer(i));
+        export const timerPreset = config.timerPreset.map(i => parseTimer(i));
         export const utcOffsetRate = 60 *1000;
         // export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
         export const makeTimerLabel = (timer: number) =>
@@ -1983,7 +1984,7 @@ export module Clockworks
                 {
                     let result = false;
                     const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
-                    const timerPreset = config.timerPreset
+                    const timerPreset = Domain.timerPreset
                         .concat(Storage.CountdownTimer.recentlyTimer.get())
                         .sort(minamo.core.comparer.make([i => i]))
                         .filter((i, ix, list) => ix === list.indexOf(i));

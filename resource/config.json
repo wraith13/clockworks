@@ -13,8 +13,8 @@
         "#977E33", "#A16F39", "#A75F42", "#A9504E",
         "#A8445D", "#A23A6C", "#99347C", "#8C318A"
     ],
-    "flashIntervalPreset": [ 0, 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60 ],
-    "timerPreset": [ 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60 ],
+    "flashIntervalPreset": [ "0m", "1m", "2m", "3m", "4m", "5m", "6m", "10m", "12m", "15m", "20m", "30m", "60m" ],
+    "timerPreset": [ "1m", "2m", "3m", "4m", "5m", "6m", "10m", "12m", "15m", "20m", "30m", "60m" ],
     "recentlyFlashIntervalMaxHistory": 3,
     "recentlyTimerMaxHistory": 8,
     "theme":
