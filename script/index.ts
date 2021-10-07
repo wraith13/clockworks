@@ -1328,7 +1328,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const removeEvent = async (item: EventEntry, onCanceled?: () => unknown) =>
+                export const remove = async (item: EventEntry, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
                     const isOpend = !! getUrlHash(location.href).split("/")[1];
@@ -2058,7 +2058,7 @@ export module Clockworks
                 }
             );
         };
-        export const schedulePrompt = async (message: string, title: string, tick: number): Promise<{ title: string, tick: number } | null> =>
+        export const eventPrompt = async (message: string, title: string, tick: number): Promise<EventEntry | null> =>
         {
             const inputTitle = $make(HTMLInputElement)
             ({
@@ -2084,7 +2084,7 @@ export module Clockworks
             (
                 resolve =>
                 {
-                    let result: { title: string, tick: number } | null = null;
+                    let result: EventEntry | null = null;
                     const ui = popup
                     ({
                         children:
@@ -2567,7 +2567,7 @@ export module Clockworks
                         label("Edit"),
                         async () =>
                         {
-                            const result = await schedulePrompt(locale.map("Edit"), item.title, item.end);
+                            const result = await eventPrompt(locale.map("Edit"), item.title, item.end);
                             if (null !== result)
                             {
                                 if (item.title !== result.title || item.end !== result.tick)
@@ -2620,6 +2620,74 @@ export module Clockworks
             (
                 label("Remove"),
                 async () => await Operate.CountdownTimer.removeAlarm(item),
+                "delete-button"
+            )
+        ];
+        export const eventItem = async (item: EventEntry) => $div("event-item flex-item")
+        ([
+            $div("item-header")
+            ([
+                internalLink
+                ({
+                    className: "item-title",
+                    href: makePageParams("ElapsedTimer", item),
+                    children:
+                    [
+                        await Resource.loadSvgOrCache("tick-icon"),
+                        $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
+                    ]
+                }),
+                $div("item-operator")
+                ([
+                    await menuButton(await eventItemMenu(item)),
+                ]),
+            ]),
+            $div("item-information")
+            ([
+                $div("event-timestamp")
+                ([
+                    label("Due timestamp"),
+                    $span("value monospace")(Domain.dateFullStringFromTick(item.tick)),
+                ]),
+                $div("event-elapsed-time")
+                ([
+                    label("Rest"),
+                    $span("value monospace")(Domain.timeLongStringFromTick(Domain.getTicks() - item.tick)),
+                ]),
+            ]),
+        ]);
+        export const eventItemMenu = async (item: EventEntry) =>
+        [
+            menuItem
+            (
+                label("Edit"),
+                async () =>
+                {
+                    const result = await eventPrompt(locale.map("Edit"), item.title, item.tick);
+                    if (null !== result)
+                    {
+                        if (item.title !== result.title || item.tick !== result.tick)
+                        {
+                            if (result.tick < Domain.getTicks())
+                            {
+                                await Operate.ElapsedTimer.edit(item, result.title, result.tick);
+                            }
+                            else
+                            {
+                                makeToast
+                                ({
+                                    content: label("A date and time outside the valid range was specified."),
+                                    isWideContent: true,
+                                });
+                            }
+                        }
+                    }
+                }
+            ),
+            menuItem
+            (
+                label("Remove"),
+                async () => await Operate.ElapsedTimer.remove(item),
                 "delete-button"
             )
         ];
@@ -3617,7 +3685,7 @@ export module Clockworks
                             children: label("New Schedule"),
                             onclick: async () =>
                             {
-                                const result = await schedulePrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks());
+                                const result = await eventPrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks());
                                 if (result)
                                 {
                                     if (Domain.getTicks() < result.tick)
