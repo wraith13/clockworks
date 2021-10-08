@@ -39,36 +39,46 @@ export module locale
 export module Clockworks
 {
     export const applicationTitle = config.applicationTitle;
-    export interface ApplicationEntry
+    export interface ApplicationEntry<ItemType>
     {
         icon: Render.Resource.KeyType;
         title: string;
+        show: (item: ItemType) => Promise<unknown>;
+        parseItem: (json: string) => ItemType;
     }
-    export const application =
+    export const applicationList =
     {
-        "RainbowClock": <ApplicationEntry>
+        "RainbowClock": <ApplicationEntry<TimezoneEntry>>
         {
             icon: "tick-icon",
             title: "Rainbow Clock",
+            show: async item => await Render.showRainbowClockScreen(item),
+            parseItem: json => Domain.parseTimezone(json),
         },
-        "CountdownTimer": <ApplicationEntry>
+        "CountdownTimer": <ApplicationEntry<AlarmEntry>>
         {
             icon: "history-icon",
             title: "Countdown Timer",
+            show: async item => await Render.showCountdownTimerScreen(item),
+            parseItem: json => Domain.parseAlarm(json),
         },
-        "ElapsedTimer": <ApplicationEntry>
+        "ElapsedTimer": <ApplicationEntry<EventEntry>>
         {
             icon: "elapsed-icon",
             title: "Elapsed Timer",
+            show: async item => Render.showElapsedTimerScreen(item),
+            parseItem: json => Domain.parseEvent(json),
         },
-        "NeverStopwatch": <ApplicationEntry>
+        "NeverStopwatch": <ApplicationEntry<number>>
         {
             icon: "never-stopwatch-icon",
             title: "Never Stopwatch",
+            show: async item => Render.showNeverStopwatchScreen(item),
+            parseItem: json => Domain.parseStamp(json),
         },
     };
-    export type ApplicationType = keyof typeof application;
-    export const ApplicationList = Object.keys(application);
+    export type ApplicationType = keyof typeof applicationList;
+    export const applicationIdList = Object.keys(applicationList);
     export const themeObject =
     {
         "auto": null,
@@ -396,8 +406,8 @@ export module Clockworks
     }
     export module Domain
     {
-        export const flashIntervalPreset = config.flashIntervalPreset.map(i => parseTimer(i));
-        export const timerPreset = config.timerPreset.map(i => parseTimer(i));
+        export const getFlashIntervalPreset = () => config.flashIntervalPreset.map(i => parseTimer(i));
+        export const getTimerPreset = () => config.timerPreset.map(i => parseTimer(i));
         export const utcOffsetRate = 60 *1000;
         // export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
         export const makeTimerLabel = (timer: number) =>
@@ -1984,7 +1994,7 @@ export module Clockworks
                 {
                     let result = false;
                     const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
-                    const timerPreset = Domain.timerPreset
+                    const timerPreset = Domain.getTimerPreset()
                         .concat(Storage.CountdownTimer.recentlyTimer.get())
                         .sort(minamo.core.comparer.make([i => i]))
                         .filter((i, ix, list) => ix === list.indexOf(i));
@@ -2464,7 +2474,7 @@ export module Clockworks
                         await Resource.loadSvgOrCache("tick-icon"),
                         $div("tick-elapsed-time")
                         ([
-                            $span("value monospace")(label("elapsed time")),
+                            $span("value monospace")(label("Elapsed time")),
                         ]),
                     ]
                 }),
@@ -2647,12 +2657,12 @@ export module Clockworks
             ([
                 $div("event-timestamp")
                 ([
-                    label("Due timestamp"),
+                    label("Timestamp"),
                     $span("value monospace")(Domain.dateFullStringFromTick(item.tick)),
                 ]),
                 $div("event-elapsed-time")
                 ([
-                    label("Rest"),
+                    label("Elapsed time"),
                     $span("value monospace")(Domain.timeLongStringFromTick(Domain.getTicks() - item.tick)),
                 ]),
             ]),
@@ -2894,15 +2904,15 @@ export module Clockworks
         });
         export const screenHeaderApplicationSegment = async (applicationType: ApplicationType): Promise<HeaderSegmentSource> =>
         ({
-            icon: application[applicationType].icon,
-            title: application[applicationType].title,
+            icon: applicationList[applicationType].icon,
+            title: applicationList[applicationType].title,
             menu: await Promise.all
             (
-                ApplicationList.map
+                applicationIdList.map
                 (
                     async (i: ApplicationType) => menuLinkItem
                     (
-                        [ await Resource.loadSvgOrCache(application[i].icon), application[i].title, ],
+                        [ await Resource.loadSvgOrCache(applicationList[i].icon), applicationList[i].title, ],
                         { application: i },
                         applicationType === i ? "current-item": undefined,
                     )
@@ -2947,6 +2957,27 @@ export module Clockworks
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
                             makePageParams("CountdownTimer", i),
+                            JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
+                        )
+                    )
+            )
+        });
+        export const screenHeaderEventSegment = async (item: EventEntry | null, alarms: EventEntry[]): Promise<HeaderSegmentSource> =>
+        ({
+            icon: "tick-icon",
+            title: item.title,
+            menu: await Promise.all
+            (
+                alarms
+                    .concat([item])
+                    .sort(minamo.core.comparer.make([i => i.tick]))
+                    .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
+                    .map
+                    (
+                        async i => menuLinkItem
+                        (
+                            [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
+                            makePageParams("ElapsedTimer", i),
                             JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
@@ -3123,6 +3154,13 @@ export module Clockworks
                 async () => await Operate.CountdownTimer.removeAllAlarms(),
                 "delete-button"
             );
+        export const resetElapsedTimerMenuItem = async () =>
+            menuItem
+            (
+                label("Remove all alarms"),
+                async () => await Operate.ElapsedTimer.removeAllEvents(),
+                "delete-button"
+            );
         export const resetRainbowClockMenuItem = async () =>
             menuItem
             (
@@ -3212,7 +3250,7 @@ export module Clockworks
                             ]),
                             $div("button-list")
                             (
-                                ApplicationList.map
+                                applicationIdList.map
                                 (
                                     (i: ApplicationType) =>
                                     internalLink
@@ -3222,7 +3260,7 @@ export module Clockworks
                                         {
                                             tag: "button",
                                             className: "default-button main-button long-button",
-                                            children: labelSpan(application[i].title),
+                                            children: labelSpan(applicationList[i].title),
                                             // onclick: async () => await showNeverStopwatchScreen(),
                                         }
                                     }),
@@ -3331,7 +3369,7 @@ export module Clockworks
                             await screenHeaderFlashSegment
                             (
                                 Storage.NeverStopwatch.recentlyFlashInterval.add,
-                                Domain.flashIntervalPreset
+                                Domain.getFlashIntervalPreset()
                                     .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
                                     .sort(minamo.core.comparer.make([i => i]))
                                     .filter((i, ix, list) => ix === list.indexOf(i)),
@@ -3440,7 +3478,7 @@ export module Clockworks
         let previousPrimaryStep = 0;
         export const showNeverStopwatchScreen = async (item: number | null) =>
         {
-            const applicationTitle = application["NeverStopwatch"].title;
+            const applicationTitle = applicationList["NeverStopwatch"].title;
             document.body.classList.add("hide-scroll-bar");
             let ticks = Storage.NeverStopwatch.Stamps.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
@@ -3602,7 +3640,7 @@ export module Clockworks
                             await screenHeaderFlashSegment
                             (
                                 Storage.CountdownTimer.recentlyFlashInterval.add,
-                                Domain.flashIntervalPreset
+                                Domain.getFlashIntervalPreset()
                                     .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
                                     .sort(minamo.core.comparer.make([i => i]))
                                     .filter((i, ix, list) => ix === list.indexOf(i)),
@@ -3748,7 +3786,7 @@ export module Clockworks
         });
         export const showCountdownTimerScreen = async (item: AlarmEntry | null) =>
         {
-            const applicationTitle = application["CountdownTimer"].title;
+            const applicationTitle = applicationList["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
             let alarms = Storage.CountdownTimer.Alarms.get();
             let lashFlashAt = 0;
@@ -3854,6 +3892,272 @@ export module Clockworks
             await showWindow(await countdownTimerScreen(item, alarms), updateWindow);
             await updateWindow("timer");
         };
+        export const elapsedTimerScreenMenu = async () =>
+        [
+            await fullscreenMenuItem(),
+            await themeMenuItem(),
+            await progressBarStyleMenuItem(),
+            await languageMenuItem(),
+            await resetElapsedTimerMenuItem(),
+            await githubMenuItem(),
+        ];
+        export const elapsedTimerScreenBody = async (item: EventEntry | null, events: EventEntry[]) =>
+        ([
+            $div("primary-page")
+            ([
+                $div("page-body")
+                ([
+                    $div("main-panel")
+                    ([
+                        (item ?? events[0]) ?
+                            $div("current-item event-item")
+                            ([
+                                (item ?? events[0]) ?
+                                [
+                                    $div("current-title")
+                                    ([
+                                        $span("value monospace")((item ?? events[0]).title),
+                                    ]),
+                                    $div("current-due-timestamp")
+                                    ([
+                                        $span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
+                                    ]),
+                                ]: [],
+                                $div("capital-interval")
+                                ([
+                                    $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                ]),
+                                $div("current-timestamp")
+                                ([
+                                    $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                ]),
+                            ]):
+                            $div("current-item")
+                            ([
+                                $div("capital-interval")
+                                ([
+                                    $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                ]),
+                                $div("current-timestamp")
+                                ([
+                                    $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                ]),
+                            ]),
+                        await flashIntervalLabel
+                        (
+                            await screenHeaderFlashSegment
+                            (
+                                Storage.ElapsedTimer.recentlyFlashInterval.add,
+                                Domain.getFlashIntervalPreset()
+                                    .concat(Storage.ElapsedTimer.recentlyFlashInterval.get())
+                                    .sort(minamo.core.comparer.make([i => i]))
+                                    .filter((i, ix, list) => ix === list.indexOf(i)),
+                                Storage.ElapsedTimer.flashInterval.get(),
+                                Storage.ElapsedTimer.flashInterval.set,
+                                "flash-icon",
+                                "00:00:00 only"
+                            )
+                        ),
+                    ]),
+                ]),
+                $div("page-footer")
+                ([
+                    null !== item ?
+                        $div("button-list")
+                        ([
+                            internalLink
+                            ({
+                                href: { application: "CountdownTimer", },
+                                children:
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "閉じる / Close",
+                                }
+                            }),
+                            Storage.ElapsedTimer.Events.isSaved(item) ?
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "シェア / Share",
+                                    onclick: async () => await sharePopup(item.title),
+                                }:
+                                {
+                                    tag: "button",
+                                    className: "main-button long-button",
+                                    children: "保存 / Save",
+                                    onclick: async () => await Operate.ElapsedTimer.save(item),
+                                }
+                        ]):
+                        await downPageLink(),
+                ]),
+            ]),
+            null !== item ?
+                []:
+                $div("trail-page")
+                ([
+                    $div("button-list")
+                    ([
+                        {
+                            tag: "button",
+                            className: "main-button long-button",
+                            children: label("New Event"),
+                            onclick: async () =>
+                            {
+                                const result = await eventPrompt(locale.map("New Event"), locale.map("New Event"), Domain.getAppropriateTicks());
+                                if (result)
+                                {
+                                    if (Domain.getTicks() < result.tick)
+                                    {
+                                        await Operate.ElapsedTimer.newEvent(result.title, result.tick);
+                                    }
+                                    else
+                                    {
+                                        makeToast
+                                        ({
+                                            content: label("A date and time outside the valid range was specified."),
+                                            isWideContent: true,
+                                        });
+                                    }
+                                }
+                            }
+                        },
+                    ]),
+                    $div("row-flex-list event-list")
+                    (
+                        await Promise.all(events.map(item => eventItem(item)))
+                    ),
+                    $div("description")
+                    (
+                        $tag("ul")("locale-parallel-off")
+                        ([
+                            $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                            $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        ])
+                    ),
+                ]),
+            screenBar(),
+        ]);
+        export const elapsedTimerScreen = async (item: EventEntry | null, events: EventEntry[]): Promise<ScreenSource> =>
+        ({
+            className: "elapsed-timer-screen",
+            header: null === item ?
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment(),
+                    await screenHeaderApplicationSegment("ElapsedTimer"),
+                ],
+                menu: countdownTimerScreenMenu,
+                parent: { },
+            }:
+            {
+                items:
+                [
+                    await screenHeaderHomeSegment(),
+                    await screenHeaderApplicationSegment("ElapsedTimer"),
+                    await screenHeaderEventSegment(item, events),
+                ],
+                menu: Storage.ElapsedTimer.Events.isSaved(item) ? () => eventItemMenu(item): undefined,
+                parent: { application: "ElapsedTimer" },
+            },
+            body: await elapsedTimerScreenBody(item, events)
+        });
+        export const showElapsedTimerScreen = async (item: EventEntry | null) =>
+        {
+            const applicationTitle = applicationList["ElapsedTimer"].title;
+            document.body.classList.add("hide-scroll-bar");
+            let events = Storage.ElapsedTimer.Events.get();
+            const updateWindow = async (event: UpdateWindowEventEype) =>
+            {
+                const screen = document.getElementById("screen") as HTMLDivElement;
+                const now = new Date();
+                const tick = Domain.getTicks(now);
+                const current = item ?? events[0] ?? null;
+                const flashInterval = Storage.ElapsedTimer.flashInterval.get();
+                switch(event)
+                {
+                    case "high-resolution-timer":
+                        (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(tick -(current?.tick ?? tick));
+                        const capitalTime = Domain.dateStringFromTick(tick);
+                        const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
+                        minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
+                        if (0 < flashInterval && null !== current)
+                        {
+                            const elapsed = tick -current.tick;
+                            const unit = flashInterval; // *60 *1000;
+                            const primaryStep = Math.floor(elapsed / unit);
+                            if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
+                            {
+                                screenFlash();
+                            }
+                            const currentColor = getSolidRainbowColor(primaryStep);
+                            setFoundationColor(currentColor);
+                            previousPrimaryStep = primaryStep;
+                            const rate = ((tick -current.tick) %unit) /unit;
+                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            setScreenBarProgress(rate, nextColor);
+                            // setBodyColor(nextColor);
+                            getHeaderElement().classList.add("with-screen-prgress");
+                        }
+                        else
+                        {
+                            previousPrimaryStep = 0;
+                            setScreenBarProgress(null);
+                            getHeaderElement().classList.remove("with-screen-prgress");
+                            const currentColor = getSolidRainbowColor(0);
+                            setFoundationColor(currentColor);
+                            // setBodyColor(currentColor);
+                        }
+                        break;
+                    case "timer":
+                        setTitle(Domain.timeShortStringFromTick(tick -(current?.tick ?? tick)) +" - " +applicationTitle);
+                        const eventListDiv = minamo.dom.getDivsByClassName(screen, "event-list")[0];
+                        if (eventListDiv)
+                        {
+                            minamo.dom.getChildNodes<HTMLDivElement>(eventListDiv)
+                            .forEach
+                            (
+                                (dom, index) =>
+                                {
+                                    (dom.getElementsByClassName("event-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
+                                        Domain.timeShortStringFromTick(tick -events[index].tick);
+                                }
+                            );
+                        }
+                        if (0 < flashInterval && 0 < events.length)
+                        {
+                            const elapsed = Domain.getTicks() -current.tick;
+                            const unit = flashInterval; // *60 *1000;
+                            const primaryStep = Math.floor(elapsed / unit);
+                            const currentColor = getSolidRainbowColor(primaryStep);
+                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const rate = ((Domain.getTicks() -current.tick) %unit) /unit;
+                            setBodyColor(mixColors(currentColor, nextColor, rate));
+                        }
+                        else
+                        {
+                            const currentColor = getSolidRainbowColor(0);
+                            setBodyColor(currentColor);
+                        }
+                        break;
+                    case "storage":
+                        await reload();
+                        break;
+                    case "operate":
+                        previousPrimaryStep = 0;
+                        events = Storage.ElapsedTimer.Events.get();
+                        replaceScreenBody(await elapsedTimerScreenBody(item, events));
+                        resizeFlexList();
+                        await updateWindow("timer");
+                        await Render.scrollToOffset(document.getElementById("screen-body"), 0);
+                        adjustPageFooterPosition();
+                        break;
+                }
+            };
+            await showWindow(await elapsedTimerScreen(item, events), updateWindow);
+            await updateWindow("timer");
+        };
         export const colorMenuItem = async () =>
             menuItem
             (
@@ -3922,7 +4226,7 @@ export module Clockworks
                             await screenHeaderFlashSegment
                             (
                                 null,
-                                Domain.flashIntervalPreset,
+                                Domain.getFlashIntervalPreset(),
                                     // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
                                     // .sort(minamo.core.comparer.make([i => i]))
                                     // .filter((i, ix, list) => ix === list.indexOf(i)),
@@ -4026,7 +4330,7 @@ export module Clockworks
         });
         export const showRainbowClockScreen = async (item: TimezoneEntry | null) =>
         {
-            const applicationTitle = application["RainbowClock"].title;
+            const applicationTitle = applicationList["RainbowClock"].title;
             document.body.classList.add("hide-scroll-bar");
             let timezones = Storage.RainbowClock.Timezone.get();
             const updateWindow = async (event: UpdateWindowEventEype) =>
@@ -4760,64 +5064,19 @@ export module Clockworks
         const hash = getUrlHash(url).split("/");
         const applicationType = hash[0] as ApplicationType;
         const itemJson = hash[1];
-        switch(applicationType)
+        const application = applicationList[applicationType] ??
         {
-        case "NeverStopwatch":
-            {
-                const item = Domain.parseStamp(itemJson);
-                if (regulateLocation(applicationType, itemJson, item))
-                {
-                    await Render.showNeverStopwatchScreen(item);
-                }
-                else
-                {
-                    return false;
-                }
-                break;
-            }
-        case "CountdownTimer":
-            {
-                const item = Domain.parseAlarm(itemJson);
-                if (regulateLocation(applicationType, itemJson, item))
-                {
-                    await Render.showCountdownTimerScreen(item);
-                }
-                else
-                {
-                    return false;
-                }
-                break;
-            }
-        case "ElapsedTimer":
-            {
-                const item = Domain.parseAlarm(itemJson);
-                if (regulateLocation(applicationType, itemJson, item))
-                {
-                    await Render.showCountdownTimerScreen(item);
-                }
-                else
-                {
-                    return false;
-                }
-                break;
-            }
-        case "RainbowClock":
-            {
-                const item = Domain.parseTimezone(itemJson);
-                if (regulateLocation(applicationType, itemJson, item))
-                {
-                    await Render.showRainbowClockScreen(item);
-                }
-                else
-                {
-                    return false;
-                }
-                break;
-            }
-            break;
-        default:
-            await Render.showWelcomeScreen();
-            break;
+            show: async () => await Render.showWelcomeScreen(),
+            parseItem: () => null,
+        };
+        const item = application.parseItem(itemJson);
+        if (regulateLocation(applicationType, itemJson, item))
+        {
+            await application.show(item);
+        }
+        else
+        {
+            return false;
         }
         return true;
     };
@@ -4826,7 +5085,7 @@ export module Clockworks
         const url = makeUrl(data);
         if (await showPage(url))
         {
-            history.pushState(null, application[data.application]?.title ?? applicationTitle, url);
+            history.pushState(null, applicationList[data.application]?.title ?? applicationTitle, url);
         }
     };
     export const rewriteShowUrl = async (data: PageParams) =>
@@ -4834,7 +5093,7 @@ export module Clockworks
         const url = makeUrl(data);
         if (await showPage(url))
         {
-            history.replaceState(null, application[data.application]?.title ?? applicationTitle, url);
+            history.replaceState(null, applicationList[data.application]?.title ?? applicationTitle, url);
         }
     };
     export const reload = async () => await showPage();
