@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Oct 08 2021 00:21:44 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Oct 08 2021 22:31:06 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3799,74 +3799,6 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
         })(dom = minamo.dom || (minamo.dom = {}));
     })(minamo = exports.minamo || (exports.minamo = {}));
 });
-define("resource/config", [], {
-    "applicationTitle": "Clockworks",
-    "localDbPrefix": "clockworks",
-    "repositoryUrl": "https://github.com/wraith13/clockworks/",
-    "rainbowColorSetDefaultIndex": 2,
-    "rainbowColorSetSolidIndexRate": 7,
-    "rainbowColorSet": [
-        "#7E3397", "#6F39A1", "#5F42A7", "#504EA9",
-        "#445DA8", "#3A6CA2", "#347C99", "#318A8C",
-        "#33977E", "#39A16F", "#42A75F", "#4EA950",
-        "#5DA844", "#6CA23A", "#7C9934", "#8A8C31",
-        "#977E33", "#A16F39", "#A75F42", "#A9504E",
-        "#A8445D", "#A23A6C", "#99347C", "#8C318A"
-    ],
-    "flashIntervalPreset": ["0m", "1m", "2m", "3m", "4m", "5m", "6m", "10m", "12m", "15m", "20m", "30m", "60m"],
-    "timerPreset": ["1m", "2m", "3m", "4m", "5m", "6m", "10m", "12m", "15m", "20m", "30m", "60m"],
-    "recentlyFlashIntervalMaxHistory": 3,
-    "recentlyTimerMaxHistory": 8,
-    "theme": {
-        "original": {
-            "@main-color": "#000022",
-            "@base-color": "#FFFFFF",
-            "@accent-color": "#5F42A7",
-            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
-        },
-        "light": {
-            "@main-color": "#000022",
-            "@base-color": "#FFFFFF",
-            "@accent-color": "#5F42A7",
-            "::-webkit-calendar-picker-indicator": ".dummy-invalid-class"
-        },
-        "dark": {
-            "@main-color": "#FFFFFF",
-            "@base-color": "#000022",
-            "@accent-color": "#5F42A7",
-            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
-        }
-    },
-    "timezoneOffsetList": [
-        -840, -780, -765, -720, -660, -630, -600, -570, -540, -525, -480, -420, -390, -360, -345, -330, -300, -270, -240, -210, -180, -120, -60, 0, 60, 120, 180, 210, 240, 300, 360, 420, 480, 540, 570, 600, 660, 720
-    ],
-    "initialTimezoneList": [
-        {
-            "title": "timezone.Tokyo",
-            "offset": -540
-        },
-        {
-            "title": "timezone.Delhi",
-            "offset": -330
-        },
-        {
-            "title": "timezone.Istanbul",
-            "offset": -180
-        },
-        {
-            "title": "timezone.London",
-            "offset": 0
-        },
-        {
-            "title": "timezone.New York",
-            "offset": 300
-        },
-        {
-            "title": "timezone.Seattle",
-            "offset": 480
-        }
-    ]
-});
 define("resource/lang.en", [], {
     "$name": "English",
     "Full screen": "Full screen",
@@ -4013,30 +3945,12 @@ define("resource/lang.ja", [], {
     "timezone.New York": "ニューヨーク",
     "timezone.Seattle": "シアトル"
 });
-define("resource/images", [], {
-    "application-icon": "./image/clockworks.1024.svg",
-    "never-stopwatch-icon": "./image/never-stopwatch.1024.svg",
-    "history-icon": "./image/history.1024.svg",
-    "elapsed-icon": "./image/elapsed.1024.svg",
-    "ellipsis-icon": "./image/ellipsis.1024.svg",
-    "cross-icon": "./image/cross.1024.svg",
-    "check-icon": "./image/check.1024.svg",
-    "flash-icon": "./image/sun.1024.svg",
-    "sleep-icon": "./image/moon.1024.svg",
-    "tick-icon": "./image/tick.1024.svg",
-    "pin-icon": "./image/pin.1024.svg",
-    "down-triangle-icon": "./image/down-triangle.1024.svg"
-});
-define("script/index", ["require", "exports", "script/minamo.js/index", "resource/config", "resource/lang.en", "resource/lang.ja"], function (require, exports, minamo_js_1, config_json_1, lang_en_json_1, lang_ja_json_1) {
+define("script/locale/index", ["require", "exports", "resource/lang.en", "resource/lang.ja"], function (require, exports, lang_en_json_1, lang_ja_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Clockworks = exports.locale = exports.simpleReverseComparer = exports.simpleComparer = void 0;
-    config_json_1 = __importDefault(config_json_1);
+    exports.locale = void 0;
     lang_en_json_1 = __importDefault(lang_en_json_1);
     lang_ja_json_1 = __importDefault(lang_ja_json_1);
-    exports.simpleComparer = minamo_js_1.minamo.core.comparer.basic;
-    var simpleReverseComparer = function (a, b) { return -exports.simpleComparer(a, b); };
-    exports.simpleReverseComparer = simpleReverseComparer;
     var locale;
     (function (locale_1) {
         locale_1.master = {
@@ -4061,6 +3975,97 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
         locale_1.map = function (key) { return locale_1.string(key); };
         locale_1.parallel = function (key) { return locale_1.getPrimary(key) + " / " + locale_1.getSecondary(key); };
     })(locale = exports.locale || (exports.locale = {}));
+});
+define("resource/config", [], {
+    "applicationTitle": "Clockworks",
+    "localDbPrefix": "clockworks",
+    "repositoryUrl": "https://github.com/wraith13/clockworks/",
+    "rainbowColorSetDefaultIndex": 2,
+    "rainbowColorSetSolidIndexRate": 7,
+    "rainbowColorSet": [
+        "#7E3397", "#6F39A1", "#5F42A7", "#504EA9",
+        "#445DA8", "#3A6CA2", "#347C99", "#318A8C",
+        "#33977E", "#39A16F", "#42A75F", "#4EA950",
+        "#5DA844", "#6CA23A", "#7C9934", "#8A8C31",
+        "#977E33", "#A16F39", "#A75F42", "#A9504E",
+        "#A8445D", "#A23A6C", "#99347C", "#8C318A"
+    ],
+    "flashIntervalPreset": ["0m", "1m", "2m", "3m", "4m", "5m", "6m", "10m", "12m", "15m", "20m", "30m", "60m"],
+    "timerPreset": ["1m", "2m", "3m", "4m", "5m", "6m", "10m", "12m", "15m", "20m", "30m", "60m"],
+    "recentlyFlashIntervalMaxHistory": 3,
+    "recentlyTimerMaxHistory": 8,
+    "theme": {
+        "original": {
+            "@main-color": "#000022",
+            "@base-color": "#FFFFFF",
+            "@accent-color": "#5F42A7",
+            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
+        },
+        "light": {
+            "@main-color": "#000022",
+            "@base-color": "#FFFFFF",
+            "@accent-color": "#5F42A7",
+            "::-webkit-calendar-picker-indicator": ".dummy-invalid-class"
+        },
+        "dark": {
+            "@main-color": "#FFFFFF",
+            "@base-color": "#000022",
+            "@accent-color": "#5F42A7",
+            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
+        }
+    },
+    "timezoneOffsetList": [
+        -840, -780, -765, -720, -660, -630, -600, -570, -540, -525, -480, -420, -390, -360, -345, -330, -300, -270, -240, -210, -180, -120, -60, 0, 60, 120, 180, 210, 240, 300, 360, 420, 480, 540, 570, 600, 660, 720
+    ],
+    "initialTimezoneList": [
+        {
+            "title": "timezone.Tokyo",
+            "offset": -540
+        },
+        {
+            "title": "timezone.Delhi",
+            "offset": -330
+        },
+        {
+            "title": "timezone.Istanbul",
+            "offset": -180
+        },
+        {
+            "title": "timezone.London",
+            "offset": 0
+        },
+        {
+            "title": "timezone.New York",
+            "offset": 300
+        },
+        {
+            "title": "timezone.Seattle",
+            "offset": 480
+        }
+    ]
+});
+define("resource/images", [], {
+    "application-icon": "./image/clockworks.1024.svg",
+    "never-stopwatch-icon": "./image/never-stopwatch.1024.svg",
+    "history-icon": "./image/history.1024.svg",
+    "elapsed-icon": "./image/elapsed.1024.svg",
+    "ellipsis-icon": "./image/ellipsis.1024.svg",
+    "cross-icon": "./image/cross.1024.svg",
+    "check-icon": "./image/check.1024.svg",
+    "flash-icon": "./image/sun.1024.svg",
+    "sleep-icon": "./image/moon.1024.svg",
+    "tick-icon": "./image/tick.1024.svg",
+    "pin-icon": "./image/pin.1024.svg",
+    "down-triangle-icon": "./image/down-triangle.1024.svg"
+});
+define("script/index", ["require", "exports", "script/minamo.js/index", "script/locale/index", "resource/config"], function (require, exports, minamo_js_1, locale_2, config_json_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Clockworks = exports.simpleReverseComparer = exports.simpleComparer = void 0;
+    config_json_1 = __importDefault(config_json_1);
+    exports.simpleComparer = minamo_js_1.minamo.core.comparer.basic;
+    var simpleReverseComparer = function (a, b) { return -exports.simpleComparer(a, b); };
+    exports.simpleReverseComparer = simpleReverseComparer;
     var Clockworks;
     (function (Clockworks) {
         var _this = this;
@@ -4350,7 +4355,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     Timezone.makeKey = function () { return config_json_1.default.localDbPrefix + ":" + applicationName + ":timezones"; };
                     Timezone.get = function () {
                         var _a;
-                        return (_a = minamo_js_1.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_1.default.initialTimezoneList.map(function (i) { return ({ title: locale.map(i.title), offset: i.offset }); });
+                        return (_a = minamo_js_1.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_1.default.initialTimezoneList.map(function (i) { return ({ title: locale_2.locale.map(i.title), offset: i.offset }); });
                     };
                     Timezone.set = function (list) { return minamo_js_1.minamo.localStorage.set(Timezone.makeKey(), list.sort(minamo_js_1.minamo.core.comparer.make([function (i) { return i.offset; }]))); };
                     Timezone.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Timezone.makeKey()); };
@@ -4392,26 +4397,26 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 var result = "";
                 if ("" !== result || 0 < days) {
                     if ("" === result) {
-                        result = days + " " + locale.map("days");
+                        result = days + " " + locale_2.locale.map("days");
                     }
                     else {
-                        result += " " + days + " " + locale.map("days");
+                        result += " " + days + " " + locale_2.locale.map("days");
                     }
                 }
                 if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
                     if ("" === result) {
-                        result = hours + " " + locale.map("hours");
+                        result = hours + " " + locale_2.locale.map("hours");
                     }
                     else {
-                        result += " " + ("0" + hours).substr(-2) + " " + locale.map("hours");
+                        result += " " + ("0" + hours).substr(-2) + " " + locale_2.locale.map("hours");
                     }
                 }
                 if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
                     if ("" === result) {
-                        result = minutes + " " + locale.map("minutes");
+                        result = minutes + " " + locale_2.locale.map("minutes");
                     }
                     else {
-                        result += " " + ("0" + minutes).substr(-2) + " " + locale.map("minutes");
+                        result += " " + ("0" + minutes).substr(-2) + " " + locale_2.locale.map("minutes");
                     }
                 }
                 if (0 < seconds || 0 < milliseconds) {
@@ -4421,14 +4426,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                         trail = trail.replace(/0+$/, "");
                     }
                     if ("" === result) {
-                        result = "" + seconds + trail + " " + locale.map("seconds");
+                        result = "" + seconds + trail + " " + locale_2.locale.map("seconds");
                     }
                     else {
-                        result += " " + ("0" + seconds).substr(-2) + trail + " " + locale.map("seconds");
+                        result += " " + ("0" + seconds).substr(-2) + trail + " " + locale_2.locale.map("seconds");
                     }
                 }
                 if ("" === result) {
-                    result = minutes + " " + locale.map("m(minutes)");
+                    result = minutes + " " + locale_2.locale.map("m(minutes)");
                 }
                 console.log({ timer: timer, result: result, });
                 return result;
@@ -4453,7 +4458,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 return FloorHour.getTime() + (60 * 60 * 1000);
             };
             Domain.weekday = function (tick) {
-                return new Intl.DateTimeFormat(locale.get(), { weekday: 'long' }).format(tick);
+                return new Intl.DateTimeFormat(locale_2.locale.get(), { weekday: 'long' }).format(tick);
             };
             Domain.dateCoreStringFromTick = function (tick) {
                 if (null === tick) {
@@ -4560,7 +4565,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     if (days < 1) {
                         return Domain.timeLongCoreStringFromTick(tick);
                     }
-                    return days.toLocaleString() + " " + locale.map("days") + " " + Domain.timeLongCoreStringFromTick(tick);
+                    return days.toLocaleString() + " " + locale_2.locale.map("days") + " " + Domain.timeLongCoreStringFromTick(tick);
                 }
             };
             Domain.timeLongStringFromTick = function (tick) {
@@ -4573,7 +4578,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 else {
                     var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                     return 0 < days ?
-                        days.toLocaleString() + " " + locale.map("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
+                        days.toLocaleString() + " " + locale_2.locale.map("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
                         Domain.timeFullCoreStringFromTick(tick);
                 }
             };
@@ -4831,7 +4836,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.NeverStopwatch.Stamps.add(tick);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Stamped!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Stamped!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -4858,7 +4863,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.NeverStopwatch.Stamps.add(tick);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -4886,7 +4891,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.NeverStopwatch.Stamps.add(newTick);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Updated.")),
+                                content: Render.$span("")("" + locale_2.locale.map("Updated.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -4919,7 +4924,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 Render.updateWindow("operate");
                             }
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Removed.")),
+                                content: Render.$span("")("" + locale_2.locale.map("Removed.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -4945,10 +4950,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }); };
                     NeverStopwatch.removeAllStamps = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
-                            if (Render.systemConfirm(locale.map("This action cannot be undone. Do you want to continue?"))) {
+                            if (Render.systemConfirm(locale_2.locale.map("This action cannot be undone. Do you want to continue?"))) {
                                 Storage.NeverStopwatch.Stamps.removeKey();
                                 Render.updateWindow("operate");
-                                Render.makePrimaryToast({ content: Render.$span("")("" + locale.map("Removed all stamps!")), });
+                                Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.locale.map("Removed all stamps!")), });
                             }
                             return [2 /*return*/];
                         });
@@ -4970,7 +4975,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5002,7 +5007,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5028,7 +5033,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.Alarms.add(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5062,7 +5067,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.Alarms.add(newSchedule);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5094,7 +5099,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_1.default.rainbowColorSet.length);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Done!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Done!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5125,7 +5130,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_1.default.rainbowColorSet.length);
                             Clockworks.showUrl({ application: "CountdownTimer", });
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Done!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Done!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5157,7 +5162,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 Render.updateWindow("operate");
                             }
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Removed.")),
+                                content: Render.$span("")("" + locale_2.locale.map("Removed.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5183,10 +5188,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }); };
                     CountdownTimer.removeAllAlarms = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
-                            if (Render.systemConfirm(locale.map("This action cannot be undone. Do you want to continue?"))) {
+                            if (Render.systemConfirm(locale_2.locale.map("This action cannot be undone. Do you want to continue?"))) {
                                 Storage.CountdownTimer.Alarms.removeKey();
                                 Render.updateWindow("operate");
-                                Render.makePrimaryToast({ content: Render.$span("")("" + locale.map("Removed all alarms!")), });
+                                Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.locale.map("Removed all alarms!")), });
                             }
                             return [2 /*return*/];
                         });
@@ -5206,7 +5211,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.ElapsedTimer.Events.add(event);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5232,7 +5237,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.ElapsedTimer.Events.add(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5264,7 +5269,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.ElapsedTimer.Events.add(newSchedule);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5297,7 +5302,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 Render.updateWindow("operate");
                             }
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Removed.")),
+                                content: Render.$span("")("" + locale_2.locale.map("Removed.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5323,10 +5328,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }); };
                     ElapsedTimer.removeAllEvents = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
-                            if (Render.systemConfirm(locale.map("This action cannot be undone. Do you want to continue?"))) {
+                            if (Render.systemConfirm(locale_2.locale.map("This action cannot be undone. Do you want to continue?"))) {
                                 Storage.ElapsedTimer.Events.removeKey();
                                 Render.updateWindow("operate");
-                                Render.makePrimaryToast({ content: Render.$span("")("" + locale.map("Removed all alarms!")), });
+                                Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.locale.map("Removed all alarms!")), });
                             }
                             return [2 /*return*/];
                         });
@@ -5342,7 +5347,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.RainbowClock.Timezone.add(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5375,7 +5380,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             Storage.RainbowClock.Timezone.add(newTimezone);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Saved!")),
+                                content: Render.$span("")("" + locale_2.locale.map("Saved!")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5408,7 +5413,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 Render.updateWindow("operate");
                             }
                             toast = Render.makePrimaryToast({
-                                content: Render.$span("")("" + locale.map("Removed.")),
+                                content: Render.$span("")("" + locale_2.locale.map("Removed.")),
                                 backwardOperator: Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
@@ -5434,10 +5439,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                     }); };
                     RainbowClock.reset = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
-                            if (Render.systemConfirm(locale.map("This action cannot be undone. Do you want to continue?"))) {
+                            if (Render.systemConfirm(locale_2.locale.map("This action cannot be undone. Do you want to continue?"))) {
                                 Storage.RainbowClock.Timezone.removeKey();
                                 Render.updateWindow("operate");
-                                Render.makePrimaryToast({ content: Render.$span("")("" + locale.map("Initialized timezone list!")), });
+                                Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.locale.map("Initialized timezone list!")), });
                             }
                             return [2 /*return*/];
                         });
@@ -5499,8 +5504,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
             Render.$span = Render.$tag("span");
             Render.labelSpan = Render.$span("label");
             Render.label = function (label) { return Render.labelSpan([
-                Render.$span("locale-parallel")(locale.parallel(label)),
-                Render.$span("locale-map")(locale.map(label)),
+                Render.$span("locale-parallel")(locale_2.locale.parallel(label)),
+                Render.$span("locale-map")(locale_2.locale.map(label)),
             ]); };
             // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
             // {
@@ -5592,7 +5597,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
-                                                    children: locale.map("Cancel"),
+                                                    children: locale_2.locale.map("Cancel"),
                                                     onclick: function () {
                                                         result = null;
                                                         ui.close();
@@ -5601,7 +5606,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "default-button",
-                                                    children: locale.map("OK"),
+                                                    children: locale_2.locale.map("OK"),
                                                     onclick: function () {
                                                         result = inputDate.value + "T" + inputTime.value;
                                                         ui.close();
@@ -5871,7 +5876,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                         }); },
                                                                         _e)
                                                                 ];
-                                                                return [4 /*yield*/, Promise.all(locale.locales.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                return [4 /*yield*/, Promise.all(locale_2.locale.locales.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                         var _a;
                                                                         var _this = this;
                                                                         var _b;
@@ -5885,7 +5890,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                                     return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
                                                                                 case 1: return [2 /*return*/, (_a.children = [
                                                                                         _c.sent(),
-                                                                                        Render.$span("")(Render.labelSpan(locale.getLocaleName(key)))
+                                                                                        Render.$span("")(Render.labelSpan(locale_2.locale.getLocaleName(key)))
                                                                                     ],
                                                                                         _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                             var _a;
@@ -6062,7 +6067,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     {
                                                         tag: "button",
                                                         className: "cancel-button",
-                                                        children: locale.map("Cancel"),
+                                                        children: locale_2.locale.map("Cancel"),
                                                         onclick: function () {
                                                             result = null;
                                                             ui.close();
@@ -6071,7 +6076,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                     {
                                                         tag: "button",
                                                         className: "default-button",
-                                                        children: locale.map("OK"),
+                                                        children: locale_2.locale.map("OK"),
                                                         onclick: function () {
                                                             var _a;
                                                             result = (_a = Domain.parseTime(inputTime.value)) !== null && _a !== void 0 ? _a : tick;
@@ -6168,7 +6173,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                                 var tick, minutes;
                                                                 return __generator(this, function (_a) {
                                                                     switch (_a.label) {
-                                                                        case 0: return [4 /*yield*/, Render.timePrompt(locale.map("input a time"), 0)];
+                                                                        case 0: return [4 /*yield*/, Render.timePrompt(locale_2.locale.map("input a time"), 0)];
                                                                         case 1:
                                                                             tick = _a.sent();
                                                                             if (!(null !== tick)) return [3 /*break*/, 3];
@@ -6242,7 +6247,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
-                                                    children: locale.map("Cancel"),
+                                                    children: locale_2.locale.map("Cancel"),
                                                     onclick: function () {
                                                         result = null;
                                                         ui.close();
@@ -6251,7 +6256,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "default-button",
-                                                    children: locale.map("OK"),
+                                                    children: locale_2.locale.map("OK"),
                                                     onclick: function () {
                                                         var _a, _b;
                                                         result =
@@ -6302,7 +6307,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
-                                                    children: locale.map("Cancel"),
+                                                    children: locale_2.locale.map("Cancel"),
                                                     onclick: function () {
                                                         result = null;
                                                         ui.close();
@@ -6311,7 +6316,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "default-button",
-                                                    children: locale.map("OK"),
+                                                    children: locale_2.locale.map("OK"),
                                                     onclick: function () {
                                                         var _a, _b;
                                                         result = (_b = (_a = Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick;
@@ -6367,7 +6372,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
-                                                    children: locale.map("Cancel"),
+                                                    children: locale_2.locale.map("Cancel"),
                                                     onclick: function () {
                                                         result = null;
                                                         ui.close();
@@ -6376,7 +6381,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 {
                                                     tag: "button",
                                                     className: "default-button",
-                                                    children: locale.map("OK"),
+                                                    children: locale_2.locale.map("OK"),
                                                     onclick: function () {
                                                         result =
                                                             {
@@ -6681,7 +6686,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     switch (_c.label) {
                                         case 0:
                                             _b = (_a = Domain).parseDate;
-                                            return [4 /*yield*/, Render.dateTimePrompt(locale.map("Edit"), tick)];
+                                            return [4 /*yield*/, Render.dateTimePrompt(locale_2.locale.map("Edit"), tick)];
                                         case 1:
                                             result = _b.apply(_a, [_c.sent()]);
                                             if (!(null !== result)) return [3 /*break*/, 4];
@@ -6712,7 +6717,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 });
             }); };
             Render.alarmTitle = function (item) { return "timer" === item.type ?
-                Domain.makeTimerLabel(item.end - item.start) + " " + locale.map("Timer") :
+                Domain.makeTimerLabel(item.end - item.start) + " " + locale_2.locale.map("Timer") :
                 item.title; };
             Render.alarmItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
                 var _a, _b, _c, _d, _e, _f;
@@ -6770,7 +6775,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         var result;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.eventPrompt(locale.map("Edit"), item.title, item.end)];
+                                                case 0: return [4 /*yield*/, Render.eventPrompt(locale_2.locale.map("Edit"), item.title, item.end)];
                                                 case 1:
                                                     result = _a.sent();
                                                     if (!(null !== result)) return [3 /*break*/, 4];
@@ -6794,7 +6799,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                         var result;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.dateIimePrompt(locale.map("Edit start time"), item.start)];
+                                                case 0: return [4 /*yield*/, Render.dateIimePrompt(locale_2.locale.map("Edit start time"), item.start)];
                                                 case 1:
                                                     result = _a.sent();
                                                     if (!(null !== result)) return [3 /*break*/, 4];
@@ -6879,7 +6884,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 var result;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, Render.eventPrompt(locale.map("Edit"), item.title, item.tick)];
+                                        case 0: return [4 /*yield*/, Render.eventPrompt(locale_2.locale.map("Edit"), item.title, item.tick)];
                                         case 1:
                                             result = _a.sent();
                                             if (!(null !== result)) return [3 /*break*/, 4];
@@ -6966,7 +6971,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                 var result;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("Edit"), item.title, item.offset)];
+                                        case 0: return [4 /*yield*/, Render.timezonePrompt(locale_2.locale.map("Edit"), item.title, item.offset)];
                                         case 1:
                                             result = _a.sent();
                                             if (!(null !== result)) return [3 /*break*/, 3];
@@ -7352,7 +7357,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             return [4 /*yield*/, Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[
                                                     _b.sent(),
-                                                    Render.labelSpan(0 === i ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeTimerLabel(i))
+                                                    Render.labelSpan(0 === i ? locale_2.locale.map(zeroLabel) : locale_2.locale.map("Interval") + ": " + Domain.makeTimerLabel(i))
                                                 ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                     return __generator(this, function (_a) {
                                                         switch (_a.label) {
@@ -7388,7 +7393,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                                 case 0:
                                                     Render.clearLastMouseDownTarget();
                                                     Render.getScreenCoverList().forEach(function (i) { return i.click(); });
-                                                    return [4 /*yield*/, Render.timePrompt(locale.map("input a time"), 0)];
+                                                    return [4 /*yield*/, Render.timePrompt(locale_2.locale.map("input a time"), 0)];
                                                 case 1:
                                                     tick = _a.sent();
                                                     if (null !== tick) {
@@ -7421,7 +7426,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                             case 0:
                                 _a = {
                                     icon: 0 === flashInterval ? zeroIcon : "flash-icon",
-                                    title: 0 === flashInterval ? locale.map(zeroLabel) : locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
+                                    title: 0 === flashInterval ? locale_2.locale.map(zeroLabel) : locale_2.locale.map("Interval") + ": " + Domain.makeTimerLabel(flashInterval)
                                 };
                                 return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel)];
                             case 1: return [2 /*return*/, (_a.menu = _b.sent(),
@@ -7514,7 +7519,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     case 0: return [4 /*yield*/, Render.localeSettingsPopup()];
                                     case 1:
                                         if (!_a.sent()) return [3 /*break*/, 3];
-                                        locale.setLocale(Storage.Settings.get().locale);
+                                        locale_2.locale.setLocale(Storage.Settings.get().locale);
                                         return [4 /*yield*/, Clockworks.reload()];
                                     case 2:
                                         _a.sent();
@@ -7976,7 +7981,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                         Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                        Render.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: locale.map("Stamp"), },]),
+                                        Render.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: locale_2.locale.map("Stamp"), },]),
                                     ]))
                                 ]]);
                             _o.label = 8;
@@ -8348,7 +8353,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             var result;
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, Render.eventPrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks())];
+                                                    case 0: return [4 /*yield*/, Render.eventPrompt(locale_2.locale.map("New Schedule"), locale_2.locale.map("New Schedule"), Domain.getAppropriateTicks())];
                                                     case 1:
                                                         result = _a.sent();
                                                         if (!result) return [3 /*break*/, 4];
@@ -8377,7 +8382,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                     Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                         Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                         Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                        Render.$tag("li")("")([Render.label("You can use links like these too:"), ["1500ms", "90s", "3m", "1h", "1d"].map(function (i) { return ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: Domain.makeTimerLabel(Domain.parseTimer(i)) + " " + locale.map("Timer"), }); })]),
+                                        Render.$tag("li")("")([Render.label("You can use links like these too:"), ["1500ms", "90s", "3m", "1h", "1d"].map(function (i) { return ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: Domain.makeTimerLabel(Domain.parseTimer(i)) + " " + locale_2.locale.map("Timer"), }); })]),
                                     ]))
                                 ])]);
                             _p.label = 8;
@@ -8718,7 +8723,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             var result;
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, Render.eventPrompt(locale.map("New Event"), locale.map("New Event"), Domain.getAppropriateTicks())];
+                                                    case 0: return [4 /*yield*/, Render.eventPrompt(locale_2.locale.map("New Event"), locale_2.locale.map("New Event"), Domain.getAppropriateTicks())];
                                                     case 1:
                                                         result = _a.sent();
                                                         if (!result) return [3 /*break*/, 4];
@@ -9087,7 +9092,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                                             var result;
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, Render.timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset())];
+                                                    case 0: return [4 /*yield*/, Render.timezonePrompt(locale_2.locale.map("New Time zone"), locale_2.locale.map("New Time zone"), new Date().getTimezoneOffset())];
                                                     case 1:
                                                         result = _a.sent();
                                                         if (!result) return [3 /*break*/, 3];
@@ -9714,7 +9719,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "resourc
                 switch (_a.label) {
                     case 0:
                         console.log("start!!!");
-                        locale.setLocale(Storage.Settings.get().locale);
+                        locale_2.locale.setLocale(Storage.Settings.get().locale);
                         window.onpopstate = function () { return Clockworks.showPage(); };
                         window.addEventListener("resize", Render.onWindowResize);
                         window.addEventListener("focus", Render.onWindowFocus);

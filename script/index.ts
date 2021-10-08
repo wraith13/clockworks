@@ -1,41 +1,9 @@
 import { minamo } from "./minamo.js";
+import { locale } from "./locale";
 import config from "../resource/config.json";
-import localeEn from "../resource/lang.en.json";
-import localeJa from "../resource/lang.ja.json";
 import resource from "../resource/images.json";
 export const simpleComparer = minamo.core.comparer.basic;
 export const simpleReverseComparer = <T>(a: T, b: T) => -simpleComparer(a, b);
-export module locale
-{
-    export const master =
-    {
-        en: localeEn,
-        ja: localeJa,
-    };
-    export type LocaleKeyType =
-        keyof typeof localeEn &
-        keyof typeof localeJa;
-    export type LocaleType = keyof typeof master;
-    export const locales = Object.keys(master) as LocaleType[];
-    let masterKey: LocaleType = 0 <= locales.indexOf(navigator.language as LocaleType) ?
-        navigator.language as LocaleType:
-        locales[0];
-    export const getLocaleName = (locale: LocaleType) => master[locale].$name;
-    export const setLocale = (locale: LocaleType | null) =>
-    {
-        const key = locale ?? navigator.language as LocaleType;
-        if (0 <= locales.indexOf(key))
-        {
-            masterKey = key;
-        }
-    };
-    export const get = () => masterKey;
-    export const getPrimary = (key : LocaleKeyType) => master[masterKey][key];
-    export const getSecondary = (key : LocaleKeyType) => master[locales.filter(locale => masterKey !== locale)[0]][key];
-    export const string = (key : string) : string => getPrimary(key as LocaleKeyType) || key;
-    export const map = (key : LocaleKeyType) : string => string(key);
-    export const parallel = (key : LocaleKeyType) : string => `${getPrimary(key)} / ${getSecondary(key)}`;
-}
 export module Clockworks
 {
     export const applicationTitle = config.applicationTitle;
