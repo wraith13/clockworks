@@ -1,5 +1,6 @@
 import { minamo } from "./minamo.js";
 import { locale } from "./locale";
+import { Type } from "./type";
 import config from "../resource/config.json";
 import resource from "../resource/images.json";
 export const simpleComparer = minamo.core.comparer.basic;
@@ -7,37 +8,30 @@ export const simpleReverseComparer = <T>(a: T, b: T) => -simpleComparer(a, b);
 export module Clockworks
 {
     export const applicationTitle = config.applicationTitle;
-    export interface ApplicationEntry<ItemType>
-    {
-        icon: Render.Resource.KeyType;
-        title: string;
-        show: (item: ItemType) => Promise<unknown>;
-        parseItem: (json: string) => ItemType;
-    }
     export const applicationList =
     {
-        "RainbowClock": <ApplicationEntry<TimezoneEntry>>
+        "RainbowClock": <Type.ApplicationEntry<Type.TimezoneEntry>>
         {
             icon: "tick-icon",
             title: "Rainbow Clock",
             show: async item => await Render.showRainbowClockScreen(item),
             parseItem: json => Domain.parseTimezone(json),
         },
-        "CountdownTimer": <ApplicationEntry<AlarmEntry>>
+        "CountdownTimer": <Type.ApplicationEntry<Type.AlarmEntry>>
         {
             icon: "history-icon",
             title: "Countdown Timer",
             show: async item => await Render.showCountdownTimerScreen(item),
             parseItem: json => Domain.parseAlarm(json),
         },
-        "ElapsedTimer": <ApplicationEntry<EventEntry>>
+        "ElapsedTimer": <Type.ApplicationEntry<Type.EventEntry>>
         {
             icon: "elapsed-icon",
             title: "Elapsed Timer",
             show: async item => Render.showElapsedTimerScreen(item),
             parseItem: json => Domain.parseEvent(json),
         },
-        "NeverStopwatch": <ApplicationEntry<number>>
+        "NeverStopwatch": <Type.ApplicationEntry<number>>
         {
             icon: "never-stopwatch-icon",
             title: "Never Stopwatch",
@@ -47,61 +41,7 @@ export module Clockworks
     };
     export type ApplicationType = keyof typeof applicationList;
     export const applicationIdList = Object.keys(applicationList);
-    export const themeObject =
-    {
-        "auto": null,
-        "light": null,
-        "dark": null,
-    };
-    export type ThemeType = keyof typeof themeObject;
-    export const ThemeList = Object.keys(themeObject);
 
-    export const progressBarStyleObject =
-    {
-        "header": null,
-        "auto": null,
-        "horizontal": null,
-        "vertical": null,
-    };
-    export type ProgressBarStyleType = keyof typeof progressBarStyleObject;
-    export const ProgressBarStyleList = Object.keys(progressBarStyleObject);
-
-    export interface Settings
-    {
-        theme?: ThemeType;
-        progressBarStyle?: ProgressBarStyleType;
-        locale?: locale.LocaleType;
-    }
-    export interface AlarmTimerEntry
-    {
-        type: "timer";
-        start: number;
-        end: number;
-    }
-    export interface AlarmNewTimerEntry // URL インターフェイスとしてのみの利用。
-    {
-        type: "timer";
-        start: "new";
-        end: string;
-    }
-    export interface AlarmScheduleEntry
-    {
-        type: "schedule";
-        title: string;
-        start: number;
-        end: number;
-    }
-    export type AlarmEntry = AlarmTimerEntry | AlarmScheduleEntry;
-    export interface TimezoneEntry
-    {
-        title: string;
-        offset: number;
-    }
-    export interface EventEntry
-    {
-        title: string;
-        tick: number;
-    }
     const setTitle = (title: string) =>
     {
         if (document.title !== title)
@@ -247,14 +187,14 @@ export module Clockworks
             export module Alarms
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
-                export const get = (): AlarmEntry[] => minamo.localStorage.getOrNull<AlarmEntry[]>(makeKey()) ?? [];
-                export const set = (list: AlarmEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
+                export const get = (): Type.AlarmEntry[] => minamo.localStorage.getOrNull<Type.AlarmEntry[]>(makeKey()) ?? [];
+                export const set = (list: Type.AlarmEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (item: AlarmEntry | AlarmEntry[]) =>
+                export const add = (item: Type.AlarmEntry | Type.AlarmEntry[]) =>
                     set(get().concat(item));
-                export const remove = (item: AlarmEntry) =>
+                export const remove = (item: Type.AlarmEntry) =>
                     set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
-                export const isSaved = (item: AlarmEntry) =>
+                export const isSaved = (item: Type.AlarmEntry) =>
                     0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
             }
             export module flashInterval
@@ -300,14 +240,14 @@ export module Clockworks
             export module Events
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
-                export const get = (): EventEntry[] => minamo.localStorage.getOrNull<EventEntry[]>(makeKey()) ?? [];
-                export const set = (list: EventEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.tick)));
+                export const get = (): Type.EventEntry[] => minamo.localStorage.getOrNull<Type.EventEntry[]>(makeKey()) ?? [];
+                export const set = (list: Type.EventEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.tick)));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (item: EventEntry | EventEntry[]) =>
+                export const add = (item: Type.EventEntry | Type.EventEntry[]) =>
                     set(get().concat(item));
-                export const remove = (item: EventEntry) =>
+                export const remove = (item: Type.EventEntry) =>
                     set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
-                export const isSaved = (item: EventEntry) =>
+                export const isSaved = (item: Type.EventEntry) =>
                     0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
             }
             export module flashInterval
@@ -349,16 +289,16 @@ export module Clockworks
             export module Timezone
             {
                 export const makeKey = () => `${config.localDbPrefix}:${applicationName}:timezones`;
-                export const get = (): TimezoneEntry[] =>
-                    minamo.localStorage.getOrNull<TimezoneEntry[]>(makeKey())
+                export const get = (): Type.TimezoneEntry[] =>
+                    minamo.localStorage.getOrNull<Type.TimezoneEntry[]>(makeKey())
                     ?? config.initialTimezoneList.map(i => ({ title: locale.map(i.title as locale.LocaleKeyType), offset: i.offset }));
-                export const set = (list: TimezoneEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make([i => i.offset])));
+                export const set = (list: Type.TimezoneEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make([i => i.offset])));
                 export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (entry: TimezoneEntry | TimezoneEntry[]) =>
+                export const add = (entry: Type.TimezoneEntry | Type.TimezoneEntry[]) =>
                     set(get().concat(entry));
-                export const remove = (entry: TimezoneEntry) =>
+                export const remove = (entry: Type.TimezoneEntry) =>
                     set(get().filter(i => JSON.stringify(entry) !== JSON.stringify(i)));
-                export const isSaved = (entry: TimezoneEntry) =>
+                export const isSaved = (entry: Type.TimezoneEntry) =>
                     0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(entry));
             }
             
@@ -367,8 +307,8 @@ export module Clockworks
         {
             export const makeKey = () => `${config.localDbPrefix}:settings`;
             export const get = () =>
-                minamo.localStorage.getOrNull<Clockworks.Settings>(makeKey()) ?? { };
-            export const set = (settings: Clockworks.Settings) =>
+                minamo.localStorage.getOrNull<Type.Settings>(makeKey()) ?? { };
+            export const set = (settings: Type.Settings) =>
                 minamo.localStorage.set(makeKey(), settings);
         }
     }
@@ -444,10 +384,8 @@ export module Clockworks
             {
                 result = `${minutes} ${locale.map("m(minutes)")}`;
             }
-            console.log({ timer, result, });
+            // console.log({ timer, result, });
             return result;
-            // const minutes = (timer / (60 * 1000));
-            // return `${minutes} ${locale.map("m(minutes)")}`;
         };
         export const getTicks = (date: Date = new Date()) => date.getTime();
         export const getUTCTicks = (date: Date = new Date()) => getTicks(date) +(date.getTimezoneOffset() *utcOffsetRate);
@@ -744,7 +682,7 @@ export module Clockworks
             }
             return null;
         };
-        export const parseAlarmCore = (item: any): AlarmEntry | null =>
+        export const parseAlarmCore = (item: any): Type.AlarmEntry | null =>
         {
             if (null !== item && undefined !== item && "object" === typeof item)
             {
@@ -816,8 +754,8 @@ export module Clockworks
             )
         );
         // export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
-        export const parseAlarm = (json: string): AlarmEntry | null => parseAlarmCore(parseOrNull(json));
-        export const parseEventCore = (item: any): EventEntry | null =>
+        export const parseAlarm = (json: string): Type.AlarmEntry | null => parseAlarmCore(parseOrNull(json));
+        export const parseEventCore = (item: any): Type.EventEntry | null =>
         {
             if (null !== item && undefined !== item && "object" === typeof item)
             {
@@ -852,10 +790,10 @@ export module Clockworks
             }
             return null;
         };
-        export const parseEvent = (json: string): EventEntry | null => parseEventCore(parseOrNull(json));
+        export const parseEvent = (json: string): Type.EventEntry | null => parseEventCore(parseOrNull(json));
 
 
-        export const parseTimezoneCore = (item: any): TimezoneEntry | null =>
+        export const parseTimezoneCore = (item: any): Type.TimezoneEntry | null =>
         {
             if (null !== item && undefined !== item && "object" === typeof item)
             {
@@ -877,7 +815,7 @@ export module Clockworks
             }
             return null;
         };
-        export const parseTimezone = (json: string): TimezoneEntry | null => parseTimezoneCore(parseOrNull(json));
+        export const parseTimezone = (json: string): Type.TimezoneEntry | null => parseTimezoneCore(parseOrNull(json));
     }
     export module Render
     {
@@ -1043,7 +981,7 @@ export module Clockworks
                 export const newTimer = async (i: number, onCanceled?: () => unknown) =>
                 {
                     const tick = Domain.getTicks();
-                    const alarm: AlarmTimerEntry =
+                    const alarm: Type.AlarmTimerEntry =
                     {
                         type: "timer",
                         start: tick,
@@ -1068,7 +1006,7 @@ export module Clockworks
                 };
                 export const newSchedule = async (title: string, end: number, onCanceled?: () => unknown) =>
                 {
-                    const alarm: AlarmScheduleEntry =
+                    const alarm: Type.AlarmScheduleEntry =
                     {
                         type: "schedule",
                         title,
@@ -1092,7 +1030,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const save = async (item: AlarmEntry, onCanceled?: () => unknown) =>
+                export const save = async (item: Type.AlarmEntry, onCanceled?: () => unknown) =>
                 {
                     Storage.CountdownTimer.Alarms.add(item);
                     updateWindow("operate");
@@ -1111,10 +1049,10 @@ export module Clockworks
                         ),
                     });
                 };
-                export const edit = async (item: AlarmScheduleEntry, title: string, start: number, end: number, onCanceled?: () => unknown) =>
+                export const edit = async (item: Type.AlarmScheduleEntry, title: string, start: number, end: number, onCanceled?: () => unknown) =>
                 {
                     const oldSchedule = item;
-                    const newSchedule: AlarmScheduleEntry =
+                    const newSchedule: Type.AlarmScheduleEntry =
                     {
                         type: item.type,
                         title,
@@ -1140,7 +1078,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const done = async (item: AlarmEntry, onCanceled?: () => unknown) =>
+                export const done = async (item: Type.AlarmEntry, onCanceled?: () => unknown) =>
                 {
                     Storage.CountdownTimer.Alarms.remove(item);
                     if ("schedule" === item.type)
@@ -1170,7 +1108,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const doneTemprary = async (item: AlarmEntry, onCanceled?: () => unknown) =>
+                export const doneTemprary = async (item: Type.AlarmEntry, onCanceled?: () => unknown) =>
                 {
                     const color = Storage.CountdownTimer.ColorIndex.get();
                     Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
@@ -1190,7 +1128,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const removeAlarm = async (item: AlarmEntry, onCanceled?: () => unknown) =>
+                export const removeAlarm = async (item: Type.AlarmEntry, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
                     const isOpend = !! getUrlHash(location.href).split("/")[1];
@@ -1239,7 +1177,7 @@ export module Clockworks
             {
                 export const newEvent = async (title: string, tick: number, onCanceled?: () => unknown) =>
                 {
-                    const event: EventEntry =
+                    const event: Type.EventEntry =
                     {
                         title,
                         tick,
@@ -1261,7 +1199,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const save = async (item: EventEntry, onCanceled?: () => unknown) =>
+                export const save = async (item: Type.EventEntry, onCanceled?: () => unknown) =>
                 {
                     Storage.ElapsedTimer.Events.add(item);
                     updateWindow("operate");
@@ -1280,10 +1218,10 @@ export module Clockworks
                         ),
                     });
                 };
-                export const edit = async (item: EventEntry, title: string, tick: number, onCanceled?: () => unknown) =>
+                export const edit = async (item: Type.EventEntry, title: string, tick: number, onCanceled?: () => unknown) =>
                 {
                     const oldSchedule = item;
-                    const newSchedule: EventEntry =
+                    const newSchedule: Type.EventEntry =
                     {
                         title,
                         tick,
@@ -1307,7 +1245,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const remove = async (item: EventEntry, onCanceled?: () => unknown) =>
+                export const remove = async (item: Type.EventEntry, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
                     const isOpend = !! getUrlHash(location.href).split("/")[1];
@@ -1354,7 +1292,7 @@ export module Clockworks
             }
             export module RainbowClock
             {
-                export const add = async (item: TimezoneEntry, onCanceled?: () => unknown) =>
+                export const add = async (item: Type.TimezoneEntry, onCanceled?: () => unknown) =>
                 {
                     Storage.RainbowClock.Timezone.add(item);
                     updateWindow("operate");
@@ -1374,10 +1312,10 @@ export module Clockworks
                     });
                 };
                 export const save = add;
-                export const edit = async (item: TimezoneEntry, title: string, offset: number, onCanceled?: () => unknown) =>
+                export const edit = async (item: Type.TimezoneEntry, title: string, offset: number, onCanceled?: () => unknown) =>
                 {
                     const oldTimezone = item;
-                    const newTimezone: TimezoneEntry =
+                    const newTimezone: Type.TimezoneEntry =
                     {
                         title,
                         offset,
@@ -1401,7 +1339,7 @@ export module Clockworks
                         ),
                     });
                 };
-                export const remove = async (item: TimezoneEntry, onCanceled?: () => unknown) =>
+                export const remove = async (item: Type.TimezoneEntry, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
                     const isOpend = !! getUrlHash(location.href).split("/")[1];
@@ -1625,7 +1563,7 @@ export module Clockworks
                 }
             );
         };
-        export const themeSettingsPopup = async (settings: Settings = Storage.Settings.get()): Promise<boolean> =>
+        export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
         {
             const init = settings.theme ?? "auto";
             return await new Promise
@@ -1640,9 +1578,9 @@ export module Clockworks
                         [
                             await Promise.all
                             (
-                                ThemeList.map
+                                Type.ThemeList.map
                                 (
-                                    async (key: ThemeType) =>
+                                    async (key: Type.ThemeType) =>
                                     ({
                                         tag: "button",
                                         className: `check-button ${key === (settings.theme ?? "auto") ? "checked": ""}`,
@@ -1690,7 +1628,7 @@ export module Clockworks
                 }
             );
         };
-        export const progressBarStyleSettingsPopup = async (settings: Settings = Storage.Settings.get()): Promise<boolean> =>
+        export const progressBarStyleSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
         {
             const init = settings.progressBarStyle ?? "auto";
             let selected = init;
@@ -1705,9 +1643,9 @@ export module Clockworks
                         [
                             await Promise.all
                             (
-                                ProgressBarStyleList.map
+                                Type.ProgressBarStyleList.map
                                 (
-                                    async (key: ProgressBarStyleType) =>
+                                    async (key: Type.ProgressBarStyleType) =>
                                     ({
                                         tag: "button",
                                         className: `check-button ${key === selected ? "checked": ""}`,
@@ -1758,7 +1696,7 @@ export module Clockworks
                 }
             );
         };
-        export const localeSettingsPopup = async (settings: Settings = Storage.Settings.get()): Promise<boolean> =>
+        export const localeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
         {
             return await new Promise
             (
@@ -2037,7 +1975,7 @@ export module Clockworks
                 }
             );
         };
-        export const eventPrompt = async (message: string, title: string, tick: number): Promise<EventEntry | null> =>
+        export const eventPrompt = async (message: string, title: string, tick: number): Promise<Type.EventEntry | null> =>
         {
             const inputTitle = $make(HTMLInputElement)
             ({
@@ -2063,7 +2001,7 @@ export module Clockworks
             (
                 resolve =>
                 {
-                    let result: EventEntry | null = null;
+                    let result: Type.EventEntry | null = null;
                     const ui = popup
                     ({
                         children:
@@ -2501,10 +2439,10 @@ export module Clockworks
                 "delete-button"
             )
         ];
-        export const alarmTitle = (item: AlarmEntry) => "timer" === item.type ?
+        export const alarmTitle = (item: Type.AlarmEntry) => "timer" === item.type ?
             `${Domain.makeTimerLabel(item.end -item.start)} ${locale.map("Timer")}`:
             item.title;
-        export const alarmItem = async (item: AlarmEntry) => $div("alarm-item flex-item")
+        export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item flex-item")
         ([
             $div("item-header")
             ([
@@ -2537,7 +2475,7 @@ export module Clockworks
                 ]),
             ]),
         ]);
-        export const alarmItemMenu = async (item: AlarmEntry) =>
+        export const alarmItemMenu = async (item: Type.AlarmEntry) =>
         [
             "schedule" === item.type ?
                 [
@@ -2602,7 +2540,7 @@ export module Clockworks
                 "delete-button"
             )
         ];
-        export const eventItem = async (item: EventEntry) => $div("event-item flex-item")
+        export const eventItem = async (item: Type.EventEntry) => $div("event-item flex-item")
         ([
             $div("item-header")
             ([
@@ -2635,7 +2573,7 @@ export module Clockworks
                 ]),
             ]),
         ]);
-        export const eventItemMenu = async (item: EventEntry) =>
+        export const eventItemMenu = async (item: Type.EventEntry) =>
         [
             menuItem
             (
@@ -2670,7 +2608,7 @@ export module Clockworks
                 "delete-button"
             )
         ];
-        export const timezoneItem = async (item: TimezoneEntry) => $div("timezone-item flex-item")
+        export const timezoneItem = async (item: Type.TimezoneEntry) => $div("timezone-item flex-item")
         ([
             $div("item-header")
             ([
@@ -2709,7 +2647,7 @@ export module Clockworks
                 $div("item-time-bar")([]),
             ])
         ]);
-        export const timezoneItemMenu = async (item: TimezoneEntry) =>
+        export const timezoneItemMenu = async (item: Type.TimezoneEntry) =>
         [
             menuItem
             (
@@ -2909,7 +2847,7 @@ export module Clockworks
                     )
             )
         });
-        export const screenHeaderAlarmSegment = async (item: AlarmEntry | null, alarms: AlarmEntry[]): Promise<HeaderSegmentSource> =>
+        export const screenHeaderAlarmSegment = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]): Promise<HeaderSegmentSource> =>
         ({
             icon: "tick-icon",
             title: alarmTitle(item),
@@ -2930,7 +2868,7 @@ export module Clockworks
                     )
             )
         });
-        export const screenHeaderEventSegment = async (item: EventEntry | null, alarms: EventEntry[]): Promise<HeaderSegmentSource> =>
+        export const screenHeaderEventSegment = async (item: Type.EventEntry | null, alarms: Type.EventEntry[]): Promise<HeaderSegmentSource> =>
         ({
             icon: "tick-icon",
             title: item.title,
@@ -2951,7 +2889,7 @@ export module Clockworks
                     )
             )
         });
-        export const screenHeaderTimezoneSegment = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]): Promise<HeaderSegmentSource> =>
+        export const screenHeaderTimezoneSegment = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<HeaderSegmentSource> =>
         ({
             icon: "pin-icon",
             title: item.title,
@@ -3546,7 +3484,7 @@ export module Clockworks
             await resetCountdownTimerMenuItem(),
             await githubMenuItem(),
         ];
-        export const countdownTimerScreenBody = async (item: AlarmEntry | null, alarms: AlarmEntry[]) =>
+        export const countdownTimerScreenBody = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]) =>
         ([
             $div("primary-page")
             ([
@@ -3727,7 +3665,7 @@ export module Clockworks
                 ]),
             screenBar(),
         ]);
-        export const countdownTimerScreen = async (item: AlarmEntry | null, alarms: AlarmEntry[]): Promise<ScreenSource> =>
+        export const countdownTimerScreen = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]): Promise<ScreenSource> =>
         ({
             className: "countdown-timer-screen",
             header: null === item ?
@@ -3752,7 +3690,7 @@ export module Clockworks
             },
             body: await countdownTimerScreenBody(item, alarms)
         });
-        export const showCountdownTimerScreen = async (item: AlarmEntry | null) =>
+        export const showCountdownTimerScreen = async (item: Type.AlarmEntry | null) =>
         {
             const applicationTitle = applicationList["CountdownTimer"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -3869,7 +3807,7 @@ export module Clockworks
             await resetElapsedTimerMenuItem(),
             await githubMenuItem(),
         ];
-        export const elapsedTimerScreenBody = async (item: EventEntry | null, events: EventEntry[]) =>
+        export const elapsedTimerScreenBody = async (item: Type.EventEntry | null, events: Type.EventEntry[]) =>
         ([
             $div("primary-page")
             ([
@@ -4006,7 +3944,7 @@ export module Clockworks
                 ]),
             screenBar(),
         ]);
-        export const elapsedTimerScreen = async (item: EventEntry | null, events: EventEntry[]): Promise<ScreenSource> =>
+        export const elapsedTimerScreen = async (item: Type.EventEntry | null, events: Type.EventEntry[]): Promise<ScreenSource> =>
         ({
             className: "elapsed-timer-screen",
             header: null === item ?
@@ -4031,7 +3969,7 @@ export module Clockworks
             },
             body: await elapsedTimerScreenBody(item, events)
         });
-        export const showElapsedTimerScreen = async (item: EventEntry | null) =>
+        export const showElapsedTimerScreen = async (item: Type.EventEntry | null) =>
         {
             const applicationTitle = applicationList["ElapsedTimer"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -4142,7 +4080,7 @@ export module Clockworks
             await resetRainbowClockMenuItem(),
             await githubMenuItem(),
         ];
-        export const rainbowClockScreenBody = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]) =>
+        export const rainbowClockScreenBody = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]) =>
         ([
             $div("primary-page")
             ([
@@ -4271,7 +4209,7 @@ export module Clockworks
                 ]),
             screenBar(),
         ]);
-        export const rainbowClockScreen = async (item: TimezoneEntry | null, timezones: TimezoneEntry[]): Promise<ScreenSource> =>
+        export const rainbowClockScreen = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<ScreenSource> =>
         ({
             className: "rainbow-clock-screen",
             header: null === item ?
@@ -4296,7 +4234,7 @@ export module Clockworks
             },
             body: await rainbowClockScreenBody(item, timezones),
         });
-        export const showRainbowClockScreen = async (item: TimezoneEntry | null) =>
+        export const showRainbowClockScreen = async (item: Type.TimezoneEntry | null) =>
         {
             const applicationTitle = applicationList["RainbowClock"].title;
             document.body.classList.add("hide-scroll-bar");
@@ -4854,13 +4792,12 @@ export module Clockworks
         export const onMouseUp = (_evnet: MouseEvent) => setTimeout(clearLastMouseDownTarget, 10);
         export const clearLastMouseDownTarget = () => lastMouseDownTarget = null;
     }
-    export type PageItemType = number | "new" | AlarmEntry | AlarmNewTimerEntry | EventEntry | TimezoneEntry;
     export interface PageParams
     {
         application?: ApplicationType;
-        item?: PageItemType;
+        item?: Type.PageItemType;
     }
-    export const makePageParams = (application: ApplicationType, item: PageItemType): PageParams =>
+    export const makePageParams = (application: ApplicationType, item: Type.PageItemType): PageParams =>
     ({
         application,
         item
@@ -5006,7 +4943,7 @@ export module Clockworks
         }
         return "nothing";
     };
-    export const regulateLocation = <T extends PageItemType>(application: ApplicationType, itemJson: string, item: T) =>
+    export const regulateLocation = <T extends Type.PageItemType>(application: ApplicationType, itemJson: string, item: T) =>
     {
         switch(itemState(itemJson, item))
         {

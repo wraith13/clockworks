@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Oct 08 2021 22:31:06 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sat Oct 09 2021 16:36:14 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -3976,6 +3976,41 @@ define("script/locale/index", ["require", "exports", "resource/lang.en", "resour
         locale_1.parallel = function (key) { return locale_1.getPrimary(key) + " / " + locale_1.getSecondary(key); };
     })(locale = exports.locale || (exports.locale = {}));
 });
+define("resource/images", [], {
+    "application-icon": "./image/clockworks.1024.svg",
+    "never-stopwatch-icon": "./image/never-stopwatch.1024.svg",
+    "history-icon": "./image/history.1024.svg",
+    "elapsed-icon": "./image/elapsed.1024.svg",
+    "ellipsis-icon": "./image/ellipsis.1024.svg",
+    "cross-icon": "./image/cross.1024.svg",
+    "check-icon": "./image/check.1024.svg",
+    "flash-icon": "./image/sun.1024.svg",
+    "sleep-icon": "./image/moon.1024.svg",
+    "tick-icon": "./image/tick.1024.svg",
+    "pin-icon": "./image/pin.1024.svg",
+    "down-triangle-icon": "./image/down-triangle.1024.svg"
+});
+define("script/type", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Type = void 0;
+    var Type;
+    (function (Type) {
+        Type.themeObject = {
+            "auto": null,
+            "light": null,
+            "dark": null,
+        };
+        Type.ThemeList = Object.keys(Type.themeObject);
+        Type.progressBarStyleObject = {
+            "header": null,
+            "auto": null,
+            "horizontal": null,
+            "vertical": null,
+        };
+        Type.ProgressBarStyleList = Object.keys(Type.progressBarStyleObject);
+    })(Type = exports.Type || (exports.Type = {}));
+});
 define("resource/config", [], {
     "applicationTitle": "Clockworks",
     "localDbPrefix": "clockworks",
@@ -4044,21 +4079,7 @@ define("resource/config", [], {
         }
     ]
 });
-define("resource/images", [], {
-    "application-icon": "./image/clockworks.1024.svg",
-    "never-stopwatch-icon": "./image/never-stopwatch.1024.svg",
-    "history-icon": "./image/history.1024.svg",
-    "elapsed-icon": "./image/elapsed.1024.svg",
-    "ellipsis-icon": "./image/ellipsis.1024.svg",
-    "cross-icon": "./image/cross.1024.svg",
-    "check-icon": "./image/check.1024.svg",
-    "flash-icon": "./image/sun.1024.svg",
-    "sleep-icon": "./image/moon.1024.svg",
-    "tick-icon": "./image/tick.1024.svg",
-    "pin-icon": "./image/pin.1024.svg",
-    "down-triangle-icon": "./image/down-triangle.1024.svg"
-});
-define("script/index", ["require", "exports", "script/minamo.js/index", "script/locale/index", "resource/config"], function (require, exports, minamo_js_1, locale_2, config_json_1) {
+define("script/index", ["require", "exports", "script/minamo.js/index", "script/locale/index", "script/type", "resource/config"], function (require, exports, minamo_js_1, locale_2, type_1, config_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Clockworks = exports.simpleReverseComparer = exports.simpleComparer = void 0;
@@ -4111,19 +4132,6 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
             },
         };
         Clockworks.applicationIdList = Object.keys(Clockworks.applicationList);
-        Clockworks.themeObject = {
-            "auto": null,
-            "light": null,
-            "dark": null,
-        };
-        Clockworks.ThemeList = Object.keys(Clockworks.themeObject);
-        Clockworks.progressBarStyleObject = {
-            "header": null,
-            "auto": null,
-            "horizontal": null,
-            "vertical": null,
-        };
-        Clockworks.ProgressBarStyleList = Object.keys(Clockworks.progressBarStyleObject);
         var setTitle = function (title) {
             if (document.title !== title) {
                 document.title = title;
@@ -4435,10 +4443,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                 if ("" === result) {
                     result = minutes + " " + locale_2.locale.map("m(minutes)");
                 }
-                console.log({ timer: timer, result: result, });
+                // console.log({ timer, result, });
                 return result;
-                // const minutes = (timer / (60 * 1000));
-                // return `${minutes} ${locale.map("m(minutes)")}`;
             };
             Domain.getTicks = function (date) {
                 if (date === void 0) { date = new Date(); }
@@ -5649,7 +5655,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                 case 0:
                                                                     _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
                                                                     _c = [checkButtonList];
-                                                                    return [4 /*yield*/, Promise.all(Clockworks.ThemeList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                    return [4 /*yield*/, Promise.all(type_1.Type.ThemeList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                             var _a;
                                                                             var _this = this;
                                                                             var _b;
@@ -5748,7 +5754,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                 case 0:
                                                                     _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
                                                                     _c = [checkButtonList];
-                                                                    return [4 /*yield*/, Promise.all(Clockworks.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                    return [4 /*yield*/, Promise.all(type_1.Type.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                             var _a;
                                                                             var _this = this;
                                                                             return __generator(this, function (_b) {
