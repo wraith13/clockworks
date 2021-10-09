@@ -17,30 +17,6 @@
     "timerPreset": [ "1m", "2m", "3m", "4m", "5m", "6m", "10m", "12m", "15m", "20m", "30m", "60m" ],
     "recentlyFlashIntervalMaxHistory": 3,
     "recentlyTimerMaxHistory": 8,
-    "theme":
-    {
-        "original":
-        {
-            "@main-color": "#000022",
-            "@base-color": "#FFFFFF",
-            "@accent-color": "#5F42A7",
-            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
-        },
-        "light":
-        {
-            "@main-color": "#000022",
-            "@base-color": "#FFFFFF",
-            "@accent-color": "#5F42A7",
-            "::-webkit-calendar-picker-indicator": ".dummy-invalid-class"
-        },
-        "dark":
-        {
-            "@main-color": "#FFFFFF",
-            "@base-color": "#000022",
-            "@accent-color": "#5F42A7",
-            "::-webkit-calendar-picker-indicator": "::-webkit-calendar-picker-indicator"
-        }
-    },
     "timezoneOffsetList":
     [
         -840, -780, -765, -720, -660, -630, -600, -570, -540, -525, -480, -420, -390, -360, -345, -330, -300, -270, -240, -210, -180, -120, -60, 0, 60, 120, 180, 210, 240, 300, 360, 420, 480, 540, 570, 600, 660, 720

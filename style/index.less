@@ -2,7 +2,7 @@
 @import "traits.less";
 @import "base.less";
 
-body.sleep-mouse
+&.sleep-mouse
 {
     cursor: none;
     *
@@ -10,7 +10,7 @@ body.sleep-mouse
         cursor: none !important;
     }
 }
-body.flash
+&.flash
 {
     .screen
     {
@@ -21,14 +21,14 @@ body.flash
         animation-fill-mode: both;
     }
 }
-body.flash.tektite
+&.flash.tektite
 {
     .screen
     {
         animation-name: white-flash;
     }
 }
-body.flash:not(.tektite)
+&.flash:not(.tektite)
 {
     .screen
     {
@@ -427,7 +427,7 @@ h1
         }
     }
 }
-body.tektite
+&.tektite
 {
     .segment + .segment,
     .segment +.menu-popup + .segment
@@ -1237,7 +1237,7 @@ button
         margin-left: 4px;
     }
 }
-body.fxxking-ipad-fullscreen
+&.fxxking-ipad-fullscreen
 {
     .screen
     {
@@ -1390,7 +1390,7 @@ body.fxxking-ipad-fullscreen
         }
     }
 }
-body.tektite
+&.tektite
 {
     .screen
     {
@@ -1479,7 +1479,7 @@ body.tektite
 
     }
 }
-body:not(.tektite)
+&:not(.tektite)
 {
     .screen
     {
@@ -1558,7 +1558,7 @@ body:not(.tektite)
         }
     }
 }
-body:not(.tektite)
+&:not(.tektite)
 {
     .logo
     {
