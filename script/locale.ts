@@ -1,6 +1,6 @@
-import localeEn from "../../resource/lang.en.json";
-import localeJa from "../../resource/lang.ja.json";
-export module locale
+import localeEn from "../resource/lang.en.json";
+import localeJa from "../resource/lang.ja.json";
+export module Locale
 {
     export const master =
     {

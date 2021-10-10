@@ -1,4 +1,5 @@
-import { locale } from "./locale";
+import { Locale } from "./locale";
+import { Color } from "./color";
 import resource from "../resource/images.json";
 export module Type
 {
@@ -31,7 +32,7 @@ export module Type
     {
         theme?: ThemeType;
         progressBarStyle?: ProgressBarStyleType;
-        locale?: locale.LocaleType;
+        locale?: Locale.LocaleType;
     }
     export interface AlarmTimerEntry
     {
@@ -64,4 +65,10 @@ export module Type
         tick: number;
     }
     export type PageItemType = number | "new" | AlarmEntry | AlarmNewTimerEntry | EventEntry | TimezoneEntry;
+    export const rainbowClockColorPatternMap =
+    {
+        "gradation": (index: number) => Color.getRainbowColor(index, 0),
+        "solid": (index: number) => Color.getSolidRainbowColor(index, 0),
+    };
+    export type rainbowClockColorPatternType = keyof typeof rainbowClockColorPatternMap;
 }

@@ -1,10 +1,11 @@
 import { minamo } from "./minamo.js";
-import { locale } from "./locale";
+import { Locale } from "./locale";
 import { Type } from "./type";
+import { Base } from "./base";
+import { Color } from "./color";
+import { Storage } from "./storage";
 import config from "../resource/config.json";
 import resource from "../resource/images.json";
-export const simpleComparer = minamo.core.comparer.basic;
-export const simpleReverseComparer = <T>(a: T, b: T) => -simpleComparer(a, b);
 export module Clockworks
 {
     export const applicationTitle = config.applicationTitle;
@@ -49,10 +50,6 @@ export module Clockworks
             document.title = title;
         }
     };
-    const getRainbowColor = (index: number, baseIndex = config.rainbowColorSetDefaultIndex) =>
-        config.rainbowColorSet[(index +baseIndex) % config.rainbowColorSet.length];
-    const getSolidRainbowColor = (index: number, baseIndex = config.rainbowColorSetDefaultIndex) =>
-        getRainbowColor(index *config.rainbowColorSetSolidIndexRate, baseIndex);
     const setHeaderColor = (color: string | null) =>
     {
         const screenHeader = document.getElementById("screen-header");
@@ -85,233 +82,6 @@ export module Clockworks
             setHeaderColor(null);
         }
     };
-    const toHex = (i : number) : string =>
-    {
-        let result = Math.round(i).toString(16).toUpperCase();
-        if (1 === result.length) {
-            result = "0" +result;
-        }
-        return result;
-    };
-    const mixColors = (colorA: string, colorB: string, rate: number) =>
-    {
-        if (rate <= 0.0)
-        {
-            return colorA;
-        }
-        if (1.0 <= rate)
-        {
-            return colorB;
-        }
-        const rateA = 1.0 -rate;
-        const rateB = rate;
-        let r = 0;
-        let g = 0;
-        let b = 0;
-        if (4 === colorA.length)
-        {
-            r += parseInt(colorA.substr(1,1), 16) *0x11 *rateA;
-            g += parseInt(colorA.substr(2,1), 16) *0x11 *rateA;
-            b += parseInt(colorA.substr(3,1), 16) *0x11 *rateA;
-        }
-        if (7 === colorA.length)
-        {
-            r += parseInt(colorA.substr(1,2), 16) *rateA;
-            g += parseInt(colorA.substr(3,2), 16) *rateA;
-            b += parseInt(colorA.substr(5,2), 16) *rateA;
-        }
-        if (4 === colorB.length)
-        {
-            r += parseInt(colorB.substr(1,1), 16) *0x11 *rateB;
-            g += parseInt(colorB.substr(2,1), 16) *0x11 *rateB;
-            b += parseInt(colorB.substr(3,1), 16) *0x11 *rateB;
-        }
-        if (7 === colorB.length)
-        {
-            r += parseInt(colorB.substr(1,2), 16) *rateB;
-            g += parseInt(colorB.substr(3,2), 16) *rateB;
-            b += parseInt(colorB.substr(5,2), 16) *rateB;
-        }
-        const result = "#"
-            +toHex(r)
-            +toHex(g)
-            +toHex(b);
-        return result;
-    };
-    export const rainbowClockColorPatternMap =
-    {
-        "gradation": (index: number) => getRainbowColor(index, 0),
-        "solid": (index: number) => getSolidRainbowColor(index, 0),
-    };
-    export type rainbowClockColorPatternType = keyof typeof rainbowClockColorPatternMap;
-    export module Storage
-    {
-        export let lastUpdate = 0;
-        export module NeverStopwatch
-        {
-            const applicationName = "NeverStopwatch";
-            export module Stamps
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:stamps`;
-                export const get = (): number[] => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (tick: number | number[]) =>
-                    set(get().concat(tick).sort(simpleReverseComparer).slice(0, 100));
-                export const remove = (tick: number) =>
-                    set(get().filter(i => tick !== i).sort(simpleReverseComparer));
-                export const isSaved = (tick: number) => 0 <= get().indexOf(tick);
-            }
-            export module flashInterval
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
-                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
-                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
-            }
-            export module recentlyFlashInterval
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
-                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set
-                (
-                    [value].concat(get())
-                        .filter((i, ix, list) => ix === list.indexOf(i))
-                        .filter((_i, ix) => ix < config.recentlyFlashIntervalMaxHistory)
-                );
-            }
-        }
-        export module CountdownTimer
-        {
-            const applicationName = "CountdownTimer";
-            export module Alarms
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
-                export const get = (): Type.AlarmEntry[] => minamo.localStorage.getOrNull<Type.AlarmEntry[]>(makeKey()) ?? [];
-                export const set = (list: Type.AlarmEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.end)));
-                export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (item: Type.AlarmEntry | Type.AlarmEntry[]) =>
-                    set(get().concat(item));
-                export const remove = (item: Type.AlarmEntry) =>
-                    set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
-                export const isSaved = (item: Type.AlarmEntry) =>
-                    0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
-            }
-            export module flashInterval
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
-                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
-                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
-            }
-            export module recentlyFlashInterval
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
-                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set
-                (
-                    [value].concat(get())
-                        .filter((i, ix, list) => ix === list.indexOf(i))
-                        .filter((_i, ix) => ix < config.recentlyFlashIntervalMaxHistory)
-                );
-            }
-            export module recentlyTimer
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyTimer`;
-                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set
-                (
-                    [value].concat(get())
-                        .filter((i, ix, list) => ix === list.indexOf(i))
-                        .filter((_i, ix) => ix < config.recentlyTimerMaxHistory)
-                );
-            }
-            export module ColorIndex
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:colorIndex`;
-                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
-                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
-            }
-        }
-        export module ElapsedTimer
-        {
-            const applicationName = "ElapsedTimer";
-            export module Events
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
-                export const get = (): Type.EventEntry[] => minamo.localStorage.getOrNull<Type.EventEntry[]>(makeKey()) ?? [];
-                export const set = (list: Type.EventEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.tick)));
-                export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (item: Type.EventEntry | Type.EventEntry[]) =>
-                    set(get().concat(item));
-                export const remove = (item: Type.EventEntry) =>
-                    set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
-                export const isSaved = (item: Type.EventEntry) =>
-                    0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
-            }
-            export module flashInterval
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
-                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? 0;
-                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
-            }
-            export module recentlyFlashInterval
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
-                export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-                export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
-                export const add = (value: number) => set
-                (
-                    [value].concat(get())
-                        .filter((i, ix, list) => ix === list.indexOf(i))
-                        .filter((_i, ix) => ix < config.recentlyFlashIntervalMaxHistory)
-                );
-            }
-        }
-        export module RainbowClock
-        {
-            const applicationName = "RainbowClock";
-            export module colorPattern
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:colorPattern`;
-                export const get = () =>
-                    minamo.localStorage.getOrNull<rainbowClockColorPatternType>(makeKey()) ?? "gradation";
-                export const set = (settings: rainbowClockColorPatternType) =>
-                    minamo.localStorage.set(makeKey(), settings);
-            }
-            export module flashInterval
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:flashInterval`;
-                export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? (60 * 60 * 1000);
-                export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
-            }
-            export module Timezone
-            {
-                export const makeKey = () => `${config.localDbPrefix}:${applicationName}:timezones`;
-                export const get = (): Type.TimezoneEntry[] =>
-                    minamo.localStorage.getOrNull<Type.TimezoneEntry[]>(makeKey())
-                    ?? config.initialTimezoneList.map(i => ({ title: locale.map(i.title as locale.LocaleKeyType), offset: i.offset }));
-                export const set = (list: Type.TimezoneEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make([i => i.offset])));
-                export const removeKey = () => minamo.localStorage.remove(makeKey());
-                export const add = (entry: Type.TimezoneEntry | Type.TimezoneEntry[]) =>
-                    set(get().concat(entry));
-                export const remove = (entry: Type.TimezoneEntry) =>
-                    set(get().filter(i => JSON.stringify(entry) !== JSON.stringify(i)));
-                export const isSaved = (entry: Type.TimezoneEntry) =>
-                    0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(entry));
-            }
-            
-        }
-        export module Settings
-        {
-            export const makeKey = () => `${config.localDbPrefix}:settings`;
-            export const get = () =>
-                minamo.localStorage.getOrNull<Type.Settings>(makeKey()) ?? { };
-            export const set = (settings: Type.Settings) =>
-                minamo.localStorage.set(makeKey(), settings);
-        }
-    }
     export module Domain
     {
         export const getFlashIntervalPreset = () => config.flashIntervalPreset.map(i => parseTimer(i));
@@ -334,33 +104,33 @@ export module Clockworks
             {
                 if ("" === result)
                 {
-                    result = `${days} ` +locale.map("days");
+                    result = `${days} ` +Locale.map("days");
                 }
                 else
                 {
-                    result += ` ${days} ` +locale.map("days");
+                    result += ` ${days} ` +Locale.map("days");
                 }
             }
             if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours)
             {
                 if ("" === result)
                 {
-                    result = `${hours} ` +locale.map("hours");
+                    result = `${hours} ` +Locale.map("hours");
                 }
                 else
                 {
-                    result += ` ` +`0${hours}`.substr(-2) +` ` +locale.map("hours");
+                    result += ` ` +`0${hours}`.substr(-2) +` ` +Locale.map("hours");
                 }
             }
             if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes)
             {
                 if ("" === result)
                 {
-                    result = `${minutes} ` +locale.map("minutes");
+                    result = `${minutes} ` +Locale.map("minutes");
                 }
                 else
                 {
-                    result += ` ` +`0${minutes}`.substr(-2) +` ` +locale.map("minutes");
+                    result += ` ` +`0${minutes}`.substr(-2) +` ` +Locale.map("minutes");
                 }
             }
             if (0 < seconds || 0 < milliseconds)
@@ -373,16 +143,16 @@ export module Clockworks
                 }
                 if ("" === result)
                 {
-                    result = `${seconds}${trail} ` +locale.map("seconds");
+                    result = `${seconds}${trail} ` +Locale.map("seconds");
                 }
                 else
                 {
-                    result += ` ` +`0${seconds}`.substr(-2) +trail +` ` +locale.map("seconds");
+                    result += ` ` +`0${seconds}`.substr(-2) +trail +` ` +Locale.map("seconds");
                 }
             }
             if ("" === result)
             {
-                result = `${minutes} ${locale.map("m(minutes)")}`;
+                result = `${minutes} ${Locale.map("m(minutes)")}`;
             }
             // console.log({ timer, result, });
             return result;
@@ -399,7 +169,7 @@ export module Clockworks
             return FloorHour.getTime() +(60 *60 *1000);
         };
         export const weekday = (tick: number) =>
-            new Intl.DateTimeFormat(locale.get(), { weekday: 'long'}).format(tick);
+            new Intl.DateTimeFormat(Locale.get(), { weekday: 'long'}).format(tick);
         export const dateCoreStringFromTick = (tick: null | number): string =>
         {
             if (null === tick)
@@ -543,7 +313,7 @@ export module Clockworks
                 {
                     return timeLongCoreStringFromTick(tick);
                 }
-                return `${days.toLocaleString()} ${locale.map("days")} ${timeLongCoreStringFromTick(tick)}`;
+                return `${days.toLocaleString()} ${Locale.map("days")} ${timeLongCoreStringFromTick(tick)}`;
             }
         };
         export const timeLongStringFromTick = (tick: null | number): string =>
@@ -561,7 +331,7 @@ export module Clockworks
             {
                 const days = Math.floor(tick / (24 *60 *60 *1000));
                 return 0 < days ?
-                    `${days.toLocaleString()} ${locale.map("days")} ${10 < days ? timeShortCoreStringFromTick(tick): timeLongCoreStringFromTick(tick)}`:
+                    `${days.toLocaleString()} ${Locale.map("days")} ${10 < days ? timeShortCoreStringFromTick(tick): timeLongCoreStringFromTick(tick)}`:
                     timeFullCoreStringFromTick(tick);
             }
         };
@@ -876,7 +646,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Stamped!")}`),
+                        content: $span("")(`${Locale.map("Stamped!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -896,7 +666,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -917,7 +687,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Updated.")}`),
+                        content: $span("")(`${Locale.map("Updated.")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -946,7 +716,7 @@ export module Clockworks
                     }
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Removed.")}`),
+                        content: $span("")(`${Locale.map("Removed.")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -968,11 +738,11 @@ export module Clockworks
                 };
                 export const removeAllStamps = async () =>
                 {
-                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    if (systemConfirm(Locale.map("This action cannot be undone. Do you want to continue?")))
                     {
                         Storage.NeverStopwatch.Stamps.removeKey();
                         updateWindow("operate");
-                        makePrimaryToast({ content: $span("")(`${locale.map("Removed all stamps!")}`), });
+                        makePrimaryToast({ content: $span("")(`${Locale.map("Removed all stamps!")}`), });
                     }
                 };
             }
@@ -991,7 +761,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1017,7 +787,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1036,7 +806,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1064,7 +834,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1090,7 +860,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Done!")}`),
+                        content: $span("")(`${Locale.map("Done!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1115,7 +885,7 @@ export module Clockworks
                     showUrl({ application: "CountdownTimer", });
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Done!")}`),
+                        content: $span("")(`${Locale.map("Done!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1143,7 +913,7 @@ export module Clockworks
                     }
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Removed.")}`),
+                        content: $span("")(`${Locale.map("Removed.")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1165,11 +935,11 @@ export module Clockworks
                 };
                 export const removeAllAlarms = async () =>
                 {
-                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    if (systemConfirm(Locale.map("This action cannot be undone. Do you want to continue?")))
                     {
                         Storage.CountdownTimer.Alarms.removeKey();
                         updateWindow("operate");
-                        makePrimaryToast({ content: $span("")(`${locale.map("Removed all alarms!")}`), });
+                        makePrimaryToast({ content: $span("")(`${Locale.map("Removed all alarms!")}`), });
                     }
                 };
             }
@@ -1186,7 +956,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1205,7 +975,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1231,7 +1001,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1260,7 +1030,7 @@ export module Clockworks
                     }
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Removed.")}`),
+                        content: $span("")(`${Locale.map("Removed.")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1282,11 +1052,11 @@ export module Clockworks
                 };
                 export const removeAllEvents = async () =>
                 {
-                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    if (systemConfirm(Locale.map("This action cannot be undone. Do you want to continue?")))
                     {
                         Storage.ElapsedTimer.Events.removeKey();
                         updateWindow("operate");
-                        makePrimaryToast({ content: $span("")(`${locale.map("Removed all alarms!")}`), });
+                        makePrimaryToast({ content: $span("")(`${Locale.map("Removed all alarms!")}`), });
                     }
                 };
             }
@@ -1298,7 +1068,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1325,7 +1095,7 @@ export module Clockworks
                     updateWindow("operate");
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Saved!")}`),
+                        content: $span("")(`${Locale.map("Saved!")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1354,7 +1124,7 @@ export module Clockworks
                     }
                     const toast = makePrimaryToast
                     ({
-                        content: $span("")(`${locale.map("Removed.")}`),
+                        content: $span("")(`${Locale.map("Removed.")}`),
                         backwardOperator: cancelTextButton
                         (
                             async () =>
@@ -1376,11 +1146,11 @@ export module Clockworks
                 };
                 export const reset = async () =>
                 {
-                    if (systemConfirm(locale.map("This action cannot be undone. Do you want to continue?")))
+                    if (systemConfirm(Locale.map("This action cannot be undone. Do you want to continue?")))
                     {
                         Storage.RainbowClock.Timezone.removeKey();
                         updateWindow("operate");
-                        makePrimaryToast({ content: $span("")(`${locale.map("Initialized timezone list!")}`), });
+                        makePrimaryToast({ content: $span("")(`${Locale.map("Initialized timezone list!")}`), });
                     }
                 };
             }
@@ -1439,10 +1209,10 @@ export module Clockworks
         export const $div = $tag("div");
         export const $span = $tag("span");
         export const labelSpan = $span("label");
-        export const label = (label: locale.LocaleKeyType) => labelSpan
+        export const label = (label: Locale.LocaleKeyType) => labelSpan
         ([
-            $span("locale-parallel")(locale.parallel(label)),
-            $span("locale-map")(locale.map(label)),
+            $span("locale-parallel")(Locale.parallel(label)),
+            $span("locale-map")(Locale.map(label)),
         ]);
         // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
         // {
@@ -1539,7 +1309,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "cancel-button",
-                                    children: locale.map("Cancel"),
+                                    children: Locale.map("Cancel"),
                                     onclick: () =>
                                     {
                                         result = null;
@@ -1549,7 +1319,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "default-button",
-                                    children: locale.map("OK"),
+                                    children: Locale.map("OK"),
                                     onclick: () =>
                                     {
                                         result = `${inputDate.value}T${inputTime.value}`;
@@ -1587,7 +1357,7 @@ export module Clockworks
                                         children:
                                         [
                                             await Resource.loadSvgOrCache("check-icon"),
-                                            $span("")(label(`theme.${key}` as locale.LocaleKeyType)),
+                                            $span("")(label(`theme.${key}` as Locale.LocaleKeyType)),
                                         ],
                                         onclick: async () =>
                                         {
@@ -1653,7 +1423,7 @@ export module Clockworks
                                         children:
                                         [
                                             await Resource.loadSvgOrCache("check-icon"),
-                                            $span("")(label(`progressBarStyle.${key}` as locale.LocaleKeyType)),
+                                            $span("")(label(`progressBarStyle.${key}` as Locale.LocaleKeyType)),
                                         ],
                                         onclick: async () =>
                                         {
@@ -1731,7 +1501,7 @@ export module Clockworks
                             },
                             await Promise.all
                             (
-                                locale.locales.map
+                                Locale.locales.map
                                 (
                                     async key =>
                                     ({
@@ -1740,7 +1510,7 @@ export module Clockworks
                                         children:
                                         [
                                             await Resource.loadSvgOrCache("check-icon"),
-                                            $span("")(labelSpan(locale.getLocaleName(key))),
+                                            $span("")(labelSpan(Locale.getLocaleName(key))),
                                         ],
                                         onclick: async () =>
                                         {
@@ -1795,9 +1565,9 @@ export module Clockworks
                         [
                             await Promise.all
                             (
-                                Object.keys(rainbowClockColorPatternMap).map
+                                Object.keys(Type.rainbowClockColorPatternMap).map
                                 (
-                                    async (key: rainbowClockColorPatternType) =>
+                                    async (key: Type.rainbowClockColorPatternType) =>
                                     ({
                                         tag: "button",
                                         className: `check-button ${key === settings ? "checked": ""}`,
@@ -1870,7 +1640,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "cancel-button",
-                                    children: locale.map("Cancel"),
+                                    children: Locale.map("Cancel"),
                                     onclick: () =>
                                     {
                                         result = null;
@@ -1880,7 +1650,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "default-button",
-                                    children: locale.map("OK"),
+                                    children: Locale.map("OK"),
                                     onclick: () =>
                                     {
                                         result = Domain.parseTime(inputTime.value) ?? tick;
@@ -1950,7 +1720,7 @@ export module Clockworks
                                     children: label("input a time"),
                                     onclick: async () =>
                                     {
-                                        const tick = await timePrompt(locale.map("input a time"), 0);
+                                        const tick = await timePrompt(Locale.map("input a time"), 0);
                                         if (null !== tick)
                                         {
                                             const minutes = tick /(60 *1000);
@@ -2017,7 +1787,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "cancel-button",
-                                    children: locale.map("Cancel"),
+                                    children: Locale.map("Cancel"),
                                     onclick: () =>
                                     {
                                         result = null;
@@ -2027,7 +1797,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "default-button",
-                                    children: locale.map("OK"),
+                                    children: Locale.map("OK"),
                                     onclick: () =>
                                     {
                                         result =
@@ -2078,7 +1848,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "cancel-button",
-                                    children: locale.map("Cancel"),
+                                    children: Locale.map("Cancel"),
                                     onclick: () =>
                                     {
                                         result = null;
@@ -2088,7 +1858,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "default-button",
-                                    children: locale.map("OK"),
+                                    children: Locale.map("OK"),
                                     onclick: () =>
                                     {
                                         result = Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick;
@@ -2117,7 +1887,7 @@ export module Clockworks
                 children: config.timezoneOffsetList
                     .concat([ offset ])
                     .filter((i, ix, list) => ix === list.indexOf(i))
-                    .sort(simpleComparer)
+                    .sort(Base.simpleComparer)
                     .map
                     (
                         i =>
@@ -2146,7 +1916,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "cancel-button",
-                                    children: locale.map("Cancel"),
+                                    children: Locale.map("Cancel"),
                                     onclick: () =>
                                     {
                                         result = null;
@@ -2156,7 +1926,7 @@ export module Clockworks
                                 {
                                     tag: "button",
                                     className: "default-button",
-                                    children: locale.map("OK"),
+                                    children: Locale.map("OK"),
                                     onclick: () =>
                                     {
                                         result =
@@ -2412,7 +2182,7 @@ export module Clockworks
                 label("Edit"),
                 async () =>
                 {
-                    const result = Domain.parseDate(await dateTimePrompt(locale.map("Edit"), tick));
+                    const result = Domain.parseDate(await dateTimePrompt(Locale.map("Edit"), tick));
                     if (null !== result)
                     {
                         const newTick = Domain.getTicks(result);
@@ -2442,7 +2212,7 @@ export module Clockworks
             )
         ];
         export const alarmTitle = (item: Type.AlarmEntry) => "timer" === item.type ?
-            `${Domain.makeTimerLabel(item.end -item.start)} ${locale.map("Timer")}`:
+            `${Domain.makeTimerLabel(item.end -item.start)} ${Locale.map("Timer")}`:
             item.title;
         export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item flex-item")
         ([
@@ -2486,7 +2256,7 @@ export module Clockworks
                         label("Edit"),
                         async () =>
                         {
-                            const result = await eventPrompt(locale.map("Edit"), item.title, item.end);
+                            const result = await eventPrompt(Locale.map("Edit"), item.title, item.end);
                             if (null !== result)
                             {
                                 if (item.title !== result.title || item.end !== result.tick)
@@ -2512,7 +2282,7 @@ export module Clockworks
                         label("Edit start time"),
                         async () =>
                         {
-                            const result = await dateIimePrompt(locale.map("Edit start time"), item.start);
+                            const result = await dateIimePrompt(Locale.map("Edit start time"), item.start);
                             if (null !== result)
                             {
                                 if (item.start !== result)
@@ -2582,7 +2352,7 @@ export module Clockworks
                 label("Edit"),
                 async () =>
                 {
-                    const result = await eventPrompt(locale.map("Edit"), item.title, item.tick);
+                    const result = await eventPrompt(Locale.map("Edit"), item.title, item.tick);
                     if (null !== result)
                     {
                         if (item.title !== result.title || item.tick !== result.tick)
@@ -2656,7 +2426,7 @@ export module Clockworks
                 label("Edit"),
                 async () =>
                 {
-                    const result = await timezonePrompt(locale.map("Edit"), item.title, item.offset);
+                    const result = await timezonePrompt(Locale.map("Edit"), item.title, item.offset);
                     if (null !== result)
                     {
                         if (item.title !== result.title || item.offset !== result.offset)
@@ -2912,7 +2682,7 @@ export module Clockworks
                     )
             )
         });
-        export const screenHeaderFlashSegmentMenu = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: locale.LocaleKeyType): Promise<minamo.dom.Source> =>
+        export const screenHeaderFlashSegmentMenu = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: Locale.LocaleKeyType): Promise<minamo.dom.Source> =>
         (
             await Promise.all
             (
@@ -2923,7 +2693,7 @@ export module Clockworks
                     (
                         [
                             await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
-                            labelSpan(0 === i ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                            labelSpan(0 === i ? Locale.map(zeroLabel): `${Locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
                         ],
                         async () =>
                         {
@@ -2951,7 +2721,7 @@ export module Clockworks
                     {
                         clearLastMouseDownTarget();
                         getScreenCoverList().forEach(i => i.click());
-                        const tick = await timePrompt(locale.map("input a time"), 0);
+                        const tick = await timePrompt(Locale.map("input a time"), 0);
                         if (null !== tick)
                         {
                             adder(tick);
@@ -2963,10 +2733,10 @@ export module Clockworks
             ]:
             []
         );
-        export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: locale.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
+        export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: Locale.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
         ({
             icon: 0 === flashInterval ? zeroIcon: "flash-icon",
-            title: 0 === flashInterval ? locale.map(zeroLabel): `${locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
+            title: 0 === flashInterval ? Locale.map(zeroLabel): `${Locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
             menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
         });
         export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
@@ -3043,7 +2813,7 @@ export module Clockworks
                 {
                     if (await localeSettingsPopup())
                     {
-                        locale.setLocale(Storage.Settings.get().locale);
+                        Locale.setLocale(Storage.Settings.get().locale);
                         await reload();
                     }
                 }
@@ -3211,7 +2981,7 @@ export module Clockworks
                     break;
                 }
             };
-            setBodyColor(getSolidRainbowColor(0));
+            setBodyColor(Color.getSolidRainbowColor(0));
             await showWindow(await welcomeScreen(), updateWindow);
             await updateWindow("timer");
         };
@@ -3350,7 +3120,7 @@ export module Clockworks
                         ([
                             $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                             $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                            $tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: locale.map("Stamp"), }, ]),
+                            $tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Locale.map("Stamp"), }, ]),
                         ])
                     ),
                 ]),
@@ -3412,11 +3182,11 @@ export module Clockworks
                             {
                                 screenFlash();
                             }
-                            const currentColor = getSolidRainbowColor(primaryStep);
+                            const currentColor = Color.getSolidRainbowColor(primaryStep);
                             setFoundationColor(currentColor);
                             previousPrimaryStep = primaryStep;
                             const rate = ((Domain.getTicks() -current) %unit) /unit;
-                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                             setScreenBarProgress(rate, nextColor);
                             // setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
@@ -3426,7 +3196,7 @@ export module Clockworks
                             previousPrimaryStep = 0;
                             setScreenBarProgress(null);
                             getHeaderElement().classList.remove("with-screen-prgress");
-                            const currentColor = getSolidRainbowColor(0);
+                            const currentColor = Color.getSolidRainbowColor(0);
                             setFoundationColor(currentColor);
                             // setBodyColor(currentColor);
                         }
@@ -3450,14 +3220,14 @@ export module Clockworks
                             const elapsed = Domain.getTicks() -current;
                             const unit = flashInterval; // *60 *1000;
                             const primaryStep = Math.floor(elapsed / unit);
-                            const currentColor = getSolidRainbowColor(primaryStep);
-                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const currentColor = Color.getSolidRainbowColor(primaryStep);
+                            const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                             const rate = ((Domain.getTicks() -current) %unit) /unit;
-                            setBodyColor(mixColors(currentColor, nextColor, rate));
+                            setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                         }
                         else
                         {
-                            const currentColor = getSolidRainbowColor(0);
+                            const currentColor = Color.getSolidRainbowColor(0);
                             setBodyColor(currentColor);
                         }
                         break;
@@ -3632,7 +3402,7 @@ export module Clockworks
                             children: label("New Schedule"),
                             onclick: async () =>
                             {
-                                const result = await eventPrompt(locale.map("New Schedule"), locale.map("New Schedule"), Domain.getAppropriateTicks());
+                                const result = await eventPrompt(Locale.map("New Schedule"), Locale.map("New Schedule"), Domain.getAppropriateTicks());
                                 if (result)
                                 {
                                     if (Domain.getTicks() < result.tick)
@@ -3661,7 +3431,7 @@ export module Clockworks
                         ([
                             $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                             $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                            $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${Domain.makeTimerLabel(Domain.parseTimer(i))} ${locale.map("Timer")}`, }))]),
+                            $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${Domain.makeTimerLabel(Domain.parseTimer(i))} ${Locale.map("Timer")}`, }))]),
                         ])
                     ),
                 ]),
@@ -3733,11 +3503,11 @@ export module Clockworks
                                 screenFlash();
                                 lashFlashAt = tick;
                             }
-                            const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
+                            const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setFoundationColor(currentColor);
                             const span = current.end - current.start;
                             const rate = Math.min(tick - current.start, span) /span;
-                            const nextColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
+                            const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
                             setScreenBarProgress(rate, nextColor);
                             // setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
@@ -3747,7 +3517,7 @@ export module Clockworks
                             previousPrimaryStep = 0;
                             setScreenBarProgress(null);
                             getHeaderElement().classList.remove("with-screen-prgress");
-                            const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
+                            const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setFoundationColor(currentColor);
                             // setBodyColor(currentColor);
                         }
@@ -3772,14 +3542,14 @@ export module Clockworks
                             const rest = current.end - tick;
                             const unit = flashInterval; // *60 *1000;
                             const primaryStep = Math.floor(rest / unit);
-                            const currentColor = getSolidRainbowColor(primaryStep);
-                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const currentColor = Color.getSolidRainbowColor(primaryStep);
+                            const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                             const rate = (Math.min(tick - current.start), unit) /unit;
-                            setBodyColor(mixColors(currentColor, nextColor, rate));
+                            setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                         }
                         else
                         {
-                            const currentColor = getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
+                            const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                             setBodyColor(currentColor);
                         }
                         break;
@@ -3912,7 +3682,7 @@ export module Clockworks
                             children: label("New Event"),
                             onclick: async () =>
                             {
-                                const result = await eventPrompt(locale.map("New Event"), locale.map("New Event"), Domain.getAppropriateTicks());
+                                const result = await eventPrompt(Locale.map("New Event"), Locale.map("New Event"), Domain.getAppropriateTicks());
                                 if (result)
                                 {
                                     if (Domain.getTicks() < result.tick)
@@ -3999,11 +3769,11 @@ export module Clockworks
                             {
                                 screenFlash();
                             }
-                            const currentColor = getSolidRainbowColor(primaryStep);
+                            const currentColor = Color.getSolidRainbowColor(primaryStep);
                             setFoundationColor(currentColor);
                             previousPrimaryStep = primaryStep;
                             const rate = ((tick -current.tick) %unit) /unit;
-                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                             setScreenBarProgress(rate, nextColor);
                             // setBodyColor(nextColor);
                             getHeaderElement().classList.add("with-screen-prgress");
@@ -4013,7 +3783,7 @@ export module Clockworks
                             previousPrimaryStep = 0;
                             setScreenBarProgress(null);
                             getHeaderElement().classList.remove("with-screen-prgress");
-                            const currentColor = getSolidRainbowColor(0);
+                            const currentColor = Color.getSolidRainbowColor(0);
                             setFoundationColor(currentColor);
                             // setBodyColor(currentColor);
                         }
@@ -4038,14 +3808,14 @@ export module Clockworks
                             const elapsed = Domain.getTicks() -current.tick;
                             const unit = flashInterval; // *60 *1000;
                             const primaryStep = Math.floor(elapsed / unit);
-                            const currentColor = getSolidRainbowColor(primaryStep);
-                            const nextColor = getSolidRainbowColor(primaryStep +1);
+                            const currentColor = Color.getSolidRainbowColor(primaryStep);
+                            const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                             const rate = ((Domain.getTicks() -current.tick) %unit) /unit;
-                            setBodyColor(mixColors(currentColor, nextColor, rate));
+                            setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                         }
                         else
                         {
-                            const currentColor = getSolidRainbowColor(0);
+                            const currentColor = Color.getSolidRainbowColor(0);
                             setBodyColor(currentColor);
                         }
                         break;
@@ -4188,7 +3958,7 @@ export module Clockworks
                             children: label("New Time zone"),
                             onclick: async () =>
                             {
-                                const result = await timezonePrompt(locale.map("New Time zone"), locale.map("New Time zone"), new Date().getTimezoneOffset());
+                                const result = await timezonePrompt(Locale.map("New Time zone"), Locale.map("New Time zone"), new Date().getTimezoneOffset());
                                 if (result)
                                 {
                                     await Operate.RainbowClock.add({ title: result.title, offset: result.offset, });
@@ -4278,7 +4048,7 @@ export module Clockworks
                                 (
                                     (dom, index) =>
                                     {
-                                        const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
+                                        const getRainbowColor = Type.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                                         const currentTick = utc -(timezones[index].offset *Domain.utcOffsetRate);
                                         const panel = minamo.dom.getDivsByClassName(dom, "item-panel")[0];
                                         const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
@@ -4302,14 +4072,14 @@ export module Clockworks
                         const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
                         const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                         minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
-                        const getRainbowColor = rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
+                        const getRainbowColor = Type.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                         const currentColor = getRainbowColor(currentNow.getHours());
                         setFoundationColor(currentColor);
                         const hourUnit = 60 *60 *1000;
                         const minutes = (tick % hourUnit) / hourUnit;
                         const nextColor = getRainbowColor(currentNow.getHours() +1);
                         setScreenBarProgress(minutes, nextColor);
-                        setBodyColor(mixColors(currentColor, nextColor, minutes));
+                        setBodyColor(Color.mixColors(currentColor, nextColor, minutes));
                         break;
                     case "storage":
                         await reload();
@@ -4381,7 +4151,7 @@ export module Clockworks
                     }
                 );
             }
-            setFoundationColor(getSolidRainbowColor(0));
+            setFoundationColor(Color.getSolidRainbowColor(0));
             document.body.style.removeProperty("background-color");
             document.getElementById("foundation").style.removeProperty("background-color");
             document.getElementById("screen").style.removeProperty("background-color");
@@ -4874,7 +4644,7 @@ export module Clockworks
     export const start = async () =>
     {
         console.log("start!!!");
-        locale.setLocale(Storage.Settings.get().locale);
+        Locale.setLocale(Storage.Settings.get().locale);
         window.onpopstate = () => showPage();
         window.addEventListener("resize", Render.onWindowResize);
         window.addEventListener("focus", Render.onWindowFocus);
