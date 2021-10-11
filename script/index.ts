@@ -4,6 +4,7 @@ import { Type } from "./type";
 import { Base } from "./base";
 import { Color } from "./color";
 import { Storage } from "./storage";
+import { Domain } from "./domain";
 import config from "../resource/config.json";
 import resource from "../resource/images.json";
 export module Clockworks
@@ -40,7 +41,7 @@ export module Clockworks
             parseItem: json => Domain.parseStamp(json),
         },
     };
-    export type ApplicationType = keyof typeof applicationList;
+    // export type ApplicationType = keyof typeof applicationList;
     export const applicationIdList = Object.keys(applicationList);
 
     const setTitle = (title: string) =>
@@ -82,511 +83,6 @@ export module Clockworks
             setHeaderColor(null);
         }
     };
-    export module Domain
-    {
-        export const getFlashIntervalPreset = () => config.flashIntervalPreset.map(i => parseTimer(i));
-        export const getTimerPreset = () => config.timerPreset.map(i => parseTimer(i));
-        export const utcOffsetRate = 60 *1000;
-        // export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
-        export const makeTimerLabel = (timer: number) =>
-        {
-            if (timer < 0)
-            {
-                return `-${makeTimerLabel(-timer)}`;
-            }
-            const days = Math.floor(timer / (24 * 60 * 60 * 1000));
-            const hours = Math.floor(timer / (60 * 60 * 1000)) % 24;
-            const minutes = Math.floor(timer / (60 * 1000)) % 60;
-            const seconds = Math.floor(timer / 1000) % 60;
-            const milliseconds = Math.floor(timer) % 1000;
-            let result = "";
-            if ("" !== result || 0 < days)
-            {
-                if ("" === result)
-                {
-                    result = `${days} ` +Locale.map("days");
-                }
-                else
-                {
-                    result += ` ${days} ` +Locale.map("days");
-                }
-            }
-            if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours)
-            {
-                if ("" === result)
-                {
-                    result = `${hours} ` +Locale.map("hours");
-                }
-                else
-                {
-                    result += ` ` +`0${hours}`.substr(-2) +` ` +Locale.map("hours");
-                }
-            }
-            if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes)
-            {
-                if ("" === result)
-                {
-                    result = `${minutes} ` +Locale.map("minutes");
-                }
-                else
-                {
-                    result += ` ` +`0${minutes}`.substr(-2) +` ` +Locale.map("minutes");
-                }
-            }
-            if (0 < seconds || 0 < milliseconds)
-            {
-                let trail = "";
-                if (0 < milliseconds)
-                {
-                    trail = `.` +`00${milliseconds}`.substr(-3);
-                    trail = trail.replace(/0+$/, "");
-                }
-                if ("" === result)
-                {
-                    result = `${seconds}${trail} ` +Locale.map("seconds");
-                }
-                else
-                {
-                    result += ` ` +`0${seconds}`.substr(-2) +trail +` ` +Locale.map("seconds");
-                }
-            }
-            if ("" === result)
-            {
-                result = `${minutes} ${Locale.map("m(minutes)")}`;
-            }
-            // console.log({ timer, result, });
-            return result;
-        };
-        export const getTicks = (date: Date = new Date()) => date.getTime();
-        export const getUTCTicks = (date: Date = new Date()) => getTicks(date) +(date.getTimezoneOffset() *utcOffsetRate);
-        export const getAppropriateTicks = (date: Date = new Date()) =>
-        {
-            const TenMinutesLater = date.getTime() +(10 *60 *1000);
-            const FloorHour = new Date(TenMinutesLater);
-            FloorHour.setMinutes(0);
-            FloorHour.setSeconds(0);
-            FloorHour.setMilliseconds(0);
-            return FloorHour.getTime() +(60 *60 *1000);
-        };
-        export const weekday = (tick: number) =>
-            new Intl.DateTimeFormat(Locale.get(), { weekday: 'long'}).format(tick);
-        export const dateCoreStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            {
-                const date = new Date(tick);
-                return `${date.getFullYear()}-${("0" +(date.getMonth() +1)).substr(-2)}-${("0" +date.getDate()).substr(-2)}`;
-            }
-        };
-        export const getTime = (tick: null | number): null | number =>
-        {
-            if (null === tick)
-            {
-                return null;
-            }
-            else
-            if (tick < 0)
-            {
-                return -getTime(tick);
-            }
-            else
-            if (tick < 24 *60 *60 *1000)
-            {
-                return tick;
-            }
-            else
-            {
-                const date = new Date(tick);
-                date.setHours(0);
-                date.setMinutes(0);
-                date.setSeconds(0);
-                date.setMilliseconds(0);
-                return tick -getTicks(date);
-            }
-        };
-        export const dateStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            {
-                return `${dateCoreStringFromTick(tick)} ${timeLongCoreStringFromTick(getTime(tick))}`;
-            }
-        };
-        export const dateFullStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            {
-                return `${dateCoreStringFromTick(tick)} ${timeFullCoreStringFromTick(getTime(tick))}`;
-            }
-        };
-        export const timeShortCoreStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            if (tick < 0)
-            {
-                return `-${timeShortCoreStringFromTick(-tick)}`;
-            }
-            else
-            {
-                const hour = Math.floor(tick /(60 *60 *1000)) %24;
-                const minute = Math.floor(tick /(60 *1000)) %60;
-                return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}`;
-            }
-        };
-        export const timeLongCoreStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            if (tick < 0)
-            {
-                return `-${timeLongCoreStringFromTick(-tick)}`;
-            }
-            else
-            {
-                const hour = Math.floor(tick /(60 *60 *1000)) %24;
-                const minute = Math.floor(tick /(60 *1000)) %60;
-                const second = Math.floor(tick /(1000)) %60;
-                return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}`;
-            }
-        };
-        export const timeFullCoreStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            if (tick < 0)
-            {
-                return `-${timeFullCoreStringFromTick(-tick)}`;
-            }
-            else
-            {
-                const hour = Math.floor(tick /(60 *60 *1000)) %24;
-                const minute = Math.floor(tick /(60 *1000)) %60;
-                const second = Math.floor(tick /(1000)) %60;
-                const milliseconds = tick %1000;
-                return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}.${("000" +milliseconds).slice(-3)}`;
-            }
-        };
-        export const timeShortStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            if (tick < 0)
-            {
-                return `-${timeShortStringFromTick(-tick)}`;
-            }
-            else
-            {
-                // if (tick < 60 *1000)
-                // {
-                //     return timeFullCoreStringFromTick(tick);
-                // }
-                if (tick < 60 *60 *1000)
-                {
-                    return timeLongCoreStringFromTick(tick);
-                }
-                const days = Math.floor(tick / (24 *60 *60 *1000));
-                if (days < 1)
-                {
-                    return timeLongCoreStringFromTick(tick);
-                }
-                return `${days.toLocaleString()} ${Locale.map("days")} ${timeLongCoreStringFromTick(tick)}`;
-            }
-        };
-        export const timeLongStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            if (tick < 0)
-            {
-                return `-${timeLongStringFromTick(-tick)}`;
-            }
-            else
-            {
-                const days = Math.floor(tick / (24 *60 *60 *1000));
-                return 0 < days ?
-                    `${days.toLocaleString()} ${Locale.map("days")} ${10 < days ? timeShortCoreStringFromTick(tick): timeLongCoreStringFromTick(tick)}`:
-                    timeFullCoreStringFromTick(tick);
-            }
-        };
-        export const parseDate = (date: string | null): Date | null =>
-        {
-            if (null !== date)
-            {
-                try
-                {
-                    return new Date(Date.parse(date));
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            return null;
-        };
-        export const parseTime = (time: string | null): number | null =>
-        {
-            if (null !== time)
-            {
-                try
-                {
-                    return parseDate(`2020-01-01T${time}`).getTime() -parseDate(`2020-01-01T00:00:00`).getTime();
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            return null;
-        };
-        const timezoneOffsetSignString = (offset: number): string => 0 === offset ? "±": (0 < offset ? "-": "+"); // ※ JavaScript 上のタイムゾーンオフセットとUTC表記は + / - が逆転する
-        const timezoneOffsetTimeString = (offset: number): string =>
-        {
-            if (offset < 0)
-            {
-                return timezoneOffsetTimeString(-offset);
-            }
-            const hours = `00${Math.floor(offset /60)}`.slice(-2);
-            const minutes = `00${offset %60}`.slice(-2);
-            return `${hours}:${minutes}`;
-        };
-        export const timezoneOffsetString = (offset: number) => `UTC${timezoneOffsetSignString(offset)}${timezoneOffsetTimeString(offset)}`;
-        export const parseOrNull = (json: string) =>
-        {
-            if (null !== json && undefined !== json)
-            {
-                try
-                {
-                    return JSON.parse(json);
-                }
-                catch(error)
-                {
-                    console.error(error);
-                }
-            }
-            return null;
-        };
-        export const parseStampCore = (item: any): number | null =>
-        {
-            const now = Domain.getTicks();
-            if ("new" === item)
-            {
-                return now;
-            }
-            if ("number" === typeof item && item <= now)
-            {
-                return item;
-            }
-            return null;
-        };
-        export const makeStampUrl = (item: "new" | number) => makeUrl(makePageParams("NeverStopwatch", item));
-        export const parseStamp = (json: string): number | null => parseStampCore(parseOrNull(json));
-        export const parseTimer = (timer: any) =>
-        {
-            try
-            {
-                switch(typeof timer)
-                {
-                case "number":
-                    return timer;
-                case "string":
-                    if (timer.endsWith("ms"))
-                    {
-                        return parseFloat(timer.substr(0, timer.length -2).trim());
-                    }
-                    else
-                    if (timer.endsWith("s"))
-                    {
-                        return parseFloat(timer.substr(0, timer.length -1).trim()) *1000;
-                    }
-                    else
-                    if (timer.endsWith("m"))
-                    {
-                        return parseFloat(timer.substr(0, timer.length -1).trim()) *60 *1000;
-                    }
-                    else
-                    if (timer.endsWith("h"))
-                    {
-                        return parseFloat(timer.substr(0, timer.length -1).trim()) *60 *60 *1000;
-                    }
-                    else
-                    if (timer.endsWith("d"))
-                    {
-                        return parseFloat(timer.substr(0, timer.length -1).trim()) *24 *60 *60 *1000;
-                    }
-                    else
-                    {
-                        return parseInt(timer.trim());
-                    }
-                }
-            }
-            catch(err)
-            {
-                console.error(err);
-            }
-            return null;
-        };
-        export const parseAlarmCore = (item: any): Type.AlarmEntry | null =>
-        {
-            if (null !== item && undefined !== item && "object" === typeof item)
-            {
-                if
-                (
-                    "timer" === item.type &&
-                    "number" === typeof item.start &&
-                    "number" === typeof item.end &&
-                    item.start < item.end
-                )
-                {
-                    const result =
-                    {
-                        type: item.type,
-                        start: item.start,
-                        end: item.end,
-                    };
-                    return result;
-                }
-                const newTimer = parseTimer(item.end);
-                if
-                (
-                    "timer" === item.type &&
-                    "new" === item.start &&
-                    "number" === typeof newTimer &&
-                    0 < newTimer
-                )
-                {
-                    const start = getTicks();
-                    const result =
-                    {
-                        type: item.type,
-                        start: start,
-                        end: start +newTimer,
-                    };
-                    return result;
-                }
-                if
-                (
-                    "schedule" === item.type &&
-                    "string" === typeof item.title &&
-                    "number" === typeof item.start &&
-                    "number" === typeof item.end &&
-                    item.start < item.end
-                )
-                {
-                    const result =
-                    {
-                        type: item.type,
-                        title: item.title,
-                        start: item.start,
-                        end: item.end,
-                    };
-                    return result;
-                }
-            }
-            return null;
-        };
-        export const makeNewTimerUrl = (timer: string) => makeUrl
-        (
-            makePageParams
-            (
-                "CountdownTimer",
-                {
-                    type: "timer",
-                    start: "new",
-                    end: timer,
-                },
-            )
-        );
-        // export const makeNewTimerUrl = (timer: string) => `?application=CountdownTimer&item=%7B%22type%22%3A%22timer%22%2C%22start%22%3A%22new%22%2C%22end%22%3A%22${timer}%22%7D`;
-        export const parseAlarm = (json: string): Type.AlarmEntry | null => parseAlarmCore(parseOrNull(json));
-        export const parseEventCore = (item: any): Type.EventEntry | null =>
-        {
-            if (null !== item && undefined !== item && "object" === typeof item)
-            {
-                if
-                (
-                    "string" === typeof item.title &&
-                    0 < item.title.trim().length &&
-                    "new" === item.start
-                )
-                {
-                    const result =
-                    {
-                        title: item.title.trim(),
-                        tick: getTicks(),
-                    };
-                    return result;
-                }
-                if
-                (
-                    "string" === typeof item.title &&
-                    0 < item.title.trim().length &&
-                    "number" === typeof item.tick
-                )
-                {
-                    const result =
-                    {
-                        title: item.title.trim(),
-                        tick: item.tick,
-                    };
-                    return result;
-                }
-            }
-            return null;
-        };
-        export const parseEvent = (json: string): Type.EventEntry | null => parseEventCore(parseOrNull(json));
-
-
-        export const parseTimezoneCore = (item: any): Type.TimezoneEntry | null =>
-        {
-            if (null !== item && undefined !== item && "object" === typeof item)
-            {
-                if
-                (
-                    "string" === typeof item.title &&
-                    0 < item.title.trim().length &&
-                    "number" === typeof item.offset &&
-                    -960 <= item.offset && item.offset <= 960
-                )
-                {
-                    const result =
-                    {
-                        title: item.title.trim(),
-                        offset: item.offset,
-                    };
-                    return result;
-                }
-            }
-            return null;
-        };
-        export const parseTimezone = (json: string): Type.TimezoneEntry | null => parseTimezoneCore(parseOrNull(json));
-    }
     export module Render
     {
         export const fullscreenEnabled = () => document.fullscreenEnabled ?? (document as any).webkitFullscreenEnabled;
@@ -703,7 +199,7 @@ export module Clockworks
                 export const removeStamp = async (tick: number, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
-                    const isOpend = !! getUrlHash(location.href).split("/")[1];
+                    const isOpend = !! Base.getUrlHash(location.href).split("/")[1];
                     const backup = Storage.NeverStopwatch.Stamps.get();
                     Storage.NeverStopwatch.Stamps.remove(tick);
                     if (isOpend)
@@ -724,7 +220,7 @@ export module Clockworks
                                 Storage.NeverStopwatch.Stamps.set(backup);
                                 if (isOpend)
                                 {
-                                    showUrl(makePageParams("NeverStopwatch", tick));
+                                    showUrl(Domain.makePageParams("NeverStopwatch", tick));
                                 }
                                 else
                                 {
@@ -891,7 +387,7 @@ export module Clockworks
                             async () =>
                             {
                                 Storage.CountdownTimer.ColorIndex.set(color);
-                                showUrl(makePageParams("CountdownTimer", item));
+                                showUrl(Domain.makePageParams("CountdownTimer", item));
                                 await toast.hide();
                                 onCanceled?.();
                             }
@@ -901,7 +397,7 @@ export module Clockworks
                 export const removeAlarm = async (item: Type.AlarmEntry, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
-                    const isOpend = !! getUrlHash(location.href).split("/")[1];
+                    const isOpend = !! Base.getUrlHash(location.href).split("/")[1];
                     Storage.CountdownTimer.Alarms.remove(item);
                     if (isOpend)
                     {
@@ -921,7 +417,7 @@ export module Clockworks
                                 Storage.CountdownTimer.Alarms.add(item);
                                 if (isOpend)
                                 {
-                                    showUrl(makePageParams("CountdownTimer", item));
+                                    showUrl(Domain.makePageParams("CountdownTimer", item));
                                 }
                                 else
                                 {
@@ -1018,7 +514,7 @@ export module Clockworks
                 export const remove = async (item: Type.EventEntry, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
-                    const isOpend = !! getUrlHash(location.href).split("/")[1];
+                    const isOpend = !! Base.getUrlHash(location.href).split("/")[1];
                     Storage.ElapsedTimer.Events.remove(item);
                     if (isOpend)
                     {
@@ -1038,7 +534,7 @@ export module Clockworks
                                 Storage.ElapsedTimer.Events.add(item);
                                 if (isOpend)
                                 {
-                                    showUrl(makePageParams("ElapsedTimer", item));
+                                    showUrl(Domain.makePageParams("ElapsedTimer", item));
                                 }
                                 else
                                 {
@@ -1112,7 +608,7 @@ export module Clockworks
                 export const remove = async (item: Type.TimezoneEntry, onCanceled?: () => unknown) =>
                 {
                     // const urlParams = getUrlParams(location.href)["item"];
-                    const isOpend = !! getUrlHash(location.href).split("/")[1];
+                    const isOpend = !! Base.getUrlHash(location.href).split("/")[1];
                     Storage.RainbowClock.Timezone.remove(item);
                     if (isOpend)
                     {
@@ -1132,7 +628,7 @@ export module Clockworks
                                 Storage.RainbowClock.Timezone.add(item);
                                 if (isOpend)
                                 {
-                                    showUrl(makePageParams("RainbowClock", item));
+                                    showUrl(Domain.makePageParams("RainbowClock", item));
                                 }
                                 else
                                 {
@@ -1170,11 +666,11 @@ export module Clockworks
                 });
             },
         });
-        export const internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
+        export const internalLink = (data: { className?: string, href: Type.PageParams, children: minamo.dom.Source}) =>
         ({
             tag: "a",
             className: data.className,
-            href: makeUrl(data.href),
+            href: Domain.makeUrl(data.href),
             children: data.children,
             onclick: (_event: MouseEvent) =>
             {
@@ -2133,7 +1629,7 @@ export module Clockworks
             children,
             onclick,
         });
-        export const menuLinkItem = (children: minamo.dom.Source, href: PageParams, className?: string) => menuItem
+        export const menuLinkItem = (children: minamo.dom.Source, href: Type.PageParams, className?: string) => menuItem
         (
             children,
             () => showUrl(href),
@@ -2146,7 +1642,7 @@ export module Clockworks
                 internalLink
                 ({
                     className: "item-title",
-                    href: makePageParams("NeverStopwatch", tick),
+                    href: Domain.makePageParams("NeverStopwatch", tick),
                     children:
                     [
                         await Resource.loadSvgOrCache("tick-icon"),
@@ -2221,7 +1717,7 @@ export module Clockworks
                 internalLink
                 ({
                     className: "item-title",
-                    href: makePageParams("CountdownTimer", item),
+                    href: Domain.makePageParams("CountdownTimer", item),
                     children:
                     [
                         await Resource.loadSvgOrCache("tick-icon"),
@@ -2319,7 +1815,7 @@ export module Clockworks
                 internalLink
                 ({
                     className: "item-title",
-                    href: makePageParams("ElapsedTimer", item),
+                    href: Domain.makePageParams("ElapsedTimer", item),
                     children:
                     [
                         await Resource.loadSvgOrCache("tick-icon"),
@@ -2387,7 +1883,7 @@ export module Clockworks
                 internalLink
                 ({
                     className: "item-title",
-                    href: makePageParams("RainbowClock", item),
+                    href: Domain.makePageParams("RainbowClock", item),
                     children:
                     [
                         await Resource.loadSvgOrCache("pin-icon"),
@@ -2447,7 +1943,7 @@ export module Clockworks
         {
             icon: Resource.KeyType;
             title: string;
-            href?: PageParams;
+            href?: Type.PageParams;
             menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
         }
         export interface HeaderSource
@@ -2455,7 +1951,7 @@ export module Clockworks
             items: HeaderSegmentSource[];
             menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
             operator?: minamo.dom.Source;
-            parent?: PageParams;
+            parent?: Type.PageParams;
         }
         export interface ScreenSource
         {
@@ -2580,7 +2076,7 @@ export module Clockworks
             href: { },
             title: applicationTitle,
         });
-        export const screenHeaderApplicationSegment = async (applicationType: ApplicationType): Promise<HeaderSegmentSource> =>
+        export const screenHeaderApplicationSegment = async (applicationType: Type.ApplicationType): Promise<HeaderSegmentSource> =>
         ({
             icon: applicationList[applicationType].icon,
             title: applicationList[applicationType].title,
@@ -2588,7 +2084,7 @@ export module Clockworks
             (
                 applicationIdList.map
                 (
-                    async (i: ApplicationType) => menuLinkItem
+                    async (i: Type.ApplicationType) => menuLinkItem
                     (
                         [ await Resource.loadSvgOrCache(applicationList[i].icon), applicationList[i].title, ],
                         { application: i },
@@ -2613,7 +2109,7 @@ export module Clockworks
                         async i => menuLinkItem
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), $span("monospace")(Domain.dateFullStringFromTick(i)), ],
-                            makePageParams("NeverStopwatch", i),
+                            Domain.makePageParams("NeverStopwatch", i),
                             item === i ? "current-item": undefined,
                         )
                     )
@@ -2634,7 +2130,7 @@ export module Clockworks
                         async i => menuLinkItem
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
-                            makePageParams("CountdownTimer", i),
+                            Domain.makePageParams("CountdownTimer", i),
                             JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
@@ -2655,7 +2151,7 @@ export module Clockworks
                         async i => menuLinkItem
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
-                            makePageParams("ElapsedTimer", i),
+                            Domain.makePageParams("ElapsedTimer", i),
                             JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
@@ -2676,7 +2172,7 @@ export module Clockworks
                         async i => menuLinkItem
                         (
                             [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
-                            makePageParams("RainbowClock", i),
+                            Domain.makePageParams("RainbowClock", i),
                             JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                         )
                     )
@@ -2930,7 +2426,7 @@ export module Clockworks
                             (
                                 applicationIdList.map
                                 (
-                                    (i: ApplicationType) =>
+                                    (i: Type.ApplicationType) =>
                                     internalLink
                                     ({
                                         href: { application: i },
@@ -4564,64 +4060,7 @@ export module Clockworks
         export const onMouseUp = (_evnet: MouseEvent) => setTimeout(clearLastMouseDownTarget, 10);
         export const clearLastMouseDownTarget = () => lastMouseDownTarget = null;
     }
-    export interface PageParams
-    {
-        application?: ApplicationType;
-        item?: Type.PageItemType;
-    }
-    export const makePageParams = (application: ApplicationType, item: Type.PageItemType): PageParams =>
-    ({
-        application,
-        item
-    });
-    export const getUrlParams = (url: string = location.href) =>
-    {
-        const result: { [key: string]: string } = { };
-        url
-            .replace(/.*\?/, "")
-            .replace(/#.*/, "")
-            .split("&")
-            .map(kvp => kvp.split("="))
-            .filter(kvp => 2 <= kvp.length)
-            .forEach(kvp => result[kvp[0]] = decodeURIComponent(kvp[1]));
-        return result;
-    };
-    export const getUrlHash = (url: string = location.href) => decodeURIComponent(url.replace(/[^#]*#?/, ""));
-    export const regulateUrl = (url: string) => url.replace(/\?#/, "#").replace(/#$/, "").replace(/\?$/, "");
-    export const makeUrlRaw =
-    (
-        args: {[key: string]: string} | PageParams,
-        href: string = location.href
-    ) => regulateUrl
-    (
-        href
-            .replace(/\?.*/, "")
-            .replace(/#.*/, "")
-            +"?"
-            +Object.keys(args)
-                .filter(i => undefined !== i)
-                .filter(i => "hash" !== i)
-                .map(i => `${i}=${encodeURIComponent(args[i])}`)
-                .join("&")
-            +`#${args["hash"] ?? ""}`
-    );
-    export const makeUrl =
-    (
-        args: PageParams,
-        href: string = location.href
-    ) => makeUrlRaw
-    (
-        {
-            hash: args.application ?
-                (
-                    args.item ?
-                        `${args.application}/${encodeURIComponent(JSON.stringify(args.item))}`:
-                        args.application
-                ):
-                "",
-        },
-        href
-    );
+
     export const updateStyle = () =>
     {
         const setting = Storage.Settings.get().theme ?? "auto";
@@ -4688,7 +4127,7 @@ export module Clockworks
         }
         return "nothing";
     };
-    export const regulateLocation = <T extends Type.PageItemType>(application: ApplicationType, itemJson: string, item: T) =>
+    export const regulateLocation = <T extends Type.PageItemType>(application: Type.ApplicationType, itemJson: string, item: T) =>
     {
         switch(itemState(itemJson, item))
         {
@@ -4697,7 +4136,7 @@ export module Clockworks
         case "regular":
             return true;
         case "irregular":
-            rewriteShowUrl(makePageParams(application, item));
+            rewriteShowUrl(Domain.makePageParams(application, item));
             return false;
         case "invalid":
             rewriteShowUrl({ application, });
@@ -4711,8 +4150,8 @@ export module Clockworks
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
         // const urlParams = getUrlParams(url);
-        const hash = getUrlHash(url).split("/");
-        const applicationType = hash[0] as ApplicationType;
+        const hash = Base.getUrlHash(url).split("/");
+        const applicationType = hash[0] as Type.ApplicationType;
         const itemJson = hash[1];
         const application = applicationList[applicationType] ??
         {
@@ -4730,17 +4169,17 @@ export module Clockworks
         }
         return true;
     };
-    export const showUrl = async (data: PageParams) =>
+    export const showUrl = async (data: Type.PageParams) =>
     {
-        const url = makeUrl(data);
+        const url = Domain.makeUrl(data);
         if (await showPage(url))
         {
             history.pushState(null, applicationList[data.application]?.title ?? applicationTitle, url);
         }
     };
-    export const rewriteShowUrl = async (data: PageParams) =>
+    export const rewriteShowUrl = async (data: Type.PageParams) =>
     {
-        const url = makeUrl(data);
+        const url = Domain.makeUrl(data);
         if (await showPage(url))
         {
             history.replaceState(null, applicationList[data.application]?.title ?? applicationTitle, url);

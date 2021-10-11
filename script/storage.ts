@@ -1,10 +1,10 @@
-import { minamo } from "../minamo.js";
-import { Type } from "../type";
-import { Storage as RainbowClockStorage } from "../application/rainbowclock/storage";
-import { Storage as CountdownTimerStorage } from "../application/countdowntimer/storage";
-import { Storage as ElapsedTimerStorage } from "../application/elapsedtimer/storage";
-import { Storage as NeverStopwatchStorage } from "../application/neverstopwatch/storage";
-import config from "../../resource/config.json";
+import { minamo } from "./minamo.js/index.js";
+import { Type } from "./type";
+import { Storage as RainbowClockStorage } from "./application/rainbowclock/storage";
+import { Storage as CountdownTimerStorage } from "./application/countdowntimer/storage";
+import { Storage as ElapsedTimerStorage } from "./application/elapsedtimer/storage";
+import { Storage as NeverStopwatchStorage } from "./application/neverstopwatch/storage";
+import config from "../resource/config.json";
 export module Storage
 {
     export let lastUpdate = 0;

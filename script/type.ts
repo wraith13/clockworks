@@ -3,6 +3,9 @@ import { Color } from "./color";
 import resource from "../resource/images.json";
 export module Type
 {
+    // export type ApplicationType = keyof typeof applicationList;
+    export type ApplicationType = "RainbowClock" | "CountdownTimer" | "ElapsedTimer" | "NeverStopwatch";
+
     export interface ApplicationEntry<ItemType>
     {
         icon: keyof typeof resource;
@@ -71,4 +74,9 @@ export module Type
         "solid": (index: number) => Color.getSolidRainbowColor(index, 0),
     };
     export type rainbowClockColorPatternType = keyof typeof rainbowClockColorPatternMap;
+    export interface PageParams
+    {
+        application?: Type.ApplicationType;
+        item?: Type.PageItemType;
+    }
 }
