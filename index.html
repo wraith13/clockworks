@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sun Oct 10 2021 15:28:55 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Oct 10 2021 21:43:07 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6747,181 +6747,210 @@ define("script/type", ["require", "exports", "script/color"], function (require,
         };
     })(Type = exports.Type || (exports.Type = {}));
 });
-define("script/storage/neverstopwatch", ["require", "exports", "script/minamo.js/index", "script/storage/index", "resource/config"], function (require, exports, minamo_js_1, _1, config_json_2) {
+define("script/base", ["require", "exports", "script/minamo.js/index"], function (require, exports, minamo_js_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NeverStopwatch = void 0;
+    exports.Base = void 0;
+    var Base;
+    (function (Base) {
+        Base.simpleComparer = minamo_js_1.minamo.core.comparer.basic;
+        Base.simpleReverseComparer = function (a, b) { return -Base.simpleComparer(a, b); };
+    })(Base = exports.Base || (exports.Base = {}));
+});
+define("script/application/rainbowclock/storage", ["require", "exports", "script/minamo.js/index", "script/locale", "resource/config"], function (require, exports, index_js_1, locale_1, config_json_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Storage = void 0;
     config_json_2 = __importDefault(config_json_2);
-    var NeverStopwatch;
-    (function (NeverStopwatch) {
-        var applicationName = "NeverStopwatch";
-        var Stamps;
-        (function (Stamps) {
-            Stamps.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":stamps"; };
-            Stamps.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(Stamps.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            Stamps.set = function (list) { return minamo_js_1.minamo.localStorage.set(Stamps.makeKey(), list); };
-            Stamps.removeKey = function () { return minamo_js_1.minamo.localStorage.remove(Stamps.makeKey()); };
-            Stamps.add = function (tick) {
-                return Stamps.set(Stamps.get().concat(tick).sort(_1.Storage.simpleReverseComparer).slice(0, 100));
+    var Storage;
+    (function (Storage) {
+        var applicationName = "RainbowClock";
+        var colorPattern;
+        (function (colorPattern) {
+            colorPattern.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":colorPattern"; };
+            colorPattern.get = function () { var _a; return (_a = index_js_1.minamo.localStorage.getOrNull(colorPattern.makeKey())) !== null && _a !== void 0 ? _a : "gradation"; };
+            colorPattern.set = function (settings) {
+                return index_js_1.minamo.localStorage.set(colorPattern.makeKey(), settings);
             };
-            Stamps.remove = function (tick) {
-                return Stamps.set(Stamps.get().filter(function (i) { return tick !== i; }).sort(_1.Storage.simpleReverseComparer));
-            };
-            Stamps.isSaved = function (tick) { return 0 <= Stamps.get().indexOf(tick); };
-        })(Stamps = NeverStopwatch.Stamps || (NeverStopwatch.Stamps = {}));
+        })(colorPattern = Storage.colorPattern || (Storage.colorPattern = {}));
         var flashInterval;
         (function (flashInterval) {
             flashInterval.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-            flashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-            flashInterval.set = function (value) { return minamo_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
-        })(flashInterval = NeverStopwatch.flashInterval || (NeverStopwatch.flashInterval = {}));
-        var recentlyFlashInterval;
-        (function (recentlyFlashInterval) {
-            recentlyFlashInterval.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
-            recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_1.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            recentlyFlashInterval.set = function (list) { return minamo_js_1.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
-            recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
-                .filter(function (i, ix, list) { return ix === list.indexOf(i); })
-                .filter(function (_i, ix) { return ix < config_json_2.default.recentlyFlashIntervalMaxHistory; })); };
-        })(recentlyFlashInterval = NeverStopwatch.recentlyFlashInterval || (NeverStopwatch.recentlyFlashInterval = {}));
-    })(NeverStopwatch = exports.NeverStopwatch || (exports.NeverStopwatch = {}));
+            flashInterval.get = function () { var _a; return (_a = index_js_1.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : (60 * 60 * 1000); };
+            flashInterval.set = function (value) { return index_js_1.minamo.localStorage.set(flashInterval.makeKey(), value); };
+        })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
+        var Timezone;
+        (function (Timezone) {
+            Timezone.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":timezones"; };
+            Timezone.get = function () {
+                var _a;
+                return (_a = index_js_1.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_2.default.initialTimezoneList.map(function (i) { return ({ title: locale_1.Locale.map(i.title), offset: i.offset }); });
+            };
+            Timezone.set = function (list) { return index_js_1.minamo.localStorage.set(Timezone.makeKey(), list.sort(index_js_1.minamo.core.comparer.make([function (i) { return i.offset; }]))); };
+            Timezone.removeKey = function () { return index_js_1.minamo.localStorage.remove(Timezone.makeKey()); };
+            Timezone.add = function (entry) {
+                return Timezone.set(Timezone.get().concat(entry));
+            };
+            Timezone.remove = function (entry) {
+                return Timezone.set(Timezone.get().filter(function (i) { return JSON.stringify(entry) !== JSON.stringify(i); }));
+            };
+            Timezone.isSaved = function (entry) {
+                return 0 <= Timezone.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(entry));
+            };
+        })(Timezone = Storage.Timezone || (Storage.Timezone = {}));
+    })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("script/storage/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/storage/neverstopwatch", "resource/config"], function (require, exports, minamo_js_2, locale_1, neverstopwatch_1, config_json_3) {
+define("script/application/countdowntimer/storage", ["require", "exports", "script/minamo.js/index", "resource/config"], function (require, exports, index_js_2, config_json_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Storage = void 0;
     config_json_3 = __importDefault(config_json_3);
     var Storage;
     (function (Storage) {
-        Storage.simpleComparer = minamo_js_2.minamo.core.comparer.basic;
-        Storage.simpleReverseComparer = function (a, b) { return -Storage.simpleComparer(a, b); };
+        var applicationName = "CountdownTimer";
+        var Alarms;
+        (function (Alarms) {
+            Alarms.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":alarms"; };
+            Alarms.get = function () { var _a; return (_a = index_js_2.minamo.localStorage.getOrNull(Alarms.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            Alarms.set = function (list) { return index_js_2.minamo.localStorage.set(Alarms.makeKey(), list.sort(index_js_2.minamo.core.comparer.make(function (i) { return i.end; }))); };
+            Alarms.removeKey = function () { return index_js_2.minamo.localStorage.remove(Alarms.makeKey()); };
+            Alarms.add = function (item) {
+                return Alarms.set(Alarms.get().concat(item));
+            };
+            Alarms.remove = function (item) {
+                return Alarms.set(Alarms.get().filter(function (i) { return JSON.stringify(item) !== JSON.stringify(i); }));
+            };
+            Alarms.isSaved = function (item) {
+                return 0 <= Alarms.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item));
+            };
+        })(Alarms = Storage.Alarms || (Storage.Alarms = {}));
+        var flashInterval;
+        (function (flashInterval) {
+            flashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
+            flashInterval.get = function () { var _a; return (_a = index_js_2.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            flashInterval.set = function (value) { return index_js_2.minamo.localStorage.set(flashInterval.makeKey(), value); };
+        })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
+        var recentlyFlashInterval;
+        (function (recentlyFlashInterval) {
+            recentlyFlashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
+            recentlyFlashInterval.get = function () { var _a; return (_a = index_js_2.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyFlashInterval.set = function (list) { return index_js_2.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+            recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
+                .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                .filter(function (_i, ix) { return ix < config_json_3.default.recentlyFlashIntervalMaxHistory; })); };
+        })(recentlyFlashInterval = Storage.recentlyFlashInterval || (Storage.recentlyFlashInterval = {}));
+        var recentlyTimer;
+        (function (recentlyTimer) {
+            recentlyTimer.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":recentlyTimer"; };
+            recentlyTimer.get = function () { var _a; return (_a = index_js_2.minamo.localStorage.getOrNull(recentlyTimer.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyTimer.set = function (list) { return index_js_2.minamo.localStorage.set(recentlyTimer.makeKey(), list); };
+            recentlyTimer.add = function (value) { return recentlyTimer.set([value].concat(recentlyTimer.get())
+                .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                .filter(function (_i, ix) { return ix < config_json_3.default.recentlyTimerMaxHistory; })); };
+        })(recentlyTimer = Storage.recentlyTimer || (Storage.recentlyTimer = {}));
+        var ColorIndex;
+        (function (ColorIndex) {
+            ColorIndex.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":colorIndex"; };
+            ColorIndex.get = function () { var _a; return (_a = index_js_2.minamo.localStorage.getOrNull(ColorIndex.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            ColorIndex.set = function (value) { return index_js_2.minamo.localStorage.set(ColorIndex.makeKey(), value); };
+        })(ColorIndex = Storage.ColorIndex || (Storage.ColorIndex = {}));
+    })(Storage = exports.Storage || (exports.Storage = {}));
+});
+define("script/application/elapsedtimer/storage", ["require", "exports", "script/minamo.js/index", "resource/config"], function (require, exports, index_js_3, config_json_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Storage = void 0;
+    config_json_4 = __importDefault(config_json_4);
+    var Storage;
+    (function (Storage) {
+        var applicationName = "ElapsedTimer";
+        var Events;
+        (function (Events) {
+            Events.makeKey = function () { return config_json_4.default.localDbPrefix + ":" + applicationName + ":alarms"; };
+            Events.get = function () { var _a; return (_a = index_js_3.minamo.localStorage.getOrNull(Events.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            Events.set = function (list) { return index_js_3.minamo.localStorage.set(Events.makeKey(), list.sort(index_js_3.minamo.core.comparer.make(function (i) { return i.tick; }))); };
+            Events.removeKey = function () { return index_js_3.minamo.localStorage.remove(Events.makeKey()); };
+            Events.add = function (item) {
+                return Events.set(Events.get().concat(item));
+            };
+            Events.remove = function (item) {
+                return Events.set(Events.get().filter(function (i) { return JSON.stringify(item) !== JSON.stringify(i); }));
+            };
+            Events.isSaved = function (item) {
+                return 0 <= Events.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item));
+            };
+        })(Events = Storage.Events || (Storage.Events = {}));
+        var flashInterval;
+        (function (flashInterval) {
+            flashInterval.makeKey = function () { return config_json_4.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
+            flashInterval.get = function () { var _a; return (_a = index_js_3.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            flashInterval.set = function (value) { return index_js_3.minamo.localStorage.set(flashInterval.makeKey(), value); };
+        })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
+        var recentlyFlashInterval;
+        (function (recentlyFlashInterval) {
+            recentlyFlashInterval.makeKey = function () { return config_json_4.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
+            recentlyFlashInterval.get = function () { var _a; return (_a = index_js_3.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyFlashInterval.set = function (list) { return index_js_3.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+            recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
+                .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                .filter(function (_i, ix) { return ix < config_json_4.default.recentlyFlashIntervalMaxHistory; })); };
+        })(recentlyFlashInterval = Storage.recentlyFlashInterval || (Storage.recentlyFlashInterval = {}));
+    })(Storage = exports.Storage || (exports.Storage = {}));
+});
+define("script/application/neverstopwatch/storage", ["require", "exports", "script/minamo.js/index", "script/base", "resource/config"], function (require, exports, index_js_4, base_1, config_json_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Storage = void 0;
+    config_json_5 = __importDefault(config_json_5);
+    var Storage;
+    (function (Storage) {
+        var applicationName = "NeverStopwatch";
+        var Stamps;
+        (function (Stamps) {
+            Stamps.makeKey = function () { return config_json_5.default.localDbPrefix + ":" + applicationName + ":stamps"; };
+            Stamps.get = function () { var _a; return (_a = index_js_4.minamo.localStorage.getOrNull(Stamps.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            Stamps.set = function (list) { return index_js_4.minamo.localStorage.set(Stamps.makeKey(), list); };
+            Stamps.removeKey = function () { return index_js_4.minamo.localStorage.remove(Stamps.makeKey()); };
+            Stamps.add = function (tick) {
+                return Stamps.set(Stamps.get().concat(tick).sort(base_1.Base.simpleReverseComparer).slice(0, 100));
+            };
+            Stamps.remove = function (tick) {
+                return Stamps.set(Stamps.get().filter(function (i) { return tick !== i; }).sort(base_1.Base.simpleReverseComparer));
+            };
+            Stamps.isSaved = function (tick) { return 0 <= Stamps.get().indexOf(tick); };
+        })(Stamps = Storage.Stamps || (Storage.Stamps = {}));
+        var flashInterval;
+        (function (flashInterval) {
+            flashInterval.makeKey = function () { return config_json_5.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
+            flashInterval.get = function () { var _a; return (_a = index_js_4.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            flashInterval.set = function (value) { return index_js_4.minamo.localStorage.set(flashInterval.makeKey(), value); };
+        })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
+        var recentlyFlashInterval;
+        (function (recentlyFlashInterval) {
+            recentlyFlashInterval.makeKey = function () { return config_json_5.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
+            recentlyFlashInterval.get = function () { var _a; return (_a = index_js_4.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyFlashInterval.set = function (list) { return index_js_4.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+            recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
+                .filter(function (i, ix, list) { return ix === list.indexOf(i); })
+                .filter(function (_i, ix) { return ix < config_json_5.default.recentlyFlashIntervalMaxHistory; })); };
+        })(recentlyFlashInterval = Storage.recentlyFlashInterval || (Storage.recentlyFlashInterval = {}));
+    })(Storage = exports.Storage || (exports.Storage = {}));
+});
+define("script/storage/index", ["require", "exports", "script/minamo.js/index", "script/application/rainbowclock/storage", "script/application/countdowntimer/storage", "script/application/elapsedtimer/storage", "script/application/neverstopwatch/storage", "resource/config"], function (require, exports, minamo_js_2, storage_1, storage_2, storage_3, storage_4, config_json_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Storage = void 0;
+    config_json_6 = __importDefault(config_json_6);
+    var Storage;
+    (function (Storage) {
         Storage.lastUpdate = 0;
-        Storage.NeverStopwatch = neverstopwatch_1.NeverStopwatch;
-        var CountdownTimer;
-        (function (CountdownTimer) {
-            var applicationName = "CountdownTimer";
-            var Alarms;
-            (function (Alarms) {
-                Alarms.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":alarms"; };
-                Alarms.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(Alarms.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                Alarms.set = function (list) { return minamo_js_2.minamo.localStorage.set(Alarms.makeKey(), list.sort(minamo_js_2.minamo.core.comparer.make(function (i) { return i.end; }))); };
-                Alarms.removeKey = function () { return minamo_js_2.minamo.localStorage.remove(Alarms.makeKey()); };
-                Alarms.add = function (item) {
-                    return Alarms.set(Alarms.get().concat(item));
-                };
-                Alarms.remove = function (item) {
-                    return Alarms.set(Alarms.get().filter(function (i) { return JSON.stringify(item) !== JSON.stringify(i); }));
-                };
-                Alarms.isSaved = function (item) {
-                    return 0 <= Alarms.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item));
-                };
-            })(Alarms = CountdownTimer.Alarms || (CountdownTimer.Alarms = {}));
-            var flashInterval;
-            (function (flashInterval) {
-                flashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-                flashInterval.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-                flashInterval.set = function (value) { return minamo_js_2.minamo.localStorage.set(flashInterval.makeKey(), value); };
-            })(flashInterval = CountdownTimer.flashInterval || (CountdownTimer.flashInterval = {}));
-            var recentlyFlashInterval;
-            (function (recentlyFlashInterval) {
-                recentlyFlashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
-                recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                recentlyFlashInterval.set = function (list) { return minamo_js_2.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
-                recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
-                    .filter(function (i, ix, list) { return ix === list.indexOf(i); })
-                    .filter(function (_i, ix) { return ix < config_json_3.default.recentlyFlashIntervalMaxHistory; })); };
-            })(recentlyFlashInterval = CountdownTimer.recentlyFlashInterval || (CountdownTimer.recentlyFlashInterval = {}));
-            var recentlyTimer;
-            (function (recentlyTimer) {
-                recentlyTimer.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":recentlyTimer"; };
-                recentlyTimer.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(recentlyTimer.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                recentlyTimer.set = function (list) { return minamo_js_2.minamo.localStorage.set(recentlyTimer.makeKey(), list); };
-                recentlyTimer.add = function (value) { return recentlyTimer.set([value].concat(recentlyTimer.get())
-                    .filter(function (i, ix, list) { return ix === list.indexOf(i); })
-                    .filter(function (_i, ix) { return ix < config_json_3.default.recentlyTimerMaxHistory; })); };
-            })(recentlyTimer = CountdownTimer.recentlyTimer || (CountdownTimer.recentlyTimer = {}));
-            var ColorIndex;
-            (function (ColorIndex) {
-                ColorIndex.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":colorIndex"; };
-                ColorIndex.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(ColorIndex.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-                ColorIndex.set = function (value) { return minamo_js_2.minamo.localStorage.set(ColorIndex.makeKey(), value); };
-            })(ColorIndex = CountdownTimer.ColorIndex || (CountdownTimer.ColorIndex = {}));
-        })(CountdownTimer = Storage.CountdownTimer || (Storage.CountdownTimer = {}));
-        var ElapsedTimer;
-        (function (ElapsedTimer) {
-            var applicationName = "ElapsedTimer";
-            var Events;
-            (function (Events) {
-                Events.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":alarms"; };
-                Events.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(Events.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                Events.set = function (list) { return minamo_js_2.minamo.localStorage.set(Events.makeKey(), list.sort(minamo_js_2.minamo.core.comparer.make(function (i) { return i.tick; }))); };
-                Events.removeKey = function () { return minamo_js_2.minamo.localStorage.remove(Events.makeKey()); };
-                Events.add = function (item) {
-                    return Events.set(Events.get().concat(item));
-                };
-                Events.remove = function (item) {
-                    return Events.set(Events.get().filter(function (i) { return JSON.stringify(item) !== JSON.stringify(i); }));
-                };
-                Events.isSaved = function (item) {
-                    return 0 <= Events.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(item));
-                };
-            })(Events = ElapsedTimer.Events || (ElapsedTimer.Events = {}));
-            var flashInterval;
-            (function (flashInterval) {
-                flashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-                flashInterval.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-                flashInterval.set = function (value) { return minamo_js_2.minamo.localStorage.set(flashInterval.makeKey(), value); };
-            })(flashInterval = ElapsedTimer.flashInterval || (ElapsedTimer.flashInterval = {}));
-            var recentlyFlashInterval;
-            (function (recentlyFlashInterval) {
-                recentlyFlashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
-                recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
-                recentlyFlashInterval.set = function (list) { return minamo_js_2.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
-                recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
-                    .filter(function (i, ix, list) { return ix === list.indexOf(i); })
-                    .filter(function (_i, ix) { return ix < config_json_3.default.recentlyFlashIntervalMaxHistory; })); };
-            })(recentlyFlashInterval = ElapsedTimer.recentlyFlashInterval || (ElapsedTimer.recentlyFlashInterval = {}));
-        })(ElapsedTimer = Storage.ElapsedTimer || (Storage.ElapsedTimer = {}));
-        var RainbowClock;
-        (function (RainbowClock) {
-            var applicationName = "RainbowClock";
-            var colorPattern;
-            (function (colorPattern) {
-                colorPattern.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":colorPattern"; };
-                colorPattern.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(colorPattern.makeKey())) !== null && _a !== void 0 ? _a : "gradation"; };
-                colorPattern.set = function (settings) {
-                    return minamo_js_2.minamo.localStorage.set(colorPattern.makeKey(), settings);
-                };
-            })(colorPattern = RainbowClock.colorPattern || (RainbowClock.colorPattern = {}));
-            var flashInterval;
-            (function (flashInterval) {
-                flashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-                flashInterval.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : (60 * 60 * 1000); };
-                flashInterval.set = function (value) { return minamo_js_2.minamo.localStorage.set(flashInterval.makeKey(), value); };
-            })(flashInterval = RainbowClock.flashInterval || (RainbowClock.flashInterval = {}));
-            var Timezone;
-            (function (Timezone) {
-                Timezone.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":timezones"; };
-                Timezone.get = function () {
-                    var _a;
-                    return (_a = minamo_js_2.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_3.default.initialTimezoneList.map(function (i) { return ({ title: locale_1.Locale.map(i.title), offset: i.offset }); });
-                };
-                Timezone.set = function (list) { return minamo_js_2.minamo.localStorage.set(Timezone.makeKey(), list.sort(minamo_js_2.minamo.core.comparer.make([function (i) { return i.offset; }]))); };
-                Timezone.removeKey = function () { return minamo_js_2.minamo.localStorage.remove(Timezone.makeKey()); };
-                Timezone.add = function (entry) {
-                    return Timezone.set(Timezone.get().concat(entry));
-                };
-                Timezone.remove = function (entry) {
-                    return Timezone.set(Timezone.get().filter(function (i) { return JSON.stringify(entry) !== JSON.stringify(i); }));
-                };
-                Timezone.isSaved = function (entry) {
-                    return 0 <= Timezone.get().map(function (i) { return JSON.stringify(i); }).indexOf(JSON.stringify(entry));
-                };
-            })(Timezone = RainbowClock.Timezone || (RainbowClock.Timezone = {}));
-        })(RainbowClock = Storage.RainbowClock || (Storage.RainbowClock = {}));
+        Storage.RainbowClock = storage_1.Storage;
+        Storage.CountdownTimer = storage_2.Storage;
+        Storage.ElapsedTimer = storage_3.Storage;
+        Storage.NeverStopwatch = storage_4.Storage;
         var Settings;
         (function (Settings) {
-            Settings.makeKey = function () { return config_json_3.default.localDbPrefix + ":settings"; };
+            Settings.makeKey = function () { return config_json_6.default.localDbPrefix + ":settings"; };
             Settings.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(Settings.makeKey())) !== null && _a !== void 0 ? _a : {}; };
             Settings.set = function (settings) {
                 return minamo_js_2.minamo.localStorage.set(Settings.makeKey(), settings);
@@ -6929,16 +6958,15 @@ define("script/storage/index", ["require", "exports", "script/minamo.js/index", 
         })(Settings = Storage.Settings || (Storage.Settings = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("script/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/type", "script/color", "script/storage/index", "resource/config"], function (require, exports, minamo_js_3, locale_2, type_1, color_2, storage_1, config_json_4) {
+define("script/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/type", "script/base", "script/color", "script/storage/index", "resource/config"], function (require, exports, minamo_js_3, locale_2, type_1, base_2, color_2, storage_5, config_json_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Clockworks = exports.simpleComparer = void 0;
-    config_json_4 = __importDefault(config_json_4);
-    exports.simpleComparer = minamo_js_3.minamo.core.comparer.basic;
+    exports.Clockworks = void 0;
+    config_json_7 = __importDefault(config_json_7);
     var Clockworks;
     (function (Clockworks) {
         var _this = this;
-        Clockworks.applicationTitle = config_json_4.default.applicationTitle;
+        Clockworks.applicationTitle = config_json_7.default.applicationTitle;
         Clockworks.applicationList = {
             "RainbowClock": {
                 icon: "tick-icon",
@@ -7004,7 +7032,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
             var _a;
             var foundation = document.getElementById("foundation");
             minamo_js_3.minamo.dom.setProperty(foundation.style, "backgroundColor", color);
-            if ((_a = "header" === storage_1.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto") {
+            if ((_a = "header" === storage_5.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto") {
                 setHeaderColor(color);
             }
             else {
@@ -7013,8 +7041,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
         };
         var Domain;
         (function (Domain) {
-            Domain.getFlashIntervalPreset = function () { return config_json_4.default.flashIntervalPreset.map(function (i) { return Domain.parseTimer(i); }); };
-            Domain.getTimerPreset = function () { return config_json_4.default.timerPreset.map(function (i) { return Domain.parseTimer(i); }); };
+            Domain.getFlashIntervalPreset = function () { return config_json_7.default.flashIntervalPreset.map(function (i) { return Domain.parseTimer(i); }); };
+            Domain.getTimerPreset = function () { return config_json_7.default.timerPreset.map(function (i) { return Domain.parseTimer(i); }); };
             Domain.utcOffsetRate = 60 * 1000;
             // export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
             Domain.makeTimerLabel = function (timer) {
@@ -7462,8 +7490,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var backup, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            backup = storage_1.Storage.NeverStopwatch.Stamps.get();
-                            storage_1.Storage.NeverStopwatch.Stamps.add(tick);
+                            backup = storage_5.Storage.NeverStopwatch.Stamps.get();
+                            storage_5.Storage.NeverStopwatch.Stamps.add(tick);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Stamped!")),
@@ -7471,7 +7499,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.NeverStopwatch.Stamps.set(backup);
+                                                storage_5.Storage.NeverStopwatch.Stamps.set(backup);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7489,8 +7517,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var backup, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            backup = storage_1.Storage.NeverStopwatch.Stamps.get();
-                            storage_1.Storage.NeverStopwatch.Stamps.add(tick);
+                            backup = storage_5.Storage.NeverStopwatch.Stamps.get();
+                            storage_5.Storage.NeverStopwatch.Stamps.add(tick);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7498,7 +7526,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.NeverStopwatch.Stamps.set(backup);
+                                                storage_5.Storage.NeverStopwatch.Stamps.set(backup);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7516,9 +7544,9 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var backup, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            backup = storage_1.Storage.NeverStopwatch.Stamps.get();
-                            storage_1.Storage.NeverStopwatch.Stamps.remove(oldTick);
-                            storage_1.Storage.NeverStopwatch.Stamps.add(newTick);
+                            backup = storage_5.Storage.NeverStopwatch.Stamps.get();
+                            storage_5.Storage.NeverStopwatch.Stamps.remove(oldTick);
+                            storage_5.Storage.NeverStopwatch.Stamps.add(newTick);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Updated.")),
@@ -7526,7 +7554,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.NeverStopwatch.Stamps.set(backup);
+                                                storage_5.Storage.NeverStopwatch.Stamps.set(backup);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7545,8 +7573,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var _this = this;
                         return __generator(this, function (_a) {
                             isOpend = !!Clockworks.getUrlHash(location.href).split("/")[1];
-                            backup = storage_1.Storage.NeverStopwatch.Stamps.get();
-                            storage_1.Storage.NeverStopwatch.Stamps.remove(tick);
+                            backup = storage_5.Storage.NeverStopwatch.Stamps.get();
+                            storage_5.Storage.NeverStopwatch.Stamps.remove(tick);
                             if (isOpend) {
                                 Clockworks.showUrl({ application: "NeverStopwatch", });
                             }
@@ -7559,7 +7587,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.NeverStopwatch.Stamps.set(backup);
+                                                storage_5.Storage.NeverStopwatch.Stamps.set(backup);
                                                 if (isOpend) {
                                                     Clockworks.showUrl(Clockworks.makePageParams("NeverStopwatch", tick));
                                                 }
@@ -7581,7 +7609,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                     NeverStopwatch.removeAllStamps = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             if (Render.systemConfirm(locale_2.Locale.map("This action cannot be undone. Do you want to continue?"))) {
-                                storage_1.Storage.NeverStopwatch.Stamps.removeKey();
+                                storage_5.Storage.NeverStopwatch.Stamps.removeKey();
                                 Render.updateWindow("operate");
                                 Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.Locale.map("Removed all stamps!")), });
                             }
@@ -7602,7 +7630,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 start: tick,
                                 end: tick + i,
                             };
-                            storage_1.Storage.CountdownTimer.Alarms.add(alarm);
+                            storage_5.Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7610,7 +7638,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.CountdownTimer.Alarms.remove(alarm);
+                                                storage_5.Storage.CountdownTimer.Alarms.remove(alarm);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7634,7 +7662,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 start: Domain.getTicks(),
                                 end: end,
                             };
-                            storage_1.Storage.CountdownTimer.Alarms.add(alarm);
+                            storage_5.Storage.CountdownTimer.Alarms.add(alarm);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7642,7 +7670,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.CountdownTimer.Alarms.remove(alarm);
+                                                storage_5.Storage.CountdownTimer.Alarms.remove(alarm);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7660,7 +7688,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            storage_1.Storage.CountdownTimer.Alarms.add(item);
+                            storage_5.Storage.CountdownTimer.Alarms.add(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7668,7 +7696,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.CountdownTimer.Alarms.remove(item);
+                                                storage_5.Storage.CountdownTimer.Alarms.remove(item);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7693,8 +7721,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 start: start,
                                 end: end,
                             };
-                            storage_1.Storage.CountdownTimer.Alarms.remove(oldSchedule);
-                            storage_1.Storage.CountdownTimer.Alarms.add(newSchedule);
+                            storage_5.Storage.CountdownTimer.Alarms.remove(oldSchedule);
+                            storage_5.Storage.CountdownTimer.Alarms.add(newSchedule);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7702,8 +7730,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.CountdownTimer.Alarms.remove(newSchedule);
-                                                storage_1.Storage.CountdownTimer.Alarms.add(oldSchedule);
+                                                storage_5.Storage.CountdownTimer.Alarms.remove(newSchedule);
+                                                storage_5.Storage.CountdownTimer.Alarms.add(oldSchedule);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7721,12 +7749,12 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var color, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            storage_1.Storage.CountdownTimer.Alarms.remove(item);
+                            storage_5.Storage.CountdownTimer.Alarms.remove(item);
                             if ("schedule" === item.type) {
-                                storage_1.Storage.ElapsedTimer.Events.add({ title: item.title, tick: item.end, });
+                                storage_5.Storage.ElapsedTimer.Events.add({ title: item.title, tick: item.end, });
                             }
-                            color = storage_1.Storage.CountdownTimer.ColorIndex.get();
-                            storage_1.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_4.default.rainbowColorSet.length);
+                            color = storage_5.Storage.CountdownTimer.ColorIndex.get();
+                            storage_5.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_7.default.rainbowColorSet.length);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Done!")),
@@ -7734,11 +7762,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.CountdownTimer.Alarms.add(item);
+                                                storage_5.Storage.CountdownTimer.Alarms.add(item);
                                                 if ("schedule" === item.type) {
-                                                    storage_1.Storage.ElapsedTimer.Events.remove({ title: item.title, tick: item.end, });
+                                                    storage_5.Storage.ElapsedTimer.Events.remove({ title: item.title, tick: item.end, });
                                                 }
-                                                storage_1.Storage.CountdownTimer.ColorIndex.set(color);
+                                                storage_5.Storage.CountdownTimer.ColorIndex.set(color);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7756,8 +7784,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var color, toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            color = storage_1.Storage.CountdownTimer.ColorIndex.get();
-                            storage_1.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_4.default.rainbowColorSet.length);
+                            color = storage_5.Storage.CountdownTimer.ColorIndex.get();
+                            storage_5.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_7.default.rainbowColorSet.length);
                             Clockworks.showUrl({ application: "CountdownTimer", });
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Done!")),
@@ -7765,7 +7793,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.CountdownTimer.ColorIndex.set(color);
+                                                storage_5.Storage.CountdownTimer.ColorIndex.set(color);
                                                 Clockworks.showUrl(Clockworks.makePageParams("CountdownTimer", item));
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7784,7 +7812,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var _this = this;
                         return __generator(this, function (_a) {
                             isOpend = !!Clockworks.getUrlHash(location.href).split("/")[1];
-                            storage_1.Storage.CountdownTimer.Alarms.remove(item);
+                            storage_5.Storage.CountdownTimer.Alarms.remove(item);
                             if (isOpend) {
                                 Clockworks.showUrl({ application: "CountdownTimer", });
                             }
@@ -7797,7 +7825,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.CountdownTimer.Alarms.add(item);
+                                                storage_5.Storage.CountdownTimer.Alarms.add(item);
                                                 if (isOpend) {
                                                     Clockworks.showUrl(Clockworks.makePageParams("CountdownTimer", item));
                                                 }
@@ -7819,7 +7847,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                     CountdownTimer.removeAllAlarms = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             if (Render.systemConfirm(locale_2.Locale.map("This action cannot be undone. Do you want to continue?"))) {
-                                storage_1.Storage.CountdownTimer.Alarms.removeKey();
+                                storage_5.Storage.CountdownTimer.Alarms.removeKey();
                                 Render.updateWindow("operate");
                                 Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.Locale.map("Removed all alarms!")), });
                             }
@@ -7838,7 +7866,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 title: title,
                                 tick: tick,
                             };
-                            storage_1.Storage.ElapsedTimer.Events.add(event);
+                            storage_5.Storage.ElapsedTimer.Events.add(event);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7846,7 +7874,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.ElapsedTimer.Events.remove(event);
+                                                storage_5.Storage.ElapsedTimer.Events.remove(event);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7864,7 +7892,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            storage_1.Storage.ElapsedTimer.Events.add(item);
+                            storage_5.Storage.ElapsedTimer.Events.add(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7872,7 +7900,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.ElapsedTimer.Events.remove(item);
+                                                storage_5.Storage.ElapsedTimer.Events.remove(item);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7895,8 +7923,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 title: title,
                                 tick: tick,
                             };
-                            storage_1.Storage.ElapsedTimer.Events.remove(oldSchedule);
-                            storage_1.Storage.ElapsedTimer.Events.add(newSchedule);
+                            storage_5.Storage.ElapsedTimer.Events.remove(oldSchedule);
+                            storage_5.Storage.ElapsedTimer.Events.add(newSchedule);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7904,8 +7932,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.ElapsedTimer.Events.remove(newSchedule);
-                                                storage_1.Storage.ElapsedTimer.Events.add(oldSchedule);
+                                                storage_5.Storage.ElapsedTimer.Events.remove(newSchedule);
+                                                storage_5.Storage.ElapsedTimer.Events.add(oldSchedule);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -7924,7 +7952,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var _this = this;
                         return __generator(this, function (_a) {
                             isOpend = !!Clockworks.getUrlHash(location.href).split("/")[1];
-                            storage_1.Storage.ElapsedTimer.Events.remove(item);
+                            storage_5.Storage.ElapsedTimer.Events.remove(item);
                             if (isOpend) {
                                 Clockworks.showUrl({ application: "ElapsedTimer", });
                             }
@@ -7937,7 +7965,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.ElapsedTimer.Events.add(item);
+                                                storage_5.Storage.ElapsedTimer.Events.add(item);
                                                 if (isOpend) {
                                                     Clockworks.showUrl(Clockworks.makePageParams("ElapsedTimer", item));
                                                 }
@@ -7959,7 +7987,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                     ElapsedTimer.removeAllEvents = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             if (Render.systemConfirm(locale_2.Locale.map("This action cannot be undone. Do you want to continue?"))) {
-                                storage_1.Storage.ElapsedTimer.Events.removeKey();
+                                storage_5.Storage.ElapsedTimer.Events.removeKey();
                                 Render.updateWindow("operate");
                                 Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.Locale.map("Removed all alarms!")), });
                             }
@@ -7974,7 +8002,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var toast;
                         var _this = this;
                         return __generator(this, function (_a) {
-                            storage_1.Storage.RainbowClock.Timezone.add(item);
+                            storage_5.Storage.RainbowClock.Timezone.add(item);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -7982,7 +8010,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.RainbowClock.Timezone.remove(item);
+                                                storage_5.Storage.RainbowClock.Timezone.remove(item);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -8006,8 +8034,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 title: title,
                                 offset: offset,
                             };
-                            storage_1.Storage.RainbowClock.Timezone.remove(oldTimezone);
-                            storage_1.Storage.RainbowClock.Timezone.add(newTimezone);
+                            storage_5.Storage.RainbowClock.Timezone.remove(oldTimezone);
+                            storage_5.Storage.RainbowClock.Timezone.add(newTimezone);
                             Render.updateWindow("operate");
                             toast = Render.makePrimaryToast({
                                 content: Render.$span("")("" + locale_2.Locale.map("Saved!")),
@@ -8015,8 +8043,8 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.RainbowClock.Timezone.remove(newTimezone);
-                                                storage_1.Storage.RainbowClock.Timezone.add(oldTimezone);
+                                                storage_5.Storage.RainbowClock.Timezone.remove(newTimezone);
+                                                storage_5.Storage.RainbowClock.Timezone.add(oldTimezone);
                                                 Render.updateWindow("operate");
                                                 return [4 /*yield*/, toast.hide()];
                                             case 1:
@@ -8035,7 +8063,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         var _this = this;
                         return __generator(this, function (_a) {
                             isOpend = !!Clockworks.getUrlHash(location.href).split("/")[1];
-                            storage_1.Storage.RainbowClock.Timezone.remove(item);
+                            storage_5.Storage.RainbowClock.Timezone.remove(item);
                             if (isOpend) {
                                 Clockworks.showUrl({ application: "RainbowClock", });
                             }
@@ -8048,7 +8076,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                storage_1.Storage.RainbowClock.Timezone.add(item);
+                                                storage_5.Storage.RainbowClock.Timezone.add(item);
                                                 if (isOpend) {
                                                     Clockworks.showUrl(Clockworks.makePageParams("RainbowClock", item));
                                                 }
@@ -8070,7 +8098,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                     RainbowClock.reset = function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             if (Render.systemConfirm(locale_2.Locale.map("This action cannot be undone. Do you want to continue?"))) {
-                                storage_1.Storage.RainbowClock.Timezone.removeKey();
+                                storage_5.Storage.RainbowClock.Timezone.removeKey();
                                 Render.updateWindow("operate");
                                 Render.makePrimaryToast({ content: Render.$span("")("" + locale_2.Locale.map("Initialized timezone list!")), });
                             }
@@ -8254,7 +8282,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                 });
             }); };
             Render.themeSettingsPopup = function (settings) {
-                if (settings === void 0) { settings = storage_1.Storage.Settings.get(); }
+                if (settings === void 0) { settings = storage_5.Storage.Settings.get(); }
                 return __awaiter(_this, void 0, void 0, function () {
                     var init;
                     var _this = this;
@@ -8302,7 +8330,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                                                         case 0:
                                                                                                             if (!(key !== ((_a = settings.theme) !== null && _a !== void 0 ? _a : "auto"))) return [3 /*break*/, 2];
                                                                                                             settings.theme = key;
-                                                                                                            storage_1.Storage.Settings.set(settings);
+                                                                                                            storage_5.Storage.Settings.set(settings);
                                                                                                             return [4 /*yield*/, checkButtonListUpdate()];
                                                                                                         case 1:
                                                                                                             _b.sent();
@@ -8354,7 +8382,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                 });
             };
             Render.progressBarStyleSettingsPopup = function (settings) {
-                if (settings === void 0) { settings = storage_1.Storage.Settings.get(); }
+                if (settings === void 0) { settings = storage_5.Storage.Settings.get(); }
                 return __awaiter(_this, void 0, void 0, function () {
                     var init, selected;
                     var _this = this;
@@ -8401,7 +8429,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                                                             if (!(key !== selected)) return [3 /*break*/, 2];
                                                                                                             selected = key;
                                                                                                             settings.progressBarStyle = selected;
-                                                                                                            storage_1.Storage.Settings.set(settings);
+                                                                                                            storage_5.Storage.Settings.set(settings);
                                                                                                             return [4 /*yield*/, checkButtonListUpdate()];
                                                                                                         case 1:
                                                                                                             _a.sent();
@@ -8455,7 +8483,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                 });
             };
             Render.localeSettingsPopup = function (settings) {
-                if (settings === void 0) { settings = storage_1.Storage.Settings.get(); }
+                if (settings === void 0) { settings = storage_5.Storage.Settings.get(); }
                 return __awaiter(_this, void 0, void 0, function () {
                     var _this = this;
                     return __generator(this, function (_a) {
@@ -8496,7 +8524,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                                     case 0:
                                                                                         if (!(null !== ((_a = settings.locale) !== null && _a !== void 0 ? _a : null))) return [3 /*break*/, 2];
                                                                                         settings.locale = null;
-                                                                                        storage_1.Storage.Settings.set(settings);
+                                                                                        storage_5.Storage.Settings.set(settings);
                                                                                         result = true;
                                                                                         return [4 /*yield*/, checkButtonListUpdate()];
                                                                                     case 1:
@@ -8531,7 +8559,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                                                     case 0:
                                                                                                         if (!((_a = key !== settings.locale) !== null && _a !== void 0 ? _a : null)) return [3 /*break*/, 2];
                                                                                                         settings.locale = key;
-                                                                                                        storage_1.Storage.Settings.set(settings);
+                                                                                                        storage_5.Storage.Settings.set(settings);
                                                                                                         result = true;
                                                                                                         return [4 /*yield*/, checkButtonListUpdate()];
                                                                                                     case 1:
@@ -8582,7 +8610,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                 });
             };
             Render.colorSettingsPopup = function (settings) {
-                if (settings === void 0) { settings = storage_1.Storage.RainbowClock.colorPattern.get(); }
+                if (settings === void 0) { settings = storage_5.Storage.RainbowClock.colorPattern.get(); }
                 return __awaiter(_this, void 0, void 0, function () {
                     var _this = this;
                     return __generator(this, function (_a) {
@@ -8625,7 +8653,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                                                     case 0:
                                                                                                         if (!((_a = key !== settings) !== null && _a !== void 0 ? _a : null)) return [3 /*break*/, 2];
                                                                                                         settings = key;
-                                                                                                        storage_1.Storage.RainbowClock.colorPattern.set(settings);
+                                                                                                        storage_5.Storage.RainbowClock.colorPattern.set(settings);
                                                                                                         result = true;
                                                                                                         return [4 /*yield*/, checkButtonListUpdate()];
                                                                                                     case 1:
@@ -8740,7 +8768,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             result = false;
                                             checkButtonList = Render.$make(HTMLDivElement)({ className: "check-button-list" });
                                             timerPreset = Domain.getTimerPreset()
-                                                .concat(storage_1.Storage.CountdownTimer.recentlyTimer.get())
+                                                .concat(storage_5.Storage.CountdownTimer.recentlyTimer.get())
                                                 .sort(minamo_js_3.minamo.core.comparer.make([function (i) { return i; }]))
                                                 .filter(function (i, ix, list) { return ix === list.indexOf(i); });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -8810,7 +8838,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                             tick = _a.sent();
                                                                             if (!(null !== tick)) return [3 /*break*/, 3];
                                                                             minutes = tick / (60 * 1000);
-                                                                            storage_1.Storage.CountdownTimer.recentlyTimer.add(minutes);
+                                                                            storage_5.Storage.CountdownTimer.recentlyTimer.add(minutes);
                                                                             return [4 /*yield*/, Operate.CountdownTimer.newTimer(minutes)];
                                                                         case 2:
                                                                             _a.sent();
@@ -8980,10 +9008,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                             selectOffset = Render.$make(HTMLSelectElement)({
                                 tag: "select",
                                 value: offset,
-                                children: config_json_4.default.timezoneOffsetList
+                                children: config_json_7.default.timezoneOffsetList
                                     .concat([offset])
                                     .filter(function (i, ix, list) { return ix === list.indexOf(i); })
-                                    .sort(exports.simpleComparer)
+                                    .sort(base_2.Base.simpleComparer)
                                     .map(function (i) {
                                     return ({
                                         tag: "option",
@@ -10151,7 +10179,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     case 0: return [4 /*yield*/, Render.localeSettingsPopup()];
                                     case 1:
                                         if (!_a.sent()) return [3 /*break*/, 3];
-                                        locale_2.Locale.setLocale(storage_1.Storage.Settings.get().locale);
+                                        locale_2.Locale.setLocale(storage_5.Storage.Settings.get().locale);
                                         return [4 /*yield*/, Clockworks.reload()];
                                     case 2:
                                         _a.sent();
@@ -10209,7 +10237,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
             Render.githubMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     return [2 /*return*/, Render.externalLink({
-                            href: config_json_4.default.repositoryUrl,
+                            href: config_json_7.default.repositoryUrl,
                             children: Render.menuItem(Render.labelSpan("GitHub")),
                         })];
                 });
@@ -10528,10 +10556,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                     ]),
                                 ])];
                             _e = Render.flashIntervalLabel;
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_1.Storage.NeverStopwatch.recentlyFlashInterval.add, Domain.getFlashIntervalPreset()
-                                    .concat(storage_1.Storage.NeverStopwatch.recentlyFlashInterval.get())
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_5.Storage.NeverStopwatch.recentlyFlashInterval.add, Domain.getFlashIntervalPreset()
+                                    .concat(storage_5.Storage.NeverStopwatch.recentlyFlashInterval.get())
                                     .sort(minamo_js_3.minamo.core.comparer.make([function (i) { return i; }]))
-                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_1.Storage.NeverStopwatch.flashInterval.get(), storage_1.Storage.NeverStopwatch.flashInterval.set)];
+                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_5.Storage.NeverStopwatch.flashInterval.get(), storage_5.Storage.NeverStopwatch.flashInterval.set)];
                         case 1: return [4 /*yield*/, _e.apply(void 0, [_o.sent()])];
                         case 2:
                             _f = [
@@ -10563,7 +10591,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                storage_1.Storage.NeverStopwatch.Stamps.isSaved(item) ?
+                                storage_5.Storage.NeverStopwatch.Stamps.isSaved(item) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -10668,7 +10696,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
                                 _g.sent()
                             ]),
-                                _f.menu = storage_1.Storage.NeverStopwatch.Stamps.isSaved(item) ? function () { return Render.stampItemMenu(item); } : undefined,
+                                _f.menu = storage_5.Storage.NeverStopwatch.Stamps.isSaved(item) ? function () { return Render.stampItemMenu(item); } : undefined,
                                 _f.parent = { application: "NeverStopwatch" },
                                 _f);
                             _g.label = 7;
@@ -10689,7 +10717,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         case 0:
                             applicationTitle = Clockworks.applicationList["NeverStopwatch"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            ticks = storage_1.Storage.NeverStopwatch.Stamps.get();
+                            ticks = storage_5.Storage.NeverStopwatch.Stamps.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, current, flashInterval, _a, capitalTime, capitalTimeSpan, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, stampListDiv, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
                                 var _c;
@@ -10700,7 +10728,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             now = new Date();
                                             tick = Domain.getTicks(now);
                                             current = (_c = item !== null && item !== void 0 ? item : ticks[0]) !== null && _c !== void 0 ? _c : null;
-                                            flashInterval = storage_1.Storage.NeverStopwatch.flashInterval.get();
+                                            flashInterval = storage_5.Storage.NeverStopwatch.flashInterval.get();
                                             _a = event;
                                             switch (_a) {
                                                 case "high-resolution-timer": return [3 /*break*/, 1];
@@ -10768,7 +10796,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             return [3 /*break*/, 8];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            ticks = storage_1.Storage.NeverStopwatch.Stamps.get();
+                                            ticks = storage_5.Storage.NeverStopwatch.Stamps.get();
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.neverStopwatchScreenBody(item, ticks)];
                                         case 6:
@@ -10873,10 +10901,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                         ]),
                                     ])];
                             _e = Render.flashIntervalLabel;
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_1.Storage.CountdownTimer.recentlyFlashInterval.add, Domain.getFlashIntervalPreset()
-                                    .concat(storage_1.Storage.CountdownTimer.recentlyFlashInterval.get())
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_5.Storage.CountdownTimer.recentlyFlashInterval.add, Domain.getFlashIntervalPreset()
+                                    .concat(storage_5.Storage.CountdownTimer.recentlyFlashInterval.get())
                                     .sort(minamo_js_3.minamo.core.comparer.make([function (i) { return i; }]))
-                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_1.Storage.CountdownTimer.flashInterval.get(), storage_1.Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
+                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_5.Storage.CountdownTimer.flashInterval.get(), storage_5.Storage.CountdownTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
                         case 1: return [4 /*yield*/, _e.apply(void 0, [_p.sent()])];
                         case 2:
                             _f = [
@@ -10895,7 +10923,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                                 case 0:
                                                                     current = item !== null && item !== void 0 ? item : alarms[0];
                                                                     if (!current) return [3 /*break*/, 4];
-                                                                    if (!storage_1.Storage.CountdownTimer.Alarms.isSaved(item)) return [3 /*break*/, 2];
+                                                                    if (!storage_5.Storage.CountdownTimer.Alarms.isSaved(item)) return [3 /*break*/, 2];
                                                                     return [4 /*yield*/, Operate.CountdownTimer.done(current)];
                                                                 case 1:
                                                                     _a.sent();
@@ -10923,7 +10951,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                storage_1.Storage.CountdownTimer.Alarms.isSaved(item) ?
+                                storage_5.Storage.CountdownTimer.Alarms.isSaved(item) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -11067,7 +11095,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                             _a = (_f.items = _c.concat([
                                 _g.sent()
                             ]),
-                                _f.menu = storage_1.Storage.CountdownTimer.Alarms.isSaved(item) ? function () { return Render.alarmItemMenu(item); } : undefined,
+                                _f.menu = storage_5.Storage.CountdownTimer.Alarms.isSaved(item) ? function () { return Render.alarmItemMenu(item); } : undefined,
                                 _f.parent = { application: "CountdownTimer" },
                                 _f);
                             _g.label = 7;
@@ -11087,7 +11115,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         case 0:
                             applicationTitle = Clockworks.applicationList["CountdownTimer"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            alarms = storage_1.Storage.CountdownTimer.Alarms.get();
+                            alarms = storage_5.Storage.CountdownTimer.Alarms.get();
                             lashFlashAt = 0;
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, current, _a, capitalTime, capitalTimeSpan, flashInterval, rest, unit, primaryStep, cycle, currentColor, span, rate, nextColor, currentColor, alarmListDiv, rest, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
@@ -11113,7 +11141,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             capitalTime = Domain.dateStringFromTick(tick);
                                             capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                             minamo_js_3.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
-                                            flashInterval = storage_1.Storage.CountdownTimer.flashInterval.get();
+                                            flashInterval = storage_5.Storage.CountdownTimer.flashInterval.get();
                                             if (current) {
                                                 rest = current.end - tick;
                                                 if (0 < flashInterval) {
@@ -11130,11 +11158,11 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                     Render.screenFlash();
                                                     lashFlashAt = tick;
                                                 }
-                                                currentColor = color_2.Color.getSolidRainbowColor(storage_1.Storage.CountdownTimer.ColorIndex.get());
+                                                currentColor = color_2.Color.getSolidRainbowColor(storage_5.Storage.CountdownTimer.ColorIndex.get());
                                                 setFoundationColor(currentColor);
                                                 span = current.end - current.start;
                                                 rate = Math.min(tick - current.start, span) / span;
-                                                nextColor = color_2.Color.getSolidRainbowColor(storage_1.Storage.CountdownTimer.ColorIndex.get() + 1);
+                                                nextColor = color_2.Color.getSolidRainbowColor(storage_5.Storage.CountdownTimer.ColorIndex.get() + 1);
                                                 Render.setScreenBarProgress(rate, nextColor);
                                                 // setBodyColor(nextColor);
                                                 Render.getHeaderElement().classList.add("with-screen-prgress");
@@ -11143,7 +11171,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                 previousPrimaryStep = 0;
                                                 Render.setScreenBarProgress(null);
                                                 Render.getHeaderElement().classList.remove("with-screen-prgress");
-                                                currentColor = color_2.Color.getSolidRainbowColor(storage_1.Storage.CountdownTimer.ColorIndex.get());
+                                                currentColor = color_2.Color.getSolidRainbowColor(storage_5.Storage.CountdownTimer.ColorIndex.get());
                                                 setFoundationColor(currentColor);
                                                 // setBodyColor(currentColor);
                                             }
@@ -11168,7 +11196,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                 setBodyColor(color_2.Color.mixColors(currentColor, nextColor, rate));
                                             }
                                             else {
-                                                currentColor = color_2.Color.getSolidRainbowColor(storage_1.Storage.CountdownTimer.ColorIndex.get());
+                                                currentColor = color_2.Color.getSolidRainbowColor(storage_5.Storage.CountdownTimer.ColorIndex.get());
                                                 setBodyColor(currentColor);
                                             }
                                             return [3 /*break*/, 9];
@@ -11178,7 +11206,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             return [3 /*break*/, 9];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            alarms = storage_1.Storage.CountdownTimer.Alarms.get();
+                                            alarms = storage_5.Storage.CountdownTimer.Alarms.get();
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.countdownTimerScreenBody(item, alarms)];
                                         case 6:
@@ -11280,10 +11308,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                         ]),
                                     ])];
                             _e = Render.flashIntervalLabel;
-                            return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_1.Storage.ElapsedTimer.recentlyFlashInterval.add, Domain.getFlashIntervalPreset()
-                                    .concat(storage_1.Storage.ElapsedTimer.recentlyFlashInterval.get())
+                            return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_5.Storage.ElapsedTimer.recentlyFlashInterval.add, Domain.getFlashIntervalPreset()
+                                    .concat(storage_5.Storage.ElapsedTimer.recentlyFlashInterval.get())
                                     .sort(minamo_js_3.minamo.core.comparer.make([function (i) { return i; }]))
-                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_1.Storage.ElapsedTimer.flashInterval.get(), storage_1.Storage.ElapsedTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
+                                    .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_5.Storage.ElapsedTimer.flashInterval.get(), storage_5.Storage.ElapsedTimer.flashInterval.set, "flash-icon", "00:00:00 only")];
                         case 1: return [4 /*yield*/, _e.apply(void 0, [_p.sent()])];
                         case 2:
                             _f = [
@@ -11304,7 +11332,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                storage_1.Storage.ElapsedTimer.Events.isSaved(item) ?
+                                storage_5.Storage.ElapsedTimer.Events.isSaved(item) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -11436,7 +11464,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                             _a = (_f.items = _c.concat([
                                 _g.sent()
                             ]),
-                                _f.menu = storage_1.Storage.ElapsedTimer.Events.isSaved(item) ? function () { return Render.eventItemMenu(item); } : undefined,
+                                _f.menu = storage_5.Storage.ElapsedTimer.Events.isSaved(item) ? function () { return Render.eventItemMenu(item); } : undefined,
                                 _f.parent = { application: "ElapsedTimer" },
                                 _f);
                             _g.label = 7;
@@ -11456,7 +11484,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         case 0:
                             applicationTitle = Clockworks.applicationList["ElapsedTimer"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            events = storage_1.Storage.ElapsedTimer.Events.get();
+                            events = storage_5.Storage.ElapsedTimer.Events.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, current, flashInterval, _a, capitalTime, capitalTimeSpan, elapsed, unit, primaryStep, currentColor, rate, nextColor, currentColor, eventListDiv, elapsed, unit, primaryStep, currentColor, nextColor, rate, currentColor, _b;
                                 var _c, _d, _e;
@@ -11467,7 +11495,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             now = new Date();
                                             tick = Domain.getTicks(now);
                                             current = (_c = item !== null && item !== void 0 ? item : events[0]) !== null && _c !== void 0 ? _c : null;
-                                            flashInterval = storage_1.Storage.ElapsedTimer.flashInterval.get();
+                                            flashInterval = storage_5.Storage.ElapsedTimer.flashInterval.get();
                                             _a = event;
                                             switch (_a) {
                                                 case "high-resolution-timer": return [3 /*break*/, 1];
@@ -11536,7 +11564,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             return [3 /*break*/, 9];
                                         case 5:
                                             previousPrimaryStep = 0;
-                                            events = storage_1.Storage.ElapsedTimer.Events.get();
+                                            events = storage_5.Storage.ElapsedTimer.Events.get();
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.elapsedTimerScreenBody(item, events)];
                                         case 6:
@@ -11652,7 +11680,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                 // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
                                 // .sort(minamo.core.comparer.make([i => i]))
                                 // .filter((i, ix, list) => ix === list.indexOf(i)),
-                                storage_1.Storage.RainbowClock.flashInterval.get(), storage_1.Storage.RainbowClock.flashInterval.set)];
+                                storage_5.Storage.RainbowClock.flashInterval.get(), storage_5.Storage.RainbowClock.flashInterval.set)];
                         case 1: return [4 /*yield*/, _e.apply(void 0, [_p.sent()])];
                         case 2:
                             _f = [
@@ -11673,7 +11701,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                         children: "閉じる / Close",
                                     }
                                 }),
-                                storage_1.Storage.RainbowClock.Timezone.isSaved(item) ?
+                                storage_5.Storage.RainbowClock.Timezone.isSaved(item) ?
                                     {
                                         tag: "button",
                                         className: "main-button long-button",
@@ -11798,7 +11826,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                             _a = (_f.items = _c.concat([
                                 _g.sent()
                             ]),
-                                _f.menu = storage_1.Storage.RainbowClock.Timezone.isSaved(item) ? function () { return Render.timezoneItemMenu(item); } : undefined,
+                                _f.menu = storage_5.Storage.RainbowClock.Timezone.isSaved(item) ? function () { return Render.timezoneItemMenu(item); } : undefined,
                                 _f.parent = { application: "RainbowClock" },
                                 _f);
                             _g.label = 7;
@@ -11818,7 +11846,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                         case 0:
                             applicationTitle = Clockworks.applicationList["RainbowClock"].title;
                             document.body.classList.add("hide-scroll-bar");
-                            timezones = storage_1.Storage.RainbowClock.Timezone.get();
+                            timezones = storage_5.Storage.RainbowClock.Timezone.get();
                             updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
                                 var screen, now, tick, currentNow, _a, capitalTime, capitalTimeSpan, flashInterval, utc_1, timezoneListDiv, dateString, currentDateSpan, getRainbowColor, currentColor, hourUnit, minutes, nextColor, _b;
                                 return __generator(this, function (_c) {
@@ -11844,7 +11872,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             if (minamo_js_3.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate) {
                                                 setTitle(capitalTime + " - " + applicationTitle);
                                                 if (capitalTime.endsWith(":00")) {
-                                                    flashInterval = storage_1.Storage.RainbowClock.flashInterval.get();
+                                                    flashInterval = storage_5.Storage.RainbowClock.flashInterval.get();
                                                     if (0 < flashInterval) {
                                                         if (0 === (tick % flashInterval)) {
                                                             Render.screenFlash();
@@ -11856,7 +11884,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                                 if (timezoneListDiv) {
                                                     minamo_js_3.minamo.dom.getChildNodes(timezoneListDiv)
                                                         .forEach(function (dom, index) {
-                                                        var getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_1.Storage.RainbowClock.colorPattern.get()];
+                                                        var getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_5.Storage.RainbowClock.colorPattern.get()];
                                                         var currentTick = utc_1 - (timezones[index].offset * Domain.utcOffsetRate);
                                                         var panel = minamo_js_3.minamo.dom.getDivsByClassName(dom, "item-panel")[0];
                                                         var timeBar = minamo_js_3.minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
@@ -11879,7 +11907,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             dateString = Domain.dateCoreStringFromTick(tick) + " " + Domain.weekday(tick);
                                             currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0];
                                             minamo_js_3.minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
-                                            getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_1.Storage.RainbowClock.colorPattern.get()];
+                                            getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_5.Storage.RainbowClock.colorPattern.get()];
                                             currentColor = getRainbowColor(currentNow.getHours());
                                             setFoundationColor(currentColor);
                                             hourUnit = 60 * 60 * 1000;
@@ -11893,7 +11921,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                                             _c.sent();
                                             return [3 /*break*/, 9];
                                         case 5:
-                                            timezones = storage_1.Storage.RainbowClock.Timezone.get();
+                                            timezones = storage_5.Storage.RainbowClock.Timezone.get();
                                             _b = Render.replaceScreenBody;
                                             return [4 /*yield*/, Render.rainbowClockScreenBody(item, timezones)];
                                         case 6:
@@ -12051,7 +12079,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
             Render.getProgressElement = function () { return document.getElementById("screen-header").getElementsByClassName("progress-bar")[0]; };
             Render.setScreenBarProgress = function (percent, color) {
                 var _a;
-                var setting = (_a = storage_1.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
+                var setting = (_a = storage_5.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
                 var screenBar = document.getElementsByClassName("screen-bar")[0];
                 if (null !== percent && "header" !== setting) {
                     if (color) {
@@ -12191,10 +12219,10 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
             };
             var onUpdateStorageCount = 0;
             Render.onUpdateStorage = function () {
-                var lastUpdate = storage_1.Storage.lastUpdate = new Date().getTime();
+                var lastUpdate = storage_5.Storage.lastUpdate = new Date().getTime();
                 var onUpdateStorageCountCopy = onUpdateStorageCount = onUpdateStorageCount + 1;
                 setTimeout(function () {
-                    if (lastUpdate === storage_1.Storage.lastUpdate && onUpdateStorageCountCopy === onUpdateStorageCount) {
+                    if (lastUpdate === storage_5.Storage.lastUpdate && onUpdateStorageCountCopy === onUpdateStorageCount) {
                         Render.updateWindow === null || Render.updateWindow === void 0 ? void 0 : Render.updateWindow("storage");
                     }
                 }, 50);
@@ -12322,14 +12350,14 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
         };
         Clockworks.updateStyle = function () {
             var _a;
-            var setting = (_a = storage_1.Storage.Settings.get().theme) !== null && _a !== void 0 ? _a : "auto";
+            var setting = (_a = storage_5.Storage.Settings.get().theme) !== null && _a !== void 0 ? _a : "auto";
             var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
             var theme = "auto" === setting ? system : setting;
             ["light", "dark",].forEach(function (i) { return document.body.classList.toggle(i, i === theme); });
         };
         Clockworks.updateProgressBarStyle = function () {
             var _a;
-            var setting = (_a = storage_1.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
+            var setting = (_a = storage_5.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
             document.body.classList.toggle("tektite", "header" !== setting);
             if ("header" !== setting) {
                 setHeaderColor(null);
@@ -12341,7 +12369,7 @@ define("script/index", ["require", "exports", "script/minamo.js/index", "script/
                 switch (_a.label) {
                     case 0:
                         console.log("start!!!");
-                        locale_2.Locale.setLocale(storage_1.Storage.Settings.get().locale);
+                        locale_2.Locale.setLocale(storage_5.Storage.Settings.get().locale);
                         window.onpopstate = function () { return Clockworks.showPage(); };
                         window.addEventListener("resize", Render.onWindowResize);
                         window.addEventListener("focus", Render.onWindowFocus);

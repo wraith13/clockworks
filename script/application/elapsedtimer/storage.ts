@@ -1,20 +1,21 @@
-import { minamo } from "../minamo.js/index.js";
-import { Base } from "../base";
-import config from "../../resource/config.json";
+import { minamo } from "../../minamo.js/index.js";
+import { Type } from "../../type";
+import config from "../../../resource/config.json";
 export module Storage
 {
-    const applicationName = "NeverStopwatch";
-    export module Stamps
+    const applicationName = "ElapsedTimer";
+    export module Events
     {
-        export const makeKey = () => `${config.localDbPrefix}:${applicationName}:stamps`;
-        export const get = (): number[] => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
-        export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+        export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
+        export const get = (): Type.EventEntry[] => minamo.localStorage.getOrNull<Type.EventEntry[]>(makeKey()) ?? [];
+        export const set = (list: Type.EventEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.tick)));
         export const removeKey = () => minamo.localStorage.remove(makeKey());
-        export const add = (tick: number | number[]) =>
-            set(get().concat(tick).sort(Base.simpleReverseComparer).slice(0, 100));
-        export const remove = (tick: number) =>
-            set(get().filter(i => tick !== i).sort(Base.simpleReverseComparer));
-        export const isSaved = (tick: number) => 0 <= get().indexOf(tick);
+        export const add = (item: Type.EventEntry | Type.EventEntry[]) =>
+            set(get().concat(item));
+        export const remove = (item: Type.EventEntry) =>
+            set(get().filter(i => JSON.stringify(item) !== JSON.stringify(i)));
+        export const isSaved = (item: Type.EventEntry) =>
+            0 <= get().map(i => JSON.stringify(i)).indexOf(JSON.stringify(item));
     }
     export module flashInterval
     {
