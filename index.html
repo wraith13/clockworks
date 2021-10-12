@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Mon Oct 11 2021 22:51:51 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Oct 12 2021 21:40:50 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -7406,7 +7406,28 @@ define("script/domain", ["require", "exports", "script/locale", "script/base", "
         Domain.parseTimezone = function (json) { return Domain.parseTimezoneCore(Domain.parseOrNull(json)); };
     })(Domain = exports.Domain || (exports.Domain = {}));
 });
-define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/type", "script/base", "script/color", "script/storage", "script/domain", "resource/config"], function (require, exports, minamo_js_2, locale_3, type_1, base_3, color_2, storage_5, domain_1, config_json_8) {
+define("script/render/resource", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Resource = void 0;
+    var Resource;
+    (function (Resource) {
+        var _this = this;
+        Resource.loadSvgOrCache = function (key) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                try {
+                    return [2 /*return*/, new DOMParser().parseFromString(document.getElementById(key).innerHTML, "image/svg+xml").documentElement];
+                }
+                catch (error) {
+                    console.log({ key: key });
+                    throw error;
+                }
+                return [2 /*return*/];
+            });
+        }); };
+    })(Resource = exports.Resource || (exports.Resource = {}));
+});
+define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "resource/config"], function (require, exports, minamo_js_2, locale_3, type_1, base_3, color_2, storage_5, domain_1, resource_1, config_json_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -8399,7 +8420,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                         tag: "button",
                                                                                         className: "check-button " + (key === ((_b = settings.theme) !== null && _b !== void 0 ? _b : "auto") ? "checked" : "")
                                                                                     };
-                                                                                    return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                                                    return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("check-icon")];
                                                                                 case 1: return [2 /*return*/, (_a.children = [
                                                                                         _c.sent(),
                                                                                         Render.$span("")(Render.label("theme." + key))
@@ -8498,7 +8519,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                         tag: "button",
                                                                                         className: "check-button " + (key === selected ? "checked" : "")
                                                                                     };
-                                                                                    return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                                                    return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("check-icon")];
                                                                                 case 1: return [2 /*return*/, (_a.children = [
                                                                                         _b.sent(),
                                                                                         Render.$span("")(Render.label("progressBarStyle." + key))
@@ -8591,7 +8612,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                 tag: "button",
                                                                 className: "check-button " + ("@auto" === ((_f = settings.locale) !== null && _f !== void 0 ? _f : "@auto") ? "checked" : "")
                                                             };
-                                                            return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("check-icon")];
                                                         case 1:
                                                             _d = [
                                                                 (_e.children = [
@@ -8628,7 +8649,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                     tag: "button",
                                                                                     className: "check-button " + (key === ((_b = settings.locale) !== null && _b !== void 0 ? _b : "@auto") ? "checked" : "")
                                                                                 };
-                                                                                return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                                                return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
                                                                                     Render.$span("")(Render.labelSpan(locale_3.Locale.getLocaleName(key)))
@@ -8722,7 +8743,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                     tag: "button",
                                                                                     className: "check-button " + (key === settings ? "checked" : "")
                                                                                 };
-                                                                                return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                                                return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
                                                                                     Render.$span("")(Render.label(key))
@@ -8870,7 +8891,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                 tag: "button",
                                                                                 className: "check-button"
                                                                             };
-                                                                            return [4 /*yield*/, Resource.loadSvgOrCache("check-icon")];
+                                                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("check-icon")];
                                                                         case 1: return [2 /*return*/, (_a.children = [
                                                                                 _b.sent(),
                                                                                 Render.$span("")(Render.labelSpan(domain_1.Domain.makeTimerLabel(i)))
@@ -9327,7 +9348,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             tag: "button",
                             className: "menu-button"
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache("ellipsis-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("ellipsis-icon")];
                     case 1:
                         button = _a.apply(void 0, [(_b.children = [
                                 _c.sent()
@@ -9382,7 +9403,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             className: "item-title",
                             href: domain_1.Domain.makePageParams("NeverStopwatch", tick)
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                     case 1:
                         _d = [
                             _c.apply(void 0, [(_g.children = [
@@ -9473,7 +9494,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             className: "item-title",
                             href: domain_1.Domain.makePageParams("CountdownTimer", item)
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                     case 1:
                         _d = [
                             _c.apply(void 0, [(_g.children = [
@@ -9584,7 +9605,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             className: "item-title",
                             href: domain_1.Domain.makePageParams("ElapsedTimer", item)
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                     case 1:
                         _d = [
                             _c.apply(void 0, [(_g.children = [
@@ -9667,7 +9688,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             className: "item-title",
                             href: domain_1.Domain.makePageParams("RainbowClock", item)
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache("pin-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("pin-icon")];
                     case 1:
                         _d = [
                             _c.apply(void 0, [(_g.children = [
@@ -9768,7 +9789,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             tag: "button",
                             className: "icon-button close-button"
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache("cross-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("cross-icon")];
                     case 2:
                         _b = (_d.children = [
                             _e.sent()
@@ -9816,7 +9837,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 switch (_b.label) {
                     case 0:
                         _a = Render.$div("icon");
-                        return [4 /*yield*/, Resource.loadSvgOrCache(item.icon)];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(item.icon)];
                     case 1: return [2 /*return*/, [
                             _a.apply(void 0, [_b.sent()]),
                             Render.$div("segment-title")(item.title)
@@ -9948,7 +9969,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_b.label) {
                                         case 0:
                                             _a = Render.menuLinkItem;
-                                            return [4 /*yield*/, Resource.loadSvgOrCache(Render.applicationList[i].icon)];
+                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(Render.applicationList[i].icon)];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.applicationList[i].title], { application: i },
                                                 applicationType === i ? "current-item" : undefined])];
                                     }
@@ -9979,7 +10000,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_b.label) {
                                         case 0:
                                             _a = Render.menuLinkItem;
-                                            return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.$span("monospace")(domain_1.Domain.dateFullStringFromTick(i))], domain_1.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
                                     }
@@ -10010,7 +10031,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_b.label) {
                                         case 0:
                                             _a = Render.menuLinkItem;
-                                            return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(Render.alarmTitle(i)), Render.$span("value monospace")(domain_1.Domain.dateStringFromTick(i.end))], domain_1.Domain.makePageParams("CountdownTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
@@ -10041,7 +10062,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_b.label) {
                                         case 0:
                                             _a = Render.menuLinkItem;
-                                            return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(i.title), Render.$span("value monospace")(domain_1.Domain.dateStringFromTick(i.tick))], domain_1.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
@@ -10072,7 +10093,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_b.label) {
                                         case 0:
                                             _a = Render.menuLinkItem;
-                                            return [4 /*yield*/, Resource.loadSvgOrCache("tick-icon")];
+                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.labelSpan(i.title), Render.$span("value monospace")(domain_1.Domain.timezoneOffsetString(i.offset))], domain_1.Domain.makePageParams("RainbowClock", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
@@ -10095,7 +10116,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 switch (_b.label) {
                                     case 0:
                                         _a = Render.menuItem;
-                                        return [4 /*yield*/, Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
+                                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
                                     case 1: return [2 /*return*/, _a.apply(void 0, [[
                                                 _b.sent(),
                                                 Render.labelSpan(0 === i ? locale_3.Locale.map(zeroLabel) : locale_3.Locale.map("Interval") + ": " + domain_1.Domain.makeTimerLabel(i))
@@ -10121,7 +10142,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             .concat;
                         if (!adder) return [3 /*break*/, 3];
                         _d = Render.menuItem;
-                        return [4 /*yield*/, Resource.loadSvgOrCache("flash-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("flash-icon")];
                     case 2:
                         _c = [
                             _d.apply(void 0, [[
@@ -10177,22 +10198,6 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             });
         };
         Render.replaceScreenBody = function (body) { return minamo_js_2.minamo.dom.replaceChildren(minamo_js_2.minamo.dom.getDivsByClassName(document, "screen-body")[0], body); };
-        var Resource;
-        (function (Resource) {
-            var _this = this;
-            Resource.loadSvgOrCache = function (key) { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    try {
-                        return [2 /*return*/, new DOMParser().parseFromString(document.getElementById(key).innerHTML, "image/svg+xml").documentElement];
-                    }
-                    catch (error) {
-                        console.log({ key: key });
-                        throw error;
-                    }
-                    return [2 /*return*/];
-                });
-            }); };
-        })(Resource = Render.Resource || (Render.Resource = {}));
         Render.screenFlash = function () {
             document.body.classList.add("flash");
             setTimeout(function () { return document.body.classList.remove("flash"); }, 1500);
@@ -10371,7 +10376,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             tag: "div",
                             className: "down-page-link icon"
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache("down-triangle-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("down-triangle-icon")];
                     case 1: return [2 /*return*/, (_a.children = _b.sent(),
                             _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
@@ -10456,7 +10461,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _c = Render.$div("main-panel");
                         _d = Render.$div("logo");
                         _e = Render.$div("application-icon icon");
-                        return [4 /*yield*/, Resource.loadSvgOrCache("application-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("application-icon")];
                     case 2:
                         _f = [
                             _b.apply(void 0, [[
@@ -10579,7 +10584,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             tag: "div",
                             className: "flash-interval"
                         };
-                        return [4 /*yield*/, Resource.loadSvgOrCache(entry.icon)];
+                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(entry.icon)];
                     case 1: return [2 /*return*/, (_a.children = [
                             _b.sent(),
                             entry.title

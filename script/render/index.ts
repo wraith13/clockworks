@@ -5,8 +5,8 @@ import { Base } from "../base";
 import { Color } from "../color";
 import { Storage } from "../storage";
 import { Domain } from "../domain";
+import { Resource } from "./resource";
 import config from "../../resource/config.json";
-import resource from "../../resource/images.json";
 export module Render
 {
     export const applicationList =
@@ -2253,23 +2253,6 @@ export module Render
         minamo.dom.getDivsByClassName(document, "screen-body")[0],
         body
     );
-
-    export module Resource
-    {
-        export type KeyType = keyof typeof resource;
-        export const loadSvgOrCache = async (key: KeyType): Promise<SVGElement> =>
-        {
-            try
-            {
-                return new DOMParser().parseFromString(document.getElementById(key).innerHTML, "image/svg+xml").documentElement as any;
-            }
-            catch(error)
-            {
-                console.log({key});
-                throw error;
-            }
-        };
-    }
     export const screenFlash = () =>
     {
         document.body.classList.add("flash");
