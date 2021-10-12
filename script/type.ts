@@ -5,6 +5,7 @@ export module Type
 {
     // export type ApplicationType = keyof typeof applicationList;
     export type ApplicationType = "RainbowClock" | "CountdownTimer" | "ElapsedTimer" | "NeverStopwatch";
+    export const applicationIdList = Object.freeze([ "RainbowClock", "CountdownTimer", "ElapsedTimer", "NeverStopwatch", ]);
 
     export interface ApplicationEntry<ItemType>
     {
