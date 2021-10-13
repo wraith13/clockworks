@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Oct 12 2021 21:40:50 GMT+0900 (GMT+09:00) -->
+<!-- build at: Tue Oct 12 2021 21:54:12 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6745,7 +6745,25 @@ define("script/type", ["require", "exports", "script/color"], function (require,
     exports.Type = void 0;
     var Type;
     (function (Type) {
-        Type.applicationIdList = Object.freeze(["RainbowClock", "CountdownTimer", "ElapsedTimer", "NeverStopwatch",]);
+        Type.applicationList = {
+            "RainbowClock": {
+                icon: "tick-icon",
+                title: "Rainbow Clock",
+            },
+            "CountdownTimer": {
+                icon: "history-icon",
+                title: "Countdown Timer",
+            },
+            "ElapsedTimer": {
+                icon: "elapsed-icon",
+                title: "Elapsed Timer",
+            },
+            "NeverStopwatch": {
+                icon: "never-stopwatch-icon",
+                title: "Never Stopwatch",
+            },
+        };
+        Type.applicationIdList = Object.freeze(Object.keys(Type.applicationList));
         Type.themeObject = {
             "auto": null,
             "light": null,
@@ -7435,46 +7453,6 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
     var Render;
     (function (Render) {
         var _this = this;
-        Render.applicationList = {
-            "RainbowClock": {
-                icon: "tick-icon",
-                title: "Rainbow Clock",
-                show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, Render.showRainbowClockScreen(item)];
-                        case 1: return [2 /*return*/, _a.sent()];
-                    }
-                }); }); },
-                parseItem: function (json) { return domain_1.Domain.parseTimezone(json); },
-            },
-            "CountdownTimer": {
-                icon: "history-icon",
-                title: "Countdown Timer",
-                show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, Render.showCountdownTimerScreen(item)];
-                        case 1: return [2 /*return*/, _a.sent()];
-                    }
-                }); }); },
-                parseItem: function (json) { return domain_1.Domain.parseAlarm(json); },
-            },
-            "ElapsedTimer": {
-                icon: "elapsed-icon",
-                title: "Elapsed Timer",
-                show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    return [2 /*return*/, Render.showElapsedTimerScreen(item)];
-                }); }); },
-                parseItem: function (json) { return domain_1.Domain.parseEvent(json); },
-            },
-            "NeverStopwatch": {
-                icon: "never-stopwatch-icon",
-                title: "Never Stopwatch",
-                show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    return [2 /*return*/, Render.showNeverStopwatchScreen(item)];
-                }); }); },
-                parseItem: function (json) { return domain_1.Domain.parseStamp(json); },
-            },
-        };
         var setTitle = function (title) {
             if (document.title !== title) {
                 document.title = title;
@@ -9960,8 +9938,8 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 switch (_b.label) {
                     case 0:
                         _a = {
-                            icon: Render.applicationList[applicationType].icon,
-                            title: Render.applicationList[applicationType].title
+                            icon: type_1.Type.applicationList[applicationType].icon,
+                            title: type_1.Type.applicationList[applicationType].title
                         };
                         return [4 /*yield*/, Promise.all(type_1.Type.applicationIdList.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                 var _a;
@@ -9969,8 +9947,8 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_b.label) {
                                         case 0:
                                             _a = Render.menuLinkItem;
-                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(Render.applicationList[i].icon)];
-                                        case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), Render.applicationList[i].title], { application: i },
+                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(type_1.Type.applicationList[i].icon)];
+                                        case 1: return [2 /*return*/, _a.apply(void 0, [[_b.sent(), type_1.Type.applicationList[i].title], { application: i },
                                                 applicationType === i ? "current-item" : undefined])];
                                     }
                                 });
@@ -10476,7 +10454,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                     children: {
                                                         tag: "button",
                                                         className: "default-button main-button long-button",
-                                                        children: Render.labelSpan(Render.applicationList[i].title),
+                                                        children: Render.labelSpan(type_1.Type.applicationList[i].title),
                                                         // onclick: async () => await showNeverStopwatchScreen(),
                                                     }
                                                 });
@@ -10801,7 +10779,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        applicationTitle = Render.applicationList["NeverStopwatch"].title;
+                        applicationTitle = type_1.Type.applicationList["NeverStopwatch"].title;
                         document.body.classList.add("hide-scroll-bar");
                         ticks = storage_5.Storage.NeverStopwatch.Stamps.get();
                         updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
@@ -11199,7 +11177,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        applicationTitle = Render.applicationList["CountdownTimer"].title;
+                        applicationTitle = type_1.Type.applicationList["CountdownTimer"].title;
                         document.body.classList.add("hide-scroll-bar");
                         alarms = storage_5.Storage.CountdownTimer.Alarms.get();
                         lashFlashAt = 0;
@@ -11568,7 +11546,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        applicationTitle = Render.applicationList["ElapsedTimer"].title;
+                        applicationTitle = type_1.Type.applicationList["ElapsedTimer"].title;
                         document.body.classList.add("hide-scroll-bar");
                         events = storage_5.Storage.ElapsedTimer.Events.get();
                         updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
@@ -11930,7 +11908,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        applicationTitle = Render.applicationList["RainbowClock"].title;
+                        applicationTitle = type_1.Type.applicationList["RainbowClock"].title;
                         document.body.classList.add("hide-scroll-bar");
                         timezones = storage_5.Storage.RainbowClock.Timezone.get();
                         updateWindow = function (event) { return __awaiter(_this, void 0, void 0, function () {
@@ -12430,7 +12408,38 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             hash = base_3.Base.getUrlHash(url).split("/");
                             applicationType = hash[0];
                             itemJson = hash[1];
-                            application = (_b = Render.applicationList[applicationType]) !== null && _b !== void 0 ? _b : {
+                            application = (_b = {
+                                "RainbowClock": {
+                                    show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, Render.showRainbowClockScreen(item)];
+                                            case 1: return [2 /*return*/, _a.sent()];
+                                        }
+                                    }); }); },
+                                    parseItem: function (json) { return domain_1.Domain.parseTimezone(json); },
+                                },
+                                "CountdownTimer": {
+                                    show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, Render.showCountdownTimerScreen(item)];
+                                            case 1: return [2 /*return*/, _a.sent()];
+                                        }
+                                    }); }); },
+                                    parseItem: function (json) { return domain_1.Domain.parseAlarm(json); },
+                                },
+                                "ElapsedTimer": {
+                                    show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                        return [2 /*return*/, Render.showElapsedTimerScreen(item)];
+                                    }); }); },
+                                    parseItem: function (json) { return domain_1.Domain.parseEvent(json); },
+                                },
+                                "NeverStopwatch": {
+                                    show: function (item) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                        return [2 /*return*/, Render.showNeverStopwatchScreen(item)];
+                                    }); }); },
+                                    parseItem: function (json) { return domain_1.Domain.parseStamp(json); },
+                                },
+                            }[applicationType]) !== null && _b !== void 0 ? _b : {
                                 show: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0: return [4 /*yield*/, Render.showWelcomeScreen()];
@@ -12461,7 +12470,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         return [4 /*yield*/, Render.showPage(url)];
                     case 1:
                         if (_c.sent()) {
-                            history.pushState(null, (_b = (_a = Render.applicationList[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : config_json_8.default.applicationTitle, url);
+                            history.pushState(null, (_b = (_a = type_1.Type.applicationList[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : config_json_8.default.applicationTitle, url);
                         }
                         return [2 /*return*/];
                 }
@@ -12477,7 +12486,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         return [4 /*yield*/, Render.showPage(url)];
                     case 1:
                         if (_c.sent()) {
-                            history.replaceState(null, (_b = (_a = Render.applicationList[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : config_json_8.default.applicationTitle, url);
+                            history.replaceState(null, (_b = (_a = type_1.Type.applicationList[data.application]) === null || _a === void 0 ? void 0 : _a.title) !== null && _b !== void 0 ? _b : config_json_8.default.applicationTitle, url);
                         }
                         return [2 /*return*/];
                 }

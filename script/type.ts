@@ -3,16 +3,38 @@ import { Color } from "./color";
 import resource from "../resource/images.json";
 export module Type
 {
-    // export type ApplicationType = keyof typeof applicationList;
-    export type ApplicationType = "RainbowClock" | "CountdownTimer" | "ElapsedTimer" | "NeverStopwatch";
-    export const applicationIdList = Object.freeze([ "RainbowClock", "CountdownTimer", "ElapsedTimer", "NeverStopwatch", ]);
+    export const applicationList =
+    {
+        "RainbowClock": <Type.ApplicationEntry>
+        {
+            icon: "tick-icon",
+            title: "Rainbow Clock",
+        },
+        "CountdownTimer": <Type.ApplicationEntry>
+        {
+            icon: "history-icon",
+            title: "Countdown Timer",
+        },
+        "ElapsedTimer": <Type.ApplicationEntry>
+        {
+            icon: "elapsed-icon",
+            title: "Elapsed Timer",
+        },
+        "NeverStopwatch": <Type.ApplicationEntry>
+        {
+            icon: "never-stopwatch-icon",
+            title: "Never Stopwatch",
+        },
+    };
+    export type ApplicationType = keyof typeof applicationList;
+    export const applicationIdList = Object.freeze(Object.keys(applicationList));
 
-    export interface ApplicationEntry<ItemType>
+    export interface ApplicationEntry//<ItemType>
     {
         icon: keyof typeof resource;
         title: string;
-        show: (item: ItemType) => Promise<unknown>;
-        parseItem: (json: string) => ItemType;
+        // show: (item: ItemType) => Promise<unknown>;
+        // parseItem: (json: string) => ItemType;
     }
     export const themeObject =
     {

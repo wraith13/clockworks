@@ -9,37 +9,6 @@ import { Resource } from "./resource";
 import config from "../../resource/config.json";
 export module Render
 {
-    export const applicationList =
-    {
-        "RainbowClock": <Type.ApplicationEntry<Type.TimezoneEntry>>
-        {
-            icon: "tick-icon",
-            title: "Rainbow Clock",
-            show: async item => await Render.showRainbowClockScreen(item),
-            parseItem: json => Domain.parseTimezone(json),
-        },
-        "CountdownTimer": <Type.ApplicationEntry<Type.AlarmEntry>>
-        {
-            icon: "history-icon",
-            title: "Countdown Timer",
-            show: async item => await Render.showCountdownTimerScreen(item),
-            parseItem: json => Domain.parseAlarm(json),
-        },
-        "ElapsedTimer": <Type.ApplicationEntry<Type.EventEntry>>
-        {
-            icon: "elapsed-icon",
-            title: "Elapsed Timer",
-            show: async item => Render.showElapsedTimerScreen(item),
-            parseItem: json => Domain.parseEvent(json),
-        },
-        "NeverStopwatch": <Type.ApplicationEntry<number>>
-        {
-            icon: "never-stopwatch-icon",
-            title: "Never Stopwatch",
-            show: async item => Render.showNeverStopwatchScreen(item),
-            parseItem: json => Domain.parseStamp(json),
-        },
-    };
     const setTitle = (title: string) =>
     {
         if (document.title !== title)
@@ -2091,15 +2060,15 @@ export module Render
     });
     export const screenHeaderApplicationSegment = async (applicationType: Type.ApplicationType): Promise<HeaderSegmentSource> =>
     ({
-        icon: applicationList[applicationType].icon,
-        title: applicationList[applicationType].title,
+        icon: Type.applicationList[applicationType].icon,
+        title: Type.applicationList[applicationType].title,
         menu: await Promise.all
         (
             Type.applicationIdList.map
             (
                 async (i: Type.ApplicationType) => menuLinkItem
                 (
-                    [ await Resource.loadSvgOrCache(applicationList[i].icon), applicationList[i].title, ],
+                    [ await Resource.loadSvgOrCache(Type.applicationList[i].icon), Type.applicationList[i].title, ],
                     { application: i },
                     applicationType === i ? "current-item": undefined,
                 )
@@ -2430,7 +2399,7 @@ export module Render
                                     {
                                         tag: "button",
                                         className: "default-button main-button long-button",
-                                        children: labelSpan(applicationList[i].title),
+                                        children: labelSpan(Type.applicationList[i].title),
                                         // onclick: async () => await showNeverStopwatchScreen(),
                                     }
                                 }),
@@ -2648,7 +2617,7 @@ export module Render
     let previousPrimaryStep = 0;
     export const showNeverStopwatchScreen = async (item: number | null) =>
     {
-        const applicationTitle = applicationList["NeverStopwatch"].title;
+        const applicationTitle = Type.applicationList["NeverStopwatch"].title;
         document.body.classList.add("hide-scroll-bar");
         let ticks = Storage.NeverStopwatch.Stamps.get();
         const updateWindow = async (event: UpdateWindowEventEype) =>
@@ -2956,7 +2925,7 @@ export module Render
     });
     export const showCountdownTimerScreen = async (item: Type.AlarmEntry | null) =>
     {
-        const applicationTitle = applicationList["CountdownTimer"].title;
+        const applicationTitle = Type.applicationList["CountdownTimer"].title;
         document.body.classList.add("hide-scroll-bar");
         let alarms = Storage.CountdownTimer.Alarms.get();
         let lashFlashAt = 0;
@@ -3235,7 +3204,7 @@ export module Render
     });
     export const showElapsedTimerScreen = async (item: Type.EventEntry | null) =>
     {
-        const applicationTitle = applicationList["ElapsedTimer"].title;
+        const applicationTitle = Type.applicationList["ElapsedTimer"].title;
         document.body.classList.add("hide-scroll-bar");
         let events = Storage.ElapsedTimer.Events.get();
         const updateWindow = async (event: UpdateWindowEventEype) =>
@@ -3500,7 +3469,7 @@ export module Render
     });
     export const showRainbowClockScreen = async (item: Type.TimezoneEntry | null) =>
     {
-        const applicationTitle = applicationList["RainbowClock"].title;
+        const applicationTitle = Type.applicationList["RainbowClock"].title;
         document.body.classList.add("hide-scroll-bar");
         let timezones = Storage.RainbowClock.Timezone.get();
         const updateWindow = async (event: UpdateWindowEventEype) =>
@@ -4101,7 +4070,29 @@ export module Render
         const hash = Base.getUrlHash(url).split("/");
         const applicationType = hash[0] as Type.ApplicationType;
         const itemJson = hash[1];
-        const application = applicationList[applicationType] ??
+        const application =
+        {
+            "RainbowClock":
+            {
+                show: async item => await Render.showRainbowClockScreen(item),
+                parseItem: json => Domain.parseTimezone(json),
+            },
+            "CountdownTimer":
+            {
+                show: async item => await Render.showCountdownTimerScreen(item),
+                parseItem: json => Domain.parseAlarm(json),
+            },
+            "ElapsedTimer":
+            {
+                show: async item => Render.showElapsedTimerScreen(item),
+                parseItem: json => Domain.parseEvent(json),
+            },
+            "NeverStopwatch":
+            {
+                show: async item => Render.showNeverStopwatchScreen(item),
+                parseItem: json => Domain.parseStamp(json),
+            },
+        }[applicationType] ??
         {
             show: async () => await Render.showWelcomeScreen(),
             parseItem: () => null,
@@ -4122,7 +4113,7 @@ export module Render
         const url = Domain.makeUrl(data);
         if (await showPage(url))
         {
-            history.pushState(null, applicationList[data.application]?.title ?? config.applicationTitle, url);
+            history.pushState(null, Type.applicationList[data.application]?.title ?? config.applicationTitle, url);
         }
     };
     export const rewriteShowUrl = async (data: Type.PageParams) =>
@@ -4130,7 +4121,7 @@ export module Render
         const url = Domain.makeUrl(data);
         if (await showPage(url))
         {
-            history.replaceState(null, applicationList[data.application]?.title ?? config.applicationTitle, url);
+            history.replaceState(null, Type.applicationList[data.application]?.title ?? config.applicationTitle, url);
         }
     };
     export const reload = async () => await showPage();
