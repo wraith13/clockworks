@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Oct 16 2021 00:21:19 GMT+0900 (GMT+09:00) -->
+<!-- build at: Mon Oct 18 2021 04:02:26 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -7975,7 +7975,146 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/render/operate", ["require", "exports", "script/minamo.js/index", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index", "script/application/rainbowclock/operate", "script/application/countdowntimer/operate", "script/application/elapsedtimer/operate"], function (require, exports, minamo_js_2, locale_6, base_6, storage_8, domain_4, _1, operate_1, operate_2, operate_3) {
+define("script/application/neverstopwatch/operate", ["require", "exports", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, locale_6, base_6, storage_8, domain_4, render_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Operate = void 0;
+    var Operate;
+    (function (Operate) {
+        var _this = this;
+        Operate.stamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+            var backup, toast;
+            var _this = this;
+            return __generator(this, function (_a) {
+                backup = storage_8.Storage.NeverStopwatch.Stamps.get();
+                storage_8.Storage.NeverStopwatch.Stamps.add(tick);
+                render_4.Render.updateWindow("operate");
+                toast = render_4.Render.makePrimaryToast({
+                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Stamped!")),
+                    backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    storage_8.Storage.NeverStopwatch.Stamps.set(backup);
+                                    render_4.Render.updateWindow("operate");
+                                    return [4 /*yield*/, toast.hide()];
+                                case 1:
+                                    _a.sent();
+                                    onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }),
+                });
+                return [2 /*return*/];
+            });
+        }); };
+        Operate.save = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+            var backup, toast;
+            var _this = this;
+            return __generator(this, function (_a) {
+                backup = storage_8.Storage.NeverStopwatch.Stamps.get();
+                storage_8.Storage.NeverStopwatch.Stamps.add(tick);
+                render_4.Render.updateWindow("operate");
+                toast = render_4.Render.makePrimaryToast({
+                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Saved!")),
+                    backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    storage_8.Storage.NeverStopwatch.Stamps.set(backup);
+                                    render_4.Render.updateWindow("operate");
+                                    return [4 /*yield*/, toast.hide()];
+                                case 1:
+                                    _a.sent();
+                                    onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }),
+                });
+                return [2 /*return*/];
+            });
+        }); };
+        Operate.edit = function (oldTick, newTick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+            var backup, toast;
+            var _this = this;
+            return __generator(this, function (_a) {
+                backup = storage_8.Storage.NeverStopwatch.Stamps.get();
+                storage_8.Storage.NeverStopwatch.Stamps.remove(oldTick);
+                storage_8.Storage.NeverStopwatch.Stamps.add(newTick);
+                render_4.Render.updateWindow("operate");
+                toast = render_4.Render.makePrimaryToast({
+                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Updated.")),
+                    backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    storage_8.Storage.NeverStopwatch.Stamps.set(backup);
+                                    render_4.Render.updateWindow("operate");
+                                    return [4 /*yield*/, toast.hide()];
+                                case 1:
+                                    _a.sent();
+                                    onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }),
+                });
+                return [2 /*return*/];
+            });
+        }); };
+        Operate.removeStamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
+            var isOpend, backup, toast;
+            var _this = this;
+            return __generator(this, function (_a) {
+                isOpend = !!base_6.Base.getUrlHash(location.href).split("/")[1];
+                backup = storage_8.Storage.NeverStopwatch.Stamps.get();
+                storage_8.Storage.NeverStopwatch.Stamps.remove(tick);
+                if (isOpend) {
+                    render_4.Render.showUrl({ application: "NeverStopwatch", });
+                }
+                else {
+                    render_4.Render.updateWindow("operate");
+                }
+                toast = render_4.Render.makePrimaryToast({
+                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Removed.")),
+                    backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    storage_8.Storage.NeverStopwatch.Stamps.set(backup);
+                                    if (isOpend) {
+                                        render_4.Render.showUrl(domain_4.Domain.makePageParams("NeverStopwatch", tick));
+                                    }
+                                    else {
+                                        render_4.Render.updateWindow("operate");
+                                    }
+                                    return [4 /*yield*/, toast.hide()];
+                                case 1:
+                                    _a.sent();
+                                    onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }),
+                });
+                return [2 /*return*/];
+            });
+        }); };
+        Operate.removeAllStamps = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (render_4.Render.systemConfirm(locale_6.Locale.map("This action cannot be undone. Do you want to continue?"))) {
+                    storage_8.Storage.NeverStopwatch.Stamps.removeKey();
+                    render_4.Render.updateWindow("operate");
+                    render_4.Render.makePrimaryToast({ content: render_4.Render.$span("")("" + locale_6.Locale.map("Removed all stamps!")), });
+                }
+                return [2 /*return*/];
+            });
+        }); };
+    })(Operate = exports.Operate || (exports.Operate = {}));
+});
+define("script/render/operate", ["require", "exports", "script/minamo.js/index", "script/render/index", "script/application/rainbowclock/operate", "script/application/countdowntimer/operate", "script/application/elapsedtimer/operate", "script/application/neverstopwatch/operate"], function (require, exports, minamo_js_2, _1, operate_1, operate_2, operate_3, operate_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -7995,143 +8134,84 @@ define("script/render/operate", ["require", "exports", "script/minamo.js/index",
         Operate.RainbowClock = operate_1.Operate;
         Operate.CountdownTimer = operate_2.Operate;
         Operate.ElapsedTimer = operate_3.Operate;
-        var NeverStopwatch;
-        (function (NeverStopwatch) {
-            var _this = this;
-            NeverStopwatch.stamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                var backup, toast;
-                var _this = this;
-                return __generator(this, function (_a) {
-                    backup = storage_8.Storage.NeverStopwatch.Stamps.get();
-                    storage_8.Storage.NeverStopwatch.Stamps.add(tick);
-                    _1.Render.updateWindow("operate");
-                    toast = _1.Render.makePrimaryToast({
-                        content: _1.Render.$span("")("" + locale_6.Locale.map("Stamped!")),
-                        backwardOperator: _1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        storage_8.Storage.NeverStopwatch.Stamps.set(backup);
-                                        _1.Render.updateWindow("operate");
-                                        return [4 /*yield*/, toast.hide()];
-                                    case 1:
-                                        _a.sent();
-                                        onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); }),
-                    });
-                    return [2 /*return*/];
-                });
-            }); };
-            NeverStopwatch.save = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                var backup, toast;
-                var _this = this;
-                return __generator(this, function (_a) {
-                    backup = storage_8.Storage.NeverStopwatch.Stamps.get();
-                    storage_8.Storage.NeverStopwatch.Stamps.add(tick);
-                    _1.Render.updateWindow("operate");
-                    toast = _1.Render.makePrimaryToast({
-                        content: _1.Render.$span("")("" + locale_6.Locale.map("Saved!")),
-                        backwardOperator: _1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        storage_8.Storage.NeverStopwatch.Stamps.set(backup);
-                                        _1.Render.updateWindow("operate");
-                                        return [4 /*yield*/, toast.hide()];
-                                    case 1:
-                                        _a.sent();
-                                        onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); }),
-                    });
-                    return [2 /*return*/];
-                });
-            }); };
-            NeverStopwatch.edit = function (oldTick, newTick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                var backup, toast;
-                var _this = this;
-                return __generator(this, function (_a) {
-                    backup = storage_8.Storage.NeverStopwatch.Stamps.get();
-                    storage_8.Storage.NeverStopwatch.Stamps.remove(oldTick);
-                    storage_8.Storage.NeverStopwatch.Stamps.add(newTick);
-                    _1.Render.updateWindow("operate");
-                    toast = _1.Render.makePrimaryToast({
-                        content: _1.Render.$span("")("" + locale_6.Locale.map("Updated.")),
-                        backwardOperator: _1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        storage_8.Storage.NeverStopwatch.Stamps.set(backup);
-                                        _1.Render.updateWindow("operate");
-                                        return [4 /*yield*/, toast.hide()];
-                                    case 1:
-                                        _a.sent();
-                                        onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); }),
-                    });
-                    return [2 /*return*/];
-                });
-            }); };
-            NeverStopwatch.removeStamp = function (tick, onCanceled) { return __awaiter(_this, void 0, void 0, function () {
-                var isOpend, backup, toast;
-                var _this = this;
-                return __generator(this, function (_a) {
-                    isOpend = !!base_6.Base.getUrlHash(location.href).split("/")[1];
-                    backup = storage_8.Storage.NeverStopwatch.Stamps.get();
-                    storage_8.Storage.NeverStopwatch.Stamps.remove(tick);
-                    if (isOpend) {
-                        _1.Render.showUrl({ application: "NeverStopwatch", });
-                    }
-                    else {
-                        _1.Render.updateWindow("operate");
-                    }
-                    toast = _1.Render.makePrimaryToast({
-                        content: _1.Render.$span("")("" + locale_6.Locale.map("Removed.")),
-                        backwardOperator: _1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        storage_8.Storage.NeverStopwatch.Stamps.set(backup);
-                                        if (isOpend) {
-                                            _1.Render.showUrl(domain_4.Domain.makePageParams("NeverStopwatch", tick));
-                                        }
-                                        else {
-                                            _1.Render.updateWindow("operate");
-                                        }
-                                        return [4 /*yield*/, toast.hide()];
-                                    case 1:
-                                        _a.sent();
-                                        onCanceled === null || onCanceled === void 0 ? void 0 : onCanceled();
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); }),
-                    });
-                    return [2 /*return*/];
-                });
-            }); };
-            NeverStopwatch.removeAllStamps = function () { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    if (_1.Render.systemConfirm(locale_6.Locale.map("This action cannot be undone. Do you want to continue?"))) {
-                        storage_8.Storage.NeverStopwatch.Stamps.removeKey();
-                        _1.Render.updateWindow("operate");
-                        _1.Render.makePrimaryToast({ content: _1.Render.$span("")("" + locale_6.Locale.map("Removed all stamps!")), });
-                    }
-                    return [2 /*return*/];
-                });
-            }); };
-        })(NeverStopwatch = Operate.NeverStopwatch || (Operate.NeverStopwatch = {}));
+        Operate.NeverStopwatch = operate_4.Operate;
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "resource/config"], function (require, exports, minamo_js_3, locale_7, type_1, base_7, color_2, storage_9, domain_5, resource_1, operate_4, config_json_9) {
+define("tektite/script/fullscreen", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Fullscreen = void 0;
+    var Fullscreen;
+    (function (Fullscreen) {
+        var _this = this;
+        Fullscreen.enabled = function () { var _a; return (_a = document.fullscreenEnabled) !== null && _a !== void 0 ? _a : document.webkitFullscreenEnabled; };
+        Fullscreen.element = function () { var _a, _b; return ((_b = (_a = document.fullscreenElement) !== null && _a !== void 0 ? _a : (document.webkitFullscreenElement)) !== null && _b !== void 0 ? _b : null); };
+        Fullscreen.request = function (element) {
+            if (element === void 0) { element = document.documentElement; }
+            return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!element.requestFullscreen) return [3 /*break*/, 2];
+                            return [4 /*yield*/, element.requestFullscreen()];
+                        case 1:
+                            _a.sent();
+                            return [3 /*break*/, 4];
+                        case 2:
+                            if (!element.webkitRequestFullscreen) return [3 /*break*/, 4];
+                            return [4 /*yield*/, (element.webkitRequestFullscreen)()];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4:
+                            if (!document.body.classList.contains("sleep-mouse")) {
+                                document.body.classList.add("sleep-mouse");
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        Fullscreen.exit = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!document.exitFullscreen) return [3 /*break*/, 2];
+                        return [4 /*yield*/, document.exitFullscreen()];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 2:
+                        if (!document.webkitCancelFullScreen) return [3 /*break*/, 4];
+                        return [4 /*yield*/, (document.webkitCancelFullScreen)()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        if (document.body.classList.contains("sleep-mouse")) {
+                            document.body.classList.remove("sleep-mouse");
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+    })(Fullscreen = exports.Fullscreen || (exports.Fullscreen = {}));
+});
+define("tektite/script/index", ["require", "exports", "tektite/script/fullscreen"], function (require, exports, fullscreen_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Tektite = void 0;
+    var Tektite;
+    (function (Tektite) {
+        Tektite.Fullscreen = fullscreen_1.Fullscreen;
+        Tektite.onWebkitFullscreenChange = function (_event) {
+            if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document)) {
+                document.body.classList.toggle("fxxking-ipad-fullscreen", Tektite.Fullscreen.element());
+            }
+        };
+    })(Tektite = exports.Tektite || (exports.Tektite = {}));
+});
+define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "resource/config", "tektite/script/index"], function (require, exports, minamo_js_3, locale_7, type_1, base_7, color_2, storage_9, domain_5, resource_1, operate_5, config_json_9, script_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -8185,58 +8265,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 Render.setHeaderColor(null);
             }
         };
-        Render.fullscreenEnabled = function () { var _a; return (_a = document.fullscreenEnabled) !== null && _a !== void 0 ? _a : document.webkitFullscreenEnabled; };
-        Render.fullscreenElement = function () { var _a, _b; return ((_b = (_a = document.fullscreenElement) !== null && _a !== void 0 ? _a : (document.webkitFullscreenElement)) !== null && _b !== void 0 ? _b : null); };
-        Render.requestFullscreen = function (element) {
-            if (element === void 0) { element = document.documentElement; }
-            return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!element.requestFullscreen) return [3 /*break*/, 2];
-                            return [4 /*yield*/, element.requestFullscreen()];
-                        case 1:
-                            _a.sent();
-                            return [3 /*break*/, 4];
-                        case 2:
-                            if (!element.webkitRequestFullscreen) return [3 /*break*/, 4];
-                            return [4 /*yield*/, (element.webkitRequestFullscreen)()];
-                        case 3:
-                            _a.sent();
-                            _a.label = 4;
-                        case 4:
-                            if (!document.body.classList.contains("sleep-mouse")) {
-                                document.body.classList.add("sleep-mouse");
-                            }
-                            return [2 /*return*/];
-                    }
-                });
-            });
-        };
-        Render.exitFullscreen = function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!document.exitFullscreen) return [3 /*break*/, 2];
-                        return [4 /*yield*/, document.exitFullscreen()];
-                    case 1:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 2:
-                        if (!document.webkitCancelFullScreen) return [3 /*break*/, 4];
-                        return [4 /*yield*/, (document.webkitCancelFullScreen)()];
-                    case 3:
-                        _a.sent();
-                        _a.label = 4;
-                    case 4:
-                        if (document.body.classList.contains("sleep-mouse")) {
-                            document.body.classList.remove("sleep-mouse");
-                        }
-                        return [2 /*return*/];
-                }
-            });
-        }); };
-        Render.Operate = operate_4.Operate;
+        Render.Operate = operate_5.Operate;
         Render.cancelTextButton = function (onCanceled) {
             return ({
                 tag: "button",
@@ -10233,17 +10262,17 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.fullscreenMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, Render.fullscreenEnabled() ?
-                        (null === Render.fullscreenElement() ?
+                return [2 /*return*/, script_1.Tektite.Fullscreen.enabled() ?
+                        (null === script_1.Tektite.Fullscreen.element() ?
                             Render.menuItem(Render.label("Full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, Render.requestFullscreen()];
+                                    case 0: return [4 /*yield*/, script_1.Tektite.Fullscreen.request()];
                                     case 1: return [2 /*return*/, _a.sent()];
                                 }
                             }); }); }) :
                             Render.menuItem(Render.label("Cancel full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, Render.exitFullscreen()];
+                                    case 0: return [4 /*yield*/, script_1.Tektite.Fullscreen.exit()];
                                     case 1: return [2 /*return*/, _a.sent()];
                                 }
                             }); }); })) :
@@ -12370,12 +12399,12 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 if (["input", "textarea"].indexOf(focusedElementTagName) < 0) {
                     switch (event.key.toLowerCase()) {
                         case "f":
-                            if (Render.fullscreenEnabled()) {
-                                if (null === Render.fullscreenElement()) {
-                                    Render.requestFullscreen();
+                            if (script_1.Tektite.Fullscreen.enabled()) {
+                                if (null === script_1.Tektite.Fullscreen.element()) {
+                                    script_1.Tektite.Fullscreen.request();
                                 }
                                 else {
-                                    Render.exitFullscreen();
+                                    script_1.Tektite.Fullscreen.exit();
                                 }
                             }
                             break;
@@ -12385,14 +12414,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         };
         var lastMouseMouseAt = 0;
         Render.onMouseMove = function (_evnet) {
-            if (Render.fullscreenEnabled()) {
+            if (script_1.Tektite.Fullscreen.enabled()) {
                 var now_1 = lastMouseMouseAt = new Date().getTime();
                 if (document.body.classList.contains("sleep-mouse")) {
                     document.body.classList.remove("sleep-mouse");
                 }
-                if (Render.fullscreenElement()) {
+                if (script_1.Tektite.Fullscreen.element()) {
                     setTimeout(function () {
-                        if (Render.fullscreenElement() && now_1 === lastMouseMouseAt) {
+                        if (script_1.Tektite.Fullscreen.element() && now_1 === lastMouseMouseAt) {
                             if (!document.body.classList.contains("sleep-mouse")) {
                                 document.body.classList.add("sleep-mouse");
                             }
@@ -12404,11 +12433,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.onFullscreenChange = function (_event) {
             Render.onWindowResize();
         };
-        Render.onWebkitFullscreenChange = function (_event) {
+        Render.onWebkitFullscreenChange = function (event) {
             Render.onWindowResize();
-            if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document)) {
-                document.body.classList.toggle("fxxking-ipad-fullscreen", Render.fullscreenElement());
-            }
+            script_1.Tektite.onWebkitFullscreenChange(event);
         };
         var lastMouseDownTarget = null;
         Render.onMouseDown = function (event) { return lastMouseDownTarget = event.target; };
@@ -12550,7 +12577,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         }); }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("script/index", ["require", "exports", "script/locale", "script/render/index", "script/storage"], function (require, exports, locale_8, render_4, storage_10) {
+define("script/index", ["require", "exports", "script/locale", "script/render/index", "script/storage"], function (require, exports, locale_8, render_5, storage_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Clockworks = void 0;
@@ -12568,29 +12595,29 @@ define("script/index", ["require", "exports", "script/locale", "script/render/in
                     case 0:
                         console.log("start!!!");
                         locale_8.Locale.setLocale(storage_10.Storage.Settings.get().locale);
-                        window.onpopstate = function () { return render_4.Render.showPage(); };
-                        window.addEventListener("resize", render_4.Render.onWindowResize);
-                        window.addEventListener("focus", render_4.Render.onWindowFocus);
-                        window.addEventListener("blur", render_4.Render.onWindowBlur);
-                        window.addEventListener("storage", render_4.Render.onUpdateStorage);
-                        window.addEventListener("compositionstart", render_4.Render.onCompositionStart);
-                        window.addEventListener("compositionend", render_4.Render.onCompositionEnd);
-                        window.addEventListener("keydown", render_4.Render.onKeydown);
+                        window.onpopstate = function () { return render_5.Render.showPage(); };
+                        window.addEventListener("resize", render_5.Render.onWindowResize);
+                        window.addEventListener("focus", render_5.Render.onWindowFocus);
+                        window.addEventListener("blur", render_5.Render.onWindowBlur);
+                        window.addEventListener("storage", render_5.Render.onUpdateStorage);
+                        window.addEventListener("compositionstart", render_5.Render.onCompositionStart);
+                        window.addEventListener("compositionend", render_5.Render.onCompositionEnd);
+                        window.addEventListener("keydown", render_5.Render.onKeydown);
                         document.getElementById("screen-header").addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, render_4.Render.scrollToOffset(document.getElementById("screen-body"), 0)];
+                                case 0: return [4 /*yield*/, render_5.Render.scrollToOffset(document.getElementById("screen-body"), 0)];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); });
-                        window.addEventListener("mousemove", render_4.Render.onMouseMove);
-                        window.addEventListener("mousedown", render_4.Render.onMouseDown);
-                        window.addEventListener("mouseup", render_4.Render.onMouseUp);
-                        document.addEventListener("fullscreenchange", render_4.Render.onFullscreenChange);
-                        document.addEventListener("webkitfullscreenchange", render_4.Render.onWebkitFullscreenChange);
-                        window.matchMedia("(prefers-color-scheme: dark)").addListener(render_4.Render.updateStyle);
-                        render_4.Render.updateStyle();
-                        render_4.Render.updateProgressBarStyle();
-                        return [4 /*yield*/, render_4.Render.showPage()];
+                        window.addEventListener("mousemove", render_5.Render.onMouseMove);
+                        window.addEventListener("mousedown", render_5.Render.onMouseDown);
+                        window.addEventListener("mouseup", render_5.Render.onMouseUp);
+                        document.addEventListener("fullscreenchange", render_5.Render.onFullscreenChange);
+                        document.addEventListener("webkitfullscreenchange", render_5.Render.onWebkitFullscreenChange);
+                        window.matchMedia("(prefers-color-scheme: dark)").addListener(render_5.Render.updateStyle);
+                        render_5.Render.updateStyle();
+                        render_5.Render.updateProgressBarStyle();
+                        return [4 /*yield*/, render_5.Render.showPage()];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
