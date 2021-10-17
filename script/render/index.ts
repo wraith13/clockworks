@@ -8,6 +8,7 @@ import { Domain } from "../domain";
 import { Resource } from "./resource";
 import { Operate as RenderOperate } from "./operate";
 import config from "../../resource/config.json";
+import { Tektite } from "../../tektite/script";
 export module Render
 {
     const setTitle = (title: string) =>
@@ -66,40 +67,6 @@ export module Render
         if ("header" !== setting)
         {
             Render.setHeaderColor(null);
-        }
-    };
-    export const fullscreenEnabled = () => document.fullscreenEnabled ?? (document as any).webkitFullscreenEnabled;
-    export const fullscreenElement = () => (document.fullscreenElement ?? ((document as any).webkitFullscreenElement) ?? null);
-    export const requestFullscreen = async (element: Element = document.documentElement) =>
-    {
-        if (element.requestFullscreen)
-        {
-            await element.requestFullscreen();
-        }
-        else
-        if ((element as any).webkitRequestFullscreen)
-        {
-            await ((element as any).webkitRequestFullscreen)();
-        }
-        if ( ! document.body.classList.contains("sleep-mouse"))
-        {
-            document.body.classList.add("sleep-mouse");
-        }
-    };
-    export const exitFullscreen = async () =>
-    {
-        if (document.exitFullscreen)
-        {
-            await document.exitFullscreen();
-        }
-        else
-        if ((document as any).webkitCancelFullScreen)
-        {
-            await ((document as any).webkitCancelFullScreen)();
-        }
-        if (document.body.classList.contains("sleep-mouse"))
-        {
-            document.body.classList.remove("sleep-mouse");
         }
     };
     export const Operate = RenderOperate;
@@ -1697,18 +1664,18 @@ export module Render
         document.body.classList.add("flash");
         setTimeout(() => document.body.classList.remove("flash"), 1500);
     };
-    export const fullscreenMenuItem = async () => fullscreenEnabled() ?
+    export const fullscreenMenuItem = async () => Tektite.Fullscreen.enabled() ?
         (
-            null === fullscreenElement() ?
+            null === Tektite.Fullscreen.element() ?
                 menuItem
                 (
                     label("Full screen"),
-                    async () => await requestFullscreen()
+                    async () => await Tektite.Fullscreen.request()
                 ):
                 menuItem
                 (
                     label("Cancel full screen"),
-                    async () => await exitFullscreen()
+                    async () => await Tektite.Fullscreen.exit()
                 )
         ):
         [];
@@ -3433,15 +3400,15 @@ export module Render
                 switch(event.key.toLowerCase())
                 {
                     case "f":
-                        if (fullscreenEnabled())
+                        if (Tektite.Fullscreen.enabled())
                         {
-                            if(null === fullscreenElement())
+                            if(null === Tektite.Fullscreen.element())
                             {
-                                requestFullscreen();
+                                Tektite.Fullscreen.request();
                             }
                             else
                             {
-                                exitFullscreen();
+                                Tektite.Fullscreen.exit();
                             }
                         }
                         break;
@@ -3452,20 +3419,20 @@ export module Render
     let lastMouseMouseAt = 0;
     export const onMouseMove = (_evnet: MouseEvent) =>
     {
-        if (fullscreenEnabled())
+        if (Tektite.Fullscreen.enabled())
         {
             const now = lastMouseMouseAt = new Date().getTime();
             if (document.body.classList.contains("sleep-mouse"))
             {
                 document.body.classList.remove("sleep-mouse");
             }
-            if (fullscreenElement())
+            if (Tektite.Fullscreen.element())
             {
                 setTimeout
                 (
                     () =>
                     {
-                        if (fullscreenElement() && now === lastMouseMouseAt)
+                        if (Tektite.Fullscreen.element() && now === lastMouseMouseAt)
                         {
                             if ( ! document.body.classList.contains("sleep-mouse"))
                             {
@@ -3482,13 +3449,10 @@ export module Render
     {
         onWindowResize();
     };
-    export const onWebkitFullscreenChange = (_event: Event) =>
+    export const onWebkitFullscreenChange = (event: Event) =>
     {
         onWindowResize();
-        if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document))
-        {
-            document.body.classList.toggle("fxxking-ipad-fullscreen", fullscreenElement());
-        }
+        Tektite.onWebkitFullscreenChange(event);
     };
     let lastMouseDownTarget: EventTarget = null;
     export const onMouseDown = (event: MouseEvent) => lastMouseDownTarget = event.target;
