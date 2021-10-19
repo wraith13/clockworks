@@ -63,7 +63,8 @@ export module Render
     export const updateProgressBarStyle = () =>
     {
         const setting = Storage.Settings.get().progressBarStyle ?? "auto";
-        document.body.classList.toggle("tektite", "header" !== setting);
+        document.body.classList.toggle("tektite-modern", "header" !== setting);
+        document.body.classList.toggle("tektite-classic", "header" === setting);
         if ("header" !== setting)
         {
             Render.setHeaderColor(null);
