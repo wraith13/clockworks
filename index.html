@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Oct 20 2021 21:05:41 GMT+0900 (GMT+09:00) -->
+<!-- build at: Wed Oct 20 2021 21:22:21 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6640,6 +6640,84 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
         })(dom = minamo.dom || (minamo.dom = {}));
     })(minamo = exports.minamo || (exports.minamo = {}));
 });
+define("tektite/script/fullscreen", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Fullscreen = void 0;
+    var Fullscreen;
+    (function (Fullscreen) {
+        var _this = this;
+        Fullscreen.enabled = function () { var _a; return (_a = document.fullscreenEnabled) !== null && _a !== void 0 ? _a : document.webkitFullscreenEnabled; };
+        Fullscreen.element = function () { var _a, _b; return ((_b = (_a = document.fullscreenElement) !== null && _a !== void 0 ? _a : (document.webkitFullscreenElement)) !== null && _b !== void 0 ? _b : null); };
+        Fullscreen.request = function (element) {
+            if (element === void 0) { element = document.documentElement; }
+            return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!element.requestFullscreen) return [3 /*break*/, 2];
+                            return [4 /*yield*/, element.requestFullscreen()];
+                        case 1:
+                            _a.sent();
+                            return [3 /*break*/, 4];
+                        case 2:
+                            if (!element.webkitRequestFullscreen) return [3 /*break*/, 4];
+                            return [4 /*yield*/, (element.webkitRequestFullscreen)()];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4:
+                            if (!document.body.classList.contains("sleep-mouse")) {
+                                document.body.classList.add("sleep-mouse");
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        Fullscreen.exit = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!document.exitFullscreen) return [3 /*break*/, 2];
+                        return [4 /*yield*/, document.exitFullscreen()];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 2:
+                        if (!document.webkitCancelFullScreen) return [3 /*break*/, 4];
+                        return [4 /*yield*/, (document.webkitCancelFullScreen)()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        if (document.body.classList.contains("sleep-mouse")) {
+                            document.body.classList.remove("sleep-mouse");
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+    })(Fullscreen = exports.Fullscreen || (exports.Fullscreen = {}));
+});
+define("tektite/script/index", ["require", "exports", "tektite/script/fullscreen"], function (require, exports, fullscreen_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Tektite = void 0;
+    var Tektite;
+    (function (Tektite) {
+        Tektite.Fullscreen = fullscreen_1.Fullscreen;
+        Tektite.onWebkitFullscreenChange = function (_event) {
+            if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document)) {
+                document.body.classList.toggle("fxxking-ipad-fullscreen", Tektite.Fullscreen.element());
+            }
+        };
+        Tektite.screenFlash = function () {
+            document.body.classList.add("flash");
+            setTimeout(function () { return document.body.classList.remove("flash"); }, 1500);
+        };
+    })(Tektite = exports.Tektite || (exports.Tektite = {}));
+});
 define("resource/config", [], {
     "applicationTitle": "Clockworks",
     "localDbPrefix": "clockworks",
@@ -7975,7 +8053,7 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/neverstopwatch/operate", ["require", "exports", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, locale_6, base_6, storage_8, domain_4, render_4) {
+define("script/application/neverstopwatch/operate", ["require", "exports", "tektite/script/index", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, script_1, locale_6, base_6, storage_8, domain_4, render_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -7989,6 +8067,7 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 backup = storage_8.Storage.NeverStopwatch.Stamps.get();
                 storage_8.Storage.NeverStopwatch.Stamps.add(tick);
                 render_4.Render.updateWindow("operate");
+                script_1.Tektite.screenFlash();
                 toast = render_4.Render.makePrimaryToast({
                     content: render_4.Render.$span("")("" + locale_6.Locale.map("Stamped!")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
@@ -8137,81 +8216,7 @@ define("script/render/operate", ["require", "exports", "script/minamo.js/index",
         Operate.NeverStopwatch = operate_4.Operate;
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("tektite/script/fullscreen", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Fullscreen = void 0;
-    var Fullscreen;
-    (function (Fullscreen) {
-        var _this = this;
-        Fullscreen.enabled = function () { var _a; return (_a = document.fullscreenEnabled) !== null && _a !== void 0 ? _a : document.webkitFullscreenEnabled; };
-        Fullscreen.element = function () { var _a, _b; return ((_b = (_a = document.fullscreenElement) !== null && _a !== void 0 ? _a : (document.webkitFullscreenElement)) !== null && _b !== void 0 ? _b : null); };
-        Fullscreen.request = function (element) {
-            if (element === void 0) { element = document.documentElement; }
-            return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!element.requestFullscreen) return [3 /*break*/, 2];
-                            return [4 /*yield*/, element.requestFullscreen()];
-                        case 1:
-                            _a.sent();
-                            return [3 /*break*/, 4];
-                        case 2:
-                            if (!element.webkitRequestFullscreen) return [3 /*break*/, 4];
-                            return [4 /*yield*/, (element.webkitRequestFullscreen)()];
-                        case 3:
-                            _a.sent();
-                            _a.label = 4;
-                        case 4:
-                            if (!document.body.classList.contains("sleep-mouse")) {
-                                document.body.classList.add("sleep-mouse");
-                            }
-                            return [2 /*return*/];
-                    }
-                });
-            });
-        };
-        Fullscreen.exit = function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!document.exitFullscreen) return [3 /*break*/, 2];
-                        return [4 /*yield*/, document.exitFullscreen()];
-                    case 1:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 2:
-                        if (!document.webkitCancelFullScreen) return [3 /*break*/, 4];
-                        return [4 /*yield*/, (document.webkitCancelFullScreen)()];
-                    case 3:
-                        _a.sent();
-                        _a.label = 4;
-                    case 4:
-                        if (document.body.classList.contains("sleep-mouse")) {
-                            document.body.classList.remove("sleep-mouse");
-                        }
-                        return [2 /*return*/];
-                }
-            });
-        }); };
-    })(Fullscreen = exports.Fullscreen || (exports.Fullscreen = {}));
-});
-define("tektite/script/index", ["require", "exports", "tektite/script/fullscreen"], function (require, exports, fullscreen_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Tektite = void 0;
-    var Tektite;
-    (function (Tektite) {
-        Tektite.Fullscreen = fullscreen_1.Fullscreen;
-        Tektite.onWebkitFullscreenChange = function (_event) {
-            if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document)) {
-                document.body.classList.toggle("fxxking-ipad-fullscreen", Tektite.Fullscreen.element());
-            }
-        };
-    })(Tektite = exports.Tektite || (exports.Tektite = {}));
-});
-define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/locale", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "resource/config", "tektite/script/index"], function (require, exports, minamo_js_3, locale_7, type_1, base_7, color_2, storage_9, domain_5, resource_1, operate_5, config_json_9, script_1) {
+define("script/render/index", ["require", "exports", "script/minamo.js/index", "tektite/script/index", "script/locale", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "resource/config"], function (require, exports, minamo_js_3, script_2, locale_7, type_1, base_7, color_2, storage_9, domain_5, resource_1, operate_5, config_json_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -10256,24 +10261,20 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             });
         };
         Render.replaceScreenBody = function (body) { return minamo_js_3.minamo.dom.replaceChildren(minamo_js_3.minamo.dom.getDivsByClassName(document, "screen-body")[0], body); };
-        Render.screenFlash = function () {
-            document.body.classList.add("flash");
-            setTimeout(function () { return document.body.classList.remove("flash"); }, 1500);
-        };
         Render.fullscreenMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, script_1.Tektite.Fullscreen.enabled() ?
-                        (null === script_1.Tektite.Fullscreen.element() ?
+                return [2 /*return*/, script_2.Tektite.Fullscreen.enabled() ?
+                        (null === script_2.Tektite.Fullscreen.element() ?
                             Render.menuItem(Render.label("Full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, script_1.Tektite.Fullscreen.request()];
+                                    case 0: return [4 /*yield*/, script_2.Tektite.Fullscreen.request()];
                                     case 1: return [2 /*return*/, _a.sent()];
                                 }
                             }); }); }) :
                             Render.menuItem(Render.label("Cancel full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, script_1.Tektite.Fullscreen.exit()];
+                                    case 0: return [4 /*yield*/, script_2.Tektite.Fullscreen.exit()];
                                     case 1: return [2 /*return*/, _a.sent()];
                                 }
                             }); }); })) :
@@ -10891,7 +10892,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             unit = flashInterval;
                                             primaryStep = Math.floor(elapsed / unit);
                                             if (primaryStep === previousPrimaryStep + 1 && (elapsed % unit) < 5 * 1000) {
-                                                Render.screenFlash();
+                                                script_2.Tektite.screenFlash();
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(primaryStep);
                                             setFoundationColor(currentColor);
@@ -11292,14 +11293,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 unit = flashInterval;
                                                 primaryStep = 0 < unit ? Math.floor(rest / unit) : 0;
                                                 if ((primaryStep + 1 === previousPrimaryStep && -5 * 1000 < (rest % unit) && 500 < tick - current.start)) {
-                                                    Render.screenFlash();
+                                                    script_2.Tektite.screenFlash();
                                                     lashFlashAt = tick;
                                                 }
                                                 previousPrimaryStep = primaryStep;
                                             }
                                             cycle = "timer" === current.type ? 3000 : 10000;
                                             if (rest <= 0 && lashFlashAt + cycle <= tick) {
-                                                Render.screenFlash();
+                                                script_2.Tektite.screenFlash();
                                                 lashFlashAt = tick;
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(storage_9.Storage.CountdownTimer.ColorIndex.get());
@@ -11658,7 +11659,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             unit = flashInterval;
                                             primaryStep = Math.floor(elapsed / unit);
                                             if (primaryStep === previousPrimaryStep + 1 && (elapsed % unit) < 5 * 1000) {
-                                                Render.screenFlash();
+                                                script_2.Tektite.screenFlash();
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(primaryStep);
                                             setFoundationColor(currentColor);
@@ -12019,7 +12020,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 flashInterval = storage_9.Storage.RainbowClock.flashInterval.get();
                                                 if (0 < flashInterval) {
                                                     if (0 === (tick % flashInterval)) {
-                                                        Render.screenFlash();
+                                                        script_2.Tektite.screenFlash();
                                                     }
                                                 }
                                             }
@@ -12400,12 +12401,12 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 if (["input", "textarea"].indexOf(focusedElementTagName) < 0) {
                     switch (event.key.toLowerCase()) {
                         case "f":
-                            if (script_1.Tektite.Fullscreen.enabled()) {
-                                if (null === script_1.Tektite.Fullscreen.element()) {
-                                    script_1.Tektite.Fullscreen.request();
+                            if (script_2.Tektite.Fullscreen.enabled()) {
+                                if (null === script_2.Tektite.Fullscreen.element()) {
+                                    script_2.Tektite.Fullscreen.request();
                                 }
                                 else {
-                                    script_1.Tektite.Fullscreen.exit();
+                                    script_2.Tektite.Fullscreen.exit();
                                 }
                             }
                             break;
@@ -12415,14 +12416,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         };
         var lastMouseMouseAt = 0;
         Render.onMouseMove = function (_evnet) {
-            if (script_1.Tektite.Fullscreen.enabled()) {
+            if (script_2.Tektite.Fullscreen.enabled()) {
                 var now_1 = lastMouseMouseAt = new Date().getTime();
                 if (document.body.classList.contains("sleep-mouse")) {
                     document.body.classList.remove("sleep-mouse");
                 }
-                if (script_1.Tektite.Fullscreen.element()) {
+                if (script_2.Tektite.Fullscreen.element()) {
                     setTimeout(function () {
-                        if (script_1.Tektite.Fullscreen.element() && now_1 === lastMouseMouseAt) {
+                        if (script_2.Tektite.Fullscreen.element() && now_1 === lastMouseMouseAt) {
                             if (!document.body.classList.contains("sleep-mouse")) {
                                 document.body.classList.add("sleep-mouse");
                             }
@@ -12436,7 +12437,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         };
         Render.onWebkitFullscreenChange = function (event) {
             Render.onWindowResize();
-            script_1.Tektite.onWebkitFullscreenChange(event);
+            script_2.Tektite.onWebkitFullscreenChange(event);
         };
         var lastMouseDownTarget = null;
         Render.onMouseDown = function (event) { return lastMouseDownTarget = event.target; };

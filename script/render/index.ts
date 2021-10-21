@@ -1,4 +1,5 @@
 import { minamo } from "../minamo.js";
+import { Tektite } from "../../tektite/script";
 import { Locale } from "../locale";
 import { Type } from "../type";
 import { Base } from "../base";
@@ -8,7 +9,6 @@ import { Domain } from "../domain";
 import { Resource } from "./resource";
 import { Operate as RenderOperate } from "./operate";
 import config from "../../resource/config.json";
-import { Tektite } from "../../tektite/script";
 export module Render
 {
     const setTitle = (title: string) =>
@@ -1660,11 +1660,6 @@ export module Render
         minamo.dom.getDivsByClassName(document, "screen-body")[0],
         body
     );
-    export const screenFlash = () =>
-    {
-        document.body.classList.add("flash");
-        setTimeout(() => document.body.classList.remove("flash"), 1500);
-    };
     export const fullscreenMenuItem = async () => Tektite.Fullscreen.enabled() ?
         (
             null === Tektite.Fullscreen.element() ?
@@ -2079,7 +2074,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            screenFlash();
+                            Tektite.screenFlash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setFoundationColor(currentColor);
@@ -2391,7 +2386,7 @@ export module Render
                             const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
                             if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -current.start))
                             {
-                                screenFlash();
+                                Tektite.screenFlash();
                                 lashFlashAt = tick;
                             }
                             previousPrimaryStep = primaryStep;
@@ -2399,7 +2394,7 @@ export module Render
                         const cycle = "timer" === current.type ? 3000: 10000;
                         if (rest <= 0 && lashFlashAt +cycle <= tick)
                         {
-                            screenFlash();
+                            Tektite.screenFlash();
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
@@ -2666,7 +2661,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            screenFlash();
+                            Tektite.screenFlash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setFoundationColor(currentColor);
@@ -2933,7 +2928,7 @@ export module Render
                             {
                                 if (0 === (tick % flashInterval))
                                 {
-                                    screenFlash();
+                                    Tektite.screenFlash();
                                 }
                             }
                         }

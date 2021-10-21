@@ -1,3 +1,4 @@
+import { Tektite } from "../../../tektite/script";
 import { Locale } from "../../locale";
 import { Base } from "../../base";
 import { Storage } from "../../storage";
@@ -10,6 +11,7 @@ export module Operate
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.add(tick);
         Render.updateWindow("operate");
+        Tektite.screenFlash();
         const toast = Render.makePrimaryToast
         ({
             content: Render.$span("")(`${Locale.map("Stamped!")}`),

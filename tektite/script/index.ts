@@ -10,4 +10,9 @@ export module Tektite
             document.body.classList.toggle("fxxking-ipad-fullscreen", Tektite.Fullscreen.element());
         }
     };
+    export const screenFlash = () =>
+    {
+        document.body.classList.add("flash");
+        setTimeout(() => document.body.classList.remove("flash"), 1500);
+    };
 }
