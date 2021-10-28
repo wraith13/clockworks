@@ -37,16 +37,28 @@ export module Render
         const meta = document.getElementById("theme-color") as HTMLMetaElement;
         minamo.dom.setProperty(meta, "content", color);
     };
-    const setFoundationColor = (color: string) =>
+    export const setFoundationColor = (color: string | null) =>
     {
         const foundation = document.getElementById("foundation");
-        minamo.dom.setProperty(foundation.style, "backgroundColor", color);
-        if ("header" === Storage.Settings.get().progressBarStyle ?? "auto")
+        if (color)
         {
-            setHeaderColor(color);
+            minamo.dom.setProperty(foundation.style, "backgroundColor", color);
         }
         else
         {
+            document.getElementById("foundation").style.removeProperty("background-color");
+        }
+    };
+    const setBackgroundColor = (color: string | null) =>
+    {
+        if ("header" === (Storage.Settings.get().progressBarStyle ?? "auto"))
+        {
+            setHeaderColor(color);
+            setFoundationColor(null);
+        }
+        else
+        {
+            setFoundationColor(color);
             setHeaderColor(null);
         }
     };
@@ -2077,7 +2089,7 @@ export module Render
                             Tektite.screenFlash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        setFoundationColor(currentColor);
+                        setBackgroundColor(currentColor);
                         previousPrimaryStep = primaryStep;
                         const rate = ((Domain.getTicks() -current) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
@@ -2091,7 +2103,7 @@ export module Render
                         setScreenBarProgress(null);
                         getHeaderElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
-                        setFoundationColor(currentColor);
+                        setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
@@ -2398,7 +2410,7 @@ export module Render
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        setFoundationColor(currentColor);
+                        setBackgroundColor(currentColor);
                         const span = current.end - current.start;
                         const rate = Math.min(tick - current.start, span) /span;
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
@@ -2412,7 +2424,7 @@ export module Render
                         setScreenBarProgress(null);
                         getHeaderElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        setFoundationColor(currentColor);
+                        setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
@@ -2664,7 +2676,7 @@ export module Render
                             Tektite.screenFlash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        setFoundationColor(currentColor);
+                        setBackgroundColor(currentColor);
                         previousPrimaryStep = primaryStep;
                         const rate = ((tick -current.tick) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
@@ -2678,7 +2690,7 @@ export module Render
                         setScreenBarProgress(null);
                         getHeaderElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
-                        setFoundationColor(currentColor);
+                        setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
@@ -2968,7 +2980,7 @@ export module Render
                     minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                     const getRainbowColor = Type.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                     const currentColor = getRainbowColor(currentNow.getHours());
-                    setFoundationColor(currentColor);
+                    setBackgroundColor(currentColor);
                     const hourUnit = 60 *60 *1000;
                     const minutes = (tick % hourUnit) / hourUnit;
                     const nextColor = getRainbowColor(currentNow.getHours() +1);
@@ -3045,7 +3057,7 @@ export module Render
                 }
             );
         }
-        setFoundationColor(Color.getSolidRainbowColor(0));
+        setBackgroundColor(Color.getSolidRainbowColor(0));
         document.body.style.removeProperty("background-color");
         document.getElementById("foundation").style.removeProperty("background-color");
         document.getElementById("screen").style.removeProperty("background-color");

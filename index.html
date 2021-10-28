@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Oct 20 2021 21:22:21 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Oct 29 2021 04:22:25 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -322,6 +322,7 @@ body.light ul {
   padding-inline-start: 40px;
 }
 body.light #foundation {
+  background-color: #FFFFFF;
   position: absolute;
   top: 0px;
   bottom: 0px;
@@ -565,9 +566,6 @@ body.light.tektite-modern.flash .screen-bar .screen-bar-flash-layer {
   animation-duration: 1.5s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
-}
-body.light.tektite-classic .screen .screen-body {
-  background-color: #FFFFFF;
 }
 body.light.sleep-mouse {
   cursor: none;
@@ -2947,6 +2945,7 @@ body.dark ul {
   padding-inline-start: 40px;
 }
 body.dark #foundation {
+  background-color: #000022;
   position: absolute;
   top: 0px;
   bottom: 0px;
@@ -3190,9 +3189,6 @@ body.dark.tektite-modern.flash .screen-bar .screen-bar-flash-layer {
   animation-duration: 1.5s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
-}
-body.dark.tektite-classic .screen .screen-body {
-  background-color: #000022;
 }
 body.dark.sleep-mouse {
   cursor: none;
@@ -8244,14 +8240,23 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             var meta = document.getElementById("theme-color");
             minamo_js_3.minamo.dom.setProperty(meta, "content", color);
         };
-        var setFoundationColor = function (color) {
-            var _a;
+        Render.setFoundationColor = function (color) {
             var foundation = document.getElementById("foundation");
-            minamo_js_3.minamo.dom.setProperty(foundation.style, "backgroundColor", color);
-            if ((_a = "header" === storage_9.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto") {
-                Render.setHeaderColor(color);
+            if (color) {
+                minamo_js_3.minamo.dom.setProperty(foundation.style, "backgroundColor", color);
             }
             else {
+                document.getElementById("foundation").style.removeProperty("background-color");
+            }
+        };
+        var setBackgroundColor = function (color) {
+            var _a;
+            if ("header" === ((_a = storage_9.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto")) {
+                Render.setHeaderColor(color);
+                Render.setFoundationColor(null);
+            }
+            else {
+                Render.setFoundationColor(color);
                 Render.setHeaderColor(null);
             }
         };
@@ -10895,7 +10900,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 script_2.Tektite.screenFlash();
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(primaryStep);
-                                            setFoundationColor(currentColor);
+                                            setBackgroundColor(currentColor);
                                             previousPrimaryStep = primaryStep;
                                             rate = ((domain_5.Domain.getTicks() - current) % unit) / unit;
                                             nextColor = color_2.Color.getSolidRainbowColor(primaryStep + 1);
@@ -10908,7 +10913,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             Render.setScreenBarProgress(null);
                                             Render.getHeaderElement().classList.remove("with-screen-prgress");
                                             currentColor = color_2.Color.getSolidRainbowColor(0);
-                                            setFoundationColor(currentColor);
+                                            setBackgroundColor(currentColor);
                                             // setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 8];
@@ -11304,7 +11309,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 lashFlashAt = tick;
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(storage_9.Storage.CountdownTimer.ColorIndex.get());
-                                            setFoundationColor(currentColor);
+                                            setBackgroundColor(currentColor);
                                             span = current.end - current.start;
                                             rate = Math.min(tick - current.start, span) / span;
                                             nextColor = color_2.Color.getSolidRainbowColor(storage_9.Storage.CountdownTimer.ColorIndex.get() + 1);
@@ -11317,7 +11322,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             Render.setScreenBarProgress(null);
                                             Render.getHeaderElement().classList.remove("with-screen-prgress");
                                             currentColor = color_2.Color.getSolidRainbowColor(storage_9.Storage.CountdownTimer.ColorIndex.get());
-                                            setFoundationColor(currentColor);
+                                            setBackgroundColor(currentColor);
                                             // setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 9];
@@ -11662,7 +11667,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 script_2.Tektite.screenFlash();
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(primaryStep);
-                                            setFoundationColor(currentColor);
+                                            setBackgroundColor(currentColor);
                                             previousPrimaryStep = primaryStep;
                                             rate = ((tick - current.tick) % unit) / unit;
                                             nextColor = color_2.Color.getSolidRainbowColor(primaryStep + 1);
@@ -11675,7 +11680,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             Render.setScreenBarProgress(null);
                                             Render.getHeaderElement().classList.remove("with-screen-prgress");
                                             currentColor = color_2.Color.getSolidRainbowColor(0);
-                                            setFoundationColor(currentColor);
+                                            setBackgroundColor(currentColor);
                                             // setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 9];
@@ -12054,7 +12059,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         minamo_js_3.minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                                         getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_9.Storage.RainbowClock.colorPattern.get()];
                                         currentColor = getRainbowColor(currentNow.getHours());
-                                        setFoundationColor(currentColor);
+                                        setBackgroundColor(currentColor);
                                         hourUnit = 60 * 60 * 1000;
                                         minutes = (tick % hourUnit) / hourUnit;
                                         nextColor = getRainbowColor(currentNow.getHours() + 1);
@@ -12138,7 +12143,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 }
                             });
                         }
-                        setFoundationColor(color_2.Color.getSolidRainbowColor(0));
+                        setBackgroundColor(color_2.Color.getSolidRainbowColor(0));
                         document.body.style.removeProperty("background-color");
                         document.getElementById("foundation").style.removeProperty("background-color");
                         document.getElementById("screen").style.removeProperty("background-color");
