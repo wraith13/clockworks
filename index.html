@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Oct 29 2021 04:22:25 GMT+0900 (GMT+09:00) -->
+<!-- build at: Fri Oct 29 2021 23:52:48 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6321,6 +6321,9 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
                 return Property;
             }(core.Property));
             localStorage.Property = Property;
+            /**
+             * @deprecated
+             */
             var AutoSaveProperty = /** @class */ (function (_super) {
                 __extends(AutoSaveProperty, _super);
                 function AutoSaveProperty(params) {
@@ -6345,16 +6348,33 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
                 window.sessionStorage.setItem(key, value);
                 return value;
             };
+            /**
+             * @deprecated User `set2()` instead.
+             */
             sessionStorage.set = function (key, value) {
                 sessionStorage.setRaw(key, encodeURIComponent(JSON.stringify(value)));
                 return value;
             };
+            sessionStorage.set2 = function (key, value) {
+                sessionStorage.setRaw(key, JSON.stringify(value));
+                return value;
+            };
             sessionStorage.remove = function (key) { return window.sessionStorage.removeItem(key); };
             sessionStorage.getRaw = function (key) { return window.sessionStorage.getItem(key); };
+            /**
+             * @deprecated User `getOrNull2()` instead.
+             */
             sessionStorage.getOrNull = function (key) {
                 var rawValue = sessionStorage.getRaw(key);
                 return core.exists(rawValue) ? JSON.parse(decodeURIComponent(rawValue)) : null;
             };
+            sessionStorage.getOrNull2 = function (key) {
+                var rawValue = sessionStorage.getRaw(key);
+                return core.exists(rawValue) ? JSON.parse(rawValue) : null;
+            };
+            /**
+             * @deprecated
+             */
             var Property = /** @class */ (function (_super) {
                 __extends(Property, _super);
                 function Property(params) {
@@ -6393,6 +6413,9 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
                 return Property;
             }(core.Property));
             sessionStorage.Property = Property;
+            /**
+             * @deprecated
+             */
             var AutoSaveProperty = /** @class */ (function (_super) {
                 __extends(AutoSaveProperty, _super);
                 function AutoSaveProperty(params) {
@@ -6435,7 +6458,7 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
                     }
                 };
                 console.log("body: " + JSON.stringify(body));
-                request.send(body);
+                request.send(body); // VS Code エディター上で異なる ES バージョンでコンパイルされエラー表示されてしまう問題回避の為の any
             }); };
             http.get = function (url, headers) { return http.request("GET", url, undefined, headers); };
             http.post = function (url, body, headers) { return http.request("POST", url, body, headers); };
@@ -6603,6 +6626,11 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
                     isUpdate: isUpdate,
                 };
                 return result;
+            };
+            dom.setStyleProperty = function (object, key, value) {
+                return undefined !== value && null !== value ?
+                    dom.setProperty(object.style, key, value) :
+                    dom.removeCSSStyleProperty(object.style, key);
             };
             dom.addCSSClass = function (element, className) {
                 var isUpdate = !element.classList.contains(className);
@@ -8226,13 +8254,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             }
         };
         Render.setHeaderColor = function (color) {
-            var screenHeader = document.getElementById("screen-header");
-            if (color) {
-                minamo_js_3.minamo.dom.setProperty(screenHeader.style, "backgroundColor", color);
-            }
-            else {
-                minamo_js_3.minamo.dom.removeCSSStyleProperty(screenHeader.style, "background-color");
-            }
+            return minamo_js_3.minamo.dom.setStyleProperty(document.getElementById("screen-header"), "backgroundColor", color);
         };
         var setBodyColor = function (color) {
             var bodyColor = color + "E8";
@@ -8241,13 +8263,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             minamo_js_3.minamo.dom.setProperty(meta, "content", color);
         };
         Render.setFoundationColor = function (color) {
-            var foundation = document.getElementById("foundation");
-            if (color) {
-                minamo_js_3.minamo.dom.setProperty(foundation.style, "backgroundColor", color);
-            }
-            else {
-                document.getElementById("foundation").style.removeProperty("background-color");
-            }
+            return minamo_js_3.minamo.dom.setStyleProperty(document.getElementById("foundation"), "backgroundColor", color);
         };
         var setBackgroundColor = function (color) {
             var _a;

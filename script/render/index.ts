@@ -19,17 +19,7 @@ export module Render
         }
     };
     export const setHeaderColor = (color: string | null) =>
-    {
-        const screenHeader = document.getElementById("screen-header");
-        if (color)
-        {
-            minamo.dom.setProperty(screenHeader.style, "backgroundColor", color);
-        }
-        else
-        {
-            minamo.dom.removeCSSStyleProperty(screenHeader.style, "background-color");
-        }
-    };
+        minamo.dom.setStyleProperty(document.getElementById("screen-header"), "backgroundColor", color);
     const setBodyColor = (color: string) =>
     {
         const bodyColor = `${color}E8`;
@@ -38,17 +28,7 @@ export module Render
         minamo.dom.setProperty(meta, "content", color);
     };
     export const setFoundationColor = (color: string | null) =>
-    {
-        const foundation = document.getElementById("foundation");
-        if (color)
-        {
-            minamo.dom.setProperty(foundation.style, "backgroundColor", color);
-        }
-        else
-        {
-            document.getElementById("foundation").style.removeProperty("background-color");
-        }
-    };
+        minamo.dom.setStyleProperty(document.getElementById("foundation"), "backgroundColor", color);
     const setBackgroundColor = (color: string | null) =>
     {
         if ("header" === (Storage.Settings.get().progressBarStyle ?? "auto"))
