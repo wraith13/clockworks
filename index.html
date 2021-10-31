@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Fri Oct 29 2021 23:52:48 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Oct 31 2021 23:38:15 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6490,6 +6490,32 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
         })(file = minamo.file || (minamo.file = {}));
         var dom;
         (function (dom) {
+            function get(parent, queryOrElement) {
+                if (undefined === queryOrElement) {
+                    return get(document, parent);
+                }
+                if ("string" === typeof parent) {
+                    return get(get(document, parent), queryOrElement);
+                }
+                if ("string" === typeof queryOrElement) {
+                    return parent.querySelector(queryOrElement);
+                }
+                return queryOrElement;
+            }
+            dom.get = get;
+            function getAll(parent, queryOrElement) {
+                if (undefined === queryOrElement) {
+                    return getAll(document, parent);
+                }
+                if ("string" === typeof parent) {
+                    return getAll(get(document, parent), queryOrElement);
+                }
+                if ("string" === typeof queryOrElement) {
+                    return Array.from(parent.querySelectorAll(queryOrElement));
+                }
+                return queryOrElement;
+            }
+            dom.getAll = getAll;
             function make(arg, level) {
                 core.existsOrThrow(arg);
                 if (arg instanceof Node) {
@@ -6602,13 +6628,14 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
             dom.getChildNodes = function (parent) {
                 return Array.from(parent.childNodes);
             };
-            dom.setProperty = function (object, key, value) {
-                var isUpdate = value !== object[key];
+            dom.setProperty = function (objectOrQuery, key, value) {
+                var element = get(objectOrQuery);
+                var isUpdate = value !== element[key];
                 if (isUpdate) {
-                    object[key] = value;
+                    element[key] = value;
                 }
                 var result = {
-                    object: object,
+                    object: element,
                     key: key,
                     value: value,
                     isUpdate: isUpdate,
@@ -6629,8 +6656,8 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
             };
             dom.setStyleProperty = function (object, key, value) {
                 return undefined !== value && null !== value ?
-                    dom.setProperty(object.style, key, value) :
-                    dom.removeCSSStyleProperty(object.style, key);
+                    dom.setProperty(get(object).style, key, value) :
+                    dom.removeCSSStyleProperty(get(object).style, key);
             };
             dom.addCSSClass = function (element, className) {
                 var isUpdate = !element.classList.contains(className);
@@ -8254,16 +8281,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             }
         };
         Render.setHeaderColor = function (color) {
-            return minamo_js_3.minamo.dom.setStyleProperty(document.getElementById("screen-header"), "backgroundColor", color);
+            return minamo_js_3.minamo.dom.setStyleProperty("#screen-header", "backgroundColor", color);
         };
         var setBodyColor = function (color) {
-            var bodyColor = color + "E8";
-            minamo_js_3.minamo.dom.setProperty(document.body.style, "backgroundColor", bodyColor);
-            var meta = document.getElementById("theme-color");
-            minamo_js_3.minamo.dom.setProperty(meta, "content", color);
+            minamo_js_3.minamo.dom.setStyleProperty(document.body, "backgroundColor", color + "E8");
+            minamo_js_3.minamo.dom.setProperty("#theme-color", "content", color);
         };
         Render.setFoundationColor = function (color) {
-            return minamo_js_3.minamo.dom.setStyleProperty(document.getElementById("foundation"), "backgroundColor", color);
+            return minamo_js_3.minamo.dom.setStyleProperty("#foundation", "backgroundColor", color);
         };
         var setBackgroundColor = function (color) {
             var _a;
@@ -12059,10 +12084,10 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                     var hourUnit = 60 * 60 * 1000;
                                                     var minutes = (currentTick % hourUnit) / hourUnit;
                                                     var nextColor = getRainbowColor(currentHours + 1);
-                                                    minamo_js_3.minamo.dom.setProperty(panel.style, "backgroundColor", currentColor);
-                                                    minamo_js_3.minamo.dom.setProperty(timeBar.style, "backgroundColor", nextColor);
+                                                    minamo_js_3.minamo.dom.setStyleProperty(panel, "backgroundColor", currentColor);
+                                                    minamo_js_3.minamo.dom.setStyleProperty(timeBar, "backgroundColor", nextColor);
                                                     var percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                                                    minamo_js_3.minamo.dom.setProperty(timeBar.style, "width", percentString);
+                                                    minamo_js_3.minamo.dom.setStyleProperty(timeBar, "width", percentString);
                                                     minamo_js_3.minamo.dom.setProperty(minamo_js_3.minamo.dom.getDivsByClassName(minamo_js_3.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", domain_5.Domain.dateCoreStringFromTick(currentTick) + " " + domain_5.Domain.weekday(currentTick));
                                                     minamo_js_3.minamo.dom.getDivsByClassName(minamo_js_3.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = domain_5.Domain.timeLongCoreStringFromTick(domain_5.Domain.getTime(currentTick));
                                                 });
@@ -12160,9 +12185,6 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             });
                         }
                         setBackgroundColor(color_2.Color.getSolidRainbowColor(0));
-                        document.body.style.removeProperty("background-color");
-                        document.getElementById("foundation").style.removeProperty("background-color");
-                        document.getElementById("screen").style.removeProperty("background-color");
                         document.getElementById("screen").className = screen.className + " screen";
                         _b = (_a = minamo_js_3.minamo.dom).replaceChildren;
                         _c = [Render.getHeaderElement()];
@@ -12249,42 +12271,42 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             var screenBar = document.getElementsByClassName("screen-bar")[0];
             if (null !== percent && "header" !== setting) {
                 if (color) {
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "backgroundColor", color);
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
                 }
                 var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting) {
                     minamo_js_3.minamo.dom.addCSSClass(screenBar, "horizontal");
                     minamo_js_3.minamo.dom.removeCSSClass(screenBar, "vertical");
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "height", "initial");
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "maxHeight", "initial");
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "width", percentString);
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "maxWidth", percentString);
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "height", "initial");
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "width", percentString);
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
                 }
                 else {
                     minamo_js_3.minamo.dom.addCSSClass(screenBar, "vertical");
                     minamo_js_3.minamo.dom.removeCSSClass(screenBar, "horizontal");
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "width", "initial");
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "maxWidth", "initial");
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "height", percentString);
-                    minamo_js_3.minamo.dom.setProperty(screenBar.style, "maxHeight", percentString);
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "width", "initial");
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "height", percentString);
+                    minamo_js_3.minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
                 }
-                minamo_js_3.minamo.dom.setProperty(screenBar.style, "display", "block");
+                minamo_js_3.minamo.dom.setStyleProperty(screenBar, "display", "block");
             }
             else {
-                minamo_js_3.minamo.dom.setProperty(screenBar.style, "display", "none");
+                minamo_js_3.minamo.dom.setStyleProperty(screenBar, "display", "none");
             }
             var progressBar = Render.getProgressElement();
             if (null !== percent && "header" === setting) {
                 if (color) {
-                    minamo_js_3.minamo.dom.setProperty(progressBar.style, "backgroundColor", color);
+                    minamo_js_3.minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
                 }
                 var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                minamo_js_3.minamo.dom.setProperty(progressBar.style, "width", percentString);
-                minamo_js_3.minamo.dom.setProperty(progressBar.style, "borderRightWidth", "1px");
+                minamo_js_3.minamo.dom.setStyleProperty(progressBar, "width", percentString);
+                minamo_js_3.minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
             }
             else {
-                minamo_js_3.minamo.dom.setProperty(progressBar.style, "width", "0%");
-                minamo_js_3.minamo.dom.setProperty(progressBar.style, "borderRightWidth", "0px");
+                minamo_js_3.minamo.dom.setStyleProperty(progressBar, "width", "0%");
+                minamo_js_3.minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
             }
         };
         Render.resizeFlexList = function () {
@@ -12319,7 +12341,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                     var itemHeight = list.childNodes[0].offsetHeight + 1;
                     var columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
                     var row = Math.max(Math.ceil(length / columns), Math.min(length, Math.floor(height / itemHeight)));
-                    minamo_js_3.minamo.dom.setProperty(list.style, "height", row * itemHeight + "px");
+                    minamo_js_3.minamo.dom.setStyleProperty(list, "height", row * itemHeight + "px");
                     minamo_js_3.minamo.dom.addCSSClass(list, "max-column-" + columns);
                 }
                 if (0 < length) {
@@ -12358,9 +12380,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 var body = document.getElementById("screen-body");
                 var delta_1 = Math.max(primaryPage.clientHeight - (body.clientHeight + Render.getBodyScrollTop()), 0);
                 minamo_js_3.minamo.dom.getDivsByClassName(document, "page-footer")
-                    .forEach(function (i) { return minamo_js_3.minamo.dom.setProperty(i.style, "paddingBottom", "calc(1rem + " + delta_1 + "px)"); });
+                    .forEach(function (i) { return minamo_js_3.minamo.dom.setStyleProperty(i, "paddingBottom", "calc(1rem + " + delta_1 + "px)"); });
                 // minamo.dom.getDivsByClassName(document, "down-page-link")
-                //     .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
+                //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
             }
         };
         Render.adjustDownPageLinkDirection = function () {

@@ -19,16 +19,14 @@ export module Render
         }
     };
     export const setHeaderColor = (color: string | null) =>
-        minamo.dom.setStyleProperty(document.getElementById("screen-header"), "backgroundColor", color);
+        minamo.dom.setStyleProperty("#screen-header", "backgroundColor", color);
     const setBodyColor = (color: string) =>
     {
-        const bodyColor = `${color}E8`;
-        minamo.dom.setProperty(document.body.style, "backgroundColor", bodyColor);
-        const meta = document.getElementById("theme-color") as HTMLMetaElement;
-        minamo.dom.setProperty(meta, "content", color);
+        minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
+        minamo.dom.setProperty("#theme-color", "content", color);
     };
     export const setFoundationColor = (color: string | null) =>
-        minamo.dom.setStyleProperty(document.getElementById("foundation"), "backgroundColor", color);
+        minamo.dom.setStyleProperty("#foundation", "backgroundColor", color);
     const setBackgroundColor = (color: string | null) =>
     {
         if ("header" === (Storage.Settings.get().progressBarStyle ?? "auto"))
@@ -2943,10 +2941,10 @@ export module Render
                                     const hourUnit = 60 *60 *1000;
                                     const minutes = (currentTick % hourUnit) / hourUnit;
                                     const nextColor = getRainbowColor(currentHours +1);
-                                    minamo.dom.setProperty(panel.style, "backgroundColor", currentColor);
-                                    minamo.dom.setProperty(timeBar.style, "backgroundColor", nextColor);
+                                    minamo.dom.setStyleProperty(panel, "backgroundColor", currentColor);
+                                    minamo.dom.setStyleProperty(timeBar, "backgroundColor", nextColor);
                                     const percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                                    minamo.dom.setProperty(timeBar.style, "width", percentString);
+                                    minamo.dom.setStyleProperty(timeBar, "width", percentString);
                                     minamo.dom.setProperty(minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) +" " +Domain.weekday(currentTick));
                                     minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
                                 }
@@ -3038,9 +3036,6 @@ export module Render
             );
         }
         setBackgroundColor(Color.getSolidRainbowColor(0));
-        document.body.style.removeProperty("background-color");
-        document.getElementById("foundation").style.removeProperty("background-color");
-        document.getElementById("screen").style.removeProperty("background-color");
         document.getElementById("screen").className = `${screen.className} screen`;
         minamo.dom.replaceChildren
         (
@@ -3150,48 +3145,48 @@ export module Render
         {
             if (color)
             {
-                minamo.dom.setProperty(screenBar.style, "backgroundColor", color);
+                minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
             }
             const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
             if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting)
             {
                 minamo.dom.addCSSClass(screenBar, "horizontal");
                 minamo.dom.removeCSSClass(screenBar, "vertical");
-                minamo.dom.setProperty(screenBar.style, "height", "initial");
-                minamo.dom.setProperty(screenBar.style, "maxHeight", "initial");
-                minamo.dom.setProperty(screenBar.style, "width", percentString);
-                minamo.dom.setProperty(screenBar.style, "maxWidth", percentString);
+                minamo.dom.setStyleProperty(screenBar, "height", "initial");
+                minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
+                minamo.dom.setStyleProperty(screenBar, "width", percentString);
+                minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
             }
             else
             {
                 minamo.dom.addCSSClass(screenBar, "vertical");
                 minamo.dom.removeCSSClass(screenBar, "horizontal");
-                minamo.dom.setProperty(screenBar.style, "width", "initial");
-                minamo.dom.setProperty(screenBar.style, "maxWidth", "initial");
-                minamo.dom.setProperty(screenBar.style, "height", percentString);
-                minamo.dom.setProperty(screenBar.style, "maxHeight", percentString);
+                minamo.dom.setStyleProperty(screenBar, "width", "initial");
+                minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
+                minamo.dom.setStyleProperty(screenBar, "height", percentString);
+                minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
             }
-            minamo.dom.setProperty(screenBar.style, "display", "block");
+            minamo.dom.setStyleProperty(screenBar, "display", "block");
         }
         else
         {
-            minamo.dom.setProperty(screenBar.style, "display", "none");
+            minamo.dom.setStyleProperty(screenBar, "display", "none");
         }
         const progressBar = getProgressElement();
         if (null !== percent && "header" === setting)
         {
             if (color)
             {
-                minamo.dom.setProperty(progressBar.style, "backgroundColor", color);
+                minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
             }
             const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-            minamo.dom.setProperty(progressBar.style, "width", percentString);
-            minamo.dom.setProperty(progressBar.style, "borderRightWidth", "1px");
+            minamo.dom.setStyleProperty(progressBar, "width", percentString);
+            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
         }
         else
         {
-            minamo.dom.setProperty(progressBar.style, "width", "0%");
-            minamo.dom.setProperty(progressBar.style, "borderRightWidth", "0px");
+            minamo.dom.setStyleProperty(progressBar, "width", "0%");
+            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
         }
     };
     export const resizeFlexList = () =>
@@ -3249,7 +3244,7 @@ export module Render
                     const itemHeight = (list.childNodes[0] as HTMLElement).offsetHeight +1;
                     const columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
                     const row = Math.max(Math.ceil(length /columns), Math.min(length, Math.floor(height / itemHeight)));
-                    minamo.dom.setProperty(list.style, "height", `${row *itemHeight}px`);
+                    minamo.dom.setStyleProperty(list, "height", `${row *itemHeight}px`);
                     minamo.dom.addCSSClass(list, `max-column-${columns}`);
                 }
                 if (0 < length)
@@ -3302,9 +3297,9 @@ export module Render
             const body = document.getElementById("screen-body");
             const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +getBodyScrollTop()), 0);
             minamo.dom.getDivsByClassName(document, "page-footer")
-                .forEach(i => minamo.dom.setProperty(i.style, "paddingBottom", `calc(1rem + ${delta}px)`));
+                .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(1rem + ${delta}px)`));
             // minamo.dom.getDivsByClassName(document, "down-page-link")
-            //     .forEach(i => minamo.dom.setProperty(i.style, "bottom", `calc(1rem + ${delta}px)`));
+            //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
         }
     };
     export const adjustDownPageLinkDirection = () =>
