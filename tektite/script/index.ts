@@ -1,8 +1,18 @@
-// import { minamo } from "../../script/minamo.js";
+import { minamo } from "../../script/minamo.js";
 import { Fullscreen as FullscreenModule } from "./fullscreen";
+import { Header as HeaderModule } from "./header";
 export module Tektite
 {
     export const Fullscreen = FullscreenModule;
+    // export const Header = HeaderModule;
+    export type HeaderSegmentSource<PageParams, IconKeyType> = HeaderModule.SegmentSource<PageParams, IconKeyType>;
+    export type HeaderSource<PageParams, IconKeyType> = HeaderModule.Source<PageParams, IconKeyType>;
+    export interface ScreenSource<PageParams, IconKeyType>
+    {
+        className: string;
+        header: HeaderSource<PageParams, IconKeyType>;
+        body: minamo.dom.Source;
+    }
     export const onWebkitFullscreenChange = (_event: Event) =>
     {
         if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document))

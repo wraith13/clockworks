@@ -1349,26 +1349,9 @@ export module Render
             "delete-button"
         )
     ];
-    export interface HeaderSegmentSource
-    {
-        icon: Resource.KeyType;
-        title: string;
-        href?: Type.PageParams;
-        menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
-    }
-    export interface HeaderSource
-    {
-        items: HeaderSegmentSource[];
-        menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
-        operator?: minamo.dom.Source;
-        parent?: Type.PageParams;
-    }
-    export interface ScreenSource
-    {
-        className: string;
-        header: HeaderSource;
-        body: minamo.dom.Source;
-    }
+    export type HeaderSegmentSource = Tektite.HeaderSegmentSource<Type.PageParams, Resource.KeyType>;
+    export type HeaderSource = Tektite.HeaderSource<Type.PageParams, Resource.KeyType>;
+    export type ScreenSource = Tektite.ScreenSource<Type.PageParams, Resource.KeyType>;
     const getLastSegmentClass = (ix: number, items: HeaderSegmentSource[]) =>
         [
             ix === 0 ? "first-segment": undefined,
