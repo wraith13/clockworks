@@ -1,3 +1,4 @@
+import { Tektite } from "../../../tektite/script";
 import { Locale } from "../../locale";
 import { Type } from "../../type";
 import { Base } from "../../base";
@@ -15,7 +16,7 @@ export module Operate
         };
         Storage.ElapsedTimer.Events.add(event);
         Render.updateWindow("operate");
-        const toast = Render.makePrimaryToast
+        const toast = Tektite.Toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -34,7 +35,7 @@ export module Operate
     {
         Storage.ElapsedTimer.Events.add(item);
         Render.updateWindow("operate");
-        const toast = Render.makePrimaryToast
+        const toast = Tektite.Toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -60,7 +61,7 @@ export module Operate
         Storage.ElapsedTimer.Events.remove(oldSchedule);
         Storage.ElapsedTimer.Events.add(newSchedule);
         Render.updateWindow("operate");
-        const toast = Render.makePrimaryToast
+        const toast = Tektite.Toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -89,7 +90,7 @@ export module Operate
         {
             Render.updateWindow("operate");
         }
-        const toast = Render.makePrimaryToast
+        const toast = Tektite.Toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Removed.")}`),
             backwardOperator: Render.cancelTextButton
@@ -117,7 +118,7 @@ export module Operate
         {
             Storage.ElapsedTimer.Events.removeKey();
             Render.updateWindow("operate");
-            Render.makePrimaryToast({ content: Render.$span("")(`${Locale.map("Removed all alarms!")}`), });
+            Tektite.Toast.makePrimary({ content: Render.$span("")(`${Locale.map("Removed all alarms!")}`), });
         }
     };
 }

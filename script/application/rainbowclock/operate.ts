@@ -1,3 +1,4 @@
+import { Tektite } from "../../../tektite/script";
 import { Locale } from "../../locale";
 import { Type } from "../../type";
 import { Base } from "../../base";
@@ -10,7 +11,7 @@ export module Operate
     {
         Storage.RainbowClock.Timezone.add(item);
         Render.updateWindow("operate");
-        const toast = Render.makePrimaryToast
+        const toast = Tektite.Toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -37,7 +38,7 @@ export module Operate
         Storage.RainbowClock.Timezone.remove(oldTimezone);
         Storage.RainbowClock.Timezone.add(newTimezone);
         Render.updateWindow("operate");
-        const toast = Render.makePrimaryToast
+        const toast = Tektite.Toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -66,7 +67,7 @@ export module Operate
         {
             Render.updateWindow("operate");
         }
-        const toast = Render.makePrimaryToast
+        const toast = Tektite.Toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Removed.")}`),
             backwardOperator: Render.cancelTextButton
@@ -94,7 +95,7 @@ export module Operate
         {
             Storage.RainbowClock.Timezone.removeKey();
             Render.updateWindow("operate");
-            Render.makePrimaryToast({ content: Render.$span("")(`${Locale.map("Initialized timezone list!")}`), });
+            Tektite.Toast.makePrimary({ content: Render.$span("")(`${Locale.map("Initialized timezone list!")}`), });
         }
     };
 }
