@@ -1,10 +1,12 @@
 import { minamo } from "../../script/minamo.js";
 import { Fullscreen as FullscreenModule } from "./fullscreen";
-import { Header as HeaderModule } from "./header";
+import { Screen as ScreenModule } from "./screen";
 import { Toast as ToastModule } from "./toast";
+import { Header as HeaderModule } from "./header";
 export module Tektite
 {
     export const Fullscreen = FullscreenModule;
+    export const Screen = ScreenModule;
     // export const Header = HeaderModule;
     export type HeaderSegmentSource<PageParams, IconKeyType> = HeaderModule.SegmentSource<PageParams, IconKeyType>;
     export type HeaderSource<PageParams, IconKeyType> = HeaderModule.Source<PageParams, IconKeyType>;

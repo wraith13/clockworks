@@ -1,4 +1,5 @@
 // import { minamo } from "./minamo.js";
+import { Tektite } from "../tektite/script";
 import { Locale } from "./locale";
 // import { Type } from "./type";
 import { Render } from "./render";
@@ -27,8 +28,8 @@ export module Clockworks
             async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
         );
         window.addEventListener("mousemove", Render.onMouseMove);
-        window.addEventListener("mousedown", Render.onMouseDown);
-        window.addEventListener("mouseup", Render.onMouseUp);
+        window.addEventListener("mousedown", Tektite.Screen.onMouseDown);
+        window.addEventListener("mouseup", Tektite.Screen.onMouseUp);
         document.addEventListener("fullscreenchange", Render.onFullscreenChange);
         document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);

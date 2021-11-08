@@ -203,7 +203,7 @@ export module Render
             resolve =>
             {
                 let result: string | null = null;
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     children:
                     [
@@ -282,7 +282,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -348,7 +348,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -434,7 +434,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -498,7 +498,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -535,7 +535,7 @@ export module Render
             resolve =>
             {
                 let result: number | null = null;
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     children:
                     [
@@ -611,7 +611,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -680,7 +680,7 @@ export module Render
             resolve =>
             {
                 let result: Type.EventEntry | null = null;
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     children:
                     [
@@ -742,7 +742,7 @@ export module Render
             resolve =>
             {
                 let result: number | null = null;
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     children:
                     [
@@ -810,7 +810,7 @@ export module Render
             resolve =>
             {
                 let result: { title: string, offset: number } | null = null;
-                const ui = popup
+                const ui = Tektite.Screen.popup
                 ({
                     children:
                     [
@@ -854,7 +854,7 @@ export module Render
     (
         async resolve =>
         {
-            const ui = popup
+            const ui = Tektite.Screen.popup
             ({
                 // className: "add-remove-tags-popup",
                 children:
@@ -900,92 +900,6 @@ export module Render
             });
         }
     );
-    export const screenCover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
-    {
-        const onclick = async () =>
-        {
-            if (dom === (lastMouseDownTarget ?? dom))
-            {
-                console.log("screen-cover.click!");
-                dom.onclick = undefined;
-                data.onclick();
-                close();
-            }
-        };
-        const dom = $make(HTMLDivElement)
-        ({
-            tag: "div",
-            className: "screen-cover fade-in",
-            children: data.children,
-            onclick,
-        });
-        // dom.addEventListener("mousedown", onclick);
-        const close = async () =>
-        {
-            dom.classList.remove("fade-in");
-            dom.classList.add("fade-out");
-            await minamo.core.timeout(500);
-            minamo.dom.remove(dom);
-        };
-        minamo.dom.appendChildren(document.getElementById("screen"), dom);
-        const result =
-        {
-            dom,
-            close,
-        };
-        return result;
-    };
-    export const getScreenCoverList = () => minamo.dom.getDivsByClassName(document, "screen-cover");
-    export const getScreenCover = () => getScreenCoverList().filter((_i, ix, list) => (ix +1) === list.length)[0];
-    export const hasScreenCover = () => 0 < getScreenCoverList().length;
-    export const popup =
-    (
-        data:
-        {
-            className?: string,
-            children: minamo.dom.Source,
-            onClose?: () => Promise<unknown>
-        }
-    ) =>
-    {
-        const dom = $make(HTMLDivElement)
-        ({
-            tag: "div",
-            className: `popup locale-parallel-off ${data.className ?? ""}`,
-            children: data.children,
-            onclick: async (event: MouseEvent) =>
-            {
-                console.log("popup.click!");
-                event.stopPropagation();
-                //getScreenCoverList.forEach(i => i.click());
-            },
-        });
-        const close = async () =>
-        {
-            await data?.onClose();
-            cover.close();
-        };
-        // minamo.dom.appendChildren(document.body, dom);
-        const cover = screenCover
-        ({
-            children:
-            [
-                dom,
-                { tag: "div", }, // レイアウト調整用のダミー要素 ( この調整がないとポップアップが小さく且つ入力要素がある場合に iPad でキーボードの下に dom が隠れてしまう。 )
-            ],
-            onclick: async () =>
-            {
-                await data?.onClose();
-                //minamo.dom.remove(dom);
-            },
-        });
-        const result =
-        {
-            dom,
-            close,
-        };
-        return result;
-    };
     export const menuButton = async (menu: minamo.dom.Source | (() => Promise<minamo.dom.Source>)) =>
     {
         let cover: { dom: HTMLDivElement, close: () => Promise<unknown> };
@@ -1024,7 +938,7 @@ export module Render
                     minamo.dom.replaceChildren(popup, await menu());
                 }
                 popup.classList.add("show");
-                cover = screenCover
+                cover = Tektite.Screen.cover
                 ({
                     onclick: close,
                 });
@@ -1455,7 +1369,7 @@ export module Render
                 popup.style.width = `${popup.offsetWidth -2}px`;
                 popup.style.top = `${segment.offsetTop +segment.offsetHeight}px`;
                 popup.style.left = `${Math.max(segment.offsetLeft, 4)}px`;
-                cover = screenCover
+                cover = Tektite.Screen.cover
                 ({
                     onclick: close,
                 });
@@ -1587,8 +1501,8 @@ export module Render
                     async () =>
                     {
                         setter(i);
-                        clearLastMouseDownTarget();
-                        getScreenCoverList().forEach(i => i.click());
+                        Tektite.Screen.clearLastMouseDownTarget();
+                        Tektite.Screen.getScreenCoverList().forEach(i => i.click());
                         await reload();
                     },
                     flashInterval === i ? "current-item": undefined
@@ -1608,8 +1522,8 @@ export module Render
                 ],
                 async () =>
                 {
-                    clearLastMouseDownTarget();
-                    getScreenCoverList().forEach(i => i.click());
+                    Tektite.Screen.clearLastMouseDownTarget();
+                    Tektite.Screen.getScreenCoverList().forEach(i => i.click());
                     const tick = await timePrompt(Locale.map("input a time"), 0);
                     if (null !== tick)
                     {
@@ -1870,7 +1784,7 @@ export module Render
             await Resource.loadSvgOrCache(entry.icon),
             entry.title,
         ],
-        onclick: async () => popup
+        onclick: async () => Tektite.Screen.popup
         ({
             className: "bare-popup",
             children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
@@ -3273,7 +3187,7 @@ export module Render
                         .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "default-button")?.[0]?.click());
                     break;
                 case "Escape":
-                    (getScreenCover() ?? getCloseButton())?.click();
+                    (Tektite.Screen.getScreenCover() ?? getCloseButton())?.click();
                     break;
             }
             const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
@@ -3336,10 +3250,6 @@ export module Render
         onWindowResize();
         Tektite.onWebkitFullscreenChange(event);
     };
-    let lastMouseDownTarget: EventTarget = null;
-    export const onMouseDown = (event: MouseEvent) => lastMouseDownTarget = event.target;
-    export const onMouseUp = (_evnet: MouseEvent) => setTimeout(clearLastMouseDownTarget, 10);
-    export const clearLastMouseDownTarget = () => lastMouseDownTarget = null;
     export type ItemStateType = "nothing" | "regular" | "irregular" | "invalid";
     export const itemState = <T>(itemJson: string, item: T): ItemStateType =>
     {
@@ -3379,7 +3289,7 @@ export module Render
     };
     export const showPage = async (url: string = location.href) =>
     {
-        Render.getScreenCover()?.click();
+        Tektite.Screen.getScreenCover()?.click();
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
         // const urlParams = getUrlParams(url);
