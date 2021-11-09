@@ -1,4 +1,5 @@
 import { minamo } from "../minamo.js";
+import { Clockworks } from "..";
 import { Tektite } from "../../tektite/script";
 import { Locale } from "../locale";
 import { Type } from "../type";
@@ -69,7 +70,7 @@ export module Render
         onclick: async () =>
         {
             onCanceled();
-            Tektite.Toast.make
+            Clockworks.tektite.toast.make
             ({
                 content: $span("")(label("roll-backed")),
                 wait: 3000,
@@ -203,7 +204,7 @@ export module Render
             resolve =>
             {
                 let result: string | null = null;
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     children:
                     [
@@ -282,7 +283,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -348,7 +349,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -434,7 +435,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -498,7 +499,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -535,7 +536,7 @@ export module Render
             resolve =>
             {
                 let result: number | null = null;
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     children:
                     [
@@ -611,7 +612,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -680,7 +681,7 @@ export module Render
             resolve =>
             {
                 let result: Type.EventEntry | null = null;
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     children:
                     [
@@ -742,7 +743,7 @@ export module Render
             resolve =>
             {
                 let result: number | null = null;
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     children:
                     [
@@ -810,7 +811,7 @@ export module Render
             resolve =>
             {
                 let result: { title: string, offset: number } | null = null;
-                const ui = Tektite.Screen.popup
+                const ui = Clockworks.tektite.screen.popup
                 ({
                     children:
                     [
@@ -854,7 +855,7 @@ export module Render
     (
         async resolve =>
         {
-            const ui = Tektite.Screen.popup
+            const ui = Clockworks.tektite.screen.popup
             ({
                 // className: "add-remove-tags-popup",
                 children:
@@ -938,7 +939,7 @@ export module Render
                     minamo.dom.replaceChildren(popup, await menu());
                 }
                 popup.classList.add("show");
-                cover = Tektite.Screen.cover
+                cover = Clockworks.tektite.screen.cover
                 ({
                     onclick: close,
                 });
@@ -1014,7 +1015,7 @@ export module Render
                         }
                         else
                         {
-                            Tektite.Toast.make
+                            Clockworks.tektite.toast.make
                             ({
                                 content: label("A date and time outside the valid range was specified."),
                                 isWideContent: true,
@@ -1087,7 +1088,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Tektite.Toast.make
+                                    Clockworks.tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -1113,7 +1114,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Tektite.Toast.make
+                                    Clockworks.tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -1183,7 +1184,7 @@ export module Render
                         }
                         else
                         {
-                            Tektite.Toast.make
+                            Clockworks.tektite.toast.make
                             ({
                                 content: label("A date and time outside the valid range was specified."),
                                 isWideContent: true,
@@ -1369,7 +1370,7 @@ export module Render
                 popup.style.width = `${popup.offsetWidth -2}px`;
                 popup.style.top = `${segment.offsetTop +segment.offsetHeight}px`;
                 popup.style.left = `${Math.max(segment.offsetLeft, 4)}px`;
-                cover = Tektite.Screen.cover
+                cover = Clockworks.tektite.screen.cover
                 ({
                     onclick: close,
                 });
@@ -1501,8 +1502,8 @@ export module Render
                     async () =>
                     {
                         setter(i);
-                        Tektite.Screen.clearLastMouseDownTarget();
-                        Tektite.Screen.getScreenCoverList().forEach(i => i.click());
+                        Clockworks.tektite.screen.clearLastMouseDownTarget();
+                        Clockworks.tektite.screen.getScreenCoverList().forEach(i => i.click());
                         await reload();
                     },
                     flashInterval === i ? "current-item": undefined
@@ -1522,8 +1523,8 @@ export module Render
                 ],
                 async () =>
                 {
-                    Tektite.Screen.clearLastMouseDownTarget();
-                    Tektite.Screen.getScreenCoverList().forEach(i => i.click());
+                    Clockworks.tektite.screen.clearLastMouseDownTarget();
+                    Clockworks.tektite.screen.getScreenCoverList().forEach(i => i.click());
                     const tick = await timePrompt(Locale.map("input a time"), 0);
                     if (null !== tick)
                     {
@@ -1547,18 +1548,18 @@ export module Render
         minamo.dom.getDivsByClassName(document, "screen-body")[0],
         body
     );
-    export const fullscreenMenuItem = async () => Tektite.Fullscreen.enabled() ?
+    export const fullscreenMenuItem = async () => Clockworks.tektite.fullscreen.enabled() ?
         (
-            null === Tektite.Fullscreen.element() ?
+            null === Clockworks.tektite.fullscreen.element() ?
                 menuItem
                 (
                     label("Full screen"),
-                    async () => await Tektite.Fullscreen.request()
+                    async () => await Clockworks.tektite.fullscreen.request()
                 ):
                 menuItem
                 (
                     label("Cancel full screen"),
-                    async () => await Tektite.Fullscreen.exit()
+                    async () => await Clockworks.tektite.fullscreen.exit()
                 )
         ):
         [];
@@ -1784,7 +1785,7 @@ export module Render
             await Resource.loadSvgOrCache(entry.icon),
             entry.title,
         ],
-        onclick: async () => Tektite.Screen.popup
+        onclick: async () => Clockworks.tektite.screen.popup
         ({
             className: "bare-popup",
             children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
@@ -1961,7 +1962,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            Tektite.screenFlash();
+                            Clockworks.tektite.screenFlash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setBackgroundColor(currentColor);
@@ -2192,7 +2193,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Tektite.Toast.make
+                                    Clockworks.tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -2273,7 +2274,7 @@ export module Render
                             const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
                             if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -current.start))
                             {
-                                Tektite.screenFlash();
+                                Clockworks.tektite.screenFlash();
                                 lashFlashAt = tick;
                             }
                             previousPrimaryStep = primaryStep;
@@ -2281,7 +2282,7 @@ export module Render
                         const cycle = "timer" === current.type ? 3000: 10000;
                         if (rest <= 0 && lashFlashAt +cycle <= tick)
                         {
-                            Tektite.screenFlash();
+                            Clockworks.tektite.screenFlash();
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
@@ -2472,7 +2473,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Tektite.Toast.make
+                                    Clockworks.tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -2548,7 +2549,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            Tektite.screenFlash();
+                            Clockworks.tektite.screenFlash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setBackgroundColor(currentColor);
@@ -2815,7 +2816,7 @@ export module Render
                             {
                                 if (0 === (tick % flashInterval))
                                 {
-                                    Tektite.screenFlash();
+                                    Clockworks.tektite.screenFlash();
                                 }
                             }
                         }
@@ -3187,7 +3188,7 @@ export module Render
                         .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "default-button")?.[0]?.click());
                     break;
                 case "Escape":
-                    (Tektite.Screen.getScreenCover() ?? getCloseButton())?.click();
+                    (Clockworks.tektite.screen.getScreenCover() ?? getCloseButton())?.click();
                     break;
             }
             const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
@@ -3196,15 +3197,15 @@ export module Render
                 switch(event.key.toLowerCase())
                 {
                     case "f":
-                        if (Tektite.Fullscreen.enabled())
+                        if (Clockworks.tektite.fullscreen.enabled())
                         {
-                            if(null === Tektite.Fullscreen.element())
+                            if(null === Clockworks.tektite.fullscreen.element())
                             {
-                                Tektite.Fullscreen.request();
+                                Clockworks.tektite.fullscreen.request();
                             }
                             else
                             {
-                                Tektite.Fullscreen.exit();
+                                Clockworks.tektite.fullscreen.exit();
                             }
                         }
                         break;
@@ -3215,20 +3216,20 @@ export module Render
     let lastMouseMouseAt = 0;
     export const onMouseMove = (_evnet: MouseEvent) =>
     {
-        if (Tektite.Fullscreen.enabled())
+        if (Clockworks.tektite.fullscreen.enabled())
         {
             const now = lastMouseMouseAt = new Date().getTime();
             if (document.body.classList.contains("sleep-mouse"))
             {
                 document.body.classList.remove("sleep-mouse");
             }
-            if (Tektite.Fullscreen.element())
+            if (Clockworks.tektite.fullscreen.element())
             {
                 setTimeout
                 (
                     () =>
                     {
-                        if (Tektite.Fullscreen.element() && now === lastMouseMouseAt)
+                        if (Clockworks.tektite.fullscreen.element() && now === lastMouseMouseAt)
                         {
                             if ( ! document.body.classList.contains("sleep-mouse"))
                             {
@@ -3248,7 +3249,7 @@ export module Render
     export const onWebkitFullscreenChange = (event: Event) =>
     {
         onWindowResize();
-        Tektite.onWebkitFullscreenChange(event);
+        Clockworks.tektite.onWebkitFullscreenChange(event);
     };
     export type ItemStateType = "nothing" | "regular" | "irregular" | "invalid";
     export const itemState = <T>(itemJson: string, item: T): ItemStateType =>
@@ -3289,7 +3290,7 @@ export module Render
     };
     export const showPage = async (url: string = location.href) =>
     {
-        Tektite.Screen.getScreenCover()?.click();
+        Clockworks.tektite.screen.getScreenCover()?.click();
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
         // const urlParams = getUrlParams(url);

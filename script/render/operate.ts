@@ -1,5 +1,5 @@
 import { minamo } from "../minamo.js";
-import { Tektite } from "../../tektite/script";
+import { Clockworks } from "..";
 import { Operate as RainbowClockOperate } from "../application/rainbowclock/operate";
 import { Operate as CountdownTimerOperate } from "../application/countdowntimer/operate";
 import { Operate as ElapsedTimerOperate } from "../application/elapsedtimer/operate";
@@ -16,7 +16,7 @@ export module Operate
         document.getSelection().selectAllChildren(pre);
         document.execCommand("copy");
         document.body.removeChild(pre);
-        Tektite.Toast.make({ content: `Copied ${displayText} to the clipboard.`,});
+        Clockworks.tektite.toast.make({ content: `Copied ${displayText} to the clipboard.`,});
     };
     export const RainbowClock = RainbowClockOperate;
     export const CountdownTimer = CountdownTimerOperate;

@@ -1,4 +1,4 @@
-import { Tektite } from "../../../tektite/script";
+import { Clockworks } from "../..";
 import { Locale } from "../../locale";
 import { Base } from "../../base";
 import { Storage } from "../../storage";
@@ -11,8 +11,8 @@ export module Operate
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.add(tick);
         Render.updateWindow("operate");
-        Tektite.screenFlash();
-        const toast = Tektite.Toast.makePrimary
+        Clockworks.tektite.screenFlash();
+        const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Stamped!")}`),
             backwardOperator: Render.cancelTextButton
@@ -32,7 +32,7 @@ export module Operate
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.add(tick);
         Render.updateWindow("operate");
-        const toast = Tektite.Toast.makePrimary
+        const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -53,7 +53,7 @@ export module Operate
         Storage.NeverStopwatch.Stamps.remove(oldTick);
         Storage.NeverStopwatch.Stamps.add(newTick);
         Render.updateWindow("operate");
-        const toast = Tektite.Toast.makePrimary
+        const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Updated.")}`),
             backwardOperator: Render.cancelTextButton
@@ -82,7 +82,7 @@ export module Operate
         {
             Render.updateWindow("operate");
         }
-        const toast = Tektite.Toast.makePrimary
+        const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Removed.")}`),
             backwardOperator: Render.cancelTextButton
@@ -110,7 +110,7 @@ export module Operate
         {
             Storage.NeverStopwatch.Stamps.removeKey();
             Render.updateWindow("operate");
-            Tektite.Toast.makePrimary({ content: Render.$span("")(`${Locale.map("Removed all stamps!")}`), });
+            Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Locale.map("Removed all stamps!")}`), });
         }
     };
 }

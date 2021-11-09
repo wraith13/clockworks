@@ -3,6 +3,7 @@ import { Tektite } from "../tektite/script";
 import { Locale } from "./locale";
 // import { Type } from "./type";
 import { Render } from "./render";
+import { Resource } from "./render/resource";
 import { Storage } from "./storage";
 // import { Domain } from "./domain";
 // import config from "../resource/config.json";
@@ -10,9 +11,14 @@ export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
     // export const applicationIdList = Object.keys(applicationList);
-    export const start = async () =>
+    export const tektite = Tektite.make
+    ({
+        showUrl: Render.showUrl,
+        loadSvgOrCache: Resource.loadSvgOrCache,
+    });
+    export const start = async (params:{ buildTimestamp: string, }) =>
     {
-        console.log("start!!!");
+        console.log(`start!!!: ${JSON.stringify(params)}`);
         Locale.setLocale(Storage.Settings.get().locale);
         window.onpopstate = () => Render.showPage();
         window.addEventListener("resize", Render.onWindowResize);
@@ -28,8 +34,8 @@ export module Clockworks
             async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
         );
         window.addEventListener("mousemove", Render.onMouseMove);
-        window.addEventListener("mousedown", Tektite.Screen.onMouseDown);
-        window.addEventListener("mouseup", Tektite.Screen.onMouseUp);
+        window.addEventListener("mousedown", tektite.screen.onMouseDown);
+        window.addEventListener("mouseup", tektite.screen.onMouseUp);
         document.addEventListener("fullscreenchange", Render.onFullscreenChange);
         document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
