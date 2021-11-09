@@ -29,4 +29,17 @@ export module Tektite
         document.body.classList.add("flash");
         setTimeout(() => document.body.classList.remove("flash"), 1500);
     };
+    export interface TektiteParams<PageParams, IconKeyType>
+    {
+        showUrl: (data: PageParams) => Promise<unknown>;
+        loadSvgOrCache: (key: IconKeyType) => Promise<SVGElement>;
+    }
+    export class Tektite<PageParams, IconKeyType>
+    {
+        constructor(public params: TektiteParams<PageParams, IconKeyType>)
+        {
+        }
+    }
+    export const make = <PageParams, IconKeyType>(params: TektiteParams<PageParams, IconKeyType>) =>
+        new Tektite(params);
 }
