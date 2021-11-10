@@ -1,18 +1,19 @@
 // import { minamo } from "./minamo.js";
 import { Tektite } from "../tektite/script";
 import { Locale } from "./locale";
-// import { Type } from "./type";
+import { Type } from "./type";
 import { Render } from "./render";
 import { Resource } from "./render/resource";
 import { Storage } from "./storage";
-// import { Domain } from "./domain";
+import { Domain } from "./domain";
 // import config from "../resource/config.json";
 export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
     // export const applicationIdList = Object.keys(applicationList);
-    export const tektite = Tektite.make
+    export const tektite = Tektite.make<Type.PageParams, Resource.KeyType>
     ({
+        makeUrl: Domain.makeUrl,
         showUrl: Render.showUrl,
         loadSvgOrCache: Resource.loadSvgOrCache,
     });

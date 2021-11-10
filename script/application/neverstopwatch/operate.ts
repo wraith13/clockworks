@@ -11,7 +11,7 @@ export module Operate
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.add(tick);
         Render.updateWindow("operate");
-        Clockworks.tektite.screenFlash();
+        Clockworks.tektite.screen.flash();
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Locale.map("Stamped!")}`),

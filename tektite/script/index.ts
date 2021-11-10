@@ -1,12 +1,13 @@
 import { minamo } from "../../script/minamo.js";
 import { Fullscreen as FullscreenModule } from "./fullscreen";
-import { Screen as ScreenModule } from "./screen";
+import { Screen } from "./screen";
 import { Toast as ToastModule } from "./toast";
-import { Header as HeaderModule } from "./header";
+import { Header } from "./header";
+import { Menu } from "./menu";
 export module Tektite
 {
-    export type HeaderSegmentSource<PageParams, IconKeyType> = HeaderModule.SegmentSource<PageParams, IconKeyType>;
-    export type HeaderSource<PageParams, IconKeyType> = HeaderModule.Source<PageParams, IconKeyType>;
+    export type HeaderSegmentSource<PageParams, IconKeyType> = Header.SegmentSource<PageParams, IconKeyType>;
+    export type HeaderSource<PageParams, IconKeyType> = Header.Source<PageParams, IconKeyType>;
     export interface ScreenSource<PageParams, IconKeyType>
     {
         className: string;
@@ -15,8 +16,9 @@ export module Tektite
     }
     export interface TektiteParams<PageParams, IconKeyType>
     {
+        makeUrl: (args: PageParams) => string;
         showUrl: (data: PageParams) => Promise<unknown>;
-        loadSvgOrCache: (key: IconKeyType) => Promise<SVGElement>;
+        loadSvgOrCache: (key: IconKeyType | "cross-icon" | "ellipsis-icon") => Promise<SVGElement>;
     }
     export class Tektite<PageParams, IconKeyType>
     {
@@ -24,9 +26,30 @@ export module Tektite
         {
         }
         public fullscreen = FullscreenModule;
-        public screen = ScreenModule;
-        // public Header = HeaderModule;
+        public screen = Screen.make(this);
+        public header = Header.make(this);
+        public menu = Menu.make(this);
         public toast = ToastModule;
+        internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
+        ({
+            tag: "a",
+            className: data.className,
+            href: this.params.makeUrl(data.href),
+            children: data.children,
+            onclick: (_event: MouseEvent) =>
+            {
+                // event.stopPropagation();
+                this.params.showUrl(data.href);
+                return false;
+            }
+        });
+        externalLink = (data: { className?: string, href: string, children: minamo.dom.Source}) =>
+        ({
+            tag: "a",
+            className: data.className,
+            href: data.href,
+            children: data.children,
+        });
         public onWebkitFullscreenChange = (_event: Event) =>
         {
             if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document))
@@ -34,12 +57,7 @@ export module Tektite
                 document.body.classList.toggle("fxxking-ipad-fullscreen", this.fullscreen.element());
             }
         };
-        public screenFlash = () =>
-        {
-            document.body.classList.add("flash");
-            setTimeout(() => document.body.classList.remove("flash"), 1500);
-        };
-        }
+    }
     export const make = <PageParams, IconKeyType>(params: TektiteParams<PageParams, IconKeyType>) =>
         new Tektite(params);
 }

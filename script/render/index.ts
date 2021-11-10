@@ -77,26 +77,6 @@ export module Render
             });
         },
     });
-    export const internalLink = (data: { className?: string, href: Type.PageParams, children: minamo.dom.Source}) =>
-    ({
-        tag: "a",
-        className: data.className,
-        href: Domain.makeUrl(data.href),
-        children: data.children,
-        onclick: (_event: MouseEvent) =>
-        {
-            // event.stopPropagation();
-            showUrl(data.href);
-            return false;
-        }
-    });
-    export const externalLink = (data: { className?: string, href: string, children: minamo.dom.Source}) =>
-    ({
-        tag: "a",
-        className: data.className,
-        href: data.href,
-        children: data.children,
-    });
     export const $make = minamo.dom.make;
     export const $tag = (tag: string) => (className: string | minamo.dom.AlphaObjectSource) => (children: minamo.dom.Source) =>
         "string" === typeof className ?
@@ -901,70 +881,11 @@ export module Render
             });
         }
     );
-    export const menuButton = async (menu: minamo.dom.Source | (() => Promise<minamo.dom.Source>)) =>
-    {
-        let cover: { dom: HTMLDivElement, close: () => Promise<unknown> };
-        const close = () =>
-        {
-            popup.classList.remove("show");
-            cover = null;
-        };
-        const popup = $make(HTMLDivElement)
-        ({
-            tag: "div",
-            className: "menu-popup",
-            children: "function" !== typeof menu ? menu: [ ],
-            onclick: async (event: MouseEvent) =>
-            {
-                event.stopPropagation();
-                console.log("menu-popup.click!");
-                cover?.close();
-                close();
-            },
-        });
-        const button = $make(HTMLButtonElement)
-        ({
-            tag: "button",
-            className: "menu-button",
-            children:
-            [
-                await Resource.loadSvgOrCache("ellipsis-icon"),
-            ],
-            onclick: async (event: MouseEvent) =>
-            {
-                event.stopPropagation();
-                console.log("menu-button.click!");
-                if ("function" === typeof menu)
-                {
-                    minamo.dom.replaceChildren(popup, await menu());
-                }
-                popup.classList.add("show");
-                cover = Clockworks.tektite.screen.cover
-                ({
-                    onclick: close,
-                });
-            },
-        });
-        return [ button, popup, ];
-    };
-    export const menuItem = (children: minamo.dom.Source, onclick?: (event: MouseEvent | TouchEvent) => unknown, className?: string) =>
-    ({
-        tag: "button",
-        className,
-        children,
-        onclick,
-    });
-    export const menuLinkItem = (children: minamo.dom.Source, href: Type.PageParams, className?: string) => menuItem
-    (
-        children,
-        () => showUrl(href),
-        className,
-    );
     export const stampItem = async (tick: number, interval: number | null) => $div("stamp-item flex-item")
     ([
         $div("item-header")
         ([
-            internalLink
+            Clockworks.tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("NeverStopwatch", tick),
@@ -979,7 +900,7 @@ export module Render
             }),
             $div("item-operator")
             ([
-                await menuButton(await stampItemMenu(tick)),
+                await Clockworks.tektite.menu.button(await stampItemMenu(tick)),
             ]),
         ]),
         $div("item-information")
@@ -998,7 +919,7 @@ export module Render
     ]);
     export const stampItemMenu = async (tick: number) =>
     [
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Edit"),
             async () =>
@@ -1025,7 +946,7 @@ export module Render
                 }
             }
         ),
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Remove"),
             async () => await Operate.NeverStopwatch.removeStamp(tick),
@@ -1039,7 +960,7 @@ export module Render
     ([
         $div("item-header")
         ([
-            internalLink
+            Clockworks.tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("CountdownTimer", item),
@@ -1051,7 +972,7 @@ export module Render
             }),
             $div("item-operator")
             ([
-                await menuButton(await alarmItemMenu(item)),
+                await Clockworks.tektite.menu.button(await alarmItemMenu(item)),
             ]),
         ]),
         $div("item-information")
@@ -1072,7 +993,7 @@ export module Render
     [
         "schedule" === item.type ?
             [
-                menuItem
+                Clockworks.tektite.menu.item
                 (
                     label("Edit"),
                     async () =>
@@ -1098,7 +1019,7 @@ export module Render
                         }
                     }
                 ),
-                menuItem
+                Clockworks.tektite.menu.item
                 (
                     label("Edit start time"),
                     async () =>
@@ -1126,7 +1047,7 @@ export module Render
                 )
             ]:
             [],
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Remove"),
             async () => await Operate.CountdownTimer.removeAlarm(item),
@@ -1137,7 +1058,7 @@ export module Render
     ([
         $div("item-header")
         ([
-            internalLink
+            Clockworks.tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("ElapsedTimer", item),
@@ -1149,7 +1070,7 @@ export module Render
             }),
             $div("item-operator")
             ([
-                await menuButton(await eventItemMenu(item)),
+                await Clockworks.tektite.menu.button(await eventItemMenu(item)),
             ]),
         ]),
         $div("item-information")
@@ -1168,7 +1089,7 @@ export module Render
     ]);
     export const eventItemMenu = async (item: Type.EventEntry) =>
     [
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Edit"),
             async () =>
@@ -1194,7 +1115,7 @@ export module Render
                 }
             }
         ),
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Remove"),
             async () => await Operate.ElapsedTimer.remove(item),
@@ -1205,7 +1126,7 @@ export module Render
     ([
         $div("item-header")
         ([
-            internalLink
+            Clockworks.tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("RainbowClock", item),
@@ -1217,7 +1138,7 @@ export module Render
             }),
             $div("item-operator")
             ([
-                await menuButton(await timezoneItemMenu(item)),
+                await Clockworks.tektite.menu.button(await timezoneItemMenu(item)),
             ]),
         ]),
         $div("item-panel")
@@ -1242,7 +1163,7 @@ export module Render
     ]);
     export const timezoneItemMenu = async (item: Type.TimezoneEntry) =>
     [
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Edit"),
             async () =>
@@ -1257,7 +1178,7 @@ export module Render
                 }
             }
         ),
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Remove"),
             async () => await Operate.RainbowClock.remove(item),
@@ -1265,119 +1186,7 @@ export module Render
         )
     ];
     export type HeaderSegmentSource = Tektite.HeaderSegmentSource<Type.PageParams, Resource.KeyType>;
-    export type HeaderSource = Tektite.HeaderSource<Type.PageParams, Resource.KeyType>;
     export type ScreenSource = Tektite.ScreenSource<Type.PageParams, Resource.KeyType>;
-    const getLastSegmentClass = (ix: number, items: HeaderSegmentSource[]) =>
-        [
-            ix === 0 ? "first-segment": undefined,
-            ix === items.length -1 ? "last-segment": undefined,
-        ]
-        .filter(i => undefined !== i)
-        .join(" ");
-    export const screenSegmentedHeader = async (data:HeaderSource) =>
-    [
-        $div("progress-bar")([]),
-        (
-            await Promise.all
-            (
-                data.items
-                .filter(i => i)
-                .map
-                (
-                    async (item, ix, list) =>
-                        (item.href && screenHeaderLinkSegment(item, getLastSegmentClass(ix, list))) ||
-                        (item.menu && screenHeaderPopupSegment(item, getLastSegmentClass(ix, list))) ||
-                        (true && screenHeaderLabelSegment(item, getLastSegmentClass(ix, list)))
-                )
-            )
-        ).reduce((a, b) => (a as any[]).concat(b), []),
-        data.parent ?
-            {
-                tag: "button",
-                className: "icon-button close-button",
-                children:
-                [
-                    await Resource.loadSvgOrCache("cross-icon"),
-                ],
-                onclick: (event: MouseEvent) =>
-                {
-                    event.stopPropagation();
-                    // if ("" !== getFilterText() || getHeaderElement().classList.contains("header-operator-has-focus"))
-                    // {
-                    //     setFilterText("");
-                    //     blurFilterInputElement();
-                    // }
-                    // else
-                    // {
-                        showUrl(data.parent);
-                    // }
-                },
-            }:
-            [],
-        data.menu ? await menuButton(data.menu): [],
-        data.operator ? $div("header-operator")(data.operator): [],
-    ];
-    export const getCloseButton = () => minamo.dom.getButtonsByClassName(getHeaderElement(), "close-button")[0];
-    export const screenHeaderSegmentCore = async (item: HeaderSegmentSource) =>
-    [
-        $div("icon")(await Resource.loadSvgOrCache(item.icon)),
-        $div("segment-title")(item.title),
-    ];
-    export const screenHeaderLabelSegment = async (item: HeaderSegmentSource, className: string = "") =>
-        $div(`segment label-segment ${className}`)(await screenHeaderSegmentCore(item));
-    export const screenHeaderLinkSegment = async (item: HeaderSegmentSource, className: string = "") => internalLink
-    ({
-        className: `segment ${className}`,
-        href: item.href,
-        children: await screenHeaderSegmentCore(item),
-    });
-    export const screenHeaderPopupSegment = async (item: HeaderSegmentSource, className: string = "") =>
-    {
-        let cover: { dom: HTMLDivElement, close: () => Promise<unknown> };
-        const close = () =>
-        {
-            popup.classList.remove("show");
-            cover = null;
-        };
-        const popup = $make(HTMLDivElement)
-        ({
-            tag: "div",
-            className: "menu-popup segment-popup",
-            children: "function" !== typeof item.menu ? item.menu: [ ],
-            onclick: async (event: MouseEvent) =>
-            {
-                event.stopPropagation();
-                console.log("menu-popup.click!");
-                cover?.close();
-                close();
-            },
-        });
-        const segment = $make(HTMLDivElement)
-        ({
-            tag: "div",
-            className: `segment ${className}`,
-            children: await screenHeaderSegmentCore(item),
-            onclick: async (event: MouseEvent) =>
-            {
-                event.stopPropagation();
-                console.log("menu-button.click!");
-                if ("function" === typeof item.menu)
-                {
-                    minamo.dom.replaceChildren(popup, await item.menu());
-                }
-                popup.classList.add("show");
-                //popup.style.height = `${popup.offsetHeight -2}px`;
-                popup.style.width = `${popup.offsetWidth -2}px`;
-                popup.style.top = `${segment.offsetTop +segment.offsetHeight}px`;
-                popup.style.left = `${Math.max(segment.offsetLeft, 4)}px`;
-                cover = Clockworks.tektite.screen.cover
-                ({
-                    onclick: close,
-                });
-            },
-        });
-        return [ segment, popup, ];
-    };
     export const screenHeaderHomeSegment = async (): Promise<HeaderSegmentSource> =>
     ({
         icon: "application-icon",
@@ -1392,7 +1201,7 @@ export module Render
         (
             Type.applicationIdList.map
             (
-                async (i: Type.ApplicationType) => menuLinkItem
+                async (i: Type.ApplicationType) => Clockworks.tektite.menu.linkItem
                 (
                     [ await Resource.loadSvgOrCache(Type.applicationList[i].icon), Type.applicationList[i].title, ],
                     { application: i },
@@ -1414,7 +1223,7 @@ export module Render
                 .filter((i, ix, list) => ix === list.indexOf(i))
                 .map
                 (
-                    async i => menuLinkItem
+                    async i => Clockworks.tektite.menu.linkItem
                     (
                         [ await Resource.loadSvgOrCache("tick-icon"), $span("monospace")(Domain.dateFullStringFromTick(i)), ],
                         Domain.makePageParams("NeverStopwatch", i),
@@ -1435,7 +1244,7 @@ export module Render
                 .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
                 .map
                 (
-                    async i => menuLinkItem
+                    async i => Clockworks.tektite.menu.linkItem
                     (
                         [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
                         Domain.makePageParams("CountdownTimer", i),
@@ -1456,7 +1265,7 @@ export module Render
                 .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
                 .map
                 (
-                    async i => menuLinkItem
+                    async i => Clockworks.tektite.menu.linkItem
                     (
                         [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
                         Domain.makePageParams("ElapsedTimer", i),
@@ -1477,7 +1286,7 @@ export module Render
                 .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
                 .map
                 (
-                    async i => menuLinkItem
+                    async i => Clockworks.tektite.menu.linkItem
                     (
                         [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
                         Domain.makePageParams("RainbowClock", i),
@@ -1493,7 +1302,7 @@ export module Render
             flashIntervalPreset.map
             (
                 async i =>
-                menuItem
+                Clockworks.tektite.menu.item
                 (
                     [
                         await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
@@ -1515,7 +1324,7 @@ export module Render
     (
         adder ?
         [
-            menuItem
+            Clockworks.tektite.menu.item
             (
                 [
                     await Resource.loadSvgOrCache("flash-icon"),
@@ -1551,12 +1360,12 @@ export module Render
     export const fullscreenMenuItem = async () => Clockworks.tektite.fullscreen.enabled() ?
         (
             null === Clockworks.tektite.fullscreen.element() ?
-                menuItem
+                Clockworks.tektite.menu.item
                 (
                     label("Full screen"),
                     async () => await Clockworks.tektite.fullscreen.request()
                 ):
-                menuItem
+                Clockworks.tektite.menu.item
                 (
                     label("Cancel full screen"),
                     async () => await Clockworks.tektite.fullscreen.exit()
@@ -1564,7 +1373,7 @@ export module Render
         ):
         [];
     export const themeMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Theme setting"),
             async () =>
@@ -1576,7 +1385,7 @@ export module Render
             }
         );
     export const progressBarStyleMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Progress Bar Style setting"),
             async () =>
@@ -1588,7 +1397,7 @@ export module Render
             }
         );
     export const languageMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Language setting"),
             async () =>
@@ -1601,38 +1410,38 @@ export module Render
             }
         );
     export const resetNeverStopwatchMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Remove all stamps"),
             async () => await Operate.NeverStopwatch.removeAllStamps(),
             "delete-button"
         );
     export const resetCountdownTimerMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Remove all alarms"),
             async () => await Operate.CountdownTimer.removeAllAlarms(),
             "delete-button"
         );
     export const resetElapsedTimerMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Remove all alarms"),
             async () => await Operate.ElapsedTimer.removeAllEvents(),
             "delete-button"
         );
     export const resetRainbowClockMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Initialize timezone list"),
             async () => await Operate.RainbowClock.reset(),
             "delete-button"
         );
     export const githubMenuItem = async () =>
-        externalLink
+        Clockworks.tektite.externalLink
         ({
             href: config.repositoryUrl,
-            children: menuItem(labelSpan("GitHub")),
+            children: Clockworks.tektite.menu.item(labelSpan("GitHub")),
         });
     export const welcomeScreenMenu = async () =>
     [
@@ -1713,7 +1522,7 @@ export module Render
                             Type.applicationIdList.map
                             (
                                 (i: Type.ApplicationType) =>
-                                internalLink
+                                Clockworks.tektite.internalLink
                                 ({
                                     href: { application: i },
                                     children:
@@ -1851,7 +1660,7 @@ export module Render
                 null !== item ?
                     $div("button-list")
                     ([
-                        internalLink
+                        Clockworks.tektite.internalLink
                         ({
                             href: { application: "NeverStopwatch", },
                             children:
@@ -1962,7 +1771,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            Clockworks.tektite.screenFlash();
+                            Clockworks.tektite.screen.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setBackgroundColor(currentColor);
@@ -2139,7 +1948,7 @@ export module Render
                 null !== item ?
                     $div("button-list")
                     ([
-                        internalLink
+                        Clockworks.tektite.internalLink
                         ({
                             href: { application: "CountdownTimer", },
                             children:
@@ -2274,7 +2083,7 @@ export module Render
                             const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
                             if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -current.start))
                             {
-                                Clockworks.tektite.screenFlash();
+                                Clockworks.tektite.screen.flash();
                                 lashFlashAt = tick;
                             }
                             previousPrimaryStep = primaryStep;
@@ -2282,7 +2091,7 @@ export module Render
                         const cycle = "timer" === current.type ? 3000: 10000;
                         if (rest <= 0 && lashFlashAt +cycle <= tick)
                         {
-                            Clockworks.tektite.screenFlash();
+                            Clockworks.tektite.screen.flash();
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
@@ -2425,7 +2234,7 @@ export module Render
                 null !== item ?
                     $div("button-list")
                     ([
-                        internalLink
+                        Clockworks.tektite.internalLink
                         ({
                             href: { application: "CountdownTimer", },
                             children:
@@ -2549,7 +2358,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            Clockworks.tektite.screenFlash();
+                            Clockworks.tektite.screen.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setBackgroundColor(currentColor);
@@ -2619,7 +2428,7 @@ export module Render
         await updateWindow("timer");
     };
     export const colorMenuItem = async () =>
-        menuItem
+        Clockworks.tektite.menu.item
         (
             label("Color setting"),
             async () => await colorSettingsPopup(),
@@ -2701,7 +2510,7 @@ export module Render
                 null !== item ?
                     $div("button-list")
                     ([
-                        internalLink
+                        Clockworks.tektite.internalLink
                         ({
                             href: { application: "RainbowClock", },
                             children:
@@ -2816,7 +2625,7 @@ export module Render
                             {
                                 if (0 === (tick % flashInterval))
                                 {
-                                    Clockworks.tektite.screenFlash();
+                                    Clockworks.tektite.screen.flash();
                                 }
                             }
                         }
@@ -2938,7 +2747,7 @@ export module Render
         minamo.dom.replaceChildren
         (
             getHeaderElement(),
-            await screenSegmentedHeader(screen.header)
+            await Clockworks.tektite.header.segmented(screen.header)
         );
         minamo.dom.replaceChildren
         (
@@ -3188,7 +2997,7 @@ export module Render
                         .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "default-button")?.[0]?.click());
                     break;
                 case "Escape":
-                    (Clockworks.tektite.screen.getScreenCover() ?? getCloseButton())?.click();
+                    (Clockworks.tektite.screen.getScreenCover() ?? Clockworks.tektite.header.getCloseButton())?.click();
                     break;
             }
             const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
