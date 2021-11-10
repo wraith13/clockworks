@@ -3,9 +3,9 @@ import { Tektite } from ".";
 export module Screen
 {
     const $make = minamo.dom.make;
-    export class Screen<PageParams, IconKeyType>
+    export class Screen<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType>)
+        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
         public cover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
@@ -104,6 +104,6 @@ export module Screen
             setTimeout(() => document.body.classList.remove("flash"), 1500);
         };
     }
-    export const make = <PageParams, IconKeyType>(tektite: Tektite.Tektite<PageParams, IconKeyType>) =>
+    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Screen(tektite);
 }

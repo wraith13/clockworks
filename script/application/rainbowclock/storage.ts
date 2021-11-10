@@ -1,6 +1,6 @@
+import { Clockworks } from "../..";
 import { minamo } from "../../minamo.js/index.js";
 import { Type } from "../../type";
-import { Locale } from "../../locale";
 import config from "../../../resource/config.json";
 export module Storage
 {
@@ -24,7 +24,7 @@ export module Storage
         export const makeKey = () => `${config.localDbPrefix}:${applicationName}:timezones`;
         export const get = (): Type.TimezoneEntry[] =>
             minamo.localStorage.getOrNull<Type.TimezoneEntry[]>(makeKey())
-            ?? config.initialTimezoneList.map(i => ({ title: Locale.map(i.title as Locale.LocaleKeyType), offset: i.offset }));
+            ?? config.initialTimezoneList.map(i => ({ title: Clockworks.tektite.locale.map(i.title as Clockworks.LocaleKeyType), offset: i.offset }));
         export const set = (list: Type.TimezoneEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make([i => i.offset])));
         export const removeKey = () => minamo.localStorage.remove(makeKey());
         export const add = (entry: Type.TimezoneEntry | Type.TimezoneEntry[]) =>

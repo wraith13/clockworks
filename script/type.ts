@@ -1,6 +1,6 @@
-import { Locale } from "./locale";
 import { Color } from "./color";
 import resource from "../resource/images.json";
+import { Clockworks } from ".";
 export module Type
 {
     export const applicationList =
@@ -58,7 +58,7 @@ export module Type
     {
         theme?: ThemeType;
         progressBarStyle?: ProgressBarStyleType;
-        locale?: Locale.LocaleType;
+        locale?: Clockworks.LocaleType;
     }
     export interface AlarmTimerEntry
     {

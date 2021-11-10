@@ -1,5 +1,4 @@
 import { Clockworks } from "../..";
-import { Locale } from "../../locale";
 import { Base } from "../../base";
 import { Storage } from "../../storage";
 import { Domain } from "../../domain";
@@ -14,7 +13,7 @@ export module Operate
         Clockworks.tektite.screen.flash();
         const toast = Clockworks.tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Locale.map("Stamped!")}`),
+            content: Render.$span("")(`${Clockworks.tektite.locale.map("Stamped!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -34,7 +33,7 @@ export module Operate
         Render.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Locale.map("Saved!")}`),
+            content: Render.$span("")(`${Clockworks.tektite.locale.map("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -55,7 +54,7 @@ export module Operate
         Render.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Locale.map("Updated.")}`),
+            content: Render.$span("")(`${Clockworks.tektite.locale.map("Updated.")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -84,7 +83,7 @@ export module Operate
         }
         const toast = Clockworks.tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Locale.map("Removed.")}`),
+            content: Render.$span("")(`${Clockworks.tektite.locale.map("Removed.")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -106,11 +105,11 @@ export module Operate
     };
     export const removeAllStamps = async () =>
     {
-        if (Render.systemConfirm(Locale.map("This action cannot be undone. Do you want to continue?")))
+        if (Render.systemConfirm(Clockworks.tektite.locale.map("This action cannot be undone. Do you want to continue?")))
         {
             Storage.NeverStopwatch.Stamps.removeKey();
             Render.updateWindow("operate");
-            Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Locale.map("Removed all stamps!")}`), });
+            Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Clockworks.tektite.locale.map("Removed all stamps!")}`), });
         }
     };
 }

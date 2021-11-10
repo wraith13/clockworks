@@ -35,9 +35,9 @@ export module Header
     const $div = $tag("div");
     // const $span = $tag("span");
     // const labelSpan = $span("label");
-    export class Header<PageParams, IconKeyType>
+    export class Header<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType>)
+        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
         getElement = () => document.getElementById("screen-header") as HTMLDivElement;
@@ -153,6 +153,6 @@ export module Header
             return [ segment, popup, ];
         };
     }
-    export const make = <PageParams, IconKeyType>(tektite: Tektite.Tektite<PageParams, IconKeyType>) =>
+    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Header(tektite);
 }

@@ -1,7 +1,6 @@
 import { minamo } from "../minamo.js";
 import { Clockworks } from "..";
 import { Tektite } from "../../tektite/script";
-import { Locale } from "../locale";
 import { Type } from "../type";
 import { Base } from "../base";
 import { Color } from "../color";
@@ -96,10 +95,10 @@ export module Render
     export const $div = $tag("div");
     export const $span = $tag("span");
     export const labelSpan = $span("label");
-    export const label = (label: Locale.LocaleKeyType) => labelSpan
+    export const label = (label: Clockworks.LocaleKeyType) => labelSpan
     ([
-        $span("locale-parallel")(Locale.parallel(label)),
-        $span("locale-map")(Locale.map(label)),
+        $span("locale-parallel")(Clockworks.tektite.locale.parallel(label)),
+        $span("locale-map")(Clockworks.tektite.locale.map(label)),
     ]);
     // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
     // {
@@ -196,7 +195,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "cancel-button",
-                                children: Locale.map("Cancel"),
+                                children: Clockworks.tektite.locale.map("Cancel"),
                                 onclick: () =>
                                 {
                                     result = null;
@@ -206,7 +205,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "default-button",
-                                children: Locale.map("OK"),
+                                children: Clockworks.tektite.locale.map("OK"),
                                 onclick: () =>
                                 {
                                     result = `${inputDate.value}T${inputTime.value}`;
@@ -244,7 +243,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        $span("")(label(`theme.${key}` as Locale.LocaleKeyType)),
+                                        $span("")(label(`theme.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -310,7 +309,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        $span("")(label(`progressBarStyle.${key}` as Locale.LocaleKeyType)),
+                                        $span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -388,16 +387,16 @@ export module Render
                         },
                         await Promise.all
                         (
-                            Locale.locales.map
+                            Clockworks.tektite.locale.locales.map
                             (
-                                async key =>
+                                async (key: Clockworks.LocaleType) =>
                                 ({
                                     tag: "button",
                                     className: `check-button ${key === (settings.locale ?? "@auto") ? "checked": ""}`,
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        $span("")(labelSpan(Locale.getLocaleName(key))),
+                                        $span("")(labelSpan(Clockworks.tektite.locale.getLocaleName(key))),
                                     ],
                                     onclick: async () =>
                                     {
@@ -527,7 +526,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "cancel-button",
-                                children: Locale.map("Cancel"),
+                                children: Clockworks.tektite.locale.map("Cancel"),
                                 onclick: () =>
                                 {
                                     result = null;
@@ -537,7 +536,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "default-button",
-                                children: Locale.map("OK"),
+                                children: Clockworks.tektite.locale.map("OK"),
                                 onclick: () =>
                                 {
                                     result = Domain.parseTime(inputTime.value) ?? tick;
@@ -607,7 +606,7 @@ export module Render
                                 children: label("input a time"),
                                 onclick: async () =>
                                 {
-                                    const tick = await timePrompt(Locale.map("input a time"), 0);
+                                    const tick = await timePrompt(Clockworks.tektite.locale.map("input a time"), 0);
                                     if (null !== tick)
                                     {
                                         const minutes = tick /(60 *1000);
@@ -674,7 +673,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "cancel-button",
-                                children: Locale.map("Cancel"),
+                                children: Clockworks.tektite.locale.map("Cancel"),
                                 onclick: () =>
                                 {
                                     result = null;
@@ -684,7 +683,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "default-button",
-                                children: Locale.map("OK"),
+                                children: Clockworks.tektite.locale.map("OK"),
                                 onclick: () =>
                                 {
                                     result =
@@ -735,7 +734,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "cancel-button",
-                                children: Locale.map("Cancel"),
+                                children: Clockworks.tektite.locale.map("Cancel"),
                                 onclick: () =>
                                 {
                                     result = null;
@@ -745,7 +744,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "default-button",
-                                children: Locale.map("OK"),
+                                children: Clockworks.tektite.locale.map("OK"),
                                 onclick: () =>
                                 {
                                     result = Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick;
@@ -803,7 +802,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "cancel-button",
-                                children: Locale.map("Cancel"),
+                                children: Clockworks.tektite.locale.map("Cancel"),
                                 onclick: () =>
                                 {
                                     result = null;
@@ -813,7 +812,7 @@ export module Render
                             {
                                 tag: "button",
                                 className: "default-button",
-                                children: Locale.map("OK"),
+                                children: Clockworks.tektite.locale.map("OK"),
                                 onclick: () =>
                                 {
                                     result =
@@ -924,7 +923,7 @@ export module Render
             label("Edit"),
             async () =>
             {
-                const result = Domain.parseDate(await dateTimePrompt(Locale.map("Edit"), tick));
+                const result = Domain.parseDate(await dateTimePrompt(Clockworks.tektite.locale.map("Edit"), tick));
                 if (null !== result)
                 {
                     const newTick = Domain.getTicks(result);
@@ -954,7 +953,7 @@ export module Render
         )
     ];
     export const alarmTitle = (item: Type.AlarmEntry) => "timer" === item.type ?
-        `${Domain.makeTimerLabel(item.end -item.start)} ${Locale.map("Timer")}`:
+        `${Domain.makeTimerLabel(item.end -item.start)} ${Clockworks.tektite.locale.map("Timer")}`:
         item.title;
     export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item flex-item")
     ([
@@ -998,7 +997,7 @@ export module Render
                     label("Edit"),
                     async () =>
                     {
-                        const result = await eventPrompt(Locale.map("Edit"), item.title, item.end);
+                        const result = await eventPrompt(Clockworks.tektite.locale.map("Edit"), item.title, item.end);
                         if (null !== result)
                         {
                             if (item.title !== result.title || item.end !== result.tick)
@@ -1024,7 +1023,7 @@ export module Render
                     label("Edit start time"),
                     async () =>
                     {
-                        const result = await dateIimePrompt(Locale.map("Edit start time"), item.start);
+                        const result = await dateIimePrompt(Clockworks.tektite.locale.map("Edit start time"), item.start);
                         if (null !== result)
                         {
                             if (item.start !== result)
@@ -1094,7 +1093,7 @@ export module Render
             label("Edit"),
             async () =>
             {
-                const result = await eventPrompt(Locale.map("Edit"), item.title, item.tick);
+                const result = await eventPrompt(Clockworks.tektite.locale.map("Edit"), item.title, item.tick);
                 if (null !== result)
                 {
                     if (item.title !== result.title || item.tick !== result.tick)
@@ -1168,7 +1167,7 @@ export module Render
             label("Edit"),
             async () =>
             {
-                const result = await timezonePrompt(Locale.map("Edit"), item.title, item.offset);
+                const result = await timezonePrompt(Clockworks.tektite.locale.map("Edit"), item.title, item.offset);
                 if (null !== result)
                 {
                     if (item.title !== result.title || item.offset !== result.offset)
@@ -1295,7 +1294,7 @@ export module Render
                 )
         )
     });
-    export const screenHeaderFlashSegmentMenu = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: Locale.LocaleKeyType): Promise<minamo.dom.Source> =>
+    export const screenHeaderFlashSegmentMenu = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType, zeroLabel: Clockworks.LocaleKeyType): Promise<minamo.dom.Source> =>
     (
         await Promise.all
         (
@@ -1306,7 +1305,7 @@ export module Render
                 (
                     [
                         await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
-                        labelSpan(0 === i ? Locale.map(zeroLabel): `${Locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                        labelSpan(0 === i ? Clockworks.tektite.locale.map(zeroLabel): `${Clockworks.tektite.locale.map("Interval")}: ${Domain.makeTimerLabel(i)}`),
                     ],
                     async () =>
                     {
@@ -1334,7 +1333,7 @@ export module Render
                 {
                     Clockworks.tektite.screen.clearLastMouseDownTarget();
                     Clockworks.tektite.screen.getScreenCoverList().forEach(i => i.click());
-                    const tick = await timePrompt(Locale.map("input a time"), 0);
+                    const tick = await timePrompt(Clockworks.tektite.locale.map("input a time"), 0);
                     if (null !== tick)
                     {
                         adder(tick);
@@ -1346,10 +1345,10 @@ export module Render
         ]:
         []
     );
-    export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: Locale.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
+    export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: Clockworks.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
     ({
         icon: 0 === flashInterval ? zeroIcon: "flash-icon",
-        title: 0 === flashInterval ? Locale.map(zeroLabel): `${Locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
+        title: 0 === flashInterval ? Clockworks.tektite.locale.map(zeroLabel): `${Clockworks.tektite.locale.map("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
         menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
     });
     export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
@@ -1404,7 +1403,7 @@ export module Render
             {
                 if (await localeSettingsPopup())
                 {
-                    Locale.setLocale(Storage.Settings.get().locale);
+                    Clockworks.tektite.locale.setLocale(Storage.Settings.get().locale);
                     await reload();
                 }
             }
@@ -1711,7 +1710,7 @@ export module Render
                     ([
                         $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                         $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                        $tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Locale.map("Stamp"), }, ]),
+                        $tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Clockworks.tektite.locale.map("Stamp"), }, ]),
                     ])
                 ),
             ]),
@@ -1993,7 +1992,7 @@ export module Render
                         children: label("New Schedule"),
                         onclick: async () =>
                         {
-                            const result = await eventPrompt(Locale.map("New Schedule"), Locale.map("New Schedule"), Domain.getAppropriateTicks());
+                            const result = await eventPrompt(Clockworks.tektite.locale.map("New Schedule"), Clockworks.tektite.locale.map("New Schedule"), Domain.getAppropriateTicks());
                             if (result)
                             {
                                 if (Domain.getTicks() < result.tick)
@@ -2022,7 +2021,7 @@ export module Render
                     ([
                         $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                         $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                        $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${Domain.makeTimerLabel(Domain.parseTimer(i))} ${Locale.map("Timer")}`, }))]),
+                        $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${Domain.makeTimerLabel(Domain.parseTimer(i))} ${Clockworks.tektite.locale.map("Timer")}`, }))]),
                     ])
                 ),
             ]),
@@ -2273,7 +2272,7 @@ export module Render
                         children: label("New Event"),
                         onclick: async () =>
                         {
-                            const result = await eventPrompt(Locale.map("New Event"), Locale.map("New Event"), Domain.getAppropriateTicks());
+                            const result = await eventPrompt(Clockworks.tektite.locale.map("New Event"), Clockworks.tektite.locale.map("New Event"), Domain.getAppropriateTicks());
                             if (result)
                             {
                                 if (Domain.getTicks() < result.tick)
@@ -2549,7 +2548,7 @@ export module Render
                         children: label("New Time zone"),
                         onclick: async () =>
                         {
-                            const result = await timezonePrompt(Locale.map("New Time zone"), Locale.map("New Time zone"), new Date().getTimezoneOffset());
+                            const result = await timezonePrompt(Clockworks.tektite.locale.map("New Time zone"), Clockworks.tektite.locale.map("New Time zone"), new Date().getTimezoneOffset());
                             if (result)
                             {
                                 await Operate.RainbowClock.add({ title: result.title, offset: result.offset, });

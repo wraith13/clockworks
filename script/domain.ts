@@ -1,6 +1,6 @@
-import { Locale } from "./locale";
 import { Type } from "./type";
 import { Base } from "./base";
+import { Clockworks } from ".";
 import config from "../resource/config.json";
 export module Domain
 {
@@ -46,33 +46,33 @@ export module Domain
         {
             if ("" === result)
             {
-                result = `${days} ` +Locale.map("days");
+                result = `${days} ` +Clockworks.tektite.locale.map("days");
             }
             else
             {
-                result += ` ${days} ` +Locale.map("days");
+                result += ` ${days} ` +Clockworks.tektite.locale.map("days");
             }
         }
         if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours)
         {
             if ("" === result)
             {
-                result = `${hours} ` +Locale.map("hours");
+                result = `${hours} ` +Clockworks.tektite.locale.map("hours");
             }
             else
             {
-                result += ` ` +`0${hours}`.substr(-2) +` ` +Locale.map("hours");
+                result += ` ` +`0${hours}`.substr(-2) +` ` +Clockworks.tektite.locale.map("hours");
             }
         }
         if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes)
         {
             if ("" === result)
             {
-                result = `${minutes} ` +Locale.map("minutes");
+                result = `${minutes} ` +Clockworks.tektite.locale.map("minutes");
             }
             else
             {
-                result += ` ` +`0${minutes}`.substr(-2) +` ` +Locale.map("minutes");
+                result += ` ` +`0${minutes}`.substr(-2) +` ` +Clockworks.tektite.locale.map("minutes");
             }
         }
         if (0 < seconds || 0 < milliseconds)
@@ -85,16 +85,16 @@ export module Domain
             }
             if ("" === result)
             {
-                result = `${seconds}${trail} ` +Locale.map("seconds");
+                result = `${seconds}${trail} ` +Clockworks.tektite.locale.map("seconds");
             }
             else
             {
-                result += ` ` +`0${seconds}`.substr(-2) +trail +` ` +Locale.map("seconds");
+                result += ` ` +`0${seconds}`.substr(-2) +trail +` ` +Clockworks.tektite.locale.map("seconds");
             }
         }
         if ("" === result)
         {
-            result = `${minutes} ${Locale.map("m(minutes)")}`;
+            result = `${minutes} ${Clockworks.tektite.locale.map("m(minutes)")}`;
         }
         // console.log({ timer, result, });
         return result;
@@ -111,7 +111,7 @@ export module Domain
         return FloorHour.getTime() +(60 *60 *1000);
     };
     export const weekday = (tick: number) =>
-        new Intl.DateTimeFormat(Locale.get(), { weekday: 'long'}).format(tick);
+        new Intl.DateTimeFormat(Clockworks.tektite.locale.get(), { weekday: 'long'}).format(tick);
     export const dateCoreStringFromTick = (tick: null | number): string =>
     {
         if (null === tick)
@@ -255,7 +255,7 @@ export module Domain
             {
                 return timeLongCoreStringFromTick(tick);
             }
-            return `${days.toLocaleString()} ${Locale.map("days")} ${timeLongCoreStringFromTick(tick)}`;
+            return `${days.toLocaleString()} ${Clockworks.tektite.locale.map("days")} ${timeLongCoreStringFromTick(tick)}`;
         }
     };
     export const timeLongStringFromTick = (tick: null | number): string =>
@@ -273,7 +273,7 @@ export module Domain
         {
             const days = Math.floor(tick / (24 *60 *60 *1000));
             return 0 < days ?
-                `${days.toLocaleString()} ${Locale.map("days")} ${10 < days ? timeShortCoreStringFromTick(tick): timeLongCoreStringFromTick(tick)}`:
+                `${days.toLocaleString()} ${Clockworks.tektite.locale.map("days")} ${10 < days ? timeShortCoreStringFromTick(tick): timeLongCoreStringFromTick(tick)}`:
                 timeFullCoreStringFromTick(tick);
         }
     };

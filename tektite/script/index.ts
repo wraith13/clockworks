@@ -1,4 +1,5 @@
 import { minamo } from "../../script/minamo.js";
+import { Locale } from "./locale";
 import { Fullscreen as FullscreenModule } from "./fullscreen";
 import { Screen } from "./screen";
 import { Toast as ToastModule } from "./toast";
@@ -6,6 +7,10 @@ import { Header } from "./header";
 import { Menu } from "./menu";
 export module Tektite
 {
+    export interface LocaleEntry
+    {
+        [key : string] : string;
+    }
     export type HeaderSegmentSource<PageParams, IconKeyType> = Header.SegmentSource<PageParams, IconKeyType>;
     export type HeaderSource<PageParams, IconKeyType> = Header.Source<PageParams, IconKeyType>;
     export interface ScreenSource<PageParams, IconKeyType>
@@ -14,21 +19,23 @@ export module Tektite
         header: HeaderSource<PageParams, IconKeyType>;
         body: minamo.dom.Source;
     }
-    export interface TektiteParams<PageParams, IconKeyType>
+    export interface TektiteParams<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         makeUrl: (args: PageParams) => string;
         showUrl: (data: PageParams) => Promise<unknown>;
         loadSvgOrCache: (key: IconKeyType | "cross-icon" | "ellipsis-icon") => Promise<SVGElement>;
+        localeMaster: LocaleMapType;
     }
-    export class Tektite<PageParams, IconKeyType>
+    export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
-        constructor(public params: TektiteParams<PageParams, IconKeyType>)
+        constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
         public fullscreen = FullscreenModule;
         public screen = Screen.make(this);
         public header = Header.make(this);
         public menu = Menu.make(this);
+        public locale = Locale.make(this);
         public toast = ToastModule;
         internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
         ({
@@ -58,6 +65,6 @@ export module Tektite
             }
         };
     }
-    export const make = <PageParams, IconKeyType>(params: TektiteParams<PageParams, IconKeyType>) =>
+    export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);
 }

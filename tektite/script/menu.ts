@@ -3,9 +3,9 @@ import { Tektite } from "./index.js";
 export module Menu
 {
     const $make = minamo.dom.make;
-    export class Menu<PageParams, IconKeyType>
+    export class Menu<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType>)
+        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
         public button = async (menu: minamo.dom.Source | (() => Promise<minamo.dom.Source>)) =>
@@ -68,6 +68,7 @@ export module Menu
             className,
         );
     }
-    export const make = <PageParams, IconKeyType>(tektite: Tektite.Tektite<PageParams, IconKeyType>) =>
+    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+        (tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Menu(tektite);
 }

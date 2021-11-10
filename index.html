@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Nov 09 2021 22:31:55 GMT+0900 (GMT+09:00) -->
+<!-- build at: Thu Nov 11 2021 01:50:48 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6514,6 +6514,42 @@ define("script/minamo.js/index", ["require", "exports"], function (require, expo
         })(dom = minamo.dom || (minamo.dom = {}));
     })(minamo = exports.minamo || (exports.minamo = {}));
 });
+define("tektite/script/locale", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Locale = void 0;
+    var Locale;
+    (function (Locale_1) {
+        var Locale = /** @class */ (function () {
+            function Locale(master) {
+                var _this = this;
+                this.master = master;
+                this.locales = Object.keys(this.master);
+                this.masterKey = 0 <= this.locales.indexOf(navigator.language) ?
+                    navigator.language :
+                    this.locales[0];
+                this.getLocaleName = function (locale) { var _a; return (_a = _this.master[locale].$name) !== null && _a !== void 0 ? _a : locale; };
+                this.setLocale = function (locale) {
+                    var key = locale !== null && locale !== void 0 ? locale : navigator.language;
+                    if (0 <= _this.locales.indexOf(key)) {
+                        _this.masterKey = key;
+                    }
+                };
+                this.get = function () { return _this.masterKey; };
+                this.getPrimary = function (key) { return _this.master[_this.masterKey][key]; };
+                this.getSecondary = function (key) { return _this.master[_this.locales.filter(function (locale) { return _this.masterKey !== locale; })[0]][key]; };
+                this.string = function (key) { var _a; return (_a = _this.getPrimary(key)) !== null && _a !== void 0 ? _a : key; };
+                this.map = function (key) { return _this.string(key); };
+                this.parallel = function (key) { return _this.getPrimary(key) + " / " + _this.getSecondary(key); };
+            }
+            return Locale;
+        }());
+        Locale_1.Locale = Locale;
+        Locale_1.make = function (tektite) {
+            return new Locale(tektite.params.localeMaster);
+        };
+    })(Locale = exports.Locale || (exports.Locale = {}));
+});
 define("tektite/script/fullscreen", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7094,7 +7130,7 @@ define("tektite/script/menu", ["require", "exports", "script/minamo.js/index"], 
         };
     })(Menu = exports.Menu || (exports.Menu = {}));
 });
-define("tektite/script/index", ["require", "exports", "tektite/script/fullscreen", "tektite/script/screen", "tektite/script/toast", "tektite/script/header", "tektite/script/menu"], function (require, exports, fullscreen_1, screen_1, toast_1, header_1, menu_1) {
+define("tektite/script/index", ["require", "exports", "tektite/script/locale", "tektite/script/fullscreen", "tektite/script/screen", "tektite/script/toast", "tektite/script/header", "tektite/script/menu"], function (require, exports, locale_1, fullscreen_1, screen_1, toast_1, header_1, menu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Tektite = void 0;
@@ -7108,6 +7144,7 @@ define("tektite/script/index", ["require", "exports", "tektite/script/fullscreen
                 this.screen = screen_1.Screen.make(this);
                 this.header = header_1.Header.make(this);
                 this.menu = menu_1.Menu.make(this);
+                this.locale = locale_1.Locale.make(this);
                 this.toast = toast_1.Toast;
                 this.internalLink = function (data) {
                     return ({
@@ -7143,183 +7180,6 @@ define("tektite/script/index", ["require", "exports", "tektite/script/fullscreen
             return new Tektite(params);
         };
     })(Tektite = exports.Tektite || (exports.Tektite = {}));
-});
-define("resource/lang.en", [], {
-    "$name": "English",
-    "Full screen": "Full screen",
-    "Cancel full screen": "Cancel full screen",
-    "Elapsed time": "elapsed time",
-    "Stamp": "Stamp",
-    "Done": "Done",
-    "New Timer": "New Timer",
-    "New Schedule": "New Schedule",
-    "New Time zone": "New Time zone",
-    "New Event": "New Event",
-    "days": "days",
-    "hours": "hours",
-    "minutes": "minutes",
-    "m(minutes)": "m",
-    "seconds": "seconds",
-    "input a time": "input a time",
-    "Timer": "timer",
-    "No Flash": "No Flash",
-    "00:00:00 only": "00:00:00 only",
-    "Timestamp": "Timestamp",
-    "Interval": "Interval",
-    "Due timestamp": "Due timestamp",
-    "Rest": "Rest",
-    "Time zone offset": "Time zone",
-    "Remove": "Remove",
-    "Remove all stamps": "Remove all stamps",
-    "Removed all stamps!": "Removed all stamps!",
-    "Remove all alarms": "Remove all alarms",
-    "Removed all alarms!": "Removed all alarms!",
-    "Initialize timezone list": "Initialize timezone list",
-    "Initialized timezone list!": "Initialized timezone list!",
-    "OK": "OK",
-    "Cancel": "Cancel",
-    "Edit": "Edit",
-    "Edit start time": "Edit start time",
-    "Theme setting": "Theme setting",
-    "theme.auto": "Auto ( Follows System )",
-    "theme.light": "Light",
-    "theme.dark": "Dark",
-    "Progress Bar Style setting": "Progress bar setting",
-    "progressBarStyle.header": "Header",
-    "progressBarStyle.auto": "Auto",
-    "progressBarStyle.horizontal": "Horizontal",
-    "progressBarStyle.vertical": "Vertical",
-    "language.auto": "Auto",
-    "Language setting": "Language setting",
-    "Color setting": "Color setting",
-    "gradation": "Gradation",
-    "solid": "Solid",
-    "roll-back": "Cancel",
-    "roll-backed": "Canceled.",
-    "This action cannot be undone. Do you want to continue?": "This action cannot be undone. Do you want to continue?",
-    "Close": "Close",
-    "Stamped!": "Stamped!",
-    "Updated.": "Updated.",
-    "Removed.": "Removed.",
-    "Reseted.": "Reseted.",
-    "Done!": "Done!",
-    "Saved!": "Saved!",
-    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
-    "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
-    "You can use a link like this too:": "You can use a link like this too:",
-    "You can use links like these too:": "You can use links like these too:",
-    "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified.",
-    "Not support daylight savings time.": "Not support daylight savings time.",
-    "timezone.Tokyo": "Tokyo",
-    "timezone.Delhi": "Delhi",
-    "timezone.Istanbul": "Istanbul",
-    "timezone.London": "London",
-    "timezone.New York": "New York",
-    "timezone.Seattle": "Seattle"
-});
-define("resource/lang.ja", [], {
-    "$name": "日本語",
-    "Full screen": "フルスクリーン表示",
-    "Cancel full screen": "フルスクリーン解除",
-    "Elapsed time": "経過時間",
-    "Stamp": "スタンプ",
-    "Done": "完了",
-    "New Timer": "新しいタイマー",
-    "New Schedule": "新しい予定",
-    "New Time zone": "新しいタイムゾーン",
-    "New Event": "新しいイベント",
-    "days": "日",
-    "hours": "時間",
-    "minutes": "分",
-    "m(minutes)": "分",
-    "seconds": "秒",
-    "input a time": "時間を入力する",
-    "Timer": "タイマー",
-    "No Flash": "フラッシュなし",
-    "00:00:00 only": "00:00:00 のみ",
-    "Timestamp": "日時",
-    "Interval": "間隔",
-    "Due timestamp": "期限日時",
-    "Rest": "残り時間",
-    "Time zone offset": "タイムゾーン",
-    "Remove": "削除",
-    "Remove all stamps": "全てのスタンプを削除",
-    "Removed all stamps!": "全てのスタンプを削除しました！",
-    "Remove all alarms": "全てのアラームを削除",
-    "Removed all alarms!": "全てのアラームを削除しました！",
-    "Initialize timezone list": "タイムゾーンリストを初期化",
-    "Initialized timezone list!": "タイムゾーンリストを初期化しました！",
-    "OK": "OK",
-    "Cancel": "キャンセル",
-    "Edit": "編集",
-    "Edit start time": "起点編集",
-    "Theme setting": "テーマ設定",
-    "theme.auto": "自動 ( システムに従う )",
-    "theme.light": "ライト",
-    "theme.dark": "ダーク",
-    "Progress Bar Style setting": "プログレスバー設定",
-    "progressBarStyle.header": "ヘッダー",
-    "progressBarStyle.auto": "自動",
-    "progressBarStyle.horizontal": "水平",
-    "progressBarStyle.vertical": "垂直",
-    "language.auto": "自動",
-    "Language setting": "言語設定",
-    "Color setting": "色設定",
-    "gradation": "グラデーション",
-    "solid": "ソリッド",
-    "roll-back": "取り消す",
-    "roll-backed": "取り消しました。",
-    "This action cannot be undone. Do you want to continue?": "この操作は取り消せません。続行しますか？",
-    "Close": "閉じる",
-    "Stamped!": "スタンプ！",
-    "Updated.": "更新しました。",
-    "Removed.": "削除しました。",
-    "Reseted.": "リセットしました。",
-    "Done!": "完了！",
-    "Saved!": "保存しました！",
-    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
-    "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
-    "You can use a link like this too:": "次のようなリンクを使う事もできます:",
-    "You can use links like these too:": "次のようなリンクを使う事もできます:",
-    "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。",
-    "Not support daylight savings time.": "夏時間はサポートしていません。",
-    "timezone.Tokyo": "東京",
-    "timezone.Delhi": "デリー",
-    "timezone.Istanbul": "イスタンブール",
-    "timezone.London": "ロンドン",
-    "timezone.New York": "ニューヨーク",
-    "timezone.Seattle": "シアトル"
-});
-define("script/locale", ["require", "exports", "resource/lang.en", "resource/lang.ja"], function (require, exports, lang_en_json_1, lang_ja_json_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Locale = void 0;
-    lang_en_json_1 = __importDefault(lang_en_json_1);
-    lang_ja_json_1 = __importDefault(lang_ja_json_1);
-    var Locale;
-    (function (Locale) {
-        Locale.master = {
-            en: lang_en_json_1.default,
-            ja: lang_ja_json_1.default,
-        };
-        Locale.locales = Object.keys(Locale.master);
-        var masterKey = 0 <= Locale.locales.indexOf(navigator.language) ?
-            navigator.language :
-            Locale.locales[0];
-        Locale.getLocaleName = function (locale) { return Locale.master[locale].$name; };
-        Locale.setLocale = function (locale) {
-            var key = locale !== null && locale !== void 0 ? locale : navigator.language;
-            if (0 <= Locale.locales.indexOf(key)) {
-                masterKey = key;
-            }
-        };
-        Locale.get = function () { return masterKey; };
-        Locale.getPrimary = function (key) { return Locale.master[masterKey][key]; };
-        Locale.getSecondary = function (key) { return Locale.master[Locale.locales.filter(function (locale) { return masterKey !== locale; })[0]][key]; };
-        Locale.string = function (key) { return Locale.getPrimary(key) || key; };
-        Locale.map = function (key) { return Locale.string(key); };
-        Locale.parallel = function (key) { return Locale.getPrimary(key) + " / " + Locale.getSecondary(key); };
-    })(Locale = exports.Locale || (exports.Locale = {}));
 });
 define("resource/config", [], {
     "applicationTitle": "Clockworks",
@@ -7530,7 +7390,7 @@ define("script/base", ["require", "exports", "script/minamo.js/index"], function
         };
     })(Base = exports.Base || (exports.Base = {}));
 });
-define("script/application/rainbowclock/storage", ["require", "exports", "script/minamo.js/index", "script/locale", "resource/config"], function (require, exports, index_js_1, locale_1, config_json_2) {
+define("script/application/rainbowclock/storage", ["require", "exports", "script/index", "script/minamo.js/index", "resource/config"], function (require, exports, __1, index_js_1, config_json_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Storage = void 0;
@@ -7557,7 +7417,7 @@ define("script/application/rainbowclock/storage", ["require", "exports", "script
             Timezone.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":timezones"; };
             Timezone.get = function () {
                 var _a;
-                return (_a = index_js_1.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_2.default.initialTimezoneList.map(function (i) { return ({ title: locale_1.Locale.map(i.title), offset: i.offset }); });
+                return (_a = index_js_1.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_2.default.initialTimezoneList.map(function (i) { return ({ title: __1.Clockworks.tektite.locale.map(i.title), offset: i.offset }); });
             };
             Timezone.set = function (list) { return index_js_1.minamo.localStorage.set(Timezone.makeKey(), list.sort(index_js_1.minamo.core.comparer.make([function (i) { return i.offset; }]))); };
             Timezone.removeKey = function () { return index_js_1.minamo.localStorage.remove(Timezone.makeKey()); };
@@ -7731,7 +7591,7 @@ define("script/storage", ["require", "exports", "script/minamo.js/index", "scrip
         })(Settings = Storage.Settings || (Storage.Settings = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("script/domain", ["require", "exports", "script/locale", "script/base", "resource/config"], function (require, exports, locale_2, base_2, config_json_7) {
+define("script/domain", ["require", "exports", "script/base", "script/index", "resource/config"], function (require, exports, base_2, _1, config_json_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Domain = void 0;
@@ -7770,26 +7630,26 @@ define("script/domain", ["require", "exports", "script/locale", "script/base", "
             var result = "";
             if ("" !== result || 0 < days) {
                 if ("" === result) {
-                    result = days + " " + locale_2.Locale.map("days");
+                    result = days + " " + _1.Clockworks.tektite.locale.map("days");
                 }
                 else {
-                    result += " " + days + " " + locale_2.Locale.map("days");
+                    result += " " + days + " " + _1.Clockworks.tektite.locale.map("days");
                 }
             }
             if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
                 if ("" === result) {
-                    result = hours + " " + locale_2.Locale.map("hours");
+                    result = hours + " " + _1.Clockworks.tektite.locale.map("hours");
                 }
                 else {
-                    result += " " + ("0" + hours).substr(-2) + " " + locale_2.Locale.map("hours");
+                    result += " " + ("0" + hours).substr(-2) + " " + _1.Clockworks.tektite.locale.map("hours");
                 }
             }
             if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
                 if ("" === result) {
-                    result = minutes + " " + locale_2.Locale.map("minutes");
+                    result = minutes + " " + _1.Clockworks.tektite.locale.map("minutes");
                 }
                 else {
-                    result += " " + ("0" + minutes).substr(-2) + " " + locale_2.Locale.map("minutes");
+                    result += " " + ("0" + minutes).substr(-2) + " " + _1.Clockworks.tektite.locale.map("minutes");
                 }
             }
             if (0 < seconds || 0 < milliseconds) {
@@ -7799,14 +7659,14 @@ define("script/domain", ["require", "exports", "script/locale", "script/base", "
                     trail = trail.replace(/0+$/, "");
                 }
                 if ("" === result) {
-                    result = "" + seconds + trail + " " + locale_2.Locale.map("seconds");
+                    result = "" + seconds + trail + " " + _1.Clockworks.tektite.locale.map("seconds");
                 }
                 else {
-                    result += " " + ("0" + seconds).substr(-2) + trail + " " + locale_2.Locale.map("seconds");
+                    result += " " + ("0" + seconds).substr(-2) + trail + " " + _1.Clockworks.tektite.locale.map("seconds");
                 }
             }
             if ("" === result) {
-                result = minutes + " " + locale_2.Locale.map("m(minutes)");
+                result = minutes + " " + _1.Clockworks.tektite.locale.map("m(minutes)");
             }
             // console.log({ timer, result, });
             return result;
@@ -7829,7 +7689,7 @@ define("script/domain", ["require", "exports", "script/locale", "script/base", "
             return FloorHour.getTime() + (60 * 60 * 1000);
         };
         Domain.weekday = function (tick) {
-            return new Intl.DateTimeFormat(locale_2.Locale.get(), { weekday: 'long' }).format(tick);
+            return new Intl.DateTimeFormat(_1.Clockworks.tektite.locale.get(), { weekday: 'long' }).format(tick);
         };
         Domain.dateCoreStringFromTick = function (tick) {
             if (null === tick) {
@@ -7936,7 +7796,7 @@ define("script/domain", ["require", "exports", "script/locale", "script/base", "
                 if (days < 1) {
                     return Domain.timeLongCoreStringFromTick(tick);
                 }
-                return days.toLocaleString() + " " + locale_2.Locale.map("days") + " " + Domain.timeLongCoreStringFromTick(tick);
+                return days.toLocaleString() + " " + _1.Clockworks.tektite.locale.map("days") + " " + Domain.timeLongCoreStringFromTick(tick);
             }
         };
         Domain.timeLongStringFromTick = function (tick) {
@@ -7949,7 +7809,7 @@ define("script/domain", ["require", "exports", "script/locale", "script/base", "
             else {
                 var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                 return 0 < days ?
-                    days.toLocaleString() + " " + locale_2.Locale.map("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
+                    days.toLocaleString() + " " + _1.Clockworks.tektite.locale.map("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
                     Domain.timeFullCoreStringFromTick(tick);
             }
         };
@@ -8151,7 +8011,7 @@ define("script/render/resource", ["require", "exports"], function (require, expo
         }); };
     })(Resource = exports.Resource || (exports.Resource = {}));
 });
-define("script/application/rainbowclock/operate", ["require", "exports", "script/index", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __1, locale_3, base_3, storage_5, domain_1, render_1) {
+define("script/application/rainbowclock/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __2, base_3, storage_5, domain_1, render_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8164,8 +8024,8 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
             return __generator(this, function (_a) {
                 storage_5.Storage.RainbowClock.Timezone.add(item);
                 render_1.Render.updateWindow("operate");
-                toast = __1.Clockworks.tektite.toast.makePrimary({
-                    content: render_1.Render.$span("")("" + locale_3.Locale.map("Saved!")),
+                toast = __2.Clockworks.tektite.toast.makePrimary({
+                    content: render_1.Render.$span("")("" + __2.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8197,8 +8057,8 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
                 storage_5.Storage.RainbowClock.Timezone.remove(oldTimezone);
                 storage_5.Storage.RainbowClock.Timezone.add(newTimezone);
                 render_1.Render.updateWindow("operate");
-                toast = __1.Clockworks.tektite.toast.makePrimary({
-                    content: render_1.Render.$span("")("" + locale_3.Locale.map("Saved!")),
+                toast = __2.Clockworks.tektite.toast.makePrimary({
+                    content: render_1.Render.$span("")("" + __2.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8230,8 +8090,8 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
                 else {
                     render_1.Render.updateWindow("operate");
                 }
-                toast = __1.Clockworks.tektite.toast.makePrimary({
-                    content: render_1.Render.$span("")("" + locale_3.Locale.map("Removed.")),
+                toast = __2.Clockworks.tektite.toast.makePrimary({
+                    content: render_1.Render.$span("")("" + __2.Clockworks.tektite.locale.map("Removed.")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8257,17 +8117,17 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
         }); };
         Operate.reset = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (render_1.Render.systemConfirm(locale_3.Locale.map("This action cannot be undone. Do you want to continue?"))) {
+                if (render_1.Render.systemConfirm(__2.Clockworks.tektite.locale.map("This action cannot be undone. Do you want to continue?"))) {
                     storage_5.Storage.RainbowClock.Timezone.removeKey();
                     render_1.Render.updateWindow("operate");
-                    __1.Clockworks.tektite.toast.makePrimary({ content: render_1.Render.$span("")("" + locale_3.Locale.map("Initialized timezone list!")), });
+                    __2.Clockworks.tektite.toast.makePrimary({ content: render_1.Render.$span("")("" + __2.Clockworks.tektite.locale.map("Initialized timezone list!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/countdowntimer/operate", ["require", "exports", "script/index", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index", "resource/config"], function (require, exports, __2, locale_4, base_4, storage_6, domain_2, render_2, config_json_8) {
+define("script/application/countdowntimer/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index", "resource/config"], function (require, exports, __3, base_4, storage_6, domain_2, render_2, config_json_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8287,8 +8147,8 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 };
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 render_2.Render.updateWindow("operate");
-                toast = __2.Clockworks.tektite.toast.makePrimary({
-                    content: render_2.Render.$span("")("" + locale_4.Locale.map("Saved!")),
+                toast = __3.Clockworks.tektite.toast.makePrimary({
+                    content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8319,8 +8179,8 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 };
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 render_2.Render.updateWindow("operate");
-                toast = __2.Clockworks.tektite.toast.makePrimary({
-                    content: render_2.Render.$span("")("" + locale_4.Locale.map("Saved!")),
+                toast = __3.Clockworks.tektite.toast.makePrimary({
+                    content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8345,8 +8205,8 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
             return __generator(this, function (_a) {
                 storage_6.Storage.CountdownTimer.Alarms.add(item);
                 render_2.Render.updateWindow("operate");
-                toast = __2.Clockworks.tektite.toast.makePrimary({
-                    content: render_2.Render.$span("")("" + locale_4.Locale.map("Saved!")),
+                toast = __3.Clockworks.tektite.toast.makePrimary({
+                    content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8379,8 +8239,8 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 storage_6.Storage.CountdownTimer.Alarms.remove(oldSchedule);
                 storage_6.Storage.CountdownTimer.Alarms.add(newSchedule);
                 render_2.Render.updateWindow("operate");
-                toast = __2.Clockworks.tektite.toast.makePrimary({
-                    content: render_2.Render.$span("")("" + locale_4.Locale.map("Saved!")),
+                toast = __3.Clockworks.tektite.toast.makePrimary({
+                    content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8411,8 +8271,8 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 color = storage_6.Storage.CountdownTimer.ColorIndex.get();
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 render_2.Render.updateWindow("operate");
-                toast = __2.Clockworks.tektite.toast.makePrimary({
-                    content: render_2.Render.$span("")("" + locale_4.Locale.map("Done!")),
+                toast = __3.Clockworks.tektite.toast.makePrimary({
+                    content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Done!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8442,8 +8302,8 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 color = storage_6.Storage.CountdownTimer.ColorIndex.get();
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 render_2.Render.showUrl({ application: "CountdownTimer", });
-                toast = __2.Clockworks.tektite.toast.makePrimary({
-                    content: render_2.Render.$span("")("" + locale_4.Locale.map("Done!")),
+                toast = __3.Clockworks.tektite.toast.makePrimary({
+                    content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Done!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8474,8 +8334,8 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 else {
                     render_2.Render.updateWindow("operate");
                 }
-                toast = __2.Clockworks.tektite.toast.makePrimary({
-                    content: render_2.Render.$span("")("" + locale_4.Locale.map("Removed.")),
+                toast = __3.Clockworks.tektite.toast.makePrimary({
+                    content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Removed.")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8501,17 +8361,17 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
         }); };
         Operate.removeAllAlarms = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (render_2.Render.systemConfirm(locale_4.Locale.map("This action cannot be undone. Do you want to continue?"))) {
+                if (render_2.Render.systemConfirm(__3.Clockworks.tektite.locale.map("This action cannot be undone. Do you want to continue?"))) {
                     storage_6.Storage.CountdownTimer.Alarms.removeKey();
                     render_2.Render.updateWindow("operate");
-                    __2.Clockworks.tektite.toast.makePrimary({ content: render_2.Render.$span("")("" + locale_4.Locale.map("Removed all alarms!")), });
+                    __3.Clockworks.tektite.toast.makePrimary({ content: render_2.Render.$span("")("" + __3.Clockworks.tektite.locale.map("Removed all alarms!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/elapsedtimer/operate", ["require", "exports", "script/index", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __3, locale_5, base_5, storage_7, domain_3, render_3) {
+define("script/application/elapsedtimer/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __4, base_5, storage_7, domain_3, render_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8528,8 +8388,8 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                 };
                 storage_7.Storage.ElapsedTimer.Events.add(event);
                 render_3.Render.updateWindow("operate");
-                toast = __3.Clockworks.tektite.toast.makePrimary({
-                    content: render_3.Render.$span("")("" + locale_5.Locale.map("Saved!")),
+                toast = __4.Clockworks.tektite.toast.makePrimary({
+                    content: render_3.Render.$span("")("" + __4.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8554,8 +8414,8 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
             return __generator(this, function (_a) {
                 storage_7.Storage.ElapsedTimer.Events.add(item);
                 render_3.Render.updateWindow("operate");
-                toast = __3.Clockworks.tektite.toast.makePrimary({
-                    content: render_3.Render.$span("")("" + locale_5.Locale.map("Saved!")),
+                toast = __4.Clockworks.tektite.toast.makePrimary({
+                    content: render_3.Render.$span("")("" + __4.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8586,8 +8446,8 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                 storage_7.Storage.ElapsedTimer.Events.remove(oldSchedule);
                 storage_7.Storage.ElapsedTimer.Events.add(newSchedule);
                 render_3.Render.updateWindow("operate");
-                toast = __3.Clockworks.tektite.toast.makePrimary({
-                    content: render_3.Render.$span("")("" + locale_5.Locale.map("Saved!")),
+                toast = __4.Clockworks.tektite.toast.makePrimary({
+                    content: render_3.Render.$span("")("" + __4.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8619,8 +8479,8 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                 else {
                     render_3.Render.updateWindow("operate");
                 }
-                toast = __3.Clockworks.tektite.toast.makePrimary({
-                    content: render_3.Render.$span("")("" + locale_5.Locale.map("Removed.")),
+                toast = __4.Clockworks.tektite.toast.makePrimary({
+                    content: render_3.Render.$span("")("" + __4.Clockworks.tektite.locale.map("Removed.")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8646,17 +8506,17 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
         }); };
         Operate.removeAllEvents = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (render_3.Render.systemConfirm(locale_5.Locale.map("This action cannot be undone. Do you want to continue?"))) {
+                if (render_3.Render.systemConfirm(__4.Clockworks.tektite.locale.map("This action cannot be undone. Do you want to continue?"))) {
                     storage_7.Storage.ElapsedTimer.Events.removeKey();
                     render_3.Render.updateWindow("operate");
-                    __3.Clockworks.tektite.toast.makePrimary({ content: render_3.Render.$span("")("" + locale_5.Locale.map("Removed all alarms!")), });
+                    __4.Clockworks.tektite.toast.makePrimary({ content: render_3.Render.$span("")("" + __4.Clockworks.tektite.locale.map("Removed all alarms!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/neverstopwatch/operate", ["require", "exports", "script/index", "script/locale", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __4, locale_6, base_6, storage_8, domain_4, render_4) {
+define("script/application/neverstopwatch/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __5, base_6, storage_8, domain_4, render_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8670,9 +8530,9 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 backup = storage_8.Storage.NeverStopwatch.Stamps.get();
                 storage_8.Storage.NeverStopwatch.Stamps.add(tick);
                 render_4.Render.updateWindow("operate");
-                __4.Clockworks.tektite.screen.flash();
-                toast = __4.Clockworks.tektite.toast.makePrimary({
-                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Stamped!")),
+                __5.Clockworks.tektite.screen.flash();
+                toast = __5.Clockworks.tektite.toast.makePrimary({
+                    content: render_4.Render.$span("")("" + __5.Clockworks.tektite.locale.map("Stamped!")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8698,8 +8558,8 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 backup = storage_8.Storage.NeverStopwatch.Stamps.get();
                 storage_8.Storage.NeverStopwatch.Stamps.add(tick);
                 render_4.Render.updateWindow("operate");
-                toast = __4.Clockworks.tektite.toast.makePrimary({
-                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Saved!")),
+                toast = __5.Clockworks.tektite.toast.makePrimary({
+                    content: render_4.Render.$span("")("" + __5.Clockworks.tektite.locale.map("Saved!")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8726,8 +8586,8 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 storage_8.Storage.NeverStopwatch.Stamps.remove(oldTick);
                 storage_8.Storage.NeverStopwatch.Stamps.add(newTick);
                 render_4.Render.updateWindow("operate");
-                toast = __4.Clockworks.tektite.toast.makePrimary({
-                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Updated.")),
+                toast = __5.Clockworks.tektite.toast.makePrimary({
+                    content: render_4.Render.$span("")("" + __5.Clockworks.tektite.locale.map("Updated.")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8759,8 +8619,8 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 else {
                     render_4.Render.updateWindow("operate");
                 }
-                toast = __4.Clockworks.tektite.toast.makePrimary({
-                    content: render_4.Render.$span("")("" + locale_6.Locale.map("Removed.")),
+                toast = __5.Clockworks.tektite.toast.makePrimary({
+                    content: render_4.Render.$span("")("" + __5.Clockworks.tektite.locale.map("Removed.")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8786,17 +8646,17 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
         }); };
         Operate.removeAllStamps = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (render_4.Render.systemConfirm(locale_6.Locale.map("This action cannot be undone. Do you want to continue?"))) {
+                if (render_4.Render.systemConfirm(__5.Clockworks.tektite.locale.map("This action cannot be undone. Do you want to continue?"))) {
                     storage_8.Storage.NeverStopwatch.Stamps.removeKey();
                     render_4.Render.updateWindow("operate");
-                    __4.Clockworks.tektite.toast.makePrimary({ content: render_4.Render.$span("")("" + locale_6.Locale.map("Removed all stamps!")), });
+                    __5.Clockworks.tektite.toast.makePrimary({ content: render_4.Render.$span("")("" + __5.Clockworks.tektite.locale.map("Removed all stamps!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/render/operate", ["require", "exports", "script/minamo.js/index", "script/index", "script/application/rainbowclock/operate", "script/application/countdowntimer/operate", "script/application/elapsedtimer/operate", "script/application/neverstopwatch/operate"], function (require, exports, minamo_js_6, __5, operate_1, operate_2, operate_3, operate_4) {
+define("script/render/operate", ["require", "exports", "script/minamo.js/index", "script/index", "script/application/rainbowclock/operate", "script/application/countdowntimer/operate", "script/application/elapsedtimer/operate", "script/application/neverstopwatch/operate"], function (require, exports, minamo_js_6, __6, operate_1, operate_2, operate_3, operate_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8811,7 +8671,7 @@ define("script/render/operate", ["require", "exports", "script/minamo.js/index",
             document.getSelection().selectAllChildren(pre);
             document.execCommand("copy");
             document.body.removeChild(pre);
-            __5.Clockworks.tektite.toast.make({ content: "Copied " + displayText + " to the clipboard.", });
+            __6.Clockworks.tektite.toast.make({ content: "Copied " + displayText + " to the clipboard.", });
         };
         Operate.RainbowClock = operate_1.Operate;
         Operate.CountdownTimer = operate_2.Operate;
@@ -8819,7 +8679,7 @@ define("script/render/operate", ["require", "exports", "script/minamo.js/index",
         Operate.NeverStopwatch = operate_4.Operate;
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/index", "script/locale", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "resource/config"], function (require, exports, minamo_js_7, __6, locale_7, type_1, base_7, color_2, storage_9, domain_5, resource_1, operate_5, config_json_9) {
+define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/index", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "resource/config"], function (require, exports, minamo_js_7, __7, type_1, base_7, color_2, storage_9, domain_5, resource_1, operate_5, config_json_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -8878,7 +8738,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         onCanceled();
-                        __6.Clockworks.tektite.toast.make({
+                        __7.Clockworks.tektite.toast.make({
                             content: Render.$span("")(Render.label("roll-backed")),
                             wait: 3000,
                         });
@@ -8904,8 +8764,8 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.$span = Render.$tag("span");
         Render.labelSpan = Render.$span("label");
         Render.label = function (label) { return Render.labelSpan([
-            Render.$span("locale-parallel")(locale_7.Locale.parallel(label)),
-            Render.$span("locale-map")(locale_7.Locale.map(label)),
+            Render.$span("locale-parallel")(__7.Clockworks.tektite.locale.parallel(label)),
+            Render.$span("locale-map")(__7.Clockworks.tektite.locale.map(label)),
         ]); };
         // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
         // {
@@ -8988,7 +8848,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         });
                         return [4 /*yield*/, new Promise(function (resolve) {
                                 var result = null;
-                                var ui = __6.Clockworks.tektite.screen.popup({
+                                var ui = __7.Clockworks.tektite.screen.popup({
                                     children: [
                                         Render.$tag("h2")("")(message),
                                         inputDate,
@@ -8997,7 +8857,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
-                                                children: locale_7.Locale.map("Cancel"),
+                                                children: __7.Clockworks.tektite.locale.map("Cancel"),
                                                 onclick: function () {
                                                     result = null;
                                                     ui.close();
@@ -9006,7 +8866,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "default-button",
-                                                children: locale_7.Locale.map("OK"),
+                                                children: __7.Clockworks.tektite.locale.map("OK"),
                                                 onclick: function () {
                                                     result = inputDate.value + "T" + inputTime.value;
                                                     ui.close();
@@ -9096,7 +8956,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 return [4 /*yield*/, checkButtonListUpdate()];
                                             case 1:
                                                 _a.sent();
-                                                ui = __6.Clockworks.tektite.screen.popup({
+                                                ui = __7.Clockworks.tektite.screen.popup({
                                                     // className: "add-remove-tags-popup",
                                                     children: [
                                                         Render.$tag("h2")("")(Render.label("Theme setting")),
@@ -9194,7 +9054,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 return [4 /*yield*/, checkButtonListUpdate()];
                                             case 1:
                                                 _a.sent();
-                                                ui = __6.Clockworks.tektite.screen.popup({
+                                                ui = __7.Clockworks.tektite.screen.popup({
                                                     // className: "add-remove-tags-popup",
                                                     children: [
                                                         Render.$tag("h2")("")(Render.label("Progress Bar Style setting")),
@@ -9278,7 +9138,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                     }); },
                                                                     _e)
                                                             ];
-                                                            return [4 /*yield*/, Promise.all(locale_7.Locale.locales.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                            return [4 /*yield*/, Promise.all(__7.Clockworks.tektite.locale.locales.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                     var _a;
                                                                     var _this = this;
                                                                     var _b;
@@ -9292,7 +9152,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                 return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
-                                                                                    Render.$span("")(Render.labelSpan(locale_7.Locale.getLocaleName(key)))
+                                                                                    Render.$span("")(Render.labelSpan(__7.Clockworks.tektite.locale.getLocaleName(key)))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -9324,7 +9184,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             return [4 /*yield*/, checkButtonListUpdate()];
                                         case 1:
                                             _a.sent();
-                                            ui = __6.Clockworks.tektite.screen.popup({
+                                            ui = __7.Clockworks.tektite.screen.popup({
                                                 // className: "add-remove-tags-popup",
                                                 children: [
                                                     Render.$tag("h2")("")(Render.label("Language setting")),
@@ -9418,7 +9278,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             return [4 /*yield*/, checkButtonListUpdate()];
                                         case 1:
                                             _a.sent();
-                                            ui = __6.Clockworks.tektite.screen.popup({
+                                            ui = __7.Clockworks.tektite.screen.popup({
                                                 // className: "add-remove-tags-popup",
                                                 children: [
                                                     Render.$tag("h2")("")(Render.label("Color setting")),
@@ -9461,7 +9321,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             });
                             return [4 /*yield*/, new Promise(function (resolve) {
                                     var result = null;
-                                    var ui = __6.Clockworks.tektite.screen.popup({
+                                    var ui = __7.Clockworks.tektite.screen.popup({
                                         children: [
                                             Render.$tag("h2")("")(message),
                                             inputTime,
@@ -9469,7 +9329,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
-                                                    children: locale_7.Locale.map("Cancel"),
+                                                    children: __7.Clockworks.tektite.locale.map("Cancel"),
                                                     onclick: function () {
                                                         result = null;
                                                         ui.close();
@@ -9478,7 +9338,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 {
                                                     tag: "button",
                                                     className: "default-button",
-                                                    children: locale_7.Locale.map("OK"),
+                                                    children: __7.Clockworks.tektite.locale.map("OK"),
                                                     onclick: function () {
                                                         var _a;
                                                         result = (_a = domain_5.Domain.parseTime(inputTime.value)) !== null && _a !== void 0 ? _a : tick;
@@ -9561,7 +9421,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         return [4 /*yield*/, checkButtonListUpdate()];
                                     case 1:
                                         _a.sent();
-                                        ui = __6.Clockworks.tektite.screen.popup({
+                                        ui = __7.Clockworks.tektite.screen.popup({
                                             // className: "add-remove-tags-popup",
                                             children: [
                                                 Render.$tag("h2")("")(Render.label("New Timer")),
@@ -9575,7 +9435,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                             var tick, minutes;
                                                             return __generator(this, function (_a) {
                                                                 switch (_a.label) {
-                                                                    case 0: return [4 /*yield*/, Render.timePrompt(locale_7.Locale.map("input a time"), 0)];
+                                                                    case 0: return [4 /*yield*/, Render.timePrompt(__7.Clockworks.tektite.locale.map("input a time"), 0)];
                                                                     case 1:
                                                                         tick = _a.sent();
                                                                         if (!(null !== tick)) return [3 /*break*/, 3];
@@ -9639,7 +9499,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         });
                         return [4 /*yield*/, new Promise(function (resolve) {
                                 var result = null;
-                                var ui = __6.Clockworks.tektite.screen.popup({
+                                var ui = __7.Clockworks.tektite.screen.popup({
                                     children: [
                                         Render.$tag("h2")("")(message),
                                         inputTitle,
@@ -9649,7 +9509,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
-                                                children: locale_7.Locale.map("Cancel"),
+                                                children: __7.Clockworks.tektite.locale.map("Cancel"),
                                                 onclick: function () {
                                                     result = null;
                                                     ui.close();
@@ -9658,7 +9518,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "default-button",
-                                                children: locale_7.Locale.map("OK"),
+                                                children: __7.Clockworks.tektite.locale.map("OK"),
                                                 onclick: function () {
                                                     var _a, _b;
                                                     result =
@@ -9700,7 +9560,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         });
                         return [4 /*yield*/, new Promise(function (resolve) {
                                 var result = null;
-                                var ui = __6.Clockworks.tektite.screen.popup({
+                                var ui = __7.Clockworks.tektite.screen.popup({
                                     children: [
                                         Render.$tag("h2")("")(message),
                                         inputDate,
@@ -9709,7 +9569,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
-                                                children: locale_7.Locale.map("Cancel"),
+                                                children: __7.Clockworks.tektite.locale.map("Cancel"),
                                                 onclick: function () {
                                                     result = null;
                                                     ui.close();
@@ -9718,7 +9578,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "default-button",
-                                                children: locale_7.Locale.map("OK"),
+                                                children: __7.Clockworks.tektite.locale.map("OK"),
                                                 onclick: function () {
                                                     var _a, _b;
                                                     result = (_b = (_a = domain_5.Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick;
@@ -9765,7 +9625,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         });
                         return [4 /*yield*/, new Promise(function (resolve) {
                                 var result = null;
-                                var ui = __6.Clockworks.tektite.screen.popup({
+                                var ui = __7.Clockworks.tektite.screen.popup({
                                     children: [
                                         Render.$tag("h2")("")(message),
                                         inputTitle,
@@ -9774,7 +9634,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
-                                                children: locale_7.Locale.map("Cancel"),
+                                                children: __7.Clockworks.tektite.locale.map("Cancel"),
                                                 onclick: function () {
                                                     result = null;
                                                     ui.close();
@@ -9783,7 +9643,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             {
                                                 tag: "button",
                                                 className: "default-button",
-                                                children: locale_7.Locale.map("OK"),
+                                                children: __7.Clockworks.tektite.locale.map("OK"),
                                                 onclick: function () {
                                                     result =
                                                         {
@@ -9814,7 +9674,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 var ui;
                                 var _this = this;
                                 return __generator(this, function (_a) {
-                                    ui = __6.Clockworks.tektite.screen.popup({
+                                    ui = __7.Clockworks.tektite.screen.popup({
                                         // className: "add-remove-tags-popup",
                                         children: [
                                             Render.$tag("h2")("")(Render.labelSpan("シェア / Share")),
@@ -9875,7 +9735,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                     case 0:
                         _a = Render.$div("stamp-item flex-item");
                         _b = Render.$div("item-header");
-                        _d = (_c = __6.Clockworks.tektite).internalLink;
+                        _d = (_c = __7.Clockworks.tektite).internalLink;
                         _j = {
                             className: "item-title",
                             href: domain_5.Domain.makePageParams("NeverStopwatch", tick)
@@ -9892,7 +9752,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     _j)])
                         ];
                         _f = Render.$div("item-operator");
-                        _h = (_g = __6.Clockworks.tektite.menu).button;
+                        _h = (_g = __7.Clockworks.tektite.menu).button;
                         return [4 /*yield*/, Render.stampItemMenu(tick)];
                     case 2: return [4 /*yield*/, _h.apply(_g, [_k.sent()])];
                     case 3: return [2 /*return*/, _a.apply(void 0, [[
@@ -9919,13 +9779,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, [
-                        __6.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                        __7.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
                             var result, _a, _b, newTick;
                             return __generator(this, function (_c) {
                                 switch (_c.label) {
                                     case 0:
                                         _b = (_a = domain_5.Domain).parseDate;
-                                        return [4 /*yield*/, Render.dateTimePrompt(locale_7.Locale.map("Edit"), tick)];
+                                        return [4 /*yield*/, Render.dateTimePrompt(__7.Clockworks.tektite.locale.map("Edit"), tick)];
                                     case 1:
                                         result = _b.apply(_a, [_c.sent()]);
                                         if (!(null !== result)) return [3 /*break*/, 4];
@@ -9937,7 +9797,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         _c.sent();
                                         return [3 /*break*/, 4];
                                     case 3:
-                                        __6.Clockworks.tektite.toast.make({
+                                        __7.Clockworks.tektite.toast.make({
                                             content: Render.label("A date and time outside the valid range was specified."),
                                             isWideContent: true,
                                         });
@@ -9946,7 +9806,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 }
                             });
                         }); }),
-                        __6.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        __7.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.Operate.NeverStopwatch.removeStamp(tick)];
                                 case 1: return [2 /*return*/, _a.sent()];
@@ -9956,7 +9816,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             });
         }); };
         Render.alarmTitle = function (item) { return "timer" === item.type ?
-            domain_5.Domain.makeTimerLabel(item.end - item.start) + " " + locale_7.Locale.map("Timer") :
+            domain_5.Domain.makeTimerLabel(item.end - item.start) + " " + __7.Clockworks.tektite.locale.map("Timer") :
             item.title; };
         Render.alarmItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
             var _a, _b, _c, _d, _e, _f, _g, _h;
@@ -9966,7 +9826,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                     case 0:
                         _a = Render.$div("alarm-item flex-item");
                         _b = Render.$div("item-header");
-                        _d = (_c = __6.Clockworks.tektite).internalLink;
+                        _d = (_c = __7.Clockworks.tektite).internalLink;
                         _j = {
                             className: "item-title",
                             href: domain_5.Domain.makePageParams("CountdownTimer", item)
@@ -9981,7 +9841,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     _j)])
                         ];
                         _f = Render.$div("item-operator");
-                        _h = (_g = __6.Clockworks.tektite.menu).button;
+                        _h = (_g = __7.Clockworks.tektite.menu).button;
                         return [4 /*yield*/, Render.alarmItemMenu(item)];
                     case 2: return [4 /*yield*/, _h.apply(_g, [_k.sent()])];
                     case 3: return [2 /*return*/, _a.apply(void 0, [[
@@ -10010,11 +9870,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 return [2 /*return*/, [
                         "schedule" === item.type ?
                             [
-                                __6.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                __7.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
                                     var result;
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Render.eventPrompt(locale_7.Locale.map("Edit"), item.title, item.end)];
+                                            case 0: return [4 /*yield*/, Render.eventPrompt(__7.Clockworks.tektite.locale.map("Edit"), item.title, item.end)];
                                             case 1:
                                                 result = _a.sent();
                                                 if (!(null !== result)) return [3 /*break*/, 4];
@@ -10025,7 +9885,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 _a.sent();
                                                 return [3 /*break*/, 4];
                                             case 3:
-                                                __6.Clockworks.tektite.toast.make({
+                                                __7.Clockworks.tektite.toast.make({
                                                     content: Render.label("A date and time outside the valid range was specified."),
                                                     isWideContent: true,
                                                 });
@@ -10034,11 +9894,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         }
                                     });
                                 }); }),
-                                __6.Clockworks.tektite.menu.item(Render.label("Edit start time"), function () { return __awaiter(_this, void 0, void 0, function () {
+                                __7.Clockworks.tektite.menu.item(Render.label("Edit start time"), function () { return __awaiter(_this, void 0, void 0, function () {
                                     var result;
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, Render.dateIimePrompt(locale_7.Locale.map("Edit start time"), item.start)];
+                                            case 0: return [4 /*yield*/, Render.dateIimePrompt(__7.Clockworks.tektite.locale.map("Edit start time"), item.start)];
                                             case 1:
                                                 result = _a.sent();
                                                 if (!(null !== result)) return [3 /*break*/, 4];
@@ -10049,7 +9909,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 _a.sent();
                                                 return [3 /*break*/, 4];
                                             case 3:
-                                                __6.Clockworks.tektite.toast.make({
+                                                __7.Clockworks.tektite.toast.make({
                                                     content: Render.label("A date and time outside the valid range was specified."),
                                                     isWideContent: true,
                                                 });
@@ -10060,7 +9920,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 }); })
                             ] :
                             [],
-                        __6.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        __7.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.Operate.CountdownTimer.removeAlarm(item)];
                                 case 1: return [2 /*return*/, _a.sent()];
@@ -10077,7 +9937,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                     case 0:
                         _a = Render.$div("event-item flex-item");
                         _b = Render.$div("item-header");
-                        _d = (_c = __6.Clockworks.tektite).internalLink;
+                        _d = (_c = __7.Clockworks.tektite).internalLink;
                         _j = {
                             className: "item-title",
                             href: domain_5.Domain.makePageParams("ElapsedTimer", item)
@@ -10092,7 +9952,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     _j)])
                         ];
                         _f = Render.$div("item-operator");
-                        _h = (_g = __6.Clockworks.tektite.menu).button;
+                        _h = (_g = __7.Clockworks.tektite.menu).button;
                         return [4 /*yield*/, Render.eventItemMenu(item)];
                     case 2: return [4 /*yield*/, _h.apply(_g, [_k.sent()])];
                     case 3: return [2 /*return*/, _a.apply(void 0, [[
@@ -10119,11 +9979,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, [
-                        __6.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                        __7.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
                             var result;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, Render.eventPrompt(locale_7.Locale.map("Edit"), item.title, item.tick)];
+                                    case 0: return [4 /*yield*/, Render.eventPrompt(__7.Clockworks.tektite.locale.map("Edit"), item.title, item.tick)];
                                     case 1:
                                         result = _a.sent();
                                         if (!(null !== result)) return [3 /*break*/, 4];
@@ -10134,7 +9994,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         _a.sent();
                                         return [3 /*break*/, 4];
                                     case 3:
-                                        __6.Clockworks.tektite.toast.make({
+                                        __7.Clockworks.tektite.toast.make({
                                             content: Render.label("A date and time outside the valid range was specified."),
                                             isWideContent: true,
                                         });
@@ -10143,7 +10003,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 }
                             });
                         }); }),
-                        __6.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        __7.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.Operate.ElapsedTimer.remove(item)];
                                 case 1: return [2 /*return*/, _a.sent()];
@@ -10160,7 +10020,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                     case 0:
                         _a = Render.$div("timezone-item flex-item");
                         _b = Render.$div("item-header");
-                        _d = (_c = __6.Clockworks.tektite).internalLink;
+                        _d = (_c = __7.Clockworks.tektite).internalLink;
                         _j = {
                             className: "item-title",
                             href: domain_5.Domain.makePageParams("RainbowClock", item)
@@ -10175,7 +10035,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     _j)])
                         ];
                         _f = Render.$div("item-operator");
-                        _h = (_g = __6.Clockworks.tektite.menu).button;
+                        _h = (_g = __7.Clockworks.tektite.menu).button;
                         return [4 /*yield*/, Render.timezoneItemMenu(item)];
                     case 2: return [4 /*yield*/, _h.apply(_g, [_k.sent()])];
                     case 3: return [2 /*return*/, _a.apply(void 0, [[
@@ -10206,11 +10066,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, [
-                        __6.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
+                        __7.Clockworks.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
                             var result;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, Render.timezonePrompt(locale_7.Locale.map("Edit"), item.title, item.offset)];
+                                    case 0: return [4 /*yield*/, Render.timezonePrompt(__7.Clockworks.tektite.locale.map("Edit"), item.title, item.offset)];
                                     case 1:
                                         result = _a.sent();
                                         if (!(null !== result)) return [3 /*break*/, 3];
@@ -10223,7 +10083,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 }
                             });
                         }); }),
-                        __6.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        __7.Clockworks.tektite.menu.item(Render.label("Remove"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.Operate.RainbowClock.remove(item)];
                                 case 1: return [2 /*return*/, _a.sent()];
@@ -10256,7 +10116,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
-                                            _b = (_a = __6.Clockworks.tektite.menu).linkItem;
+                                            _b = (_a = __7.Clockworks.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(type_1.Type.applicationList[i].icon)];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), type_1.Type.applicationList[i].title], { application: i },
                                                 applicationType === i ? "current-item" : undefined])];
@@ -10287,7 +10147,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
-                                            _b = (_a = __6.Clockworks.tektite.menu).linkItem;
+                                            _b = (_a = __7.Clockworks.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.$span("monospace")(domain_5.Domain.dateFullStringFromTick(i))], domain_5.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
@@ -10318,7 +10178,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
-                                            _b = (_a = __6.Clockworks.tektite.menu).linkItem;
+                                            _b = (_a = __7.Clockworks.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), Render.$span("value monospace")(domain_5.Domain.dateStringFromTick(i.end))], domain_5.Domain.makePageParams("CountdownTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
@@ -10349,7 +10209,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
-                                            _b = (_a = __6.Clockworks.tektite.menu).linkItem;
+                                            _b = (_a = __7.Clockworks.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(i.title), Render.$span("value monospace")(domain_5.Domain.dateStringFromTick(i.tick))], domain_5.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
@@ -10380,7 +10240,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 return __generator(this, function (_c) {
                                     switch (_c.label) {
                                         case 0:
-                                            _b = (_a = __6.Clockworks.tektite.menu).linkItem;
+                                            _b = (_a = __7.Clockworks.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(i.title), Render.$span("value monospace")(domain_5.Domain.timezoneOffsetString(i.offset))], domain_5.Domain.makePageParams("RainbowClock", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
@@ -10403,18 +10263,18 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             return __generator(this, function (_c) {
                                 switch (_c.label) {
                                     case 0:
-                                        _b = (_a = __6.Clockworks.tektite.menu).item;
+                                        _b = (_a = __7.Clockworks.tektite.menu).item;
                                         return [4 /*yield*/, resource_1.Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
                                     case 1: return [2 /*return*/, _b.apply(_a, [[
                                                 _c.sent(),
-                                                Render.labelSpan(0 === i ? locale_7.Locale.map(zeroLabel) : locale_7.Locale.map("Interval") + ": " + domain_5.Domain.makeTimerLabel(i))
+                                                Render.labelSpan(0 === i ? __7.Clockworks.tektite.locale.map(zeroLabel) : __7.Clockworks.tektite.locale.map("Interval") + ": " + domain_5.Domain.makeTimerLabel(i))
                                             ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
                                                         case 0:
                                                             setter(i);
-                                                            __6.Clockworks.tektite.screen.clearLastMouseDownTarget();
-                                                            __6.Clockworks.tektite.screen.getScreenCoverList().forEach(function (i) { return i.click(); });
+                                                            __7.Clockworks.tektite.screen.clearLastMouseDownTarget();
+                                                            __7.Clockworks.tektite.screen.getScreenCoverList().forEach(function (i) { return i.click(); });
                                                             return [4 /*yield*/, Render.reload()];
                                                         case 1:
                                                             _a.sent();
@@ -10429,7 +10289,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _b = (_a = (_f.sent()))
                             .concat;
                         if (!adder) return [3 /*break*/, 3];
-                        _e = (_d = __6.Clockworks.tektite.menu).item;
+                        _e = (_d = __7.Clockworks.tektite.menu).item;
                         return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("flash-icon")];
                     case 2:
                         _c = [
@@ -10441,9 +10301,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                __6.Clockworks.tektite.screen.clearLastMouseDownTarget();
-                                                __6.Clockworks.tektite.screen.getScreenCoverList().forEach(function (i) { return i.click(); });
-                                                return [4 /*yield*/, Render.timePrompt(locale_7.Locale.map("input a time"), 0)];
+                                                __7.Clockworks.tektite.screen.clearLastMouseDownTarget();
+                                                __7.Clockworks.tektite.screen.getScreenCoverList().forEach(function (i) { return i.click(); });
+                                                return [4 /*yield*/, Render.timePrompt(__7.Clockworks.tektite.locale.map("input a time"), 0)];
                                             case 1:
                                                 tick = _a.sent();
                                                 if (null !== tick) {
@@ -10476,7 +10336,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         case 0:
                             _a = {
                                 icon: 0 === flashInterval ? zeroIcon : "flash-icon",
-                                title: 0 === flashInterval ? locale_7.Locale.map(zeroLabel) : locale_7.Locale.map("Interval") + ": " + domain_5.Domain.makeTimerLabel(flashInterval)
+                                title: 0 === flashInterval ? __7.Clockworks.tektite.locale.map(zeroLabel) : __7.Clockworks.tektite.locale.map("Interval") + ": " + domain_5.Domain.makeTimerLabel(flashInterval)
                             };
                             return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel)];
                         case 1: return [2 /*return*/, (_a.menu = _b.sent(),
@@ -10489,17 +10349,17 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.fullscreenMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.fullscreen.enabled() ?
-                        (null === __6.Clockworks.tektite.fullscreen.element() ?
-                            __6.Clockworks.tektite.menu.item(Render.label("Full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                return [2 /*return*/, __7.Clockworks.tektite.fullscreen.enabled() ?
+                        (null === __7.Clockworks.tektite.fullscreen.element() ?
+                            __7.Clockworks.tektite.menu.item(Render.label("Full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, __6.Clockworks.tektite.fullscreen.request()];
+                                    case 0: return [4 /*yield*/, __7.Clockworks.tektite.fullscreen.request()];
                                     case 1: return [2 /*return*/, _a.sent()];
                                 }
                             }); }); }) :
-                            __6.Clockworks.tektite.menu.item(Render.label("Cancel full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            __7.Clockworks.tektite.menu.item(Render.label("Cancel full screen"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, __6.Clockworks.tektite.fullscreen.exit()];
+                                    case 0: return [4 /*yield*/, __7.Clockworks.tektite.fullscreen.exit()];
                                     case 1: return [2 /*return*/, _a.sent()];
                                 }
                             }); }); })) :
@@ -10509,7 +10369,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.themeMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Theme setting"), function () { return __awaiter(_this, void 0, void 0, function () {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Theme setting"), function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.themeSettingsPopup()];
@@ -10526,7 +10386,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.progressBarStyleMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Progress Bar Style setting"), function () { return __awaiter(_this, void 0, void 0, function () {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Progress Bar Style setting"), function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.progressBarStyleSettingsPopup()];
@@ -10543,13 +10403,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.languageMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Language setting"), function () { return __awaiter(_this, void 0, void 0, function () {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Language setting"), function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, Render.localeSettingsPopup()];
                                 case 1:
                                     if (!_a.sent()) return [3 /*break*/, 3];
-                                    locale_7.Locale.setLocale(storage_9.Storage.Settings.get().locale);
+                                    __7.Clockworks.tektite.locale.setLocale(storage_9.Storage.Settings.get().locale);
                                     return [4 /*yield*/, Render.reload()];
                                 case 2:
                                     _a.sent();
@@ -10563,7 +10423,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.resetNeverStopwatchMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Remove all stamps"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Remove all stamps"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, Render.Operate.NeverStopwatch.removeAllStamps()];
                             case 1: return [2 /*return*/, _a.sent()];
@@ -10574,7 +10434,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.resetCountdownTimerMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Remove all alarms"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Remove all alarms"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, Render.Operate.CountdownTimer.removeAllAlarms()];
                             case 1: return [2 /*return*/, _a.sent()];
@@ -10585,7 +10445,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.resetElapsedTimerMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Remove all alarms"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Remove all alarms"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, Render.Operate.ElapsedTimer.removeAllEvents()];
                             case 1: return [2 /*return*/, _a.sent()];
@@ -10596,7 +10456,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.resetRainbowClockMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Initialize timezone list"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Initialize timezone list"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, Render.Operate.RainbowClock.reset()];
                             case 1: return [2 /*return*/, _a.sent()];
@@ -10606,9 +10466,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         }); };
         Render.githubMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.externalLink({
+                return [2 /*return*/, __7.Clockworks.tektite.externalLink({
                         href: config_json_9.default.repositoryUrl,
-                        children: __6.Clockworks.tektite.menu.item(Render.labelSpan("GitHub")),
+                        children: __7.Clockworks.tektite.menu.item(Render.labelSpan("GitHub")),
                     })];
             });
         }); };
@@ -10755,7 +10615,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                     Render.$span("logo-text")(config_json_9.default.applicationTitle)
                                                 ]]),
                                             Render.$div("button-list")(type_1.Type.applicationIdList.map(function (i) {
-                                                return __6.Clockworks.tektite.internalLink({
+                                                return __7.Clockworks.tektite.internalLink({
                                                     href: { application: i },
                                                     children: {
                                                         tag: "button",
@@ -10879,7 +10739,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 return __generator(this, function (_e) {
                                     switch (_e.label) {
                                         case 0:
-                                            _b = (_a = __6.Clockworks.tektite.screen).popup;
+                                            _b = (_a = __7.Clockworks.tektite.screen).popup;
                                             _d = {
                                                 className: "bare-popup"
                                             };
@@ -10953,7 +10813,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _g = Render.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
                         _h = Render.$div("button-list")([
-                            __6.Clockworks.tektite.internalLink({
+                            __7.Clockworks.tektite.internalLink({
                                 href: { application: "NeverStopwatch", },
                                 children: {
                                     tag: "button",
@@ -11011,7 +10871,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                     Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                     Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                    Render.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_5.Domain.makeStampUrl("new"), children: locale_7.Locale.map("Stamp"), },]),
+                                    Render.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_5.Domain.makeStampUrl("new"), children: __7.Clockworks.tektite.locale.map("Stamp"), },]),
                                 ]))
                             ]]);
                         _o.label = 8;
@@ -11117,7 +10977,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             unit = flashInterval;
                                             primaryStep = Math.floor(elapsed / unit);
                                             if (primaryStep === previousPrimaryStep + 1 && (elapsed % unit) < 5 * 1000) {
-                                                __6.Clockworks.tektite.screen.flash();
+                                                __7.Clockworks.tektite.screen.flash();
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(primaryStep);
                                             setBackgroundColor(currentColor);
@@ -11313,7 +11173,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _g = Render.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
                         _h = Render.$div("button-list")([
-                            __6.Clockworks.tektite.internalLink({
+                            __7.Clockworks.tektite.internalLink({
                                 href: { application: "CountdownTimer", },
                                 children: {
                                     tag: "button",
@@ -11383,7 +11243,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         var result;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.eventPrompt(locale_7.Locale.map("New Schedule"), locale_7.Locale.map("New Schedule"), domain_5.Domain.getAppropriateTicks())];
+                                                case 0: return [4 /*yield*/, Render.eventPrompt(__7.Clockworks.tektite.locale.map("New Schedule"), __7.Clockworks.tektite.locale.map("New Schedule"), domain_5.Domain.getAppropriateTicks())];
                                                 case 1:
                                                     result = _a.sent();
                                                     if (!result) return [3 /*break*/, 4];
@@ -11393,7 +11253,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                     _a.sent();
                                                     return [3 /*break*/, 4];
                                                 case 3:
-                                                    __6.Clockworks.tektite.toast.make({
+                                                    __7.Clockworks.tektite.toast.make({
                                                         content: Render.label("A date and time outside the valid range was specified."),
                                                         isWideContent: true,
                                                     });
@@ -11412,7 +11272,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 Render.$div("description")(Render.$tag("ul")("locale-parallel-off")([
                                     Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                     Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                    Render.$tag("li")("")([Render.label("You can use links like these too:"), ["1500ms", "90s", "3m", "1h", "1d"].map(function (i) { return ({ tag: "a", style: "margin-inline-start:0.5em;", href: domain_5.Domain.makeNewTimerUrl(i), children: domain_5.Domain.makeTimerLabel(domain_5.Domain.parseTimer(i)) + " " + locale_7.Locale.map("Timer"), }); })]),
+                                    Render.$tag("li")("")([Render.label("You can use links like these too:"), ["1500ms", "90s", "3m", "1h", "1d"].map(function (i) { return ({ tag: "a", style: "margin-inline-start:0.5em;", href: domain_5.Domain.makeNewTimerUrl(i), children: domain_5.Domain.makeTimerLabel(domain_5.Domain.parseTimer(i)) + " " + __7.Clockworks.tektite.locale.map("Timer"), }); })]),
                                 ]))
                             ])]);
                         _p.label = 8;
@@ -11518,14 +11378,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 unit = flashInterval;
                                                 primaryStep = 0 < unit ? Math.floor(rest / unit) : 0;
                                                 if ((primaryStep + 1 === previousPrimaryStep && -5 * 1000 < (rest % unit) && 500 < tick - current.start)) {
-                                                    __6.Clockworks.tektite.screen.flash();
+                                                    __7.Clockworks.tektite.screen.flash();
                                                     lashFlashAt = tick;
                                                 }
                                                 previousPrimaryStep = primaryStep;
                                             }
                                             cycle = "timer" === current.type ? 3000 : 10000;
                                             if (rest <= 0 && lashFlashAt + cycle <= tick) {
-                                                __6.Clockworks.tektite.screen.flash();
+                                                __7.Clockworks.tektite.screen.flash();
                                                 lashFlashAt = tick;
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(storage_9.Storage.CountdownTimer.ColorIndex.get());
@@ -11694,7 +11554,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _g = Render.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
                         _h = Render.$div("button-list")([
-                            __6.Clockworks.tektite.internalLink({
+                            __7.Clockworks.tektite.internalLink({
                                 href: { application: "CountdownTimer", },
                                 children: {
                                     tag: "button",
@@ -11753,7 +11613,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         var result;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.eventPrompt(locale_7.Locale.map("New Event"), locale_7.Locale.map("New Event"), domain_5.Domain.getAppropriateTicks())];
+                                                case 0: return [4 /*yield*/, Render.eventPrompt(__7.Clockworks.tektite.locale.map("New Event"), __7.Clockworks.tektite.locale.map("New Event"), domain_5.Domain.getAppropriateTicks())];
                                                 case 1:
                                                     result = _a.sent();
                                                     if (!result) return [3 /*break*/, 4];
@@ -11763,7 +11623,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                     _a.sent();
                                                     return [3 /*break*/, 4];
                                                 case 3:
-                                                    __6.Clockworks.tektite.toast.make({
+                                                    __7.Clockworks.tektite.toast.make({
                                                         content: Render.label("A date and time outside the valid range was specified."),
                                                         isWideContent: true,
                                                     });
@@ -11884,7 +11744,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             unit = flashInterval;
                                             primaryStep = Math.floor(elapsed / unit);
                                             if (primaryStep === previousPrimaryStep + 1 && (elapsed % unit) < 5 * 1000) {
-                                                __6.Clockworks.tektite.screen.flash();
+                                                __7.Clockworks.tektite.screen.flash();
                                             }
                                             currentColor = color_2.Color.getSolidRainbowColor(primaryStep);
                                             setBackgroundColor(currentColor);
@@ -11967,7 +11827,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         Render.colorMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, __6.Clockworks.tektite.menu.item(Render.label("Color setting"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                return [2 /*return*/, __7.Clockworks.tektite.menu.item(Render.label("Color setting"), function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, Render.colorSettingsPopup()];
                             case 1: return [2 /*return*/, _a.sent()];
@@ -12063,7 +11923,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _g = Render.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
                         _h = Render.$div("button-list")([
-                            __6.Clockworks.tektite.internalLink({
+                            __7.Clockworks.tektite.internalLink({
                                 href: { application: "RainbowClock", },
                                 children: {
                                     tag: "button",
@@ -12122,7 +11982,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         var result;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, Render.timezonePrompt(locale_7.Locale.map("New Time zone"), locale_7.Locale.map("New Time zone"), new Date().getTimezoneOffset())];
+                                                case 0: return [4 /*yield*/, Render.timezonePrompt(__7.Clockworks.tektite.locale.map("New Time zone"), __7.Clockworks.tektite.locale.map("New Time zone"), new Date().getTimezoneOffset())];
                                                 case 1:
                                                     result = _a.sent();
                                                     if (!result) return [3 /*break*/, 3];
@@ -12245,7 +12105,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 flashInterval = storage_9.Storage.RainbowClock.flashInterval.get();
                                                 if (0 < flashInterval) {
                                                     if (0 === (tick % flashInterval)) {
-                                                        __6.Clockworks.tektite.screen.flash();
+                                                        __7.Clockworks.tektite.screen.flash();
                                                     }
                                                 }
                                             }
@@ -12367,7 +12227,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         document.getElementById("screen").className = screen.className + " screen";
                         _b = (_a = minamo_js_7.minamo.dom).replaceChildren;
                         _c = [Render.getHeaderElement()];
-                        return [4 /*yield*/, __6.Clockworks.tektite.header.segmented(screen.header)];
+                        return [4 /*yield*/, __7.Clockworks.tektite.header.segmented(screen.header)];
                     case 1:
                         _b.apply(_a, _c.concat([_d.sent()]));
                         minamo_js_7.minamo.dom.replaceChildren(document.getElementById("screen-body"), screen.body);
@@ -12552,19 +12412,19 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             .forEach(function (popup) { var _a, _b; return (_b = (_a = minamo_js_7.minamo.dom.getElementsByClassName(popup, "default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
                         break;
                     case "Escape":
-                        (_b = ((_a = __6.Clockworks.tektite.screen.getScreenCover()) !== null && _a !== void 0 ? _a : __6.Clockworks.tektite.header.getCloseButton())) === null || _b === void 0 ? void 0 : _b.click();
+                        (_b = ((_a = __7.Clockworks.tektite.screen.getScreenCover()) !== null && _a !== void 0 ? _a : __7.Clockworks.tektite.header.getCloseButton())) === null || _b === void 0 ? void 0 : _b.click();
                         break;
                 }
                 var focusedElementTagName = (_e = (_d = (_c = document.activeElement) === null || _c === void 0 ? void 0 : _c.tagName) === null || _d === void 0 ? void 0 : _d.toLowerCase()) !== null && _e !== void 0 ? _e : "";
                 if (["input", "textarea"].indexOf(focusedElementTagName) < 0) {
                     switch (event.key.toLowerCase()) {
                         case "f":
-                            if (__6.Clockworks.tektite.fullscreen.enabled()) {
-                                if (null === __6.Clockworks.tektite.fullscreen.element()) {
-                                    __6.Clockworks.tektite.fullscreen.request();
+                            if (__7.Clockworks.tektite.fullscreen.enabled()) {
+                                if (null === __7.Clockworks.tektite.fullscreen.element()) {
+                                    __7.Clockworks.tektite.fullscreen.request();
                                 }
                                 else {
-                                    __6.Clockworks.tektite.fullscreen.exit();
+                                    __7.Clockworks.tektite.fullscreen.exit();
                                 }
                             }
                             break;
@@ -12574,14 +12434,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         };
         var lastMouseMouseAt = 0;
         Render.onMouseMove = function (_evnet) {
-            if (__6.Clockworks.tektite.fullscreen.enabled()) {
+            if (__7.Clockworks.tektite.fullscreen.enabled()) {
                 var now_1 = lastMouseMouseAt = new Date().getTime();
                 if (document.body.classList.contains("sleep-mouse")) {
                     document.body.classList.remove("sleep-mouse");
                 }
-                if (__6.Clockworks.tektite.fullscreen.element()) {
+                if (__7.Clockworks.tektite.fullscreen.element()) {
                     setTimeout(function () {
-                        if (__6.Clockworks.tektite.fullscreen.element() && now_1 === lastMouseMouseAt) {
+                        if (__7.Clockworks.tektite.fullscreen.element() && now_1 === lastMouseMouseAt) {
                             if (!document.body.classList.contains("sleep-mouse")) {
                                 document.body.classList.add("sleep-mouse");
                             }
@@ -12595,7 +12455,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         };
         Render.onWebkitFullscreenChange = function (event) {
             Render.onWindowResize();
-            __6.Clockworks.tektite.onWebkitFullscreenChange(event);
+            __7.Clockworks.tektite.onWebkitFullscreenChange(event);
         };
         Render.itemState = function (itemJson, item) {
             if (itemJson) {
@@ -12635,7 +12495,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
-                            (_a = __6.Clockworks.tektite.screen.getScreenCover()) === null || _a === void 0 ? void 0 : _a.click();
+                            (_a = __7.Clockworks.tektite.screen.getScreenCover()) === null || _a === void 0 ? void 0 : _a.click();
                             window.scrollTo(0, 0);
                             document.getElementById("screen-body").scrollTo(0, 0);
                             hash = base_7.Base.getUrlHash(url).split("/");
@@ -12733,20 +12593,173 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
         }); }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("script/index", ["require", "exports", "tektite/script/index", "script/locale", "script/render/index", "script/render/resource", "script/storage", "script/domain"], function (require, exports, script_1, locale_8, render_5, resource_2, storage_10, domain_6) {
+define("resource/lang.en", [], {
+    "$name": "English",
+    "Full screen": "Full screen",
+    "Cancel full screen": "Cancel full screen",
+    "Elapsed time": "elapsed time",
+    "Stamp": "Stamp",
+    "Done": "Done",
+    "New Timer": "New Timer",
+    "New Schedule": "New Schedule",
+    "New Time zone": "New Time zone",
+    "New Event": "New Event",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "m(minutes)": "m",
+    "seconds": "seconds",
+    "input a time": "input a time",
+    "Timer": "timer",
+    "No Flash": "No Flash",
+    "00:00:00 only": "00:00:00 only",
+    "Timestamp": "Timestamp",
+    "Interval": "Interval",
+    "Due timestamp": "Due timestamp",
+    "Rest": "Rest",
+    "Time zone offset": "Time zone",
+    "Remove": "Remove",
+    "Remove all stamps": "Remove all stamps",
+    "Removed all stamps!": "Removed all stamps!",
+    "Remove all alarms": "Remove all alarms",
+    "Removed all alarms!": "Removed all alarms!",
+    "Initialize timezone list": "Initialize timezone list",
+    "Initialized timezone list!": "Initialized timezone list!",
+    "OK": "OK",
+    "Cancel": "Cancel",
+    "Edit": "Edit",
+    "Edit start time": "Edit start time",
+    "Theme setting": "Theme setting",
+    "theme.auto": "Auto ( Follows System )",
+    "theme.light": "Light",
+    "theme.dark": "Dark",
+    "Progress Bar Style setting": "Progress bar setting",
+    "progressBarStyle.header": "Header",
+    "progressBarStyle.auto": "Auto",
+    "progressBarStyle.horizontal": "Horizontal",
+    "progressBarStyle.vertical": "Vertical",
+    "language.auto": "Auto",
+    "Language setting": "Language setting",
+    "Color setting": "Color setting",
+    "gradation": "Gradation",
+    "solid": "Solid",
+    "roll-back": "Cancel",
+    "roll-backed": "Canceled.",
+    "This action cannot be undone. Do you want to continue?": "This action cannot be undone. Do you want to continue?",
+    "Close": "Close",
+    "Stamped!": "Stamped!",
+    "Updated.": "Updated.",
+    "Removed.": "Removed.",
+    "Reseted.": "Reseted.",
+    "Done!": "Done!",
+    "Saved!": "Saved!",
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.",
+    "You can use this web app like an app by registering it on the home screen of your smartphone.": "You can use this web app like an app by registering it on the home screen of your smartphone.",
+    "You can use a link like this too:": "You can use a link like this too:",
+    "You can use links like these too:": "You can use links like these too:",
+    "A date and time outside the valid range was specified.": "A date and time outside the valid range was specified.",
+    "Not support daylight savings time.": "Not support daylight savings time.",
+    "timezone.Tokyo": "Tokyo",
+    "timezone.Delhi": "Delhi",
+    "timezone.Istanbul": "Istanbul",
+    "timezone.London": "London",
+    "timezone.New York": "New York",
+    "timezone.Seattle": "Seattle"
+});
+define("resource/lang.ja", [], {
+    "$name": "日本語",
+    "Full screen": "フルスクリーン表示",
+    "Cancel full screen": "フルスクリーン解除",
+    "Elapsed time": "経過時間",
+    "Stamp": "スタンプ",
+    "Done": "完了",
+    "New Timer": "新しいタイマー",
+    "New Schedule": "新しい予定",
+    "New Time zone": "新しいタイムゾーン",
+    "New Event": "新しいイベント",
+    "days": "日",
+    "hours": "時間",
+    "minutes": "分",
+    "m(minutes)": "分",
+    "seconds": "秒",
+    "input a time": "時間を入力する",
+    "Timer": "タイマー",
+    "No Flash": "フラッシュなし",
+    "00:00:00 only": "00:00:00 のみ",
+    "Timestamp": "日時",
+    "Interval": "間隔",
+    "Due timestamp": "期限日時",
+    "Rest": "残り時間",
+    "Time zone offset": "タイムゾーン",
+    "Remove": "削除",
+    "Remove all stamps": "全てのスタンプを削除",
+    "Removed all stamps!": "全てのスタンプを削除しました！",
+    "Remove all alarms": "全てのアラームを削除",
+    "Removed all alarms!": "全てのアラームを削除しました！",
+    "Initialize timezone list": "タイムゾーンリストを初期化",
+    "Initialized timezone list!": "タイムゾーンリストを初期化しました！",
+    "OK": "OK",
+    "Cancel": "キャンセル",
+    "Edit": "編集",
+    "Edit start time": "起点編集",
+    "Theme setting": "テーマ設定",
+    "theme.auto": "自動 ( システムに従う )",
+    "theme.light": "ライト",
+    "theme.dark": "ダーク",
+    "Progress Bar Style setting": "プログレスバー設定",
+    "progressBarStyle.header": "ヘッダー",
+    "progressBarStyle.auto": "自動",
+    "progressBarStyle.horizontal": "水平",
+    "progressBarStyle.vertical": "垂直",
+    "language.auto": "自動",
+    "Language setting": "言語設定",
+    "Color setting": "色設定",
+    "gradation": "グラデーション",
+    "solid": "ソリッド",
+    "roll-back": "取り消す",
+    "roll-backed": "取り消しました。",
+    "This action cannot be undone. Do you want to continue?": "この操作は取り消せません。続行しますか？",
+    "Close": "閉じる",
+    "Stamped!": "スタンプ！",
+    "Updated.": "更新しました。",
+    "Removed.": "削除しました。",
+    "Reseted.": "リセットしました。",
+    "Done!": "完了！",
+    "Saved!": "保存しました！",
+    "Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.": "最大100個のタイムスタンプが保持され、100を超えると古いタイムスタンプから破棄されます。",
+    "You can use this web app like an app by registering it on the home screen of your smartphone.": "スマートフォンのホーム画面に登録する事でアプリのようにも使えます。",
+    "You can use a link like this too:": "次のようなリンクを使う事もできます:",
+    "You can use links like these too:": "次のようなリンクを使う事もできます:",
+    "A date and time outside the valid range was specified.": "有効な範囲外な日時が指定されました。",
+    "Not support daylight savings time.": "夏時間はサポートしていません。",
+    "timezone.Tokyo": "東京",
+    "timezone.Delhi": "デリー",
+    "timezone.Istanbul": "イスタンブール",
+    "timezone.London": "ロンドン",
+    "timezone.New York": "ニューヨーク",
+    "timezone.Seattle": "シアトル"
+});
+define("script/index", ["require", "exports", "tektite/script/index", "script/render/index", "script/render/resource", "script/storage", "script/domain", "resource/lang.en", "resource/lang.ja"], function (require, exports, script_1, render_5, resource_2, storage_10, domain_6, lang_en_json_1, lang_ja_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Clockworks = void 0;
+    lang_en_json_1 = __importDefault(lang_en_json_1);
+    lang_ja_json_1 = __importDefault(lang_ja_json_1);
     // import config from "../resource/config.json";
     var Clockworks;
     (function (Clockworks) {
         var _this = this;
         // export type ApplicationType = keyof typeof applicationList;
         // export const applicationIdList = Object.keys(applicationList);
+        Clockworks.localeMaster = {
+            en: lang_en_json_1.default,
+            ja: lang_ja_json_1.default,
+        };
         Clockworks.tektite = script_1.Tektite.make({
             makeUrl: domain_6.Domain.makeUrl,
             showUrl: render_5.Render.showUrl,
             loadSvgOrCache: resource_2.Resource.loadSvgOrCache,
+            localeMaster: Clockworks.localeMaster,
         });
         Clockworks.start = function (params) { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
@@ -12754,7 +12767,7 @@ define("script/index", ["require", "exports", "tektite/script/index", "script/lo
                 switch (_a.label) {
                     case 0:
                         console.log("start!!!: " + JSON.stringify(params));
-                        locale_8.Locale.setLocale(storage_10.Storage.Settings.get().locale);
+                        Clockworks.tektite.locale.setLocale(storage_10.Storage.Settings.get().locale);
                         window.onpopstate = function () { return render_5.Render.showPage(); };
                         window.addEventListener("resize", render_5.Render.onWindowResize);
                         window.addEventListener("focus", render_5.Render.onWindowFocus);
@@ -12795,7 +12808,7 @@ define("script/index", ["require", "exports", "tektite/script/index", "script/lo
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Tue Nov 09 2021 22:31:55 GMT+0900 (GMT+09:00)', })"><div id="foundation"><div id="screen"><h1 id="screen-header" class="segmented"></h1><div id="screen-body" class="screen-body"></div><div id="screen-toast"></div></div></div><div id="images" style="display: none;"><div id="application-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Thu Nov 11 2021 01:50:48 GMT+0900 (GMT+09:00)', })"><div id="foundation"><div id="screen"><h1 id="screen-header" class="segmented"></h1><div id="screen-body" class="screen-body"></div><div id="screen-toast"></div></div></div><div id="images" style="display: none;"><div id="application-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M555.328,66.1C526.511,63.3 497.489,63.3 468.672,66.1L454.4,135.582C426.779,139.808 399.707,147.062 373.674,157.212L326.573,104.175C300.216,116.159 275.083,130.67 251.527,147.503L273.908,214.812C252.101,232.283 232.283,252.101 214.812,273.908L147.503,251.527C130.67,275.083 116.159,300.216 104.175,326.573L157.212,373.674C147.062,399.707 139.808,426.779 135.582,454.4L66.1,468.672C63.3,497.489 63.3,526.511 66.1,555.328L135.582,569.6C139.808,597.221 147.062,624.293 157.212,650.326L104.175,697.427C116.159,723.784 130.67,748.917 147.503,772.473L214.812,750.092C232.283,771.899 252.101,791.717 273.908,809.188L251.527,876.497C275.083,893.33 300.216,907.841 326.573,919.825L373.674,866.788C399.707,876.938 426.779,884.192 454.4,888.418L468.672,957.9C497.489,960.7 526.511,960.7 555.328,957.9L569.6,888.418C597.221,884.192 624.293,876.938 650.326,866.788L697.427,919.825C723.784,907.841 748.917,893.33 772.473,876.497L750.092,809.188C771.899,791.717 791.717,771.899 809.188,750.092L876.497,772.473C893.33,748.917 907.841,723.784 919.825,697.427L866.788,650.326C876.938,624.293 884.192,597.221 888.418,569.6L957.9,555.328C960.7,526.511 960.7,497.489 957.9,468.672L888.418,454.4C884.192,426.779 876.938,399.707 866.788,373.674L919.825,326.573C907.841,300.216 893.33,275.083 876.497,251.527L809.188,273.908C791.717,252.101 771.899,232.283 750.092,214.812L772.473,147.503C748.917,130.67 723.784,116.159 697.427,104.175L650.326,157.212C624.293,147.062 597.221,139.808 569.6,135.582L555.328,66.1ZM512,192.225C688.488,192.225 831.775,335.512 831.775,512C831.775,688.488 688.488,831.775 512,831.775C335.512,831.775 192.225,688.488 192.225,512C192.225,335.512 335.512,192.225 512,192.225ZM503.806,508.395L662.473,349.917C681.066,331.345 711.239,331.363 729.811,349.957L730.354,350.501C748.926,369.095 748.908,399.268 730.314,417.839L539.166,608.761C538.717,609.249 538.254,609.732 537.778,610.208C530.727,617.263 522.02,621.663 512.902,623.408L512.727,623.441L512.644,623.456L512.605,623.464L512.535,623.476L512.443,623.493L512.386,623.504L512.31,623.518L512.198,623.537L512.159,623.544L512.129,623.549L512.014,623.569L511.872,623.593C510.28,623.863 508.661,624.054 507.02,624.162L506.898,624.17L506.756,624.179L506.72,624.181L506.691,624.183L506.592,624.189L506.483,624.195L506.432,624.198L506.381,624.2L506.286,624.205L506.203,624.209L506.144,624.212L506.067,624.216L505.979,624.22L505.919,624.222L505.857,624.225L505.751,624.229L505.672,624.233L505.63,624.234L505.569,624.236L505.43,624.241L505.364,624.243L505.337,624.244L505.281,624.246L505.104,624.251L505.055,624.252L505.041,624.252L504.993,624.254L504.768,624.258L504.742,624.259C504.438,624.265 504.133,624.268 503.829,624.268L503.817,624.268L503.685,624.267L503.553,624.267L503.541,624.267L503.507,624.267L503.295,624.265L503.26,624.264C498.449,624.21 493.806,623.446 489.434,622.072L489.338,622.042L489.266,622.019C482.181,619.773 475.514,615.843 469.896,610.229L341.788,482.199C323.05,463.472 323.041,433.055 341.768,414.316C360.495,395.578 390.912,395.569 409.65,414.296L503.806,508.395Z"/>
 </svg>
 </div><div id="never-stopwatch-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
