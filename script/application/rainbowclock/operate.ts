@@ -12,7 +12,7 @@ export module Operate
         Render.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.tektite.locale.map("Saved!")}`),
+            content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -39,7 +39,7 @@ export module Operate
         Render.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.tektite.locale.map("Saved!")}`),
+            content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -68,7 +68,7 @@ export module Operate
         }
         const toast = Clockworks.tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.tektite.locale.map("Removed.")}`),
+            content: Render.$span("")(`${Clockworks.localeMap("Removed.")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -90,11 +90,11 @@ export module Operate
     };
     export const reset = async () =>
     {
-        if (Render.systemConfirm(Clockworks.tektite.locale.map("This action cannot be undone. Do you want to continue?")))
+        if (Render.systemConfirm(Clockworks.localeMap("This action cannot be undone. Do you want to continue?")))
         {
             Storage.RainbowClock.Timezone.removeKey();
             Render.updateWindow("operate");
-            Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Clockworks.tektite.locale.map("Initialized timezone list!")}`), });
+            Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Clockworks.localeMap("Initialized timezone list!")}`), });
         }
     };
 }

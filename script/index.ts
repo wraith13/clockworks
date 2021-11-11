@@ -28,6 +28,8 @@ export module Clockworks
         loadSvgOrCache: Resource.loadSvgOrCache,
         localeMaster,
     });
+    export const localeMap = (key: LocaleKeyType) => tektite.locale.map(key);
+    export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
     export const start = async (params:{ buildTimestamp: string, }) =>
     {
         console.log(`start!!!: ${JSON.stringify(params)}`);
