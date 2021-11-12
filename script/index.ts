@@ -39,8 +39,6 @@ export module Clockworks
         window.addEventListener("focus", Render.onWindowFocus);
         window.addEventListener("blur", Render.onWindowBlur);
         window.addEventListener("storage", Render.onUpdateStorage);
-        window.addEventListener("compositionstart", Render.onCompositionStart);
-        window.addEventListener("compositionend", Render.onCompositionEnd);
         window.addEventListener("keydown", Render.onKeydown);
         document.getElementById("screen-header").addEventListener
         (

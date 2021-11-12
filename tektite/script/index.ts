@@ -5,6 +5,7 @@ import { Screen } from "./screen";
 import { Toast as ToastModule } from "./toast";
 import { Header } from "./header";
 import { Menu } from "./menu";
+import { Key as KeyModule } from "./key";
 export module Tektite
 {
     export interface LocaleEntry
@@ -30,8 +31,11 @@ export module Tektite
     {
         constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
+            window.addEventListener("compositionstart", this.key.onCompositionStart);
+            window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
         public fullscreen = FullscreenModule;
+        public key = KeyModule;
         public screen = Screen.make(this);
         public header = Header.make(this);
         public menu = Menu.make(this);

@@ -2969,24 +2969,9 @@ export module Render
             50,
         );
     };
-    let isInComposeSession: boolean = false;
-    let lastestCompositionEndAt = 0;
-    export const onCompositionStart = (_event: CompositionEvent) =>
-    {
-        isInComposeSession = true;
-    };
-    export const onCompositionEnd = (_event: CompositionEvent) =>
-    {
-        isInComposeSession = false;
-        lastestCompositionEndAt = new Date().getTime();
-    };
-    export const isComposing = (event: KeyboardEvent) =>
-    {
-        return event.isComposing || isInComposeSession || new Date().getTime() < lastestCompositionEndAt +100;
-    };
     export const onKeydown = (event: KeyboardEvent) =>
     {
-        if ( ! isComposing(event))
+        if ( ! Clockworks.tektite.key.isComposing(event))
         {
             switch(event.key)
             {
