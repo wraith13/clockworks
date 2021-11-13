@@ -1351,11 +1351,6 @@ export module Render
         title: 0 === flashInterval ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
         menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
     });
-    export const replaceScreenBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
-    (
-        minamo.dom.getDivsByClassName(document, "screen-body")[0],
-        body
-    );
     export const fullscreenMenuItem = async () => Clockworks.tektite.fullscreen.enabled() ?
         (
             null === Clockworks.tektite.fullscreen.element() ?
@@ -1450,48 +1445,6 @@ export module Render
         await languageMenuItem(),
         await githubMenuItem(),
     ];
-    export const getBodyScrollTop = (topChild = minamo.dom.getDivsByClassName(document, "primary-page")[0]) =>
-    {
-        const body = document.getElementById("screen-body");
-        const primaryPageOffsetTop = Math.min(topChild.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
-        return body.scrollTop -primaryPageOffsetTop;
-    };
-    export const isStrictShowPrimaryPage = () => 0 === getBodyScrollTop();
-    export const downPageLink = async () =>
-    ({
-        tag: "div",
-        className: "down-page-link icon",
-        children: await Resource.loadSvgOrCache("down-triangle-icon"),
-        onclick: async () =>
-        {
-            if (isStrictShowPrimaryPage())
-            {
-                await scrollToElement(minamo.dom.getDivsByClassName(document, "trail-page")[0]);
-            }
-            else
-            {
-                await scrollToElement(minamo.dom.getDivsByClassName(document, "primary-page")[0]);
-            }
-        },
-    });
-    export const scrollToOffset = async (target: HTMLElement, offset: number) =>
-    {
-        let scrollTop = target.scrollTop;
-        let diff = offset -scrollTop;
-        for(let i = 0; i < 25; ++i)
-        {
-            diff *= 0.8;
-            target.scrollTo(0, offset -diff);
-            await minamo.core.timeout(10);
-        }
-        target.scrollTo(0, offset);
-    };
-    export const scrollToElement = async (target: HTMLElement) =>
-    {
-        const parent = target.parentElement;
-        const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
-        await scrollToOffset(parent, targetOffsetTop);
-    };
     export const welcomeScreen = async (): Promise<ScreenSource> =>
     ({
         className: "welcome-screen",
@@ -1538,7 +1491,7 @@ export module Render
                 ]),
                 $div("page-footer")
                 ([
-                    await downPageLink(),
+                    await Clockworks.tektite.screen.downPageLink(),
                 ]),
             ]),
             $div("trail-page")
@@ -1683,7 +1636,7 @@ export module Render
                                 onclick: async () => await Operate.NeverStopwatch.save(item),
                             }
                     ]):
-                    await downPageLink(),
+                    await Clockworks.tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
@@ -1827,9 +1780,9 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     ticks = Storage.NeverStopwatch.Stamps.get();
-                    replaceScreenBody(await neverStopwatchScreenBody(item, ticks));
+                    Clockworks.tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
                     resizeFlexList();
-                    adjustPageFooterPosition();
+                    Clockworks.tektite.screen.adjustPageFooterPosition();
                     await updateWindow("timer");
                     break;
             }
@@ -1971,7 +1924,7 @@ export module Render
                                 onclick: async () => await Operate.CountdownTimer.save(item),
                             }
                     ]):
-                    await downPageLink(),
+                    await Clockworks.tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
@@ -2149,11 +2102,11 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     alarms = Storage.CountdownTimer.Alarms.get();
-                    replaceScreenBody(await countdownTimerScreenBody(item, alarms));
+                    Clockworks.tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
                     resizeFlexList();
                     await updateWindow("timer");
-                    await Render.scrollToOffset(document.getElementById("screen-body"), 0);
-                    adjustPageFooterPosition();
+                    await Clockworks.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    Clockworks.tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };
@@ -2257,7 +2210,7 @@ export module Render
                                 onclick: async () => await Operate.ElapsedTimer.save(item),
                             }
                     ]):
-                    await downPageLink(),
+                    await Clockworks.tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
@@ -2415,11 +2368,11 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     events = Storage.ElapsedTimer.Events.get();
-                    replaceScreenBody(await elapsedTimerScreenBody(item, events));
+                    Clockworks.tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
                     resizeFlexList();
                     await updateWindow("timer");
-                    await Render.scrollToOffset(document.getElementById("screen-body"), 0);
-                    adjustPageFooterPosition();
+                    await Clockworks.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    Clockworks.tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };
@@ -2533,7 +2486,7 @@ export module Render
                                 onclick: async () => await Operate.RainbowClock.save(item),
                             }
                     ]):
-                    await downPageLink(),
+                    await Clockworks.tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
@@ -2676,11 +2629,11 @@ export module Render
                     break;
                 case "operate":
                     timezones = Storage.RainbowClock.Timezone.get();
-                    replaceScreenBody(await rainbowClockScreenBody(item, timezones));
+                    Clockworks.tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
                     resizeFlexList();
                     await updateWindow("timer");
-                    await Render.scrollToOffset(document.getElementById("screen-body"), 0);
-                    adjustPageFooterPosition();
+                    await Clockworks.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    Clockworks.tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };
@@ -2732,8 +2685,8 @@ export module Render
                 "scroll",
                 () =>
                 {
-                    adjustPageFooterPosition();
-                    adjustDownPageLinkDirection();
+                    Clockworks.tektite.screen.adjustPageFooterPosition();
+                    Clockworks.tektite.screen.adjustDownPageLinkDirection();
                     if (document.getElementById("screen-body").scrollTop <= 0)
                     {
                         Render.updateWindow?.("scroll");
@@ -2756,7 +2709,7 @@ export module Render
         updateTitle();
         //minamo.core.timeout(100);
         resizeFlexList();
-        adjustPageFooterPosition();
+        Clockworks.tektite.screen.adjustPageFooterPosition();
     };
     export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
     export const setScreenBarProgress = (percent: null | number, color?: string) =>
@@ -2911,22 +2864,6 @@ export module Render
             }
         );
     };
-    export const adjustPageFooterPosition = () =>
-    {
-        const primaryPage = document.getElementsByClassName("primary-page")[0];
-        if (primaryPage)
-        {
-            const body = document.getElementById("screen-body");
-            const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +getBodyScrollTop()), 0);
-            minamo.dom.getDivsByClassName(document, "page-footer")
-                .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(1rem + ${delta}px)`));
-            // minamo.dom.getDivsByClassName(document, "down-page-link")
-            //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
-        }
-    };
-    export const adjustDownPageLinkDirection = () =>
-        minamo.dom.getDivsByClassName(document, "down-page-link")
-            .forEach(i => minamo.dom.toggleCSSClass(i, "reverse-down-page-link", ! isStrictShowPrimaryPage()));
     let onWindowResizeTimestamp = 0;
     export const onWindowResize = () =>
     {
@@ -2938,7 +2875,7 @@ export module Render
                 if (timestamp === onWindowResizeTimestamp)
                 {
                     resizeFlexList();
-                    adjustPageFooterPosition();
+                    Clockworks.tektite.screen.adjustPageFooterPosition();
                 }
             },
             100,

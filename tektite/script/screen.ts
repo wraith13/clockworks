@@ -8,6 +8,14 @@ export module Screen
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
+        public onLoad = () =>
+        {
+            document.getElementById("screen-header").addEventListener
+            (
+                'click',
+                async () => await this.scrollToOffset(document.getElementById("screen-body"), 0)
+            );
+        };
         public cover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
             const onclick = async () =>
@@ -70,7 +78,7 @@ export module Screen
             });
             const close = async () =>
             {
-                await data?.onClose();
+                await data.onClose?.();
                 screenCover.close();
             };
             // minamo.dom.appendChildren(document.body, dom);
@@ -83,7 +91,7 @@ export module Screen
                 ],
                 onclick: async () =>
                 {
-                    await data?.onClose();
+                    await data.onClose?.();
                     //minamo.dom.remove(dom);
                 },
             });
@@ -103,6 +111,69 @@ export module Screen
             document.body.classList.add("flash");
             setTimeout(() => document.body.classList.remove("flash"), 1500);
         };
+        replaceBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
+        (
+            minamo.dom.getDivsByClassName(document, "screen-body")[0],
+            body
+        );
+        scrollToOffset = async (target: HTMLElement, offset: number) =>
+        {
+            let scrollTop = target.scrollTop;
+            let diff = offset -scrollTop;
+            for(let i = 0; i < 25; ++i)
+            {
+                diff *= 0.8;
+                target.scrollTo(0, offset -diff);
+                await minamo.core.timeout(10);
+            }
+            target.scrollTo(0, offset);
+        };
+        scrollToElement = async (target: HTMLElement) =>
+        {
+            const parent = target.parentElement;
+            const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
+            await this.scrollToOffset(parent, targetOffsetTop);
+        };
+        getBodyScrollTop = (topChild = minamo.dom.getDivsByClassName(document, "primary-page")[0]) =>
+        {
+            const body = document.getElementById("screen-body");
+            const primaryPageOffsetTop = Math.min(topChild.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
+            return body.scrollTop -primaryPageOffsetTop;
+        };
+        isStrictShowPrimaryPage = () => 0 === this.getBodyScrollTop();
+        downPageLink = async () =>
+        ({
+            tag: "div",
+            className: "down-page-link icon",
+            children: await this.tektite.params.loadSvgOrCache("down-triangle-icon"),
+            onclick: async () =>
+            {
+                if (this.isStrictShowPrimaryPage())
+                {
+                    await this.scrollToElement(minamo.dom.getDivsByClassName(document, "trail-page")[0]);
+                }
+                else
+                {
+                    await this.scrollToElement(minamo.dom.getDivsByClassName(document, "primary-page")[0]);
+                }
+            },
+        });
+        adjustPageFooterPosition = () =>
+        {
+            const primaryPage = document.getElementsByClassName("primary-page")[0];
+            if (primaryPage)
+            {
+                const body = document.getElementById("screen-body");
+                const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +this.getBodyScrollTop()), 0);
+                minamo.dom.getDivsByClassName(document, "page-footer")
+                    .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(1rem + ${delta}px)`));
+                // minamo.dom.getDivsByClassName(document, "down-page-link")
+                //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
+            }
+        };
+        adjustDownPageLinkDirection = () =>
+            minamo.dom.getDivsByClassName(document, "down-page-link")
+                .forEach(i => minamo.dom.toggleCSSClass(i, "reverse-down-page-link", ! this.isStrictShowPrimaryPage()));
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Screen(tektite);

@@ -32,19 +32,16 @@ export module Clockworks
     export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
     export const start = async (params:{ buildTimestamp: string, }) =>
     {
-        console.log(`start!!!: ${JSON.stringify(params)}`);
+        console.log(`start timestamp: ${new Date()}`);
+        console.log(`${JSON.stringify(params)}`);
         tektite.locale.setLocale(Storage.Settings.get().locale);
+        tektite.onLoad();
         window.onpopstate = () => Render.showPage();
         window.addEventListener("resize", Render.onWindowResize);
         window.addEventListener("focus", Render.onWindowFocus);
         window.addEventListener("blur", Render.onWindowBlur);
         window.addEventListener("storage", Render.onUpdateStorage);
         window.addEventListener("keydown", Render.onKeydown);
-        document.getElementById("screen-header").addEventListener
-        (
-            'click',
-            async () => await Render.scrollToOffset(document.getElementById("screen-body"), 0)
-        );
         window.addEventListener("mousemove", Render.onMouseMove);
         window.addEventListener("mousedown", tektite.screen.onMouseDown);
         window.addEventListener("mouseup", tektite.screen.onMouseUp);

@@ -20,11 +20,12 @@ export module Tektite
         header: HeaderSource<PageParams, IconKeyType>;
         body: minamo.dom.Source;
     }
+    export type TektiteIconKeyType = "cross-icon" | "ellipsis-icon" | "down-triangle-icon";
     export interface TektiteParams<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         makeUrl: (args: PageParams) => string;
         showUrl: (data: PageParams) => Promise<unknown>;
-        loadSvgOrCache: (key: IconKeyType | "cross-icon" | "ellipsis-icon") => Promise<SVGElement>;
+        loadSvgOrCache: (key: IconKeyType | TektiteIconKeyType) => Promise<SVGElement>;
         localeMaster: LocaleMapType;
     }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
@@ -34,6 +35,10 @@ export module Tektite
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
+        public onLoad = () =>
+        {
+            this.screen.onLoad();
+        };
         public fullscreen = FullscreenModule;
         public key = KeyModule;
         public screen = Screen.make(this);
