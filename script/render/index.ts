@@ -1510,7 +1510,7 @@ export module Render
     export const showWelcomeScreen = async () =>
     {
         document.body.classList.remove("hide-scroll-bar");
-        const updateWindow = async (event: UpdateWindowEventEype) =>
+        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
             switch(event)
             {
@@ -1702,7 +1702,7 @@ export module Render
         const applicationTitle = Type.applicationList["NeverStopwatch"].title;
         document.body.classList.add("hide-scroll-bar");
         let ticks = Storage.NeverStopwatch.Stamps.get();
-        const updateWindow = async (event: UpdateWindowEventEype) =>
+        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
             const screen = document.getElementById("screen") as HTMLDivElement;
             const now = new Date();
@@ -1732,13 +1732,13 @@ export module Render
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         setScreenBarProgress(rate, nextColor);
                         // setBodyColor(nextColor);
-                        getHeaderElement().classList.add("with-screen-prgress");
+                        Clockworks.tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         setScreenBarProgress(null);
-                        getHeaderElement().classList.remove("with-screen-prgress");
+                        Clockworks.tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
                         setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
@@ -2011,7 +2011,7 @@ export module Render
         document.body.classList.add("hide-scroll-bar");
         let alarms = Storage.CountdownTimer.Alarms.get();
         let lashFlashAt = 0;
-        const updateWindow = async (event: UpdateWindowEventEype) =>
+        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
             const screen = document.getElementById("screen") as HTMLDivElement;
             const now = new Date();
@@ -2053,13 +2053,13 @@ export module Render
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
                         setScreenBarProgress(rate, nextColor);
                         // setBodyColor(nextColor);
-                        getHeaderElement().classList.add("with-screen-prgress");
+                        Clockworks.tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         setScreenBarProgress(null);
-                        getHeaderElement().classList.remove("with-screen-prgress");
+                        Clockworks.tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                         setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
@@ -2289,7 +2289,7 @@ export module Render
         const applicationTitle = Type.applicationList["ElapsedTimer"].title;
         document.body.classList.add("hide-scroll-bar");
         let events = Storage.ElapsedTimer.Events.get();
-        const updateWindow = async (event: UpdateWindowEventEype) =>
+        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
             const screen = document.getElementById("screen") as HTMLDivElement;
             const now = new Date();
@@ -2319,13 +2319,13 @@ export module Render
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         setScreenBarProgress(rate, nextColor);
                         // setBodyColor(nextColor);
-                        getHeaderElement().classList.add("with-screen-prgress");
+                        Clockworks.tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         setScreenBarProgress(null);
-                        getHeaderElement().classList.remove("with-screen-prgress");
+                        Clockworks.tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
                         setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
@@ -2554,7 +2554,7 @@ export module Render
         const applicationTitle = Type.applicationList["RainbowClock"].title;
         document.body.classList.add("hide-scroll-bar");
         let timezones = Storage.RainbowClock.Timezone.get();
-        const updateWindow = async (event: UpdateWindowEventEype) =>
+        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
             const screen = document.getElementById("screen") as HTMLDivElement;
             const now = new Date();
@@ -2642,74 +2642,18 @@ export module Render
     };
     export const updateTitle = () =>
     {
-        document.title = minamo.dom.getDivsByClassName(getHeaderElement(), "segment-title")
+        document.title = minamo.dom.getDivsByClassName(Clockworks.tektite.header.getElement(), "segment-title")
             ?.map(div => div.innerText)
             // ?.reverse()
             ?.join(" / ")
             ?? config.applicationTitle;
     };
-    export type UpdateWindowEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
-    export let updateWindow: (event: UpdateWindowEventEype) => unknown;
-    let updateWindowTimer = undefined;
-    export const getHeaderElement = () => document.getElementById("screen-header") as HTMLDivElement;
-    export const showWindow = async (screen: ScreenSource, updateWindow?: (event: UpdateWindowEventEype) => unknown) =>
+    export const showWindow = async (screen: ScreenSource, updateWindow?: (event: Tektite.UpdateWindowEventEype) => unknown) =>
     {
-        if (undefined !== updateWindow)
-        {
-            Render.updateWindow = updateWindow;
-        }
-        else
-        {
-            Render.updateWindow = async (event: UpdateWindowEventEype) =>
-            {
-                if ("storage" === event || "operate" === event)
-                {
-                    await reload();
-                }
-            };
-        }
-        if (undefined === updateWindowTimer)
-        {
-            updateWindowTimer = setInterval
-            (
-                () => Render.updateWindow?.("high-resolution-timer"),
-                36
-            );
-            updateWindowTimer = setInterval
-            (
-                () => Render.updateWindow?.("timer"),
-                360
-            );
-            document.getElementById("screen-body").addEventListener
-            (
-                "scroll",
-                () =>
-                {
-                    Clockworks.tektite.screen.adjustPageFooterPosition();
-                    Clockworks.tektite.screen.adjustDownPageLinkDirection();
-                    if (document.getElementById("screen-body").scrollTop <= 0)
-                    {
-                        Render.updateWindow?.("scroll");
-                    }
-                }
-            );
-        }
+        await Clockworks.tektite.screen.show(screen, updateWindow);
         setBackgroundColor(Color.getSolidRainbowColor(0));
-        document.getElementById("screen").className = `${screen.className} screen`;
-        minamo.dom.replaceChildren
-        (
-            getHeaderElement(),
-            await Clockworks.tektite.header.segmented(screen.header)
-        );
-        minamo.dom.replaceChildren
-        (
-            document.getElementById("screen-body"),
-            screen.body
-        );
         updateTitle();
-        //minamo.core.timeout(100);
         resizeFlexList();
-        Clockworks.tektite.screen.adjustPageFooterPosition();
     };
     export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
     export const setScreenBarProgress = (percent: null | number, color?: string) =>
@@ -2879,31 +2823,6 @@ export module Render
                 }
             },
             100,
-        );
-    };
-    export const onWindowFocus = () =>
-    {
-        updateWindow?.("focus");
-    };
-    export const onWindowBlur = () =>
-    {
-        updateWindow?.("blur");
-    };
-    let onUpdateStorageCount = 0;
-    export const onUpdateStorage = () =>
-    {
-        const lastUpdate = Storage.lastUpdate = new Date().getTime();
-        const onUpdateStorageCountCopy = onUpdateStorageCount = onUpdateStorageCount +1;
-        setTimeout
-        (
-            () =>
-            {
-                if (lastUpdate === Storage.lastUpdate && onUpdateStorageCountCopy === onUpdateStorageCount)
-                {
-                    updateWindow?.("storage");
-                }
-            },
-            50,
         );
     };
     export const onKeydown = (event: KeyboardEvent) =>

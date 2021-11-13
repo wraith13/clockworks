@@ -9,7 +9,7 @@ export module Operate
     export const add = async (item: Type.TimezoneEntry, onCanceled?: () => unknown) =>
     {
         Storage.RainbowClock.Timezone.add(item);
-        Render.updateWindow("operate");
+        Clockworks.tektite.screen.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
@@ -18,7 +18,7 @@ export module Operate
                 async () =>
                 {
                     Storage.RainbowClock.Timezone.remove(item);
-                    Render.updateWindow("operate");
+                    Clockworks.tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -36,7 +36,7 @@ export module Operate
         };
         Storage.RainbowClock.Timezone.remove(oldTimezone);
         Storage.RainbowClock.Timezone.add(newTimezone);
-        Render.updateWindow("operate");
+        Clockworks.tektite.screen.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
@@ -46,7 +46,7 @@ export module Operate
                 {
                     Storage.RainbowClock.Timezone.remove(newTimezone);
                     Storage.RainbowClock.Timezone.add(oldTimezone);
-                    Render.updateWindow("operate");
+                    Clockworks.tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -64,7 +64,7 @@ export module Operate
         }
         else
         {
-            Render.updateWindow("operate");
+            Clockworks.tektite.screen.updateWindow("operate");
         }
         const toast = Clockworks.tektite.toast.makePrimary
         ({
@@ -80,7 +80,7 @@ export module Operate
                     }
                     else
                     {
-                        Render.updateWindow("operate");
+                        Clockworks.tektite.screen.updateWindow("operate");
                     }
                     await toast.hide();
                     onCanceled?.();
@@ -93,7 +93,7 @@ export module Operate
         if (Render.systemConfirm(Clockworks.localeMap("This action cannot be undone. Do you want to continue?")))
         {
             Storage.RainbowClock.Timezone.removeKey();
-            Render.updateWindow("operate");
+            Clockworks.tektite.screen.updateWindow("operate");
             Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Clockworks.localeMap("Initialized timezone list!")}`), });
         }
     };

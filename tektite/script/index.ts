@@ -21,12 +21,15 @@ export module Tektite
         body: minamo.dom.Source;
     }
     export type TektiteIconKeyType = "cross-icon" | "ellipsis-icon" | "down-triangle-icon";
+    export type UpdateWindowEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
     export interface TektiteParams<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         makeUrl: (args: PageParams) => string;
         showUrl: (data: PageParams) => Promise<unknown>;
+        showPage: (url: string) => Promise<unknown>;
         loadSvgOrCache: (key: IconKeyType | TektiteIconKeyType) => Promise<SVGElement>;
         localeMaster: LocaleMapType;
+        timer?: { resolution?: number, highResolution?: number, };
     }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
@@ -46,7 +49,7 @@ export module Tektite
         public menu = Menu.make(this);
         public locale = Locale.make(this);
         public toast = ToastModule;
-        internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
+        public internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
         ({
             tag: "a",
             className: data.className,
@@ -59,7 +62,7 @@ export module Tektite
                 return false;
             }
         });
-        externalLink = (data: { className?: string, href: string, children: minamo.dom.Source}) =>
+        public externalLink = (data: { className?: string, href: string, children: minamo.dom.Source}) =>
         ({
             tag: "a",
             className: data.className,
@@ -73,6 +76,7 @@ export module Tektite
                 document.body.classList.toggle("fxxking-ipad-fullscreen", this.fullscreen.element());
             }
         };
+        public reload = async () => await this.params.showPage(location.href);
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);

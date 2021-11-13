@@ -25,8 +25,14 @@ export module Clockworks
     ({
         makeUrl: Domain.makeUrl,
         showUrl: Render.showUrl,
+        showPage: Render.showPage,
         loadSvgOrCache: Resource.loadSvgOrCache,
         localeMaster,
+        timer:
+        {
+            resolution: 360,
+            highResolution: 36,
+        }
     });
     export const localeMap = (key: LocaleKeyType) => tektite.locale.map(key);
     export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
@@ -38,9 +44,6 @@ export module Clockworks
         tektite.onLoad();
         window.onpopstate = () => Render.showPage();
         window.addEventListener("resize", Render.onWindowResize);
-        window.addEventListener("focus", Render.onWindowFocus);
-        window.addEventListener("blur", Render.onWindowBlur);
-        window.addEventListener("storage", Render.onUpdateStorage);
         window.addEventListener("keydown", Render.onKeydown);
         window.addEventListener("mousemove", Render.onMouseMove);
         window.addEventListener("mousedown", tektite.screen.onMouseDown);

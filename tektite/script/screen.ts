@@ -8,13 +8,72 @@ export module Screen
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
+        updateWindow: (event: Tektite.UpdateWindowEventEype) => unknown;
+        private updateWindowTimer = undefined;
+        private updateWindowHighResolutionTimer = undefined;
+        onWindowFocus = () =>
+        {
+            this.updateWindow?.("focus");
+        };
+        onWindowBlur = () =>
+        {
+            this.updateWindow?.("blur");
+        };
+        private onUpdateStorageCount = 0;
+        onUpdateStorage = () =>
+        {
+            const onUpdateStorageCountCopy = this.onUpdateStorageCount = this.onUpdateStorageCount +1;
+            setTimeout
+            (
+                () =>
+                {
+                    if (onUpdateStorageCountCopy === this.onUpdateStorageCount)
+                    {
+                        this.updateWindow?.("storage");
+                    }
+                },
+                50,
+            );
+        };
         public onLoad = () =>
         {
+            window.addEventListener("focus", this.onWindowFocus);
+            window.addEventListener("blur", this.onWindowBlur);
+            window.addEventListener("storage", this.onUpdateStorage);
             document.getElementById("screen-header").addEventListener
             (
                 'click',
                 async () => await this.scrollToOffset(document.getElementById("screen-body"), 0)
             );
+            document.getElementById("screen-body").addEventListener
+            (
+                "scroll",
+                () =>
+                {
+                    this.adjustPageFooterPosition();
+                    this.adjustDownPageLinkDirection();
+                    if (document.getElementById("screen-body").scrollTop <= 0)
+                    {
+                        this.updateWindow?.("scroll");
+                    }
+                }
+            );
+            if (undefined === this.updateWindowTimer)
+            {
+                this.updateWindowTimer = setInterval
+                (
+                    () => this.updateWindow?.("timer"),
+                    360
+                );
+            }
+            if (undefined === this.updateWindowHighResolutionTimer)
+            {
+                this.updateWindowHighResolutionTimer = setInterval
+                (
+                    () => this.updateWindow?.("high-resolution-timer"),
+                    36
+                );
+            }
         };
         public cover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
@@ -174,6 +233,36 @@ export module Screen
         adjustDownPageLinkDirection = () =>
             minamo.dom.getDivsByClassName(document, "down-page-link")
                 .forEach(i => minamo.dom.toggleCSSClass(i, "reverse-down-page-link", ! this.isStrictShowPrimaryPage()));
+        public show = async (screen: Tektite.ScreenSource<PageParams, IconKeyType>, updateWindow?: (event: Tektite.UpdateWindowEventEype) => unknown) =>
+        {
+            if (undefined !== updateWindow)
+            {
+                this.updateWindow = updateWindow;
+            }
+            else
+            {
+                this.updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
+                {
+                    if ("storage" === event || "operate" === event)
+                    {
+                        await this.tektite.reload();
+                    }
+                };
+            }
+            document.getElementById("screen").className = `${screen.className} screen`;
+            minamo.dom.replaceChildren
+            (
+                this.tektite.header.getElement(),
+                await this.tektite.header.segmented(screen.header)
+            );
+            minamo.dom.replaceChildren
+            (
+                document.getElementById("screen-body"),
+                screen.body
+            );
+            this.adjustPageFooterPosition();
+            this.adjustDownPageLinkDirection();
+        };
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Screen(tektite);

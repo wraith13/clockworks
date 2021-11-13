@@ -17,7 +17,7 @@ export module Operate
             end: tick +i,
         };
         Storage.CountdownTimer.Alarms.add(alarm);
-        Render.updateWindow("operate");
+        Clockworks.tektite.screen.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
@@ -26,7 +26,7 @@ export module Operate
                 async () =>
                 {
                     Storage.CountdownTimer.Alarms.remove(alarm);
-                    Render.updateWindow("operate");
+                    Clockworks.tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -43,7 +43,7 @@ export module Operate
             end,
         };
         Storage.CountdownTimer.Alarms.add(alarm);
-        Render.updateWindow("operate");
+        Clockworks.tektite.screen.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
@@ -52,7 +52,7 @@ export module Operate
                 async () =>
                 {
                     Storage.CountdownTimer.Alarms.remove(alarm);
-                    Render.updateWindow("operate");
+                    Clockworks.tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -62,7 +62,7 @@ export module Operate
     export const save = async (item: Type.AlarmEntry, onCanceled?: () => unknown) =>
     {
         Storage.CountdownTimer.Alarms.add(item);
-        Render.updateWindow("operate");
+        Clockworks.tektite.screen.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
@@ -71,7 +71,7 @@ export module Operate
                 async () =>
                 {
                     Storage.CountdownTimer.Alarms.remove(item);
-                    Render.updateWindow("operate");
+                    Clockworks.tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -90,7 +90,7 @@ export module Operate
         };
         Storage.CountdownTimer.Alarms.remove(oldSchedule);
         Storage.CountdownTimer.Alarms.add(newSchedule);
-        Render.updateWindow("operate");
+        Clockworks.tektite.screen.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
@@ -100,7 +100,7 @@ export module Operate
                 {
                     Storage.CountdownTimer.Alarms.remove(newSchedule);
                     Storage.CountdownTimer.Alarms.add(oldSchedule);
-                    Render.updateWindow("operate");
+                    Clockworks.tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -116,7 +116,7 @@ export module Operate
         }
         const color = Storage.CountdownTimer.ColorIndex.get();
         Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
-        Render.updateWindow("operate");
+        Clockworks.tektite.screen.updateWindow("operate");
         const toast = Clockworks.tektite.toast.makePrimary
         ({
             content: Render.$span("")(`${Clockworks.localeMap("Done!")}`),
@@ -130,7 +130,7 @@ export module Operate
                         Storage.ElapsedTimer.Events.remove({ title: item.title, tick: item.end, });
                     }
                     Storage.CountdownTimer.ColorIndex.set(color);
-                    Render.updateWindow("operate");
+                    Clockworks.tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -168,7 +168,7 @@ export module Operate
         }
         else
         {
-            Render.updateWindow("operate");
+            Clockworks.tektite.screen.updateWindow("operate");
         }
         const toast = Clockworks.tektite.toast.makePrimary
         ({
@@ -184,7 +184,7 @@ export module Operate
                     }
                     else
                     {
-                        Render.updateWindow("operate");
+                        Clockworks.tektite.screen.updateWindow("operate");
                     }
                     await toast.hide();
                     onCanceled?.();
@@ -197,7 +197,7 @@ export module Operate
         if (Render.systemConfirm(Clockworks.localeMap("This action cannot be undone. Do you want to continue?")))
         {
             Storage.CountdownTimer.Alarms.removeKey();
-            Render.updateWindow("operate");
+            Clockworks.tektite.screen.updateWindow("operate");
             Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
         }
     };
