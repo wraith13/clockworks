@@ -1,14 +1,14 @@
 {
     "application-icon": "./image/clockworks.1024.svg",
     "never-stopwatch-icon": "./image/never-stopwatch.1024.svg",
-    "history-icon": "./image/history.1024.svg",
-    "elapsed-icon": "./image/elapsed.1024.svg",
-    "ellipsis-icon": "./image/ellipsis.1024.svg",
-    "cross-icon": "./image/cross.1024.svg",
-    "check-icon": "./image/check.1024.svg",
-    "flash-icon": "./image/sun.1024.svg",
-    "sleep-icon": "./image/moon.1024.svg",
-    "tick-icon": "./image/tick.1024.svg",
-    "pin-icon": "./image/pin.1024.svg",
-    "down-triangle-icon": "./image/down-triangle.1024.svg"
+    "history-icon": "./tektite/image/history.1024.svg",
+    "elapsed-icon": "./tektite/image/elapsed.1024.svg",
+    "ellipsis-icon": "./tektite/image/ellipsis.1024.svg",
+    "cross-icon": "./tektite/image/cross.1024.svg",
+    "check-icon": "./tektite/image/check.1024.svg",
+    "flash-icon": "./tektite/image/sun.1024.svg",
+    "sleep-icon": "./tektite/image/moon.1024.svg",
+    "tick-icon": "./tektite/image/tick.1024.svg",
+    "pin-icon": "./tektite/image/pin.1024.svg",
+    "down-triangle-icon": "./tektite/image/down-triangle.1024.svg"
 }
