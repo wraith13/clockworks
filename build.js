@@ -1,4 +1,5 @@
 'use strict';
+console.log(`build start: ${new Date()}`);
 const process = require("process");
 const child_process = require("child_process");
 const fs = require("fs");
@@ -41,14 +42,27 @@ const evalValue = (value) =>
     return null;
 };
 const json = require("./build.json");
-(json.preprocesses[process.argv[2] || "default"] || [ ]).forEach
-(
-    command =>
-    {
-        console.log(command);
-        child_process.execSync(command);
-    }
-);
+try
+{
+    (json.preprocesses[process.argv[2] || "default"] || [ ]).forEach
+    (
+        command =>
+        {
+            console.log(command);
+            child_process.execSync
+            (
+                command,
+                {
+                    stdio: [ "inherit", "inherit", "inherit" ]
+                }
+            );
+        }
+    );
+}
+catch
+{
+    process.exit(-1);
+}
 const template = evalValue(json.template);
 Object.keys(json.parameters).forEach
 (
@@ -73,5 +87,6 @@ fs.writeFileSync
         template
     )
 )
+console.log(`build end: ${new Date()}`);
 
 // how to run: `node ./build.js`
