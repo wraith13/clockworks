@@ -2,7 +2,7 @@
 const process = require("process");
 const child_process = require("child_process");
 const fs = require("fs");
-const fget = path => fs.readFileSync(path, { encoding: "utf-8" });
+const fget = (path, base) => fs.readFileSync(((undefined !== base ? base: "") +path).replace(/\/\.\//gm, "/"), { encoding: "utf-8" });
 const evalValue = (value) =>
 {
     if ("string" === typeof value)
@@ -19,7 +19,7 @@ const evalValue = (value) =>
     {
         const resource = require(value.resource);
         return Object.keys(resource)
-            .map(id => `<div id="${id}">${fget(resource[id]).replace(/[\w\W]*(<svg)/g, "$1")}</div>`)
+            .map(id => `<div id="${id}">${fget(resource[id], value.base).replace(/[\w\W]*(<svg)/g, "$1")}</div>`)
             .join("");
     }
     else

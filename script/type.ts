@@ -1,5 +1,6 @@
 import { Color } from "./color";
 import resource from "../resource/images.json";
+import tektiteResource from "../tektite/images.json";
 import { Clockworks } from ".";
 export module Type
 {
@@ -31,7 +32,7 @@ export module Type
 
     export interface ApplicationEntry//<ItemType>
     {
-        icon: keyof typeof resource;
+        icon: keyof typeof resource | keyof typeof tektiteResource;
         title: string;
         // show: (item: ItemType) => Promise<unknown>;
         // parseItem: (json: string) => ItemType;

@@ -1,7 +1,8 @@
 import resource from "../../resource/images.json";
+import tektiteResource from "../../tektite/images.json";
 export module Resource
 {
-    export type KeyType = keyof typeof resource;
+    export type KeyType = keyof typeof resource | keyof typeof tektiteResource;
     export const loadSvgOrCache = async (key: KeyType): Promise<SVGElement> =>
     {
         try

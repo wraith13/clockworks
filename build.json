@@ -25,6 +25,7 @@
         "__DARK_STYLE__": { "path": "./style/theme.dark.css" },
         "__EVIL_COMMONJS__": { "path": "./script/evil-commonjs/index.js" },
         "__SCRIPT__": { "path": "./script/index.js" },
-        "__IMAGES__": { "resource": "./resource/images.json" }
+        "__IMAGES__": { "resource": "./resource/images.json" },
+        "__TEKTITE_IMAGES__": { "resource": "./tektite/images.json", "base": "./tektite/" }
     }
 }
