@@ -54,7 +54,7 @@ export module Menu
             });
             return [ button, popup, ];
         };
-        public item = (children: minamo.dom.Source, onclick?: (event: MouseEvent | TouchEvent) => unknown, className?: string) =>
+        public item = (children: minamo.dom.Source, onclick?: (event: MouseEvent | TouchEvent) => unknown, className?: string): minamo.dom.Source =>
         ({
             tag: "button",
             className,

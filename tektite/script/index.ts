@@ -49,7 +49,7 @@ export module Tektite
         public menu = Menu.make(this);
         public locale = Locale.make(this);
         public toast = ToastModule;
-        public internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}) =>
+        public internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}): minamo.dom.Source =>
         ({
             tag: "a",
             className: data.className,
