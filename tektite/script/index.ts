@@ -16,7 +16,7 @@ export module Tektite
     export type HeaderSource<PageParams, IconKeyType> = Header.Source<PageParams, IconKeyType>;
     export interface ScreenSource<PageParams, IconKeyType>
     {
-        className: string;
+        className?: string;
         header: HeaderSource<PageParams, IconKeyType>;
         body: minamo.dom.Source;
     }

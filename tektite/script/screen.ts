@@ -172,7 +172,7 @@ export module Screen
         };
         replaceBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
         (
-            minamo.dom.getDivsByClassName(document, "screen-body")[0],
+            document.getElementById("screen-body"),
             body
         );
         scrollToOffset = async (target: HTMLElement, offset: number) =>
@@ -233,6 +233,19 @@ export module Screen
         adjustDownPageLinkDirection = () =>
             minamo.dom.getDivsByClassName(document, "down-page-link")
                 .forEach(i => minamo.dom.toggleCSSClass(i, "reverse-down-page-link", ! this.isStrictShowPrimaryPage()));
+        public lastScreenName?: string;
+        public setClass = (className?: string) =>
+        {
+            if (undefined !== this.lastScreenName)
+            {
+                document.getElementById("screen").classList.remove(this.lastScreenName);
+            }
+            if (undefined !== className)
+            {
+                document.getElementById("screen").classList.add(className);
+            }
+            this.lastScreenName = className;
+        }
         public show = async (screen: Tektite.ScreenSource<PageParams, IconKeyType>, updateWindow?: (event: Tektite.UpdateWindowEventEype) => unknown) =>
         {
             if (undefined !== updateWindow)
@@ -249,17 +262,13 @@ export module Screen
                     }
                 };
             }
-            document.getElementById("screen").className = `${screen.className} screen`;
+            this.setClass(screen.className);
             minamo.dom.replaceChildren
             (
                 this.tektite.header.getElement(),
                 await this.tektite.header.segmented(screen.header)
             );
-            minamo.dom.replaceChildren
-            (
-                document.getElementById("screen-body"),
-                screen.body
-            );
+            this.replaceBody(screen.body);
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();
         };
