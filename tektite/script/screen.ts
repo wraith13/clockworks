@@ -263,11 +263,7 @@ export module Screen
                 };
             }
             this.setClass(screen.className);
-            minamo.dom.replaceChildren
-            (
-                this.tektite.header.getElement(),
-                await this.tektite.header.segmented(screen.header)
-            );
+            this.tektite.header.replace(screen.header);
             this.replaceBody(screen.body);
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();

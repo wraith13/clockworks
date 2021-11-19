@@ -152,6 +152,11 @@ export module Header
             });
             return [ segment, popup, ];
         };
+        public replace = async (header: Tektite.HeaderSource<PageParams, IconKeyType>) => minamo.dom.replaceChildren
+        (
+            this.getElement(),
+            await this.segmented(header)
+        );
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Header(tektite);
