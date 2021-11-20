@@ -8,6 +8,7 @@ export module Screen
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
+        getElement = () => document.getElementById("screen") as HTMLDivElement;
         updateWindow: (event: Tektite.UpdateWindowEventEype) => unknown;
         private updateWindowTimer = undefined;
         private updateWindowHighResolutionTimer = undefined;
@@ -102,7 +103,7 @@ export module Screen
                 await minamo.core.timeout(500);
                 minamo.dom.remove(dom);
             };
-            minamo.dom.appendChildren(document.getElementById("screen"), dom);
+            minamo.dom.appendChildren(this.getElement(), dom);
             const result =
             {
                 dom,
@@ -238,11 +239,11 @@ export module Screen
         {
             if (undefined !== this.lastScreenName)
             {
-                document.getElementById("screen").classList.remove(this.lastScreenName);
+                this.getElement().classList.remove(this.lastScreenName);
             }
             if (undefined !== className)
             {
-                document.getElementById("screen").classList.add(className);
+                this.getElement().classList.add(className);
             }
             this.lastScreenName = className;
         }
