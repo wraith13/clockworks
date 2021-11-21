@@ -40,6 +40,35 @@ export module Tektite
         }
         public onLoad = () =>
         {
+            minamo.dom.make
+            ({
+                parent: document.body,
+                tag: "div",
+                id: "foundation",
+                children:
+                {
+                    tag: "div",
+                    id: "screen",
+                    className: "screen",
+                    children:
+                    [
+                        {
+                            tag: "h1",
+                            id: "screen-header",
+                            className: "segmented",
+                        },
+                        {
+                            tag: "div",
+                            id: "screen-body",
+                            className: "screen-body",
+                        },
+                        {
+                            tag: "div",
+                            id: "screen-toast",
+                        },
+                    ]
+                }
+            });
             this.screen.onLoad();
         };
         public fullscreen = FullscreenModule;

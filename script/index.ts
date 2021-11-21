@@ -32,7 +32,7 @@ export module Clockworks
         {
             resolution: 360,
             highResolution: 36,
-        }
+        },
     });
     export const localeMap = (key: LocaleKeyType) => tektite.locale.map(key);
     export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
