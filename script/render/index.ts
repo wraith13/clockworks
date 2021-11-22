@@ -21,16 +21,18 @@ export module Render
         }
     };
     export const setHeaderColor = (color: string | null) =>
-        minamo.dom.setStyleProperty("#screen-header", "backgroundColor", color);
+        minamo.dom.setProperty("#screen-header", "backgroundColor", color ?? "");
     export const setBodyColor = (color: string) =>
     {
         minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
         minamo.dom.setProperty("#theme-color", "content", color);
     };
     export const setFoundationColor = (color: string | null) =>
-        minamo.dom.setStyleProperty("#foundation", "backgroundColor", color);
+            minamo.dom.setStyleProperty("#foundation", "backgroundColor", color ?? "");
+    let latestColor: string | null;
     export const setBackgroundColor = (color: string | null) =>
     {
+        latestColor = color;
         if ("header" === (Storage.Settings.get().progressBarStyle ?? "auto"))
         {
             setHeaderColor(color);
@@ -57,10 +59,7 @@ export module Render
         const setting = Storage.Settings.get().progressBarStyle ?? "auto";
         document.body.classList.toggle("tektite-modern", "header" !== setting);
         document.body.classList.toggle("tektite-classic", "header" === setting);
-        if ("header" !== setting)
-        {
-            Render.setHeaderColor(null);
-        }
+        setBackgroundColor(latestColor ?? null);
     };
     export const Operate = RenderOperate;
     export const cancelTextButton = (onCanceled: () => unknown) =>
