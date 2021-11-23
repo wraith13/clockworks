@@ -1,5 +1,5 @@
 import { minamo } from "../minamo.js";
-import { Clockworks } from "..";
+import { Clockworks, tektite } from "..";
 import { Tektite } from "../../tektite/script";
 import { Type } from "../type";
 import { Base } from "../base";
@@ -13,13 +13,6 @@ import { Render as CountdownTimerRender } from "../application/countdowntimer/re
 import config from "../../resource/config.json";
 export module Render
 {
-    export const setTitle = (title: string) =>
-    {
-        if (document.title !== title)
-        {
-            document.title = title;
-        }
-    };
     export const setHeaderColor = (color: string | null) =>
         minamo.dom.setProperty("#screen-header", "backgroundColor", color ?? "");
     export const setBodyColor = (color: string) =>
@@ -70,36 +63,17 @@ export module Render
         onclick: async () =>
         {
             onCanceled();
-            Clockworks.tektite.toast.make
+            tektite.toast.make
             ({
-                content: $span("")(label("roll-backed")),
+                content: tektite.$span("")(label("roll-backed")),
                 wait: 3000,
             });
         },
     });
-    export const $make = minamo.dom.make;
-    export const $tag = (tag: string) => (className: string | minamo.dom.AlphaObjectSource) => (children: minamo.dom.Source) =>
-        "string" === typeof className ?
-        {
-            tag,
-            children,
-            className,
-        }:
-        Object.assign
-        (
-            {
-                tag,
-                children,
-            },
-            className,
-        );
-    export const $div = $tag("div");
-    export const $span = $tag("span");
-    export const labelSpan = $span("label");
-    export const label = (label: Clockworks.LocaleKeyType) => labelSpan
+    export const label = (label: Clockworks.LocaleKeyType) => tektite.$labelSpan
     ([
-        $span("locale-parallel")(Clockworks.localeParallel(label)),
-        $span("locale-map")(Clockworks.localeMap(label)),
+        tektite.$span("locale-parallel")(Clockworks.localeParallel(label)),
+        tektite.$span("locale-map")(Clockworks.localeMap(label)),
     ]);
     // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
     // {
@@ -165,14 +139,14 @@ export module Render
     // export const confirm = systemConfirm;
     export const dateTimePrompt = async (message: string, _default: number): Promise<string | null> =>
     {
-        const inputDate = $make(HTMLInputElement)
+        const inputDate = tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "date",
             value: Domain.dateCoreStringFromTick(_default),
             required: "",
         });
-        const inputTime = $make(HTMLInputElement)
+        const inputTime = tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
@@ -184,14 +158,14 @@ export module Render
             resolve =>
             {
                 let result: string | null = null;
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     children:
                     [
-                        $tag("h2")("")(message),
+                        tektite.$tag("h2")("")(message),
                         inputDate,
                         inputTime,
-                        $div("popup-operator")
+                        tektite.$div("popup-operator")
                         ([
                             {
                                 tag: "button",
@@ -228,7 +202,7 @@ export module Render
             async resolve =>
             {
                 let result = false;
-                const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -244,7 +218,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        $span("")(label(`theme.${key}` as Clockworks.LocaleKeyType)),
+                                        tektite.$span("")(label(`theme.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -263,14 +237,14 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        $tag("h2")("")(label("Theme setting")),
+                        tektite.$tag("h2")("")(label("Theme setting")),
                         checkButtonList,
-                        $div("popup-operator")
+                        tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -294,7 +268,7 @@ export module Render
         (
             async resolve =>
             {
-                const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -310,7 +284,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        $span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
+                                        tektite.$span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -329,14 +303,14 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        $tag("h2")("")(label("Progress Bar Style setting")),
+                        tektite.$tag("h2")("")(label("Progress Bar Style setting")),
                         checkButtonList,
-                        $div("popup-operator")
+                        tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -362,7 +336,7 @@ export module Render
             async resolve =>
             {
                 let result = false;
-                const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -373,7 +347,7 @@ export module Render
                             children:
                             [
                                 await Resource.loadSvgOrCache("check-icon"),
-                                $span("")(label("language.auto")),
+                                tektite.$span("")(label("language.auto")),
                             ],
                             onclick: async () =>
                             {
@@ -388,7 +362,7 @@ export module Render
                         },
                         await Promise.all
                         (
-                            Clockworks.tektite.locale.locales.map
+                            tektite.locale.locales.map
                             (
                                 async (key: Clockworks.LocaleType) =>
                                 ({
@@ -397,7 +371,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        $span("")(labelSpan(Clockworks.tektite.locale.getLocaleName(key))),
+                                        tektite.$span("")(tektite.$labelSpan(tektite.locale.getLocaleName(key))),
                                     ],
                                     onclick: async () =>
                                     {
@@ -415,14 +389,14 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        $tag("h2")("")(label("Language setting")),
+                        tektite.$tag("h2")("")(label("Language setting")),
                         checkButtonList,
-                        $div("popup-operator")
+                        tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -445,7 +419,7 @@ export module Render
             async resolve =>
             {
                 let result = false;
-                const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -461,7 +435,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        $span("")(label(key)),
+                                        tektite.$span("")(label(key)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -479,14 +453,14 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        $tag("h2")("")(label("Color setting")),
+                        tektite.$tag("h2")("")(label("Color setting")),
                         checkButtonList,
-                        $div("popup-operator")
+                        tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -504,7 +478,7 @@ export module Render
     };
     export const timePrompt = async (message: string, tick: number = 0): Promise<number | null> =>
     {
-        const inputTime = $make(HTMLInputElement)
+        const inputTime = tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
@@ -516,13 +490,13 @@ export module Render
             resolve =>
             {
                 let result: number | null = null;
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     children:
                     [
-                        $tag("h2")("")(message),
+                        tektite.$tag("h2")("")(message),
                         inputTime,
-                        $div("popup-operator")
+                        tektite.$div("popup-operator")
                         ([
                             {
                                 tag: "button",
@@ -553,14 +527,14 @@ export module Render
     };
     export const dateIimePrompt = async (message: string, tick: number): Promise<number | null> =>
     {
-        const inputDate = $make(HTMLInputElement)
+        const inputDate = tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "date",
             value: Domain.dateCoreStringFromTick(tick),
             required: "",
         });
-        const inputTime = $make(HTMLInputElement)
+        const inputTime = tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
@@ -572,14 +546,14 @@ export module Render
             resolve =>
             {
                 let result: number | null = null;
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     children:
                     [
-                        $tag("h2")("")(message),
+                        tektite.$tag("h2")("")(message),
                         inputDate,
                         inputTime,
-                        $div("popup-operator")
+                        tektite.$div("popup-operator")
                         ([
                             {
                                 tag: "button",
@@ -612,18 +586,18 @@ export module Render
     (
         async resolve =>
         {
-            const ui = Clockworks.tektite.screen.popup
+            const ui = tektite.screen.popup
             ({
                 // className: "add-remove-tags-popup",
                 children:
                 [
-                    $tag("h2")("")(labelSpan("シェア / Share")),
-                    $div("menu-button-list")
+                    tektite.$tag("h2")("")(tektite.$labelSpan("シェア / Share")),
+                    tektite.$div("menu-button-list")
                     ([
                         {
                             tag: "button",
                             className: "menu-item-button",
-                            children: $span("")(labelSpan("Tweet / ツイート")),
+                            children: tektite.$span("")(tektite.$labelSpan("Tweet / ツイート")),
                             onclick: async () =>
                             {
                                 location.href='https://twitter.com/intent/tweet?text='+encodeURIComponent('【'+title+'】 '+url +' ');
@@ -633,7 +607,7 @@ export module Render
                         {
                             tag: "button",
                             className: "menu-item-button",
-                            children: $span("")(labelSpan("Copy URL / URL をコピー")),
+                            children: tektite.$span("")(tektite.$labelSpan("Copy URL / URL をコピー")),
                             onclick: async () =>
                             {
                                 Operate.copyToClipboard(url, "URL");
@@ -641,7 +615,7 @@ export module Render
                             }
                         }
                     ]),
-                    $div("popup-operator")
+                    tektite.$div("popup-operator")
                     ([
                         {
                             tag: "button",
@@ -658,45 +632,45 @@ export module Render
             });
         }
     );
-    export const stampItem = async (tick: number, interval: number | null) => $div("stamp-item flex-item")
+    export const stampItem = async (tick: number, interval: number | null) => tektite.$div("stamp-item flex-item")
     ([
-        $div("item-header")
+        tektite.$div("item-header")
         ([
-            Clockworks.tektite.internalLink
+            tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("NeverStopwatch", tick),
                 children:
                 [
                     await Resource.loadSvgOrCache("tick-icon"),
-                    $div("tick-elapsed-time")
+                    tektite.$div("tick-elapsed-time")
                     ([
-                        $span("value monospace")(label("Elapsed time")),
+                        tektite.$span("value monospace")(label("Elapsed time")),
                     ]),
                 ]
             }),
-            $div("item-operator")
+            tektite.$div("item-operator")
             ([
-                await Clockworks.tektite.menu.button(await stampItemMenu(tick)),
+                await tektite.menu.button(await stampItemMenu(tick)),
             ]),
         ]),
-        $div("item-information")
+        tektite.$div("item-information")
         ([
-            $div("tick-timestamp")
+            tektite.$div("tick-timestamp")
             ([
                 label("Timestamp"),
-                $span("value monospace")(Domain.dateFullStringFromTick(tick)),
+                tektite.$span("value monospace")(Domain.dateFullStringFromTick(tick)),
             ]),
-            $div("tick-interval")
+            tektite.$div("tick-interval")
             ([
                 label("Interval"),
-                $span("value monospace")(Domain.timeLongStringFromTick(interval)),
+                tektite.$span("value monospace")(Domain.timeLongStringFromTick(interval)),
             ]),
         ]),
     ]);
     export const stampItemMenu = async (tick: number) =>
     [
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Edit"),
             async () =>
@@ -713,7 +687,7 @@ export module Render
                         }
                         else
                         {
-                            Clockworks.tektite.toast.make
+                            tektite.toast.make
                             ({
                                 content: label("A date and time outside the valid range was specified."),
                                 isWideContent: true,
@@ -723,7 +697,7 @@ export module Render
                 }
             }
         ),
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Remove"),
             async () => await Operate.NeverStopwatch.removeStamp(tick),
@@ -746,7 +720,7 @@ export module Render
         (
             Type.applicationIdList.map
             (
-                async (i: Type.ApplicationType) => Clockworks.tektite.menu.linkItem
+                async (i: Type.ApplicationType) => tektite.menu.linkItem
                 (
                     [ await Resource.loadSvgOrCache(Type.applicationList[i].icon), Type.applicationList[i].title, ],
                     { application: i },
@@ -768,9 +742,9 @@ export module Render
                 .filter((i, ix, list) => ix === list.indexOf(i))
                 .map
                 (
-                    async i => Clockworks.tektite.menu.linkItem
+                    async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), $span("monospace")(Domain.dateFullStringFromTick(i)), ],
+                        [ await Resource.loadSvgOrCache("tick-icon"), tektite.$span("monospace")(Domain.dateFullStringFromTick(i)), ],
                         Domain.makePageParams("NeverStopwatch", i),
                         item === i ? "current-item": undefined,
                     )
@@ -789,9 +763,9 @@ export module Render
                 .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
                 .map
                 (
-                    async i => Clockworks.tektite.menu.linkItem
+                    async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
+                        [ await Resource.loadSvgOrCache("tick-icon"), tektite.$labelSpan(i.title), tektite.$span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
                         Domain.makePageParams("ElapsedTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -810,9 +784,9 @@ export module Render
                 .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
                 .map
                 (
-                    async i => Clockworks.tektite.menu.linkItem
+                    async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(i.title), $span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
+                        [ await Resource.loadSvgOrCache("tick-icon"), tektite.$labelSpan(i.title), tektite.$span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
                         Domain.makePageParams("RainbowClock", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -826,17 +800,17 @@ export module Render
             flashIntervalPreset.map
             (
                 async i =>
-                Clockworks.tektite.menu.item
+                tektite.menu.item
                 (
                     [
                         await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
-                        labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                        tektite.$labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(i)}`),
                     ],
                     async () =>
                     {
                         setter(i);
-                        Clockworks.tektite.screen.clearLastMouseDownTarget();
-                        Clockworks.tektite.screen.getScreenCoverList().forEach(i => i.click());
+                        tektite.screen.clearLastMouseDownTarget();
+                        tektite.screen.getScreenCoverList().forEach(i => i.click());
                         await reload();
                     },
                     flashInterval === i ? "current-item": undefined
@@ -848,7 +822,7 @@ export module Render
     (
         adder ?
         [
-            Clockworks.tektite.menu.item
+            tektite.menu.item
             (
                 [
                     await Resource.loadSvgOrCache("flash-icon"),
@@ -856,8 +830,8 @@ export module Render
                 ],
                 async () =>
                 {
-                    Clockworks.tektite.screen.clearLastMouseDownTarget();
-                    Clockworks.tektite.screen.getScreenCoverList().forEach(i => i.click());
+                    tektite.screen.clearLastMouseDownTarget();
+                    tektite.screen.getScreenCoverList().forEach(i => i.click());
                     const tick = await timePrompt(Clockworks.localeMap("input a time"), 0);
                     if (null !== tick)
                     {
@@ -876,23 +850,23 @@ export module Render
         title: 0 === flashInterval ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
         menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
     });
-    export const fullscreenMenuItem = async () => Clockworks.tektite.fullscreen.enabled() ?
+    export const fullscreenMenuItem = async () => tektite.fullscreen.enabled() ?
         (
-            null === Clockworks.tektite.fullscreen.element() ?
-                Clockworks.tektite.menu.item
+            null === tektite.fullscreen.element() ?
+                tektite.menu.item
                 (
                     label("Full screen"),
-                    async () => await Clockworks.tektite.fullscreen.request()
+                    async () => await tektite.fullscreen.request()
                 ):
-                Clockworks.tektite.menu.item
+                tektite.menu.item
                 (
                     label("Cancel full screen"),
-                    async () => await Clockworks.tektite.fullscreen.exit()
+                    async () => await tektite.fullscreen.exit()
                 )
         ):
         [];
     export const themeMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Theme setting"),
             async () =>
@@ -904,7 +878,7 @@ export module Render
             }
         );
     export const progressBarStyleMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Progress Bar Style setting"),
             async () =>
@@ -916,51 +890,51 @@ export module Render
             }
         );
     export const languageMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Language setting"),
             async () =>
             {
                 if (await localeSettingsPopup())
                 {
-                    Clockworks.tektite.locale.setLocale(Storage.Settings.get().locale);
+                    tektite.locale.setLocale(Storage.Settings.get().locale);
                     await reload();
                 }
             }
         );
     export const resetNeverStopwatchMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Remove all stamps"),
             async () => await Operate.NeverStopwatch.removeAllStamps(),
             "delete-button"
         );
     export const resetCountdownTimerMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Remove all alarms"),
             async () => await Operate.CountdownTimer.removeAllAlarms(),
             "delete-button"
         );
     export const resetElapsedTimerMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Remove all alarms"),
             async () => await Operate.ElapsedTimer.removeAllEvents(),
             "delete-button"
         );
     export const resetRainbowClockMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Initialize timezone list"),
             async () => await Operate.RainbowClock.reset(),
             "delete-button"
         );
     export const githubMenuItem = async () =>
-        Clockworks.tektite.externalLink
+        tektite.externalLink
         ({
             href: config.repositoryUrl,
-            children: Clockworks.tektite.menu.item(labelSpan("GitHub")),
+            children: tektite.menu.item(tektite.$labelSpan("GitHub")),
         });
     export const welcomeScreenMenu = async () =>
     [
@@ -983,30 +957,30 @@ export module Render
         },
         body:
         [
-            $div("primary-page")
+            tektite.$div("primary-page")
             ([
-                $div("page-body")
+                tektite.$div("page-body")
                 ([
-                    $div("main-panel")
+                    tektite.$div("main-panel")
                     ([
-                        $div("logo")
+                        tektite.$div("logo")
                         ([
-                            $div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
-                            $span("logo-text")(config.applicationTitle)
+                            tektite.$div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
+                            tektite.$span("logo-text")(config.applicationTitle)
                         ]),
-                        $div("button-list")
+                        tektite.$div("button-list")
                         (
                             Type.applicationIdList.map
                             (
                                 (i: Type.ApplicationType) =>
-                                Clockworks.tektite.internalLink
+                                tektite.internalLink
                                 ({
                                     href: { application: i },
                                     children:
                                     {
                                         tag: "button",
                                         className: "default-button main-button long-button",
-                                        children: labelSpan(Type.applicationList[i].title),
+                                        children: tektite.$labelSpan(Type.applicationList[i].title),
                                         // onclick: async () => await showNeverStopwatchScreen(),
                                     }
                                 }),
@@ -1014,18 +988,18 @@ export module Render
                         ),
                     ]),
                 ]),
-                $div("page-footer")
+                tektite.$div("page-footer")
                 ([
-                    await Clockworks.tektite.screen.downPageLink(),
+                    await tektite.screen.downPageLink(),
                 ]),
             ]),
-            $div("trail-page")
+            tektite.$div("trail-page")
             ([
-                $div("description")
+                tektite.$div("description")
                 (
-                    $tag("ul")("locale-parallel-off")
+                    tektite.$tag("ul")("locale-parallel-off")
                     ([
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                     ])
                 ),
             ]),
@@ -1071,26 +1045,26 @@ export module Render
             await Resource.loadSvgOrCache(entry.icon),
             entry.title,
         ],
-        onclick: async () => Clockworks.tektite.screen.popup
+        onclick: async () => tektite.screen.popup
         ({
             className: "bare-popup",
             children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
         }),
     });
-    export const screenBar = () => $div("screen-bar")($div("screen-bar-flash-layer")([]));
+    export const screenBar = () => tektite.$div("screen-bar")(tektite.$div("screen-bar-flash-layer")([]));
     export const neverStopwatchScreenBody = async (item: number | null, ticks: number[]) =>
     ([
-        $div("primary-page")
+        tektite.$div("primary-page")
         ([
-            $div("page-body")
+            tektite.$div("page-body")
             ([
-                $div("main-panel")
+                tektite.$div("main-panel")
                 ([
-                    $div("current-item")
+                    tektite.$div("current-item")
                     ([
-                        $div("previous-timestamp")
+                        tektite.$div("previous-timestamp")
                         ([
-                            $span("value monospace")
+                            tektite.$span("value monospace")
                             (
                                 null !== item ?
                                     Domain.dateFullStringFromTick(item):
@@ -1101,13 +1075,13 @@ export module Render
                                     )
                             ),
                         ]),
-                        $div("capital-interval")
+                        tektite.$div("capital-interval")
                         ([
-                            $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                            tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                         ]),
-                        $div("current-timestamp")
+                        tektite.$div("current-timestamp")
                         ([
-                            $span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                            tektite.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                         ]),
                     ]),
                     await flashIntervalLabel
@@ -1123,7 +1097,7 @@ export module Render
                             Storage.NeverStopwatch.flashInterval.set
                         )
                     ),
-                    $div("button-list")
+                    tektite.$div("button-list")
                     ({
                         tag: "button",
                         className: "default-button main-button long-button",
@@ -1132,12 +1106,12 @@ export module Render
                     }),
                 ]),
             ]),
-            $div("page-footer")
+            tektite.$div("page-footer")
             ([
                 null !== item ?
-                    $div("button-list")
+                tektite.$div("button-list")
                     ([
-                        Clockworks.tektite.internalLink
+                        tektite.internalLink
                         ({
                             href: { application: "NeverStopwatch", },
                             children:
@@ -1161,14 +1135,14 @@ export module Render
                                 onclick: async () => await Operate.NeverStopwatch.save(item),
                             }
                     ]):
-                    await Clockworks.tektite.screen.downPageLink(),
+                    await tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
             []:
-            $div("trail-page")
+            tektite.$div("trail-page")
             ([
-                $div("row-flex-list stamp-list")
+                tektite.$div("row-flex-list stamp-list")
                 (
                     await Promise.all
                     (
@@ -1182,13 +1156,13 @@ export module Render
                         )
                     )
                 ),
-                $div("description")
+                tektite.$div("description")
                 (
-                    $tag("ul")("locale-parallel-off")
+                    tektite.$tag("ul")("locale-parallel-off")
                     ([
-                        $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                        $tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Clockworks.localeMap("Stamp"), }, ]),
+                        tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                        tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        tektite.$tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Clockworks.localeMap("Stamp"), }, ]),
                     ])
                 ),
             ]),
@@ -1248,7 +1222,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            Clockworks.tektite.screen.flash();
+                            tektite.screen.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setBackgroundColor(currentColor);
@@ -1257,20 +1231,20 @@ export module Render
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         setScreenBarProgress(rate, nextColor);
                         // setBodyColor(nextColor);
-                        Clockworks.tektite.header.getElement().classList.add("with-screen-prgress");
+                        tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         setScreenBarProgress(null);
-                        Clockworks.tektite.header.getElement().classList.remove("with-screen-prgress");
+                        tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
                         setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
                 case "timer":
-                    setTitle(Domain.timeShortStringFromTick(tick -(current ?? tick)) +" - " +applicationTitle);
+                    tektite.setTitle(Domain.timeShortStringFromTick(tick -(current ?? tick)) +" - " +applicationTitle);
                     const stampListDiv = minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
                     if (stampListDiv)
                     {
@@ -1305,9 +1279,9 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     ticks = Storage.NeverStopwatch.Stamps.get();
-                    Clockworks.tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
+                    tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
                     resizeFlexList();
-                    Clockworks.tektite.screen.adjustPageFooterPosition();
+                    tektite.screen.adjustPageFooterPosition();
                     await updateWindow("timer");
                     break;
             }
@@ -1326,44 +1300,44 @@ export module Render
     ];
     export const elapsedTimerScreenBody = async (item: Type.EventEntry | null, events: Type.EventEntry[]) =>
     ([
-        $div("primary-page")
+        tektite.$div("primary-page")
         ([
-            $div("page-body")
+            tektite.$div("page-body")
             ([
-                $div("main-panel")
+                tektite.$div("main-panel")
                 ([
                     (item ?? events[0]) ?
-                        $div("current-item event-item")
+                    tektite.$div("current-item event-item")
                         ([
                             (item ?? events[0]) ?
                             [
-                                $div("current-title")
+                                tektite.$div("current-title")
                                 ([
-                                    $span("value monospace")((item ?? events[0]).title),
+                                    tektite.$span("value monospace")((item ?? events[0]).title),
                                 ]),
-                                $div("current-due-timestamp")
+                                tektite.$div("current-due-timestamp")
                                 ([
-                                    $span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
+                                    tektite.$span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
                                 ]),
                             ]: [],
-                            $div("capital-interval")
+                            tektite.$div("capital-interval")
                             ([
-                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                             ]),
-                            $div("current-timestamp")
+                            tektite.$div("current-timestamp")
                             ([
-                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
                             ]),
                         ]):
-                        $div("current-item")
+                        tektite.$div("current-item")
                         ([
-                            $div("capital-interval")
+                            tektite.$div("capital-interval")
                             ([
-                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                             ]),
-                            $div("current-timestamp")
+                            tektite.$div("current-timestamp")
                             ([
-                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
                             ]),
                         ]),
                     await flashIntervalLabel
@@ -1383,12 +1357,12 @@ export module Render
                     ),
                 ]),
             ]),
-            $div("page-footer")
+            tektite.$div("page-footer")
             ([
                 null !== item ?
-                    $div("button-list")
+                    tektite.$div("button-list")
                     ([
-                        Clockworks.tektite.internalLink
+                        tektite.internalLink
                         ({
                             href: { application: "CountdownTimer", },
                             children:
@@ -1412,14 +1386,14 @@ export module Render
                                 onclick: async () => await Operate.ElapsedTimer.save(item),
                             }
                     ]):
-                    await Clockworks.tektite.screen.downPageLink(),
+                    await tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
             []:
-            $div("trail-page")
+            tektite.$div("trail-page")
             ([
-                $div("button-list")
+                tektite.$div("button-list")
                 ([
                     {
                         tag: "button",
@@ -1436,7 +1410,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Clockworks.tektite.toast.make
+                                    tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -1446,16 +1420,16 @@ export module Render
                         }
                     },
                 ]),
-                $div("row-flex-list event-list")
+                tektite.$div("row-flex-list event-list")
                 (
                     await Promise.all(events.map(item => CountdownTimerRender.eventItem(item)))
                 ),
-                $div("description")
+                tektite.$div("description")
                 (
-                    $tag("ul")("locale-parallel-off")
+                    tektite.$tag("ul")("locale-parallel-off")
                     ([
-                        $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                        tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                     ])
                 ),
             ]),
@@ -1512,7 +1486,7 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            Clockworks.tektite.screen.flash();
+                            tektite.screen.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         setBackgroundColor(currentColor);
@@ -1521,20 +1495,20 @@ export module Render
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         setScreenBarProgress(rate, nextColor);
                         // setBodyColor(nextColor);
-                        Clockworks.tektite.header.getElement().classList.add("with-screen-prgress");
+                        tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         setScreenBarProgress(null);
-                        Clockworks.tektite.header.getElement().classList.remove("with-screen-prgress");
+                        tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
                         setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
                 case "timer":
-                    setTitle(Domain.timeShortStringFromTick(tick -(current?.tick ?? tick)) +" - " +applicationTitle);
+                    tektite.setTitle(Domain.timeShortStringFromTick(tick -(current?.tick ?? tick)) +" - " +applicationTitle);
                     const eventListDiv = minamo.dom.getDivsByClassName(screen, "event-list")[0];
                     if (eventListDiv)
                     {
@@ -1570,11 +1544,11 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     events = Storage.ElapsedTimer.Events.get();
-                    Clockworks.tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
+                    tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
                     resizeFlexList();
                     await updateWindow("timer");
-                    await Clockworks.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
-                    Clockworks.tektite.screen.adjustPageFooterPosition();
+                    await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };
@@ -1582,14 +1556,14 @@ export module Render
         await updateWindow("timer");
     };
     export const colorMenuItem = async () =>
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Color setting"),
             async () => await colorSettingsPopup(),
         );
     export const updateTitle = () =>
     {
-        document.title = minamo.dom.getDivsByClassName(Clockworks.tektite.header.getElement(), "segment-title")
+        document.title = minamo.dom.getDivsByClassName(tektite.header.getElement(), "segment-title")
             ?.map(div => div.innerText)
             // ?.reverse()
             ?.join(" / ")
@@ -1597,7 +1571,7 @@ export module Render
     };
     export const showWindow = async (screen: ScreenSource, updateWindow?: (event: Tektite.UpdateWindowEventEype) => unknown) =>
     {
-        await Clockworks.tektite.screen.show(screen, updateWindow);
+        await tektite.screen.show(screen, updateWindow);
         setBackgroundColor(Color.getSolidRainbowColor(0));
         updateTitle();
         resizeFlexList();
@@ -1766,7 +1740,7 @@ export module Render
                 if (timestamp === onWindowResizeTimestamp)
                 {
                     resizeFlexList();
-                    Clockworks.tektite.screen.adjustPageFooterPosition();
+                    tektite.screen.adjustPageFooterPosition();
                 }
             },
             100,
@@ -1774,7 +1748,7 @@ export module Render
     };
     export const onKeydown = (event: KeyboardEvent) =>
     {
-        if ( ! Clockworks.tektite.key.isComposing(event))
+        if ( ! tektite.key.isComposing(event))
         {
             switch(event.key)
             {
@@ -1784,7 +1758,7 @@ export module Render
                         .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "default-button")?.[0]?.click());
                     break;
                 case "Escape":
-                    (Clockworks.tektite.screen.getScreenCover() ?? Clockworks.tektite.header.getCloseButton())?.click();
+                    (tektite.screen.getScreenCover() ?? tektite.header.getCloseButton())?.click();
                     break;
             }
             const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
@@ -1793,15 +1767,15 @@ export module Render
                 switch(event.key.toLowerCase())
                 {
                     case "f":
-                        if (Clockworks.tektite.fullscreen.enabled())
+                        if (tektite.fullscreen.enabled())
                         {
-                            if(null === Clockworks.tektite.fullscreen.element())
+                            if(null === tektite.fullscreen.element())
                             {
-                                Clockworks.tektite.fullscreen.request();
+                                tektite.fullscreen.request();
                             }
                             else
                             {
-                                Clockworks.tektite.fullscreen.exit();
+                                tektite.fullscreen.exit();
                             }
                         }
                         break;
@@ -1812,20 +1786,20 @@ export module Render
     let lastMouseMouseAt = 0;
     export const onMouseMove = (_evnet: MouseEvent) =>
     {
-        if (Clockworks.tektite.fullscreen.enabled())
+        if (tektite.fullscreen.enabled())
         {
             const now = lastMouseMouseAt = new Date().getTime();
             if (document.body.classList.contains("sleep-mouse"))
             {
                 document.body.classList.remove("sleep-mouse");
             }
-            if (Clockworks.tektite.fullscreen.element())
+            if (tektite.fullscreen.element())
             {
                 setTimeout
                 (
                     () =>
                     {
-                        if (Clockworks.tektite.fullscreen.element() && now === lastMouseMouseAt)
+                        if (tektite.fullscreen.element() && now === lastMouseMouseAt)
                         {
                             if ( ! document.body.classList.contains("sleep-mouse"))
                             {
@@ -1845,7 +1819,7 @@ export module Render
     export const onWebkitFullscreenChange = (event: Event) =>
     {
         onWindowResize();
-        Clockworks.tektite.onWebkitFullscreenChange(event);
+        tektite.onWebkitFullscreenChange(event);
     };
     export type ItemStateType = "nothing" | "regular" | "irregular" | "invalid";
     export const itemState = <T>(itemJson: string, item: T): ItemStateType =>
@@ -1886,7 +1860,7 @@ export module Render
     };
     export const showPage = async (url: string = location.href) =>
     {
-        Clockworks.tektite.screen.getScreenCover()?.click();
+        tektite.screen.getScreenCover()?.click();
         window.scrollTo(0,0);
         document.getElementById("screen-body").scrollTo(0,0);
         // const urlParams = getUrlParams(url);

@@ -1,6 +1,6 @@
 import { Type } from "./type";
 import { Base } from "./base";
-import { Clockworks } from ".";
+import { Clockworks, tektite } from ".";
 import config from "../resource/config.json";
 export module Domain
 {
@@ -111,7 +111,7 @@ export module Domain
         return FloorHour.getTime() +(60 *60 *1000);
     };
     export const weekday = (tick: number) =>
-        new Intl.DateTimeFormat(Clockworks.tektite.locale.get(), { weekday: 'long'}).format(tick);
+        new Intl.DateTimeFormat(tektite.locale.get(), { weekday: 'long'}).format(tick);
     export const dateCoreStringFromTick = (tick: null | number): string =>
     {
         if (null === tick)

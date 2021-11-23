@@ -1,4 +1,4 @@
-import { Clockworks } from "../..";
+import { Clockworks, tektite } from "../..";
 import { Base } from "../../base";
 import { Storage } from "../../storage";
 import { Domain } from "../../domain";
@@ -9,17 +9,17 @@ export module Operate
     {
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.add(tick);
-        Clockworks.tektite.screen.updateWindow("operate");
-        Clockworks.tektite.screen.flash();
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        tektite.screen.flash();
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Stamped!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Stamped!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
                 {
                     Storage.NeverStopwatch.Stamps.set(backup);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -30,16 +30,16 @@ export module Operate
     {
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.add(tick);
-        Clockworks.tektite.screen.updateWindow("operate");
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
                 {
                     Storage.NeverStopwatch.Stamps.set(backup);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -51,16 +51,16 @@ export module Operate
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.remove(oldTick);
         Storage.NeverStopwatch.Stamps.add(newTick);
-        Clockworks.tektite.screen.updateWindow("operate");
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Updated.")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Updated.")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
                 {
                     Storage.NeverStopwatch.Stamps.set(backup);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -79,11 +79,11 @@ export module Operate
         }
         else
         {
-            Clockworks.tektite.screen.updateWindow("operate");
+            tektite.screen.updateWindow("operate");
         }
-        const toast = Clockworks.tektite.toast.makePrimary
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Removed.")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Removed.")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -95,7 +95,7 @@ export module Operate
                     }
                     else
                     {
-                        Clockworks.tektite.screen.updateWindow("operate");
+                        tektite.screen.updateWindow("operate");
                     }
                     await toast.hide();
                     onCanceled?.();
@@ -108,8 +108,8 @@ export module Operate
         if (Render.systemConfirm(Clockworks.localeMap("This action cannot be undone. Do you want to continue?")))
         {
             Storage.NeverStopwatch.Stamps.removeKey();
-            Clockworks.tektite.screen.updateWindow("operate");
-            Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Clockworks.localeMap("Removed all stamps!")}`), });
+            tektite.screen.updateWindow("operate");
+            tektite.toast.makePrimary({ content: tektite.$span("")(`${Clockworks.localeMap("Removed all stamps!")}`), });
         }
     };
 }

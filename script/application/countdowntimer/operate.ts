@@ -1,4 +1,4 @@
-import { Clockworks } from "../..";
+import { Clockworks, tektite } from "../..";
 import { Type } from "../../type";
 import { Base } from "../../base";
 import { Storage } from "../../storage";
@@ -17,16 +17,16 @@ export module Operate
             end: tick +i,
         };
         Storage.CountdownTimer.Alarms.add(alarm);
-        Clockworks.tektite.screen.updateWindow("operate");
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
                 {
                     Storage.CountdownTimer.Alarms.remove(alarm);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -43,16 +43,16 @@ export module Operate
             end,
         };
         Storage.CountdownTimer.Alarms.add(alarm);
-        Clockworks.tektite.screen.updateWindow("operate");
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
                 {
                     Storage.CountdownTimer.Alarms.remove(alarm);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -62,16 +62,16 @@ export module Operate
     export const save = async (item: Type.AlarmEntry, onCanceled?: () => unknown) =>
     {
         Storage.CountdownTimer.Alarms.add(item);
-        Clockworks.tektite.screen.updateWindow("operate");
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
                 {
                     Storage.CountdownTimer.Alarms.remove(item);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -90,17 +90,17 @@ export module Operate
         };
         Storage.CountdownTimer.Alarms.remove(oldSchedule);
         Storage.CountdownTimer.Alarms.add(newSchedule);
-        Clockworks.tektite.screen.updateWindow("operate");
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
                 {
                     Storage.CountdownTimer.Alarms.remove(newSchedule);
                     Storage.CountdownTimer.Alarms.add(oldSchedule);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -116,10 +116,10 @@ export module Operate
         }
         const color = Storage.CountdownTimer.ColorIndex.get();
         Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
-        Clockworks.tektite.screen.updateWindow("operate");
-        const toast = Clockworks.tektite.toast.makePrimary
+        tektite.screen.updateWindow("operate");
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Done!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Done!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -130,7 +130,7 @@ export module Operate
                         Storage.ElapsedTimer.Events.remove({ title: item.title, tick: item.end, });
                     }
                     Storage.CountdownTimer.ColorIndex.set(color);
-                    Clockworks.tektite.screen.updateWindow("operate");
+                    tektite.screen.updateWindow("operate");
                     await toast.hide();
                     onCanceled?.();
                 }
@@ -142,9 +142,9 @@ export module Operate
         const color = Storage.CountdownTimer.ColorIndex.get();
         Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
         Render.showUrl({ application: "CountdownTimer", });
-        const toast = Clockworks.tektite.toast.makePrimary
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Done!")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Done!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -168,11 +168,11 @@ export module Operate
         }
         else
         {
-            Clockworks.tektite.screen.updateWindow("operate");
+            tektite.screen.updateWindow("operate");
         }
-        const toast = Clockworks.tektite.toast.makePrimary
+        const toast = tektite.toast.makePrimary
         ({
-            content: Render.$span("")(`${Clockworks.localeMap("Removed.")}`),
+            content: tektite.$span("")(`${Clockworks.localeMap("Removed.")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -184,7 +184,7 @@ export module Operate
                     }
                     else
                     {
-                        Clockworks.tektite.screen.updateWindow("operate");
+                        tektite.screen.updateWindow("operate");
                     }
                     await toast.hide();
                     onCanceled?.();
@@ -197,8 +197,8 @@ export module Operate
         if (Render.systemConfirm(Clockworks.localeMap("This action cannot be undone. Do you want to continue?")))
         {
             Storage.CountdownTimer.Alarms.removeKey();
-            Clockworks.tektite.screen.updateWindow("operate");
-            Clockworks.tektite.toast.makePrimary({ content: Render.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
+            tektite.screen.updateWindow("operate");
+            tektite.toast.makePrimary({ content: tektite.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
         }
     };
 }

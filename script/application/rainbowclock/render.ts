@@ -1,5 +1,5 @@
 import { minamo } from "../../minamo.js";
-import { Clockworks } from "../..";
+import { Clockworks, tektite } from "../..";
 import { Tektite } from "../../../tektite/script";
 import { Type } from "../../type";
 import { Base } from "../../base";
@@ -26,7 +26,7 @@ export module Render
     ([
         $div("item-header")
         ([
-            Clockworks.tektite.internalLink
+            tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("RainbowClock", item),
@@ -38,7 +38,7 @@ export module Render
             }),
             $div("item-operator")
             ([
-                await Clockworks.tektite.menu.button(await timezoneItemMenu(item)),
+                await tektite.menu.button(await timezoneItemMenu(item)),
             ]),
         ]),
         $div("item-panel")
@@ -93,7 +93,7 @@ export module Render
             resolve =>
             {
                 let result: { title: string, offset: number } | null = null;
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     children:
                     [
@@ -135,7 +135,7 @@ export module Render
     };
     export const timezoneItemMenu = async (item: Type.TimezoneEntry): Promise<minamo.dom.Source> =>
     [
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Edit"),
             async () =>
@@ -150,7 +150,7 @@ export module Render
                 }
             }
         ),
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Remove"),
             async () => await Operate.remove(item),
@@ -234,7 +234,7 @@ export module Render
                 null !== item ?
                     $div("button-list")
                     ([
-                        Clockworks.tektite.internalLink
+                        tektite.internalLink
                         ({
                             href: { application: "RainbowClock", },
                             children:
@@ -258,7 +258,7 @@ export module Render
                                 onclick: async () => await Operate.save(item),
                             }
                     ]):
-                    await Clockworks.tektite.screen.downPageLink(),
+                    await tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
@@ -341,7 +341,7 @@ export module Render
                     const capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     if (minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate)
                     {
-                        RenderBase.setTitle(capitalTime +" - " +applicationTitle);
+                        tektite.setTitle(capitalTime +" - " +applicationTitle);
                         if (capitalTime.endsWith(":00"))
                         {
                             const flashInterval = Storage.RainbowClock.flashInterval.get();
@@ -349,7 +349,7 @@ export module Render
                             {
                                 if (0 === (tick % flashInterval))
                                 {
-                                    Clockworks.tektite.screen.flash();
+                                    tektite.screen.flash();
                                 }
                             }
                         }
@@ -401,11 +401,11 @@ export module Render
                     break;
                 case "operate":
                     timezones = Storage.RainbowClock.Timezone.get();
-                    Clockworks.tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
+                    tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
                     RenderBase.resizeFlexList();
                     await updateWindow("timer");
-                    await Clockworks.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
-                    Clockworks.tektite.screen.adjustPageFooterPosition();
+                    await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };

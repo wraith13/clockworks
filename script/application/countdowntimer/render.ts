@@ -1,5 +1,5 @@
 import { minamo } from "../../minamo.js";
-import { Clockworks } from "../..";
+import { Clockworks, tektite } from "../..";
 import { Tektite } from "../../../tektite/script";
 import { Type } from "../../type";
 // import { Base } from "../../base";
@@ -34,7 +34,7 @@ export module Render
                 .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
                 .map
                 (
-                    async i => Clockworks.tektite.menu.linkItem
+                    async i => tektite.menu.linkItem
                     (
                         [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
                         Domain.makePageParams("CountdownTimer", i),
@@ -50,7 +50,7 @@ export module Render
     ([
         $div("item-header")
         ([
-            Clockworks.tektite.internalLink
+            tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("CountdownTimer", item),
@@ -62,7 +62,7 @@ export module Render
             }),
             $div("item-operator")
             ([
-                await Clockworks.tektite.menu.button(await alarmItemMenu(item)),
+                await tektite.menu.button(await alarmItemMenu(item)),
             ]),
         ]),
         $div("item-information")
@@ -83,7 +83,7 @@ export module Render
     [
         "schedule" === item.type ?
             [
-                Clockworks.tektite.menu.item
+                tektite.menu.item
                 (
                     label("Edit"),
                     async () =>
@@ -99,7 +99,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Clockworks.tektite.toast.make
+                                    tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -109,7 +109,7 @@ export module Render
                         }
                     }
                 ),
-                Clockworks.tektite.menu.item
+                tektite.menu.item
                 (
                     label("Edit start time"),
                     async () =>
@@ -125,7 +125,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Clockworks.tektite.toast.make
+                                    tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -137,7 +137,7 @@ export module Render
                 )
             ]:
             [],
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Remove"),
             async () => await Operate.removeAlarm(item),
@@ -148,7 +148,7 @@ export module Render
     ([
         $div("item-header")
         ([
-            Clockworks.tektite.internalLink
+            tektite.internalLink
             ({
                 className: "item-title",
                 href: Domain.makePageParams("ElapsedTimer", item),
@@ -160,7 +160,7 @@ export module Render
             }),
             $div("item-operator")
             ([
-                await Clockworks.tektite.menu.button(await eventItemMenu(item)),
+                await tektite.menu.button(await eventItemMenu(item)),
             ]),
         ]),
         $div("item-information")
@@ -179,7 +179,7 @@ export module Render
     ]);
     export const eventItemMenu = async (item: Type.EventEntry) =>
     [
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Edit"),
             async () =>
@@ -195,7 +195,7 @@ export module Render
                         }
                         else
                         {
-                            Clockworks.tektite.toast.make
+                            tektite.toast.make
                             ({
                                 content: label("A date and time outside the valid range was specified."),
                                 isWideContent: true,
@@ -205,7 +205,7 @@ export module Render
                 }
             }
         ),
-        Clockworks.tektite.menu.item
+        tektite.menu.item
         (
             label("Remove"),
             async () => await RenderBase.Operate.ElapsedTimer.remove(item),
@@ -253,7 +253,7 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     // className: "add-remove-tags-popup",
                     children:
@@ -322,7 +322,7 @@ export module Render
             resolve =>
             {
                 let result: Type.EventEntry | null = null;
-                const ui = Clockworks.tektite.screen.popup
+                const ui = tektite.screen.popup
                 ({
                     children:
                     [
@@ -473,7 +473,7 @@ export module Render
                 null !== item ?
                     $div("button-list")
                     ([
-                        Clockworks.tektite.internalLink
+                        tektite.internalLink
                         ({
                             href: { application: "CountdownTimer", },
                             children:
@@ -497,7 +497,7 @@ export module Render
                                 onclick: async () => await Operate.save(item),
                             }
                     ]):
-                    await Clockworks.tektite.screen.downPageLink(),
+                    await tektite.screen.downPageLink(),
             ]),
         ]),
         null !== item ?
@@ -527,7 +527,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    Clockworks.tektite.toast.make
+                                    tektite.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -609,7 +609,7 @@ export module Render
                             const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
                             if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -current.start))
                             {
-                                Clockworks.tektite.screen.flash();
+                                tektite.screen.flash();
                                 lashFlashAt = tick;
                             }
                             previousPrimaryStep = primaryStep;
@@ -617,7 +617,7 @@ export module Render
                         const cycle = "timer" === current.type ? 3000: 10000;
                         if (rest <= 0 && lashFlashAt +cycle <= tick)
                         {
-                            Clockworks.tektite.screen.flash();
+                            tektite.screen.flash();
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
@@ -627,20 +627,20 @@ export module Render
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
                         RenderBase.setScreenBarProgress(rate, nextColor);
                         // setBodyColor(nextColor);
-                        Clockworks.tektite.header.getElement().classList.add("with-screen-prgress");
+                        tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         RenderBase.setScreenBarProgress(null);
-                        Clockworks.tektite.header.getElement().classList.remove("with-screen-prgress");
+                        tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                         RenderBase.setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
                 case "timer":
-                    RenderBase.setTitle(current ? Domain.timeShortStringFromTick(Math.max(current.end -tick, 0)) +" - " +applicationTitle: applicationTitle);
+                    tektite.setTitle(current ? Domain.timeShortStringFromTick(Math.max(current.end -tick, 0)) +" - " +applicationTitle: applicationTitle);
                     const alarmListDiv = minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
                     if (alarmListDiv)
                     {
@@ -676,11 +676,11 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     alarms = Storage.CountdownTimer.Alarms.get();
-                    Clockworks.tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
+                    tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
                     RenderBase.resizeFlexList();
                     await updateWindow("timer");
-                    await Clockworks.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
-                    Clockworks.tektite.screen.adjustPageFooterPosition();
+                    await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };

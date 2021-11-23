@@ -38,6 +38,11 @@ export module Tektite
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
+        $make = minamo.dom.make;
+        $tag = minamo.dom.tag;
+        $div = this.$tag("div");
+        $span = this.$tag("span");
+        $labelSpan = this.$span("label");
         public onLoad = () =>
         {
             minamo.dom.make
@@ -106,6 +111,13 @@ export module Tektite
             }
         };
         public reload = async () => await this.params.showPage(location.href);
+        public setTitle = (title: string) =>
+        {
+            if (document.title !== title)
+            {
+                document.title = title;
+            }
+        };
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);

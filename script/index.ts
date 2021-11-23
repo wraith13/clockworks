@@ -21,19 +21,6 @@ export module Clockworks
         keyof typeof localeEn &
         keyof typeof localeJa;
     export type LocaleType = keyof typeof localeMaster;
-    export const tektite = Tektite.make<Type.PageParams, Resource.KeyType, typeof localeEn | typeof localeJa, typeof localeMaster>
-    ({
-        makeUrl: Domain.makeUrl,
-        showUrl: Render.showUrl,
-        showPage: Render.showPage,
-        loadSvgOrCache: Resource.loadSvgOrCache,
-        localeMaster,
-        timer:
-        {
-            resolution: 360,
-            highResolution: 36,
-        },
-    });
     export const localeMap = (key: LocaleKeyType) => tektite.locale.map(key);
     export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
     export const start = async (params:{ buildTimestamp: string, }) =>
@@ -56,3 +43,17 @@ export module Clockworks
         await Render.showPage();
     };
 }
+
+export const tektite = Tektite.make<Type.PageParams, Resource.KeyType, typeof localeEn | typeof localeJa, typeof Clockworks.localeMaster>
+({
+    makeUrl: Domain.makeUrl,
+    showUrl: Render.showUrl,
+    showPage: Render.showPage,
+    loadSvgOrCache: Resource.loadSvgOrCache,
+    localeMaster: Clockworks.localeMaster,
+    timer:
+    {
+        resolution: 360,
+        highResolution: 36,
+    },
+});
