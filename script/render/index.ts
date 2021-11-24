@@ -65,15 +65,15 @@ export module Render
             onCanceled();
             tektite.toast.make
             ({
-                content: tektite.$span("")(label("roll-backed")),
+                content: Tektite.$span("")(label("roll-backed")),
                 wait: 3000,
             });
         },
     });
-    export const label = (label: Clockworks.LocaleKeyType) => tektite.$labelSpan
+    export const label = (label: Clockworks.LocaleKeyType) => Tektite.$labelSpan
     ([
-        tektite.$span("locale-parallel")(Clockworks.localeParallel(label)),
-        tektite.$span("locale-map")(Clockworks.localeMap(label)),
+        Tektite.$span("locale-parallel")(Clockworks.localeParallel(label)),
+        Tektite.$span("locale-map")(Clockworks.localeMap(label)),
     ]);
     // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
     // {
@@ -139,14 +139,14 @@ export module Render
     // export const confirm = systemConfirm;
     export const dateTimePrompt = async (message: string, _default: number): Promise<string | null> =>
     {
-        const inputDate = tektite.$make(HTMLInputElement)
+        const inputDate = Tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "date",
             value: Domain.dateCoreStringFromTick(_default),
             required: "",
         });
-        const inputTime = tektite.$make(HTMLInputElement)
+        const inputTime = Tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
@@ -162,10 +162,10 @@ export module Render
                 ({
                     children:
                     [
-                        tektite.$tag("h2")("")(message),
+                        Tektite.$tag("h2")("")(message),
                         inputDate,
                         inputTime,
-                        tektite.$div("popup-operator")
+                        Tektite.$div("popup-operator")
                         ([
                             {
                                 tag: "button",
@@ -202,7 +202,7 @@ export module Render
             async resolve =>
             {
                 let result = false;
-                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -218,7 +218,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        tektite.$span("")(label(`theme.${key}` as Clockworks.LocaleKeyType)),
+                                        Tektite.$span("")(label(`theme.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -242,9 +242,9 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        tektite.$tag("h2")("")(label("Theme setting")),
+                        Tektite.$tag("h2")("")(label("Theme setting")),
                         checkButtonList,
-                        tektite.$div("popup-operator")
+                        Tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -268,7 +268,7 @@ export module Render
         (
             async resolve =>
             {
-                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -284,7 +284,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        tektite.$span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
+                                        Tektite.$span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -308,9 +308,9 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        tektite.$tag("h2")("")(label("Progress Bar Style setting")),
+                        Tektite.$tag("h2")("")(label("Progress Bar Style setting")),
                         checkButtonList,
-                        tektite.$div("popup-operator")
+                        Tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -336,7 +336,7 @@ export module Render
             async resolve =>
             {
                 let result = false;
-                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -347,7 +347,7 @@ export module Render
                             children:
                             [
                                 await Resource.loadSvgOrCache("check-icon"),
-                                tektite.$span("")(label("language.auto")),
+                                Tektite.$span("")(label("language.auto")),
                             ],
                             onclick: async () =>
                             {
@@ -371,7 +371,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        tektite.$span("")(tektite.$labelSpan(tektite.locale.getLocaleName(key))),
+                                        Tektite.$span("")(Tektite.$labelSpan(tektite.locale.getLocaleName(key))),
                                     ],
                                     onclick: async () =>
                                     {
@@ -394,9 +394,9 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        tektite.$tag("h2")("")(label("Language setting")),
+                        Tektite.$tag("h2")("")(label("Language setting")),
                         checkButtonList,
-                        tektite.$div("popup-operator")
+                        Tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -419,7 +419,7 @@ export module Render
             async resolve =>
             {
                 let result = false;
-                const checkButtonList = tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -435,7 +435,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("check-icon"),
-                                        tektite.$span("")(label(key)),
+                                        Tektite.$span("")(label(key)),
                                     ],
                                     onclick: async () =>
                                     {
@@ -458,9 +458,9 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        tektite.$tag("h2")("")(label("Color setting")),
+                        Tektite.$tag("h2")("")(label("Color setting")),
                         checkButtonList,
-                        tektite.$div("popup-operator")
+                        Tektite.$div("popup-operator")
                         ([{
                             tag: "button",
                             className: "default-button",
@@ -478,7 +478,7 @@ export module Render
     };
     export const timePrompt = async (message: string, tick: number = 0): Promise<number | null> =>
     {
-        const inputTime = tektite.$make(HTMLInputElement)
+        const inputTime = Tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
@@ -494,9 +494,9 @@ export module Render
                 ({
                     children:
                     [
-                        tektite.$tag("h2")("")(message),
+                        Tektite.$tag("h2")("")(message),
                         inputTime,
-                        tektite.$div("popup-operator")
+                        Tektite.$div("popup-operator")
                         ([
                             {
                                 tag: "button",
@@ -527,14 +527,14 @@ export module Render
     };
     export const dateIimePrompt = async (message: string, tick: number): Promise<number | null> =>
     {
-        const inputDate = tektite.$make(HTMLInputElement)
+        const inputDate = Tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "date",
             value: Domain.dateCoreStringFromTick(tick),
             required: "",
         });
-        const inputTime = tektite.$make(HTMLInputElement)
+        const inputTime = Tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
@@ -550,10 +550,10 @@ export module Render
                 ({
                     children:
                     [
-                        tektite.$tag("h2")("")(message),
+                        Tektite.$tag("h2")("")(message),
                         inputDate,
                         inputTime,
-                        tektite.$div("popup-operator")
+                        Tektite.$div("popup-operator")
                         ([
                             {
                                 tag: "button",
@@ -591,13 +591,13 @@ export module Render
                 // className: "add-remove-tags-popup",
                 children:
                 [
-                    tektite.$tag("h2")("")(tektite.$labelSpan("シェア / Share")),
-                    tektite.$div("menu-button-list")
+                    Tektite.$tag("h2")("")(Tektite.$labelSpan("シェア / Share")),
+                    Tektite.$div("menu-button-list")
                     ([
                         {
                             tag: "button",
                             className: "menu-item-button",
-                            children: tektite.$span("")(tektite.$labelSpan("Tweet / ツイート")),
+                            children: Tektite.$span("")(Tektite.$labelSpan("Tweet / ツイート")),
                             onclick: async () =>
                             {
                                 location.href='https://twitter.com/intent/tweet?text='+encodeURIComponent('【'+title+'】 '+url +' ');
@@ -607,7 +607,7 @@ export module Render
                         {
                             tag: "button",
                             className: "menu-item-button",
-                            children: tektite.$span("")(tektite.$labelSpan("Copy URL / URL をコピー")),
+                            children: Tektite.$span("")(Tektite.$labelSpan("Copy URL / URL をコピー")),
                             onclick: async () =>
                             {
                                 Operate.copyToClipboard(url, "URL");
@@ -615,7 +615,7 @@ export module Render
                             }
                         }
                     ]),
-                    tektite.$div("popup-operator")
+                    Tektite.$div("popup-operator")
                     ([
                         {
                             tag: "button",
@@ -632,9 +632,9 @@ export module Render
             });
         }
     );
-    export const stampItem = async (tick: number, interval: number | null) => tektite.$div("stamp-item flex-item")
+    export const stampItem = async (tick: number, interval: number | null) => Tektite.$div("stamp-item flex-item")
     ([
-        tektite.$div("item-header")
+        Tektite.$div("item-header")
         ([
             tektite.internalLink
             ({
@@ -643,28 +643,28 @@ export module Render
                 children:
                 [
                     await Resource.loadSvgOrCache("tick-icon"),
-                    tektite.$div("tick-elapsed-time")
+                    Tektite.$div("tick-elapsed-time")
                     ([
-                        tektite.$span("value monospace")(label("Elapsed time")),
+                        Tektite.$span("value monospace")(label("Elapsed time")),
                     ]),
                 ]
             }),
-            tektite.$div("item-operator")
+            Tektite.$div("item-operator")
             ([
                 await tektite.menu.button(await stampItemMenu(tick)),
             ]),
         ]),
-        tektite.$div("item-information")
+        Tektite.$div("item-information")
         ([
-            tektite.$div("tick-timestamp")
+            Tektite.$div("tick-timestamp")
             ([
                 label("Timestamp"),
-                tektite.$span("value monospace")(Domain.dateFullStringFromTick(tick)),
+                Tektite.$span("value monospace")(Domain.dateFullStringFromTick(tick)),
             ]),
-            tektite.$div("tick-interval")
+            Tektite.$div("tick-interval")
             ([
                 label("Interval"),
-                tektite.$span("value monospace")(Domain.timeLongStringFromTick(interval)),
+                Tektite.$span("value monospace")(Domain.timeLongStringFromTick(interval)),
             ]),
         ]),
     ]);
@@ -744,7 +744,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), tektite.$span("monospace")(Domain.dateFullStringFromTick(i)), ],
+                        [ await Resource.loadSvgOrCache("tick-icon"), Tektite.$span("monospace")(Domain.dateFullStringFromTick(i)), ],
                         Domain.makePageParams("NeverStopwatch", i),
                         item === i ? "current-item": undefined,
                     )
@@ -765,7 +765,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), tektite.$labelSpan(i.title), tektite.$span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
+                        [ await Resource.loadSvgOrCache("tick-icon"), Tektite.$labelSpan(i.title), Tektite.$span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
                         Domain.makePageParams("ElapsedTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -786,7 +786,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), tektite.$labelSpan(i.title), tektite.$span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
+                        [ await Resource.loadSvgOrCache("tick-icon"), Tektite.$labelSpan(i.title), Tektite.$span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
                         Domain.makePageParams("RainbowClock", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -804,7 +804,7 @@ export module Render
                 (
                     [
                         await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
-                        tektite.$labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                        Tektite.$labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(i)}`),
                     ],
                     async () =>
                     {
@@ -934,7 +934,7 @@ export module Render
         tektite.externalLink
         ({
             href: config.repositoryUrl,
-            children: tektite.menu.item(tektite.$labelSpan("GitHub")),
+            children: tektite.menu.item(Tektite.$labelSpan("GitHub")),
         });
     export const welcomeScreenMenu = async () =>
     [
@@ -957,18 +957,18 @@ export module Render
         },
         body:
         [
-            tektite.$div("primary-page")
+            Tektite.$div("primary-page")
             ([
-                tektite.$div("page-body")
+                Tektite.$div("page-body")
                 ([
-                    tektite.$div("main-panel")
+                    Tektite.$div("main-panel")
                     ([
-                        tektite.$div("logo")
+                        Tektite.$div("logo")
                         ([
-                            tektite.$div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
-                            tektite.$span("logo-text")(config.applicationTitle)
+                            Tektite.$div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
+                            Tektite.$span("logo-text")(config.applicationTitle)
                         ]),
-                        tektite.$div("button-list")
+                        Tektite.$div("button-list")
                         (
                             Type.applicationIdList.map
                             (
@@ -980,7 +980,7 @@ export module Render
                                     {
                                         tag: "button",
                                         className: "default-button main-button long-button",
-                                        children: tektite.$labelSpan(Type.applicationList[i].title),
+                                        children: Tektite.$labelSpan(Type.applicationList[i].title),
                                         // onclick: async () => await showNeverStopwatchScreen(),
                                     }
                                 }),
@@ -988,18 +988,18 @@ export module Render
                         ),
                     ]),
                 ]),
-                tektite.$div("page-footer")
+                Tektite.$div("page-footer")
                 ([
                     await tektite.screen.downPageLink(),
                 ]),
             ]),
-            tektite.$div("trail-page")
+            Tektite.$div("trail-page")
             ([
-                tektite.$div("description")
+                Tektite.$div("description")
                 (
-                    tektite.$tag("ul")("locale-parallel-off")
+                    Tektite.$tag("ul")("locale-parallel-off")
                     ([
-                        tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                     ])
                 ),
             ]),
@@ -1051,20 +1051,20 @@ export module Render
             children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
         }),
     });
-    export const screenBar = () => tektite.$div("screen-bar")(tektite.$div("screen-bar-flash-layer")([]));
+    export const screenBar = () => Tektite.$div("screen-bar")(Tektite.$div("screen-bar-flash-layer")([]));
     export const neverStopwatchScreenBody = async (item: number | null, ticks: number[]) =>
     ([
-        tektite.$div("primary-page")
+        Tektite.$div("primary-page")
         ([
-            tektite.$div("page-body")
+            Tektite.$div("page-body")
             ([
-                tektite.$div("main-panel")
+                Tektite.$div("main-panel")
                 ([
-                    tektite.$div("current-item")
+                    Tektite.$div("current-item")
                     ([
-                        tektite.$div("previous-timestamp")
+                        Tektite.$div("previous-timestamp")
                         ([
-                            tektite.$span("value monospace")
+                            Tektite.$span("value monospace")
                             (
                                 null !== item ?
                                     Domain.dateFullStringFromTick(item):
@@ -1075,13 +1075,13 @@ export module Render
                                     )
                             ),
                         ]),
-                        tektite.$div("capital-interval")
+                        Tektite.$div("capital-interval")
                         ([
-                            tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                            Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                         ]),
-                        tektite.$div("current-timestamp")
+                        Tektite.$div("current-timestamp")
                         ([
-                            tektite.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                            Tektite.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
                         ]),
                     ]),
                     await flashIntervalLabel
@@ -1097,7 +1097,7 @@ export module Render
                             Storage.NeverStopwatch.flashInterval.set
                         )
                     ),
-                    tektite.$div("button-list")
+                    Tektite.$div("button-list")
                     ({
                         tag: "button",
                         className: "default-button main-button long-button",
@@ -1106,10 +1106,10 @@ export module Render
                     }),
                 ]),
             ]),
-            tektite.$div("page-footer")
+            Tektite.$div("page-footer")
             ([
                 null !== item ?
-                tektite.$div("button-list")
+                Tektite.$div("button-list")
                     ([
                         tektite.internalLink
                         ({
@@ -1140,9 +1140,9 @@ export module Render
         ]),
         null !== item ?
             []:
-            tektite.$div("trail-page")
+            Tektite.$div("trail-page")
             ([
-                tektite.$div("row-flex-list stamp-list")
+                Tektite.$div("row-flex-list stamp-list")
                 (
                     await Promise.all
                     (
@@ -1156,13 +1156,13 @@ export module Render
                         )
                     )
                 ),
-                tektite.$div("description")
+                Tektite.$div("description")
                 (
-                    tektite.$tag("ul")("locale-parallel-off")
+                    Tektite.$tag("ul")("locale-parallel-off")
                     ([
-                        tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                        tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                        tektite.$tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Clockworks.localeMap("Stamp"), }, ]),
+                        Tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                        Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        Tektite.$tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Clockworks.localeMap("Stamp"), }, ]),
                     ])
                 ),
             ]),
@@ -1300,44 +1300,44 @@ export module Render
     ];
     export const elapsedTimerScreenBody = async (item: Type.EventEntry | null, events: Type.EventEntry[]) =>
     ([
-        tektite.$div("primary-page")
+        Tektite.$div("primary-page")
         ([
-            tektite.$div("page-body")
+            Tektite.$div("page-body")
             ([
-                tektite.$div("main-panel")
+                Tektite.$div("main-panel")
                 ([
                     (item ?? events[0]) ?
-                    tektite.$div("current-item event-item")
+                    Tektite.$div("current-item event-item")
                         ([
                             (item ?? events[0]) ?
                             [
-                                tektite.$div("current-title")
+                                Tektite.$div("current-title")
                                 ([
-                                    tektite.$span("value monospace")((item ?? events[0]).title),
+                                    Tektite.$span("value monospace")((item ?? events[0]).title),
                                 ]),
-                                tektite.$div("current-due-timestamp")
+                                Tektite.$div("current-due-timestamp")
                                 ([
-                                    tektite.$span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
+                                    Tektite.$span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
                                 ]),
                             ]: [],
-                            tektite.$div("capital-interval")
+                            Tektite.$div("capital-interval")
                             ([
-                                tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                             ]),
-                            tektite.$div("current-timestamp")
+                            Tektite.$div("current-timestamp")
                             ([
-                                tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
                             ]),
                         ]):
-                        tektite.$div("current-item")
+                        Tektite.$div("current-item")
                         ([
-                            tektite.$div("capital-interval")
+                            Tektite.$div("capital-interval")
                             ([
-                                tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                             ]),
-                            tektite.$div("current-timestamp")
+                            Tektite.$div("current-timestamp")
                             ([
-                                tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                                Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
                             ]),
                         ]),
                     await flashIntervalLabel
@@ -1357,10 +1357,10 @@ export module Render
                     ),
                 ]),
             ]),
-            tektite.$div("page-footer")
+            Tektite.$div("page-footer")
             ([
                 null !== item ?
-                    tektite.$div("button-list")
+                    Tektite.$div("button-list")
                     ([
                         tektite.internalLink
                         ({
@@ -1391,9 +1391,9 @@ export module Render
         ]),
         null !== item ?
             []:
-            tektite.$div("trail-page")
+            Tektite.$div("trail-page")
             ([
-                tektite.$div("button-list")
+                Tektite.$div("button-list")
                 ([
                     {
                         tag: "button",
@@ -1420,16 +1420,16 @@ export module Render
                         }
                     },
                 ]),
-                tektite.$div("row-flex-list event-list")
+                Tektite.$div("row-flex-list event-list")
                 (
                     await Promise.all(events.map(item => CountdownTimerRender.eventItem(item)))
                 ),
-                tektite.$div("description")
+                Tektite.$div("description")
                 (
-                    tektite.$tag("ul")("locale-parallel-off")
+                    Tektite.$tag("ul")("locale-parallel-off")
                     ([
-                        tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                        tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                        Tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                        Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                     ])
                 ),
             ]),

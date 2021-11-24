@@ -1,4 +1,5 @@
 import { Clockworks, tektite } from "../..";
+import { Tektite } from "../../../tektite/script";
 import { Type } from "../../type";
 import { Base } from "../../base";
 import { Storage } from "../../storage";
@@ -17,7 +18,7 @@ export module Operate
         tektite.screen.updateWindow("operate");
         const toast = tektite.toast.makePrimary
         ({
-            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -36,7 +37,7 @@ export module Operate
         tektite.screen.updateWindow("operate");
         const toast = tektite.toast.makePrimary
         ({
-            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -62,7 +63,7 @@ export module Operate
         tektite.screen.updateWindow("operate");
         const toast = tektite.toast.makePrimary
         ({
-            content: tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
+            content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -91,7 +92,7 @@ export module Operate
         }
         const toast = tektite.toast.makePrimary
         ({
-            content: tektite.$span("")(`${Clockworks.localeMap("Removed.")}`),
+            content: Tektite.$span("")(`${Clockworks.localeMap("Removed.")}`),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>
@@ -117,7 +118,7 @@ export module Operate
         {
             Storage.ElapsedTimer.Events.removeKey();
             tektite.screen.updateWindow("operate");
-            tektite.toast.makePrimary({ content: tektite.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
+            tektite.toast.makePrimary({ content: Tektite.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
         }
     };
 }

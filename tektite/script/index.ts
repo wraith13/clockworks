@@ -8,6 +8,11 @@ import { Menu } from "./menu";
 import { Key as KeyModule } from "./key";
 export module Tektite
 {
+    export const $make = minamo.dom.make;
+    export const $tag = minamo.dom.tag;
+    export const $div = $tag("div");
+    export const $span = $tag("span");
+    export const $labelSpan = $span("label");
     export interface LocaleEntry
     {
         [key : string] : string;
@@ -38,11 +43,6 @@ export module Tektite
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
-        $make = minamo.dom.make;
-        $tag = minamo.dom.tag;
-        $div = this.$tag("div");
-        $span = this.$tag("span");
-        $labelSpan = this.$span("label");
         public onLoad = () =>
         {
             minamo.dom.make

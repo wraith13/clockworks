@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Tue Nov 23 2021 20:25:00 GMT+0900 (GMT+09:00) -->
+<!-- build at: Wed Nov 24 2021 10:10:03 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -6922,31 +6922,16 @@ define("tektite/script/screen", ["require", "exports", "script/minamo.js/index"]
         };
     })(Screen = exports.Screen || (exports.Screen = {}));
 });
-define("tektite/script/toast", ["require", "exports", "script/minamo.js/index"], function (require, exports, minamo_js_2) {
+define("tektite/script/toast", ["require", "exports", "script/minamo.js/index", "tektite/script/index"], function (require, exports, minamo_js_2, _1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Toast = void 0;
     var Toast;
     (function (Toast) {
         var _this = this;
-        var $make = minamo_js_2.minamo.dom.make;
-        var $tag = function (tag) { return function (className) { return function (children) {
-            return "string" === typeof className ?
-                {
-                    tag: tag,
-                    children: children,
-                    className: className,
-                } :
-                Object.assign({
-                    tag: tag,
-                    children: children,
-                }, className);
-        }; }; };
-        // const $div = $tag("div");
-        var $span = $tag("span");
         Toast.make = function (data) {
             var _a, _b, _c;
-            var dom = $make(HTMLDivElement)({
+            var dom = _1.Tektite.$make(HTMLDivElement)({
                 tag: "div",
                 className: "item slide-up-in",
                 children: data.isWideContent ?
@@ -6956,9 +6941,9 @@ define("tektite/script/toast", ["require", "exports", "script/minamo.js/index"],
                         data.forwardOperator,
                     ].filter(function (i) { return undefined !== i; }) :
                     [
-                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : $span("dummy")([]),
+                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : _1.Tektite.$span("dummy")([]),
                         data.content,
-                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : $span("dummy")([]),
+                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : _1.Tektite.$span("dummy")([]),
                     ],
             });
             var hideRaw = function (className, wait) { return __awaiter(_this, void 0, void 0, function () {
@@ -7005,28 +6990,12 @@ define("tektite/script/toast", ["require", "exports", "script/minamo.js/index"],
         };
     })(Toast = exports.Toast || (exports.Toast = {}));
 });
-define("tektite/script/header", ["require", "exports", "script/minamo.js/index"], function (require, exports, minamo_js_3) {
+define("tektite/script/header", ["require", "exports", "script/minamo.js/index", "tektite/script/index"], function (require, exports, minamo_js_3, _2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Header = void 0;
     var Header;
     (function (Header_1) {
-        var $make = minamo_js_3.minamo.dom.make;
-        var $tag = function (tag) { return function (className) { return function (children) {
-            return "string" === typeof className ?
-                {
-                    tag: tag,
-                    children: children,
-                    className: className,
-                } :
-                Object.assign({
-                    tag: tag,
-                    children: children,
-                }, className);
-        }; }; };
-        var $div = $tag("div");
-        // const $span = $tag("span");
-        // const labelSpan = $span("label");
         var Header = /** @class */ (function () {
             function Header(tektite) {
                 var _this = this;
@@ -7047,7 +7016,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index"]
                     return __generator(this, function (_e) {
                         switch (_e.label) {
                             case 0:
-                                _a = [$div("progress-bar")([])];
+                                _a = [_2.Tektite.$div("progress-bar")([])];
                                 return [4 /*yield*/, Promise.all(data.items
                                         .filter(function (i) { return i; })
                                         .map(function (item, ix, list) { return __awaiter(_this, void 0, void 0, function () {
@@ -7102,7 +7071,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index"]
                                 _e.label = 7;
                             case 7: return [2 /*return*/, _a.concat([
                                     _c,
-                                    data.operator ? $div("header-operator")(data.operator) : []
+                                    data.operator ? _2.Tektite.$div("header-operator")(data.operator) : []
                                 ])];
                         }
                     });
@@ -7113,11 +7082,11 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index"]
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = $div("icon");
+                                _a = _2.Tektite.$div("icon");
                                 return [4 /*yield*/, this.tektite.params.loadSvgOrCache(item.icon)];
                             case 1: return [2 /*return*/, [
                                     _a.apply(void 0, [_b.sent()]),
-                                    $div("segment-title")(item.title)
+                                    _2.Tektite.$div("segment-title")(item.title)
                                 ]];
                         }
                     });
@@ -7127,7 +7096,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index"]
                     return __awaiter(_this, void 0, void 0, function () { var _a; return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = $div("segment label-segment " + className);
+                                _a = _2.Tektite.$div("segment label-segment " + className);
                                 return [4 /*yield*/, this.segmentCore(item)];
                             case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent()])];
                         }
@@ -7166,7 +7135,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index"]
                                         popup.classList.remove("show");
                                         cover = null;
                                     };
-                                    popup = $make(HTMLDivElement)({
+                                    popup = _2.Tektite.$make(HTMLDivElement)({
                                         tag: "div",
                                         className: "menu-popup segment-popup",
                                         children: "function" !== typeof item.menu ? item.menu : [],
@@ -7180,7 +7149,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index"]
                                             });
                                         }); },
                                     });
-                                    _a = $make(HTMLDivElement);
+                                    _a = _2.Tektite.$make(HTMLDivElement);
                                     _b = {
                                         tag: "div",
                                         className: "segment " + className
@@ -7360,15 +7329,15 @@ define("tektite/script/index", ["require", "exports", "script/minamo.js/index", 
     exports.Tektite = void 0;
     var Tektite;
     (function (Tektite_1) {
+        Tektite_1.$make = minamo_js_5.minamo.dom.make;
+        Tektite_1.$tag = minamo_js_5.minamo.dom.tag;
+        Tektite_1.$div = Tektite_1.$tag("div");
+        Tektite_1.$span = Tektite_1.$tag("span");
+        Tektite_1.$labelSpan = Tektite_1.$span("label");
         var Tektite = /** @class */ (function () {
             function Tektite(params) {
                 var _this = this;
                 this.params = params;
-                this.$make = minamo_js_5.minamo.dom.make;
-                this.$tag = minamo_js_5.minamo.dom.tag;
-                this.$div = this.$tag("div");
-                this.$span = this.$tag("span");
-                this.$labelSpan = this.$span("label");
                 this.onLoad = function () {
                     minamo_js_5.minamo.dom.make({
                         parent: document.body,
@@ -7865,7 +7834,7 @@ define("script/storage", ["require", "exports", "script/minamo.js/index", "scrip
         })(Settings = Storage.Settings || (Storage.Settings = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("script/domain", ["require", "exports", "script/base", "script/index", "resource/config"], function (require, exports, base_2, _1, config_json_7) {
+define("script/domain", ["require", "exports", "script/base", "script/index", "resource/config"], function (require, exports, base_2, _3, config_json_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Domain = void 0;
@@ -7904,26 +7873,26 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
             var result = "";
             if ("" !== result || 0 < days) {
                 if ("" === result) {
-                    result = days + " " + _1.Clockworks.localeMap("days");
+                    result = days + " " + _3.Clockworks.localeMap("days");
                 }
                 else {
-                    result += " " + days + " " + _1.Clockworks.localeMap("days");
+                    result += " " + days + " " + _3.Clockworks.localeMap("days");
                 }
             }
             if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
                 if ("" === result) {
-                    result = hours + " " + _1.Clockworks.localeMap("hours");
+                    result = hours + " " + _3.Clockworks.localeMap("hours");
                 }
                 else {
-                    result += " " + ("0" + hours).substr(-2) + " " + _1.Clockworks.localeMap("hours");
+                    result += " " + ("0" + hours).substr(-2) + " " + _3.Clockworks.localeMap("hours");
                 }
             }
             if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
                 if ("" === result) {
-                    result = minutes + " " + _1.Clockworks.localeMap("minutes");
+                    result = minutes + " " + _3.Clockworks.localeMap("minutes");
                 }
                 else {
-                    result += " " + ("0" + minutes).substr(-2) + " " + _1.Clockworks.localeMap("minutes");
+                    result += " " + ("0" + minutes).substr(-2) + " " + _3.Clockworks.localeMap("minutes");
                 }
             }
             if (0 < seconds || 0 < milliseconds) {
@@ -7933,14 +7902,14 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
                     trail = trail.replace(/0+$/, "");
                 }
                 if ("" === result) {
-                    result = "" + seconds + trail + " " + _1.Clockworks.localeMap("seconds");
+                    result = "" + seconds + trail + " " + _3.Clockworks.localeMap("seconds");
                 }
                 else {
-                    result += " " + ("0" + seconds).substr(-2) + trail + " " + _1.Clockworks.localeMap("seconds");
+                    result += " " + ("0" + seconds).substr(-2) + trail + " " + _3.Clockworks.localeMap("seconds");
                 }
             }
             if ("" === result) {
-                result = minutes + " " + _1.Clockworks.localeMap("m(minutes)");
+                result = minutes + " " + _3.Clockworks.localeMap("m(minutes)");
             }
             // console.log({ timer, result, });
             return result;
@@ -7963,7 +7932,7 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
             return FloorHour.getTime() + (60 * 60 * 1000);
         };
         Domain.weekday = function (tick) {
-            return new Intl.DateTimeFormat(_1.tektite.locale.get(), { weekday: 'long' }).format(tick);
+            return new Intl.DateTimeFormat(_3.tektite.locale.get(), { weekday: 'long' }).format(tick);
         };
         Domain.dateCoreStringFromTick = function (tick) {
             if (null === tick) {
@@ -8070,7 +8039,7 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
                 if (days < 1) {
                     return Domain.timeLongCoreStringFromTick(tick);
                 }
-                return days.toLocaleString() + " " + _1.Clockworks.localeMap("days") + " " + Domain.timeLongCoreStringFromTick(tick);
+                return days.toLocaleString() + " " + _3.Clockworks.localeMap("days") + " " + Domain.timeLongCoreStringFromTick(tick);
             }
         };
         Domain.timeLongStringFromTick = function (tick) {
@@ -8083,7 +8052,7 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
             else {
                 var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                 return 0 < days ?
-                    days.toLocaleString() + " " + _1.Clockworks.localeMap("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
+                    days.toLocaleString() + " " + _3.Clockworks.localeMap("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
                     Domain.timeFullCoreStringFromTick(tick);
             }
         };
@@ -8285,7 +8254,7 @@ define("script/render/resource", ["require", "exports"], function (require, expo
         }); };
     })(Resource = exports.Resource || (exports.Resource = {}));
 });
-define("script/application/rainbowclock/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __2, base_3, storage_5, domain_1, render_1) {
+define("script/application/rainbowclock/operate", ["require", "exports", "script/index", "tektite/script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __2, script_1, base_3, storage_5, domain_1, render_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8299,7 +8268,7 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
                 storage_5.Storage.RainbowClock.Timezone.add(item);
                 __2.tektite.screen.updateWindow("operate");
                 toast = __2.tektite.toast.makePrimary({
-                    content: __2.tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
+                    content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8332,7 +8301,7 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
                 storage_5.Storage.RainbowClock.Timezone.add(newTimezone);
                 __2.tektite.screen.updateWindow("operate");
                 toast = __2.tektite.toast.makePrimary({
-                    content: __2.tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
+                    content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8365,7 +8334,7 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
                     __2.tektite.screen.updateWindow("operate");
                 }
                 toast = __2.tektite.toast.makePrimary({
-                    content: __2.tektite.$span("")("" + __2.Clockworks.localeMap("Removed.")),
+                    content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8394,14 +8363,14 @@ define("script/application/rainbowclock/operate", ["require", "exports", "script
                 if (render_1.Render.systemConfirm(__2.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_5.Storage.RainbowClock.Timezone.removeKey();
                     __2.tektite.screen.updateWindow("operate");
-                    __2.tektite.toast.makePrimary({ content: __2.tektite.$span("")("" + __2.Clockworks.localeMap("Initialized timezone list!")), });
+                    __2.tektite.toast.makePrimary({ content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Initialized timezone list!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/countdowntimer/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index", "resource/config"], function (require, exports, __3, base_4, storage_6, domain_2, render_2, config_json_8) {
+define("script/application/countdowntimer/operate", ["require", "exports", "script/index", "tektite/script/index", "script/base", "script/storage", "script/domain", "script/render/index", "resource/config"], function (require, exports, __3, script_2, base_4, storage_6, domain_2, render_2, config_json_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8422,7 +8391,7 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8454,7 +8423,7 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8480,7 +8449,7 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 storage_6.Storage.CountdownTimer.Alarms.add(item);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8514,7 +8483,7 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 storage_6.Storage.CountdownTimer.Alarms.add(newSchedule);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8546,7 +8515,7 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
+                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8577,7 +8546,7 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 render_2.Render.showUrl({ application: "CountdownTimer", });
                 toast = __3.tektite.toast.makePrimary({
-                    content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
+                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8609,7 +8578,7 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                     __3.tektite.screen.updateWindow("operate");
                 }
                 toast = __3.tektite.toast.makePrimary({
-                    content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Removed.")),
+                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8638,14 +8607,14 @@ define("script/application/countdowntimer/operate", ["require", "exports", "scri
                 if (render_2.Render.systemConfirm(__3.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_6.Storage.CountdownTimer.Alarms.removeKey();
                     __3.tektite.screen.updateWindow("operate");
-                    __3.tektite.toast.makePrimary({ content: __3.tektite.$span("")("" + __3.Clockworks.localeMap("Removed all alarms!")), });
+                    __3.tektite.toast.makePrimary({ content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Removed all alarms!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/elapsedtimer/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __4, base_5, storage_7, domain_3, render_3) {
+define("script/application/elapsedtimer/operate", ["require", "exports", "script/index", "tektite/script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __4, script_3, base_5, storage_7, domain_3, render_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8663,7 +8632,7 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                 storage_7.Storage.ElapsedTimer.Events.add(event);
                 __4.tektite.screen.updateWindow("operate");
                 toast = __4.tektite.toast.makePrimary({
-                    content: __4.tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
+                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8689,7 +8658,7 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                 storage_7.Storage.ElapsedTimer.Events.add(item);
                 __4.tektite.screen.updateWindow("operate");
                 toast = __4.tektite.toast.makePrimary({
-                    content: __4.tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
+                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8721,7 +8690,7 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                 storage_7.Storage.ElapsedTimer.Events.add(newSchedule);
                 __4.tektite.screen.updateWindow("operate");
                 toast = __4.tektite.toast.makePrimary({
-                    content: __4.tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
+                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8754,7 +8723,7 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                     __4.tektite.screen.updateWindow("operate");
                 }
                 toast = __4.tektite.toast.makePrimary({
-                    content: __4.tektite.$span("")("" + __4.Clockworks.localeMap("Removed.")),
+                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8783,14 +8752,14 @@ define("script/application/elapsedtimer/operate", ["require", "exports", "script
                 if (render_3.Render.systemConfirm(__4.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_7.Storage.ElapsedTimer.Events.removeKey();
                     __4.tektite.screen.updateWindow("operate");
-                    __4.tektite.toast.makePrimary({ content: __4.tektite.$span("")("" + __4.Clockworks.localeMap("Removed all alarms!")), });
+                    __4.tektite.toast.makePrimary({ content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Removed all alarms!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/neverstopwatch/operate", ["require", "exports", "script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __5, base_6, storage_8, domain_4, render_4) {
+define("script/application/neverstopwatch/operate", ["require", "exports", "script/index", "tektite/script/index", "script/base", "script/storage", "script/domain", "script/render/index"], function (require, exports, __5, script_4, base_6, storage_8, domain_4, render_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -8806,7 +8775,7 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 __5.tektite.screen.updateWindow("operate");
                 __5.tektite.screen.flash();
                 toast = __5.tektite.toast.makePrimary({
-                    content: __5.tektite.$span("")("" + __5.Clockworks.localeMap("Stamped!")),
+                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Stamped!")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8833,7 +8802,7 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 storage_8.Storage.NeverStopwatch.Stamps.add(tick);
                 __5.tektite.screen.updateWindow("operate");
                 toast = __5.tektite.toast.makePrimary({
-                    content: __5.tektite.$span("")("" + __5.Clockworks.localeMap("Saved!")),
+                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8861,7 +8830,7 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 storage_8.Storage.NeverStopwatch.Stamps.add(newTick);
                 __5.tektite.screen.updateWindow("operate");
                 toast = __5.tektite.toast.makePrimary({
-                    content: __5.tektite.$span("")("" + __5.Clockworks.localeMap("Updated.")),
+                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Updated.")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8894,7 +8863,7 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                     __5.tektite.screen.updateWindow("operate");
                 }
                 toast = __5.tektite.toast.makePrimary({
-                    content: __5.tektite.$span("")("" + __5.Clockworks.localeMap("Removed.")),
+                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -8923,7 +8892,7 @@ define("script/application/neverstopwatch/operate", ["require", "exports", "scri
                 if (render_4.Render.systemConfirm(__5.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_8.Storage.NeverStopwatch.Stamps.removeKey();
                     __5.tektite.screen.updateWindow("operate");
-                    __5.tektite.toast.makePrimary({ content: __5.tektite.$span("")("" + __5.Clockworks.localeMap("Removed all stamps!")), });
+                    __5.tektite.toast.makePrimary({ content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Removed all stamps!")), });
                 }
                 return [2 /*return*/];
             });
@@ -10310,7 +10279,7 @@ define("script/application/countdowntimer/render", ["require", "exports", "scrip
         }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/index", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "script/application/rainbowclock/render", "script/application/countdowntimer/render", "resource/config"], function (require, exports, minamo_js_10, __9, type_3, base_8, color_4, storage_11, domain_7, resource_3, operate_7, render_7, render_8, config_json_10) {
+define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/index", "tektite/script/index", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "script/application/rainbowclock/render", "script/application/countdowntimer/render", "resource/config"], function (require, exports, minamo_js_10, __9, script_5, type_3, base_8, color_4, storage_11, domain_7, resource_3, operate_7, render_7, render_8, config_json_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -10365,7 +10334,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                     return __generator(this, function (_a) {
                         onCanceled();
                         __9.tektite.toast.make({
-                            content: __9.tektite.$span("")(Render.label("roll-backed")),
+                            content: script_5.Tektite.$span("")(Render.label("roll-backed")),
                             wait: 3000,
                         });
                         return [2 /*return*/];
@@ -10373,9 +10342,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 }); },
             });
         };
-        Render.label = function (label) { return __9.tektite.$labelSpan([
-            __9.tektite.$span("locale-parallel")(__9.Clockworks.localeParallel(label)),
-            __9.tektite.$span("locale-map")(__9.Clockworks.localeMap(label)),
+        Render.label = function (label) { return script_5.Tektite.$labelSpan([
+            script_5.Tektite.$span("locale-parallel")(__9.Clockworks.localeParallel(label)),
+            script_5.Tektite.$span("locale-map")(__9.Clockworks.localeMap(label)),
         ]); };
         // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
         // {
@@ -10444,13 +10413,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        inputDate = __9.tektite.$make(HTMLInputElement)({
+                        inputDate = script_5.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
                             value: domain_7.Domain.dateCoreStringFromTick(_default),
                             required: "",
                         });
-                        inputTime = __9.tektite.$make(HTMLInputElement)({
+                        inputTime = script_5.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
                             value: domain_7.Domain.timeFullCoreStringFromTick(domain_7.Domain.getTime(_default)),
@@ -10460,10 +10429,10 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 var result = null;
                                 var ui = __9.tektite.screen.popup({
                                     children: [
-                                        __9.tektite.$tag("h2")("")(message),
+                                        script_5.Tektite.$tag("h2")("")(message),
                                         inputDate,
                                         inputTime,
-                                        __9.tektite.$div("popup-operator")([
+                                        script_5.Tektite.$div("popup-operator")([
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
@@ -10510,7 +10479,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         switch (_a.label) {
                                             case 0:
                                                 result = false;
-                                                checkButtonList = __9.tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                                checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                                 checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                     var _a, _b, _c;
                                                     var _this = this;
@@ -10533,7 +10502,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                     return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                                 case 1: return [2 /*return*/, (_a.children = [
                                                                                         _c.sent(),
-                                                                                        __9.tektite.$span("")(Render.label("theme." + key))
+                                                                                        script_5.Tektite.$span("")(Render.label("theme." + key))
                                                                                     ],
                                                                                         _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                             var _a;
@@ -10569,9 +10538,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 ui = __9.tektite.screen.popup({
                                                     // className: "add-remove-tags-popup",
                                                     children: [
-                                                        __9.tektite.$tag("h2")("")(Render.label("Theme setting")),
+                                                        script_5.Tektite.$tag("h2")("")(Render.label("Theme setting")),
                                                         checkButtonList,
-                                                        __9.tektite.$div("popup-operator")([{
+                                                        script_5.Tektite.$div("popup-operator")([{
                                                                 tag: "button",
                                                                 className: "default-button",
                                                                 children: Render.label("Close"),
@@ -10610,7 +10579,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                checkButtonList = __9.tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                                checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                                 checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                     var _a, _b, _c;
                                                     var _this = this;
@@ -10632,7 +10601,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                     return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                                 case 1: return [2 /*return*/, (_a.children = [
                                                                                         _b.sent(),
-                                                                                        __9.tektite.$span("")(Render.label("progressBarStyle." + key))
+                                                                                        script_5.Tektite.$span("")(Render.label("progressBarStyle." + key))
                                                                                     ],
                                                                                         _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                             return __generator(this, function (_a) {
@@ -10667,9 +10636,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 ui = __9.tektite.screen.popup({
                                                     // className: "add-remove-tags-popup",
                                                     children: [
-                                                        __9.tektite.$tag("h2")("")(Render.label("Progress Bar Style setting")),
+                                                        script_5.Tektite.$tag("h2")("")(Render.label("Progress Bar Style setting")),
                                                         checkButtonList,
-                                                        __9.tektite.$div("popup-operator")([{
+                                                        script_5.Tektite.$div("popup-operator")([{
                                                                 tag: "button",
                                                                 className: "default-button",
                                                                 children: Render.label("Close"),
@@ -10707,7 +10676,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_a.label) {
                                         case 0:
                                             result = false;
-                                            checkButtonList = __9.tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c, _d;
                                                 var _e;
@@ -10727,7 +10696,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                             _d = [
                                                                 (_e.children = [
                                                                     _g.sent(),
-                                                                    __9.tektite.$span("")(Render.label("language.auto"))
+                                                                    script_5.Tektite.$span("")(Render.label("language.auto"))
                                                                 ],
                                                                     _e.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                         var _a;
@@ -10762,7 +10731,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                 return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
-                                                                                    __9.tektite.$span("")(__9.tektite.$labelSpan(__9.tektite.locale.getLocaleName(key)))
+                                                                                    script_5.Tektite.$span("")(script_5.Tektite.$labelSpan(__9.tektite.locale.getLocaleName(key)))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -10797,9 +10766,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             ui = __9.tektite.screen.popup({
                                                 // className: "add-remove-tags-popup",
                                                 children: [
-                                                    __9.tektite.$tag("h2")("")(Render.label("Language setting")),
+                                                    script_5.Tektite.$tag("h2")("")(Render.label("Language setting")),
                                                     checkButtonList,
-                                                    __9.tektite.$div("popup-operator")([{
+                                                    script_5.Tektite.$div("popup-operator")([{
                                                             tag: "button",
                                                             className: "default-button",
                                                             children: Render.label("Close"),
@@ -10834,7 +10803,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_a.label) {
                                         case 0:
                                             result = false;
-                                            checkButtonList = __9.tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c;
                                                 var _this = this;
@@ -10856,7 +10825,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                 return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
-                                                                                    __9.tektite.$span("")(Render.label(key))
+                                                                                    script_5.Tektite.$span("")(Render.label(key))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -10891,9 +10860,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             ui = __9.tektite.screen.popup({
                                                 // className: "add-remove-tags-popup",
                                                 children: [
-                                                    __9.tektite.$tag("h2")("")(Render.label("Color setting")),
+                                                    script_5.Tektite.$tag("h2")("")(Render.label("Color setting")),
                                                     checkButtonList,
-                                                    __9.tektite.$div("popup-operator")([{
+                                                    script_5.Tektite.$div("popup-operator")([{
                                                             tag: "button",
                                                             className: "default-button",
                                                             children: Render.label("Close"),
@@ -10923,7 +10892,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            inputTime = __9.tektite.$make(HTMLInputElement)({
+                            inputTime = script_5.Tektite.$make(HTMLInputElement)({
                                 tag: "input",
                                 type: "time",
                                 value: domain_7.Domain.timeLongCoreStringFromTick(tick),
@@ -10933,9 +10902,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     var result = null;
                                     var ui = __9.tektite.screen.popup({
                                         children: [
-                                            __9.tektite.$tag("h2")("")(message),
+                                            script_5.Tektite.$tag("h2")("")(message),
                                             inputTime,
-                                            __9.tektite.$div("popup-operator")([
+                                            script_5.Tektite.$div("popup-operator")([
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
@@ -10973,13 +10942,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        inputDate = __9.tektite.$make(HTMLInputElement)({
+                        inputDate = script_5.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
                             value: domain_7.Domain.dateCoreStringFromTick(tick),
                             required: "",
                         });
-                        inputTime = __9.tektite.$make(HTMLInputElement)({
+                        inputTime = script_5.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
                             value: domain_7.Domain.timeShortCoreStringFromTick(domain_7.Domain.getTime(tick)),
@@ -10989,10 +10958,10 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 var result = null;
                                 var ui = __9.tektite.screen.popup({
                                     children: [
-                                        __9.tektite.$tag("h2")("")(message),
+                                        script_5.Tektite.$tag("h2")("")(message),
                                         inputDate,
                                         inputTime,
-                                        __9.tektite.$div("popup-operator")([
+                                        script_5.Tektite.$div("popup-operator")([
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
@@ -11036,12 +11005,12 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     ui = __9.tektite.screen.popup({
                                         // className: "add-remove-tags-popup",
                                         children: [
-                                            __9.tektite.$tag("h2")("")(__9.tektite.$labelSpan("シェア / Share")),
-                                            __9.tektite.$div("menu-button-list")([
+                                            script_5.Tektite.$tag("h2")("")(script_5.Tektite.$labelSpan("シェア / Share")),
+                                            script_5.Tektite.$div("menu-button-list")([
                                                 {
                                                     tag: "button",
                                                     className: "menu-item-button",
-                                                    children: __9.tektite.$span("")(__9.tektite.$labelSpan("Tweet / ツイート")),
+                                                    children: script_5.Tektite.$span("")(script_5.Tektite.$labelSpan("Tweet / ツイート")),
                                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                         return __generator(this, function (_a) {
                                                             location.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('【' + title + '】 ' + url + ' ');
@@ -11053,7 +11022,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 {
                                                     tag: "button",
                                                     className: "menu-item-button",
-                                                    children: __9.tektite.$span("")(__9.tektite.$labelSpan("Copy URL / URL をコピー")),
+                                                    children: script_5.Tektite.$span("")(script_5.Tektite.$labelSpan("Copy URL / URL をコピー")),
                                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                         return __generator(this, function (_a) {
                                                             Render.Operate.copyToClipboard(url, "URL");
@@ -11063,7 +11032,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                     }); }
                                                 }
                                             ]),
-                                            __9.tektite.$div("popup-operator")([
+                                            script_5.Tektite.$div("popup-operator")([
                                                 {
                                                     tag: "button",
                                                     className: "default-button",
@@ -11092,8 +11061,8 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
-                        _a = __9.tektite.$div("stamp-item flex-item");
-                        _b = __9.tektite.$div("item-header");
+                        _a = script_5.Tektite.$div("stamp-item flex-item");
+                        _b = script_5.Tektite.$div("item-header");
                         _d = (_c = __9.tektite).internalLink;
                         _j = {
                             className: "item-title",
@@ -11104,13 +11073,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _e = [
                             _d.apply(_c, [(_j.children = [
                                     _k.sent(),
-                                    __9.tektite.$div("tick-elapsed-time")([
-                                        __9.tektite.$span("value monospace")(Render.label("Elapsed time")),
+                                    script_5.Tektite.$div("tick-elapsed-time")([
+                                        script_5.Tektite.$span("value monospace")(Render.label("Elapsed time")),
                                     ])
                                 ],
                                     _j)])
                         ];
-                        _f = __9.tektite.$div("item-operator");
+                        _f = script_5.Tektite.$div("item-operator");
                         _h = (_g = __9.tektite.menu).button;
                         return [4 /*yield*/, Render.stampItemMenu(tick)];
                     case 2: return [4 /*yield*/, _h.apply(_g, [_k.sent()])];
@@ -11120,14 +11089,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 _k.sent()
                                             ]])
                                     ])]),
-                                __9.tektite.$div("item-information")([
-                                    __9.tektite.$div("tick-timestamp")([
+                                script_5.Tektite.$div("item-information")([
+                                    script_5.Tektite.$div("tick-timestamp")([
                                         Render.label("Timestamp"),
-                                        __9.tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(tick)),
+                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(tick)),
                                     ]),
-                                    __9.tektite.$div("tick-interval")([
+                                    script_5.Tektite.$div("tick-interval")([
                                         Render.label("Interval"),
-                                        __9.tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(interval)),
+                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(interval)),
                                     ]),
                                 ])
                             ]])];
@@ -11231,7 +11200,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), __9.tektite.$span("monospace")(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_5.Tektite.$span("monospace")(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
                                     }
                                 });
@@ -11262,7 +11231,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), __9.tektite.$labelSpan(i.title), __9.tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(i.tick))], domain_7.Domain.makePageParams("ElapsedTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_5.Tektite.$labelSpan(i.title), script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(i.tick))], domain_7.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -11293,7 +11262,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), __9.tektite.$labelSpan(i.title), __9.tektite.$span("value monospace")(domain_7.Domain.timezoneOffsetString(i.offset))], domain_7.Domain.makePageParams("RainbowClock", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_5.Tektite.$labelSpan(i.title), script_5.Tektite.$span("value monospace")(domain_7.Domain.timezoneOffsetString(i.offset))], domain_7.Domain.makePageParams("RainbowClock", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -11318,7 +11287,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         return [4 /*yield*/, resource_3.Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
                                     case 1: return [2 /*return*/, _b.apply(_a, [[
                                                 _c.sent(),
-                                                __9.tektite.$labelSpan(0 === i ? __9.Clockworks.localeMap(zeroLabel) : __9.Clockworks.localeMap("Interval") + ": " + domain_7.Domain.makeTimerLabel(i))
+                                                script_5.Tektite.$labelSpan(0 === i ? __9.Clockworks.localeMap(zeroLabel) : __9.Clockworks.localeMap("Interval") + ": " + domain_7.Domain.makeTimerLabel(i))
                                             ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
@@ -11518,7 +11487,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_a) {
                 return [2 /*return*/, __9.tektite.externalLink({
                         href: config_json_10.default.repositoryUrl,
-                        children: __9.tektite.menu.item(__9.tektite.$labelSpan("GitHub")),
+                        children: __9.tektite.menu.item(script_5.Tektite.$labelSpan("GitHub")),
                     })];
             });
         }); };
@@ -11570,11 +11539,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         ],
                             _j.menu = Render.welcomeScreenMenu,
                             _j);
-                        _a = __9.tektite.$div("primary-page");
-                        _b = __9.tektite.$div("page-body");
-                        _c = __9.tektite.$div("main-panel");
-                        _d = __9.tektite.$div("logo");
-                        _e = __9.tektite.$div("application-icon icon");
+                        _a = script_5.Tektite.$div("primary-page");
+                        _b = script_5.Tektite.$div("page-body");
+                        _c = script_5.Tektite.$div("main-panel");
+                        _d = script_5.Tektite.$div("logo");
+                        _e = script_5.Tektite.$div("application-icon icon");
                         return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("application-icon")];
                     case 2:
                         _f = [
@@ -11582,15 +11551,15 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     _c.apply(void 0, [[
                                             _d.apply(void 0, [[
                                                     _e.apply(void 0, [_k.sent()]),
-                                                    __9.tektite.$span("logo-text")(config_json_10.default.applicationTitle)
+                                                    script_5.Tektite.$span("logo-text")(config_json_10.default.applicationTitle)
                                                 ]]),
-                                            __9.tektite.$div("button-list")(type_3.Type.applicationIdList.map(function (i) {
+                                            script_5.Tektite.$div("button-list")(type_3.Type.applicationIdList.map(function (i) {
                                                 return __9.tektite.internalLink({
                                                     href: { application: i },
                                                     children: {
                                                         tag: "button",
                                                         className: "default-button main-button long-button",
-                                                        children: __9.tektite.$labelSpan(type_3.Type.applicationList[i].title),
+                                                        children: script_5.Tektite.$labelSpan(type_3.Type.applicationList[i].title),
                                                         // onclick: async () => await showNeverStopwatchScreen(),
                                                     }
                                                 });
@@ -11598,7 +11567,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         ]])
                                 ]])
                         ];
-                        _g = __9.tektite.$div("page-footer");
+                        _g = script_5.Tektite.$div("page-footer");
                         return [4 /*yield*/, __9.tektite.screen.downPageLink()];
                     case 3: return [2 /*return*/, (_h.body = [
                             _a.apply(void 0, [_f.concat([
@@ -11606,9 +11575,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             _k.sent()
                                         ]])
                                 ])]),
-                            __9.tektite.$div("trail-page")([
-                                __9.tektite.$div("description")(__9.tektite.$tag("ul")("locale-parallel-off")([
-                                    __9.tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                            script_5.Tektite.$div("trail-page")([
+                                script_5.Tektite.$div("description")(script_5.Tektite.$tag("ul")("locale-parallel-off")([
+                                    script_5.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                 ])),
                             ]),
                             Render.screenBar()
@@ -11730,29 +11699,29 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 }
             });
         }); };
-        Render.screenBar = function () { return __9.tektite.$div("screen-bar")(__9.tektite.$div("screen-bar-flash-layer")([])); };
+        Render.screenBar = function () { return script_5.Tektite.$div("screen-bar")(script_5.Tektite.$div("screen-bar-flash-layer")([])); };
         Render.neverStopwatchScreenBody = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
             var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
             var _this = this;
             return __generator(this, function (_o) {
                 switch (_o.label) {
                     case 0:
-                        _a = __9.tektite.$div("primary-page");
-                        _b = __9.tektite.$div("page-body");
-                        _c = __9.tektite.$div("main-panel");
-                        _d = [__9.tektite.$div("current-item")([
-                                __9.tektite.$div("previous-timestamp")([
-                                    __9.tektite.$span("value monospace")(null !== item ?
+                        _a = script_5.Tektite.$div("primary-page");
+                        _b = script_5.Tektite.$div("page-body");
+                        _c = script_5.Tektite.$div("main-panel");
+                        _d = [script_5.Tektite.$div("current-item")([
+                                script_5.Tektite.$div("previous-timestamp")([
+                                    script_5.Tektite.$span("value monospace")(null !== item ?
                                         domain_7.Domain.dateFullStringFromTick(item) :
                                         (0 < ticks.length ?
                                             domain_7.Domain.dateFullStringFromTick(ticks[0]) :
                                             "")),
                                 ]),
-                                __9.tektite.$div("capital-interval")([
-                                    __9.tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
+                                script_5.Tektite.$div("capital-interval")([
+                                    script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
                                 ]),
-                                __9.tektite.$div("current-timestamp")([
-                                    __9.tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
+                                script_5.Tektite.$div("current-timestamp")([
+                                    script_5.Tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
                                 ]),
                             ])];
                         _e = Render.flashIntervalLabel;
@@ -11766,7 +11735,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             _b.apply(void 0, [[
                                     _c.apply(void 0, [_d.concat([
                                             _o.sent(),
-                                            __9.tektite.$div("button-list")({
+                                            script_5.Tektite.$div("button-list")({
                                                 tag: "button",
                                                 className: "default-button main-button long-button",
                                                 children: Render.label("Stamp"),
@@ -11780,9 +11749,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         ])])
                                 ]])
                         ];
-                        _g = __9.tektite.$div("page-footer");
+                        _g = script_5.Tektite.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
-                        _h = __9.tektite.$div("button-list")([
+                        _h = script_5.Tektite.$div("button-list")([
                             __9.tektite.internalLink({
                                 href: { application: "NeverStopwatch", },
                                 children: {
@@ -11832,16 +11801,16 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _k = [];
                         return [3 /*break*/, 8];
                     case 6:
-                        _l = __9.tektite.$div("trail-page");
-                        _m = __9.tektite.$div("row-flex-list stamp-list");
+                        _l = script_5.Tektite.$div("trail-page");
+                        _m = script_5.Tektite.$div("row-flex-list stamp-list");
                         return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                     case 7:
                         _k = _l.apply(void 0, [[
                                 _m.apply(void 0, [_o.sent()]),
-                                __9.tektite.$div("description")(__9.tektite.$tag("ul")("locale-parallel-off")([
-                                    __9.tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                    __9.tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                    __9.tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
+                                script_5.Tektite.$div("description")(script_5.Tektite.$tag("ul")("locale-parallel-off")([
+                                    script_5.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                    script_5.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                    script_5.Tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
                                 ]))
                             ]]);
                         _o.label = 8;
@@ -12065,33 +12034,33 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_p) {
                 switch (_p.label) {
                     case 0:
-                        _a = __9.tektite.$div("primary-page");
-                        _b = __9.tektite.$div("page-body");
-                        _c = __9.tektite.$div("main-panel");
+                        _a = script_5.Tektite.$div("primary-page");
+                        _b = script_5.Tektite.$div("page-body");
+                        _c = script_5.Tektite.$div("main-panel");
                         _d = [(item !== null && item !== void 0 ? item : events[0]) ?
-                                __9.tektite.$div("current-item event-item")([
+                                script_5.Tektite.$div("current-item event-item")([
                                     (item !== null && item !== void 0 ? item : events[0]) ?
                                         [
-                                            __9.tektite.$div("current-title")([
-                                                __9.tektite.$span("value monospace")((item !== null && item !== void 0 ? item : events[0]).title),
+                                            script_5.Tektite.$div("current-title")([
+                                                script_5.Tektite.$span("value monospace")((item !== null && item !== void 0 ? item : events[0]).title),
                                             ]),
-                                            __9.tektite.$div("current-due-timestamp")([
-                                                __9.tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
+                                            script_5.Tektite.$div("current-due-timestamp")([
+                                                script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
                                             ]),
                                         ] : [],
-                                    __9.tektite.$div("capital-interval")([
-                                        __9.tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
+                                    script_5.Tektite.$div("capital-interval")([
+                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
                                     ]),
-                                    __9.tektite.$div("current-timestamp")([
-                                        __9.tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
+                                    script_5.Tektite.$div("current-timestamp")([
+                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
                                     ]),
                                 ]) :
-                                __9.tektite.$div("current-item")([
-                                    __9.tektite.$div("capital-interval")([
-                                        __9.tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
+                                script_5.Tektite.$div("current-item")([
+                                    script_5.Tektite.$div("capital-interval")([
+                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
                                     ]),
-                                    __9.tektite.$div("current-timestamp")([
-                                        __9.tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
+                                    script_5.Tektite.$div("current-timestamp")([
+                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
                                     ]),
                                 ])];
                         _e = Render.flashIntervalLabel;
@@ -12108,9 +12077,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         ])])
                                 ]])
                         ];
-                        _g = __9.tektite.$div("page-footer");
+                        _g = script_5.Tektite.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
-                        _h = __9.tektite.$div("button-list")([
+                        _h = script_5.Tektite.$div("button-list")([
                             __9.tektite.internalLink({
                                 href: { application: "CountdownTimer", },
                                 children: {
@@ -12160,8 +12129,8 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _k = [];
                         return [3 /*break*/, 8];
                     case 6:
-                        _l = __9.tektite.$div("trail-page");
-                        _m = [__9.tektite.$div("button-list")([
+                        _l = script_5.Tektite.$div("trail-page");
+                        _m = [script_5.Tektite.$div("button-list")([
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
@@ -12191,14 +12160,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     }); }
                                 },
                             ])];
-                        _o = __9.tektite.$div("row-flex-list event-list");
+                        _o = script_5.Tektite.$div("row-flex-list event-list");
                         return [4 /*yield*/, Promise.all(events.map(function (item) { return render_8.Render.eventItem(item); }))];
                     case 7:
                         _k = _l.apply(void 0, [_m.concat([
                                 _o.apply(void 0, [_p.sent()]),
-                                __9.tektite.$div("description")(__9.tektite.$tag("ul")("locale-parallel-off")([
-                                    __9.tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                    __9.tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                script_5.Tektite.$div("description")(script_5.Tektite.$tag("ul")("locale-parallel-off")([
+                                    script_5.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                    script_5.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                 ]))
                             ])]);
                         _p.label = 8;
@@ -12866,7 +12835,7 @@ define("resource/lang.ja", [], {
     "timezone.New York": "ニューヨーク",
     "timezone.Seattle": "シアトル"
 });
-define("script/index", ["require", "exports", "tektite/script/index", "script/render/index", "script/render/resource", "script/storage", "script/domain", "resource/lang.en", "resource/lang.ja"], function (require, exports, script_1, render_9, resource_4, storage_12, domain_8, lang_en_json_1, lang_ja_json_1) {
+define("script/index", ["require", "exports", "tektite/script/index", "script/render/index", "script/render/resource", "script/storage", "script/domain", "resource/lang.en", "resource/lang.ja"], function (require, exports, script_6, render_9, resource_4, storage_12, domain_8, lang_en_json_1, lang_ja_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.tektite = exports.Clockworks = void 0;
@@ -12911,7 +12880,7 @@ define("script/index", ["require", "exports", "tektite/script/index", "script/re
             });
         }); };
     })(Clockworks = exports.Clockworks || (exports.Clockworks = {}));
-    exports.tektite = script_1.Tektite.make({
+    exports.tektite = script_6.Tektite.make({
         makeUrl: domain_8.Domain.makeUrl,
         showUrl: render_9.Render.showUrl,
         showPage: render_9.Render.showPage,
@@ -12932,7 +12901,7 @@ define("script/index", ["require", "exports", "tektite/script/index", "script/re
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Tue Nov 23 2021 20:25:00 GMT+0900 (GMT+09:00)', })"><div id="tektite-images" style="display: none;"><div id="history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Wed Nov 24 2021 10:10:03 GMT+0900 (GMT+09:00)', })"><div id="tektite-images" style="display: none;"><div id="history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
 </div><div id="elapsed-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">

@@ -16,25 +16,6 @@ export module Header
         operator?: minamo.dom.Source;
         parent?: PageParams;
     }
-    const $make = minamo.dom.make;
-    const $tag = (tag: string) => (className: string | minamo.dom.AlphaObjectSource) => (children: minamo.dom.Source) =>
-        "string" === typeof className ?
-        {
-            tag,
-            children,
-            className,
-        }:
-        Object.assign
-        (
-            {
-                tag,
-                children,
-            },
-            className,
-        );
-    const $div = $tag("div");
-    // const $span = $tag("span");
-    // const labelSpan = $span("label");
     export class Header<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -50,7 +31,7 @@ export module Header
             .join(" ");
         segmented = async (data: Source<PageParams, IconKeyType>) =>
         [
-            $div("progress-bar")([]),
+            Tektite.$div("progress-bar")([]),
             (
                 await Promise.all
                 (
@@ -89,16 +70,16 @@ export module Header
                 }:
                 [],
             data.menu ? await this.tektite.menu.button(data.menu): [],
-            data.operator ? $div("header-operator")(data.operator): [],
+            data.operator ? Tektite.$div("header-operator")(data.operator): [],
         ];
         getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "close-button")[0];
         segmentCore = async (item: SegmentSource<PageParams, IconKeyType>) =>
         [
-            $div("icon")(await this.tektite.params.loadSvgOrCache(item.icon)),
-            $div("segment-title")(item.title),
+            Tektite.$div("icon")(await this.tektite.params.loadSvgOrCache(item.icon)),
+            Tektite.$div("segment-title")(item.title),
         ];
         labelSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") =>
-            $div(`segment label-segment ${className}`)(await this.segmentCore(item));
+        Tektite.$div(`segment label-segment ${className}`)(await this.segmentCore(item));
         linkSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") => this.tektite.internalLink
         ({
             className: `segment ${className}`,
@@ -113,7 +94,7 @@ export module Header
                 popup.classList.remove("show");
                 cover = null;
             };
-            const popup = $make(HTMLDivElement)
+            const popup = Tektite.$make(HTMLDivElement)
             ({
                 tag: "div",
                 className: "menu-popup segment-popup",
@@ -126,7 +107,7 @@ export module Header
                     close();
                 },
             });
-            const segment = $make(HTMLDivElement)
+            const segment = Tektite.$make(HTMLDivElement)
             ({
                 tag: "div",
                 className: `segment ${className}`,

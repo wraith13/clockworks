@@ -1,24 +1,7 @@
 import { minamo } from "../../script/minamo.js";
+import { Tektite } from ".";
 export module Toast
 {
-    const $make = minamo.dom.make;
-    const $tag = (tag: string) => (className: string | minamo.dom.AlphaObjectSource) => (children: minamo.dom.Source) =>
-        "string" === typeof className ?
-        {
-            tag,
-            children,
-            className,
-        }:
-        Object.assign
-        (
-            {
-                tag,
-                children,
-            },
-            className,
-        );
-    // const $div = $tag("div");
-    const $span = $tag("span");
     export interface Type
     {
         dom: HTMLDivElement;
@@ -37,7 +20,7 @@ export module Toast
         }
     ): Type =>
     {
-        const dom = $make(HTMLDivElement)
+        const dom = Tektite.$make(HTMLDivElement)
         ({
             tag: "div",
             className: "item slide-up-in",
@@ -48,9 +31,9 @@ export module Toast
                 data.forwardOperator,
             ].filter(i => undefined !== i):
             [
-                data.backwardOperator ?? $span("dummy")([]),
+                data.backwardOperator ?? Tektite.$span("dummy")([]),
                 data.content,
-                data.forwardOperator ?? $span("dummy")([]),
+                data.forwardOperator ?? Tektite.$span("dummy")([]),
             ],
         });
         const hideRaw = async (className: string, wait: number) =>
