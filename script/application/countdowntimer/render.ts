@@ -662,12 +662,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = (Math.min(tick - current.start), unit) /unit;
-                        RenderBase.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        Tektite.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        RenderBase.setBodyColor(currentColor);
+                        Tektite.setBodyColor(currentColor);
                     }
                     break;
                 case "storage":

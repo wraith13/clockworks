@@ -2,6 +2,7 @@ import { Color } from "./color";
 import resource from "../resource/images.json";
 import tektiteResource from "../tektite/images.json";
 import { Clockworks } from ".";
+import { Tektite } from "../tektite/script";
 export module Type
 {
     export const applicationList =
@@ -46,19 +47,10 @@ export module Type
     export type ThemeType = keyof typeof themeObject;
     export const ThemeList = Object.keys(themeObject);
 
-    export const progressBarStyleObject =
-    {
-        "header": null,
-        "auto": null,
-        "horizontal": null,
-        "vertical": null,
-    };
-    export type ProgressBarStyleType = keyof typeof progressBarStyleObject;
-    export const ProgressBarStyleList = Object.keys(progressBarStyleObject);
     export interface Settings
     {
         theme?: ThemeType;
-        progressBarStyle?: ProgressBarStyleType;
+        progressBarStyle?: Tektite.ProgressBarStyleType;
         locale?: Clockworks.LocaleType;
     }
     export interface AlarmTimerEntry

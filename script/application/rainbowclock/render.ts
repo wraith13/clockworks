@@ -394,7 +394,7 @@ export module Render
                     const minutes = (tick % hourUnit) / hourUnit;
                     const nextColor = getRainbowColor(currentNow.getHours() +1);
                     RenderBase.setScreenBarProgress(minutes, nextColor);
-                    RenderBase.setBodyColor(Color.mixColors(currentColor, nextColor, minutes));
+                    Tektite.setBodyColor(Color.mixColors(currentColor, nextColor, minutes));
                     break;
                 case "storage":
                     await RenderBase.reload();

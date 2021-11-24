@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Wed Nov 24 2021 10:10:03 GMT+0900 (GMT+09:00) -->
+<!-- build at: Wed Nov 24 2021 20:41:35 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -7334,6 +7334,13 @@ define("tektite/script/index", ["require", "exports", "script/minamo.js/index", 
         Tektite_1.$div = Tektite_1.$tag("div");
         Tektite_1.$span = Tektite_1.$tag("span");
         Tektite_1.$labelSpan = Tektite_1.$span("label");
+        Tektite_1.progressBarStyleObject = {
+            "header": null,
+            "auto": null,
+            "horizontal": null,
+            "vertical": null,
+        };
+        Tektite_1.ProgressBarStyleList = Object.keys(Tektite_1.progressBarStyleObject);
         var Tektite = /** @class */ (function () {
             function Tektite(params) {
                 var _this = this;
@@ -7419,6 +7426,33 @@ define("tektite/script/index", ["require", "exports", "script/minamo.js/index", 
         Tektite_1.Tektite = Tektite;
         Tektite_1.make = function (params) {
             return new Tektite(params);
+        };
+        Tektite_1.setHeaderColor = function (color) {
+            return minamo_js_5.minamo.dom.setProperty("#screen-header", "backgroundColor", color !== null && color !== void 0 ? color : "");
+        };
+        Tektite_1.setBodyColor = function (color) {
+            minamo_js_5.minamo.dom.setStyleProperty(document.body, "backgroundColor", color + "E8");
+            minamo_js_5.minamo.dom.setProperty("#theme-color", "content", color);
+        };
+        Tektite_1.setFoundationColor = function (color) {
+            return minamo_js_5.minamo.dom.setStyleProperty("#foundation", "backgroundColor", color !== null && color !== void 0 ? color : "");
+        };
+        var latestColor;
+        Tektite_1.setBackgroundColor = function (progressBarStyle, color) {
+            latestColor = color;
+            if ("header" === progressBarStyle) {
+                Tektite_1.setHeaderColor(color);
+                Tektite_1.setFoundationColor(null);
+            }
+            else {
+                Tektite_1.setFoundationColor(color);
+                Tektite_1.setHeaderColor(null);
+            }
+        };
+        Tektite_1.updateProgressBarStyle = function (progressBarStyle) {
+            document.body.classList.toggle("tektite-modern", "header" !== progressBarStyle);
+            document.body.classList.toggle("tektite-classic", "header" === progressBarStyle);
+            Tektite_1.setBackgroundColor(progressBarStyle, latestColor !== null && latestColor !== void 0 ? latestColor : null);
         };
     })(Tektite = exports.Tektite || (exports.Tektite = {}));
 });
@@ -7579,13 +7613,6 @@ define("script/type", ["require", "exports", "script/color"], function (require,
             "dark": null,
         };
         Type.ThemeList = Object.keys(Type.themeObject);
-        Type.progressBarStyleObject = {
-            "header": null,
-            "auto": null,
-            "horizontal": null,
-            "vertical": null,
-        };
-        Type.ProgressBarStyleList = Object.keys(Type.progressBarStyleObject);
         Type.rainbowClockColorPatternMap = {
             "gradation": function (index) { return color_1.Color.getRainbowColor(index, 0); },
             "solid": function (index) { return color_1.Color.getSolidRainbowColor(index, 0); },
@@ -8922,7 +8949,7 @@ define("script/render/operate", ["require", "exports", "script/minamo.js/index",
         Operate.NeverStopwatch = operate_4.Operate;
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("script/application/rainbowclock/render", ["require", "exports", "script/minamo.js/index", "script/index", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/index", "script/application/rainbowclock/operate", "resource/config"], function (require, exports, minamo_js_8, __7, type_1, base_7, color_2, storage_9, domain_5, resource_1, render_5, operate_5, config_json_9) {
+define("script/application/rainbowclock/render", ["require", "exports", "script/minamo.js/index", "script/index", "tektite/script/index", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/index", "script/application/rainbowclock/operate", "resource/config"], function (require, exports, minamo_js_8, __7, script_5, type_1, base_7, color_2, storage_9, domain_5, resource_1, render_5, operate_5, config_json_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -9396,7 +9423,7 @@ define("script/application/rainbowclock/render", ["require", "exports", "script/
                                         minutes = (tick % hourUnit) / hourUnit;
                                         nextColor = getRainbowColor(currentNow.getHours() + 1);
                                         render_5.Render.setScreenBarProgress(minutes, nextColor);
-                                        render_5.Render.setBodyColor(color_2.Color.mixColors(currentColor, nextColor, minutes));
+                                        script_5.Tektite.setBodyColor(color_2.Color.mixColors(currentColor, nextColor, minutes));
                                         return [3 /*break*/, 9];
                                     case 3: return [4 /*yield*/, render_5.Render.reload()];
                                     case 4:
@@ -9435,7 +9462,7 @@ define("script/application/rainbowclock/render", ["require", "exports", "script/
         }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("script/application/countdowntimer/render", ["require", "exports", "script/minamo.js/index", "script/index", "script/type", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/index", "script/application/countdowntimer/operate"], function (require, exports, minamo_js_9, __8, type_2, color_3, storage_10, domain_6, resource_2, render_6, operate_6) {
+define("script/application/countdowntimer/render", ["require", "exports", "script/minamo.js/index", "script/index", "tektite/script/index", "script/type", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/index", "script/application/countdowntimer/operate"], function (require, exports, minamo_js_9, __8, script_6, type_2, color_3, storage_10, domain_6, resource_2, render_6, operate_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -10234,11 +10261,11 @@ define("script/application/countdowntimer/render", ["require", "exports", "scrip
                                             currentColor = color_3.Color.getSolidRainbowColor(primaryStep);
                                             nextColor = color_3.Color.getSolidRainbowColor(primaryStep + 1);
                                             rate = (Math.min(tick - current.start), unit) / unit;
-                                            render_6.Render.setBodyColor(color_3.Color.mixColors(currentColor, nextColor, rate));
+                                            script_6.Tektite.setBodyColor(color_3.Color.mixColors(currentColor, nextColor, rate));
                                         }
                                         else {
                                             currentColor = color_3.Color.getSolidRainbowColor(storage_10.Storage.CountdownTimer.ColorIndex.get());
-                                            render_6.Render.setBodyColor(currentColor);
+                                            script_6.Tektite.setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 9];
                                     case 3: return [4 /*yield*/, render_6.Render.reload()];
@@ -10279,7 +10306,7 @@ define("script/application/countdowntimer/render", ["require", "exports", "scrip
         }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/index", "tektite/script/index", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "script/application/rainbowclock/render", "script/application/countdowntimer/render", "resource/config"], function (require, exports, minamo_js_10, __9, script_5, type_3, base_8, color_4, storage_11, domain_7, resource_3, operate_7, render_7, render_8, config_json_10) {
+define("script/render/index", ["require", "exports", "script/minamo.js/index", "script/index", "tektite/script/index", "script/type", "script/base", "script/color", "script/storage", "script/domain", "script/render/resource", "script/render/operate", "script/application/rainbowclock/render", "script/application/countdowntimer/render", "resource/config"], function (require, exports, minamo_js_10, __9, script_7, type_3, base_8, color_4, storage_11, domain_7, resource_3, operate_7, render_7, render_8, config_json_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -10287,29 +10314,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
     var Render;
     (function (Render) {
         var _this = this;
-        Render.setHeaderColor = function (color) {
-            return minamo_js_10.minamo.dom.setProperty("#screen-header", "backgroundColor", color !== null && color !== void 0 ? color : "");
-        };
-        Render.setBodyColor = function (color) {
-            minamo_js_10.minamo.dom.setStyleProperty(document.body, "backgroundColor", color + "E8");
-            minamo_js_10.minamo.dom.setProperty("#theme-color", "content", color);
-        };
-        Render.setFoundationColor = function (color) {
-            return minamo_js_10.minamo.dom.setStyleProperty("#foundation", "backgroundColor", color !== null && color !== void 0 ? color : "");
-        };
-        var latestColor;
-        Render.setBackgroundColor = function (color) {
-            var _a;
-            latestColor = color;
-            if ("header" === ((_a = storage_11.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto")) {
-                Render.setHeaderColor(color);
-                Render.setFoundationColor(null);
-            }
-            else {
-                Render.setFoundationColor(color);
-                Render.setHeaderColor(null);
-            }
-        };
+        Render.setBackgroundColor = function (color) { var _a; return script_7.Tektite.setBackgroundColor((_a = storage_11.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto", color); };
         Render.updateStyle = function () {
             var _a;
             var setting = (_a = storage_11.Storage.Settings.get().theme) !== null && _a !== void 0 ? _a : "auto";
@@ -10317,13 +10322,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             var theme = "auto" === setting ? system : setting;
             ["light", "dark",].forEach(function (i) { return document.body.classList.toggle(i, i === theme); });
         };
-        Render.updateProgressBarStyle = function () {
-            var _a;
-            var setting = (_a = storage_11.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
-            document.body.classList.toggle("tektite-modern", "header" !== setting);
-            document.body.classList.toggle("tektite-classic", "header" === setting);
-            Render.setBackgroundColor(latestColor !== null && latestColor !== void 0 ? latestColor : null);
-        };
+        Render.updateProgressBarStyle = function () { var _a; return script_7.Tektite.updateProgressBarStyle((_a = storage_11.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto"); };
         Render.Operate = operate_7.Operate;
         Render.cancelTextButton = function (onCanceled) {
             return ({
@@ -10334,7 +10333,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                     return __generator(this, function (_a) {
                         onCanceled();
                         __9.tektite.toast.make({
-                            content: script_5.Tektite.$span("")(Render.label("roll-backed")),
+                            content: script_7.Tektite.$span("")(Render.label("roll-backed")),
                             wait: 3000,
                         });
                         return [2 /*return*/];
@@ -10342,9 +10341,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 }); },
             });
         };
-        Render.label = function (label) { return script_5.Tektite.$labelSpan([
-            script_5.Tektite.$span("locale-parallel")(__9.Clockworks.localeParallel(label)),
-            script_5.Tektite.$span("locale-map")(__9.Clockworks.localeMap(label)),
+        Render.label = function (label) { return script_7.Tektite.$labelSpan([
+            script_7.Tektite.$span("locale-parallel")(__9.Clockworks.localeParallel(label)),
+            script_7.Tektite.$span("locale-map")(__9.Clockworks.localeMap(label)),
         ]); };
         // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
         // {
@@ -10413,13 +10412,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        inputDate = script_5.Tektite.$make(HTMLInputElement)({
+                        inputDate = script_7.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
                             value: domain_7.Domain.dateCoreStringFromTick(_default),
                             required: "",
                         });
-                        inputTime = script_5.Tektite.$make(HTMLInputElement)({
+                        inputTime = script_7.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
                             value: domain_7.Domain.timeFullCoreStringFromTick(domain_7.Domain.getTime(_default)),
@@ -10429,10 +10428,10 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 var result = null;
                                 var ui = __9.tektite.screen.popup({
                                     children: [
-                                        script_5.Tektite.$tag("h2")("")(message),
+                                        script_7.Tektite.$tag("h2")("")(message),
                                         inputDate,
                                         inputTime,
-                                        script_5.Tektite.$div("popup-operator")([
+                                        script_7.Tektite.$div("popup-operator")([
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
@@ -10479,7 +10478,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         switch (_a.label) {
                                             case 0:
                                                 result = false;
-                                                checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                                checkButtonList = script_7.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                                 checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                     var _a, _b, _c;
                                                     var _this = this;
@@ -10502,7 +10501,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                     return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                                 case 1: return [2 /*return*/, (_a.children = [
                                                                                         _c.sent(),
-                                                                                        script_5.Tektite.$span("")(Render.label("theme." + key))
+                                                                                        script_7.Tektite.$span("")(Render.label("theme." + key))
                                                                                     ],
                                                                                         _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                             var _a;
@@ -10538,9 +10537,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 ui = __9.tektite.screen.popup({
                                                     // className: "add-remove-tags-popup",
                                                     children: [
-                                                        script_5.Tektite.$tag("h2")("")(Render.label("Theme setting")),
+                                                        script_7.Tektite.$tag("h2")("")(Render.label("Theme setting")),
                                                         checkButtonList,
-                                                        script_5.Tektite.$div("popup-operator")([{
+                                                        script_7.Tektite.$div("popup-operator")([{
                                                                 tag: "button",
                                                                 className: "default-button",
                                                                 children: Render.label("Close"),
@@ -10579,7 +10578,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0:
-                                                checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                                checkButtonList = script_7.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                                 checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                     var _a, _b, _c;
                                                     var _this = this;
@@ -10588,7 +10587,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                             case 0:
                                                                 _b = (_a = minamo_js_10.minamo.dom).replaceChildren;
                                                                 _c = [checkButtonList];
-                                                                return [4 /*yield*/, Promise.all(type_3.Type.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                return [4 /*yield*/, Promise.all(script_7.Tektite.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                         var _a;
                                                                         var _this = this;
                                                                         return __generator(this, function (_b) {
@@ -10601,7 +10600,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                     return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                                 case 1: return [2 /*return*/, (_a.children = [
                                                                                         _b.sent(),
-                                                                                        script_5.Tektite.$span("")(Render.label("progressBarStyle." + key))
+                                                                                        script_7.Tektite.$span("")(Render.label("progressBarStyle." + key))
                                                                                     ],
                                                                                         _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                             return __generator(this, function (_a) {
@@ -10636,9 +10635,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 ui = __9.tektite.screen.popup({
                                                     // className: "add-remove-tags-popup",
                                                     children: [
-                                                        script_5.Tektite.$tag("h2")("")(Render.label("Progress Bar Style setting")),
+                                                        script_7.Tektite.$tag("h2")("")(Render.label("Progress Bar Style setting")),
                                                         checkButtonList,
-                                                        script_5.Tektite.$div("popup-operator")([{
+                                                        script_7.Tektite.$div("popup-operator")([{
                                                                 tag: "button",
                                                                 className: "default-button",
                                                                 children: Render.label("Close"),
@@ -10676,7 +10675,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_a.label) {
                                         case 0:
                                             result = false;
-                                            checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = script_7.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c, _d;
                                                 var _e;
@@ -10696,7 +10695,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                             _d = [
                                                                 (_e.children = [
                                                                     _g.sent(),
-                                                                    script_5.Tektite.$span("")(Render.label("language.auto"))
+                                                                    script_7.Tektite.$span("")(Render.label("language.auto"))
                                                                 ],
                                                                     _e.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                         var _a;
@@ -10731,7 +10730,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                 return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
-                                                                                    script_5.Tektite.$span("")(script_5.Tektite.$labelSpan(__9.tektite.locale.getLocaleName(key)))
+                                                                                    script_7.Tektite.$span("")(script_7.Tektite.$labelSpan(__9.tektite.locale.getLocaleName(key)))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -10766,9 +10765,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             ui = __9.tektite.screen.popup({
                                                 // className: "add-remove-tags-popup",
                                                 children: [
-                                                    script_5.Tektite.$tag("h2")("")(Render.label("Language setting")),
+                                                    script_7.Tektite.$tag("h2")("")(Render.label("Language setting")),
                                                     checkButtonList,
-                                                    script_5.Tektite.$div("popup-operator")([{
+                                                    script_7.Tektite.$div("popup-operator")([{
                                                             tag: "button",
                                                             className: "default-button",
                                                             children: Render.label("Close"),
@@ -10803,7 +10802,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     switch (_a.label) {
                                         case 0:
                                             result = false;
-                                            checkButtonList = script_5.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = script_7.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c;
                                                 var _this = this;
@@ -10825,7 +10824,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                                                 return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
-                                                                                    script_5.Tektite.$span("")(Render.label(key))
+                                                                                    script_7.Tektite.$span("")(Render.label(key))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -10860,9 +10859,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             ui = __9.tektite.screen.popup({
                                                 // className: "add-remove-tags-popup",
                                                 children: [
-                                                    script_5.Tektite.$tag("h2")("")(Render.label("Color setting")),
+                                                    script_7.Tektite.$tag("h2")("")(Render.label("Color setting")),
                                                     checkButtonList,
-                                                    script_5.Tektite.$div("popup-operator")([{
+                                                    script_7.Tektite.$div("popup-operator")([{
                                                             tag: "button",
                                                             className: "default-button",
                                                             children: Render.label("Close"),
@@ -10892,7 +10891,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            inputTime = script_5.Tektite.$make(HTMLInputElement)({
+                            inputTime = script_7.Tektite.$make(HTMLInputElement)({
                                 tag: "input",
                                 type: "time",
                                 value: domain_7.Domain.timeLongCoreStringFromTick(tick),
@@ -10902,9 +10901,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     var result = null;
                                     var ui = __9.tektite.screen.popup({
                                         children: [
-                                            script_5.Tektite.$tag("h2")("")(message),
+                                            script_7.Tektite.$tag("h2")("")(message),
                                             inputTime,
-                                            script_5.Tektite.$div("popup-operator")([
+                                            script_7.Tektite.$div("popup-operator")([
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
@@ -10942,13 +10941,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        inputDate = script_5.Tektite.$make(HTMLInputElement)({
+                        inputDate = script_7.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
                             value: domain_7.Domain.dateCoreStringFromTick(tick),
                             required: "",
                         });
-                        inputTime = script_5.Tektite.$make(HTMLInputElement)({
+                        inputTime = script_7.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
                             value: domain_7.Domain.timeShortCoreStringFromTick(domain_7.Domain.getTime(tick)),
@@ -10958,10 +10957,10 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 var result = null;
                                 var ui = __9.tektite.screen.popup({
                                     children: [
-                                        script_5.Tektite.$tag("h2")("")(message),
+                                        script_7.Tektite.$tag("h2")("")(message),
                                         inputDate,
                                         inputTime,
-                                        script_5.Tektite.$div("popup-operator")([
+                                        script_7.Tektite.$div("popup-operator")([
                                             {
                                                 tag: "button",
                                                 className: "cancel-button",
@@ -11005,12 +11004,12 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     ui = __9.tektite.screen.popup({
                                         // className: "add-remove-tags-popup",
                                         children: [
-                                            script_5.Tektite.$tag("h2")("")(script_5.Tektite.$labelSpan("シェア / Share")),
-                                            script_5.Tektite.$div("menu-button-list")([
+                                            script_7.Tektite.$tag("h2")("")(script_7.Tektite.$labelSpan("シェア / Share")),
+                                            script_7.Tektite.$div("menu-button-list")([
                                                 {
                                                     tag: "button",
                                                     className: "menu-item-button",
-                                                    children: script_5.Tektite.$span("")(script_5.Tektite.$labelSpan("Tweet / ツイート")),
+                                                    children: script_7.Tektite.$span("")(script_7.Tektite.$labelSpan("Tweet / ツイート")),
                                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                         return __generator(this, function (_a) {
                                                             location.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('【' + title + '】 ' + url + ' ');
@@ -11022,7 +11021,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 {
                                                     tag: "button",
                                                     className: "menu-item-button",
-                                                    children: script_5.Tektite.$span("")(script_5.Tektite.$labelSpan("Copy URL / URL をコピー")),
+                                                    children: script_7.Tektite.$span("")(script_7.Tektite.$labelSpan("Copy URL / URL をコピー")),
                                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                         return __generator(this, function (_a) {
                                                             Render.Operate.copyToClipboard(url, "URL");
@@ -11032,7 +11031,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                     }); }
                                                 }
                                             ]),
-                                            script_5.Tektite.$div("popup-operator")([
+                                            script_7.Tektite.$div("popup-operator")([
                                                 {
                                                     tag: "button",
                                                     className: "default-button",
@@ -11061,8 +11060,8 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
-                        _a = script_5.Tektite.$div("stamp-item flex-item");
-                        _b = script_5.Tektite.$div("item-header");
+                        _a = script_7.Tektite.$div("stamp-item flex-item");
+                        _b = script_7.Tektite.$div("item-header");
                         _d = (_c = __9.tektite).internalLink;
                         _j = {
                             className: "item-title",
@@ -11073,13 +11072,13 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _e = [
                             _d.apply(_c, [(_j.children = [
                                     _k.sent(),
-                                    script_5.Tektite.$div("tick-elapsed-time")([
-                                        script_5.Tektite.$span("value monospace")(Render.label("Elapsed time")),
+                                    script_7.Tektite.$div("tick-elapsed-time")([
+                                        script_7.Tektite.$span("value monospace")(Render.label("Elapsed time")),
                                     ])
                                 ],
                                     _j)])
                         ];
-                        _f = script_5.Tektite.$div("item-operator");
+                        _f = script_7.Tektite.$div("item-operator");
                         _h = (_g = __9.tektite.menu).button;
                         return [4 /*yield*/, Render.stampItemMenu(tick)];
                     case 2: return [4 /*yield*/, _h.apply(_g, [_k.sent()])];
@@ -11089,14 +11088,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                                 _k.sent()
                                             ]])
                                     ])]),
-                                script_5.Tektite.$div("item-information")([
-                                    script_5.Tektite.$div("tick-timestamp")([
+                                script_7.Tektite.$div("item-information")([
+                                    script_7.Tektite.$div("tick-timestamp")([
                                         Render.label("Timestamp"),
-                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(tick)),
+                                        script_7.Tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(tick)),
                                     ]),
-                                    script_5.Tektite.$div("tick-interval")([
+                                    script_7.Tektite.$div("tick-interval")([
                                         Render.label("Interval"),
-                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(interval)),
+                                        script_7.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(interval)),
                                     ]),
                                 ])
                             ]])];
@@ -11200,7 +11199,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_5.Tektite.$span("monospace")(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_7.Tektite.$span("monospace")(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
                                     }
                                 });
@@ -11231,7 +11230,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_5.Tektite.$labelSpan(i.title), script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(i.tick))], domain_7.Domain.makePageParams("ElapsedTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_7.Tektite.$labelSpan(i.title), script_7.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(i.tick))], domain_7.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -11262,7 +11261,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_5.Tektite.$labelSpan(i.title), script_5.Tektite.$span("value monospace")(domain_7.Domain.timezoneOffsetString(i.offset))], domain_7.Domain.makePageParams("RainbowClock", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_7.Tektite.$labelSpan(i.title), script_7.Tektite.$span("value monospace")(domain_7.Domain.timezoneOffsetString(i.offset))], domain_7.Domain.makePageParams("RainbowClock", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -11287,7 +11286,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         return [4 /*yield*/, resource_3.Resource.loadSvgOrCache(0 === i ? zeroIcon : "flash-icon")];
                                     case 1: return [2 /*return*/, _b.apply(_a, [[
                                                 _c.sent(),
-                                                script_5.Tektite.$labelSpan(0 === i ? __9.Clockworks.localeMap(zeroLabel) : __9.Clockworks.localeMap("Interval") + ": " + domain_7.Domain.makeTimerLabel(i))
+                                                script_7.Tektite.$labelSpan(0 === i ? __9.Clockworks.localeMap(zeroLabel) : __9.Clockworks.localeMap("Interval") + ": " + domain_7.Domain.makeTimerLabel(i))
                                             ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
@@ -11487,7 +11486,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_a) {
                 return [2 /*return*/, __9.tektite.externalLink({
                         href: config_json_10.default.repositoryUrl,
-                        children: __9.tektite.menu.item(script_5.Tektite.$labelSpan("GitHub")),
+                        children: __9.tektite.menu.item(script_7.Tektite.$labelSpan("GitHub")),
                     })];
             });
         }); };
@@ -11539,11 +11538,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         ],
                             _j.menu = Render.welcomeScreenMenu,
                             _j);
-                        _a = script_5.Tektite.$div("primary-page");
-                        _b = script_5.Tektite.$div("page-body");
-                        _c = script_5.Tektite.$div("main-panel");
-                        _d = script_5.Tektite.$div("logo");
-                        _e = script_5.Tektite.$div("application-icon icon");
+                        _a = script_7.Tektite.$div("primary-page");
+                        _b = script_7.Tektite.$div("page-body");
+                        _c = script_7.Tektite.$div("main-panel");
+                        _d = script_7.Tektite.$div("logo");
+                        _e = script_7.Tektite.$div("application-icon icon");
                         return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("application-icon")];
                     case 2:
                         _f = [
@@ -11551,15 +11550,15 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     _c.apply(void 0, [[
                                             _d.apply(void 0, [[
                                                     _e.apply(void 0, [_k.sent()]),
-                                                    script_5.Tektite.$span("logo-text")(config_json_10.default.applicationTitle)
+                                                    script_7.Tektite.$span("logo-text")(config_json_10.default.applicationTitle)
                                                 ]]),
-                                            script_5.Tektite.$div("button-list")(type_3.Type.applicationIdList.map(function (i) {
+                                            script_7.Tektite.$div("button-list")(type_3.Type.applicationIdList.map(function (i) {
                                                 return __9.tektite.internalLink({
                                                     href: { application: i },
                                                     children: {
                                                         tag: "button",
                                                         className: "default-button main-button long-button",
-                                                        children: script_5.Tektite.$labelSpan(type_3.Type.applicationList[i].title),
+                                                        children: script_7.Tektite.$labelSpan(type_3.Type.applicationList[i].title),
                                                         // onclick: async () => await showNeverStopwatchScreen(),
                                                     }
                                                 });
@@ -11567,7 +11566,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         ]])
                                 ]])
                         ];
-                        _g = script_5.Tektite.$div("page-footer");
+                        _g = script_7.Tektite.$div("page-footer");
                         return [4 /*yield*/, __9.tektite.screen.downPageLink()];
                     case 3: return [2 /*return*/, (_h.body = [
                             _a.apply(void 0, [_f.concat([
@@ -11575,9 +11574,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             _k.sent()
                                         ]])
                                 ])]),
-                            script_5.Tektite.$div("trail-page")([
-                                script_5.Tektite.$div("description")(script_5.Tektite.$tag("ul")("locale-parallel-off")([
-                                    script_5.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                            script_7.Tektite.$div("trail-page")([
+                                script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
+                                    script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                 ])),
                             ]),
                             Render.screenBar()
@@ -11608,7 +11607,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 return [2 /*return*/];
                             });
                         }); };
-                        Render.setBodyColor(color_4.Color.getSolidRainbowColor(0));
+                        script_7.Tektite.setBodyColor(color_4.Color.getSolidRainbowColor(0));
                         _a = Render.showWindow;
                         return [4 /*yield*/, Render.welcomeScreen()];
                     case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent(), updateWindow])];
@@ -11699,29 +11698,29 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 }
             });
         }); };
-        Render.screenBar = function () { return script_5.Tektite.$div("screen-bar")(script_5.Tektite.$div("screen-bar-flash-layer")([])); };
+        Render.screenBar = function () { return script_7.Tektite.$div("screen-bar")(script_7.Tektite.$div("screen-bar-flash-layer")([])); };
         Render.neverStopwatchScreenBody = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
             var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
             var _this = this;
             return __generator(this, function (_o) {
                 switch (_o.label) {
                     case 0:
-                        _a = script_5.Tektite.$div("primary-page");
-                        _b = script_5.Tektite.$div("page-body");
-                        _c = script_5.Tektite.$div("main-panel");
-                        _d = [script_5.Tektite.$div("current-item")([
-                                script_5.Tektite.$div("previous-timestamp")([
-                                    script_5.Tektite.$span("value monospace")(null !== item ?
+                        _a = script_7.Tektite.$div("primary-page");
+                        _b = script_7.Tektite.$div("page-body");
+                        _c = script_7.Tektite.$div("main-panel");
+                        _d = [script_7.Tektite.$div("current-item")([
+                                script_7.Tektite.$div("previous-timestamp")([
+                                    script_7.Tektite.$span("value monospace")(null !== item ?
                                         domain_7.Domain.dateFullStringFromTick(item) :
                                         (0 < ticks.length ?
                                             domain_7.Domain.dateFullStringFromTick(ticks[0]) :
                                             "")),
                                 ]),
-                                script_5.Tektite.$div("capital-interval")([
-                                    script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
+                                script_7.Tektite.$div("capital-interval")([
+                                    script_7.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
                                 ]),
-                                script_5.Tektite.$div("current-timestamp")([
-                                    script_5.Tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
+                                script_7.Tektite.$div("current-timestamp")([
+                                    script_7.Tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
                                 ]),
                             ])];
                         _e = Render.flashIntervalLabel;
@@ -11735,7 +11734,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             _b.apply(void 0, [[
                                     _c.apply(void 0, [_d.concat([
                                             _o.sent(),
-                                            script_5.Tektite.$div("button-list")({
+                                            script_7.Tektite.$div("button-list")({
                                                 tag: "button",
                                                 className: "default-button main-button long-button",
                                                 children: Render.label("Stamp"),
@@ -11749,9 +11748,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         ])])
                                 ]])
                         ];
-                        _g = script_5.Tektite.$div("page-footer");
+                        _g = script_7.Tektite.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
-                        _h = script_5.Tektite.$div("button-list")([
+                        _h = script_7.Tektite.$div("button-list")([
                             __9.tektite.internalLink({
                                 href: { application: "NeverStopwatch", },
                                 children: {
@@ -11801,16 +11800,16 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _k = [];
                         return [3 /*break*/, 8];
                     case 6:
-                        _l = script_5.Tektite.$div("trail-page");
-                        _m = script_5.Tektite.$div("row-flex-list stamp-list");
+                        _l = script_7.Tektite.$div("trail-page");
+                        _m = script_7.Tektite.$div("row-flex-list stamp-list");
                         return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                     case 7:
                         _k = _l.apply(void 0, [[
                                 _m.apply(void 0, [_o.sent()]),
-                                script_5.Tektite.$div("description")(script_5.Tektite.$tag("ul")("locale-parallel-off")([
-                                    script_5.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                    script_5.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                    script_5.Tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
+                                script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
+                                    script_7.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                    script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                    script_7.Tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
                                 ]))
                             ]]);
                         _o.label = 8;
@@ -11952,11 +11951,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             currentColor = color_4.Color.getSolidRainbowColor(primaryStep);
                                             nextColor = color_4.Color.getSolidRainbowColor(primaryStep + 1);
                                             rate = ((domain_7.Domain.getTicks() - current) % unit) / unit;
-                                            Render.setBodyColor(color_4.Color.mixColors(currentColor, nextColor, rate));
+                                            script_7.Tektite.setBodyColor(color_4.Color.mixColors(currentColor, nextColor, rate));
                                         }
                                         else {
                                             currentColor = color_4.Color.getSolidRainbowColor(0);
-                                            Render.setBodyColor(currentColor);
+                                            script_7.Tektite.setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 8];
                                     case 3: return [4 /*yield*/, Render.reload()];
@@ -12034,33 +12033,33 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
             return __generator(this, function (_p) {
                 switch (_p.label) {
                     case 0:
-                        _a = script_5.Tektite.$div("primary-page");
-                        _b = script_5.Tektite.$div("page-body");
-                        _c = script_5.Tektite.$div("main-panel");
+                        _a = script_7.Tektite.$div("primary-page");
+                        _b = script_7.Tektite.$div("page-body");
+                        _c = script_7.Tektite.$div("main-panel");
                         _d = [(item !== null && item !== void 0 ? item : events[0]) ?
-                                script_5.Tektite.$div("current-item event-item")([
+                                script_7.Tektite.$div("current-item event-item")([
                                     (item !== null && item !== void 0 ? item : events[0]) ?
                                         [
-                                            script_5.Tektite.$div("current-title")([
-                                                script_5.Tektite.$span("value monospace")((item !== null && item !== void 0 ? item : events[0]).title),
+                                            script_7.Tektite.$div("current-title")([
+                                                script_7.Tektite.$span("value monospace")((item !== null && item !== void 0 ? item : events[0]).title),
                                             ]),
-                                            script_5.Tektite.$div("current-due-timestamp")([
-                                                script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
+                                            script_7.Tektite.$div("current-due-timestamp")([
+                                                script_7.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
                                             ]),
                                         ] : [],
-                                    script_5.Tektite.$div("capital-interval")([
-                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
+                                    script_7.Tektite.$div("capital-interval")([
+                                        script_7.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
                                     ]),
-                                    script_5.Tektite.$div("current-timestamp")([
-                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
+                                    script_7.Tektite.$div("current-timestamp")([
+                                        script_7.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
                                     ]),
                                 ]) :
-                                script_5.Tektite.$div("current-item")([
-                                    script_5.Tektite.$div("capital-interval")([
-                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
+                                script_7.Tektite.$div("current-item")([
+                                    script_7.Tektite.$div("capital-interval")([
+                                        script_7.Tektite.$span("value monospace")(domain_7.Domain.timeLongStringFromTick(0)),
                                     ]),
-                                    script_5.Tektite.$div("current-timestamp")([
-                                        script_5.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
+                                    script_7.Tektite.$div("current-timestamp")([
+                                        script_7.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
                                     ]),
                                 ])];
                         _e = Render.flashIntervalLabel;
@@ -12077,9 +12076,9 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                         ])])
                                 ]])
                         ];
-                        _g = script_5.Tektite.$div("page-footer");
+                        _g = script_7.Tektite.$div("page-footer");
                         if (!(null !== item)) return [3 /*break*/, 3];
-                        _h = script_5.Tektite.$div("button-list")([
+                        _h = script_7.Tektite.$div("button-list")([
                             __9.tektite.internalLink({
                                 href: { application: "CountdownTimer", },
                                 children: {
@@ -12129,8 +12128,8 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                         _k = [];
                         return [3 /*break*/, 8];
                     case 6:
-                        _l = script_5.Tektite.$div("trail-page");
-                        _m = [script_5.Tektite.$div("button-list")([
+                        _l = script_7.Tektite.$div("trail-page");
+                        _m = [script_7.Tektite.$div("button-list")([
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
@@ -12160,14 +12159,14 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                     }); }
                                 },
                             ])];
-                        _o = script_5.Tektite.$div("row-flex-list event-list");
+                        _o = script_7.Tektite.$div("row-flex-list event-list");
                         return [4 /*yield*/, Promise.all(events.map(function (item) { return render_8.Render.eventItem(item); }))];
                     case 7:
                         _k = _l.apply(void 0, [_m.concat([
                                 _o.apply(void 0, [_p.sent()]),
-                                script_5.Tektite.$div("description")(script_5.Tektite.$tag("ul")("locale-parallel-off")([
-                                    script_5.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                    script_5.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
+                                    script_7.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                    script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                 ]))
                             ])]);
                         _p.label = 8;
@@ -12307,11 +12306,11 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                             currentColor = color_4.Color.getSolidRainbowColor(primaryStep);
                                             nextColor = color_4.Color.getSolidRainbowColor(primaryStep + 1);
                                             rate = ((domain_7.Domain.getTicks() - current.tick) % unit) / unit;
-                                            Render.setBodyColor(color_4.Color.mixColors(currentColor, nextColor, rate));
+                                            script_7.Tektite.setBodyColor(color_4.Color.mixColors(currentColor, nextColor, rate));
                                         }
                                         else {
                                             currentColor = color_4.Color.getSolidRainbowColor(0);
-                                            Render.setBodyColor(currentColor);
+                                            script_7.Tektite.setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 9];
                                     case 3: return [4 /*yield*/, Render.reload()];
@@ -12835,7 +12834,7 @@ define("resource/lang.ja", [], {
     "timezone.New York": "ニューヨーク",
     "timezone.Seattle": "シアトル"
 });
-define("script/index", ["require", "exports", "tektite/script/index", "script/render/index", "script/render/resource", "script/storage", "script/domain", "resource/lang.en", "resource/lang.ja"], function (require, exports, script_6, render_9, resource_4, storage_12, domain_8, lang_en_json_1, lang_ja_json_1) {
+define("script/index", ["require", "exports", "tektite/script/index", "script/render/index", "script/render/resource", "script/storage", "script/domain", "resource/lang.en", "resource/lang.ja"], function (require, exports, script_8, render_9, resource_4, storage_12, domain_8, lang_en_json_1, lang_ja_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.tektite = exports.Clockworks = void 0;
@@ -12880,7 +12879,7 @@ define("script/index", ["require", "exports", "tektite/script/index", "script/re
             });
         }); };
     })(Clockworks = exports.Clockworks || (exports.Clockworks = {}));
-    exports.tektite = script_6.Tektite.make({
+    exports.tektite = script_8.Tektite.make({
         makeUrl: domain_8.Domain.makeUrl,
         showUrl: render_9.Render.showUrl,
         showPage: render_9.Render.showPage,
@@ -12901,7 +12900,7 @@ define("script/index", ["require", "exports", "tektite/script/index", "script/re
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Wed Nov 24 2021 10:10:03 GMT+0900 (GMT+09:00)', })"><div id="tektite-images" style="display: none;"><div id="history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Wed Nov 24 2021 20:41:35 GMT+0900 (GMT+09:00)', })"><div id="tektite-images" style="display: none;"><div id="history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
 </div><div id="elapsed-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">

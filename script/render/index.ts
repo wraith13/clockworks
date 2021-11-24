@@ -13,30 +13,8 @@ import { Render as CountdownTimerRender } from "../application/countdowntimer/re
 import config from "../../resource/config.json";
 export module Render
 {
-    export const setHeaderColor = (color: string | null) =>
-        minamo.dom.setProperty("#screen-header", "backgroundColor", color ?? "");
-    export const setBodyColor = (color: string) =>
-    {
-        minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
-        minamo.dom.setProperty("#theme-color", "content", color);
-    };
-    export const setFoundationColor = (color: string | null) =>
-            minamo.dom.setStyleProperty("#foundation", "backgroundColor", color ?? "");
-    let latestColor: string | null;
     export const setBackgroundColor = (color: string | null) =>
-    {
-        latestColor = color;
-        if ("header" === (Storage.Settings.get().progressBarStyle ?? "auto"))
-        {
-            setHeaderColor(color);
-            setFoundationColor(null);
-        }
-        else
-        {
-            setFoundationColor(color);
-            setHeaderColor(null);
-        }
-    };
+        Tektite.setBackgroundColor(Storage.Settings.get().progressBarStyle ?? "auto", color);
     export const updateStyle = () =>
     {
         const setting = Storage.Settings.get().theme ?? "auto";
@@ -48,12 +26,7 @@ export module Render
         );
     };
     export const updateProgressBarStyle = () =>
-    {
-        const setting = Storage.Settings.get().progressBarStyle ?? "auto";
-        document.body.classList.toggle("tektite-modern", "header" !== setting);
-        document.body.classList.toggle("tektite-classic", "header" === setting);
-        setBackgroundColor(latestColor ?? null);
-    };
+        Tektite.updateProgressBarStyle(Storage.Settings.get().progressBarStyle ?? "auto");
     export const Operate = RenderOperate;
     export const cancelTextButton = (onCanceled: () => unknown) =>
     ({
@@ -275,9 +248,9 @@ export module Render
                     [
                         await Promise.all
                         (
-                            Type.ProgressBarStyleList.map
+                            Tektite.ProgressBarStyleList.map
                             (
-                                async (key: Type.ProgressBarStyleType) =>
+                                async (key: Tektite.ProgressBarStyleType) =>
                                 ({
                                     tag: "button",
                                     className: `check-button ${key === selected ? "checked": ""}`,
@@ -1023,7 +996,7 @@ export module Render
                 break;
             }
         };
-        setBodyColor(Color.getSolidRainbowColor(0));
+        Tektite.setBodyColor(Color.getSolidRainbowColor(0));
         await showWindow(await welcomeScreen(), updateWindow);
         await updateWindow("timer");
     };
@@ -1265,12 +1238,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = ((Domain.getTicks() -current) %unit) /unit;
-                        setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        Tektite.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(0);
-                        setBodyColor(currentColor);
+                        Tektite.setBodyColor(currentColor);
                     }
                     break;
                 case "storage":
@@ -1530,12 +1503,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = ((Domain.getTicks() -current.tick) %unit) /unit;
-                        setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        Tektite.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(0);
-                        setBodyColor(currentColor);
+                        Tektite.setBodyColor(currentColor);
                     }
                     break;
                 case "storage":

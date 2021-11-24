@@ -17,6 +17,15 @@ export module Tektite
     {
         [key : string] : string;
     }
+    export const progressBarStyleObject =
+    {
+        "header": null,
+        "auto": null,
+        "horizontal": null,
+        "vertical": null,
+    };
+    export type ProgressBarStyleType = keyof typeof progressBarStyleObject;
+    export const ProgressBarStyleList = Object.keys(progressBarStyleObject);
     export type HeaderSegmentSource<PageParams, IconKeyType> = Header.SegmentSource<PageParams, IconKeyType>;
     export type HeaderSource<PageParams, IconKeyType> = Header.Source<PageParams, IconKeyType>;
     export interface ScreenSource<PageParams, IconKeyType>
@@ -121,4 +130,34 @@ export module Tektite
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);
+    export const setHeaderColor = (color: string | null) =>
+        minamo.dom.setProperty("#screen-header", "backgroundColor", color ?? "");
+    export const setBodyColor = (color: string) =>
+    {
+        minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
+        minamo.dom.setProperty("#theme-color", "content", color);
+    };
+    export const setFoundationColor = (color: string | null) =>
+            minamo.dom.setStyleProperty("#foundation", "backgroundColor", color ?? "");
+    let latestColor: string | null;
+    export const setBackgroundColor = (progressBarStyle: ProgressBarStyleType, color: string | null) =>
+    {
+        latestColor = color;
+        if ("header" === progressBarStyle)
+        {
+            setHeaderColor(color);
+            setFoundationColor(null);
+        }
+        else
+        {
+            setFoundationColor(color);
+            setHeaderColor(null);
+        }
+    };
+    export const updateProgressBarStyle = (progressBarStyle: ProgressBarStyleType) =>
+    {
+        document.body.classList.toggle("tektite-modern", "header" !== progressBarStyle);
+        document.body.classList.toggle("tektite-classic", "header" === progressBarStyle);
+        setBackgroundColor(progressBarStyle, latestColor ?? null);
+    };
 }
