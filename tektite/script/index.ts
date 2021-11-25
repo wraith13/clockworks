@@ -154,10 +154,14 @@ export module Tektite
             setHeaderColor(null);
         }
     };
+    export const setStyle = (style: "modern" | "classic") =>
+    {
+        document.body.classList.toggle("tektite-modern", "modern" === style);
+        document.body.classList.toggle("tektite-classic", "classic" === style);
+    }
     export const updateProgressBarStyle = (progressBarStyle: ProgressBarStyleType) =>
     {
-        document.body.classList.toggle("tektite-modern", "header" !== progressBarStyle);
-        document.body.classList.toggle("tektite-classic", "header" === progressBarStyle);
+        setStyle("header" !== progressBarStyle ? "modern": "classic");
         setBackgroundColor(progressBarStyle, latestColor ?? null);
     };
 }
