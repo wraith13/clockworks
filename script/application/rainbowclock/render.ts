@@ -389,7 +389,7 @@ export module Render
                     minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                     const getRainbowColor = Type.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                     const currentColor = getRainbowColor(currentNow.getHours());
-                    RenderBase.setBackgroundColor(currentColor);
+                    Tektite.setBackgroundColor(currentColor);
                     const hourUnit = 60 *60 *1000;
                     const minutes = (tick % hourUnit) / hourUnit;
                     const nextColor = getRainbowColor(currentNow.getHours() +1);

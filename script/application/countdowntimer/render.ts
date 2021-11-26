@@ -621,7 +621,7 @@ export module Render
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        RenderBase.setBackgroundColor(currentColor);
+                        Tektite.setBackgroundColor(currentColor);
                         const span = current.end - current.start;
                         const rate = Math.min(tick - current.start, span) /span;
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
@@ -635,7 +635,7 @@ export module Render
                         RenderBase.setScreenBarProgress(null);
                         tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        RenderBase.setBackgroundColor(currentColor);
+                        Tektite.setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;

@@ -140,15 +140,15 @@ export module Tektite
     export const setFoundationColor = (color: string | null) =>
             minamo.dom.setStyleProperty("#foundation", "backgroundColor", color ?? "");
     let latestColor: string | null;
-    export const setBackgroundColor = (progressBarStyle: ProgressBarStyleType, color: string | null) =>
+    export const setBackgroundColor = (color: string | null) =>
     {
         latestColor = color;
-        if ("header" === progressBarStyle)
+        if (document.body.classList.contains("tektite-classic"))
         {
             setHeaderColor(color);
             setFoundationColor(null);
         }
-        else
+        if (document.body.classList.contains("tektite-modern"))
         {
             setFoundationColor(color);
             setHeaderColor(null);
@@ -156,12 +156,72 @@ export module Tektite
     };
     export const setStyle = (style: "modern" | "classic") =>
     {
-        document.body.classList.toggle("tektite-modern", "modern" === style);
-        document.body.classList.toggle("tektite-classic", "classic" === style);
+        if
+        (
+            [
+                { className: "tektite-modern", tottle: "modern" === style, },
+                { className: "tektite-classic", tottle: "classic" === style, },
+            ]
+            .map(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate)
+            .reduce((a, b) => a || b, false)
+        )
+        {
+            setBackgroundColor(latestColor ?? null);
+        }
     }
-    export const updateProgressBarStyle = (progressBarStyle: ProgressBarStyleType) =>
-    {
+    export const setProgressBarStyle = (progressBarStyle: ProgressBarStyleType) =>
         setStyle("header" !== progressBarStyle ? "modern": "classic");
-        setBackgroundColor(progressBarStyle, latestColor ?? null);
+    export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
+    export const setScreenBarProgress = (progressBarStyle: ProgressBarStyleType, percent: null | number, color?: string) =>
+    {
+        setProgressBarStyle(progressBarStyle);
+        const screenBar = document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
+        if (null !== percent && "header" !== progressBarStyle)
+        {
+            if (color)
+            {
+                minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
+            }
+            const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            if ((window.innerHeight < window.innerWidth && "vertical" !== progressBarStyle) || "horizontal" === progressBarStyle)
+            {
+                minamo.dom.addCSSClass(screenBar, "horizontal");
+                minamo.dom.removeCSSClass(screenBar, "vertical");
+                minamo.dom.setStyleProperty(screenBar, "height", "initial");
+                minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
+                minamo.dom.setStyleProperty(screenBar, "width", percentString);
+                minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
+            }
+            else
+            {
+                minamo.dom.addCSSClass(screenBar, "vertical");
+                minamo.dom.removeCSSClass(screenBar, "horizontal");
+                minamo.dom.setStyleProperty(screenBar, "width", "initial");
+                minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
+                minamo.dom.setStyleProperty(screenBar, "height", percentString);
+                minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
+            }
+            minamo.dom.setStyleProperty(screenBar, "display", "block");
+        }
+        else
+        {
+            minamo.dom.setStyleProperty(screenBar, "display", "none");
+        }
+        const progressBar = getProgressElement();
+        if (null !== percent && "header" === progressBarStyle)
+        {
+            if (color)
+            {
+                minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
+            }
+            const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            minamo.dom.setStyleProperty(progressBar, "width", percentString);
+            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
+        }
+        else
+        {
+            minamo.dom.setStyleProperty(progressBar, "width", "0%");
+            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
+        }
     };
 }

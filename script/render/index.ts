@@ -13,8 +13,6 @@ import { Render as CountdownTimerRender } from "../application/countdowntimer/re
 import config from "../../resource/config.json";
 export module Render
 {
-    export const setBackgroundColor = (color: string | null) =>
-        Tektite.setBackgroundColor(Storage.Settings.get().progressBarStyle ?? "auto", color);
     export const updateStyle = () =>
     {
         const setting = Storage.Settings.get().theme ?? "auto";
@@ -26,7 +24,7 @@ export module Render
         );
     };
     export const updateProgressBarStyle = () =>
-        Tektite.updateProgressBarStyle(Storage.Settings.get().progressBarStyle ?? "auto");
+        Tektite.setProgressBarStyle(Storage.Settings.get().progressBarStyle ?? "auto");
     export const Operate = RenderOperate;
     export const cancelTextButton = (onCanceled: () => unknown) =>
     ({
@@ -1198,7 +1196,7 @@ export module Render
                             tektite.screen.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        setBackgroundColor(currentColor);
+                        Tektite.setBackgroundColor(currentColor);
                         previousPrimaryStep = primaryStep;
                         const rate = ((Domain.getTicks() -current) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
@@ -1212,7 +1210,7 @@ export module Render
                         setScreenBarProgress(null);
                         tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
-                        setBackgroundColor(currentColor);
+                        Tektite.setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
@@ -1462,7 +1460,7 @@ export module Render
                             tektite.screen.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        setBackgroundColor(currentColor);
+                        Tektite.setBackgroundColor(currentColor);
                         previousPrimaryStep = primaryStep;
                         const rate = ((tick -current.tick) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
@@ -1476,7 +1474,7 @@ export module Render
                         setScreenBarProgress(null);
                         tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
-                        setBackgroundColor(currentColor);
+                        Tektite.setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
@@ -1545,63 +1543,12 @@ export module Render
     export const showWindow = async (screen: ScreenSource, updateWindow?: (event: Tektite.UpdateWindowEventEype) => unknown) =>
     {
         await tektite.screen.show(screen, updateWindow);
-        setBackgroundColor(Color.getSolidRainbowColor(0));
+        Tektite.setBackgroundColor(Color.getSolidRainbowColor(0));
         updateTitle();
         resizeFlexList();
     };
-    export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
     export const setScreenBarProgress = (percent: null | number, color?: string) =>
-    {
-        const setting = Storage.Settings.get().progressBarStyle ?? "auto";
-        const screenBar = document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
-        if (null !== percent && "header" !== setting)
-        {
-            if (color)
-            {
-                minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
-            }
-            const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-            if ((window.innerHeight < window.innerWidth && "vertical" !== setting) || "horizontal" === setting)
-            {
-                minamo.dom.addCSSClass(screenBar, "horizontal");
-                minamo.dom.removeCSSClass(screenBar, "vertical");
-                minamo.dom.setStyleProperty(screenBar, "height", "initial");
-                minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
-                minamo.dom.setStyleProperty(screenBar, "width", percentString);
-                minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
-            }
-            else
-            {
-                minamo.dom.addCSSClass(screenBar, "vertical");
-                minamo.dom.removeCSSClass(screenBar, "horizontal");
-                minamo.dom.setStyleProperty(screenBar, "width", "initial");
-                minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
-                minamo.dom.setStyleProperty(screenBar, "height", percentString);
-                minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
-            }
-            minamo.dom.setStyleProperty(screenBar, "display", "block");
-        }
-        else
-        {
-            minamo.dom.setStyleProperty(screenBar, "display", "none");
-        }
-        const progressBar = getProgressElement();
-        if (null !== percent && "header" === setting)
-        {
-            if (color)
-            {
-                minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
-            }
-            const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-            minamo.dom.setStyleProperty(progressBar, "width", percentString);
-            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
-        }
-        else
-        {
-            minamo.dom.setStyleProperty(progressBar, "width", "0%");
-            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
-        }
-    };
+        Tektite.setScreenBarProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
     export const resizeFlexList = () =>
     {
         const minColumns = 1 +Math.floor(window.innerWidth / 780);
