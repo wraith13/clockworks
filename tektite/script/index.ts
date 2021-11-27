@@ -172,10 +172,11 @@ export module Tektite
     export const setProgressBarStyle = (progressBarStyle: ProgressBarStyleType) =>
         setStyle("header" !== progressBarStyle ? "modern": "classic");
     export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
+    export const getScreenBarElement = () => document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
     export const setScreenBarProgress = (progressBarStyle: ProgressBarStyleType, percent: null | number, color?: string) =>
     {
         setProgressBarStyle(progressBarStyle);
-        const screenBar = document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
+        const screenBar = getScreenBarElement();
         if (null !== percent && "header" !== progressBarStyle)
         {
             if (color)
