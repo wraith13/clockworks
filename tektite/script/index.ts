@@ -78,6 +78,15 @@ export module Tektite
                         },
                         {
                             tag: "div",
+                            className: "screen-bar",
+                            childNodes:
+                            {
+                                tag: "div",
+                                className: "screen-bar-flash-layer",
+                            },
+                        },
+                        {
+                            tag: "div",
                             id: "screen-toast",
                         },
                     ]
@@ -173,6 +182,14 @@ export module Tektite
         setStyle("header" !== progressBarStyle ? "modern": "classic");
     export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
     export const getScreenBarElement = () => document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
+    export const resetScreenBarProgress = () =>
+    {
+        const screenBar = getScreenBarElement();
+        minamo.dom.setStyleProperty(screenBar, "display", "none");
+        const progressBar = getProgressElement();
+        minamo.dom.setStyleProperty(progressBar, "width", "0%");
+        minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
+    }
     export const setScreenBarProgress = (progressBarStyle: ProgressBarStyleType, percent: null | number, color?: string) =>
     {
         setProgressBarStyle(progressBarStyle);

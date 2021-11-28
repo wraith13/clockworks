@@ -206,30 +206,30 @@
                 }
             }
         }
-        .screen-bar
+    }
+    .screen-bar
+    {
+        z-index: -10;
+        position: fixed;
+        border-width: 0px;
+        border-style: solid;
+        border-color: #0008;
+        box-sizing: border-box;
+        &.horizontal
         {
-            z-index: -10;
-            position: fixed;
-            border-width: 0px;
-            border-style: solid;
-            border-color: #0008;
-            box-sizing: border-box;
-            &.horizontal
-            {
-                top: 0px;
-                bottom: 0px;
-                left: 0px;
-                border-right-width: 1px;
-            }
-            &.vertical
-            {
-                top: 0px;
-                left: 0px;
-                right: 0px;
-                border-bottom-width: 1px;
-            }
-            overflow: hidden;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            border-right-width: 1px;
         }
+        &.vertical
+        {
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            border-bottom-width: 1px;
+        }
+        overflow: hidden;
     }
 }
 &.tektite-modern

@@ -551,7 +551,6 @@ export module Render
                     ])
                 ),
             ]),
-        RenderBase.screenBar(),
     ]);
     let previousPrimaryStep = 0;
     export const countdownTimerScreen = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]): Promise<RenderBase.ScreenSource> =>

@@ -294,7 +294,6 @@ export module Render
                     ])
                 ),
             ]),
-        RenderBase.screenBar(),
     ]);
     export const rainbowClockScreen = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<RenderBase.ScreenSource> =>
     ({

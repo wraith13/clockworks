@@ -1,6 +1,6 @@
 <html>
 <!-- This file is genereted by build.js. このファイルは build.js によって生成されました。 -->
-<!-- build at: Sat Nov 27 2021 01:09:20 GMT+0900 (GMT+09:00) -->
+<!-- build at: Sun Nov 28 2021 09:29:25 GMT+0900 (GMT+09:00) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
@@ -488,7 +488,7 @@ body.light .screen > .screen-body .primary-page .page-footer .down-page-link.ico
 body.light .screen > .screen-body .primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
   transform: scale(1, -1);
 }
-body.light .screen > .screen-body .screen-bar {
+body.light .screen .screen-bar {
   z-index: -10;
   position: fixed;
   border-width: 0px;
@@ -497,13 +497,13 @@ body.light .screen > .screen-body .screen-bar {
   box-sizing: border-box;
   overflow: hidden;
 }
-body.light .screen > .screen-body .screen-bar.horizontal {
+body.light .screen .screen-bar.horizontal {
   top: 0px;
   bottom: 0px;
   left: 0px;
   border-right-width: 1px;
 }
-body.light .screen > .screen-body .screen-bar.vertical {
+body.light .screen .screen-bar.vertical {
   top: 0px;
   left: 0px;
   right: 0px;
@@ -3111,7 +3111,7 @@ body.dark .screen > .screen-body .primary-page .page-footer .down-page-link.icon
 body.dark .screen > .screen-body .primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
   transform: scale(1, -1);
 }
-body.dark .screen > .screen-body .screen-bar {
+body.dark .screen .screen-bar {
   z-index: -10;
   position: fixed;
   border-width: 0px;
@@ -3120,13 +3120,13 @@ body.dark .screen > .screen-body .screen-bar {
   box-sizing: border-box;
   overflow: hidden;
 }
-body.dark .screen > .screen-body .screen-bar.horizontal {
+body.dark .screen .screen-bar.horizontal {
   top: 0px;
   bottom: 0px;
   left: 0px;
   border-right-width: 1px;
 }
-body.dark .screen > .screen-body .screen-bar.vertical {
+body.dark .screen .screen-bar.vertical {
   top: 0px;
   left: 0px;
   right: 0px;
@@ -6620,7 +6620,7 @@ define("tektite/script/fullscreen", ["require", "exports"], function (require, e
         }); };
     })(Fullscreen = exports.Fullscreen || (exports.Fullscreen = {}));
 });
-define("tektite/script/screen", ["require", "exports", "script/minamo.js/index"], function (require, exports, minamo_js_1) {
+define("tektite/script/screen", ["require", "exports", "script/minamo.js/index", "tektite/script/index"], function (require, exports, minamo_js_1, _1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Screen = void 0;
@@ -6905,6 +6905,7 @@ define("tektite/script/screen", ["require", "exports", "script/minamo.js/index"]
                                 });
                             }); };
                         }
+                        _1.Tektite.resetScreenBarProgress();
                         this.setClass(screen.className);
                         this.tektite.header.replace(screen.header);
                         this.replaceBody(screen.body);
@@ -6922,7 +6923,7 @@ define("tektite/script/screen", ["require", "exports", "script/minamo.js/index"]
         };
     })(Screen = exports.Screen || (exports.Screen = {}));
 });
-define("tektite/script/toast", ["require", "exports", "script/minamo.js/index", "tektite/script/index"], function (require, exports, minamo_js_2, _1) {
+define("tektite/script/toast", ["require", "exports", "script/minamo.js/index", "tektite/script/index"], function (require, exports, minamo_js_2, _2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Toast = void 0;
@@ -6931,7 +6932,7 @@ define("tektite/script/toast", ["require", "exports", "script/minamo.js/index", 
         var _this = this;
         Toast.make = function (data) {
             var _a, _b, _c;
-            var dom = _1.Tektite.$make(HTMLDivElement)({
+            var dom = _2.Tektite.$make(HTMLDivElement)({
                 tag: "div",
                 className: "item slide-up-in",
                 children: data.isWideContent ?
@@ -6941,9 +6942,9 @@ define("tektite/script/toast", ["require", "exports", "script/minamo.js/index", 
                         data.forwardOperator,
                     ].filter(function (i) { return undefined !== i; }) :
                     [
-                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : _1.Tektite.$span("dummy")([]),
+                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : _2.Tektite.$span("dummy")([]),
                         data.content,
-                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : _1.Tektite.$span("dummy")([]),
+                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : _2.Tektite.$span("dummy")([]),
                     ],
             });
             var hideRaw = function (className, wait) { return __awaiter(_this, void 0, void 0, function () {
@@ -6990,7 +6991,7 @@ define("tektite/script/toast", ["require", "exports", "script/minamo.js/index", 
         };
     })(Toast = exports.Toast || (exports.Toast = {}));
 });
-define("tektite/script/header", ["require", "exports", "script/minamo.js/index", "tektite/script/index"], function (require, exports, minamo_js_3, _2) {
+define("tektite/script/header", ["require", "exports", "script/minamo.js/index", "tektite/script/index"], function (require, exports, minamo_js_3, _3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Header = void 0;
@@ -7016,7 +7017,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index",
                     return __generator(this, function (_e) {
                         switch (_e.label) {
                             case 0:
-                                _a = [_2.Tektite.$div("progress-bar")([])];
+                                _a = [_3.Tektite.$div("progress-bar")([])];
                                 return [4 /*yield*/, Promise.all(data.items
                                         .filter(function (i) { return i; })
                                         .map(function (item, ix, list) { return __awaiter(_this, void 0, void 0, function () {
@@ -7071,7 +7072,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index",
                                 _e.label = 7;
                             case 7: return [2 /*return*/, _a.concat([
                                     _c,
-                                    data.operator ? _2.Tektite.$div("header-operator")(data.operator) : []
+                                    data.operator ? _3.Tektite.$div("header-operator")(data.operator) : []
                                 ])];
                         }
                     });
@@ -7082,11 +7083,11 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index",
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = _2.Tektite.$div("icon");
+                                _a = _3.Tektite.$div("icon");
                                 return [4 /*yield*/, this.tektite.params.loadSvgOrCache(item.icon)];
                             case 1: return [2 /*return*/, [
                                     _a.apply(void 0, [_b.sent()]),
-                                    _2.Tektite.$div("segment-title")(item.title)
+                                    _3.Tektite.$div("segment-title")(item.title)
                                 ]];
                         }
                     });
@@ -7096,7 +7097,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index",
                     return __awaiter(_this, void 0, void 0, function () { var _a; return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = _2.Tektite.$div("segment label-segment " + className);
+                                _a = _3.Tektite.$div("segment label-segment " + className);
                                 return [4 /*yield*/, this.segmentCore(item)];
                             case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent()])];
                         }
@@ -7135,7 +7136,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index",
                                         popup.classList.remove("show");
                                         cover = null;
                                     };
-                                    popup = _2.Tektite.$make(HTMLDivElement)({
+                                    popup = _3.Tektite.$make(HTMLDivElement)({
                                         tag: "div",
                                         className: "menu-popup segment-popup",
                                         children: "function" !== typeof item.menu ? item.menu : [],
@@ -7149,7 +7150,7 @@ define("tektite/script/header", ["require", "exports", "script/minamo.js/index",
                                             });
                                         }); },
                                     });
-                                    _a = _2.Tektite.$make(HTMLDivElement);
+                                    _a = _3.Tektite.$make(HTMLDivElement);
                                     _b = {
                                         tag: "div",
                                         className: "segment " + className
@@ -7367,6 +7368,14 @@ define("tektite/script/index", ["require", "exports", "script/minamo.js/index", 
                                 },
                                 {
                                     tag: "div",
+                                    className: "screen-bar",
+                                    childNodes: {
+                                        tag: "div",
+                                        className: "screen-bar-flash-layer",
+                                    },
+                                },
+                                {
+                                    tag: "div",
                                     id: "screen-toast",
                                 },
                             ]
@@ -7463,9 +7472,17 @@ define("tektite/script/index", ["require", "exports", "script/minamo.js/index", 
             return Tektite_1.setStyle("header" !== progressBarStyle ? "modern" : "classic");
         };
         Tektite_1.getProgressElement = function () { return document.getElementById("screen-header").getElementsByClassName("progress-bar")[0]; };
+        Tektite_1.getScreenBarElement = function () { return document.getElementsByClassName("screen-bar")[0]; };
+        Tektite_1.resetScreenBarProgress = function () {
+            var screenBar = Tektite_1.getScreenBarElement();
+            minamo_js_5.minamo.dom.setStyleProperty(screenBar, "display", "none");
+            var progressBar = Tektite_1.getProgressElement();
+            minamo_js_5.minamo.dom.setStyleProperty(progressBar, "width", "0%");
+            minamo_js_5.minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
+        };
         Tektite_1.setScreenBarProgress = function (progressBarStyle, percent, color) {
             Tektite_1.setProgressBarStyle(progressBarStyle);
-            var screenBar = document.getElementsByClassName("screen-bar")[0];
+            var screenBar = Tektite_1.getScreenBarElement();
             if (null !== percent && "header" !== progressBarStyle) {
                 if (color) {
                     minamo_js_5.minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
@@ -7913,7 +7930,7 @@ define("script/storage", ["require", "exports", "script/minamo.js/index", "scrip
         })(Settings = Storage.Settings || (Storage.Settings = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("script/domain", ["require", "exports", "script/base", "script/index", "resource/config"], function (require, exports, base_2, _3, config_json_7) {
+define("script/domain", ["require", "exports", "script/base", "script/index", "resource/config"], function (require, exports, base_2, _4, config_json_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Domain = void 0;
@@ -7952,26 +7969,26 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
             var result = "";
             if ("" !== result || 0 < days) {
                 if ("" === result) {
-                    result = days + " " + _3.Clockworks.localeMap("days");
+                    result = days + " " + _4.Clockworks.localeMap("days");
                 }
                 else {
-                    result += " " + days + " " + _3.Clockworks.localeMap("days");
+                    result += " " + days + " " + _4.Clockworks.localeMap("days");
                 }
             }
             if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
                 if ("" === result) {
-                    result = hours + " " + _3.Clockworks.localeMap("hours");
+                    result = hours + " " + _4.Clockworks.localeMap("hours");
                 }
                 else {
-                    result += " " + ("0" + hours).substr(-2) + " " + _3.Clockworks.localeMap("hours");
+                    result += " " + ("0" + hours).substr(-2) + " " + _4.Clockworks.localeMap("hours");
                 }
             }
             if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
                 if ("" === result) {
-                    result = minutes + " " + _3.Clockworks.localeMap("minutes");
+                    result = minutes + " " + _4.Clockworks.localeMap("minutes");
                 }
                 else {
-                    result += " " + ("0" + minutes).substr(-2) + " " + _3.Clockworks.localeMap("minutes");
+                    result += " " + ("0" + minutes).substr(-2) + " " + _4.Clockworks.localeMap("minutes");
                 }
             }
             if (0 < seconds || 0 < milliseconds) {
@@ -7981,14 +7998,14 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
                     trail = trail.replace(/0+$/, "");
                 }
                 if ("" === result) {
-                    result = "" + seconds + trail + " " + _3.Clockworks.localeMap("seconds");
+                    result = "" + seconds + trail + " " + _4.Clockworks.localeMap("seconds");
                 }
                 else {
-                    result += " " + ("0" + seconds).substr(-2) + trail + " " + _3.Clockworks.localeMap("seconds");
+                    result += " " + ("0" + seconds).substr(-2) + trail + " " + _4.Clockworks.localeMap("seconds");
                 }
             }
             if ("" === result) {
-                result = minutes + " " + _3.Clockworks.localeMap("m(minutes)");
+                result = minutes + " " + _4.Clockworks.localeMap("m(minutes)");
             }
             // console.log({ timer, result, });
             return result;
@@ -8011,7 +8028,7 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
             return FloorHour.getTime() + (60 * 60 * 1000);
         };
         Domain.weekday = function (tick) {
-            return new Intl.DateTimeFormat(_3.tektite.locale.get(), { weekday: 'long' }).format(tick);
+            return new Intl.DateTimeFormat(_4.tektite.locale.get(), { weekday: 'long' }).format(tick);
         };
         Domain.dateCoreStringFromTick = function (tick) {
             if (null === tick) {
@@ -8118,7 +8135,7 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
                 if (days < 1) {
                     return Domain.timeLongCoreStringFromTick(tick);
                 }
-                return days.toLocaleString() + " " + _3.Clockworks.localeMap("days") + " " + Domain.timeLongCoreStringFromTick(tick);
+                return days.toLocaleString() + " " + _4.Clockworks.localeMap("days") + " " + Domain.timeLongCoreStringFromTick(tick);
             }
         };
         Domain.timeLongStringFromTick = function (tick) {
@@ -8131,7 +8148,7 @@ define("script/domain", ["require", "exports", "script/base", "script/index", "r
             else {
                 var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                 return 0 < days ?
-                    days.toLocaleString() + " " + _3.Clockworks.localeMap("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
+                    days.toLocaleString() + " " + _4.Clockworks.localeMap("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
                     Domain.timeFullCoreStringFromTick(tick);
             }
         };
@@ -9339,8 +9356,7 @@ define("script/application/rainbowclock/render", ["require", "exports", "script/
                             ])]);
                         _q.label = 8;
                     case 8: return [2 /*return*/, (_k.concat([
-                            _l,
-                            render_5.Render.screenBar()
+                            _l
                         ]))];
                 }
             });
@@ -10166,8 +10182,7 @@ define("script/application/countdowntimer/render", ["require", "exports", "scrip
                             ])]);
                         _q.label = 8;
                     case 8: return [2 /*return*/, (_k.concat([
-                            _l,
-                            render_6.Render.screenBar()
+                            _l
                         ]))];
                 }
             });
@@ -11629,8 +11644,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                                 script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
                                     script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                                 ])),
-                            ]),
-                            Render.screenBar()
+                            ])
                         ],
                             _h)];
                 }
@@ -11749,7 +11763,6 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                 }
             });
         }); };
-        Render.screenBar = function () { return script_7.Tektite.$div("screen-bar")(script_7.Tektite.$div("screen-bar-flash-layer")([])); };
         Render.neverStopwatchScreenBody = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
             var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
             var _this = this;
@@ -11865,8 +11878,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             ]]);
                         _o.label = 8;
                     case 8: return [2 /*return*/, (_j.concat([
-                            _k,
-                            Render.screenBar()
+                            _k
                         ]))];
                 }
             });
@@ -12222,8 +12234,7 @@ define("script/render/index", ["require", "exports", "script/minamo.js/index", "
                             ])]);
                         _p.label = 8;
                     case 8: return [2 /*return*/, (_j.concat([
-                            _k,
-                            Render.screenBar()
+                            _k
                         ]))];
                 }
             });
@@ -12907,7 +12918,7 @@ define("script/index", ["require", "exports", "tektite/script/index", "script/re
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Sat Nov 27 2021 01:09:20 GMT+0900 (GMT+09:00)', })"><div id="tektite-images" style="display: none;"><div id="history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<body onload="require('script/index').Clockworks.start({ buildTimestamp: 'Sun Nov 28 2021 09:29:25 GMT+0900 (GMT+09:00)', })"><div id="tektite-images" style="display: none;"><div id="history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
 </div><div id="elapsed-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">

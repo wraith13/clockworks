@@ -974,7 +974,6 @@ export module Render
                     ])
                 ),
             ]),
-            screenBar(),
         ]
     });
     export const showWelcomeScreen = async () =>
@@ -1022,7 +1021,6 @@ export module Render
             children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
         }),
     });
-    export const screenBar = () => Tektite.$div("screen-bar")(Tektite.$div("screen-bar-flash-layer")([]));
     export const neverStopwatchScreenBody = async (item: number | null, ticks: number[]) =>
     ([
         Tektite.$div("primary-page")
@@ -1137,7 +1135,6 @@ export module Render
                     ])
                 ),
             ]),
-        screenBar(),
     ]);
     export const neverStopwatchScreen = async (item: number | null, ticks: number[]): Promise<ScreenSource> =>
     ({
@@ -1404,7 +1401,6 @@ export module Render
                     ])
                 ),
             ]),
-        screenBar(),
     ]);
     export const elapsedTimerScreen = async (item: Type.EventEntry | null, events: Type.EventEntry[]): Promise<ScreenSource> =>
     ({
