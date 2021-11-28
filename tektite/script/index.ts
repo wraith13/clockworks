@@ -182,15 +182,23 @@ export module Tektite
         setStyle("header" !== progressBarStyle ? "modern": "classic");
     export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
     export const getScreenBarElement = () => document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
-    export const resetScreenBarProgress = () =>
+    const resetScreenBarProgress = () =>
     {
         const screenBar = getScreenBarElement();
         minamo.dom.setStyleProperty(screenBar, "display", "none");
+    }
+    const resetHeaderProgress = () =>
+    {
         const progressBar = getProgressElement();
         minamo.dom.setStyleProperty(progressBar, "width", "0%");
         minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
     }
-    export const setScreenBarProgress = (progressBarStyle: ProgressBarStyleType, percent: null | number, color?: string) =>
+    export const resetProgress = () =>
+    {
+        resetScreenBarProgress();
+        resetHeaderProgress();
+    }
+    export const setProgress = (progressBarStyle: ProgressBarStyleType, percent: null | number, color?: string) =>
     {
         setProgressBarStyle(progressBarStyle);
         const screenBar = getScreenBarElement();
@@ -223,7 +231,7 @@ export module Tektite
         }
         else
         {
-            minamo.dom.setStyleProperty(screenBar, "display", "none");
+            resetScreenBarProgress();
         }
         const progressBar = getProgressElement();
         if (null !== percent && "header" === progressBarStyle)
@@ -238,8 +246,7 @@ export module Tektite
         }
         else
         {
-            minamo.dom.setStyleProperty(progressBar, "width", "0%");
-            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
+            resetHeaderProgress();
         }
     };
 }

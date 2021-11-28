@@ -1197,14 +1197,14 @@ export module Render
                         previousPrimaryStep = primaryStep;
                         const rate = ((Domain.getTicks() -current) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
-                        setScreenBarProgress(rate, nextColor);
+                        setProgress(rate, nextColor);
                         // setBodyColor(nextColor);
                         tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
-                        setScreenBarProgress(null);
+                        setProgress(null);
                         tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
                         Tektite.setBackgroundColor(currentColor);
@@ -1460,14 +1460,14 @@ export module Render
                         previousPrimaryStep = primaryStep;
                         const rate = ((tick -current.tick) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
-                        setScreenBarProgress(rate, nextColor);
+                        setProgress(rate, nextColor);
                         // setBodyColor(nextColor);
                         tektite.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
-                        setScreenBarProgress(null);
+                        setProgress(null);
                         tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
                         Tektite.setBackgroundColor(currentColor);
@@ -1543,8 +1543,8 @@ export module Render
         updateTitle();
         resizeFlexList();
     };
-    export const setScreenBarProgress = (percent: null | number, color?: string) =>
-        Tektite.setScreenBarProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
+    export const setProgress = (percent: null | number, color?: string) =>
+        Tektite.setProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
     export const resizeFlexList = () =>
     {
         const minColumns = 1 +Math.floor(window.innerWidth / 780);

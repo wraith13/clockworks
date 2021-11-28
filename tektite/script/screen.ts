@@ -263,7 +263,7 @@ export module Screen
                     }
                 };
             }
-            Tektite.resetScreenBarProgress();
+            Tektite.resetProgress();
             this.setClass(screen.className);
             this.tektite.header.replace(screen.header);
             this.replaceBody(screen.body);
