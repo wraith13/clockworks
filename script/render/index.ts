@@ -1744,15 +1744,20 @@ export module Render
         {
             return "nothing";
         }
+        else
         if ( ! item)
         {
             return "invalid";
         }
+        else
         if ( ! (JSON.stringify(item) === itemJson))
         {
             return "irregular";
         }
-        return "regular";
+        else
+        {
+            return "regular";
+        }
     };
     export const regulateLocation = <T extends Type.PageItemType>(application: Type.ApplicationType, itemJson: string, item: T) =>
     {
