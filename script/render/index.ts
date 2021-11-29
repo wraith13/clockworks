@@ -1740,22 +1740,19 @@ export module Render
     export type ItemStateType = "nothing" | "regular" | "irregular" | "invalid";
     export const itemState = <T>(itemJson: string, item: T): ItemStateType =>
     {
-        if (itemJson)
+        if ( ! itemJson)
         {
-            if (item)
-            {
-                if (JSON.stringify(item) !== itemJson)
-                {
-                    return "irregular";
-                }
-            }
-            else
-            {
-                return "invalid";
-            }
-            return "regular";
+            return "nothing";
         }
-        return "nothing";
+        if ( ! item)
+        {
+            return "invalid";
+        }
+        if ( ! (JSON.stringify(item) === itemJson))
+        {
+            return "irregular";
+        }
+        return "regular";
     };
     export const regulateLocation = <T extends Type.PageItemType>(application: Type.ApplicationType, itemJson: string, item: T) =>
     {
