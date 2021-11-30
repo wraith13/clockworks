@@ -1,5 +1,5 @@
 // import { minamo } from "./minamo.js";
-import { Tektite } from "../tektite/script";
+import { Tektite } from "../tektite.js/script";
 import { Type } from "./type";
 import { Render } from "./render";
 import { Resource } from "./render/resource";

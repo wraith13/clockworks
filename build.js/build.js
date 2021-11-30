@@ -3,8 +3,9 @@ console.log(`build start: ${new Date()}`);
 const process = require("process");
 const child_process = require("child_process");
 const fs = require("fs");
-const fget = (path, base) => fs.readFileSync(((undefined !== base ? base: "") +path).replace(/\/\.\//gm, "/"), { encoding: "utf-8" });
-const evalValue = (value) =>
+const makePath = (...path) => path.map(i => undefined !== i ? i: "").join("").replace(/\/\.\//gm, "/");
+const fget = (path) => fs.readFileSync(path, { encoding: "utf-8" });
+const evalValue = (base, value) =>
 {
     if ("string" === typeof value)
     {
@@ -18,9 +19,9 @@ const evalValue = (value) =>
     else
     if ("string" === typeof value.resource)
     {
-        const resource = require(value.resource);
+        const resource = require(makePath(base, value.resource));
         return Object.keys(resource)
-            .map(id => `<div id="${id}">${fget(resource[id], value.base).replace(/[\w\W]*(<svg)/g, "$1")}</div>`)
+            .map(id => `<div id="${id}">${fget(makePath(value.base, resource[id])).replace(/[\w\W]*(<svg)/g, "$1")}</div>`)
             .join("");
     }
     else
@@ -41,10 +42,12 @@ const evalValue = (value) =>
     }
     return null;
 };
-const json = require("./build.json");
+const jsonPath = process.argv[2];
+const base = jsonPath.replace(/\/[^\/]+$/, "/");
+const json = require(jsonPath);
 try
 {
-    (json.preprocesses[process.argv[2] || "default"] || [ ]).forEach
+    (json.preprocesses[process.argv[3] || "default"] || [ ]).forEach
     (
         command =>
         {
@@ -63,7 +66,7 @@ catch
 {
     process.exit(-1);
 }
-const template = evalValue(json.template);
+const template = evalValue(base, json.template);
 Object.keys(json.parameters).forEach
 (
     key =>
@@ -79,7 +82,7 @@ fs.writeFileSync
     json.output.path,
     Object.keys(json.parameters).map
     (
-        key => ({ key, work: evalValue(json.parameters[key]) })
+        key => ({ key, work: evalValue(base, json.parameters[key]) })
     )
     .reduce
     (

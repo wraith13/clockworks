@@ -1,5 +1,5 @@
 import resource from "../../resource/images.json";
-import tektiteResource from "../../tektite/images.json";
+import tektiteResource from "../../tektite.js/images.json";
 export module Resource
 {
     export type KeyType = keyof typeof resource | keyof typeof tektiteResource;

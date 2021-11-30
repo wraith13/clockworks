@@ -1,6 +1,6 @@
 import { minamo } from "../../minamo.js";
 import { Clockworks, tektite } from "../..";
-import { Tektite } from "../../../tektite/script";
+import { Tektite } from "../../../tektite.js/script";
 import { Type } from "../../type";
 // import { Base } from "../../base";
 import { Color } from "../../color";
