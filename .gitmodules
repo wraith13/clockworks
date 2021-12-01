@@ -4,3 +4,6 @@
 [submodule "script/minamo.js"]
 	path = script/minamo.js
 	url = https://github.com/wraith13/minamo.js
+[submodule "build.js"]
+	path = build.js
+	url = https://github.com/wraith13/build.js
