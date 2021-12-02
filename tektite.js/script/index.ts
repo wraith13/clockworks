@@ -1,4 +1,4 @@
-import { minamo } from "../../script/minamo.js";
+import { minamo } from "../../nephila/minamo.js";
 import { Locale } from "./locale";
 import { Fullscreen as FullscreenModule } from "./fullscreen";
 import { Screen } from "./screen";

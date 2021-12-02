@@ -1,4 +1,4 @@
-import { minamo } from "./minamo.js/index.js";
+import { minamo } from "../../nephila/minamo.js";
 import { Type } from "./type";
 import { Storage as RainbowClockStorage } from "./application/rainbowclock/storage";
 import { Storage as CountdownTimerStorage } from "./application/countdowntimer/storage";

@@ -1,4 +1,4 @@
-import { minamo } from "../minamo.js";
+import { minamo } from "../../nephila/minamo.js";
 import { tektite } from "..";
 import { Operate as RainbowClockOperate } from "../application/rainbowclock/operate";
 import { Operate as CountdownTimerOperate } from "../application/countdowntimer/operate";

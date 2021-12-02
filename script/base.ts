@@ -1,4 +1,4 @@
-import { minamo } from "./minamo.js";
+import { minamo } from "../../nephila/minamo.js";
 import { Type } from "./type";
 export module Base
 {

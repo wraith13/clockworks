@@ -1,4 +1,4 @@
-import { minamo } from "../../minamo.js/index.js";
+import { minamo } from "../../../nephila/minamo.js";
 import { Base } from "../../base";
 import config from "../../../resource/config.json";
 export module Storage

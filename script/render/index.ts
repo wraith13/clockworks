@@ -1,4 +1,4 @@
-import { minamo } from "../minamo.js";
+import { minamo } from "../../nephila/minamo.js";
 import { Clockworks, tektite } from "..";
 import { Tektite } from "../../tektite.js/script";
 import { Type } from "../type";
