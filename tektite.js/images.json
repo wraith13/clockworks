@@ -1,12 +1,12 @@
 {
-    "history-icon": "./image/history.1024.svg",
-    "elapsed-icon": "./image/elapsed.1024.svg",
-    "ellipsis-icon": "./image/ellipsis.1024.svg",
-    "cross-icon": "./image/cross.1024.svg",
-    "check-icon": "./image/check.1024.svg",
-    "flash-icon": "./image/sun.1024.svg",
-    "sleep-icon": "./image/moon.1024.svg",
-    "tick-icon": "./image/tick.1024.svg",
-    "pin-icon": "./image/pin.1024.svg",
-    "down-triangle-icon": "./image/down-triangle.1024.svg"
+    "tektite-history-icon": "./image/history.1024.svg",
+    "tektite-elapsed-icon": "./image/elapsed.1024.svg",
+    "tektite-ellipsis-icon": "./image/ellipsis.1024.svg",
+    "tektite-cross-icon": "./image/cross.1024.svg",
+    "tektite-check-icon": "./image/check.1024.svg",
+    "tektite-flash-icon": "./image/sun.1024.svg",
+    "tektite-sleep-icon": "./image/moon.1024.svg",
+    "tektite-tick-icon": "./image/tick.1024.svg",
+    "tektite-pin-icon": "./image/pin.1024.svg",
+    "tektite-down-triangle-icon": "./image/down-triangle.1024.svg"
 }

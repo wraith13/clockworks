@@ -6,6 +6,7 @@ import { Toast as ToastModule } from "./toast";
 import { Header } from "./header";
 import { Menu } from "./menu";
 import { Key as KeyModule } from "./key";
+import tektiteResource from "..//images.json";
 export module Tektite
 {
     export const $make = minamo.dom.make;
@@ -34,7 +35,7 @@ export module Tektite
         header: HeaderSource<PageParams, IconKeyType>;
         body: minamo.dom.Source;
     }
-    export type TektiteIconKeyType = "cross-icon" | "ellipsis-icon" | "down-triangle-icon";
+    export type TektiteIconKeyType = keyof typeof tektiteResource;
     export type UpdateWindowEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
     export interface TektiteParams<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
@@ -52,6 +53,7 @@ export module Tektite
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
+        public loadSvgOrCache = (key: TektiteIconKeyType) => this.params.loadSvgOrCache(key);
         public onLoad = () =>
         {
             minamo.dom.make

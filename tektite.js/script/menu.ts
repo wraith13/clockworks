@@ -35,7 +35,7 @@ export module Menu
                 className: "menu-button",
                 children:
                 [
-                    await this.tektite.params.loadSvgOrCache("ellipsis-icon"),
+                    await this.tektite.loadSvgOrCache("tektite-ellipsis-icon"),
                 ],
                 onclick: async (event: MouseEvent) =>
                 {

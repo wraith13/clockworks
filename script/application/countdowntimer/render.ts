@@ -24,7 +24,7 @@ export module Render
     ]);
     export const screenHeaderAlarmSegment = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
-        icon: "tick-icon",
+        icon: "tektite-tick-icon",
         title: alarmTitle(item),
         menu: await Promise.all
         (
@@ -36,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
+                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), $span("value monospace")(Domain.dateStringFromTick(i.end)), ],
                         Domain.makePageParams("CountdownTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -56,7 +56,7 @@ export module Render
                 href: Domain.makePageParams("CountdownTimer", item),
                 children:
                 [
-                    await Resource.loadSvgOrCache("tick-icon"),
+                    await Resource.loadSvgOrCache("tektite-tick-icon"),
                     $div("tick-elapsed-time")([$span("value monospace")(alarmTitle(item)),]),
                 ]
             }),
@@ -154,7 +154,7 @@ export module Render
                 href: Domain.makePageParams("ElapsedTimer", item),
                 children:
                 [
-                    await Resource.loadSvgOrCache("tick-icon"),
+                    await Resource.loadSvgOrCache("tektite-tick-icon"),
                     $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
                 ]
             }),
@@ -238,7 +238,7 @@ export module Render
                                     className: `check-button`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("check-icon"),
+                                        await Resource.loadSvgOrCache("tektite-check-icon"),
                                         $span("")(labelSpan(Domain.makeTimerLabel(i))),
                                     ],
                                     onclick: async () =>
@@ -440,7 +440,7 @@ export module Render
                                 .filter((i, ix, list) => ix === list.indexOf(i)),
                             Storage.CountdownTimer.flashInterval.get(),
                             Storage.CountdownTimer.flashInterval.set,
-                            "flash-icon",
+                            "tektite-flash-icon",
                             "00:00:00 only"
                         )
                     ),

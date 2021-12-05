@@ -32,7 +32,7 @@ export module Render
                 href: Domain.makePageParams("RainbowClock", item),
                 children:
                 [
-                    await Resource.loadSvgOrCache("pin-icon"),
+                    await Resource.loadSvgOrCache("tektite-pin-icon"),
                     $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
                 ]
             }),

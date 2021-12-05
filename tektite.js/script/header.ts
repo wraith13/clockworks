@@ -52,7 +52,7 @@ export module Header
                     className: "icon-button close-button",
                     children:
                     [
-                        await this.tektite.params.loadSvgOrCache("cross-icon"),
+                        await this.tektite.loadSvgOrCache("tektite-cross-icon"),
                     ],
                     onclick: (event: MouseEvent) =>
                     {

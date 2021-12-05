@@ -188,7 +188,7 @@ export module Render
                                     className: `check-button ${key === (settings.theme ?? "auto") ? "checked": ""}`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("check-icon"),
+                                        await Resource.loadSvgOrCache("tektite-check-icon"),
                                         Tektite.$span("")(label(`theme.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
@@ -254,7 +254,7 @@ export module Render
                                     className: `check-button ${key === selected ? "checked": ""}`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("check-icon"),
+                                        await Resource.loadSvgOrCache("tektite-check-icon"),
                                         Tektite.$span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
@@ -317,7 +317,7 @@ export module Render
                             className: `check-button ${"@auto" === (settings.locale ?? "@auto") ? "checked": ""}`,
                             children:
                             [
-                                await Resource.loadSvgOrCache("check-icon"),
+                                await Resource.loadSvgOrCache("tektite-check-icon"),
                                 Tektite.$span("")(label("language.auto")),
                             ],
                             onclick: async () =>
@@ -341,7 +341,7 @@ export module Render
                                     className: `check-button ${key === (settings.locale ?? "@auto") ? "checked": ""}`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("check-icon"),
+                                        await Resource.loadSvgOrCache("tektite-check-icon"),
                                         Tektite.$span("")(Tektite.$labelSpan(tektite.locale.getLocaleName(key))),
                                     ],
                                     onclick: async () =>
@@ -405,7 +405,7 @@ export module Render
                                     className: `check-button ${key === settings ? "checked": ""}`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("check-icon"),
+                                        await Resource.loadSvgOrCache("tektite-check-icon"),
                                         Tektite.$span("")(label(key)),
                                     ],
                                     onclick: async () =>
@@ -613,7 +613,7 @@ export module Render
                 href: Domain.makePageParams("NeverStopwatch", tick),
                 children:
                 [
-                    await Resource.loadSvgOrCache("tick-icon"),
+                    await Resource.loadSvgOrCache("tektite-tick-icon"),
                     Tektite.$div("tick-elapsed-time")
                     ([
                         Tektite.$span("value monospace")(label("Elapsed time")),
@@ -703,7 +703,7 @@ export module Render
 
     export const screenHeaderStampSegment = async (item: number | null, ticks: number[]): Promise<HeaderSegmentSource> =>
     ({
-        icon: "tick-icon",
+        icon: "tektite-tick-icon",
         title: Domain.dateFullStringFromTick(item),
         menu: await Promise.all
         (
@@ -715,7 +715,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), Tektite.$span("monospace")(Domain.dateFullStringFromTick(i)), ],
+                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$span("monospace")(Domain.dateFullStringFromTick(i)), ],
                         Domain.makePageParams("NeverStopwatch", i),
                         item === i ? "current-item": undefined,
                     )
@@ -724,7 +724,7 @@ export module Render
     });
     export const screenHeaderEventSegment = async (item: Type.EventEntry | null, alarms: Type.EventEntry[]): Promise<HeaderSegmentSource> =>
     ({
-        icon: "tick-icon",
+        icon: "tektite-tick-icon",
         title: item.title,
         menu: await Promise.all
         (
@@ -736,7 +736,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), Tektite.$labelSpan(i.title), Tektite.$span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
+                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.$span("value monospace")(Domain.dateStringFromTick(i.tick)), ],
                         Domain.makePageParams("ElapsedTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -745,7 +745,7 @@ export module Render
     });
     export const screenHeaderTimezoneSegment = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<HeaderSegmentSource> =>
     ({
-        icon: "pin-icon",
+        icon: "tektite-pin-icon",
         title: item.title,
         menu: await Promise.all
         (
@@ -757,7 +757,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tick-icon"), Tektite.$labelSpan(i.title), Tektite.$span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
+                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.$span("value monospace")(Domain.timezoneOffsetString(i.offset)), ],
                         Domain.makePageParams("RainbowClock", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -774,7 +774,7 @@ export module Render
                 tektite.menu.item
                 (
                     [
-                        await Resource.loadSvgOrCache(0 === i ? zeroIcon: "flash-icon"),
+                        await Resource.loadSvgOrCache(0 === i ? zeroIcon: "tektite-flash-icon"),
                         Tektite.$labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(i)}`),
                     ],
                     async () =>
@@ -796,7 +796,7 @@ export module Render
             tektite.menu.item
             (
                 [
-                    await Resource.loadSvgOrCache("flash-icon"),
+                    await Resource.loadSvgOrCache("tektite-flash-icon"),
                     label("input a time"),
                 ],
                 async () =>
@@ -815,9 +815,9 @@ export module Render
         ]:
         []
     );
-    export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "sleep-icon", zeroLabel: Clockworks.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
+    export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "tektite-sleep-icon", zeroLabel: Clockworks.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
     ({
-        icon: 0 === flashInterval ? zeroIcon: "flash-icon",
+        icon: 0 === flashInterval ? zeroIcon: "tektite-flash-icon",
         title: 0 === flashInterval ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
         menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
     });
@@ -1319,7 +1319,7 @@ export module Render
                                 .filter((i, ix, list) => ix === list.indexOf(i)),
                             Storage.ElapsedTimer.flashInterval.get(),
                             Storage.ElapsedTimer.flashInterval.set,
-                            "flash-icon",
+                            "tektite-flash-icon",
                             "00:00:00 only"
                         )
                     ),

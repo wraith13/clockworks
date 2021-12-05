@@ -205,7 +205,7 @@ export module Screen
         ({
             tag: "div",
             className: "down-page-link icon",
-            children: await this.tektite.params.loadSvgOrCache("down-triangle-icon"),
+            children: await this.tektite.loadSvgOrCache("tektite-down-triangle-icon"),
             onclick: async () =>
             {
                 if (this.isStrictShowPrimaryPage())

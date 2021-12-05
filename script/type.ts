@@ -9,17 +9,17 @@ export module Type
     {
         "RainbowClock": <Type.ApplicationEntry>
         {
-            icon: "tick-icon",
+            icon: "tektite-tick-icon",
             title: "Rainbow Clock",
         },
         "CountdownTimer": <Type.ApplicationEntry>
         {
-            icon: "history-icon",
+            icon: "tektite-history-icon",
             title: "Countdown Timer",
         },
         "ElapsedTimer": <Type.ApplicationEntry>
         {
-            icon: "elapsed-icon",
+            icon: "tektite-elapsed-icon",
             title: "Elapsed Timer",
         },
         "NeverStopwatch": <Type.ApplicationEntry>
