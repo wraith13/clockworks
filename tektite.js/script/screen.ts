@@ -3,6 +3,7 @@ import { Tektite } from ".";
 export module Screen
 {
     const $make = minamo.dom.make;
+    export type PageSource = { body: minamo.dom.Source, footer?: minamo.dom.Source, };
     export class Screen<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -270,6 +271,23 @@ export module Screen
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();
         };
+        public page = (primary: PageSource | minamo.dom.Source, trail?: minamo.dom.Source) =>
+        [
+            Tektite.$div("primary-page")
+            (
+                undefined === (primary as PageSource).body ?
+                    primary as minamo.dom.Source:
+                    [
+                        Tektite.$div("page-body")(Tektite.$div("main-panel")((primary as PageSource).body)),
+                        undefined !== (primary as PageSource).footer ?
+                            Tektite.$div("page-footer")((primary as PageSource).footer):
+                            [],
+                    ]
+            ),
+            undefined !== trail ?
+                Tektite.$div("trail-page")(trail):
+                [],
+        ]
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Screen(tektite);
