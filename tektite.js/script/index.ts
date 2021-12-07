@@ -29,11 +29,13 @@ export module Tektite
     export const ProgressBarStyleList = Object.keys(progressBarStyleObject);
     export type HeaderSegmentSource<PageParams, IconKeyType> = Header.SegmentSource<PageParams, IconKeyType>;
     export type HeaderSource<PageParams, IconKeyType> = Header.Source<PageParams, IconKeyType>;
+    export type PrimaryPageSource = { body: minamo.dom.Source, footer?: minamo.dom.Source, };
+    export type PageSource = { primary: PrimaryPageSource | minamo.dom.Source, trail?: minamo.dom.Source, };
     export interface ScreenSource<PageParams, IconKeyType>
     {
         className?: string;
         header: HeaderSource<PageParams, IconKeyType>;
-        body: minamo.dom.Source;
+        body: PageSource | minamo.dom.Source;
     }
     export type TektiteIconKeyType = keyof typeof tektiteResource;
     export type UpdateWindowEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";

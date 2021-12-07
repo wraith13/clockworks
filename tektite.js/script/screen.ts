@@ -3,7 +3,6 @@ import { Tektite } from ".";
 export module Screen
 {
     const $make = minamo.dom.make;
-    export type PageSource = { body: minamo.dom.Source, footer?: minamo.dom.Source, };
     export class Screen<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -267,27 +266,42 @@ export module Screen
             Tektite.resetProgress();
             this.setClass(screen.className);
             this.tektite.header.replace(screen.header);
-            this.replaceBody(screen.body);
+            this.replaceBody(await this.makeBody(screen.body));
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();
         };
-        public page = (primary: PageSource | minamo.dom.Source, trail?: minamo.dom.Source) =>
+        public makeBody = async (body: Tektite.PageSource | minamo.dom.Source) =>
+            undefined === (body as Tektite.PageSource).primary ?
+                body as minamo.dom.Source:
+                await this.makePage((body as Tektite.PageSource).primary, (body as Tektite.PageSource).trail);
+        public makePage = async (primary: Tektite.PrimaryPageSource | minamo.dom.Source, trail?: minamo.dom.Source) =>
         [
             Tektite.$div("primary-page")
-            (
-                undefined === (primary as PageSource).body ?
-                    primary as minamo.dom.Source:
-                    [
-                        Tektite.$div("page-body")(Tektite.$div("main-panel")((primary as PageSource).body)),
-                        undefined !== (primary as PageSource).footer ?
-                            Tektite.$div("page-footer")((primary as PageSource).footer):
-                            [],
-                    ]
-            ),
+            ([
+                Tektite.$div("page-body")
+                (
+                    Tektite.$div("main-panel")
+                    (
+                        undefined === (primary as Tektite.PrimaryPageSource).body ?
+                            primary as minamo.dom.Source:
+                            (primary as Tektite.PrimaryPageSource).body
+                    )
+                ),
+                Tektite.$div("page-footer")
+                (
+                    undefined !== (primary as Tektite.PrimaryPageSource).footer ?
+                        (primary as Tektite.PrimaryPageSource).footer:
+                        (
+                            undefined !== trail ?
+                            await this.downPageLink():
+                            []
+                        )
+                ),
+            ]),
             undefined !== trail ?
                 Tektite.$div("trail-page")(trail):
                 [],
-        ]
+        ];
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Screen(tektite);

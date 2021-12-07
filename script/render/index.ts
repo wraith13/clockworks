@@ -927,54 +927,41 @@ export module Render
             menu: welcomeScreenMenu,
         },
         body:
-        [
-            Tektite.$div("primary-page")
-            ([
-                Tektite.$div("page-body")
+        {
+            primary:
+            [
+                Tektite.$div("logo")
                 ([
-                    Tektite.$div("main-panel")
-                    ([
-                        Tektite.$div("logo")
-                        ([
-                            Tektite.$div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
-                            Tektite.$span("logo-text")(config.applicationTitle)
-                        ]),
-                        Tektite.$div("button-list")
-                        (
-                            Type.applicationIdList.map
-                            (
-                                (i: Type.ApplicationType) =>
-                                tektite.internalLink
-                                ({
-                                    href: { application: i },
-                                    children:
-                                    {
-                                        tag: "button",
-                                        className: "default-button main-button long-button",
-                                        children: Tektite.$labelSpan(Type.applicationList[i].title),
-                                        // onclick: async () => await showNeverStopwatchScreen(),
-                                    }
-                                }),
-                            )
-                        ),
-                    ]),
+                    Tektite.$div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
+                    Tektite.$span("logo-text")(config.applicationTitle)
                 ]),
-                Tektite.$div("page-footer")
-                ([
-                    await tektite.screen.downPageLink(),
-                ]),
-            ]),
-            Tektite.$div("trail-page")
-            ([
-                Tektite.$div("description")
+                Tektite.$div("button-list")
                 (
-                    Tektite.$tag("ul")("locale-parallel-off")
-                    ([
-                        Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                    ])
+                    Type.applicationIdList.map
+                    (
+                        (i: Type.ApplicationType) =>
+                        tektite.internalLink
+                        ({
+                            href: { application: i },
+                            children:
+                            {
+                                tag: "button",
+                                className: "default-button main-button long-button",
+                                children: Tektite.$labelSpan(Type.applicationList[i].title),
+                                // onclick: async () => await showNeverStopwatchScreen(),
+                            }
+                        }),
+                    )
                 ),
-            ]),
-        ]
+            ],
+            trail: Tektite.$div("description")
+            (
+                Tektite.$tag("ul")("locale-parallel-off")
+                ([
+                    Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                ])
+            ),
+        }
     });
     export const showWelcomeScreen = async () =>
     {
