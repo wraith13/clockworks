@@ -1234,7 +1234,7 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     ticks = Storage.NeverStopwatch.Stamps.get();
-                    tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
+                    await tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
                     resizeFlexList();
                     tektite.screen.adjustPageFooterPosition();
                     await updateWindow("timer");
@@ -1498,7 +1498,7 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     events = Storage.ElapsedTimer.Events.get();
-                    tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
+                    await tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
                     resizeFlexList();
                     await updateWindow("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);

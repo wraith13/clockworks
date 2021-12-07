@@ -168,133 +168,124 @@ export module Render
         await RenderBase.githubMenuItem(),
     ];
     export const rainbowClockScreenBody = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]) =>
-    ([
-        $div("primary-page")
-        ([
-            $div("page-body")
-            ([
-                $div("main-panel")
-                ([
-                    null !== item ?
-                        $div("current-title")
-                        ([
-                            $span("value")(item.title),
-                        ]):
-                        [],
-                    $div("current-date")
+    ({
+        primary:
+        {
+            body:[
+                null !== item ?
+                    $div("current-title")
                     ([
-                        $span("value monospace")
+                        $span("value")(item.title),
+                    ]):
+                    [],
+                $div("current-date")
+                ([
+                    $span("value monospace")
+                    (
+                        Domain.dateCoreStringFromTick
                         (
-                            Domain.dateCoreStringFromTick
+                            null !== item ?
+                                Domain.getUTCTicks() -item.offset:
+                                Domain.getTicks()
+                        )
+                    ),
+                ]),
+                $div("capital-time")
+                ([
+                    $span("value monospace")
+                    (
+                        Domain.timeFullCoreStringFromTick
+                        (
+                            Domain.getTime
                             (
                                 null !== item ?
                                     Domain.getUTCTicks() -item.offset:
                                     Domain.getTicks()
                             )
-                        ),
-                    ]),
-                    $div("capital-time")
-                    ([
-                        $span("value monospace")
-                        (
-                            Domain.timeFullCoreStringFromTick
-                            (
-                                Domain.getTime
-                                (
-                                    null !== item ?
-                                        Domain.getUTCTicks() -item.offset:
-                                        Domain.getTicks()
-                                )
-                            )
-                        ),
-                    ]),
-                    null !== item ?
-                        $div("current-utc-offset")
-                        ([
-                            $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
-                        ]):
-                        [],
-                    await RenderBase.flashIntervalLabel
-                    (
-                        await RenderBase.screenHeaderFlashSegment
-                        (
-                            null,
-                            Domain.getFlashIntervalPreset(),
-                                // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
-                                // .sort(minamo.core.comparer.make([i => i]))
-                                // .filter((i, ix, list) => ix === list.indexOf(i)),
-                            Storage.RainbowClock.flashInterval.get(),
-                            Storage.RainbowClock.flashInterval.set
                         )
                     ),
                 ]),
-            ]),
-            $div("page-footer")
-            ([
                 null !== item ?
-                    $div("button-list")
+                    $div("current-utc-offset")
                     ([
-                        tektite.internalLink
-                        ({
-                            href: { application: "RainbowClock", },
-                            children:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "閉じる / Close",
-                            }
-                        }),
-                        Storage.RainbowClock.Timezone.isSaved(item) ?
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "シェア / Share",
-                                onclick: async () => await RenderBase.sharePopup(item.title),
-                            }:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "保存 / Save",
-                                onclick: async () => await Operate.save(item),
-                            }
+                        $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
                     ]):
-                    await tektite.screen.downPageLink(),
-            ]),
-        ]),
-        null !== item ?
-            []:
-            $div("trail-page")
-            ([
+                    [],
+                await RenderBase.flashIntervalLabel
+                (
+                    await RenderBase.screenHeaderFlashSegment
+                    (
+                        null,
+                        Domain.getFlashIntervalPreset(),
+                            // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
+                            // .sort(minamo.core.comparer.make([i => i]))
+                            // .filter((i, ix, list) => ix === list.indexOf(i)),
+                        Storage.RainbowClock.flashInterval.get(),
+                        Storage.RainbowClock.flashInterval.set
+                    )
+                ),
+            ],
+            footer: null !== item ?
                 $div("button-list")
                 ([
-                    {
-                        tag: "button",
-                        className: "main-button long-button",
-                        children: label("New Time zone"),
-                        onclick: async () =>
+                    tektite.internalLink
+                    ({
+                        href: { application: "RainbowClock", },
+                        children:
                         {
-                            const result = await timezonePrompt(Clockworks.localeMap("New Time zone"), Clockworks.localeMap("New Time zone"), new Date().getTimezoneOffset());
-                            if (result)
-                            {
-                                await Operate.add({ title: result.title, offset: result.offset, });
-                            }
+                            tag: "button",
+                            className: "main-button long-button",
+                            children: "閉じる / Close",
                         }
-                    },
-                ]),
-                $div("row-flex-list timezone-list")
-                (
-                    await Promise.all(timezones.map(item => timezoneItem(item)))
-                ),
-                $div("description")
-                (
-                    $tag("ul")("locale-parallel-off")
-                    ([
-                        $tag("li")("")(label("Not support daylight savings time.")),
-                        $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                    ])
-                ),
+                    }),
+                    Storage.RainbowClock.Timezone.isSaved(item) ?
+                        {
+                            tag: "button",
+                            className: "main-button long-button",
+                            children: "シェア / Share",
+                            onclick: async () => await RenderBase.sharePopup(item.title),
+                        }:
+                        {
+                            tag: "button",
+                            className: "main-button long-button",
+                            children: "保存 / Save",
+                            onclick: async () => await Operate.save(item),
+                        }
+                ]):
+                await tektite.screen.downPageLink(),
+        },
+        trail:
+        [
+            $div("button-list")
+            ([
+                {
+                    tag: "button",
+                    className: "main-button long-button",
+                    children: label("New Time zone"),
+                    onclick: async () =>
+                    {
+                        const result = await timezonePrompt(Clockworks.localeMap("New Time zone"), Clockworks.localeMap("New Time zone"), new Date().getTimezoneOffset());
+                        if (result)
+                        {
+                            await Operate.add({ title: result.title, offset: result.offset, });
+                        }
+                    }
+                },
             ]),
-    ]);
+            $div("row-flex-list timezone-list")
+            (
+                await Promise.all(timezones.map(item => timezoneItem(item)))
+            ),
+            $div("description")
+            (
+                $tag("ul")("locale-parallel-off")
+                ([
+                    $tag("li")("")(label("Not support daylight savings time.")),
+                    $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                ])
+            ),
+        ]
+    });
     export const rainbowClockScreen = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<RenderBase.ScreenSource> =>
     ({
         className: "rainbow-clock-screen",
@@ -400,7 +391,7 @@ export module Render
                     break;
                 case "operate":
                     timezones = Storage.RainbowClock.Timezone.get();
-                    tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
+                    await tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
                     RenderBase.resizeFlexList();
                     await updateWindow("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);

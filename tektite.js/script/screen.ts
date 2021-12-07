@@ -171,10 +171,10 @@ export module Screen
             document.body.classList.add("flash");
             setTimeout(() => document.body.classList.remove("flash"), 1500);
         };
-        replaceBody = (body: minamo.dom.Source) => minamo.dom.replaceChildren
+        replaceBody = async (body: Tektite.PageSource | minamo.dom.Source) => minamo.dom.replaceChildren
         (
             document.getElementById("screen-body"),
-            body
+            await this.makeBody(body)
         );
         scrollToOffset = async (target: HTMLElement, offset: number) =>
         {
@@ -266,7 +266,7 @@ export module Screen
             Tektite.resetProgress();
             this.setClass(screen.className);
             this.tektite.header.replace(screen.header);
-            this.replaceBody(await this.makeBody(screen.body));
+            await this.replaceBody(screen.body);
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();
         };

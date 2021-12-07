@@ -675,7 +675,7 @@ export module Render
                 case "operate":
                     previousPrimaryStep = 0;
                     alarms = Storage.CountdownTimer.Alarms.get();
-                    tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
+                    await tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
                     RenderBase.resizeFlexList();
                     await updateWindow("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
