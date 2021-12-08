@@ -373,103 +373,100 @@ export module Render
         await RenderBase.githubMenuItem(),
     ];
     export const countdownTimerScreenBody = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]) =>
-    ([
-        $div("primary-page")
-        ([
-            $div("page-body")
-            ([
-                $div("main-panel")
-                ([
-                    (item ?? alarms[0]) ?
-                        $div
-                        (
-                            "timer" === (item ?? alarms[0]).type ?
-                                "current-item timer-item":
-                                "current-item schedule-item"
-                        )
-                        ([
-                            (item ?? alarms[0]) ?
-                            [
-                                $div("current-title")
-                                ([
-                                    $span("value monospace")(alarmTitle(item ?? alarms[0])),
-                                ]),
-                                $div
+    ({
+        primary:
+        {
+            body:
+            [
+                (item ?? alarms[0]) ?
+                    $div
+                    (
+                        "timer" === (item ?? alarms[0]).type ?
+                            "current-item timer-item":
+                            "current-item schedule-item"
+                    )
+                    ([
+                        (item ?? alarms[0]) ?
+                        [
+                            $div("current-title")
+                            ([
+                                $span("value monospace")(alarmTitle(item ?? alarms[0])),
+                            ]),
+                            $div
+                            (
+                                "timer" === (item ?? alarms[0]).type ?
+                                    "current-due-timestamp":
+                                    "current-due-timestamp"
+                            )
+                            ([
+                                $span("value monospace")
                                 (
                                     "timer" === (item ?? alarms[0]).type ?
-                                        "current-due-timestamp":
-                                        "current-due-timestamp"
-                                )
-                                ([
-                                    $span("value monospace")
-                                    (
-                                        "timer" === (item ?? alarms[0]).type ?
-                                            Domain.dateFullStringFromTick((item ?? alarms[0]).end):
-                                            Domain.dateStringFromTick((item ?? alarms[0]).end)
-                                    ),
-                                ]),
-                            ]: [],
-                            $div("capital-interval")
-                            ([
-                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                                        Domain.dateFullStringFromTick((item ?? alarms[0]).end):
+                                        Domain.dateStringFromTick((item ?? alarms[0]).end)
+                                ),
                             ]),
-                            $div("current-timestamp")
-                            ([
-                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                            ]),
-                        ]):
-                        $div("current-item")
+                        ]: [],
+                        $div("capital-interval")
                         ([
-                            $div("capital-interval")
-                            ([
-                                $span("value monospace")(Domain.timeLongStringFromTick(0)),
-                            ]),
-                            $div("current-timestamp")
-                            ([
-                                $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                            ]),
+                            $span("value monospace")(Domain.timeLongStringFromTick(0)),
                         ]),
-                    await RenderBase.flashIntervalLabel
+                        $div("current-timestamp")
+                        ([
+                            $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                        ]),
+                    ]):
+                    $div("current-item")
+                    ([
+                        $div("capital-interval")
+                        ([
+                            $span("value monospace")(Domain.timeLongStringFromTick(0)),
+                        ]),
+                        $div("current-timestamp")
+                        ([
+                            $span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                        ]),
+                    ]),
+                await RenderBase.flashIntervalLabel
+                (
+                    await RenderBase.screenHeaderFlashSegment
                     (
-                        await RenderBase.screenHeaderFlashSegment
-                        (
-                            Storage.CountdownTimer.recentlyFlashInterval.add,
-                            Domain.getFlashIntervalPreset()
-                                .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
-                                .sort(minamo.core.comparer.make([i => i]))
-                                .filter((i, ix, list) => ix === list.indexOf(i)),
-                            Storage.CountdownTimer.flashInterval.get(),
-                            Storage.CountdownTimer.flashInterval.set,
-                            "tektite-flash-icon",
-                            "00:00:00 only"
-                        )
-                    ),
-                    $div("button-list")
-                    ({
-                        tag: "button",
-                        id: "done-button",
-                        className: "default-button main-button long-button",
-                        children: label("Done"),
-                        onclick: async () =>
+                        Storage.CountdownTimer.recentlyFlashInterval.add,
+                        Domain.getFlashIntervalPreset()
+                            .concat(Storage.CountdownTimer.recentlyFlashInterval.get())
+                            .sort(minamo.core.comparer.make([i => i]))
+                            .filter((i, ix, list) => ix === list.indexOf(i)),
+                        Storage.CountdownTimer.flashInterval.get(),
+                        Storage.CountdownTimer.flashInterval.set,
+                        "tektite-flash-icon",
+                        "00:00:00 only"
+                    )
+                ),
+                $div("button-list")
+                ({
+                    tag: "button",
+                    id: "done-button",
+                    className: "default-button main-button long-button",
+                    children: label("Done"),
+                    onclick: async () =>
+                    {
+                        const current = item ?? alarms[0];
+                        if (current)
                         {
-                            const current = item ?? alarms[0];
-                            if (current)
+                            if (Storage.CountdownTimer.Alarms.isSaved(item))
                             {
-                                if (Storage.CountdownTimer.Alarms.isSaved(item))
-                                {
-                                    await Operate.done(current);
-                                }
-                                else
-                                {
-                                    await Operate.doneTemprary(current);
-                                }
+                                await Operate.done(current);
+                            }
+                            else
+                            {
+                                await Operate.doneTemprary(current);
                             }
                         }
-                    }),
-                ]),
-            ]),
-            $div("page-footer")
-            ([
+                    }
+                }),
+            ],
+            footer:
+            [
                 null !== item ?
                     $div("button-list")
                     ([
@@ -498,12 +495,11 @@ export module Render
                             }
                     ]):
                     await tektite.screen.downPageLink(),
-            ]),
-        ]),
-        null !== item ?
-            []:
-            $div("trail-page")
-            ([
+            ],
+        },
+        trail: null !== item ?
+            undefined:
+            [
                 $div("button-list")
                 ([
                     {
@@ -550,8 +546,8 @@ export module Render
                         $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${Domain.makeTimerLabel(Domain.parseTimer(i))} ${Clockworks.localeMap("Timer")}`, }))]),
                     ])
                 ),
-            ]),
-    ]);
+            ]
+    });
     let previousPrimaryStep = 0;
     export const countdownTimerScreen = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]): Promise<RenderBase.ScreenSource> =>
     ({
