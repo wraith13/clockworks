@@ -140,6 +140,12 @@ export module Tektite
                 document.title = title;
             }
         };
+        public escape = () =>
+        {
+            const target = this.screen.getScreenCover() ?? this.header.getCloseButton();
+            target?.click();
+            return !! target;
+        }
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);

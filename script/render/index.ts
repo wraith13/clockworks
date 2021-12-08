@@ -1661,7 +1661,10 @@ export module Render
                         .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "default-button")?.[0]?.click());
                     break;
                 case "Escape":
-                    (tektite.screen.getScreenCover() ?? tektite.header.getCloseButton())?.click();
+                    if (tektite.escape())
+                    {
+                        event.preventDefault();
+                    }
                     break;
             }
             const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
