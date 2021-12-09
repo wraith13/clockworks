@@ -9,12 +9,6 @@
             "npm run-script \"build light style\"",
             "npm run-script \"build dark style\"",
             "npm run-script \"build script\""
-        ],
-        "debug":
-        [
-            "npm run-script \"debug build light style\"",
-            "npm run-script \"debug build dark style\"",
-            "npm run-script \"debug build script\""
         ]
     },
     "parameters":
@@ -23,8 +17,8 @@
         "__BUILD_TIMESTAMP__": { "call": "timestamp" },
         "__LIGHT_STYLE__": { "path": "./style/theme.light.css" },
         "__DARK_STYLE__": { "path": "./style/theme.dark.css" },
-        "__EVIL_COMMONJS__": { "path": "./nephila/evil-commonjs/index.js" },
-        "__SCRIPT__": { "path": "./script/index.js" },
+        "__EVIL_COMMONJS__": { "path": "./nephila/evil-commonjs/index.js", "replace": { "match": "sourceMappingURL=index.js.map", "text": "sourceMappingURL=nephila/evil-commonjs/index.js.map" } },
+        "__SCRIPT__": { "path": "./script/index.js", "replace": { "match": "sourceMappingURL=index.js.map", "text": "sourceMappingURL=script/index.js.map" } },
         "__IMAGES__": { "resource": "./resource/images.json" },
         "__TEKTITE_IMAGES__": { "resource": "./tektite.js/images.json", "base": "./tektite.js/" }
     }
