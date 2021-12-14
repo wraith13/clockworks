@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Tue Dec 14 2021 10:40:21 GMT+0900 (GMT+09:00)
+    build at: Tue Dec 14 2021 22:13:55 GMT+0900 (GMT+09:00)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!-- license:
@@ -12754,15 +12754,15 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             });
         }); };
         Render.neverStopwatchScreenBody = function (item, ticks) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+            var _a, _b, _c, _d;
+            var _e, _f;
             var _this = this;
-            return __generator(this, function (_m) {
-                switch (_m.label) {
+            return __generator(this, function (_g) {
+                switch (_g.label) {
                     case 0:
-                        _a = script_7.Tektite.$div("primary-page");
-                        _b = script_7.Tektite.$div("page-body");
-                        _c = script_7.Tektite.$div("main-panel");
-                        _d = [script_7.Tektite.$div("current-item")([
+                        _e = {};
+                        _f = {};
+                        _a = [script_7.Tektite.$div("current-item")([
                                 script_7.Tektite.$div("previous-timestamp")([
                                     script_7.Tektite.$span("value monospace")(null !== item ?
                                         domain_7.Domain.dateFullStringFromTick(item) :
@@ -12777,59 +12777,49 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     script_7.Tektite.$span("value monospace")(domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
                                 ]),
                             ])];
-                        _e = Render.flashIntervalLabel;
+                        _b = Render.flashIntervalLabel;
                         return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_11.Storage.NeverStopwatch.recentlyFlashInterval.add, domain_7.Domain.getFlashIntervalPreset()
                                 .concat(storage_11.Storage.NeverStopwatch.recentlyFlashInterval.get())
                                 .sort(minamo_js_15.minamo.core.comparer.make([function (i) { return i; }]))
                                 .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_11.Storage.NeverStopwatch.flashInterval.get(), storage_11.Storage.NeverStopwatch.flashInterval.set)];
-                    case 1: return [4 /*yield*/, _e.apply(void 0, [_m.sent()])];
+                    case 1: return [4 /*yield*/, _b.apply(void 0, [_g.sent()])];
                     case 2:
-                        _f = [
-                            _b.apply(void 0, [[
-                                    _c.apply(void 0, [_d.concat([
-                                            _m.sent(),
-                                            script_7.Tektite.$div("button-list")({
-                                                tag: "button",
-                                                className: "default-button main-button long-button",
-                                                children: Render.label("Stamp"),
-                                                onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                                    switch (_a.label) {
-                                                        case 0: return [4 /*yield*/, Render.Operate.NeverStopwatch.stamp(domain_7.Domain.getTicks())];
-                                                        case 1: return [2 /*return*/, _a.sent()];
-                                                    }
-                                                }); }); }
-                                            })
-                                        ])])
-                                ]])
-                        ];
-                        _g = script_7.Tektite.$div("page-footer");
+                        _f.body = _a.concat([
+                            _g.sent(),
+                            script_7.Tektite.$div("button-list")({
+                                tag: "button",
+                                className: "default-button main-button long-button",
+                                children: Render.label("Stamp"),
+                                onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, Render.Operate.NeverStopwatch.stamp(domain_7.Domain.getTicks())];
+                                        case 1: return [2 /*return*/, _a.sent()];
+                                    }
+                                }); }); }
+                            })
+                        ]);
                         return [4 /*yield*/, Render.itemFooter(item, "NeverStopwatch", function () { return "Elapsed Time / 経過時間"; }, storage_11.Storage.NeverStopwatch.Stamps.isSaved, Render.Operate.NeverStopwatch.save)];
                     case 3:
-                        _h = [
-                            _a.apply(void 0, [_f.concat([
-                                    _g.apply(void 0, [_m.sent()])
-                                ])])
-                        ];
+                        _e.primary = (_f.footer = _g.sent(),
+                            _f);
                         if (!(null !== item)) return [3 /*break*/, 4];
-                        _j = [];
+                        _c = undefined;
                         return [3 /*break*/, 6];
                     case 4:
-                        _k = script_7.Tektite.$div("trail-page");
-                        _l = script_7.Tektite.$div("row-flex-list stamp-list");
+                        _d = script_7.Tektite.$div("row-flex-list stamp-list");
                         return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                     case 5:
-                        _j = _k.apply(void 0, [[
-                                _l.apply(void 0, [_m.sent()]),
-                                script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
-                                    script_7.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                    script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                    script_7.Tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
-                                ]))
-                            ]]);
-                        _m.label = 6;
-                    case 6: return [2 /*return*/, (_h.concat([
-                            _j
-                        ]))];
+                        _c = [
+                            _d.apply(void 0, [_g.sent()]),
+                            script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
+                                script_7.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                script_7.Tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
+                            ]))
+                        ];
+                        _g.label = 6;
+                    case 6: return [2 /*return*/, (_e.trail = _c,
+                            _e)];
                 }
             });
         }); };
@@ -13042,15 +13032,15 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             });
         }); };
         Render.elapsedTimerScreenBody = function (item, events) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+            var _a, _b, _c, _d, _e;
+            var _f, _g;
             var _this = this;
-            return __generator(this, function (_o) {
-                switch (_o.label) {
+            return __generator(this, function (_h) {
+                switch (_h.label) {
                     case 0:
-                        _a = script_7.Tektite.$div("primary-page");
-                        _b = script_7.Tektite.$div("page-body");
-                        _c = script_7.Tektite.$div("main-panel");
-                        _d = [(item !== null && item !== void 0 ? item : events[0]) ?
+                        _f = {};
+                        _g = {};
+                        _a = [(item !== null && item !== void 0 ? item : events[0]) ?
                                 script_7.Tektite.$div("current-item event-item")([
                                     (item !== null && item !== void 0 ? item : events[0]) ?
                                         [
@@ -13076,34 +13066,25 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                         script_7.Tektite.$span("value monospace")(domain_7.Domain.dateStringFromTick(domain_7.Domain.getTicks())),
                                     ]),
                                 ])];
-                        _e = Render.flashIntervalLabel;
+                        _b = Render.flashIntervalLabel;
                         return [4 /*yield*/, Render.screenHeaderFlashSegment(storage_11.Storage.ElapsedTimer.recentlyFlashInterval.add, domain_7.Domain.getFlashIntervalPreset()
                                 .concat(storage_11.Storage.ElapsedTimer.recentlyFlashInterval.get())
                                 .sort(minamo_js_15.minamo.core.comparer.make([function (i) { return i; }]))
                                 .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_11.Storage.ElapsedTimer.flashInterval.get(), storage_11.Storage.ElapsedTimer.flashInterval.set, "tektite-flash-icon", "00:00:00 only")];
-                    case 1: return [4 /*yield*/, _e.apply(void 0, [_o.sent()])];
+                    case 1: return [4 /*yield*/, _b.apply(void 0, [_h.sent()])];
                     case 2:
-                        _f = [
-                            _b.apply(void 0, [[
-                                    _c.apply(void 0, [_d.concat([
-                                            _o.sent()
-                                        ])])
-                                ]])
-                        ];
-                        _g = script_7.Tektite.$div("page-footer");
+                        _g.body = _a.concat([
+                            _h.sent()
+                        ]);
                         return [4 /*yield*/, Render.itemFooter(item, "CountdownTimer", function (item) { return item.title; }, storage_11.Storage.ElapsedTimer.Events.isSaved, Render.Operate.ElapsedTimer.save)];
                     case 3:
-                        _h = [
-                            _a.apply(void 0, [_f.concat([
-                                    _g.apply(void 0, [_o.sent()])
-                                ])])
-                        ];
+                        _f.primary = (_g.footer = _h.sent(),
+                            _g);
                         if (!(null !== item)) return [3 /*break*/, 4];
-                        _j = [];
+                        _c = undefined;
                         return [3 /*break*/, 6];
                     case 4:
-                        _k = script_7.Tektite.$div("trail-page");
-                        _l = [script_7.Tektite.$div("button-list")([
+                        _d = [script_7.Tektite.$div("button-list")([
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
@@ -13133,20 +13114,19 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     }); }
                                 },
                             ])];
-                        _m = script_7.Tektite.$div("row-flex-list event-list");
+                        _e = script_7.Tektite.$div("row-flex-list event-list");
                         return [4 /*yield*/, Promise.all(events.map(function (item) { return render_8.Render.eventItem(item); }))];
                     case 5:
-                        _j = _k.apply(void 0, [_l.concat([
-                                _m.apply(void 0, [_o.sent()]),
-                                script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
-                                    script_7.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                    script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                ]))
-                            ])]);
-                        _o.label = 6;
-                    case 6: return [2 /*return*/, (_h.concat([
-                            _j
-                        ]))];
+                        _c = _d.concat([
+                            _e.apply(void 0, [_h.sent()]),
+                            script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
+                                script_7.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                            ]))
+                        ]);
+                        _h.label = 6;
+                    case 6: return [2 /*return*/, (_f.trail = _c,
+                            _f)];
                 }
             });
         }); };
@@ -13832,7 +13812,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1639446021420), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1639487635144), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

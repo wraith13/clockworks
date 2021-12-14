@@ -1038,65 +1038,61 @@ export module Render
             ]):
             await tektite.screen.downPageLink();
     export const neverStopwatchScreenBody = async (item: number | null, ticks: number[]) =>
-    ([
-        Tektite.$div("primary-page")
-        ([
-            Tektite.$div("page-body")
-            ([
-                Tektite.$div("main-panel")
+    ({
+        primary:
+        {
+            body:
+            [
+                Tektite.$div("current-item")
                 ([
-                    Tektite.$div("current-item")
+                    Tektite.$div("previous-timestamp")
                     ([
-                        Tektite.$div("previous-timestamp")
-                        ([
-                            Tektite.$span("value monospace")
-                            (
-                                null !== item ?
-                                    Domain.dateFullStringFromTick(item):
-                                    (
-                                        0 < ticks.length ?
-                                        Domain.dateFullStringFromTick(ticks[0]):
-                                        ""
-                                    )
-                            ),
-                        ]),
-                        Tektite.$div("capital-interval")
-                        ([
-                            Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                        ]),
-                        Tektite.$div("current-timestamp")
-                        ([
-                            Tektite.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
-                        ]),
-                    ]),
-                    await flashIntervalLabel
-                    (
-                        await screenHeaderFlashSegment
+                        Tektite.$span("value monospace")
                         (
-                            Storage.NeverStopwatch.recentlyFlashInterval.add,
-                            Domain.getFlashIntervalPreset()
-                                .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
-                                .sort(minamo.core.comparer.make([i => i]))
-                                .filter((i, ix, list) => ix === list.indexOf(i)),
-                            Storage.NeverStopwatch.flashInterval.get(),
-                            Storage.NeverStopwatch.flashInterval.set
-                        )
-                    ),
-                    Tektite.$div("button-list")
-                    ({
-                        tag: "button",
-                        className: "default-button main-button long-button",
-                        children: label("Stamp"),
-                        onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
-                    }),
+                            null !== item ?
+                                Domain.dateFullStringFromTick(item):
+                                (
+                                    0 < ticks.length ?
+                                    Domain.dateFullStringFromTick(ticks[0]):
+                                    ""
+                                )
+                        ),
+                    ]),
+                    Tektite.$div("capital-interval")
+                    ([
+                        Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                    ]),
+                    Tektite.$div("current-timestamp")
+                    ([
+                        Tektite.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
+                    ]),
                 ]),
-            ]),
-            Tektite.$div("page-footer")(await itemFooter(item, "NeverStopwatch", () => "Elapsed Time / 経過時間", Storage.NeverStopwatch.Stamps.isSaved, Operate.NeverStopwatch.save)),
-        ]),
-        null !== item ?
-            []:
-            Tektite.$div("trail-page")
-            ([
+                await flashIntervalLabel
+                (
+                    await screenHeaderFlashSegment
+                    (
+                        Storage.NeverStopwatch.recentlyFlashInterval.add,
+                        Domain.getFlashIntervalPreset()
+                            .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
+                            .sort(minamo.core.comparer.make([i => i]))
+                            .filter((i, ix, list) => ix === list.indexOf(i)),
+                        Storage.NeverStopwatch.flashInterval.get(),
+                        Storage.NeverStopwatch.flashInterval.set
+                    )
+                ),
+                Tektite.$div("button-list")
+                ({
+                    tag: "button",
+                    className: "default-button main-button long-button",
+                    children: label("Stamp"),
+                    onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
+                }),
+            ],
+            footer: await itemFooter(item, "NeverStopwatch", () => "Elapsed Time / 経過時間", Storage.NeverStopwatch.Stamps.isSaved, Operate.NeverStopwatch.save),
+        },
+        trail: null !== item ?
+            undefined:
+            [
                 Tektite.$div("row-flex-list stamp-list")
                 (
                     await Promise.all
@@ -1120,8 +1116,8 @@ export module Render
                         Tektite.$tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Clockworks.localeMap("Stamp"), }, ]),
                     ])
                 ),
-            ]),
-    ]);
+            ]
+    });
     export const neverStopwatchScreen = async (item: number | null, ticks: number[]): Promise<ScreenSource> =>
     ({
         className: "never-stopwatch-screen",
@@ -1253,70 +1249,66 @@ export module Render
         await githubMenuItem(),
     ];
     export const elapsedTimerScreenBody = async (item: Type.EventEntry | null, events: Type.EventEntry[]) =>
-    ([
-        Tektite.$div("primary-page")
-        ([
-            Tektite.$div("page-body")
-            ([
-                Tektite.$div("main-panel")
-                ([
-                    (item ?? events[0]) ?
-                    Tektite.$div("current-item event-item")
+    ({
+        primary:
+        {
+            body:
+            [
+                (item ?? events[0]) ?
+                Tektite.$div("current-item event-item")
+                    ([
+                        (item ?? events[0]) ?
+                        [
+                            Tektite.$div("current-title")
+                            ([
+                                Tektite.$span("value monospace")((item ?? events[0]).title),
+                            ]),
+                            Tektite.$div("current-due-timestamp")
+                            ([
+                                Tektite.$span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
+                            ]),
+                        ]: [],
+                        Tektite.$div("capital-interval")
                         ([
-                            (item ?? events[0]) ?
-                            [
-                                Tektite.$div("current-title")
-                                ([
-                                    Tektite.$span("value monospace")((item ?? events[0]).title),
-                                ]),
-                                Tektite.$div("current-due-timestamp")
-                                ([
-                                    Tektite.$span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
-                                ]),
-                            ]: [],
-                            Tektite.$div("capital-interval")
-                            ([
-                                Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                            ]),
-                            Tektite.$div("current-timestamp")
-                            ([
-                                Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                            ]),
-                        ]):
-                        Tektite.$div("current-item")
-                        ([
-                            Tektite.$div("capital-interval")
-                            ([
-                                Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                            ]),
-                            Tektite.$div("current-timestamp")
-                            ([
-                                Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                            ]),
+                            Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
                         ]),
-                    await flashIntervalLabel
+                        Tektite.$div("current-timestamp")
+                        ([
+                            Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                        ]),
+                    ]):
+                    Tektite.$div("current-item")
+                    ([
+                        Tektite.$div("capital-interval")
+                        ([
+                            Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
+                        ]),
+                        Tektite.$div("current-timestamp")
+                        ([
+                            Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
+                        ]),
+                    ]),
+                await flashIntervalLabel
+                (
+                    await screenHeaderFlashSegment
                     (
-                        await screenHeaderFlashSegment
-                        (
-                            Storage.ElapsedTimer.recentlyFlashInterval.add,
-                            Domain.getFlashIntervalPreset()
-                                .concat(Storage.ElapsedTimer.recentlyFlashInterval.get())
-                                .sort(minamo.core.comparer.make([i => i]))
-                                .filter((i, ix, list) => ix === list.indexOf(i)),
-                            Storage.ElapsedTimer.flashInterval.get(),
-                            Storage.ElapsedTimer.flashInterval.set,
-                            "tektite-flash-icon",
-                            "00:00:00 only"
-                        )
-                    ),
-                ]),
-            ]),
-            Tektite.$div("page-footer")(await itemFooter(item, "CountdownTimer", item => item.title, Storage.ElapsedTimer.Events.isSaved, Operate.ElapsedTimer.save)),
-        ]),
-        null !== item ?
-            []:
-            Tektite.$div("trail-page")
-            ([
+                        Storage.ElapsedTimer.recentlyFlashInterval.add,
+                        Domain.getFlashIntervalPreset()
+                            .concat(Storage.ElapsedTimer.recentlyFlashInterval.get())
+                            .sort(minamo.core.comparer.make([i => i]))
+                            .filter((i, ix, list) => ix === list.indexOf(i)),
+                        Storage.ElapsedTimer.flashInterval.get(),
+                        Storage.ElapsedTimer.flashInterval.set,
+                        "tektite-flash-icon",
+                        "00:00:00 only"
+                    )
+                ),
+            ],
+            footer: await itemFooter(item, "CountdownTimer", item => item.title, Storage.ElapsedTimer.Events.isSaved, Operate.ElapsedTimer.save),
+        },
+        trail: null !== item ?
+            undefined:
+            [
                 Tektite.$div("button-list")
                 ([
                     {
@@ -1356,8 +1348,8 @@ export module Render
                         Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                     ])
                 ),
-            ]),
-    ]);
+            ],
+    });
     export const elapsedTimerScreen = async (item: Type.EventEntry | null, events: Type.EventEntry[]): Promise<ScreenSource> =>
     ({
         className: "elapsed-timer-screen",
