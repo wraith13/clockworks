@@ -1008,6 +1008,35 @@ export module Render
             children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
         }),
     });
+    export const itemFooter = async <T>(item: T, application: Type.ApplicationType, getShareTitle: (item: T) => string, isSaved: (item: T) => boolean, save: (item: T) => Promise<unknown>) =>
+        null !== item ?
+            Tektite.$div("button-list")
+            ([
+                tektite.internalLink
+                ({
+                    href: { application, },
+                    children:
+                    {
+                        tag: "button",
+                        className: "main-button long-button",
+                        children: "閉じる / Close",
+                    }
+                }),
+                isSaved(item) ?
+                    {
+                        tag: "button",
+                        className: "main-button long-button",
+                        children: "シェア / Share",
+                        onclick: async () => await sharePopup(getShareTitle(item)),
+                    }:
+                    {
+                        tag: "button",
+                        className: "main-button long-button",
+                        children: "保存 / Save",
+                        onclick: async () => await save(item),
+                    }
+            ]):
+            await tektite.screen.downPageLink();
     export const neverStopwatchScreenBody = async (item: number | null, ticks: number[]) =>
     ([
         Tektite.$div("primary-page")
@@ -1062,37 +1091,7 @@ export module Render
                     }),
                 ]),
             ]),
-            Tektite.$div("page-footer")
-            ([
-                null !== item ?
-                Tektite.$div("button-list")
-                    ([
-                        tektite.internalLink
-                        ({
-                            href: { application: "NeverStopwatch", },
-                            children:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "閉じる / Close",
-                            }
-                        }),
-                        Storage.NeverStopwatch.Stamps.isSaved(item) ?
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "シェア / Share",
-                                onclick: async () => await sharePopup("Elapsed Time / 経過時間"),
-                            }:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "保存 / Save",
-                                onclick: async () => await Operate.NeverStopwatch.save(item),
-                            }
-                    ]):
-                    await tektite.screen.downPageLink(),
-            ]),
+            Tektite.$div("page-footer")(await itemFooter(item, "NeverStopwatch", () => "Elapsed Time / 経過時間", Storage.NeverStopwatch.Stamps.isSaved, Operate.NeverStopwatch.save)),
         ]),
         null !== item ?
             []:
@@ -1312,37 +1311,7 @@ export module Render
                     ),
                 ]),
             ]),
-            Tektite.$div("page-footer")
-            ([
-                null !== item ?
-                    Tektite.$div("button-list")
-                    ([
-                        tektite.internalLink
-                        ({
-                            href: { application: "CountdownTimer", },
-                            children:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "閉じる / Close",
-                            }
-                        }),
-                        Storage.ElapsedTimer.Events.isSaved(item) ?
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "シェア / Share",
-                                onclick: async () => await sharePopup(item.title),
-                            }:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "保存 / Save",
-                                onclick: async () => await Operate.ElapsedTimer.save(item),
-                            }
-                    ]):
-                    await tektite.screen.downPageLink(),
-            ]),
+            Tektite.$div("page-footer")(await itemFooter(item, "CountdownTimer", item => item.title, Storage.ElapsedTimer.Events.isSaved, Operate.ElapsedTimer.save)),
         ]),
         null !== item ?
             []:

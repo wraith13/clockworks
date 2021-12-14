@@ -225,34 +225,14 @@ export module Render
                     )
                 ),
             ],
-            footer: null !== item ?
-                $div("button-list")
-                ([
-                    tektite.internalLink
-                    ({
-                        href: { application: "RainbowClock", },
-                        children:
-                        {
-                            tag: "button",
-                            className: "main-button long-button",
-                            children: "閉じる / Close",
-                        }
-                    }),
-                    Storage.RainbowClock.Timezone.isSaved(item) ?
-                        {
-                            tag: "button",
-                            className: "main-button long-button",
-                            children: "シェア / Share",
-                            onclick: async () => await RenderBase.sharePopup(item.title),
-                        }:
-                        {
-                            tag: "button",
-                            className: "main-button long-button",
-                            children: "保存 / Save",
-                            onclick: async () => await Operate.save(item),
-                        }
-                ]):
-                await tektite.screen.downPageLink(),
+            footer: await RenderBase.itemFooter
+            (
+                item,
+                "RainbowClock",
+                item => item.title,
+                Storage.RainbowClock.Timezone.isSaved,
+                Operate.save
+            ),
         },
         trail:
         [

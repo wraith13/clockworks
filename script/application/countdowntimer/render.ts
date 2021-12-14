@@ -465,37 +465,14 @@ export module Render
                     }
                 }),
             ],
-            footer:
-            [
-                null !== item ?
-                    $div("button-list")
-                    ([
-                        tektite.internalLink
-                        ({
-                            href: { application: "CountdownTimer", },
-                            children:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "閉じる / Close",
-                            }
-                        }),
-                        Storage.CountdownTimer.Alarms.isSaved(item) ?
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "シェア / Share",
-                                onclick: async () => await RenderBase.sharePopup(alarmTitle(item)),
-                            }:
-                            {
-                                tag: "button",
-                                className: "main-button long-button",
-                                children: "保存 / Save",
-                                onclick: async () => await Operate.save(item),
-                            }
-                    ]):
-                    await tektite.screen.downPageLink(),
-            ],
+            footer: await RenderBase.itemFooter
+            (
+                item,
+                "CountdownTimer",
+                alarmTitle,
+                Storage.CountdownTimer.Alarms.isSaved,
+                Operate.save
+            )
         },
         trail: null !== item ?
             undefined:
