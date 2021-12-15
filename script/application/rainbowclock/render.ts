@@ -22,6 +22,8 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
+    export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
+        RenderBase.monospace(classNameOrValue, labelOrValue, valueOrNothing);
     export const timezoneItem = async (item: Type.TimezoneEntry) => $div("timezone-item flex-item")
     ([
         $div("item-header")
@@ -33,7 +35,7 @@ export module Render
                 children:
                 [
                     await Resource.loadSvgOrCache("tektite-pin-icon"),
-                    $div("tick-elapsed-time")([$span("value monospace")(item.title),]),
+                    monospace("tick-elapsed-time", item.title),
                 ]
             }),
             $div("item-operator")
@@ -45,18 +47,9 @@ export module Render
         ([
             $div("item-panel-body")
             ([
-                $div("item-utc-offset")
-                ([
-                    $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
-                ]),
-                $div("item-date")
-                ([
-                    $span("value monospace")(Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
-                ]),
-                $div("item-time")
-                ([
-                    $span("value monospace")(Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
-                ]),
+                monospace("item-utc-offset", Domain.timezoneOffsetString(item.offset)),
+                monospace("item-date", Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
+                monospace("item-time", Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
             ]),
             $div("item-time-bar")([]),
         ])
@@ -178,38 +171,31 @@ export module Render
                         $span("value")(item.title),
                     ]):
                     [],
-                $div("current-date")
-                ([
-                    $span("value monospace")
+                monospace
+                (
+                    "current-date",
+                    Domain.dateCoreStringFromTick
                     (
-                        Domain.dateCoreStringFromTick
+                        null !== item ?
+                            Domain.getUTCTicks() -item.offset:
+                            Domain.getTicks()
+                    )
+                ),
+                monospace
+                (
+                    "capital-time",
+                    Domain.timeFullCoreStringFromTick
+                    (
+                        Domain.getTime
                         (
                             null !== item ?
                                 Domain.getUTCTicks() -item.offset:
                                 Domain.getTicks()
                         )
-                    ),
-                ]),
-                $div("capital-time")
-                ([
-                    $span("value monospace")
-                    (
-                        Domain.timeFullCoreStringFromTick
-                        (
-                            Domain.getTime
-                            (
-                                null !== item ?
-                                    Domain.getUTCTicks() -item.offset:
-                                    Domain.getTicks()
-                            )
-                        )
-                    ),
-                ]),
+                    )
+                ),
                 null !== item ?
-                    $div("current-utc-offset")
-                    ([
-                        $span("value monospace")(Domain.timezoneOffsetString(item.offset)),
-                    ]):
+                    monospace("current-utc-offset", Domain.timezoneOffsetString(item.offset)):
                     [],
                 await RenderBase.flashIntervalLabel
                 (
