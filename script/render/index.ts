@@ -603,6 +603,11 @@ export module Render
             });
         }
     );
+    export const monospace = (data: { className: string, label?: minamo.dom.Source, value: minamo.dom.Source }) => Tektite.$div(data.className)
+    ([
+        data.label ?? [],
+        Tektite.$span("value monospace")(data.value),
+    ]);
     export const stampItem = async (tick: number, interval: number | null) => Tektite.$div("stamp-item flex-item")
     ([
         Tektite.$div("item-header")
@@ -614,10 +619,7 @@ export module Render
                 children:
                 [
                     await Resource.loadSvgOrCache("tektite-tick-icon"),
-                    Tektite.$div("tick-elapsed-time")
-                    ([
-                        Tektite.$span("value monospace")(label("Elapsed time")),
-                    ]),
+                    monospace({ className: "tick-elapsed-time", value: label("Elapsed time"), }),
                 ]
             }),
             Tektite.$div("item-operator")
@@ -627,16 +629,18 @@ export module Render
         ]),
         Tektite.$div("item-information")
         ([
-            Tektite.$div("tick-timestamp")
-            ([
-                label("Timestamp"),
-                Tektite.$span("value monospace")(Domain.dateFullStringFromTick(tick)),
-            ]),
-            Tektite.$div("tick-interval")
-            ([
-                label("Interval"),
-                Tektite.$span("value monospace")(Domain.timeLongStringFromTick(interval)),
-            ]),
+            monospace
+            ({
+                className: "tick-timestamp",
+                label: label("Timestamp"),
+                value: Domain.dateFullStringFromTick(tick),
+            }),
+            monospace
+            ({
+                className: "tick-interval",
+                label: label("Interval"),
+                value: Domain.timeLongStringFromTick(interval),
+            }),
         ]),
     ]);
     export const stampItemMenu = async (tick: number) =>
@@ -1045,27 +1049,19 @@ export module Render
             [
                 Tektite.$div("current-item")
                 ([
-                    Tektite.$div("previous-timestamp")
-                    ([
-                        Tektite.$span("value monospace")
-                        (
-                            null !== item ?
-                                Domain.dateFullStringFromTick(item):
-                                (
-                                    0 < ticks.length ?
-                                    Domain.dateFullStringFromTick(ticks[0]):
-                                    ""
-                                )
-                        ),
-                    ]),
-                    Tektite.$div("capital-interval")
-                    ([
-                        Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                    ]),
-                    Tektite.$div("current-timestamp")
-                    ([
-                        Tektite.$span("value monospace")(Domain.dateFullStringFromTick(Domain.getTicks())),
-                    ]),
+                    monospace
+                    ({
+                        className: "previous-timestamp",
+                        value: null !== item ?
+                            Domain.dateFullStringFromTick(item):
+                            (
+                                0 < ticks.length ?
+                                Domain.dateFullStringFromTick(ticks[0]):
+                                ""
+                            )
+                    }),
+                    monospace({ className: "capital-interval", value: Domain.timeLongStringFromTick(0), }),
+                    monospace({ className: "current-timestamp", value: Domain.dateFullStringFromTick(Domain.getTicks()), }),
                 ]),
                 await flashIntervalLabel
                 (
@@ -1259,34 +1255,16 @@ export module Render
                     ([
                         (item ?? events[0]) ?
                         [
-                            Tektite.$div("current-title")
-                            ([
-                                Tektite.$span("value monospace")((item ?? events[0]).title),
-                            ]),
-                            Tektite.$div("current-due-timestamp")
-                            ([
-                                Tektite.$span("value monospace")(Domain.dateStringFromTick((item ?? events[0]).tick)),
-                            ]),
+                            monospace({ className: "current-title", value: (item ?? events[0]).title, }),
+                            monospace({ className: "current-due-timestamp", value: Domain.dateStringFromTick((item ?? events[0]).tick), }),
                         ]: [],
-                        Tektite.$div("capital-interval")
-                        ([
-                            Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                        ]),
-                        Tektite.$div("current-timestamp")
-                        ([
-                            Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                        ]),
+                        monospace({ className: "capital-interval", value: Domain.timeLongStringFromTick(0), }),
+                        monospace({ className: "current-timestamp", value: Domain.dateStringFromTick(Domain.getTicks()), }),
                     ]):
                     Tektite.$div("current-item")
                     ([
-                        Tektite.$div("capital-interval")
-                        ([
-                            Tektite.$span("value monospace")(Domain.timeLongStringFromTick(0)),
-                        ]),
-                        Tektite.$div("current-timestamp")
-                        ([
-                            Tektite.$span("value monospace")(Domain.dateStringFromTick(Domain.getTicks())),
-                        ]),
+                        monospace({ className: "capital-interval", value: Domain.timeLongStringFromTick(0), }),
+                        monospace({ className: "current-timestamp", value: Domain.dateStringFromTick(Domain.getTicks()), }),
                     ]),
                 await flashIntervalLabel
                 (
