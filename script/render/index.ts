@@ -10,6 +10,7 @@ import { Resource } from "./resource";
 import { Operate as RenderOperate } from "./operate";
 import { Render as RainbowClockRender } from "../application/rainbowclock/render";
 import { Render as CountdownTimerRender } from "../application/countdowntimer/render";
+import { Render as NeverStopwatchRender } from "../application/neverstopwatch/render";
 import config from "../../resource/config.json";
 export module Render
 {
@@ -611,67 +612,6 @@ export module Render
             undefined !== valueOrNothing ? labelOrValue: [],
             Tektite.$span("value monospace")(valueOrNothing ?? labelOrValue),
         ]);
-    export const stampItem = async (tick: number, interval: number | null) => Tektite.$div("stamp-item flex-item")
-    ([
-        Tektite.$div("item-header")
-        ([
-            tektite.internalLink
-            ({
-                className: "item-title",
-                href: Domain.makePageParams("NeverStopwatch", tick),
-                children:
-                [
-                    await Resource.loadSvgOrCache("tektite-tick-icon"),
-                    monospace("tick-elapsed-time", label("Elapsed time")),
-                ]
-            }),
-            Tektite.$div("item-operator")
-            ([
-                await tektite.menu.button(await stampItemMenu(tick)),
-            ]),
-        ]),
-        Tektite.$div("item-information")
-        ([
-            monospace("tick-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(tick)),
-            monospace("tick-interval", label("Interval"), Domain.timeLongStringFromTick(interval)),
-        ]),
-    ]);
-    export const stampItemMenu = async (tick: number) =>
-    [
-        tektite.menu.item
-        (
-            label("Edit"),
-            async () =>
-            {
-                const result = Domain.parseDate(await dateTimePrompt(Clockworks.localeMap("Edit"), tick));
-                if (null !== result)
-                {
-                    const newTick = Domain.getTicks(result);
-                    if (tick !== Domain.getTicks(result))
-                    {
-                        if (0 <= newTick && newTick <= Domain.getTicks())
-                        {
-                            await Operate.NeverStopwatch.edit(tick, newTick);
-                        }
-                        else
-                        {
-                            tektite.toast.make
-                            ({
-                                content: label("A date and time outside the valid range was specified."),
-                                isWideContent: true,
-                            });
-                        }
-                    }
-                }
-            }
-        ),
-        tektite.menu.item
-        (
-            label("Remove"),
-            async () => await Operate.NeverStopwatch.removeStamp(tick),
-            "delete-button"
-        )
-    ];
     export type HeaderSegmentSource = Tektite.HeaderSegmentSource<Type.PageParams, Resource.KeyType>;
     export type ScreenSource = Tektite.ScreenSource<Type.PageParams, Resource.KeyType>;
     export const screenHeaderHomeSegment = async (): Promise<HeaderSegmentSource> =>
@@ -695,28 +635,6 @@ export module Render
                     applicationType === i ? "current-item": undefined,
                 )
             )
-        )
-    });
-
-    export const screenHeaderStampSegment = async (item: number | null, ticks: number[]): Promise<HeaderSegmentSource> =>
-    ({
-        icon: "tektite-tick-icon",
-        title: Domain.dateFullStringFromTick(item),
-        menu: await Promise.all
-        (
-            ticks
-                .concat([item])
-                .sort(minamo.core.comparer.make([i => -i]))
-                .filter((i, ix, list) => ix === list.indexOf(i))
-                .map
-                (
-                    async i => tektite.menu.linkItem
-                    (
-                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$span("monospace")(Domain.dateFullStringFromTick(i)), ],
-                        Domain.makePageParams("NeverStopwatch", i),
-                        item === i ? "current-item": undefined,
-                    )
-                )
         )
     });
     export const screenHeaderEventSegment = async (item: Type.EventEntry | null, alarms: Type.EventEntry[]): Promise<HeaderSegmentSource> =>
@@ -981,15 +899,6 @@ export module Render
         await showWindow(await welcomeScreen(), updateWindow);
         await updateWindow("timer");
     };
-    export const neverStopwatchScreenMenu = async () =>
-    [
-        await fullscreenMenuItem(),
-        await themeMenuItem(),
-        await progressBarStyleMenuItem(),
-        await languageMenuItem(),
-        await resetNeverStopwatchMenuItem(),
-        await githubMenuItem(),
-    ];
     export const flashIntervalLabel = async (entry: HeaderSegmentSource) =>
     ({
         tag: "div",
@@ -1034,199 +943,6 @@ export module Render
                     }
             ]):
             await tektite.screen.downPageLink();
-    export const neverStopwatchScreenBody = async (item: number | null, ticks: number[]) =>
-    ({
-        primary:
-        {
-            body:
-            [
-                Tektite.$div("current-item")
-                ([
-                    monospace
-                    (   "previous-timestamp",
-                        null !== item ?
-                            Domain.dateFullStringFromTick(item):
-                            (
-                                0 < ticks.length ?
-                                Domain.dateFullStringFromTick(ticks[0]):
-                                ""
-                            )
-                    ),
-                    monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                    monospace("current-timestamp", Domain.dateFullStringFromTick(Domain.getTicks())),
-                ]),
-                await flashIntervalLabel
-                (
-                    await screenHeaderFlashSegment
-                    (
-                        Storage.NeverStopwatch.recentlyFlashInterval.add,
-                        Domain.getFlashIntervalPreset()
-                            .concat(Storage.NeverStopwatch.recentlyFlashInterval.get())
-                            .sort(minamo.core.comparer.make([i => i]))
-                            .filter((i, ix, list) => ix === list.indexOf(i)),
-                        Storage.NeverStopwatch.flashInterval.get(),
-                        Storage.NeverStopwatch.flashInterval.set
-                    )
-                ),
-                Tektite.$div("button-list")
-                ({
-                    tag: "button",
-                    className: "default-button main-button long-button",
-                    children: label("Stamp"),
-                    onclick: async () => await Operate.NeverStopwatch.stamp(Domain.getTicks())
-                }),
-            ],
-            footer: await itemFooter(item, "NeverStopwatch", () => "Elapsed Time / 経過時間", Storage.NeverStopwatch.Stamps.isSaved, Operate.NeverStopwatch.save),
-        },
-        trail: null !== item ?
-            undefined:
-            [
-                Tektite.$div("row-flex-list stamp-list")
-                (
-                    await Promise.all
-                    (
-                        ticks.map
-                        (
-                            (tick, index) => stampItem
-                            (
-                                tick,
-                                "number" === typeof ticks[index +1] ? tick -ticks[index +1]: null
-                            )
-                        )
-                    )
-                ),
-                Tektite.$div("description")
-                (
-                    Tektite.$tag("ul")("locale-parallel-off")
-                    ([
-                        Tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                        Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                        Tektite.$tag("li")("")([label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeStampUrl("new"), children: Clockworks.localeMap("Stamp"), }, ]),
-                    ])
-                ),
-            ]
-    });
-    export const neverStopwatchScreen = async (item: number | null, ticks: number[]): Promise<ScreenSource> =>
-    ({
-        className: "never-stopwatch-screen",
-        header: null === item ?
-        {
-            items:
-            [
-                await screenHeaderHomeSegment(),
-                await screenHeaderApplicationSegment("NeverStopwatch"),
-                // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
-            ],
-            menu: neverStopwatchScreenMenu,
-            parent: { },
-        }:
-        {
-            items:
-            [
-                await screenHeaderHomeSegment(),
-                await screenHeaderApplicationSegment("NeverStopwatch"),
-                // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
-                await screenHeaderStampSegment(item, ticks),
-            ],
-            menu: Storage.NeverStopwatch.Stamps.isSaved(item) ? () => stampItemMenu(item): undefined,
-            parent: { application: "NeverStopwatch" },
-        },
-        body: await neverStopwatchScreenBody(item, ticks)
-    });
-    let previousPrimaryStep = 0;
-    export const showNeverStopwatchScreen = async (item: number | null) =>
-    {
-        const applicationTitle = Type.applicationList["NeverStopwatch"].title;
-        document.body.classList.add("hide-scroll-bar");
-        let ticks = Storage.NeverStopwatch.Stamps.get();
-        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
-        {
-            const screen = document.getElementById("screen") as HTMLDivElement;
-            const now = new Date();
-            const tick = Domain.getTicks(now);
-            const current = item ?? ticks[0] ?? null;
-            const flashInterval = Storage.NeverStopwatch.flashInterval.get();
-            switch(event)
-            {
-                case "high-resolution-timer":
-                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(tick -(current ?? tick));
-                    const capitalTime = Domain.dateStringFromTick(tick);
-                    const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
-                    minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
-                    if (0 < flashInterval && null !== current)
-                    {
-                        const elapsed = Domain.getTicks() -current;
-                        const unit = flashInterval; // *60 *1000;
-                        const primaryStep = Math.floor(elapsed / unit);
-                        if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
-                        {
-                            tektite.screen.flash();
-                        }
-                        const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        Tektite.setBackgroundColor(currentColor);
-                        previousPrimaryStep = primaryStep;
-                        const rate = ((Domain.getTicks() -current) %unit) /unit;
-                        const nextColor = Color.getSolidRainbowColor(primaryStep +1);
-                        setProgress(rate, nextColor);
-                        // setBodyColor(nextColor);
-                        tektite.header.getElement().classList.add("with-screen-prgress");
-                    }
-                    else
-                    {
-                        previousPrimaryStep = 0;
-                        setProgress(null);
-                        tektite.header.getElement().classList.remove("with-screen-prgress");
-                        const currentColor = Color.getSolidRainbowColor(0);
-                        Tektite.setBackgroundColor(currentColor);
-                        // setBodyColor(currentColor);
-                    }
-                    break;
-                case "timer":
-                    tektite.setTitle(Domain.timeShortStringFromTick(tick -(current ?? tick)) +" - " +applicationTitle);
-                    const stampListDiv = minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
-                    if (stampListDiv)
-                    {
-                        minamo.dom.getChildNodes<HTMLDivElement>(stampListDiv)
-                        .forEach
-                        (
-                            (dom, index) =>
-                            {
-                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
-                            }
-                        );
-                    }
-                    if (0 < flashInterval && 0 < ticks.length)
-                    {
-                        const elapsed = Domain.getTicks() -current;
-                        const unit = flashInterval; // *60 *1000;
-                        const primaryStep = Math.floor(elapsed / unit);
-                        const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        const nextColor = Color.getSolidRainbowColor(primaryStep +1);
-                        const rate = ((Domain.getTicks() -current) %unit) /unit;
-                        Tektite.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
-                    }
-                    else
-                    {
-                        const currentColor = Color.getSolidRainbowColor(0);
-                        Tektite.setBodyColor(currentColor);
-                    }
-                    break;
-                case "storage":
-                    await reload();
-                    break;
-                case "operate":
-                    previousPrimaryStep = 0;
-                    ticks = Storage.NeverStopwatch.Stamps.get();
-                    await tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
-                    resizeFlexList();
-                    tektite.screen.adjustPageFooterPosition();
-                    await updateWindow("timer");
-                    break;
-            }
-        };
-        await showWindow(await neverStopwatchScreen(item, ticks), updateWindow);
-        await updateWindow("timer");
-    };
     export const elapsedTimerScreenMenu = async () =>
     [
         await fullscreenMenuItem(),
@@ -1345,6 +1061,7 @@ export module Render
         },
         body: await elapsedTimerScreenBody(item, events)
     });
+    let previousPrimaryStep = 0;
     export const showElapsedTimerScreen = async (item: Type.EventEntry | null) =>
     {
         const applicationTitle = Type.applicationList["ElapsedTimer"].title;
@@ -1725,7 +1442,7 @@ export module Render
             },
             "NeverStopwatch":
             {
-                show: async item => Render.showNeverStopwatchScreen(item),
+                show: async item => await NeverStopwatchRender.showNeverStopwatchScreen(item),
                 parseItem: json => Domain.parseStamp(json),
             },
         }[applicationType] ??
