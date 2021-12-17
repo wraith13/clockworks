@@ -24,6 +24,27 @@ export module Render
     ]);
     export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
         RenderBase.monospace(classNameOrValue, labelOrValue, valueOrNothing);
+    export const screenHeaderTimezoneSegment = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
+    ({
+        icon: "tektite-pin-icon",
+        title: item.title,
+        menu: await Promise.all
+        (
+            timezones
+                .concat([item])
+                .sort(minamo.core.comparer.make([i => i.offset]))
+                .filter((i, ix, list) => ix === list.map(a => JSON.stringify(a)).indexOf(JSON.stringify(i)))
+                .map
+                (
+                    async i => tektite.menu.linkItem
+                    (
+                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), monospace(Domain.timezoneOffsetString(i.offset)), ],
+                        Domain.makePageParams("RainbowClock", i),
+                        JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
+                    )
+                )
+        )
+    });
     export const timezoneItem = async (item: Type.TimezoneEntry) => $div("timezone-item flex-item")
     ([
         $div("item-header")
@@ -270,7 +291,7 @@ export module Render
             [
                 await RenderBase.screenHeaderHomeSegment(),
                 await RenderBase.screenHeaderApplicationSegment("RainbowClock"),
-                await RenderBase.screenHeaderTimezoneSegment(item, timezones),
+                await screenHeaderTimezoneSegment(item, timezones),
             ],
             menu: Storage.RainbowClock.Timezone.isSaved(item) ? () => timezoneItemMenu(item): undefined,
             parent: { application: "RainbowClock" },
