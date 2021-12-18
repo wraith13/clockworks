@@ -55,53 +55,18 @@ export module Render
     // };
     // export const customPrompt = async (message?: string, _default?: string): Promise<string | null> =>
     // {
-    //     const input = $make(HTMLInputElement)
+    //     const input = Tektite.$make(HTMLInputElement)
     //     ({
     //         tag: "input",
     //         type: "text",
     //         value: _default,
     //     });
-    //     return await new Promise
-    //     (
-    //         resolve =>
-    //         {
-    //             let result: string | null = null;
-    //             const ui = popup
-    //             ({
-    //                 children:
-    //                 [
-    //                     $tag("h2")("")(message ?? locale.map("please input")),
-    //                     input,
-    //                     $div("popup-operator")
-    //                     ([
-    //                         {
-    //                             tag: "button",
-    //                             className: "cancel-button",
-    //                             children: locale.map("Cancel"),
-    //                             onclick: () =>
-    //                             {
-    //                                 result = null;
-    //                                 ui.close();
-    //                             },
-    //                         },
-    //                         {
-    //                             tag: "button",
-    //                             className: "default-button",
-    //                             children: locale.map("OK"),
-    //                             onclick: () =>
-    //                             {
-    //                                 result = input.value;
-    //                                 ui.close();
-    //                             },
-    //                         },
-    //                     ]),
-    //                 ],
-    //                 onClose: async () => resolve(result),
-    //             });
-    //             input.setSelectionRange(0, _default?.length ?? 0);
-    //             input.focus();
-    //         }
-    //     );
+    //     return prompt
+    //     ({
+    //         title: message ?? Clockworks.localeMap("please input"),
+    //         content: input,
+    //         onCommit: () => input.value,
+    //     });
     // };
     // // export const prompt = systemPrompt;
     // export const prompt = customPrompt;
@@ -165,33 +130,6 @@ export module Render
         children: label("Close"),
         onclick,
     }]);
-    export const dateTimePrompt = async (message: string, _default: number): Promise<string | null> =>
-    {
-        const inputDate = Tektite.$make(HTMLInputElement)
-        ({
-            tag: "input",
-            type: "date",
-            value: Domain.dateCoreStringFromTick(_default),
-            required: "",
-        });
-        const inputTime = Tektite.$make(HTMLInputElement)
-        ({
-            tag: "input",
-            type: "time",
-            value: Domain.timeFullCoreStringFromTick(Domain.getTime(_default)),
-            required: "",
-        });
-        return prompt
-        ({
-            title: message,
-            content:
-            [
-                inputDate,
-                inputTime,
-            ],
-            onCommit: () => `${inputDate.value}T${inputTime.value}`,
-        });
-    };
     export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
     {
         const init = settings.theme ?? "auto";
@@ -447,47 +385,14 @@ export module Render
             value: Domain.timeLongCoreStringFromTick(tick),
             required: "",
         });
-        return await new Promise
-        (
-            resolve =>
-            {
-                let result: number | null = null;
-                const ui = tektite.screen.popup
-                ({
-                    children:
-                    [
-                        Tektite.$tag("h2")("")(message),
-                        inputTime,
-                        Tektite.$div("popup-operator")
-                        ([
-                            {
-                                tag: "button",
-                                className: "cancel-button",
-                                children: Clockworks.localeMap("Cancel"),
-                                onclick: () =>
-                                {
-                                    result = null;
-                                    ui.close();
-                                },
-                            },
-                            {
-                                tag: "button",
-                                className: "default-button",
-                                children: Clockworks.localeMap("OK"),
-                                onclick: () =>
-                                {
-                                    result = Domain.parseTime(inputTime.value) ?? tick;
-                                    ui.close();
-                                },
-                            },
-                        ])
-                    ],
-                    onClose: async () => resolve(result),
-                });
-            }
-        );
+        return await prompt
+        ({
+            title: message,
+            content: inputTime,
+            onCommit: () => Domain.parseTime(inputTime.value) ?? tick,
+        });
     };
-    export const dateIimePrompt = async (message: string, tick: number): Promise<number | null> =>
+    export const dateTimeTickPrompt = async (message: string, tick: number): Promise<number | null> =>
     {
         const inputDate = Tektite.$make(HTMLInputElement)
         ({
@@ -503,46 +408,16 @@ export module Render
             value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
             required: "",
         });
-        return await new Promise
-        (
-            resolve =>
-            {
-                let result: number | null = null;
-                const ui = tektite.screen.popup
-                ({
-                    children:
-                    [
-                        Tektite.$tag("h2")("")(message),
-                        inputDate,
-                        inputTime,
-                        Tektite.$div("popup-operator")
-                        ([
-                            {
-                                tag: "button",
-                                className: "cancel-button",
-                                children: Clockworks.localeMap("Cancel"),
-                                onclick: () =>
-                                {
-                                    result = null;
-                                    ui.close();
-                                },
-                            },
-                            {
-                                tag: "button",
-                                className: "default-button",
-                                children: Clockworks.localeMap("OK"),
-                                onclick: () =>
-                                {
-                                    result = Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick;
-                                    ui.close();
-                                },
-                            },
-                        ])
-                    ],
-                    onClose: async () => resolve(result),
-                });
-            }
-        );
+        return await prompt
+        ({
+            title: message,
+            content:
+            [
+                inputDate,
+                inputTime,
+            ],
+            onCommit: () => Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
+        });
     };
     export const sharePopup = async (title: string, url: string = location.href) => await new Promise<void>
     (

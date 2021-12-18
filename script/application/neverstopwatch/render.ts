@@ -77,24 +77,20 @@ export module Render
             label("Edit"),
             async () =>
             {
-                const result = Domain.parseDate(await RenderBase.dateTimePrompt(Clockworks.localeMap("Edit"), tick));
-                if (null !== result)
+                const newTick = await RenderBase.dateTimeTickPrompt(Clockworks.localeMap("Edit"), tick);
+                if (null !== newTick && tick !== newTick)
                 {
-                    const newTick = Domain.getTicks(result);
-                    if (tick !== Domain.getTicks(result))
+                    if (0 <= newTick && newTick <= Domain.getTicks())
                     {
-                        if (0 <= newTick && newTick <= Domain.getTicks())
-                        {
-                            await Operate.edit(tick, newTick);
-                        }
-                        else
-                        {
-                            tektite.toast.make
-                            ({
-                                content: label("A date and time outside the valid range was specified."),
-                                isWideContent: true,
-                            });
-                        }
+                        await Operate.edit(tick, newTick);
+                    }
+                    else
+                    {
+                        tektite.toast.make
+                        ({
+                            content: label("A date and time outside the valid range was specified."),
+                            isWideContent: true,
+                        });
                     }
                 }
             }

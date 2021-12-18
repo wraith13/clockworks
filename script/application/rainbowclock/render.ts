@@ -102,50 +102,20 @@ export module Render
                     })
                 )
         });
-        return await new Promise
-        (
-            resolve =>
-            {
-                let result: { title: string, offset: number } | null = null;
-                const ui = tektite.screen.popup
-                ({
-                    children:
-                    [
-                        $tag("h2")("")(message),
-                        inputTitle,
-                        selectOffset,
-                        $div("popup-operator")
-                        ([
-                            {
-                                tag: "button",
-                                className: "cancel-button",
-                                children: Clockworks.localeMap("Cancel"),
-                                onclick: () =>
-                                {
-                                    result = null;
-                                    ui.close();
-                                },
-                            },
-                            {
-                                tag: "button",
-                                className: "default-button",
-                                children: Clockworks.localeMap("OK"),
-                                onclick: () =>
-                                {
-                                    result =
-                                    {
-                                        title: inputTitle.value,
-                                        offset: Number.parseInt(selectOffset.value),
-                                    };
-                                    ui.close();
-                                },
-                            },
-                        ])
-                    ],
-                    onClose: async () => resolve(result),
-                });
-            }
-        );
+        return await RenderBase.prompt
+        ({
+            title: message,
+            content:
+            [
+                inputTitle,
+                selectOffset,
+            ],
+            onCommit: () =>
+            ({
+                title: inputTitle.value,
+                offset: Number.parseInt(selectOffset.value),
+            }),
+        });
     };
     export const timezoneItemMenu = async (item: Type.TimezoneEntry): Promise<minamo.dom.Source> =>
     [

@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Sat Dec 18 2021 15:28:54 GMT+0900 (GMT+09:00)
+    build at: Sun Dec 19 2021 04:23:22 GMT+0900 (GMT+09:00)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!-- license:
@@ -10178,7 +10178,6 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
         }); };
         Render.timezonePrompt = function (message, title, offset) { return __awaiter(_this, void 0, void 0, function () {
             var inputTitle, selectOffset;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -10203,42 +10202,18 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                 });
                             })
                         });
-                        return [4 /*yield*/, new Promise(function (resolve) {
-                                var result = null;
-                                var ui = __7.tektite.screen.popup({
-                                    children: [
-                                        Render.$tag("h2")("")(message),
-                                        inputTitle,
-                                        selectOffset,
-                                        Render.$div("popup-operator")([
-                                            {
-                                                tag: "button",
-                                                className: "cancel-button",
-                                                children: __7.Clockworks.localeMap("Cancel"),
-                                                onclick: function () {
-                                                    result = null;
-                                                    ui.close();
-                                                },
-                                            },
-                                            {
-                                                tag: "button",
-                                                className: "default-button",
-                                                children: __7.Clockworks.localeMap("OK"),
-                                                onclick: function () {
-                                                    result =
-                                                        {
-                                                            title: inputTitle.value,
-                                                            offset: Number.parseInt(selectOffset.value),
-                                                        };
-                                                    ui.close();
-                                                },
-                                            },
-                                        ])
-                                    ],
-                                    onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                        return [2 /*return*/, resolve(result)];
-                                    }); }); },
-                                });
+                        return [4 /*yield*/, render_5.Render.prompt({
+                                title: message,
+                                content: [
+                                    inputTitle,
+                                    selectOffset,
+                                ],
+                                onCommit: function () {
+                                    return ({
+                                        title: inputTitle.value,
+                                        offset: Number.parseInt(selectOffset.value),
+                                    });
+                                },
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -10687,11 +10662,10 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                     var result;
                                     return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, render_6.Render.dateIimePrompt(__8.Clockworks.localeMap("Edit start time"), item.start)];
+                                            case 0: return [4 /*yield*/, render_6.Render.dateTimeTickPrompt(__8.Clockworks.localeMap("Edit start time"), item.start)];
                                             case 1:
                                                 result = _a.sent();
-                                                if (!(null !== result)) return [3 /*break*/, 4];
-                                                if (!(item.start !== result)) return [3 /*break*/, 4];
+                                                if (!(null !== result && item.start !== result)) return [3 /*break*/, 4];
                                                 if (!(result < domain_6.Domain.getTicks())) return [3 /*break*/, 3];
                                                 return [4 /*yield*/, operate_6.Operate.edit(item, item.title, result, item.end)];
                                             case 2:
@@ -10914,7 +10888,6 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
         }); };
         Render.eventPrompt = function (message, title, tick) { return __awaiter(_this, void 0, void 0, function () {
             var inputTitle, inputDate, inputTime;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -10935,44 +10908,20 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                             value: domain_6.Domain.timeShortCoreStringFromTick(domain_6.Domain.getTime(tick)),
                             required: "",
                         });
-                        return [4 /*yield*/, new Promise(function (resolve) {
-                                var result = null;
-                                var ui = __8.tektite.screen.popup({
-                                    children: [
-                                        Render.$tag("h2")("")(message),
-                                        inputTitle,
-                                        inputDate,
-                                        inputTime,
-                                        Render.$div("popup-operator")([
-                                            {
-                                                tag: "button",
-                                                className: "cancel-button",
-                                                children: __8.Clockworks.localeMap("Cancel"),
-                                                onclick: function () {
-                                                    result = null;
-                                                    ui.close();
-                                                },
-                                            },
-                                            {
-                                                tag: "button",
-                                                className: "default-button",
-                                                children: __8.Clockworks.localeMap("OK"),
-                                                onclick: function () {
-                                                    var _a, _b;
-                                                    result =
-                                                        {
-                                                            title: inputTitle.value,
-                                                            tick: (_b = (_a = domain_6.Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick,
-                                                        };
-                                                    ui.close();
-                                                },
-                                            },
-                                        ])
-                                    ],
-                                    onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                        return [2 /*return*/, resolve(result)];
-                                    }); }); },
-                                });
+                        return [4 /*yield*/, render_6.Render.prompt({
+                                title: message,
+                                content: [
+                                    inputTitle,
+                                    inputDate,
+                                    inputTime,
+                                ],
+                                onCommit: function () {
+                                    var _a, _b;
+                                    return ({
+                                        title: inputTitle.value,
+                                        tick: (_b = (_a = domain_6.Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick,
+                                    });
+                                },
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -11426,28 +11375,24 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
             return __generator(this, function (_a) {
                 return [2 /*return*/, [
                         __9.tektite.menu.item(Render.label("Edit"), function () { return __awaiter(_this, void 0, void 0, function () {
-                            var result, _a, _b, newTick;
-                            return __generator(this, function (_c) {
-                                switch (_c.label) {
-                                    case 0:
-                                        _b = (_a = domain_7.Domain).parseDate;
-                                        return [4 /*yield*/, render_7.Render.dateTimePrompt(__9.Clockworks.localeMap("Edit"), tick)];
+                            var newTick;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, render_7.Render.dateTimeTickPrompt(__9.Clockworks.localeMap("Edit"), tick)];
                                     case 1:
-                                        result = _b.apply(_a, [_c.sent()]);
-                                        if (!(null !== result)) return [3 /*break*/, 4];
-                                        newTick = domain_7.Domain.getTicks(result);
-                                        if (!(tick !== domain_7.Domain.getTicks(result))) return [3 /*break*/, 4];
+                                        newTick = _a.sent();
+                                        if (!(null !== newTick && tick !== newTick)) return [3 /*break*/, 4];
                                         if (!(0 <= newTick && newTick <= domain_7.Domain.getTicks())) return [3 /*break*/, 3];
                                         return [4 /*yield*/, operate_7.Operate.edit(tick, newTick)];
                                     case 2:
-                                        _c.sent();
+                                        _a.sent();
                                         return [3 /*break*/, 4];
                                     case 3:
                                         __9.tektite.toast.make({
                                             content: Render.label("A date and time outside the valid range was specified."),
                                             isWideContent: true,
                                         });
-                                        _c.label = 4;
+                                        _a.label = 4;
                                     case 4: return [2 /*return*/];
                                 }
                             });
@@ -12130,53 +12075,18 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         // };
         // export const customPrompt = async (message?: string, _default?: string): Promise<string | null> =>
         // {
-        //     const input = $make(HTMLInputElement)
+        //     const input = Tektite.$make(HTMLInputElement)
         //     ({
         //         tag: "input",
         //         type: "text",
         //         value: _default,
         //     });
-        //     return await new Promise
-        //     (
-        //         resolve =>
-        //         {
-        //             let result: string | null = null;
-        //             const ui = popup
-        //             ({
-        //                 children:
-        //                 [
-        //                     $tag("h2")("")(message ?? locale.map("please input")),
-        //                     input,
-        //                     $div("popup-operator")
-        //                     ([
-        //                         {
-        //                             tag: "button",
-        //                             className: "cancel-button",
-        //                             children: locale.map("Cancel"),
-        //                             onclick: () =>
-        //                             {
-        //                                 result = null;
-        //                                 ui.close();
-        //                             },
-        //                         },
-        //                         {
-        //                             tag: "button",
-        //                             className: "default-button",
-        //                             children: locale.map("OK"),
-        //                             onclick: () =>
-        //                             {
-        //                                 result = input.value;
-        //                                 ui.close();
-        //                             },
-        //                         },
-        //                     ]),
-        //                 ],
-        //                 onClose: async () => resolve(result),
-        //             });
-        //             input.setSelectionRange(0, _default?.length ?? 0);
-        //             input.focus();
-        //         }
-        //     );
+        //     return prompt
+        //     ({
+        //         title: message ?? Clockworks.localeMap("please input"),
+        //         content: input,
+        //         onCommit: () => input.value,
+        //     });
         // };
         // // export const prompt = systemPrompt;
         // export const prompt = customPrompt;
@@ -12245,31 +12155,6 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 children: Render.label("Close"),
                 onclick: onclick,
             }]); };
-        Render.dateTimePrompt = function (message, _default) { return __awaiter(_this, void 0, void 0, function () {
-            var inputDate, inputTime;
-            return __generator(this, function (_a) {
-                inputDate = script_9.Tektite.$make(HTMLInputElement)({
-                    tag: "input",
-                    type: "date",
-                    value: domain_9.Domain.dateCoreStringFromTick(_default),
-                    required: "",
-                });
-                inputTime = script_9.Tektite.$make(HTMLInputElement)({
-                    tag: "input",
-                    type: "time",
-                    value: domain_9.Domain.timeFullCoreStringFromTick(domain_9.Domain.getTime(_default)),
-                    required: "",
-                });
-                return [2 /*return*/, Render.prompt({
-                        title: message,
-                        content: [
-                            inputDate,
-                            inputTime,
-                        ],
-                        onCommit: function () { return inputDate.value + "T" + inputTime.value; },
-                    })];
-            });
-        }); };
         Render.themeSettingsPopup = function (settings) {
             if (settings === void 0) { settings = storage_13.Storage.Settings.get(); }
             return __awaiter(_this, void 0, void 0, function () {
@@ -12668,7 +12553,6 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             if (tick === void 0) { tick = 0; }
             return __awaiter(_this, void 0, void 0, function () {
                 var inputTime;
-                var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -12678,47 +12562,18 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                 value: domain_9.Domain.timeLongCoreStringFromTick(tick),
                                 required: "",
                             });
-                            return [4 /*yield*/, new Promise(function (resolve) {
-                                    var result = null;
-                                    var ui = __11.tektite.screen.popup({
-                                        children: [
-                                            script_9.Tektite.$tag("h2")("")(message),
-                                            inputTime,
-                                            script_9.Tektite.$div("popup-operator")([
-                                                {
-                                                    tag: "button",
-                                                    className: "cancel-button",
-                                                    children: __11.Clockworks.localeMap("Cancel"),
-                                                    onclick: function () {
-                                                        result = null;
-                                                        ui.close();
-                                                    },
-                                                },
-                                                {
-                                                    tag: "button",
-                                                    className: "default-button",
-                                                    children: __11.Clockworks.localeMap("OK"),
-                                                    onclick: function () {
-                                                        var _a;
-                                                        result = (_a = domain_9.Domain.parseTime(inputTime.value)) !== null && _a !== void 0 ? _a : tick;
-                                                        ui.close();
-                                                    },
-                                                },
-                                            ])
-                                        ],
-                                        onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            return [2 /*return*/, resolve(result)];
-                                        }); }); },
-                                    });
+                            return [4 /*yield*/, Render.prompt({
+                                    title: message,
+                                    content: inputTime,
+                                    onCommit: function () { var _a; return (_a = domain_9.Domain.parseTime(inputTime.value)) !== null && _a !== void 0 ? _a : tick; },
                                 })];
                         case 1: return [2 /*return*/, _a.sent()];
                     }
                 });
             });
         };
-        Render.dateIimePrompt = function (message, tick) { return __awaiter(_this, void 0, void 0, function () {
+        Render.dateTimeTickPrompt = function (message, tick) { return __awaiter(_this, void 0, void 0, function () {
             var inputDate, inputTime;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -12734,39 +12589,13 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                             value: domain_9.Domain.timeShortCoreStringFromTick(domain_9.Domain.getTime(tick)),
                             required: "",
                         });
-                        return [4 /*yield*/, new Promise(function (resolve) {
-                                var result = null;
-                                var ui = __11.tektite.screen.popup({
-                                    children: [
-                                        script_9.Tektite.$tag("h2")("")(message),
-                                        inputDate,
-                                        inputTime,
-                                        script_9.Tektite.$div("popup-operator")([
-                                            {
-                                                tag: "button",
-                                                className: "cancel-button",
-                                                children: __11.Clockworks.localeMap("Cancel"),
-                                                onclick: function () {
-                                                    result = null;
-                                                    ui.close();
-                                                },
-                                            },
-                                            {
-                                                tag: "button",
-                                                className: "default-button",
-                                                children: __11.Clockworks.localeMap("OK"),
-                                                onclick: function () {
-                                                    var _a, _b;
-                                                    result = (_b = (_a = domain_9.Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick;
-                                                    ui.close();
-                                                },
-                                            },
-                                        ])
-                                    ],
-                                    onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                        return [2 /*return*/, resolve(result)];
-                                    }); }); },
-                                });
+                        return [4 /*yield*/, Render.prompt({
+                                title: message,
+                                content: [
+                                    inputDate,
+                                    inputTime,
+                                ],
+                                onCommit: function () { var _a, _b; return (_b = (_a = domain_9.Domain.parseDate(inputDate.value + "T" + inputTime.value)) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick; },
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -13807,7 +13636,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1639808934513), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1639855402458), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

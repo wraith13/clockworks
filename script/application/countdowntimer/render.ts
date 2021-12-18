@@ -108,23 +108,20 @@ export module Render
                     label("Edit start time"),
                     async () =>
                     {
-                        const result = await RenderBase.dateIimePrompt(Clockworks.localeMap("Edit start time"), item.start);
-                        if (null !== result)
+                        const result = await RenderBase.dateTimeTickPrompt(Clockworks.localeMap("Edit start time"), item.start);
+                        if (null !== result && item.start !== result)
                         {
-                            if (item.start !== result)
+                            if (result < Domain.getTicks())
                             {
-                                if (result < Domain.getTicks())
-                                {
-                                    await Operate.edit(item, item.title, result, item.end);
-                                }
-                                else
-                                {
-                                    tektite.toast.make
-                                    ({
-                                        content: label("A date and time outside the valid range was specified."),
-                                        isWideContent: true,
-                                    });
-                                }
+                                await Operate.edit(item, item.title, result, item.end);
+                            }
+                            else
+                            {
+                                tektite.toast.make
+                                ({
+                                    content: label("A date and time outside the valid range was specified."),
+                                    isWideContent: true,
+                                });
                             }
                         }
                     }
@@ -303,51 +300,21 @@ export module Render
             value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
             required: "",
         });
-        return await new Promise
-        (
-            resolve =>
-            {
-                let result: Type.EventEntry | null = null;
-                const ui = tektite.screen.popup
-                ({
-                    children:
-                    [
-                        $tag("h2")("")(message),
-                        inputTitle,
-                        inputDate,
-                        inputTime,
-                        $div("popup-operator")
-                        ([
-                            {
-                                tag: "button",
-                                className: "cancel-button",
-                                children: Clockworks.localeMap("Cancel"),
-                                onclick: () =>
-                                {
-                                    result = null;
-                                    ui.close();
-                                },
-                            },
-                            {
-                                tag: "button",
-                                className: "default-button",
-                                children: Clockworks.localeMap("OK"),
-                                onclick: () =>
-                                {
-                                    result =
-                                    {
-                                        title: inputTitle.value,
-                                        tick: Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
-                                    };
-                                    ui.close();
-                                },
-                            },
-                        ])
-                    ],
-                    onClose: async () => resolve(result),
-                });
-            }
-        );
+        return await RenderBase.prompt
+        ({
+            title: message,
+            content:
+            [
+                inputTitle,
+                inputDate,
+                inputTime,
+            ],
+            onCommit: () =>
+            ({
+                title: inputTitle.value,
+                tick: Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
+            }),
+        });
     };
     export const countdownTimerScreenMenu = async () =>
     [
