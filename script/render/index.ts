@@ -110,6 +110,61 @@ export module Render
 
     export const systemConfirm = (message: string) => window.confirm(message);
     // export const confirm = systemConfirm;
+    export const prompt = async <ResultType>
+    (
+        data:
+        {
+            title?: string,
+            content: minamo.dom.Source,
+            onCommit: () => (ResultType | Promise<ResultType>),
+            onCancel?: () => (ResultType | Promise<ResultType>),
+        }
+    ) => await new Promise<ResultType>
+    (
+        resolve =>
+        {
+            let result: ResultType | null = null;
+            const ui = tektite.screen.popup
+            ({
+                children:
+                [
+                    undefined !== data.title ? Tektite.$tag("h2")("")(data.title): [],
+                    data.content,
+                    Tektite.$div("popup-operator")
+                    ([
+                        {
+                            tag: "button",
+                            className: "cancel-button",
+                            children: Clockworks.localeMap("Cancel"),
+                            onclick: async () =>
+                            {
+                                result = (await data.onCancel?.()) ?? null;
+                                ui.close();
+                            },
+                        },
+                        {
+                            tag: "button",
+                            className: "default-button",
+                            children: Clockworks.localeMap("OK"),
+                            onclick: async () =>
+                            {
+                                result = await data.onCommit();
+                                ui.close();
+                            },
+                        },
+                    ])
+                ],
+                onClose: async () => resolve(result),
+            });
+        }
+    );
+    export const popupCloseOperator = (onclick?: () => unknown) => Tektite.$div("popup-operator")
+    ([{
+        tag: "button",
+        className: "default-button",
+        children: label("Close"),
+        onclick,
+    }]);
     export const dateTimePrompt = async (message: string, _default: number): Promise<string | null> =>
     {
         const inputDate = Tektite.$make(HTMLInputElement)
@@ -126,46 +181,16 @@ export module Render
             value: Domain.timeFullCoreStringFromTick(Domain.getTime(_default)),
             required: "",
         });
-        return await new Promise
-        (
-            resolve =>
-            {
-                let result: string | null = null;
-                const ui = tektite.screen.popup
-                ({
-                    children:
-                    [
-                        Tektite.$tag("h2")("")(message),
-                        inputDate,
-                        inputTime,
-                        Tektite.$div("popup-operator")
-                        ([
-                            {
-                                tag: "button",
-                                className: "cancel-button",
-                                children: Clockworks.localeMap("Cancel"),
-                                onclick: () =>
-                                {
-                                    result = null;
-                                    ui.close();
-                                },
-                            },
-                            {
-                                tag: "button",
-                                className: "default-button",
-                                children: Clockworks.localeMap("OK"),
-                                onclick: () =>
-                                {
-                                    result = `${inputDate.value}T${inputTime.value}`;
-                                    ui.close();
-                                },
-                            },
-                        ])
-                    ],
-                    onClose: async () => resolve(result),
-                });
-            }
-        );
+        return prompt
+        ({
+            title: message,
+            content:
+            [
+                inputDate,
+                inputTime,
+            ],
+            onCommit: () => `${inputDate.value}T${inputTime.value}`,
+        });
     };
     export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
     {
@@ -217,16 +242,7 @@ export module Render
                     [
                         Tektite.$tag("h2")("")(label("Theme setting")),
                         checkButtonList,
-                        Tektite.$div("popup-operator")
-                        ([{
-                            tag: "button",
-                            className: "default-button",
-                            children: label("Close"),
-                            onclick: () =>
-                            {
-                                ui.close();
-                            },
-                        }])
+                        popupCloseOperator(() => ui.close()),
                     ],
                     onClose: async () => resolve(result),
                 });
@@ -283,16 +299,7 @@ export module Render
                     [
                         Tektite.$tag("h2")("")(label("Progress Bar Style setting")),
                         checkButtonList,
-                        Tektite.$div("popup-operator")
-                        ([{
-                            tag: "button",
-                            className: "default-button",
-                            children: label("Close"),
-                            onclick: () =>
-                            {
-                                ui.close();
-                            },
-                        }])
+                        popupCloseOperator(() => ui.close()),
                     ],
                     onClose: async () =>
                     {
@@ -369,16 +376,7 @@ export module Render
                     [
                         Tektite.$tag("h2")("")(label("Language setting")),
                         checkButtonList,
-                        Tektite.$div("popup-operator")
-                        ([{
-                            tag: "button",
-                            className: "default-button",
-                            children: label("Close"),
-                            onclick: () =>
-                            {
-                                ui.close();
-                            },
-                        }])
+                        popupCloseOperator(() => ui.close()),
                     ],
                     onClose: async () => resolve(result),
                 });
@@ -433,16 +431,7 @@ export module Render
                     [
                         Tektite.$tag("h2")("")(label("Color setting")),
                         checkButtonList,
-                        Tektite.$div("popup-operator")
-                        ([{
-                            tag: "button",
-                            className: "default-button",
-                            children: label("Close"),
-                            onclick: () =>
-                            {
-                                ui.close();
-                            },
-                        }])
+                        popupCloseOperator(() => ui.close()),
                     ],
                     onClose: async () => resolve(result),
                 });
@@ -588,18 +577,7 @@ export module Render
                             }
                         }
                     ]),
-                    Tektite.$div("popup-operator")
-                    ([
-                        {
-                            tag: "button",
-                            className: "default-button",
-                            children: label("Close"),
-                            onclick: () =>
-                            {
-                                ui.close();
-                            },
-                        }
-                    ])
+                    popupCloseOperator(() => ui.close()),
                 ],
                 onClose: async () => resolve(),
             });
