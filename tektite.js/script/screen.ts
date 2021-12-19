@@ -3,6 +3,19 @@ import { Tektite } from ".";
 export module Screen
 {
     const $make = minamo.dom.make;
+    export interface PopupInstance<ResultType>
+    {
+        set: (result: ResultType) => PopupInstance<ResultType>;
+        close: () => PopupInstance<ResultType>;
+        getDom: () => HTMLDivElement;
+    }
+    export interface PopupArguments<ResultType>
+    {
+        initialValue?: ResultType;
+        className?: string;
+        children: minamo.dom.Source;
+        onClose?: () => Promise<unknown>;
+    }
     export class Screen<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -114,54 +127,114 @@ export module Screen
         public getScreenCoverList = () => minamo.dom.getDivsByClassName(document, "screen-cover");
         public getScreenCover = () => this.getScreenCoverList().filter((_i, ix, list) => (ix +1) === list.length)[0];
         public hasScreenCover = () => 0 < this.getScreenCoverList().length;
-        public popup =
+        // public popup =
+        // (
+        //     data:
+        //     {
+        //         className?: string,
+        //         children: minamo.dom.Source,
+        //         onClose?: () => Promise<unknown>
+        //     }
+        // ) =>
+        // {
+        //     const dom = $make(HTMLDivElement)
+        //     ({
+        //         tag: "div",
+        //         className: `popup locale-parallel-off ${data.className ?? ""}`,
+        //         children: data.children,
+        //         onclick: async (event: MouseEvent) =>
+        //         {
+        //             console.log("popup.click!");
+        //             event.stopPropagation();
+        //             //getScreenCoverList.forEach(i => i.click());
+        //         },
+        //     });
+        //     const close = async () =>
+        //     {
+        //         await data.onClose?.();
+        //         screenCover.close();
+        //     };
+        //     // minamo.dom.appendChildren(document.body, dom);
+        //     const screenCover = this.cover
+        //     ({
+        //         children:
+        //         [
+        //             dom,
+        //             { tag: "div", }, // レイアウト調整用のダミー要素 ( この調整がないとポップアップが小さく且つ入力要素がある場合に iPad でキーボードの下に dom が隠れてしまう。 )
+        //         ],
+        //         onclick: async () =>
+        //         {
+        //             await data.onClose?.();
+        //             //minamo.dom.remove(dom);
+        //         },
+        //     });
+        //     const result =
+        //     {
+        //         dom,
+        //         close,
+        //     };
+        //     return result;
+        // };
+        public popup = async <ResultType>(builder: PopupArguments<ResultType> | ((instance: PopupInstance<ResultType>) => Promise<PopupArguments<ResultType>>)) => await new Promise<ResultType>
         (
-            data:
+            async resolve =>
             {
-                className?: string,
-                children: minamo.dom.Source,
-                onClose?: () => Promise<unknown>
-            }
-        ) =>
-        {
-            const dom = $make(HTMLDivElement)
-            ({
-                tag: "div",
-                className: `popup locale-parallel-off ${data.className ?? ""}`,
-                children: data.children,
-                onclick: async (event: MouseEvent) =>
+                const instance =
                 {
-                    console.log("popup.click!");
-                    event.stopPropagation();
-                    //getScreenCoverList.forEach(i => i.click());
-                },
-            });
-            const close = async () =>
-            {
-                await data.onClose?.();
-                screenCover.close();
-            };
-            // minamo.dom.appendChildren(document.body, dom);
-            const screenCover = this.cover
-            ({
-                children:
-                [
-                    dom,
-                    { tag: "div", }, // レイアウト調整用のダミー要素 ( この調整がないとポップアップが小さく且つ入力要素がある場合に iPad でキーボードの下に dom が隠れてしまう。 )
-                ],
-                onclick: async () =>
+                    set: (value: ResultType) =>
+                    {
+                        result = value;
+                        return instance;
+                    },
+                    close: () =>
+                    {
+                        ui.close();
+                        return instance;
+                    },
+                    getDom: () => ui.dom,
+                };
+                const data = "function" === typeof builder ? await builder(instance): builder;
+                let result: ResultType | null = data.initialValue ?? null;
+                const dom = $make(HTMLDivElement)
+                ({
+                    tag: "div",
+                    className: `popup locale-parallel-off ${data.className ?? ""}`,
+                    children: data.children,
+                    onclick: async (event: MouseEvent) =>
+                    {
+                        console.log("popup.click!");
+                        event.stopPropagation();
+                        //getScreenCoverList.forEach(i => i.click());
+                    },
+                });
+                const close = async () =>
                 {
                     await data.onClose?.();
-                    //minamo.dom.remove(dom);
-                },
-            });
-            const result =
-            {
-                dom,
-                close,
-            };
-            return result;
-        };
+                    resolve(result);
+                    screenCover.close();
+                };
+                // minamo.dom.appendChildren(document.body, dom);
+                const screenCover = this.cover
+                ({
+                    children:
+                    [
+                        dom,
+                        { tag: "div", }, // レイアウト調整用のダミー要素 ( この調整がないとポップアップが小さく且つ入力要素がある場合に iPad でキーボードの下に dom が隠れてしまう。 )
+                    ],
+                    onclick: async () =>
+                    {
+                        await data.onClose?.();
+                        resolve(result);
+                        //minamo.dom.remove(dom);
+                    },
+                });
+                const ui =
+                {
+                    dom,
+                    close,
+                };
+            }
+        );
         lastMouseDownTarget: EventTarget = null;
         public onMouseDown = (event: MouseEvent) => this.lastMouseDownTarget = event.target;
         public onMouseUp = (_evnet: MouseEvent) => setTimeout(this.clearLastMouseDownTarget, 10);

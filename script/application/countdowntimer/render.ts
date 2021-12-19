@@ -196,12 +196,10 @@ export module Render
         )
     ];
     export const newTimerPopup = async (): Promise<boolean> =>
-    {
-        return await new Promise
+        await tektite.screen.popup<boolean>
         (
-            async resolve =>
+            async instance =>
             {
-                let result = false;
                 const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
                 const timerPreset = Domain.getTimerPreset()
                     .concat(Storage.CountdownTimer.recentlyTimer.get())
@@ -227,8 +225,7 @@ export module Render
                                     onclick: async () =>
                                     {
                                         await Operate.newTimer(i);
-                                        result = true;
-                                        ui.close();
+                                        instance.set(true).close();
                                     }
                                 })
                             )
@@ -236,12 +233,12 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = tektite.screen.popup
-                ({
+                return {
+                    initialValue: false,
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        $tag("h2")("")(label("New Timer")),
+                        RenderBase.popupTitle(label("New Timer")),
                         checkButtonList,
                         $div("popup-operator")
                         ([
@@ -257,27 +254,16 @@ export module Render
                                         const minutes = tick /(60 *1000);
                                         Storage.CountdownTimer.recentlyTimer.add(minutes);
                                         await Operate.newTimer(minutes);
-                                        result = true;
-                                        ui.close();
+                                        instance.set(true).close();
                                     }
                                 }
                             },
-                            {
-                                tag: "button",
-                                className: "default-button",
-                                children: label("Close"),
-                                onclick: () =>
-                                {
-                                    ui.close();
-                                },
-                            }
+                            RenderBase.closeButton(() => instance.close()),
                         ])
                     ],
-                    onClose: async () => resolve(result),
-                });
+                };
             }
         );
-    };
     export const eventPrompt = async (message: string, title: string, tick: number): Promise<Type.EventEntry | null> =>
     {
         const inputTitle = $make(HTMLInputElement)

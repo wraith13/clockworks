@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Sun Dec 19 2021 04:23:22 GMT+0900 (GMT+09:00)
+    build at: Mon Dec 20 2021 02:20:29 GMT+0900 (GMT+09:00)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!-- license:
@@ -6750,56 +6750,142 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                 this.getScreenCoverList = function () { return minamo_js_1.minamo.dom.getDivsByClassName(document, "screen-cover"); };
                 this.getScreenCover = function () { return _this.getScreenCoverList().filter(function (_i, ix, list) { return (ix + 1) === list.length; })[0]; };
                 this.hasScreenCover = function () { return 0 < _this.getScreenCoverList().length; };
-                this.popup = function (data) {
-                    var _a;
-                    var dom = $make(HTMLDivElement)({
-                        tag: "div",
-                        className: "popup locale-parallel-off " + ((_a = data.className) !== null && _a !== void 0 ? _a : ""),
-                        children: data.children,
-                        onclick: function (event) { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                console.log("popup.click!");
-                                event.stopPropagation();
-                                return [2 /*return*/];
-                            });
-                        }); },
+                // public popup =
+                // (
+                //     data:
+                //     {
+                //         className?: string,
+                //         children: minamo.dom.Source,
+                //         onClose?: () => Promise<unknown>
+                //     }
+                // ) =>
+                // {
+                //     const dom = $make(HTMLDivElement)
+                //     ({
+                //         tag: "div",
+                //         className: `popup locale-parallel-off ${data.className ?? ""}`,
+                //         children: data.children,
+                //         onclick: async (event: MouseEvent) =>
+                //         {
+                //             console.log("popup.click!");
+                //             event.stopPropagation();
+                //             //getScreenCoverList.forEach(i => i.click());
+                //         },
+                //     });
+                //     const close = async () =>
+                //     {
+                //         await data.onClose?.();
+                //         screenCover.close();
+                //     };
+                //     // minamo.dom.appendChildren(document.body, dom);
+                //     const screenCover = this.cover
+                //     ({
+                //         children:
+                //         [
+                //             dom,
+                //             { tag: "div", }, // レイアウト調整用のダミー要素 ( この調整がないとポップアップが小さく且つ入力要素がある場合に iPad でキーボードの下に dom が隠れてしまう。 )
+                //         ],
+                //         onclick: async () =>
+                //         {
+                //             await data.onClose?.();
+                //             //minamo.dom.remove(dom);
+                //         },
+                //     });
+                //     const result =
+                //     {
+                //         dom,
+                //         close,
+                //     };
+                //     return result;
+                // };
+                this.popup = function (builder) { return __awaiter(_this, void 0, void 0, function () {
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                                    var instance, data, _a, result, dom, close, screenCover, ui;
+                                    var _this = this;
+                                    var _b, _c;
+                                    return __generator(this, function (_d) {
+                                        switch (_d.label) {
+                                            case 0:
+                                                instance = {
+                                                    set: function (value) {
+                                                        result = value;
+                                                        return instance;
+                                                    },
+                                                    close: function () {
+                                                        ui.close();
+                                                        return instance;
+                                                    },
+                                                    getDom: function () { return ui.dom; },
+                                                };
+                                                if (!("function" === typeof builder)) return [3 /*break*/, 2];
+                                                return [4 /*yield*/, builder(instance)];
+                                            case 1:
+                                                _a = _d.sent();
+                                                return [3 /*break*/, 3];
+                                            case 2:
+                                                _a = builder;
+                                                _d.label = 3;
+                                            case 3:
+                                                data = _a;
+                                                result = (_b = data.initialValue) !== null && _b !== void 0 ? _b : null;
+                                                dom = $make(HTMLDivElement)({
+                                                    tag: "div",
+                                                    className: "popup locale-parallel-off " + ((_c = data.className) !== null && _c !== void 0 ? _c : ""),
+                                                    children: data.children,
+                                                    onclick: function (event) { return __awaiter(_this, void 0, void 0, function () {
+                                                        return __generator(this, function (_a) {
+                                                            console.log("popup.click!");
+                                                            event.stopPropagation();
+                                                            return [2 /*return*/];
+                                                        });
+                                                    }); },
+                                                });
+                                                close = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                    var _a;
+                                                    return __generator(this, function (_b) {
+                                                        switch (_b.label) {
+                                                            case 0: return [4 /*yield*/, ((_a = data.onClose) === null || _a === void 0 ? void 0 : _a.call(data))];
+                                                            case 1:
+                                                                _b.sent();
+                                                                resolve(result);
+                                                                screenCover.close();
+                                                                return [2 /*return*/];
+                                                        }
+                                                    });
+                                                }); };
+                                                screenCover = this.cover({
+                                                    children: [
+                                                        dom,
+                                                        { tag: "div", }, // レイアウト調整用のダミー要素 ( この調整がないとポップアップが小さく且つ入力要素がある場合に iPad でキーボードの下に dom が隠れてしまう。 )
+                                                    ],
+                                                    onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                        var _a;
+                                                        return __generator(this, function (_b) {
+                                                            switch (_b.label) {
+                                                                case 0: return [4 /*yield*/, ((_a = data.onClose) === null || _a === void 0 ? void 0 : _a.call(data))];
+                                                                case 1:
+                                                                    _b.sent();
+                                                                    resolve(result);
+                                                                    return [2 /*return*/];
+                                                            }
+                                                        });
+                                                    }); },
+                                                });
+                                                ui = {
+                                                    dom: dom,
+                                                    close: close,
+                                                };
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); })];
+                            case 1: return [2 /*return*/, _a.sent()];
+                        }
                     });
-                    var close = function () { return __awaiter(_this, void 0, void 0, function () {
-                        var _a;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
-                                case 0: return [4 /*yield*/, ((_a = data.onClose) === null || _a === void 0 ? void 0 : _a.call(data))];
-                                case 1:
-                                    _b.sent();
-                                    screenCover.close();
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); };
-                    // minamo.dom.appendChildren(document.body, dom);
-                    var screenCover = _this.cover({
-                        children: [
-                            dom,
-                            { tag: "div", }, // レイアウト調整用のダミー要素 ( この調整がないとポップアップが小さく且つ入力要素がある場合に iPad でキーボードの下に dom が隠れてしまう。 )
-                        ],
-                        onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                            var _a;
-                            return __generator(this, function (_b) {
-                                switch (_b.label) {
-                                    case 0: return [4 /*yield*/, ((_a = data.onClose) === null || _a === void 0 ? void 0 : _a.call(data))];
-                                    case 1:
-                                        _b.sent();
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); },
-                    });
-                    var result = {
-                        dom: dom,
-                        close: close,
-                    };
-                    return result;
-                };
+                }); };
                 this.lastMouseDownTarget = null;
                 this.onMouseDown = function (event) { return _this.lastMouseDownTarget = event.target; };
                 this.onMouseUp = function (_evnet) { return setTimeout(_this.clearLastMouseDownTarget, 10); };
@@ -10773,13 +10859,12 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                            var result, checkButtonList, timerPreset, checkButtonListUpdate, ui;
+                    case 0: return [4 /*yield*/, __8.tektite.screen.popup(function (instance) { return __awaiter(_this, void 0, void 0, function () {
+                            var checkButtonList, timerPreset, checkButtonListUpdate;
                             var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        result = false;
                                         checkButtonList = Render.$make(HTMLDivElement)({ className: "check-button-list" });
                                         timerPreset = domain_6.Domain.getTimerPreset()
                                             .concat(storage_10.Storage.CountdownTimer.recentlyTimer.get())
@@ -10814,8 +10899,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                                                                             case 0: return [4 /*yield*/, operate_6.Operate.newTimer(i)];
                                                                                             case 1:
                                                                                                 _a.sent();
-                                                                                                result = true;
-                                                                                                ui.close();
+                                                                                                instance.set(true).close();
                                                                                                 return [2 /*return*/];
                                                                                         }
                                                                                     });
@@ -10833,52 +10917,41 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         return [4 /*yield*/, checkButtonListUpdate()];
                                     case 1:
                                         _a.sent();
-                                        ui = __8.tektite.screen.popup({
-                                            // className: "add-remove-tags-popup",
-                                            children: [
-                                                Render.$tag("h2")("")(Render.label("New Timer")),
-                                                checkButtonList,
-                                                Render.$div("popup-operator")([
-                                                    {
-                                                        tag: "button",
-                                                        className: "cancel-button",
-                                                        children: Render.label("input a time"),
-                                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                            var tick, minutes;
-                                                            return __generator(this, function (_a) {
-                                                                switch (_a.label) {
-                                                                    case 0: return [4 /*yield*/, render_6.Render.timePrompt(__8.Clockworks.localeMap("input a time"), 0)];
-                                                                    case 1:
-                                                                        tick = _a.sent();
-                                                                        if (!(null !== tick)) return [3 /*break*/, 3];
-                                                                        minutes = tick / (60 * 1000);
-                                                                        storage_10.Storage.CountdownTimer.recentlyTimer.add(minutes);
-                                                                        return [4 /*yield*/, operate_6.Operate.newTimer(minutes)];
-                                                                    case 2:
-                                                                        _a.sent();
-                                                                        result = true;
-                                                                        ui.close();
-                                                                        _a.label = 3;
-                                                                    case 3: return [2 /*return*/];
-                                                                }
-                                                            });
-                                                        }); }
-                                                    },
-                                                    {
-                                                        tag: "button",
-                                                        className: "default-button",
-                                                        children: Render.label("Close"),
-                                                        onclick: function () {
-                                                            ui.close();
+                                        return [2 /*return*/, {
+                                                initialValue: false,
+                                                // className: "add-remove-tags-popup",
+                                                children: [
+                                                    render_6.Render.popupTitle(Render.label("New Timer")),
+                                                    checkButtonList,
+                                                    Render.$div("popup-operator")([
+                                                        {
+                                                            tag: "button",
+                                                            className: "cancel-button",
+                                                            children: Render.label("input a time"),
+                                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                                var tick, minutes;
+                                                                return __generator(this, function (_a) {
+                                                                    switch (_a.label) {
+                                                                        case 0: return [4 /*yield*/, render_6.Render.timePrompt(__8.Clockworks.localeMap("input a time"), 0)];
+                                                                        case 1:
+                                                                            tick = _a.sent();
+                                                                            if (!(null !== tick)) return [3 /*break*/, 3];
+                                                                            minutes = tick / (60 * 1000);
+                                                                            storage_10.Storage.CountdownTimer.recentlyTimer.add(minutes);
+                                                                            return [4 /*yield*/, operate_6.Operate.newTimer(minutes)];
+                                                                        case 2:
+                                                                            _a.sent();
+                                                                            instance.set(true).close();
+                                                                            _a.label = 3;
+                                                                        case 3: return [2 /*return*/];
+                                                                    }
+                                                                });
+                                                            }); }
                                                         },
-                                                    }
-                                                ])
-                                            ],
-                                            onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                                return [2 /*return*/, resolve(result)];
-                                            }); }); },
-                                        });
-                                        return [2 /*return*/];
+                                                        render_6.Render.closeButton(function () { return instance.close(); }),
+                                                    ])
+                                                ],
+                                            }];
                                 }
                             });
                         }); })];
@@ -12094,156 +12167,184 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         // export const alert = (message: string) => makeToast({ content: message, });
         Render.systemConfirm = function (message) { return window.confirm(message); };
         // export const confirm = systemConfirm;
+        Render.popupTitle = function (title) { return minamo_js_17.minamo.core.exists(title) ? script_9.Tektite.$tag("h2")("")(title) : []; };
         Render.prompt = function (data) { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, new Promise(function (resolve) {
-                            var result = null;
-                            var ui = __11.tektite.screen.popup({
-                                children: [
-                                    undefined !== data.title ? script_9.Tektite.$tag("h2")("")(data.title) : [],
-                                    data.content,
-                                    script_9.Tektite.$div("popup-operator")([
-                                        {
-                                            tag: "button",
-                                            className: "cancel-button",
-                                            children: __11.Clockworks.localeMap("Cancel"),
-                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                var _a, _b;
-                                                return __generator(this, function (_c) {
-                                                    switch (_c.label) {
-                                                        case 0: return [4 /*yield*/, ((_a = data.onCancel) === null || _a === void 0 ? void 0 : _a.call(data))];
-                                                        case 1:
-                                                            result = (_b = (_c.sent())) !== null && _b !== void 0 ? _b : null;
-                                                            ui.close();
-                                                            return [2 /*return*/];
-                                                    }
-                                                });
-                                            }); },
-                                        },
-                                        {
-                                            tag: "button",
-                                            className: "default-button",
-                                            children: __11.Clockworks.localeMap("OK"),
-                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                return __generator(this, function (_a) {
-                                                    switch (_a.label) {
-                                                        case 0: return [4 /*yield*/, data.onCommit()];
-                                                        case 1:
-                                                            result = _a.sent();
-                                                            ui.close();
-                                                            return [2 /*return*/];
-                                                    }
-                                                });
-                                            }); },
-                                        },
-                                    ])
-                                ],
-                                onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                    return [2 /*return*/, resolve(result)];
-                                }); }); },
+                    case 0: return [4 /*yield*/, __11.tektite.screen.popup(function (instance) { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
+                            return __generator(this, function (_a) {
+                                return [2 /*return*/, ({
+                                        children: [
+                                            Render.popupTitle(data.title),
+                                            data.content,
+                                            script_9.Tektite.$div("popup-operator")([
+                                                {
+                                                    tag: "button",
+                                                    className: "cancel-button",
+                                                    children: __11.Clockworks.localeMap("Cancel"),
+                                                    onclick: function () { return __awaiter(_this, void 0, void 0, function () { var _a, _b; var _c, _d; return __generator(this, function (_e) {
+                                                        switch (_e.label) {
+                                                            case 0:
+                                                                _b = (_a = instance).set;
+                                                                return [4 /*yield*/, ((_c = data.onCancel) === null || _c === void 0 ? void 0 : _c.call(data))];
+                                                            case 1: return [2 /*return*/, _b.apply(_a, [(_d = (_e.sent())) !== null && _d !== void 0 ? _d : null]).close()];
+                                                        }
+                                                    }); }); },
+                                                },
+                                                {
+                                                    tag: "button",
+                                                    className: "default-button",
+                                                    children: __11.Clockworks.localeMap("OK"),
+                                                    onclick: function () { return __awaiter(_this, void 0, void 0, function () { var _a, _b; return __generator(this, function (_c) {
+                                                        switch (_c.label) {
+                                                            case 0:
+                                                                _b = (_a = instance).set;
+                                                                return [4 /*yield*/, data.onCommit()];
+                                                            case 1: return [2 /*return*/, _b.apply(_a, [_c.sent()]).close()];
+                                                        }
+                                                    }); }); },
+                                                },
+                                            ])
+                                        ],
+                                    })];
                             });
-                        })];
+                        }); })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         }); };
-        Render.popupCloseOperator = function (onclick) { return script_9.Tektite.$div("popup-operator")([{
+        // export const prompt = async <ResultType>
+        // (
+        //     data:
+        //     {
+        //         title?: string,
+        //         content: minamo.dom.Source,
+        //         onCommit: () => (ResultType | Promise<ResultType>),
+        //         onCancel?: () => (ResultType | Promise<ResultType>),
+        //     }
+        // ) => await popup3<ResultType>
+        // (
+        //     instance =>
+        //     ({
+        //         children:
+        //         [
+        //             undefined !== data.title ? Tektite.$tag("h2")("")(data.title): [],
+        //             data.content,
+        //             Tektite.$div("popup-operator")
+        //             ([
+        //                 {
+        //                     tag: "button",
+        //                     className: "cancel-button",
+        //                     children: Clockworks.localeMap("Cancel"),
+        //                     onclick: async () => instance.close((await data.onCancel?.()) ?? null),
+        //                 },
+        //                 {
+        //                     tag: "button",
+        //                     className: "default-button",
+        //                     children: Clockworks.localeMap("OK"),
+        //                     onclick: async () => instance.close(await data.onCommit()),
+        //                 },
+        //             ])
+        //         ],
+        //         onClose: async () => instance.close((await data.onCancel?.()) ?? null),
+        //     })
+        // );
+        Render.closeButton = function (onclick) {
+            return ({
                 tag: "button",
                 className: "default-button",
                 children: Render.label("Close"),
                 onclick: onclick,
-            }]); };
+            });
+        };
+        Render.popupCloseOperator = function (onclick) {
+            return script_9.Tektite.$div("popup-operator")(Render.closeButton(onclick));
+        };
         Render.themeSettingsPopup = function (settings) {
             if (settings === void 0) { settings = storage_13.Storage.Settings.get(); }
             return __awaiter(_this, void 0, void 0, function () {
-                var init;
                 var _this = this;
-                var _a;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            init = (_a = settings.theme) !== null && _a !== void 0 ? _a : "auto";
-                            return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                                    var result, checkButtonList, checkButtonListUpdate, ui;
-                                    var _this = this;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0:
-                                                result = false;
-                                                checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
-                                                checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
-                                                    var _a, _b, _c;
-                                                    var _this = this;
-                                                    return __generator(this, function (_d) {
-                                                        switch (_d.label) {
-                                                            case 0:
-                                                                _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
-                                                                _c = [checkButtonList];
-                                                                return [4 /*yield*/, Promise.all(type_5.Type.ThemeList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
-                                                                        var _a;
-                                                                        var _this = this;
-                                                                        var _b;
-                                                                        return __generator(this, function (_c) {
-                                                                            switch (_c.label) {
-                                                                                case 0:
-                                                                                    _a = {
-                                                                                        tag: "button",
-                                                                                        className: "check-button " + (key === ((_b = settings.theme) !== null && _b !== void 0 ? _b : "auto") ? "checked" : "")
-                                                                                    };
-                                                                                    return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
-                                                                                case 1: return [2 /*return*/, (_a.children = [
-                                                                                        _c.sent(),
-                                                                                        script_9.Tektite.$span("")(Render.label("theme." + key))
-                                                                                    ],
-                                                                                        _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
-                                                                                            var _a;
-                                                                                            return __generator(this, function (_b) {
-                                                                                                switch (_b.label) {
-                                                                                                    case 0:
-                                                                                                        if (!(key !== ((_a = settings.theme) !== null && _a !== void 0 ? _a : "auto"))) return [3 /*break*/, 2];
-                                                                                                        settings.theme = key;
-                                                                                                        storage_13.Storage.Settings.set(settings);
-                                                                                                        return [4 /*yield*/, checkButtonListUpdate()];
-                                                                                                    case 1:
-                                                                                                        _b.sent();
-                                                                                                        Render.updateStyle();
-                                                                                                        result = init !== key;
-                                                                                                        _b.label = 2;
-                                                                                                    case 2: return [2 /*return*/];
-                                                                                                }
-                                                                                            });
-                                                                                        }); },
-                                                                                        _a)];
-                                                                            }
-                                                                        });
-                                                                    }); }))];
-                                                            case 1: return [2 /*return*/, _b.apply(_a, _c.concat([[
-                                                                        _d.sent()
-                                                                    ]]))];
-                                                        }
-                                                    });
-                                                }); };
-                                                return [4 /*yield*/, checkButtonListUpdate()];
-                                            case 1:
-                                                _a.sent();
-                                                ui = __11.tektite.screen.popup({
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, __11.tektite.screen.popup(function (instance) { return __awaiter(_this, void 0, void 0, function () {
+                                var init, checkButtonList, checkButtonListUpdate;
+                                var _this = this;
+                                var _a;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            init = (_a = settings.theme) !== null && _a !== void 0 ? _a : "auto";
+                                            checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                var _a, _b, _c;
+                                                var _this = this;
+                                                return __generator(this, function (_d) {
+                                                    switch (_d.label) {
+                                                        case 0:
+                                                            _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
+                                                            _c = [checkButtonList];
+                                                            return [4 /*yield*/, Promise.all(type_5.Type.ThemeList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                    var _a;
+                                                                    var _this = this;
+                                                                    var _b;
+                                                                    return __generator(this, function (_c) {
+                                                                        switch (_c.label) {
+                                                                            case 0:
+                                                                                _a = {
+                                                                                    tag: "button",
+                                                                                    className: "check-button " + (key === ((_b = settings.theme) !== null && _b !== void 0 ? _b : "auto") ? "checked" : "")
+                                                                                };
+                                                                                return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                                            case 1: return [2 /*return*/, (_a.children = [
+                                                                                    _c.sent(),
+                                                                                    script_9.Tektite.$span("")(Render.label("theme." + key))
+                                                                                ],
+                                                                                    _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                                                        var _a;
+                                                                                        return __generator(this, function (_b) {
+                                                                                            switch (_b.label) {
+                                                                                                case 0:
+                                                                                                    if (!(key !== ((_a = settings.theme) !== null && _a !== void 0 ? _a : "auto"))) return [3 /*break*/, 2];
+                                                                                                    settings.theme = key;
+                                                                                                    storage_13.Storage.Settings.set(settings);
+                                                                                                    return [4 /*yield*/, checkButtonListUpdate()];
+                                                                                                case 1:
+                                                                                                    _b.sent();
+                                                                                                    Render.updateStyle();
+                                                                                                    instance.set(init !== key);
+                                                                                                    _b.label = 2;
+                                                                                                case 2: return [2 /*return*/];
+                                                                                            }
+                                                                                        });
+                                                                                    }); },
+                                                                                    _a)];
+                                                                        }
+                                                                    });
+                                                                }); }))];
+                                                        case 1: return [2 /*return*/, _b.apply(_a, _c.concat([[
+                                                                    _d.sent()
+                                                                ]]))];
+                                                    }
+                                                });
+                                            }); };
+                                            return [4 /*yield*/, checkButtonListUpdate()];
+                                        case 1:
+                                            _b.sent();
+                                            return [2 /*return*/, {
+                                                    initialValue: false,
                                                     // className: "add-remove-tags-popup",
                                                     children: [
-                                                        script_9.Tektite.$tag("h2")("")(Render.label("Theme setting")),
+                                                        Render.popupTitle(Render.label("Theme setting")),
                                                         checkButtonList,
-                                                        Render.popupCloseOperator(function () { return ui.close(); }),
+                                                        Render.popupCloseOperator(function () { return instance.close(); }),
                                                     ],
-                                                    onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                                        return [2 /*return*/, resolve(result)];
-                                                    }); }); },
-                                                });
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); })];
-                        case 1: return [2 /*return*/, _b.sent()];
+                                                }];
+                                    }
+                                });
+                            }); })];
+                        case 1: return [2 /*return*/, _a.sent()];
                     }
                 });
             });
@@ -12251,93 +12352,87 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         Render.progressBarStyleSettingsPopup = function (settings) {
             if (settings === void 0) { settings = storage_13.Storage.Settings.get(); }
             return __awaiter(_this, void 0, void 0, function () {
-                var init, selected;
                 var _this = this;
-                var _a;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            init = (_a = settings.progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
-                            selected = init;
-                            return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                                    var checkButtonList, checkButtonListUpdate, ui;
-                                    var _this = this;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0:
-                                                checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
-                                                checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
-                                                    var _a, _b, _c;
-                                                    var _this = this;
-                                                    return __generator(this, function (_d) {
-                                                        switch (_d.label) {
-                                                            case 0:
-                                                                _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
-                                                                _c = [checkButtonList];
-                                                                return [4 /*yield*/, Promise.all(script_9.Tektite.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
-                                                                        var _a;
-                                                                        var _this = this;
-                                                                        return __generator(this, function (_b) {
-                                                                            switch (_b.label) {
-                                                                                case 0:
-                                                                                    _a = {
-                                                                                        tag: "button",
-                                                                                        className: "check-button " + (key === selected ? "checked" : "")
-                                                                                    };
-                                                                                    return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
-                                                                                case 1: return [2 /*return*/, (_a.children = [
-                                                                                        _b.sent(),
-                                                                                        script_9.Tektite.$span("")(Render.label("progressBarStyle." + key))
-                                                                                    ],
-                                                                                        _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
-                                                                                            return __generator(this, function (_a) {
-                                                                                                switch (_a.label) {
-                                                                                                    case 0:
-                                                                                                        if (!(key !== selected)) return [3 /*break*/, 2];
-                                                                                                        selected = key;
-                                                                                                        settings.progressBarStyle = selected;
-                                                                                                        storage_13.Storage.Settings.set(settings);
-                                                                                                        return [4 /*yield*/, checkButtonListUpdate()];
-                                                                                                    case 1:
-                                                                                                        _a.sent();
-                                                                                                        Render.updateProgressBarStyle();
-                                                                                                        _a.label = 2;
-                                                                                                    case 2: return [2 /*return*/];
-                                                                                                }
-                                                                                            });
-                                                                                        }); },
-                                                                                        _a)];
-                                                                            }
-                                                                        });
-                                                                    }); }))];
-                                                            case 1: return [2 /*return*/, _b.apply(_a, _c.concat([[
-                                                                        _d.sent()
-                                                                    ]]))];
-                                                        }
-                                                    });
-                                                }); };
-                                                return [4 /*yield*/, checkButtonListUpdate()];
-                                            case 1:
-                                                _a.sent();
-                                                ui = __11.tektite.screen.popup({
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, __11.tektite.screen.popup(function (instance) { return __awaiter(_this, void 0, void 0, function () {
+                                var init, selected, checkButtonList, checkButtonListUpdate;
+                                var _this = this;
+                                var _a;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            init = (_a = settings.progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
+                                            selected = init;
+                                            checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                var _a, _b, _c;
+                                                var _this = this;
+                                                return __generator(this, function (_d) {
+                                                    switch (_d.label) {
+                                                        case 0:
+                                                            _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
+                                                            _c = [checkButtonList];
+                                                            return [4 /*yield*/, Promise.all(script_9.Tektite.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                                    var _a;
+                                                                    var _this = this;
+                                                                    return __generator(this, function (_b) {
+                                                                        switch (_b.label) {
+                                                                            case 0:
+                                                                                _a = {
+                                                                                    tag: "button",
+                                                                                    className: "check-button " + (key === selected ? "checked" : "")
+                                                                                };
+                                                                                return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                                            case 1: return [2 /*return*/, (_a.children = [
+                                                                                    _b.sent(),
+                                                                                    script_9.Tektite.$span("")(Render.label("progressBarStyle." + key))
+                                                                                ],
+                                                                                    _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
+                                                                                        return __generator(this, function (_a) {
+                                                                                            switch (_a.label) {
+                                                                                                case 0:
+                                                                                                    if (!(key !== selected)) return [3 /*break*/, 2];
+                                                                                                    selected = key;
+                                                                                                    settings.progressBarStyle = selected;
+                                                                                                    storage_13.Storage.Settings.set(settings);
+                                                                                                    return [4 /*yield*/, checkButtonListUpdate()];
+                                                                                                case 1:
+                                                                                                    _a.sent();
+                                                                                                    Render.updateProgressBarStyle();
+                                                                                                    _a.label = 2;
+                                                                                                case 2: return [2 /*return*/];
+                                                                                            }
+                                                                                        });
+                                                                                    }); },
+                                                                                    _a)];
+                                                                        }
+                                                                    });
+                                                                }); }))];
+                                                        case 1: return [2 /*return*/, _b.apply(_a, _c.concat([[
+                                                                    _d.sent()
+                                                                ]]))];
+                                                    }
+                                                });
+                                            }); };
+                                            return [4 /*yield*/, checkButtonListUpdate()];
+                                        case 1:
+                                            _b.sent();
+                                            return [2 /*return*/, {
                                                     // className: "add-remove-tags-popup",
                                                     children: [
-                                                        script_9.Tektite.$tag("h2")("")(Render.label("Progress Bar Style setting")),
+                                                        Render.popupTitle(Render.label("Progress Bar Style setting")),
                                                         checkButtonList,
-                                                        Render.popupCloseOperator(function () { return ui.close(); }),
+                                                        Render.popupCloseOperator(function () { return instance.close(); }),
                                                     ],
-                                                    onClose: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                        return __generator(this, function (_a) {
-                                                            resolve(init !== selected);
-                                                            return [2 /*return*/];
-                                                        });
-                                                    }); },
-                                                });
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); })];
-                        case 1: return [2 /*return*/, _b.sent()];
+                                                    onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                                        return [2 /*return*/, instance.set(init !== selected)];
+                                                    }); }); },
+                                                }];
+                                    }
+                                });
+                            }); })];
+                        case 1: return [2 /*return*/, _a.sent()];
                     }
                 });
             });
@@ -12348,13 +12443,12 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                                var result, checkButtonList, checkButtonListUpdate, ui;
+                        case 0: return [4 /*yield*/, __11.tektite.screen.popup(function (instance) { return __awaiter(_this, void 0, void 0, function () {
+                                var checkButtonList, checkButtonListUpdate;
                                 var _this = this;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            result = false;
                                             checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c, _d;
@@ -12385,7 +12479,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                     if (!(null !== ((_a = settings.locale) !== null && _a !== void 0 ? _a : null))) return [3 /*break*/, 2];
                                                                                     settings.locale = null;
                                                                                     storage_13.Storage.Settings.set(settings);
-                                                                                    result = true;
+                                                                                    instance.set(true);
                                                                                     return [4 /*yield*/, checkButtonListUpdate()];
                                                                                 case 1:
                                                                                     _b.sent();
@@ -12420,7 +12514,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                                     if (!((_a = key !== settings.locale) !== null && _a !== void 0 ? _a : null)) return [3 /*break*/, 2];
                                                                                                     settings.locale = key;
                                                                                                     storage_13.Storage.Settings.set(settings);
-                                                                                                    result = true;
+                                                                                                    instance.set(true);
                                                                                                     return [4 /*yield*/, checkButtonListUpdate()];
                                                                                                 case 1:
                                                                                                     _b.sent();
@@ -12442,18 +12536,15 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                             return [4 /*yield*/, checkButtonListUpdate()];
                                         case 1:
                                             _a.sent();
-                                            ui = __11.tektite.screen.popup({
-                                                // className: "add-remove-tags-popup",
-                                                children: [
-                                                    script_9.Tektite.$tag("h2")("")(Render.label("Language setting")),
-                                                    checkButtonList,
-                                                    Render.popupCloseOperator(function () { return ui.close(); }),
-                                                ],
-                                                onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                                    return [2 /*return*/, resolve(result)];
-                                                }); }); },
-                                            });
-                                            return [2 /*return*/];
+                                            return [2 /*return*/, {
+                                                    initialValue: false,
+                                                    // className: "add-remove-tags-popup",
+                                                    children: [
+                                                        Render.popupTitle(Render.label("Language setting")),
+                                                        checkButtonList,
+                                                        Render.popupCloseOperator(function () { return instance.close(); }),
+                                                    ],
+                                                }];
                                     }
                                 });
                             }); })];
@@ -12468,13 +12559,12 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                                var result, checkButtonList, checkButtonListUpdate, ui;
+                        case 0: return [4 /*yield*/, __11.tektite.screen.popup(function (instance) { return __awaiter(_this, void 0, void 0, function () {
+                                var checkButtonList, checkButtonListUpdate;
                                 var _this = this;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            result = false;
                                             checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c;
@@ -12507,7 +12597,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                                     if (!((_a = key !== settings) !== null && _a !== void 0 ? _a : null)) return [3 /*break*/, 2];
                                                                                                     settings = key;
                                                                                                     storage_13.Storage.RainbowClock.colorPattern.set(settings);
-                                                                                                    result = true;
+                                                                                                    instance.set(true);
                                                                                                     return [4 /*yield*/, checkButtonListUpdate()];
                                                                                                 case 1:
                                                                                                     _b.sent();
@@ -12529,18 +12619,15 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                             return [4 /*yield*/, checkButtonListUpdate()];
                                         case 1:
                                             _a.sent();
-                                            ui = __11.tektite.screen.popup({
-                                                // className: "add-remove-tags-popup",
-                                                children: [
-                                                    script_9.Tektite.$tag("h2")("")(Render.label("Color setting")),
-                                                    checkButtonList,
-                                                    Render.popupCloseOperator(function () { return ui.close(); }),
-                                                ],
-                                                onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                                    return [2 /*return*/, resolve(result)];
-                                                }); }); },
-                                            });
-                                            return [2 /*return*/];
+                                            return [2 /*return*/, {
+                                                    initialValue: false,
+                                                    // className: "add-remove-tags-popup",
+                                                    children: [
+                                                        Render.popupTitle(Render.label("Color setting")),
+                                                        checkButtonList,
+                                                        Render.popupCloseOperator(function () { return instance.close(); }),
+                                                    ],
+                                                }];
                                     }
                                 });
                             }); })];
@@ -12607,47 +12694,42 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 var _this = this;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                                var ui;
+                        case 0: return [4 /*yield*/, __11.tektite.screen.popup(function (instance) { return __awaiter(_this, void 0, void 0, function () {
                                 var _this = this;
                                 return __generator(this, function (_a) {
-                                    ui = __11.tektite.screen.popup({
-                                        // className: "add-remove-tags-popup",
-                                        children: [
-                                            script_9.Tektite.$tag("h2")("")(script_9.Tektite.$labelSpan("シェア / Share")),
-                                            script_9.Tektite.$div("menu-button-list")([
-                                                {
-                                                    tag: "button",
-                                                    className: "menu-item-button",
-                                                    children: script_9.Tektite.$span("")(script_9.Tektite.$labelSpan("Tweet / ツイート")),
-                                                    onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                        return __generator(this, function (_a) {
-                                                            location.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('【' + title + '】 ' + url + ' ');
-                                                            ui.close();
-                                                            return [2 /*return*/];
-                                                        });
-                                                    }); }
-                                                },
-                                                {
-                                                    tag: "button",
-                                                    className: "menu-item-button",
-                                                    children: script_9.Tektite.$span("")(script_9.Tektite.$labelSpan("Copy URL / URL をコピー")),
-                                                    onclick: function () { return __awaiter(_this, void 0, void 0, function () {
-                                                        return __generator(this, function (_a) {
-                                                            Render.Operate.copyToClipboard(url, "URL");
-                                                            ui.close();
-                                                            return [2 /*return*/];
-                                                        });
-                                                    }); }
-                                                }
-                                            ]),
-                                            Render.popupCloseOperator(function () { return ui.close(); }),
-                                        ],
-                                        onClose: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                            return [2 /*return*/, resolve()];
-                                        }); }); },
-                                    });
-                                    return [2 /*return*/];
+                                    return [2 /*return*/, ({
+                                            // className: "add-remove-tags-popup",
+                                            children: [
+                                                Render.popupTitle(script_9.Tektite.$labelSpan("シェア / Share")),
+                                                script_9.Tektite.$div("menu-button-list")([
+                                                    {
+                                                        tag: "button",
+                                                        className: "menu-item-button",
+                                                        children: script_9.Tektite.$span("")(script_9.Tektite.$labelSpan("Tweet / ツイート")),
+                                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                            return __generator(this, function (_a) {
+                                                                location.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('【' + title + '】 ' + url + ' ');
+                                                                instance.close();
+                                                                return [2 /*return*/];
+                                                            });
+                                                        }); }
+                                                    },
+                                                    {
+                                                        tag: "button",
+                                                        className: "menu-item-button",
+                                                        children: script_9.Tektite.$span("")(script_9.Tektite.$labelSpan("Copy URL / URL をコピー")),
+                                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                            return __generator(this, function (_a) {
+                                                                Render.Operate.copyToClipboard(url, "URL");
+                                                                instance.close();
+                                                                return [2 /*return*/];
+                                                            });
+                                                        }); }
+                                                    }
+                                                ]),
+                                                Render.popupCloseOperator(function () { return instance.close(); }),
+                                            ],
+                                        })];
                                 });
                             }); })];
                         case 1: return [2 /*return*/, _a.sent()];
@@ -13636,7 +13718,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1639855402458), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1639934429203), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

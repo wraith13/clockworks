@@ -75,6 +75,7 @@ export module Render
 
     export const systemConfirm = (message: string) => window.confirm(message);
     // export const confirm = systemConfirm;
+    export const popupTitle = (title: minamo.dom.Source | undefined) => minamo.core.exists(title) ? Tektite.$tag("h2")("")(title): [];
     export const prompt = async <ResultType>
     (
         data:
@@ -84,60 +85,83 @@ export module Render
             onCommit: () => (ResultType | Promise<ResultType>),
             onCancel?: () => (ResultType | Promise<ResultType>),
         }
-    ) => await new Promise<ResultType>
+    ) => await tektite.screen.popup<ResultType>
     (
-        resolve =>
-        {
-            let result: ResultType | null = null;
-            const ui = tektite.screen.popup
-            ({
-                children:
-                [
-                    undefined !== data.title ? Tektite.$tag("h2")("")(data.title): [],
-                    data.content,
-                    Tektite.$div("popup-operator")
-                    ([
-                        {
-                            tag: "button",
-                            className: "cancel-button",
-                            children: Clockworks.localeMap("Cancel"),
-                            onclick: async () =>
-                            {
-                                result = (await data.onCancel?.()) ?? null;
-                                ui.close();
-                            },
-                        },
-                        {
-                            tag: "button",
-                            className: "default-button",
-                            children: Clockworks.localeMap("OK"),
-                            onclick: async () =>
-                            {
-                                result = await data.onCommit();
-                                ui.close();
-                            },
-                        },
-                    ])
-                ],
-                onClose: async () => resolve(result),
-            });
-        }
+        async instance =>
+        ({
+            children:
+            [
+                popupTitle(data.title),
+                data.content,
+                Tektite.$div("popup-operator")
+                ([
+                    {
+                        tag: "button",
+                        className: "cancel-button",
+                        children: Clockworks.localeMap("Cancel"),
+                        onclick: async () => instance.set((await data.onCancel?.()) ?? null).close(),
+                    },
+                    {
+                        tag: "button",
+                        className: "default-button",
+                        children: Clockworks.localeMap("OK"),
+                        onclick: async () => instance.set(await data.onCommit()).close(),
+                    },
+                ])
+            ],
+        })
     );
-    export const popupCloseOperator = (onclick?: () => unknown) => Tektite.$div("popup-operator")
-    ([{
+    // export const prompt = async <ResultType>
+    // (
+    //     data:
+    //     {
+    //         title?: string,
+    //         content: minamo.dom.Source,
+    //         onCommit: () => (ResultType | Promise<ResultType>),
+    //         onCancel?: () => (ResultType | Promise<ResultType>),
+    //     }
+    // ) => await popup3<ResultType>
+    // (
+    //     instance =>
+    //     ({
+    //         children:
+    //         [
+    //             undefined !== data.title ? Tektite.$tag("h2")("")(data.title): [],
+    //             data.content,
+    //             Tektite.$div("popup-operator")
+    //             ([
+    //                 {
+    //                     tag: "button",
+    //                     className: "cancel-button",
+    //                     children: Clockworks.localeMap("Cancel"),
+    //                     onclick: async () => instance.close((await data.onCancel?.()) ?? null),
+    //                 },
+    //                 {
+    //                     tag: "button",
+    //                     className: "default-button",
+    //                     children: Clockworks.localeMap("OK"),
+    //                     onclick: async () => instance.close(await data.onCommit()),
+    //                 },
+    //             ])
+    //         ],
+    //         onClose: async () => instance.close((await data.onCancel?.()) ?? null),
+    //     })
+    // );
+    export const closeButton = (onclick?: () => unknown) =>
+    ({
         tag: "button",
         className: "default-button",
         children: label("Close"),
         onclick,
-    }]);
+    });
+    export const popupCloseOperator = (onclick?: () => unknown) =>
+        Tektite.$div("popup-operator")(closeButton(onclick));
     export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
-    {
-        const init = settings.theme ?? "auto";
-        return await new Promise
+        await tektite.screen.popup<boolean>
         (
-            async resolve =>
+            async instance =>
             {
-                let result = false;
+                const init = settings.theme ?? "auto";
                 const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
@@ -164,7 +188,7 @@ export module Render
                                             Storage.Settings.set(settings);
                                             await checkButtonListUpdate();
                                             updateStyle();
-                                            result = init !== key;
+                                            instance.set(init !== key);
                                         }
                                     }
                                 })
@@ -173,28 +197,25 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = tektite.screen.popup
-                ({
+                return {
+                    initialValue: false,
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        Tektite.$tag("h2")("")(label("Theme setting")),
+                        popupTitle(label("Theme setting")),
                         checkButtonList,
-                        popupCloseOperator(() => ui.close()),
+                        popupCloseOperator(() => instance.close()),
                     ],
-                    onClose: async () => resolve(result),
-                });
+                };
             }
         );
-    };
     export const progressBarStyleSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
-    {
-        const init = settings.progressBarStyle ?? "auto";
-        let selected = init;
-        return await new Promise
+        await tektite.screen.popup<boolean>
         (
-            async resolve =>
+            async instance =>
             {
+                const init = settings.progressBarStyle ?? "auto";
+                let selected = init;
                 const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
@@ -230,30 +251,23 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = tektite.screen.popup
-                ({
+                return {
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        Tektite.$tag("h2")("")(label("Progress Bar Style setting")),
+                        popupTitle(label("Progress Bar Style setting")),
                         checkButtonList,
-                        popupCloseOperator(() => ui.close()),
+                        popupCloseOperator(() => instance.close()),
                     ],
-                    onClose: async () =>
-                    {
-                        resolve(init !== selected);
-                    },
-                });
+                    onClose: async () => instance.set(init !== selected),
+                };
             }
         );
-    };
     export const localeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
-    {
-        return await new Promise
+        await tektite.screen.popup<boolean>
         (
-            async resolve =>
+            async instance =>
             {
-                let result = false;
                 const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
@@ -273,7 +287,7 @@ export module Render
                                 {
                                     settings.locale = null;
                                     Storage.Settings.set(settings);
-                                    result = true;
+                                    instance.set(true);
                                     await checkButtonListUpdate();
                                 }
                             }
@@ -297,7 +311,7 @@ export module Render
                                         {
                                             settings.locale = key;
                                             Storage.Settings.set(settings);
-                                            result = true;
+                                            instance.set(true);
                                             await checkButtonListUpdate();
                                         }
                                     }
@@ -307,27 +321,23 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = tektite.screen.popup
-                ({
+                return {
+                    initialValue: false,
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        Tektite.$tag("h2")("")(label("Language setting")),
+                        popupTitle(label("Language setting")),
                         checkButtonList,
-                        popupCloseOperator(() => ui.close()),
+                        popupCloseOperator(() => instance.close()),
                     ],
-                    onClose: async () => resolve(result),
-                });
+                };
             }
         );
-    };
     export const colorSettingsPopup = async (settings = Storage.RainbowClock.colorPattern.get()): Promise<boolean> =>
-    {
-        return await new Promise
+        await tektite.screen.popup<boolean>
         (
-            async resolve =>
+            async instance =>
             {
-                let result = false;
                 const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
@@ -352,7 +362,7 @@ export module Render
                                         {
                                             settings = key;
                                             Storage.RainbowClock.colorPattern.set(settings);
-                                            result = true;
+                                            instance.set(true);
                                             await checkButtonListUpdate();
                                         }
                                     }
@@ -362,20 +372,18 @@ export module Render
                     ]
                 );
                 await checkButtonListUpdate();
-                const ui = tektite.screen.popup
-                ({
+                return {
+                    initialValue: false,
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        Tektite.$tag("h2")("")(label("Color setting")),
+                        popupTitle(label("Color setting")),
                         checkButtonList,
-                        popupCloseOperator(() => ui.close()),
+                        popupCloseOperator(() => instance.close()),
                     ],
-                    onClose: async () => resolve(result),
-                });
+                };
             }
         );
-    };
     export const timePrompt = async (message: string, tick: number = 0): Promise<number | null> =>
     {
         const inputTime = Tektite.$make(HTMLInputElement)
@@ -419,16 +427,15 @@ export module Render
             onCommit: () => Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
         });
     };
-    export const sharePopup = async (title: string, url: string = location.href) => await new Promise<void>
-    (
-        async resolve =>
-        {
-            const ui = tektite.screen.popup
+    export const sharePopup = async (title: string, url: string = location.href) =>
+        await tektite.screen.popup<unknown>
+        (
+            async instance =>
             ({
                 // className: "add-remove-tags-popup",
                 children:
                 [
-                    Tektite.$tag("h2")("")(Tektite.$labelSpan("シェア / Share")),
+                    popupTitle(Tektite.$labelSpan("シェア / Share")),
                     Tektite.$div("menu-button-list")
                     ([
                         {
@@ -438,7 +445,7 @@ export module Render
                             onclick: async () =>
                             {
                                 location.href='https://twitter.com/intent/tweet?text='+encodeURIComponent('【'+title+'】 '+url +' ');
-                                ui.close();
+                                instance.close();
                             }
                         },
                         {
@@ -448,16 +455,14 @@ export module Render
                             onclick: async () =>
                             {
                                 Operate.copyToClipboard(url, "URL");
-                                ui.close();
+                                instance.close();
                             }
                         }
                     ]),
-                    popupCloseOperator(() => ui.close()),
+                    popupCloseOperator(() => instance.close()),
                 ],
-                onClose: async () => resolve(),
-            });
-        }
-    );
+            })
+        );
     export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
     "string" !== typeof classNameOrValue || undefined === labelOrValue ?
         Tektite.$span("value monospace")(classNameOrValue):
