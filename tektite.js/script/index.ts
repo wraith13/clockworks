@@ -14,6 +14,14 @@ export module Tektite
     export const $div = $tag("div");
     export const $span = $tag("span");
     export const $labelSpan = $span("label");
+    export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
+        "string" !== typeof classNameOrValue || undefined === labelOrValue ?
+            $span("value monospace")(classNameOrValue):
+            $div(classNameOrValue)
+            ([
+                undefined !== valueOrNothing ? labelOrValue: [],
+                $span("value monospace")(valueOrNothing ?? labelOrValue),
+            ]);
     export interface LocaleEntry
     {
         [key : string] : string;

@@ -80,6 +80,7 @@ export module Render
     (
         data:
         {
+            className?: string;
             title?: string,
             content: minamo.dom.Source,
             onCommit: () => (ResultType | Promise<ResultType>),
@@ -89,6 +90,7 @@ export module Render
     (
         async instance =>
         ({
+            className: data.className,
             children:
             [
                 popupTitle(data.title),
@@ -220,35 +222,33 @@ export module Render
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
-                    [
-                        await Promise.all
+                    await Promise.all
+                    (
+                        Tektite.ProgressBarStyleList.map
                         (
-                            Tektite.ProgressBarStyleList.map
-                            (
-                                async (key: Tektite.ProgressBarStyleType) =>
-                                ({
-                                    tag: "button",
-                                    className: `check-button ${key === selected ? "checked": ""}`,
-                                    children:
-                                    [
-                                        await Resource.loadSvgOrCache("tektite-check-icon"),
-                                        Tektite.$span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
-                                    ],
-                                    onclick: async () =>
+                            async (key: Tektite.ProgressBarStyleType) =>
+                            ({
+                                tag: "button",
+                                className: `check-button ${key === selected ? "checked": ""}`,
+                                children:
+                                [
+                                    await Resource.loadSvgOrCache("tektite-check-icon"),
+                                    Tektite.$span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
+                                ],
+                                onclick: async () =>
+                                {
+                                    if (key !== selected)
                                     {
-                                        if (key !== selected)
-                                        {
-                                            selected = key;
-                                            settings.progressBarStyle = selected;
-                                            Storage.Settings.set(settings);
-                                            await checkButtonListUpdate();
-                                            updateProgressBarStyle();
-                                        }
+                                        selected = key;
+                                        settings.progressBarStyle = selected;
+                                        Storage.Settings.set(settings);
+                                        await checkButtonListUpdate();
+                                        updateProgressBarStyle();
                                     }
-                                })
-                            )
+                                }
+                            })
                         )
-                    ]
+                    )
                 );
                 await checkButtonListUpdate();
                 return {
@@ -342,34 +342,32 @@ export module Render
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
-                    [
-                        await Promise.all
+                    await Promise.all
+                    (
+                        Object.keys(Type.rainbowClockColorPatternMap).map
                         (
-                            Object.keys(Type.rainbowClockColorPatternMap).map
-                            (
-                                async (key: Type.rainbowClockColorPatternType) =>
-                                ({
-                                    tag: "button",
-                                    className: `check-button ${key === settings ? "checked": ""}`,
-                                    children:
-                                    [
-                                        await Resource.loadSvgOrCache("tektite-check-icon"),
-                                        Tektite.$span("")(label(key)),
-                                    ],
-                                    onclick: async () =>
+                            async (key: Type.rainbowClockColorPatternType) =>
+                            ({
+                                tag: "button",
+                                className: `check-button ${key === settings ? "checked": ""}`,
+                                children:
+                                [
+                                    await Resource.loadSvgOrCache("tektite-check-icon"),
+                                    Tektite.$span("")(label(key)),
+                                ],
+                                onclick: async () =>
+                                {
+                                    if (key !== settings ?? null)
                                     {
-                                        if (key !== settings ?? null)
-                                        {
-                                            settings = key;
-                                            Storage.RainbowClock.colorPattern.set(settings);
-                                            instance.set(true);
-                                            await checkButtonListUpdate();
-                                        }
+                                        settings = key;
+                                        Storage.RainbowClock.colorPattern.set(settings);
+                                        instance.set(true);
+                                        await checkButtonListUpdate();
                                     }
-                                })
-                            )
+                                }
+                            })
                         )
-                    ]
+                    )
                 );
                 await checkButtonListUpdate();
                 return {
@@ -463,14 +461,6 @@ export module Render
                 ],
             })
         );
-    export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
-    "string" !== typeof classNameOrValue || undefined === labelOrValue ?
-        Tektite.$span("value monospace")(classNameOrValue):
-        Tektite.$div(classNameOrValue)
-        ([
-            undefined !== valueOrNothing ? labelOrValue: [],
-            Tektite.$span("value monospace")(valueOrNothing ?? labelOrValue),
-        ]);
     export type HeaderSegmentSource = Tektite.HeaderSegmentSource<Type.PageParams, Resource.KeyType>;
     export type ScreenSource = Tektite.ScreenSource<Type.PageParams, Resource.KeyType>;
     export const screenHeaderHomeSegment = async (): Promise<HeaderSegmentSource> =>

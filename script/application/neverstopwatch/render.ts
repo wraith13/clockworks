@@ -22,8 +22,6 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
-        RenderBase.monospace(classNameOrValue, labelOrValue, valueOrNothing);
     export const screenHeaderStampSegment = async (item: number | null, ticks: number[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-tick-icon",
@@ -56,7 +54,7 @@ export module Render
                 children:
                 [
                     await Resource.loadSvgOrCache("tektite-tick-icon"),
-                    monospace("tick-elapsed-time", label("Elapsed time")),
+                    Tektite.monospace("tick-elapsed-time", label("Elapsed time")),
                 ]
             }),
             Tektite.$div("item-operator")
@@ -66,8 +64,8 @@ export module Render
         ]),
         Tektite.$div("item-information")
         ([
-            monospace("tick-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(tick)),
-            monospace("tick-interval", label("Interval"), Domain.timeLongStringFromTick(interval)),
+            Tektite.monospace("tick-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(tick)),
+            Tektite.monospace("tick-interval", label("Interval"), Domain.timeLongStringFromTick(interval)),
         ]),
     ]);
     export const stampItemMenu = async (tick: number) =>
@@ -119,7 +117,7 @@ export module Render
             [
                 Tektite.$div("current-item")
                 ([
-                    monospace
+                    Tektite.monospace
                     (   "previous-timestamp",
                         null !== item ?
                             Domain.dateFullStringFromTick(item):
@@ -129,8 +127,8 @@ export module Render
                                 ""
                             )
                     ),
-                    monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                    monospace("current-timestamp", Domain.dateFullStringFromTick(Domain.getTicks())),
+                    Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
+                    Tektite.monospace("current-timestamp", Domain.dateFullStringFromTick(Domain.getTicks())),
                 ]),
                 await RenderBase.flashIntervalLabel
                 (

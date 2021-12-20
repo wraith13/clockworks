@@ -22,8 +22,6 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
-        RenderBase.monospace(classNameOrValue, labelOrValue, valueOrNothing);
     export const screenHeaderTimezoneSegment = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-pin-icon",
@@ -38,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), monospace(Domain.timezoneOffsetString(i.offset)), ],
+                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.monospace(Domain.timezoneOffsetString(i.offset)), ],
                         Domain.makePageParams("RainbowClock", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -56,7 +54,7 @@ export module Render
                 children:
                 [
                     await Resource.loadSvgOrCache("tektite-pin-icon"),
-                    monospace("tick-elapsed-time", item.title),
+                    Tektite.monospace("tick-elapsed-time", item.title),
                 ]
             }),
             $div("item-operator")
@@ -68,9 +66,9 @@ export module Render
         ([
             $div("item-panel-body")
             ([
-                monospace("item-utc-offset", Domain.timezoneOffsetString(item.offset)),
-                monospace("item-date", Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
-                monospace("item-time", Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
+                Tektite.monospace("item-utc-offset", Domain.timezoneOffsetString(item.offset)),
+                Tektite.monospace("item-date", Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
+                Tektite.monospace("item-time", Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
             ]),
             $div("item-time-bar")([]),
         ])
@@ -162,7 +160,7 @@ export module Render
                         $span("value")(item.title),
                     ]):
                     [],
-                monospace
+                Tektite.monospace
                 (
                     "current-date",
                     Domain.dateCoreStringFromTick
@@ -172,7 +170,7 @@ export module Render
                             Domain.getTicks()
                     )
                 ),
-                monospace
+                Tektite.monospace
                 (
                     "capital-time",
                     Domain.timeFullCoreStringFromTick
@@ -186,7 +184,7 @@ export module Render
                     )
                 ),
                 null !== item ?
-                    monospace("current-utc-offset", Domain.timezoneOffsetString(item.offset)):
+                    Tektite.monospace("current-utc-offset", Domain.timezoneOffsetString(item.offset)):
                     [],
                 await RenderBase.flashIntervalLabel
                 (

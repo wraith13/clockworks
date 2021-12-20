@@ -22,8 +22,6 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    export const monospace = (classNameOrValue: string | minamo.dom.Source, labelOrValue?: minamo.dom.Source, valueOrNothing?: minamo.dom.Source) =>
-        RenderBase.monospace(classNameOrValue, labelOrValue, valueOrNothing);
     export const screenHeaderAlarmSegment = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-tick-icon",
@@ -38,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), monospace(Domain.dateStringFromTick(i.end)), ],
+                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), Tektite.monospace(Domain.dateStringFromTick(i.end)), ],
                         Domain.makePageParams("CountdownTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -59,7 +57,7 @@ export module Render
                 children:
                 [
                     await Resource.loadSvgOrCache("tektite-tick-icon"),
-                    monospace("tick-elapsed-time", alarmTitle(item)),
+                    Tektite.monospace("tick-elapsed-time", alarmTitle(item)),
                 ]
             }),
             $div("item-operator")
@@ -69,8 +67,8 @@ export module Render
         ]),
         $div("item-information")
         ([
-            monospace("alarm-due-timestamp", label("Due timestamp"), Domain.dateFullStringFromTick(item.end)),
-            monospace("alarm-due-rest", label("Rest"), Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
+            Tektite.monospace("alarm-due-timestamp", label("Due timestamp"), Domain.dateFullStringFromTick(item.end)),
+            Tektite.monospace("alarm-due-rest", label("Rest"), Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
         ]),
     ]);
     export const alarmItemMenu = async (item: Type.AlarmEntry) =>
@@ -146,7 +144,7 @@ export module Render
                 children:
                 [
                     await Resource.loadSvgOrCache("tektite-tick-icon"),
-                    monospace("tick-elapsed-time", item.title),
+                    Tektite.monospace("tick-elapsed-time", item.title),
                 ]
             }),
             $div("item-operator")
@@ -156,8 +154,8 @@ export module Render
         ]),
         $div("item-information")
         ([
-            monospace("event-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(item.tick)),
-            monospace("event-elapsed-time", label("Elapsed time"), Domain.timeLongStringFromTick(Domain.getTicks() - item.tick)),
+            Tektite.monospace("event-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(item.tick)),
+            Tektite.monospace("event-elapsed-time", label("Elapsed time"), Domain.timeLongStringFromTick(Domain.getTicks() - item.tick)),
         ]),
     ]);
     export const eventItemMenu = async (item: Type.EventEntry) =>
@@ -327,18 +325,18 @@ export module Render
                     ([
                         (item ?? alarms[0]) ?
                         [
-                            monospace("current-title", alarmTitle(item ?? alarms[0])),
+                            Tektite.monospace("current-title", alarmTitle(item ?? alarms[0])),
                             "timer" === (item ?? alarms[0]).type ?
-                                monospace("current-due-timestamp", Domain.dateFullStringFromTick((item ?? alarms[0]).end)):
-                                monospace("current-due-timestamp", Domain.dateStringFromTick((item ?? alarms[0]).end)),
+                                Tektite.monospace("current-due-timestamp", Domain.dateFullStringFromTick((item ?? alarms[0]).end)):
+                                Tektite.monospace("current-due-timestamp", Domain.dateStringFromTick((item ?? alarms[0]).end)),
                         ]: [],
-                        monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                        monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
+                        Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
+                        Tektite.monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
                     ]):
                     $div("current-item")
                     ([
-                        monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                        monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
+                        Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
+                        Tektite.monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
                     ]),
                 await RenderBase.flashIntervalLabel
                 (
