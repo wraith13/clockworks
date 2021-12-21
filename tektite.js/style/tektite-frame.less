@@ -105,6 +105,194 @@
     {
         flex-shrink: 0;
     }
+    & > header
+    {
+        padding: 0rem;
+        font-size: 1.2rem;
+        font-weight: normal;
+        max-width: 100vw;
+        overflow-x: hidden;
+        position: static;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        &.segmented
+        {
+            white-space: nowrap;
+            justify-content: start;
+        }
+        align-items: center;
+        .icon
+        {
+            display: inline-block;
+            svg
+            {
+                width: 2.0rem;
+                height: 2.0rem;
+            }
+            padding: 0.25rem;
+            // margin-right: 0.25rem;
+        }
+        .segment
+        {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            align-items: center;
+            font-size: 1.2rem;
+            padding-right: 1.25rem;
+            overflow-x: hidden;
+            transform: skewX(150deg);
+            & > *
+            {
+                transform: skewX(-150deg);
+            }
+            text-decoration: none;
+            min-width: 2.25rem;
+            &:first-child
+            {
+                min-width: 2.75rem;
+            }
+            &.label-segment
+            {
+                cursor: default;
+                .negative-foreground-coloring-trait;
+                background-color: @accent-color;
+            }
+            &:not(.label-segment)
+            {
+                .primary-operator-coloring-trait;
+            }
+            &.fill-header-segment
+            {
+                flex-grow: 1;
+                margin-right: -3rem;
+            }
+            &:not(:hover)
+            {
+                background-color: transparent !important;
+            }
+        }
+        .segment:first-child,
+        .progress-bar + .segment
+        {
+            padding-left: 1.25rem;
+            margin-left: -0.75rem;
+        }
+        .segment + .segment,
+        .segment +.menu-popup + .segment
+        {
+            padding-left: 0.5rem;
+            margin-left: 0rem;
+            border-left-style: solid;
+            border-left-width: 1px;
+            border-left-color: @base-color !important;
+            .icon
+            {
+                padding: 0.5rem 0.25rem;
+                svg
+                {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                }
+            }
+        }
+        .segment +.menu-popup
+        {
+            white-space: nowrap;
+        }
+        @media (max-width:780px)
+        {
+            .segment:not(.last-segment)
+            {
+                padding-right: 0.5rem;
+                .segment-title
+                {
+                    display: none;
+                }
+            }
+        }
+        button.icon-button,
+        button.menu-button
+        {
+            margin: 0px;
+            margin-right: 0.25rem;
+            .primary-operator-coloring-trait;
+            border-color: transparent !important;
+            right: 0.25rem;
+            position: absolute;
+            &:not(:hover)
+            {
+                background-color: transparent !important;
+            }
+        }
+        button.icon-button + button.menu-button
+        {
+            right: 2.50rem;
+        }
+        .menu-popup:not(.segment-popup)
+        {
+            top: calc(10px + 2.0rem);
+            right: 0.5rem;
+        }
+        .header-operator
+        {
+            flex-grow: 1;
+            margin-right: 5.25rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            z-index: 1000;
+        }
+        .progress-bar
+        {
+            position: absolute;
+            background-color: @progress-bar-color;
+            left: 0px;
+            top: 0px;
+            height: 2.5rem;
+            border-width: 0px;
+            border-style: solid;
+            border-color: #0005;
+            box-sizing: border-box;
+            border-right-width: 1px;
+        }
+        &.update
+        {
+            .progress-bar
+            {
+                animation-name: update-progress;
+                animation-direction: normal;
+                animation-delay: 0s;
+                animation-duration: 1.0s;
+                animation-timing-function: ease-in-out;
+                animation-fill-mode: both;
+            }
+        }
+        &.max-progress
+        {
+            .progress-bar
+            {
+                width: 100vw;
+            }
+        }
+        &.obsolescence
+        {
+            .progress-bar
+            {
+                left: initial;
+                right: 0px;
+                background-color: #888;
+                animation-name: update-progress;
+                animation-direction: normal;
+                animation-delay: 0s;
+                animation-duration: 3600.0s;
+                animation-timing-function: ease-in-out;
+                animation-fill-mode: both;
+            }
+        }
+    }
     & > .screen-body
     {
         overflow-x: hidden;
@@ -236,7 +424,7 @@
 {
     .screen
     {
-        h1
+        header
         {
             background-color: e(%("%s%s", @main-color, "11"));
             .segment:not(.label-segment)

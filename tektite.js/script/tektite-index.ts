@@ -79,7 +79,7 @@ export module Tektite
                     children:
                     [
                         {
-                            tag: "h1",
+                            tag: "header",
                             id: "screen-header",
                             className: "segmented",
                         },

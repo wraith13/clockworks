@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Tue Dec 21 2021 10:59:37 GMT+0900 (GMT+09:00)
+    build at: Tue Dec 21 2021 21:47:44 GMT+0900 (GMT+09:00)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!-- license:
@@ -442,6 +442,199 @@ body.light .screen {
 body.light .screen > :not(.screen-body) {
   flex-shrink: 0;
 }
+body.light .screen > header {
+  padding: 0rem;
+  font-size: 1.2rem;
+  font-weight: normal;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: static;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+body.light .screen > header.segmented {
+  white-space: nowrap;
+  justify-content: start;
+}
+body.light .screen > header .icon {
+  display: inline-block;
+  padding: 0.25rem;
+}
+body.light .screen > header .icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+body.light .screen > header .segment {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  font-size: 1.2rem;
+  padding-right: 1.25rem;
+  overflow-x: hidden;
+  transform: skewX(150deg);
+  text-decoration: none;
+  min-width: 2.25rem;
+}
+body.light .screen > header .segment > * {
+  transform: skewX(-150deg);
+}
+body.light .screen > header .segment:first-child {
+  min-width: 2.75rem;
+}
+body.light .screen > header .segment.label-segment {
+  cursor: default;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+  background-color: #5F42A7;
+}
+body.light .screen > header .segment:not(.label-segment) {
+  cursor: pointer;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+@media (hover: hover) {
+  body.light .screen > header .segment:not(.label-segment):not(:hover) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+  body.light .screen > header .segment:not(.label-segment):hover {
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.light .screen > header .segment:not(.label-segment) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+}
+body.light .screen > header .segment.fill-header-segment {
+  flex-grow: 1;
+  margin-right: -3rem;
+}
+body.light .screen > header .segment:not(:hover) {
+  background-color: transparent !important;
+}
+body.light .screen > header .segment:first-child,
+body.light .screen > header .progress-bar + .segment {
+  padding-left: 1.25rem;
+  margin-left: -0.75rem;
+}
+body.light .screen > header .segment + .segment,
+body.light .screen > header .segment + .menu-popup + .segment {
+  padding-left: 0.5rem;
+  margin-left: 0rem;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: #FFFFFF !important;
+}
+body.light .screen > header .segment + .segment .icon,
+body.light .screen > header .segment + .menu-popup + .segment .icon {
+  padding: 0.5rem 0.25rem;
+}
+body.light .screen > header .segment + .segment .icon svg,
+body.light .screen > header .segment + .menu-popup + .segment .icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+body.light .screen > header .segment + .menu-popup {
+  white-space: nowrap;
+}
+@media (max-width: 780px) {
+  body.light .screen > header .segment:not(.last-segment) {
+    padding-right: 0.5rem;
+  }
+  body.light .screen > header .segment:not(.last-segment) .segment-title {
+    display: none;
+  }
+}
+body.light .screen > header button.icon-button,
+body.light .screen > header button.menu-button {
+  margin: 0px;
+  margin-right: 0.25rem;
+  cursor: pointer;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+  border-color: transparent !important;
+  right: 0.25rem;
+  position: absolute;
+}
+@media (hover: hover) {
+  body.light .screen > header button.icon-button:not(:hover),
+  body.light .screen > header button.menu-button:not(:hover) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+  body.light .screen > header button.icon-button:hover,
+  body.light .screen > header button.menu-button:hover {
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.light .screen > header button.icon-button,
+  body.light .screen > header button.menu-button {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+}
+body.light .screen > header button.icon-button:not(:hover),
+body.light .screen > header button.menu-button:not(:hover) {
+  background-color: transparent !important;
+}
+body.light .screen > header button.icon-button + button.menu-button {
+  right: 2.5rem;
+}
+body.light .screen > header .menu-popup:not(.segment-popup) {
+  top: calc(10px + 2rem);
+  right: 0.5rem;
+}
+body.light .screen > header .header-operator {
+  flex-grow: 1;
+  margin-right: 5.25rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+body.light .screen > header .progress-bar {
+  position: absolute;
+  background-color: #1079C0;
+  left: 0px;
+  top: 0px;
+  height: 2.5rem;
+  border-width: 0px;
+  border-style: solid;
+  border-color: #0005;
+  box-sizing: border-box;
+  border-right-width: 1px;
+}
+body.light .screen > header.update .progress-bar {
+  animation-name: update-progress;
+  animation-direction: normal;
+  animation-delay: 0s;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+body.light .screen > header.max-progress .progress-bar {
+  width: 100vw;
+}
+body.light .screen > header.obsolescence .progress-bar {
+  left: initial;
+  right: 0px;
+  background-color: #888;
+  animation-name: update-progress;
+  animation-direction: normal;
+  animation-delay: 0s;
+  animation-duration: 3600s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
 body.light .screen > .screen-body {
   overflow-x: hidden;
   overflow-y: auto;
@@ -538,16 +731,16 @@ body.light .screen .screen-bar.vertical {
   right: 0px;
   border-bottom-width: 1px;
 }
-body.light.tektite-modern .screen h1 {
+body.light.tektite-modern .screen header {
   background-color: #00002211;
 }
 @media (hover: hover) {
-  body.light.tektite-modern .screen h1 .segment:not(.label-segment):hover {
+  body.light.tektite-modern .screen header .segment:not(.label-segment):hover {
     background-color: #FFFFFF11;
   }
 }
 @media (hover: hover) {
-  body.light.tektite-modern .screen h1 > button:hover {
+  body.light.tektite-modern .screen header > button:hover {
     background-color: #FFFFFF22;
   }
 }
@@ -1121,199 +1314,6 @@ body.light .menu-popup .locale-map {
 body.light .locale-parallel-off .locale-parallel,
 body.light .menu-popup .locale-parallel {
   display: none;
-}
-body.light h1 {
-  padding: 0rem;
-  font-size: 1.2rem;
-  font-weight: normal;
-  max-width: 100vw;
-  overflow-x: hidden;
-  position: static;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-body.light h1.segmented {
-  white-space: nowrap;
-  justify-content: start;
-}
-body.light h1 .icon {
-  display: inline-block;
-  padding: 0.25rem;
-}
-body.light h1 .icon svg {
-  width: 2rem;
-  height: 2rem;
-}
-body.light h1 .segment {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  font-size: 1.2rem;
-  padding-right: 1.25rem;
-  overflow-x: hidden;
-  transform: skewX(150deg);
-  text-decoration: none;
-  min-width: 2.25rem;
-}
-body.light h1 .segment > * {
-  transform: skewX(-150deg);
-}
-body.light h1 .segment:first-child {
-  min-width: 2.75rem;
-}
-body.light h1 .segment.label-segment {
-  cursor: default;
-  color: #FFFFFF;
-  fill: #FFFFFF;
-  background-color: #5F42A7;
-}
-body.light h1 .segment:not(.label-segment) {
-  cursor: pointer;
-  color: #FFFFFF;
-  fill: #FFFFFF;
-}
-@media (hover: hover) {
-  body.light h1 .segment:not(.label-segment):not(:hover) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-  body.light h1 .segment:not(.label-segment):hover {
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.light h1 .segment:not(.label-segment) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-}
-body.light h1 .segment.fill-header-segment {
-  flex-grow: 1;
-  margin-right: -3rem;
-}
-body.light h1 .segment:not(:hover) {
-  background-color: transparent !important;
-}
-body.light h1 .segment:first-child,
-body.light h1 .progress-bar + .segment {
-  padding-left: 1.25rem;
-  margin-left: -0.75rem;
-}
-body.light h1 .segment + .segment,
-body.light h1 .segment + .menu-popup + .segment {
-  padding-left: 0.5rem;
-  margin-left: 0rem;
-  border-left-style: solid;
-  border-left-width: 1px;
-  border-left-color: #FFFFFF !important;
-}
-body.light h1 .segment + .segment .icon,
-body.light h1 .segment + .menu-popup + .segment .icon {
-  padding: 0.5rem 0.25rem;
-}
-body.light h1 .segment + .segment .icon svg,
-body.light h1 .segment + .menu-popup + .segment .icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-body.light h1 .segment + .menu-popup {
-  white-space: nowrap;
-}
-@media (max-width: 780px) {
-  body.light h1 .segment:not(.last-segment) {
-    padding-right: 0.5rem;
-  }
-  body.light h1 .segment:not(.last-segment) .segment-title {
-    display: none;
-  }
-}
-body.light h1 button.icon-button,
-body.light h1 button.menu-button {
-  margin: 0px;
-  margin-right: 0.25rem;
-  cursor: pointer;
-  color: #FFFFFF;
-  fill: #FFFFFF;
-  border-color: transparent !important;
-  right: 0.25rem;
-  position: absolute;
-}
-@media (hover: hover) {
-  body.light h1 button.icon-button:not(:hover),
-  body.light h1 button.menu-button:not(:hover) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-  body.light h1 button.icon-button:hover,
-  body.light h1 button.menu-button:hover {
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.light h1 button.icon-button,
-  body.light h1 button.menu-button {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-}
-body.light h1 button.icon-button:not(:hover),
-body.light h1 button.menu-button:not(:hover) {
-  background-color: transparent !important;
-}
-body.light h1 button.icon-button + button.menu-button {
-  right: 2.5rem;
-}
-body.light h1 .menu-popup:not(.segment-popup) {
-  top: calc(10px + 2rem);
-  right: 0.5rem;
-}
-body.light h1 .header-operator {
-  flex-grow: 1;
-  margin-right: 5.25rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  z-index: 1000;
-}
-body.light h1 .progress-bar {
-  position: absolute;
-  background-color: #1079C0;
-  left: 0px;
-  top: 0px;
-  height: 2.5rem;
-  border-width: 0px;
-  border-style: solid;
-  border-color: #0005;
-  box-sizing: border-box;
-  border-right-width: 1px;
-}
-body.light h1.update .progress-bar {
-  animation-name: update-progress;
-  animation-direction: normal;
-  animation-delay: 0s;
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
-}
-body.light h1.max-progress .progress-bar {
-  width: 100vw;
-}
-body.light h1.obsolescence .progress-bar {
-  left: initial;
-  right: 0px;
-  background-color: #888;
-  animation-name: update-progress;
-  animation-direction: normal;
-  animation-delay: 0s;
-  animation-duration: 3600s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
 }
 body.light.tektite-modern .segment + .segment,
 body.light.tektite-modern .segment + .menu-popup + .segment {
@@ -3065,6 +3065,199 @@ body.dark .screen {
 body.dark .screen > :not(.screen-body) {
   flex-shrink: 0;
 }
+body.dark .screen > header {
+  padding: 0rem;
+  font-size: 1.2rem;
+  font-weight: normal;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: static;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+body.dark .screen > header.segmented {
+  white-space: nowrap;
+  justify-content: start;
+}
+body.dark .screen > header .icon {
+  display: inline-block;
+  padding: 0.25rem;
+}
+body.dark .screen > header .icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+body.dark .screen > header .segment {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  font-size: 1.2rem;
+  padding-right: 1.25rem;
+  overflow-x: hidden;
+  transform: skewX(150deg);
+  text-decoration: none;
+  min-width: 2.25rem;
+}
+body.dark .screen > header .segment > * {
+  transform: skewX(-150deg);
+}
+body.dark .screen > header .segment:first-child {
+  min-width: 2.75rem;
+}
+body.dark .screen > header .segment.label-segment {
+  cursor: default;
+  color: #000022;
+  fill: #000022;
+  background-color: #5F42A7;
+}
+body.dark .screen > header .segment:not(.label-segment) {
+  cursor: pointer;
+  color: #000022;
+  fill: #000022;
+}
+@media (hover: hover) {
+  body.dark .screen > header .segment:not(.label-segment):not(:hover) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+  body.dark .screen > header .segment:not(.label-segment):hover {
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.dark .screen > header .segment:not(.label-segment) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+}
+body.dark .screen > header .segment.fill-header-segment {
+  flex-grow: 1;
+  margin-right: -3rem;
+}
+body.dark .screen > header .segment:not(:hover) {
+  background-color: transparent !important;
+}
+body.dark .screen > header .segment:first-child,
+body.dark .screen > header .progress-bar + .segment {
+  padding-left: 1.25rem;
+  margin-left: -0.75rem;
+}
+body.dark .screen > header .segment + .segment,
+body.dark .screen > header .segment + .menu-popup + .segment {
+  padding-left: 0.5rem;
+  margin-left: 0rem;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: #000022 !important;
+}
+body.dark .screen > header .segment + .segment .icon,
+body.dark .screen > header .segment + .menu-popup + .segment .icon {
+  padding: 0.5rem 0.25rem;
+}
+body.dark .screen > header .segment + .segment .icon svg,
+body.dark .screen > header .segment + .menu-popup + .segment .icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+body.dark .screen > header .segment + .menu-popup {
+  white-space: nowrap;
+}
+@media (max-width: 780px) {
+  body.dark .screen > header .segment:not(.last-segment) {
+    padding-right: 0.5rem;
+  }
+  body.dark .screen > header .segment:not(.last-segment) .segment-title {
+    display: none;
+  }
+}
+body.dark .screen > header button.icon-button,
+body.dark .screen > header button.menu-button {
+  margin: 0px;
+  margin-right: 0.25rem;
+  cursor: pointer;
+  color: #000022;
+  fill: #000022;
+  border-color: transparent !important;
+  right: 0.25rem;
+  position: absolute;
+}
+@media (hover: hover) {
+  body.dark .screen > header button.icon-button:not(:hover),
+  body.dark .screen > header button.menu-button:not(:hover) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+  body.dark .screen > header button.icon-button:hover,
+  body.dark .screen > header button.menu-button:hover {
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.dark .screen > header button.icon-button,
+  body.dark .screen > header button.menu-button {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+}
+body.dark .screen > header button.icon-button:not(:hover),
+body.dark .screen > header button.menu-button:not(:hover) {
+  background-color: transparent !important;
+}
+body.dark .screen > header button.icon-button + button.menu-button {
+  right: 2.5rem;
+}
+body.dark .screen > header .menu-popup:not(.segment-popup) {
+  top: calc(10px + 2rem);
+  right: 0.5rem;
+}
+body.dark .screen > header .header-operator {
+  flex-grow: 1;
+  margin-right: 5.25rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+body.dark .screen > header .progress-bar {
+  position: absolute;
+  background-color: #1079C0;
+  left: 0px;
+  top: 0px;
+  height: 2.5rem;
+  border-width: 0px;
+  border-style: solid;
+  border-color: #0005;
+  box-sizing: border-box;
+  border-right-width: 1px;
+}
+body.dark .screen > header.update .progress-bar {
+  animation-name: update-progress;
+  animation-direction: normal;
+  animation-delay: 0s;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+body.dark .screen > header.max-progress .progress-bar {
+  width: 100vw;
+}
+body.dark .screen > header.obsolescence .progress-bar {
+  left: initial;
+  right: 0px;
+  background-color: #888;
+  animation-name: update-progress;
+  animation-direction: normal;
+  animation-delay: 0s;
+  animation-duration: 3600s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
 body.dark .screen > .screen-body {
   overflow-x: hidden;
   overflow-y: auto;
@@ -3161,16 +3354,16 @@ body.dark .screen .screen-bar.vertical {
   right: 0px;
   border-bottom-width: 1px;
 }
-body.dark.tektite-modern .screen h1 {
+body.dark.tektite-modern .screen header {
   background-color: #FFFFFF11;
 }
 @media (hover: hover) {
-  body.dark.tektite-modern .screen h1 .segment:not(.label-segment):hover {
+  body.dark.tektite-modern .screen header .segment:not(.label-segment):hover {
     background-color: #00002211;
   }
 }
 @media (hover: hover) {
-  body.dark.tektite-modern .screen h1 > button:hover {
+  body.dark.tektite-modern .screen header > button:hover {
     background-color: #00002222;
   }
 }
@@ -3744,199 +3937,6 @@ body.dark .menu-popup .locale-map {
 body.dark .locale-parallel-off .locale-parallel,
 body.dark .menu-popup .locale-parallel {
   display: none;
-}
-body.dark h1 {
-  padding: 0rem;
-  font-size: 1.2rem;
-  font-weight: normal;
-  max-width: 100vw;
-  overflow-x: hidden;
-  position: static;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-body.dark h1.segmented {
-  white-space: nowrap;
-  justify-content: start;
-}
-body.dark h1 .icon {
-  display: inline-block;
-  padding: 0.25rem;
-}
-body.dark h1 .icon svg {
-  width: 2rem;
-  height: 2rem;
-}
-body.dark h1 .segment {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  font-size: 1.2rem;
-  padding-right: 1.25rem;
-  overflow-x: hidden;
-  transform: skewX(150deg);
-  text-decoration: none;
-  min-width: 2.25rem;
-}
-body.dark h1 .segment > * {
-  transform: skewX(-150deg);
-}
-body.dark h1 .segment:first-child {
-  min-width: 2.75rem;
-}
-body.dark h1 .segment.label-segment {
-  cursor: default;
-  color: #000022;
-  fill: #000022;
-  background-color: #5F42A7;
-}
-body.dark h1 .segment:not(.label-segment) {
-  cursor: pointer;
-  color: #000022;
-  fill: #000022;
-}
-@media (hover: hover) {
-  body.dark h1 .segment:not(.label-segment):not(:hover) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-  body.dark h1 .segment:not(.label-segment):hover {
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.dark h1 .segment:not(.label-segment) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-}
-body.dark h1 .segment.fill-header-segment {
-  flex-grow: 1;
-  margin-right: -3rem;
-}
-body.dark h1 .segment:not(:hover) {
-  background-color: transparent !important;
-}
-body.dark h1 .segment:first-child,
-body.dark h1 .progress-bar + .segment {
-  padding-left: 1.25rem;
-  margin-left: -0.75rem;
-}
-body.dark h1 .segment + .segment,
-body.dark h1 .segment + .menu-popup + .segment {
-  padding-left: 0.5rem;
-  margin-left: 0rem;
-  border-left-style: solid;
-  border-left-width: 1px;
-  border-left-color: #000022 !important;
-}
-body.dark h1 .segment + .segment .icon,
-body.dark h1 .segment + .menu-popup + .segment .icon {
-  padding: 0.5rem 0.25rem;
-}
-body.dark h1 .segment + .segment .icon svg,
-body.dark h1 .segment + .menu-popup + .segment .icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-body.dark h1 .segment + .menu-popup {
-  white-space: nowrap;
-}
-@media (max-width: 780px) {
-  body.dark h1 .segment:not(.last-segment) {
-    padding-right: 0.5rem;
-  }
-  body.dark h1 .segment:not(.last-segment) .segment-title {
-    display: none;
-  }
-}
-body.dark h1 button.icon-button,
-body.dark h1 button.menu-button {
-  margin: 0px;
-  margin-right: 0.25rem;
-  cursor: pointer;
-  color: #000022;
-  fill: #000022;
-  border-color: transparent !important;
-  right: 0.25rem;
-  position: absolute;
-}
-@media (hover: hover) {
-  body.dark h1 button.icon-button:not(:hover),
-  body.dark h1 button.menu-button:not(:hover) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-  body.dark h1 button.icon-button:hover,
-  body.dark h1 button.menu-button:hover {
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.dark h1 button.icon-button,
-  body.dark h1 button.menu-button {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-}
-body.dark h1 button.icon-button:not(:hover),
-body.dark h1 button.menu-button:not(:hover) {
-  background-color: transparent !important;
-}
-body.dark h1 button.icon-button + button.menu-button {
-  right: 2.5rem;
-}
-body.dark h1 .menu-popup:not(.segment-popup) {
-  top: calc(10px + 2rem);
-  right: 0.5rem;
-}
-body.dark h1 .header-operator {
-  flex-grow: 1;
-  margin-right: 5.25rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  z-index: 1000;
-}
-body.dark h1 .progress-bar {
-  position: absolute;
-  background-color: #1079C0;
-  left: 0px;
-  top: 0px;
-  height: 2.5rem;
-  border-width: 0px;
-  border-style: solid;
-  border-color: #0005;
-  box-sizing: border-box;
-  border-right-width: 1px;
-}
-body.dark h1.update .progress-bar {
-  animation-name: update-progress;
-  animation-direction: normal;
-  animation-delay: 0s;
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
-}
-body.dark h1.max-progress .progress-bar {
-  width: 100vw;
-}
-body.dark h1.obsolescence .progress-bar {
-  left: initial;
-  right: 0px;
-  background-color: #888;
-  animation-name: update-progress;
-  animation-direction: normal;
-  animation-delay: 0s;
-  animation-duration: 3600s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
 }
 body.dark.tektite-modern .segment + .segment,
 body.dark.tektite-modern .segment + .menu-popup + .segment {
@@ -7561,7 +7561,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                             className: "screen",
                             children: [
                                 {
-                                    tag: "h1",
+                                    tag: "header",
                                     id: "screen-header",
                                     className: "segmented",
                                 },
@@ -13703,7 +13703,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640051977030), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640090864120), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
