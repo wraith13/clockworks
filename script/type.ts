@@ -2,7 +2,7 @@ import { Color } from "./color";
 import resource from "../resource/images.json";
 import tektiteResource from "../tektite.js/images.json";
 import { Clockworks } from ".";
-import { Tektite } from "../tektite.js/script";
+import { Tektite } from "../tektite.js/script/tektite-index";
 export module Type
 {
     export const applicationList =

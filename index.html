@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Mon Dec 20 2021 22:25:25 GMT+0900 (GMT+09:00)
+    build at: Tue Dec 21 2021 10:59:37 GMT+0900 (GMT+09:00)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!-- license:
@@ -6553,7 +6553,7 @@ define("clockworks/nephila/minamo.js/index", ["require", "exports"], function (r
         })(dom = minamo.dom || (minamo.dom = {}));
     })(minamo = exports.minamo || (exports.minamo = {}));
 });
-define("clockworks/tektite.js/script/locale", ["require", "exports"], function (require, exports) {
+define("clockworks/tektite.js/script/tektite-locale", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Locale = void 0;
@@ -6589,7 +6589,7 @@ define("clockworks/tektite.js/script/locale", ["require", "exports"], function (
         };
     })(Locale = exports.Locale || (exports.Locale = {}));
 });
-define("clockworks/tektite.js/script/fullscreen", ["require", "exports"], function (require, exports) {
+define("clockworks/tektite.js/script/tektite-fullscreen", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Fullscreen = void 0;
@@ -6649,13 +6649,13 @@ define("clockworks/tektite.js/script/fullscreen", ["require", "exports"], functi
         }); };
     })(Fullscreen = exports.Fullscreen || (exports.Fullscreen = {}));
 });
-define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/index"], function (require, exports, minamo_js_1, _1) {
+define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-index"], function (require, exports, index_js_1, tektite_index_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Screen = void 0;
     var Screen;
     (function (Screen_1) {
-        var $make = minamo_js_1.minamo.dom.make;
+        var $make = index_js_1.minamo.dom.make;
         var Screen = /** @class */ (function () {
             function Screen(tektite) {
                 var _this = this;
@@ -6732,22 +6732,22 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                                 case 0:
                                     dom.classList.remove("fade-in");
                                     dom.classList.add("fade-out");
-                                    return [4 /*yield*/, minamo_js_1.minamo.core.timeout(500)];
+                                    return [4 /*yield*/, index_js_1.minamo.core.timeout(500)];
                                 case 1:
                                     _a.sent();
-                                    minamo_js_1.minamo.dom.remove(dom);
+                                    index_js_1.minamo.dom.remove(dom);
                                     return [2 /*return*/];
                             }
                         });
                     }); };
-                    minamo_js_1.minamo.dom.appendChildren(_this.getElement(), dom);
+                    index_js_1.minamo.dom.appendChildren(_this.getElement(), dom);
                     var result = {
                         dom: dom,
                         close: close,
                     };
                     return result;
                 };
-                this.getScreenCoverList = function () { return minamo_js_1.minamo.dom.getDivsByClassName(document, "screen-cover"); };
+                this.getScreenCoverList = function () { return index_js_1.minamo.dom.getDivsByClassName(document, "screen-cover"); };
                 this.getScreenCover = function () { return _this.getScreenCoverList().filter(function (_i, ix, list) { return (ix + 1) === list.length; })[0]; };
                 this.hasScreenCover = function () { return 0 < _this.getScreenCoverList().length; };
                 // public popup =
@@ -6899,7 +6899,7 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                     return __generator(this, function (_d) {
                         switch (_d.label) {
                             case 0:
-                                _b = (_a = minamo_js_1.minamo.dom).replaceChildren;
+                                _b = (_a = index_js_1.minamo.dom).replaceChildren;
                                 _c = [document.getElementById("screen-body")];
                                 return [4 /*yield*/, this.makeBody(body)];
                             case 1: return [2 /*return*/, _b.apply(_a, _c.concat([_d.sent()]))];
@@ -6919,7 +6919,7 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                                 if (!(i < 25)) return [3 /*break*/, 4];
                                 diff *= 0.8;
                                 target.scrollTo(0, offset - diff);
-                                return [4 /*yield*/, minamo_js_1.minamo.core.timeout(10)];
+                                return [4 /*yield*/, index_js_1.minamo.core.timeout(10)];
                             case 2:
                                 _a.sent();
                                 _a.label = 3;
@@ -6947,7 +6947,7 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                     });
                 }); };
                 this.getBodyScrollTop = function (topChild) {
-                    if (topChild === void 0) { topChild = minamo_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0]; }
+                    if (topChild === void 0) { topChild = index_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0]; }
                     var body = document.getElementById("screen-body");
                     var primaryPageOffsetTop = Math.min(topChild.offsetTop - body.offsetTop, body.scrollHeight - body.clientHeight);
                     return body.scrollTop - primaryPageOffsetTop;
@@ -6970,11 +6970,11 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                                             switch (_a.label) {
                                                 case 0:
                                                     if (!this.isStrictShowPrimaryPage()) return [3 /*break*/, 2];
-                                                    return [4 /*yield*/, this.scrollToElement(minamo_js_1.minamo.dom.getDivsByClassName(document, "trail-page")[0])];
+                                                    return [4 /*yield*/, this.scrollToElement(index_js_1.minamo.dom.getDivsByClassName(document, "trail-page")[0])];
                                                 case 1:
                                                     _a.sent();
                                                     return [3 /*break*/, 4];
-                                                case 2: return [4 /*yield*/, this.scrollToElement(minamo_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0])];
+                                                case 2: return [4 /*yield*/, this.scrollToElement(index_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0])];
                                                 case 3:
                                                     _a.sent();
                                                     _a.label = 4;
@@ -6991,15 +6991,15 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                     if (primaryPage) {
                         var body = document.getElementById("screen-body");
                         var delta_1 = Math.max(primaryPage.clientHeight - (body.clientHeight + _this.getBodyScrollTop()), 0);
-                        minamo_js_1.minamo.dom.getDivsByClassName(document, "page-footer")
-                            .forEach(function (i) { return minamo_js_1.minamo.dom.setStyleProperty(i, "paddingBottom", "calc(1rem + " + delta_1 + "px)"); });
+                        index_js_1.minamo.dom.getDivsByClassName(document, "page-footer")
+                            .forEach(function (i) { return index_js_1.minamo.dom.setStyleProperty(i, "paddingBottom", "calc(1rem + " + delta_1 + "px)"); });
                         // minamo.dom.getDivsByClassName(document, "down-page-link")
                         //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
                     }
                 };
                 this.adjustDownPageLinkDirection = function () {
-                    return minamo_js_1.minamo.dom.getDivsByClassName(document, "down-page-link")
-                        .forEach(function (i) { return minamo_js_1.minamo.dom.toggleCSSClass(i, "reverse-down-page-link", !_this.isStrictShowPrimaryPage()); });
+                    return index_js_1.minamo.dom.getDivsByClassName(document, "down-page-link")
+                        .forEach(function (i) { return index_js_1.minamo.dom.toggleCSSClass(i, "reverse-down-page-link", !_this.isStrictShowPrimaryPage()); });
                 };
                 this.setClass = function (className) {
                     if (undefined !== _this.lastScreenName) {
@@ -7033,7 +7033,7 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                                         });
                                     }); };
                                 }
-                                _1.Tektite.resetProgress();
+                                tektite_index_1.Tektite.resetProgress();
                                 this.setClass(screen.className);
                                 this.tektite.header.replace(screen.header);
                                 return [4 /*yield*/, this.replaceBody(screen.body)];
@@ -7066,11 +7066,11 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                     return __generator(this, function (_f) {
                         switch (_f.label) {
                             case 0:
-                                _a = _1.Tektite.$div("primary-page");
-                                _b = [_1.Tektite.$div("page-body")(_1.Tektite.$div("main-panel")(undefined === primary.body ?
+                                _a = tektite_index_1.Tektite.$div("primary-page");
+                                _b = [tektite_index_1.Tektite.$div("page-body")(tektite_index_1.Tektite.$div("main-panel")(undefined === primary.body ?
                                         primary :
                                         primary.body))];
-                                _c = _1.Tektite.$div("page-footer");
+                                _c = tektite_index_1.Tektite.$div("page-footer");
                                 if (!(undefined !== primary.footer)) return [3 /*break*/, 1];
                                 _d = primary.footer;
                                 return [3 /*break*/, 5];
@@ -7091,7 +7091,7 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
                                             _c.apply(void 0, [_d])
                                         ])]),
                                     undefined !== trail ?
-                                        _1.Tektite.$div("trail-page")(trail) :
+                                        tektite_index_1.Tektite.$div("trail-page")(trail) :
                                         []
                                 ]];
                         }
@@ -7106,7 +7106,7 @@ define("clockworks/tektite.js/script/screen", ["require", "exports", "clockworks
         };
     })(Screen = exports.Screen || (exports.Screen = {}));
 });
-define("clockworks/tektite.js/script/toast", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/index"], function (require, exports, minamo_js_2, _2) {
+define("clockworks/tektite.js/script/tektite-toast", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-index"], function (require, exports, index_js_2, tektite_index_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Toast = void 0;
@@ -7115,7 +7115,7 @@ define("clockworks/tektite.js/script/toast", ["require", "exports", "clockworks/
         var _this = this;
         Toast.make = function (data) {
             var _a, _b, _c;
-            var dom = _2.Tektite.$make(HTMLDivElement)({
+            var dom = tektite_index_2.Tektite.$make(HTMLDivElement)({
                 tag: "div",
                 className: "item slide-up-in",
                 children: data.isWideContent ?
@@ -7125,9 +7125,9 @@ define("clockworks/tektite.js/script/toast", ["require", "exports", "clockworks/
                         data.forwardOperator,
                     ].filter(function (i) { return undefined !== i; }) :
                     [
-                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : _2.Tektite.$span("dummy")([]),
+                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : tektite_index_2.Tektite.$span("dummy")([]),
                         data.content,
-                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : _2.Tektite.$span("dummy")([]),
+                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : tektite_index_2.Tektite.$span("dummy")([]),
                     ],
             });
             var hideRaw = function (className, wait) { return __awaiter(_this, void 0, void 0, function () {
@@ -7141,10 +7141,10 @@ define("clockworks/tektite.js/script/toast", ["require", "exports", "clockworks/
                             if (!dom.parentElement) return [3 /*break*/, 2];
                             dom.classList.remove("slide-up-in");
                             dom.classList.add(className);
-                            return [4 /*yield*/, minamo_js_2.minamo.core.timeout(wait)];
+                            return [4 /*yield*/, index_js_2.minamo.core.timeout(wait)];
                         case 1:
                             _a.sent();
-                            minamo_js_2.minamo.dom.remove(dom);
+                            index_js_2.minamo.dom.remove(dom);
                             _a.label = 2;
                         case 2: return [2 /*return*/];
                     }
@@ -7174,7 +7174,7 @@ define("clockworks/tektite.js/script/toast", ["require", "exports", "clockworks/
         };
     })(Toast = exports.Toast || (exports.Toast = {}));
 });
-define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/index"], function (require, exports, minamo_js_3, _3) {
+define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-index"], function (require, exports, index_js_3, tektite_index_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Header = void 0;
@@ -7200,7 +7200,7 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
                     return __generator(this, function (_e) {
                         switch (_e.label) {
                             case 0:
-                                _a = [_3.Tektite.$div("progress-bar")([])];
+                                _a = [tektite_index_3.Tektite.$div("progress-bar")([])];
                                 return [4 /*yield*/, Promise.all(data.items
                                         .filter(function (i) { return i; })
                                         .map(function (item, ix, list) { return __awaiter(_this, void 0, void 0, function () {
@@ -7255,22 +7255,22 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
                                 _e.label = 7;
                             case 7: return [2 /*return*/, _a.concat([
                                     _c,
-                                    data.operator ? _3.Tektite.$div("header-operator")(data.operator) : []
+                                    data.operator ? tektite_index_3.Tektite.$div("header-operator")(data.operator) : []
                                 ])];
                         }
                     });
                 }); };
-                this.getCloseButton = function () { return minamo_js_3.minamo.dom.getButtonsByClassName(_this.getElement(), "close-button")[0]; };
+                this.getCloseButton = function () { return index_js_3.minamo.dom.getButtonsByClassName(_this.getElement(), "close-button")[0]; };
                 this.segmentCore = function (item) { return __awaiter(_this, void 0, void 0, function () {
                     var _a;
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = _3.Tektite.$div("icon");
+                                _a = tektite_index_3.Tektite.$div("icon");
                                 return [4 /*yield*/, this.tektite.params.loadSvgOrCache(item.icon)];
                             case 1: return [2 /*return*/, [
                                     _a.apply(void 0, [_b.sent()]),
-                                    _3.Tektite.$div("segment-title")(item.title)
+                                    tektite_index_3.Tektite.$div("segment-title")(item.title)
                                 ]];
                         }
                     });
@@ -7280,7 +7280,7 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
                     return __awaiter(_this, void 0, void 0, function () { var _a; return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = _3.Tektite.$div("segment label-segment " + className);
+                                _a = tektite_index_3.Tektite.$div("segment label-segment " + className);
                                 return [4 /*yield*/, this.segmentCore(item)];
                             case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent()])];
                         }
@@ -7319,7 +7319,7 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
                                         popup.classList.remove("show");
                                         cover = null;
                                     };
-                                    popup = _3.Tektite.$make(HTMLDivElement)({
+                                    popup = tektite_index_3.Tektite.$make(HTMLDivElement)({
                                         tag: "div",
                                         className: "menu-popup segment-popup",
                                         children: "function" !== typeof item.menu ? item.menu : [],
@@ -7333,7 +7333,7 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
                                             });
                                         }); },
                                     });
-                                    _a = _3.Tektite.$make(HTMLDivElement);
+                                    _a = tektite_index_3.Tektite.$make(HTMLDivElement);
                                     _b = {
                                         tag: "div",
                                         className: "segment " + className
@@ -7349,7 +7349,7 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
                                                             event.stopPropagation();
                                                             console.log("menu-button.click!");
                                                             if (!("function" === typeof item.menu)) return [3 /*break*/, 2];
-                                                            _b = (_a = minamo_js_3.minamo.dom).replaceChildren;
+                                                            _b = (_a = index_js_3.minamo.dom).replaceChildren;
                                                             _c = [popup];
                                                             return [4 /*yield*/, item.menu()];
                                                         case 1:
@@ -7379,7 +7379,7 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
                     return __generator(this, function (_d) {
                         switch (_d.label) {
                             case 0:
-                                _b = (_a = minamo_js_3.minamo.dom).replaceChildren;
+                                _b = (_a = index_js_3.minamo.dom).replaceChildren;
                                 _c = [this.getElement()];
                                 return [4 /*yield*/, this.segmented(header)];
                             case 1: return [2 /*return*/, _b.apply(_a, _c.concat([_d.sent()]))];
@@ -7395,13 +7395,13 @@ define("clockworks/tektite.js/script/header", ["require", "exports", "clockworks
         };
     })(Header = exports.Header || (exports.Header = {}));
 });
-define("clockworks/tektite.js/script/menu", ["require", "exports", "clockworks/nephila/minamo.js/index"], function (require, exports, minamo_js_4) {
+define("clockworks/tektite.js/script/tektite-menu", ["require", "exports", "clockworks/nephila/minamo.js/index"], function (require, exports, index_js_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Menu = void 0;
     var Menu;
     (function (Menu_1) {
-        var $make = minamo_js_4.minamo.dom.make;
+        var $make = index_js_4.minamo.dom.make;
         var Menu = /** @class */ (function () {
             function Menu(tektite) {
                 var _this = this;
@@ -7449,7 +7449,7 @@ define("clockworks/tektite.js/script/menu", ["require", "exports", "clockworks/n
                                                         event.stopPropagation();
                                                         console.log("menu-button.click!");
                                                         if (!("function" === typeof menu)) return [3 /*break*/, 2];
-                                                        _b = (_a = minamo_js_4.minamo.dom).replaceChildren;
+                                                        _b = (_a = index_js_4.minamo.dom).replaceChildren;
                                                         _c = [popup];
                                                         return [4 /*yield*/, menu()];
                                                     case 1:
@@ -7487,7 +7487,7 @@ define("clockworks/tektite.js/script/menu", ["require", "exports", "clockworks/n
         };
     })(Menu = exports.Menu || (exports.Menu = {}));
 });
-define("clockworks/tektite.js/script/key", ["require", "exports"], function (require, exports) {
+define("clockworks/tektite.js/script/tektite-key", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Key = void 0;
@@ -7519,14 +7519,14 @@ define("clockworks/tektite.js/images", [], {
     "tektite-pin-icon": "./image/pin.1024.svg",
     "tektite-down-triangle-icon": "./image/down-triangle.1024.svg"
 });
-define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/locale", "clockworks/tektite.js/script/fullscreen", "clockworks/tektite.js/script/screen", "clockworks/tektite.js/script/toast", "clockworks/tektite.js/script/header", "clockworks/tektite.js/script/menu", "clockworks/tektite.js/script/key"], function (require, exports, minamo_js_5, locale_1, fullscreen_1, screen_1, toast_1, header_1, menu_1, key_1) {
+define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-locale", "clockworks/tektite.js/script/tektite-fullscreen", "clockworks/tektite.js/script/tektite-screen", "clockworks/tektite.js/script/tektite-toast", "clockworks/tektite.js/script/tektite-header", "clockworks/tektite.js/script/tektite-menu", "clockworks/tektite.js/script/tektite-key"], function (require, exports, index_js_5, tektite_locale_1, tektite_fullscreen_1, tektite_screen_1, tektite_toast_1, tektite_header_1, tektite_menu_1, tektite_key_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Tektite = void 0;
     var Tektite;
     (function (Tektite_1) {
-        Tektite_1.$make = minamo_js_5.minamo.dom.make;
-        Tektite_1.$tag = minamo_js_5.minamo.dom.tag;
+        Tektite_1.$make = index_js_5.minamo.dom.make;
+        Tektite_1.$tag = index_js_5.minamo.dom.tag;
         Tektite_1.$div = Tektite_1.$tag("div");
         Tektite_1.$span = Tektite_1.$tag("span");
         Tektite_1.$labelSpan = Tektite_1.$span("label");
@@ -7551,7 +7551,7 @@ define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/
                 this.params = params;
                 this.loadSvgOrCache = function (key) { return _this.params.loadSvgOrCache(key); };
                 this.onLoad = function () {
-                    minamo_js_5.minamo.dom.make({
+                    index_js_5.minamo.dom.make({
                         parent: document.body,
                         tag: "div",
                         id: "foundation",
@@ -7587,13 +7587,13 @@ define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/
                     });
                     _this.screen.onLoad();
                 };
-                this.fullscreen = fullscreen_1.Fullscreen;
-                this.key = key_1.Key;
-                this.screen = screen_1.Screen.make(this);
-                this.header = header_1.Header.make(this);
-                this.menu = menu_1.Menu.make(this);
-                this.locale = locale_1.Locale.make(this);
-                this.toast = toast_1.Toast;
+                this.fullscreen = tektite_fullscreen_1.Fullscreen;
+                this.key = tektite_key_1.Key;
+                this.screen = tektite_screen_1.Screen.make(this);
+                this.header = tektite_header_1.Header.make(this);
+                this.menu = tektite_menu_1.Menu.make(this);
+                this.locale = tektite_locale_1.Locale.make(this);
+                this.toast = tektite_toast_1.Toast;
                 this.internalLink = function (data) {
                     return ({
                         tag: "a",
@@ -7647,14 +7647,14 @@ define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/
             return new Tektite(params);
         };
         Tektite_1.setHeaderColor = function (color) {
-            return minamo_js_5.minamo.dom.setProperty("#screen-header", "backgroundColor", color !== null && color !== void 0 ? color : "");
+            return index_js_5.minamo.dom.setProperty("#screen-header", "backgroundColor", color !== null && color !== void 0 ? color : "");
         };
         Tektite_1.setBodyColor = function (color) {
-            minamo_js_5.minamo.dom.setStyleProperty(document.body, "backgroundColor", color + "E8");
-            minamo_js_5.minamo.dom.setProperty("#theme-color", "content", color);
+            index_js_5.minamo.dom.setStyleProperty(document.body, "backgroundColor", color + "E8");
+            index_js_5.minamo.dom.setProperty("#theme-color", "content", color);
         };
         Tektite_1.setFoundationColor = function (color) {
-            return minamo_js_5.minamo.dom.setStyleProperty("#foundation", "backgroundColor", color !== null && color !== void 0 ? color : "");
+            return index_js_5.minamo.dom.setStyleProperty("#foundation", "backgroundColor", color !== null && color !== void 0 ? color : "");
         };
         var latestColor;
         Tektite_1.setBackgroundColor = function (color) {
@@ -7673,7 +7673,7 @@ define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/
                 { className: "tektite-modern", tottle: "modern" === style, },
                 { className: "tektite-classic", tottle: "classic" === style, },
             ]
-                .map(function (i) { return minamo_js_5.minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate; })
+                .map(function (i) { return index_js_5.minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate; })
                 .reduce(function (a, b) { return a || b; }, false)) {
                 Tektite_1.setBackgroundColor(latestColor !== null && latestColor !== void 0 ? latestColor : null);
             }
@@ -7685,12 +7685,12 @@ define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/
         Tektite_1.getScreenBarElement = function () { return document.getElementsByClassName("screen-bar")[0]; };
         var resetScreenBarProgress = function () {
             var screenBar = Tektite_1.getScreenBarElement();
-            minamo_js_5.minamo.dom.setStyleProperty(screenBar, "display", "none");
+            index_js_5.minamo.dom.setStyleProperty(screenBar, "display", "none");
         };
         var resetHeaderProgress = function () {
             var progressBar = Tektite_1.getProgressElement();
-            minamo_js_5.minamo.dom.setStyleProperty(progressBar, "width", "0%");
-            minamo_js_5.minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
+            index_js_5.minamo.dom.setStyleProperty(progressBar, "width", "0%");
+            index_js_5.minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
         };
         Tektite_1.resetProgress = function () {
             resetScreenBarProgress();
@@ -7701,26 +7701,26 @@ define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/
             var screenBar = Tektite_1.getScreenBarElement();
             if (null !== percent && "header" !== progressBarStyle) {
                 if (color) {
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
                 }
                 var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 if ((window.innerHeight < window.innerWidth && "vertical" !== progressBarStyle) || "horizontal" === progressBarStyle) {
-                    minamo_js_5.minamo.dom.addCSSClass(screenBar, "horizontal");
-                    minamo_js_5.minamo.dom.removeCSSClass(screenBar, "vertical");
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "height", "initial");
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "width", percentString);
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
+                    index_js_5.minamo.dom.addCSSClass(screenBar, "horizontal");
+                    index_js_5.minamo.dom.removeCSSClass(screenBar, "vertical");
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "height", "initial");
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "width", percentString);
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
                 }
                 else {
-                    minamo_js_5.minamo.dom.addCSSClass(screenBar, "vertical");
-                    minamo_js_5.minamo.dom.removeCSSClass(screenBar, "horizontal");
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "width", "initial");
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "height", percentString);
-                    minamo_js_5.minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
+                    index_js_5.minamo.dom.addCSSClass(screenBar, "vertical");
+                    index_js_5.minamo.dom.removeCSSClass(screenBar, "horizontal");
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "width", "initial");
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "height", percentString);
+                    index_js_5.minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
                 }
-                minamo_js_5.minamo.dom.setStyleProperty(screenBar, "display", "block");
+                index_js_5.minamo.dom.setStyleProperty(screenBar, "display", "block");
             }
             else {
                 resetScreenBarProgress();
@@ -7728,11 +7728,11 @@ define("clockworks/tektite.js/script/index", ["require", "exports", "clockworks/
             var progressBar = Tektite_1.getProgressElement();
             if (null !== percent && "header" === progressBarStyle) {
                 if (color) {
-                    minamo_js_5.minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
+                    index_js_5.minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
                 }
                 var percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                minamo_js_5.minamo.dom.setStyleProperty(progressBar, "width", percentString);
-                minamo_js_5.minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
+                index_js_5.minamo.dom.setStyleProperty(progressBar, "width", percentString);
+                index_js_5.minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
             }
             else {
                 resetHeaderProgress();
@@ -8845,13 +8845,13 @@ define("nephila/minamo.js/index", ["require", "exports"], function (require, exp
         })(dom = minamo.dom || (minamo.dom = {}));
     })(minamo = exports.minamo || (exports.minamo = {}));
 });
-define("clockworks/script/base", ["require", "exports", "nephila/minamo.js/index"], function (require, exports, minamo_js_6) {
+define("clockworks/script/base", ["require", "exports", "nephila/minamo.js/index"], function (require, exports, minamo_js_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Base = void 0;
     var Base;
     (function (Base) {
-        Base.simpleComparer = minamo_js_6.minamo.core.comparer.basic;
+        Base.simpleComparer = minamo_js_1.minamo.core.comparer.basic;
         Base.simpleReverseComparer = function (a, b) { return -Base.simpleComparer(a, b); };
         Base.getUrlParams = function (url) {
             if (url === void 0) { url = location.href; }
@@ -8886,7 +8886,7 @@ define("clockworks/script/base", ["require", "exports", "nephila/minamo.js/index
         };
     })(Base = exports.Base || (exports.Base = {}));
 });
-define("clockworks/script/application/rainbowclock/storage", ["require", "exports", "clockworks/script/index", "clockworks/nephila/minamo.js/index", "clockworks/resource/config"], function (require, exports, __1, minamo_js_7, config_json_2) {
+define("clockworks/script/application/rainbowclock/storage", ["require", "exports", "clockworks/script/index", "clockworks/nephila/minamo.js/index", "clockworks/resource/config"], function (require, exports, __1, minamo_js_2, config_json_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Storage = void 0;
@@ -8897,26 +8897,26 @@ define("clockworks/script/application/rainbowclock/storage", ["require", "export
         var colorPattern;
         (function (colorPattern) {
             colorPattern.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":colorPattern"; };
-            colorPattern.get = function () { var _a; return (_a = minamo_js_7.minamo.localStorage.getOrNull(colorPattern.makeKey())) !== null && _a !== void 0 ? _a : "gradation"; };
+            colorPattern.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(colorPattern.makeKey())) !== null && _a !== void 0 ? _a : "gradation"; };
             colorPattern.set = function (settings) {
-                return minamo_js_7.minamo.localStorage.set(colorPattern.makeKey(), settings);
+                return minamo_js_2.minamo.localStorage.set(colorPattern.makeKey(), settings);
             };
         })(colorPattern = Storage.colorPattern || (Storage.colorPattern = {}));
         var flashInterval;
         (function (flashInterval) {
             flashInterval.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-            flashInterval.get = function () { var _a; return (_a = minamo_js_7.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : (60 * 60 * 1000); };
-            flashInterval.set = function (value) { return minamo_js_7.minamo.localStorage.set(flashInterval.makeKey(), value); };
+            flashInterval.get = function () { var _a; return (_a = minamo_js_2.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : (60 * 60 * 1000); };
+            flashInterval.set = function (value) { return minamo_js_2.minamo.localStorage.set(flashInterval.makeKey(), value); };
         })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
         var Timezone;
         (function (Timezone) {
             Timezone.makeKey = function () { return config_json_2.default.localDbPrefix + ":" + applicationName + ":timezones"; };
             Timezone.get = function () {
                 var _a;
-                return (_a = minamo_js_7.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_2.default.initialTimezoneList.map(function (i) { return ({ title: __1.Clockworks.localeMap(i.title), offset: i.offset }); });
+                return (_a = minamo_js_2.minamo.localStorage.getOrNull(Timezone.makeKey())) !== null && _a !== void 0 ? _a : config_json_2.default.initialTimezoneList.map(function (i) { return ({ title: __1.Clockworks.localeMap(i.title), offset: i.offset }); });
             };
-            Timezone.set = function (list) { return minamo_js_7.minamo.localStorage.set(Timezone.makeKey(), list.sort(minamo_js_7.minamo.core.comparer.make([function (i) { return i.offset; }]))); };
-            Timezone.removeKey = function () { return minamo_js_7.minamo.localStorage.remove(Timezone.makeKey()); };
+            Timezone.set = function (list) { return minamo_js_2.minamo.localStorage.set(Timezone.makeKey(), list.sort(minamo_js_2.minamo.core.comparer.make([function (i) { return i.offset; }]))); };
+            Timezone.removeKey = function () { return minamo_js_2.minamo.localStorage.remove(Timezone.makeKey()); };
             Timezone.add = function (entry) {
                 return Timezone.set(Timezone.get().concat(entry));
             };
@@ -8929,7 +8929,7 @@ define("clockworks/script/application/rainbowclock/storage", ["require", "export
         })(Timezone = Storage.Timezone || (Storage.Timezone = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("clockworks/script/application/countdowntimer/storage", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/resource/config"], function (require, exports, minamo_js_8, config_json_3) {
+define("clockworks/script/application/countdowntimer/storage", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/resource/config"], function (require, exports, minamo_js_3, config_json_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Storage = void 0;
@@ -8940,9 +8940,9 @@ define("clockworks/script/application/countdowntimer/storage", ["require", "expo
         var Alarms;
         (function (Alarms) {
             Alarms.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":alarms"; };
-            Alarms.get = function () { var _a; return (_a = minamo_js_8.minamo.localStorage.getOrNull(Alarms.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            Alarms.set = function (list) { return minamo_js_8.minamo.localStorage.set(Alarms.makeKey(), list.sort(minamo_js_8.minamo.core.comparer.make(function (i) { return i.end; }))); };
-            Alarms.removeKey = function () { return minamo_js_8.minamo.localStorage.remove(Alarms.makeKey()); };
+            Alarms.get = function () { var _a; return (_a = minamo_js_3.minamo.localStorage.getOrNull(Alarms.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            Alarms.set = function (list) { return minamo_js_3.minamo.localStorage.set(Alarms.makeKey(), list.sort(minamo_js_3.minamo.core.comparer.make(function (i) { return i.end; }))); };
+            Alarms.removeKey = function () { return minamo_js_3.minamo.localStorage.remove(Alarms.makeKey()); };
             Alarms.add = function (item) {
                 return Alarms.set(Alarms.get().concat(item));
             };
@@ -8956,14 +8956,14 @@ define("clockworks/script/application/countdowntimer/storage", ["require", "expo
         var flashInterval;
         (function (flashInterval) {
             flashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-            flashInterval.get = function () { var _a; return (_a = minamo_js_8.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-            flashInterval.set = function (value) { return minamo_js_8.minamo.localStorage.set(flashInterval.makeKey(), value); };
+            flashInterval.get = function () { var _a; return (_a = minamo_js_3.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            flashInterval.set = function (value) { return minamo_js_3.minamo.localStorage.set(flashInterval.makeKey(), value); };
         })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
         var recentlyFlashInterval;
         (function (recentlyFlashInterval) {
             recentlyFlashInterval.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
-            recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_8.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            recentlyFlashInterval.set = function (list) { return minamo_js_8.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+            recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_3.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyFlashInterval.set = function (list) { return minamo_js_3.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
             recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
                 .filter(function (i, ix, list) { return ix === list.indexOf(i); })
                 .filter(function (_i, ix) { return ix < config_json_3.default.recentlyFlashIntervalMaxHistory; })); };
@@ -8971,8 +8971,8 @@ define("clockworks/script/application/countdowntimer/storage", ["require", "expo
         var recentlyTimer;
         (function (recentlyTimer) {
             recentlyTimer.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":recentlyTimer"; };
-            recentlyTimer.get = function () { var _a; return (_a = minamo_js_8.minamo.localStorage.getOrNull(recentlyTimer.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            recentlyTimer.set = function (list) { return minamo_js_8.minamo.localStorage.set(recentlyTimer.makeKey(), list); };
+            recentlyTimer.get = function () { var _a; return (_a = minamo_js_3.minamo.localStorage.getOrNull(recentlyTimer.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyTimer.set = function (list) { return minamo_js_3.minamo.localStorage.set(recentlyTimer.makeKey(), list); };
             recentlyTimer.add = function (value) { return recentlyTimer.set([value].concat(recentlyTimer.get())
                 .filter(function (i, ix, list) { return ix === list.indexOf(i); })
                 .filter(function (_i, ix) { return ix < config_json_3.default.recentlyTimerMaxHistory; })); };
@@ -8980,12 +8980,12 @@ define("clockworks/script/application/countdowntimer/storage", ["require", "expo
         var ColorIndex;
         (function (ColorIndex) {
             ColorIndex.makeKey = function () { return config_json_3.default.localDbPrefix + ":" + applicationName + ":colorIndex"; };
-            ColorIndex.get = function () { var _a; return (_a = minamo_js_8.minamo.localStorage.getOrNull(ColorIndex.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-            ColorIndex.set = function (value) { return minamo_js_8.minamo.localStorage.set(ColorIndex.makeKey(), value); };
+            ColorIndex.get = function () { var _a; return (_a = minamo_js_3.minamo.localStorage.getOrNull(ColorIndex.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            ColorIndex.set = function (value) { return minamo_js_3.minamo.localStorage.set(ColorIndex.makeKey(), value); };
         })(ColorIndex = Storage.ColorIndex || (Storage.ColorIndex = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("clockworks/script/application/elapsedtimer/storage", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/resource/config"], function (require, exports, minamo_js_9, config_json_4) {
+define("clockworks/script/application/elapsedtimer/storage", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/resource/config"], function (require, exports, minamo_js_4, config_json_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Storage = void 0;
@@ -8996,9 +8996,9 @@ define("clockworks/script/application/elapsedtimer/storage", ["require", "export
         var Events;
         (function (Events) {
             Events.makeKey = function () { return config_json_4.default.localDbPrefix + ":" + applicationName + ":alarms"; };
-            Events.get = function () { var _a; return (_a = minamo_js_9.minamo.localStorage.getOrNull(Events.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            Events.set = function (list) { return minamo_js_9.minamo.localStorage.set(Events.makeKey(), list.sort(minamo_js_9.minamo.core.comparer.make(function (i) { return i.tick; }))); };
-            Events.removeKey = function () { return minamo_js_9.minamo.localStorage.remove(Events.makeKey()); };
+            Events.get = function () { var _a; return (_a = minamo_js_4.minamo.localStorage.getOrNull(Events.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            Events.set = function (list) { return minamo_js_4.minamo.localStorage.set(Events.makeKey(), list.sort(minamo_js_4.minamo.core.comparer.make(function (i) { return i.tick; }))); };
+            Events.removeKey = function () { return minamo_js_4.minamo.localStorage.remove(Events.makeKey()); };
             Events.add = function (item) {
                 return Events.set(Events.get().concat(item));
             };
@@ -9012,21 +9012,21 @@ define("clockworks/script/application/elapsedtimer/storage", ["require", "export
         var flashInterval;
         (function (flashInterval) {
             flashInterval.makeKey = function () { return config_json_4.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-            flashInterval.get = function () { var _a; return (_a = minamo_js_9.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-            flashInterval.set = function (value) { return minamo_js_9.minamo.localStorage.set(flashInterval.makeKey(), value); };
+            flashInterval.get = function () { var _a; return (_a = minamo_js_4.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            flashInterval.set = function (value) { return minamo_js_4.minamo.localStorage.set(flashInterval.makeKey(), value); };
         })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
         var recentlyFlashInterval;
         (function (recentlyFlashInterval) {
             recentlyFlashInterval.makeKey = function () { return config_json_4.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
-            recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_9.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            recentlyFlashInterval.set = function (list) { return minamo_js_9.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+            recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_4.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyFlashInterval.set = function (list) { return minamo_js_4.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
             recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
                 .filter(function (i, ix, list) { return ix === list.indexOf(i); })
                 .filter(function (_i, ix) { return ix < config_json_4.default.recentlyFlashIntervalMaxHistory; })); };
         })(recentlyFlashInterval = Storage.recentlyFlashInterval || (Storage.recentlyFlashInterval = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("clockworks/script/application/neverstopwatch/storage", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/base", "clockworks/resource/config"], function (require, exports, minamo_js_10, base_1, config_json_5) {
+define("clockworks/script/application/neverstopwatch/storage", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/base", "clockworks/resource/config"], function (require, exports, minamo_js_5, base_1, config_json_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Storage = void 0;
@@ -9037,9 +9037,9 @@ define("clockworks/script/application/neverstopwatch/storage", ["require", "expo
         var Stamps;
         (function (Stamps) {
             Stamps.makeKey = function () { return config_json_5.default.localDbPrefix + ":" + applicationName + ":stamps"; };
-            Stamps.get = function () { var _a; return (_a = minamo_js_10.minamo.localStorage.getOrNull(Stamps.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            Stamps.set = function (list) { return minamo_js_10.minamo.localStorage.set(Stamps.makeKey(), list); };
-            Stamps.removeKey = function () { return minamo_js_10.minamo.localStorage.remove(Stamps.makeKey()); };
+            Stamps.get = function () { var _a; return (_a = minamo_js_5.minamo.localStorage.getOrNull(Stamps.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            Stamps.set = function (list) { return minamo_js_5.minamo.localStorage.set(Stamps.makeKey(), list); };
+            Stamps.removeKey = function () { return minamo_js_5.minamo.localStorage.remove(Stamps.makeKey()); };
             Stamps.add = function (tick) {
                 return Stamps.set(Stamps.get().concat(tick).sort(base_1.Base.simpleReverseComparer).slice(0, 100));
             };
@@ -9051,21 +9051,21 @@ define("clockworks/script/application/neverstopwatch/storage", ["require", "expo
         var flashInterval;
         (function (flashInterval) {
             flashInterval.makeKey = function () { return config_json_5.default.localDbPrefix + ":" + applicationName + ":flashInterval"; };
-            flashInterval.get = function () { var _a; return (_a = minamo_js_10.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
-            flashInterval.set = function (value) { return minamo_js_10.minamo.localStorage.set(flashInterval.makeKey(), value); };
+            flashInterval.get = function () { var _a; return (_a = minamo_js_5.minamo.localStorage.getOrNull(flashInterval.makeKey())) !== null && _a !== void 0 ? _a : 0; };
+            flashInterval.set = function (value) { return minamo_js_5.minamo.localStorage.set(flashInterval.makeKey(), value); };
         })(flashInterval = Storage.flashInterval || (Storage.flashInterval = {}));
         var recentlyFlashInterval;
         (function (recentlyFlashInterval) {
             recentlyFlashInterval.makeKey = function () { return config_json_5.default.localDbPrefix + ":" + applicationName + ":recentlyFlashInterval"; };
-            recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_10.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
-            recentlyFlashInterval.set = function (list) { return minamo_js_10.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
+            recentlyFlashInterval.get = function () { var _a; return (_a = minamo_js_5.minamo.localStorage.getOrNull(recentlyFlashInterval.makeKey())) !== null && _a !== void 0 ? _a : []; };
+            recentlyFlashInterval.set = function (list) { return minamo_js_5.minamo.localStorage.set(recentlyFlashInterval.makeKey(), list); };
             recentlyFlashInterval.add = function (value) { return recentlyFlashInterval.set([value].concat(recentlyFlashInterval.get())
                 .filter(function (i, ix, list) { return ix === list.indexOf(i); })
                 .filter(function (_i, ix) { return ix < config_json_5.default.recentlyFlashIntervalMaxHistory; })); };
         })(recentlyFlashInterval = Storage.recentlyFlashInterval || (Storage.recentlyFlashInterval = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("clockworks/script/storage", ["require", "exports", "nephila/minamo.js/index", "clockworks/script/application/rainbowclock/storage", "clockworks/script/application/countdowntimer/storage", "clockworks/script/application/elapsedtimer/storage", "clockworks/script/application/neverstopwatch/storage", "clockworks/resource/config"], function (require, exports, minamo_js_11, storage_1, storage_2, storage_3, storage_4, config_json_6) {
+define("clockworks/script/storage", ["require", "exports", "nephila/minamo.js/index", "clockworks/script/application/rainbowclock/storage", "clockworks/script/application/countdowntimer/storage", "clockworks/script/application/elapsedtimer/storage", "clockworks/script/application/neverstopwatch/storage", "clockworks/resource/config"], function (require, exports, minamo_js_6, storage_1, storage_2, storage_3, storage_4, config_json_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Storage = void 0;
@@ -9080,14 +9080,14 @@ define("clockworks/script/storage", ["require", "exports", "nephila/minamo.js/in
         var Settings;
         (function (Settings) {
             Settings.makeKey = function () { return config_json_6.default.localDbPrefix + ":settings"; };
-            Settings.get = function () { var _a; return (_a = minamo_js_11.minamo.localStorage.getOrNull(Settings.makeKey())) !== null && _a !== void 0 ? _a : {}; };
+            Settings.get = function () { var _a; return (_a = minamo_js_6.minamo.localStorage.getOrNull(Settings.makeKey())) !== null && _a !== void 0 ? _a : {}; };
             Settings.set = function (settings) {
-                return minamo_js_11.minamo.localStorage.set(Settings.makeKey(), settings);
+                return minamo_js_6.minamo.localStorage.set(Settings.makeKey(), settings);
             };
         })(Settings = Storage.Settings || (Storage.Settings = {}));
     })(Storage = exports.Storage || (exports.Storage = {}));
 });
-define("clockworks/script/domain", ["require", "exports", "clockworks/script/base", "clockworks/script/index", "clockworks/resource/config"], function (require, exports, base_2, _4, config_json_7) {
+define("clockworks/script/domain", ["require", "exports", "clockworks/script/base", "clockworks/script/index", "clockworks/resource/config"], function (require, exports, base_2, _1, config_json_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Domain = void 0;
@@ -9126,26 +9126,26 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
             var result = "";
             if ("" !== result || 0 < days) {
                 if ("" === result) {
-                    result = days + " " + _4.Clockworks.localeMap("days");
+                    result = days + " " + _1.Clockworks.localeMap("days");
                 }
                 else {
-                    result += " " + days + " " + _4.Clockworks.localeMap("days");
+                    result += " " + days + " " + _1.Clockworks.localeMap("days");
                 }
             }
             if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
                 if ("" === result) {
-                    result = hours + " " + _4.Clockworks.localeMap("hours");
+                    result = hours + " " + _1.Clockworks.localeMap("hours");
                 }
                 else {
-                    result += " " + ("0" + hours).substr(-2) + " " + _4.Clockworks.localeMap("hours");
+                    result += " " + ("0" + hours).substr(-2) + " " + _1.Clockworks.localeMap("hours");
                 }
             }
             if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
                 if ("" === result) {
-                    result = minutes + " " + _4.Clockworks.localeMap("minutes");
+                    result = minutes + " " + _1.Clockworks.localeMap("minutes");
                 }
                 else {
-                    result += " " + ("0" + minutes).substr(-2) + " " + _4.Clockworks.localeMap("minutes");
+                    result += " " + ("0" + minutes).substr(-2) + " " + _1.Clockworks.localeMap("minutes");
                 }
             }
             if (0 < seconds || 0 < milliseconds) {
@@ -9155,14 +9155,14 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
                     trail = trail.replace(/0+$/, "");
                 }
                 if ("" === result) {
-                    result = "" + seconds + trail + " " + _4.Clockworks.localeMap("seconds");
+                    result = "" + seconds + trail + " " + _1.Clockworks.localeMap("seconds");
                 }
                 else {
-                    result += " " + ("0" + seconds).substr(-2) + trail + " " + _4.Clockworks.localeMap("seconds");
+                    result += " " + ("0" + seconds).substr(-2) + trail + " " + _1.Clockworks.localeMap("seconds");
                 }
             }
             if ("" === result) {
-                result = minutes + " " + _4.Clockworks.localeMap("m(minutes)");
+                result = minutes + " " + _1.Clockworks.localeMap("m(minutes)");
             }
             // console.log({ timer, result, });
             return result;
@@ -9185,7 +9185,7 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
             return FloorHour.getTime() + (60 * 60 * 1000);
         };
         Domain.weekday = function (tick) {
-            return new Intl.DateTimeFormat(_4.tektite.locale.get(), { weekday: 'long' }).format(tick);
+            return new Intl.DateTimeFormat(_1.tektite.locale.get(), { weekday: 'long' }).format(tick);
         };
         Domain.dateCoreStringFromTick = function (tick) {
             if (null === tick) {
@@ -9292,7 +9292,7 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
                 if (days < 1) {
                     return Domain.timeLongCoreStringFromTick(tick);
                 }
-                return days.toLocaleString() + " " + _4.Clockworks.localeMap("days") + " " + Domain.timeLongCoreStringFromTick(tick);
+                return days.toLocaleString() + " " + _1.Clockworks.localeMap("days") + " " + Domain.timeLongCoreStringFromTick(tick);
             }
         };
         Domain.timeLongStringFromTick = function (tick) {
@@ -9305,7 +9305,7 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
             else {
                 var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                 return 0 < days ?
-                    days.toLocaleString() + " " + _4.Clockworks.localeMap("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
+                    days.toLocaleString() + " " + _1.Clockworks.localeMap("days") + " " + (10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
                     Domain.timeFullCoreStringFromTick(tick);
             }
         };
@@ -9507,7 +9507,7 @@ define("clockworks/script/render/resource", ["require", "exports"], function (re
         }); };
     })(Resource = exports.Resource || (exports.Resource = {}));
 });
-define("clockworks/script/application/rainbowclock/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index"], function (require, exports, __2, script_1, base_3, storage_5, domain_1, render_1) {
+define("clockworks/script/application/rainbowclock/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index"], function (require, exports, __2, tektite_index_4, base_3, storage_5, domain_1, render_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -9521,7 +9521,7 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
                 storage_5.Storage.RainbowClock.Timezone.add(item);
                 __2.tektite.screen.updateWindow("operate");
                 toast = __2.tektite.toast.makePrimary({
-                    content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_4.Tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9554,7 +9554,7 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
                 storage_5.Storage.RainbowClock.Timezone.add(newTimezone);
                 __2.tektite.screen.updateWindow("operate");
                 toast = __2.tektite.toast.makePrimary({
-                    content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_4.Tektite.$span("")("" + __2.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9587,7 +9587,7 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
                     __2.tektite.screen.updateWindow("operate");
                 }
                 toast = __2.tektite.toast.makePrimary({
-                    content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Removed.")),
+                    content: tektite_index_4.Tektite.$span("")("" + __2.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9616,14 +9616,14 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
                 if (render_1.Render.systemConfirm(__2.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_5.Storage.RainbowClock.Timezone.removeKey();
                     __2.tektite.screen.updateWindow("operate");
-                    __2.tektite.toast.makePrimary({ content: script_1.Tektite.$span("")("" + __2.Clockworks.localeMap("Initialized timezone list!")), });
+                    __2.tektite.toast.makePrimary({ content: tektite_index_4.Tektite.$span("")("" + __2.Clockworks.localeMap("Initialized timezone list!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("clockworks/script/application/countdowntimer/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index", "clockworks/resource/config"], function (require, exports, __3, script_2, base_4, storage_6, domain_2, render_2, config_json_8) {
+define("clockworks/script/application/countdowntimer/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index", "clockworks/resource/config"], function (require, exports, __3, tektite_index_5, base_4, storage_6, domain_2, render_2, config_json_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -9644,7 +9644,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9676,7 +9676,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9702,7 +9702,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 storage_6.Storage.CountdownTimer.Alarms.add(item);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9736,7 +9736,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 storage_6.Storage.CountdownTimer.Alarms.add(newSchedule);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9768,7 +9768,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 __3.tektite.screen.updateWindow("operate");
                 toast = __3.tektite.toast.makePrimary({
-                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
+                    content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9799,7 +9799,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 render_2.Render.showUrl({ application: "CountdownTimer", });
                 toast = __3.tektite.toast.makePrimary({
-                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
+                    content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Done!")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9831,7 +9831,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                     __3.tektite.screen.updateWindow("operate");
                 }
                 toast = __3.tektite.toast.makePrimary({
-                    content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Removed.")),
+                    content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9860,14 +9860,14 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 if (render_2.Render.systemConfirm(__3.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_6.Storage.CountdownTimer.Alarms.removeKey();
                     __3.tektite.screen.updateWindow("operate");
-                    __3.tektite.toast.makePrimary({ content: script_2.Tektite.$span("")("" + __3.Clockworks.localeMap("Removed all alarms!")), });
+                    __3.tektite.toast.makePrimary({ content: tektite_index_5.Tektite.$span("")("" + __3.Clockworks.localeMap("Removed all alarms!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("clockworks/script/application/elapsedtimer/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index"], function (require, exports, __4, script_3, base_5, storage_7, domain_3, render_3) {
+define("clockworks/script/application/elapsedtimer/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index"], function (require, exports, __4, tektite_index_6, base_5, storage_7, domain_3, render_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -9885,7 +9885,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 storage_7.Storage.ElapsedTimer.Events.add(event);
                 __4.tektite.screen.updateWindow("operate");
                 toast = __4.tektite.toast.makePrimary({
-                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_6.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9911,7 +9911,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 storage_7.Storage.ElapsedTimer.Events.add(item);
                 __4.tektite.screen.updateWindow("operate");
                 toast = __4.tektite.toast.makePrimary({
-                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_6.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9943,7 +9943,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 storage_7.Storage.ElapsedTimer.Events.add(newSchedule);
                 __4.tektite.screen.updateWindow("operate");
                 toast = __4.tektite.toast.makePrimary({
-                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_6.Tektite.$span("")("" + __4.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9976,7 +9976,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                     __4.tektite.screen.updateWindow("operate");
                 }
                 toast = __4.tektite.toast.makePrimary({
-                    content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Removed.")),
+                    content: tektite_index_6.Tektite.$span("")("" + __4.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -10005,14 +10005,14 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 if (render_3.Render.systemConfirm(__4.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_7.Storage.ElapsedTimer.Events.removeKey();
                     __4.tektite.screen.updateWindow("operate");
-                    __4.tektite.toast.makePrimary({ content: script_3.Tektite.$span("")("" + __4.Clockworks.localeMap("Removed all alarms!")), });
+                    __4.tektite.toast.makePrimary({ content: tektite_index_6.Tektite.$span("")("" + __4.Clockworks.localeMap("Removed all alarms!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("clockworks/script/application/neverstopwatch/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index"], function (require, exports, __5, script_4, base_6, storage_8, domain_4, render_4) {
+define("clockworks/script/application/neverstopwatch/operate", ["require", "exports", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/base", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/index"], function (require, exports, __5, tektite_index_7, base_6, storage_8, domain_4, render_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -10028,7 +10028,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 __5.tektite.screen.updateWindow("operate");
                 __5.tektite.screen.flash();
                 toast = __5.tektite.toast.makePrimary({
-                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Stamped!")),
+                    content: tektite_index_7.Tektite.$span("")("" + __5.Clockworks.localeMap("Stamped!")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -10055,7 +10055,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 storage_8.Storage.NeverStopwatch.Stamps.add(tick);
                 __5.tektite.screen.updateWindow("operate");
                 toast = __5.tektite.toast.makePrimary({
-                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Saved!")),
+                    content: tektite_index_7.Tektite.$span("")("" + __5.Clockworks.localeMap("Saved!")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -10083,7 +10083,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 storage_8.Storage.NeverStopwatch.Stamps.add(newTick);
                 __5.tektite.screen.updateWindow("operate");
                 toast = __5.tektite.toast.makePrimary({
-                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Updated.")),
+                    content: tektite_index_7.Tektite.$span("")("" + __5.Clockworks.localeMap("Updated.")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -10116,7 +10116,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                     __5.tektite.screen.updateWindow("operate");
                 }
                 toast = __5.tektite.toast.makePrimary({
-                    content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Removed.")),
+                    content: tektite_index_7.Tektite.$span("")("" + __5.Clockworks.localeMap("Removed.")),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -10145,14 +10145,14 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 if (render_4.Render.systemConfirm(__5.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_8.Storage.NeverStopwatch.Stamps.removeKey();
                     __5.tektite.screen.updateWindow("operate");
-                    __5.tektite.toast.makePrimary({ content: script_4.Tektite.$span("")("" + __5.Clockworks.localeMap("Removed all stamps!")), });
+                    __5.tektite.toast.makePrimary({ content: tektite_index_7.Tektite.$span("")("" + __5.Clockworks.localeMap("Removed all stamps!")), });
                 }
                 return [2 /*return*/];
             });
         }); };
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("clockworks/script/render/operate", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/script/application/rainbowclock/operate", "clockworks/script/application/countdowntimer/operate", "clockworks/script/application/elapsedtimer/operate", "clockworks/script/application/neverstopwatch/operate"], function (require, exports, minamo_js_12, __6, operate_1, operate_2, operate_3, operate_4) {
+define("clockworks/script/render/operate", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/script/application/rainbowclock/operate", "clockworks/script/application/countdowntimer/operate", "clockworks/script/application/elapsedtimer/operate", "clockworks/script/application/neverstopwatch/operate"], function (require, exports, minamo_js_7, __6, operate_1, operate_2, operate_3, operate_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Operate = void 0;
@@ -10160,7 +10160,7 @@ define("clockworks/script/render/operate", ["require", "exports", "clockworks/ne
     (function (Operate) {
         Operate.copyToClipboard = function (text, displayText) {
             if (displayText === void 0) { displayText = "\"" + text + "\""; }
-            var pre = minamo_js_12.minamo.dom.make(HTMLPreElement)({
+            var pre = minamo_js_7.minamo.dom.make(HTMLPreElement)({
                 children: text,
             });
             document.body.appendChild(pre);
@@ -10175,7 +10175,7 @@ define("clockworks/script/render/operate", ["require", "exports", "clockworks/ne
         Operate.NeverStopwatch = operate_4.Operate;
     })(Operate = exports.Operate || (exports.Operate = {}));
 });
-define("clockworks/script/application/rainbowclock/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/type", "clockworks/script/base", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/rainbowclock/operate", "clockworks/resource/config"], function (require, exports, minamo_js_13, __7, script_5, type_1, base_7, color_2, storage_9, domain_5, resource_1, render_5, operate_5, config_json_9) {
+define("clockworks/script/application/rainbowclock/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/type", "clockworks/script/base", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/rainbowclock/operate", "clockworks/resource/config"], function (require, exports, minamo_js_8, __7, tektite_index_8, type_1, base_7, color_2, storage_9, domain_5, resource_1, render_5, operate_5, config_json_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -10183,8 +10183,8 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
     var Render;
     (function (Render) {
         var _this = this;
-        Render.$make = minamo_js_13.minamo.dom.make;
-        Render.$tag = minamo_js_13.minamo.dom.tag;
+        Render.$make = minamo_js_8.minamo.dom.make;
+        Render.$tag = minamo_js_8.minamo.dom.tag;
         Render.$div = Render.$tag("div");
         Render.$span = Render.$tag("span");
         Render.labelSpan = Render.$span("label");
@@ -10204,7 +10204,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                         };
                         return [4 /*yield*/, Promise.all(timezones
                                 .concat([item])
-                                .sort(minamo_js_13.minamo.core.comparer.make([function (i) { return i.offset; }]))
+                                .sort(minamo_js_8.minamo.core.comparer.make([function (i) { return i.offset; }]))
                                 .filter(function (i, ix, list) { return ix === list.map(function (a) { return JSON.stringify(a); }).indexOf(JSON.stringify(i)); })
                                 .map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                 var _a, _b;
@@ -10213,7 +10213,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                         case 0:
                                             _b = (_a = __7.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_5.Tektite.$labelSpan(i.title), script_5.Tektite.monospace(domain_5.Domain.timezoneOffsetString(i.offset))], domain_5.Domain.makePageParams("RainbowClock", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_8.Tektite.$labelSpan(i.title), tektite_index_8.Tektite.monospace(domain_5.Domain.timezoneOffsetString(i.offset))], domain_5.Domain.makePageParams("RainbowClock", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -10241,7 +10241,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                         _e = [
                             _d.apply(_c, [(_j.children = [
                                     _k.sent(),
-                                    script_5.Tektite.monospace("tick-elapsed-time", item.title)
+                                    tektite_index_8.Tektite.monospace("tick-elapsed-time", item.title)
                                 ],
                                     _j)])
                         ];
@@ -10257,9 +10257,9 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     ])]),
                                 Render.$div("item-panel")([
                                     Render.$div("item-panel-body")([
-                                        script_5.Tektite.monospace("item-utc-offset", domain_5.Domain.timezoneOffsetString(item.offset)),
-                                        script_5.Tektite.monospace("item-date", domain_5.Domain.dateCoreStringFromTick(domain_5.Domain.getUTCTicks() - item.offset)),
-                                        script_5.Tektite.monospace("item-time", domain_5.Domain.timeFullCoreStringFromTick(domain_5.Domain.getTime(domain_5.Domain.getUTCTicks() - item.offset))),
+                                        tektite_index_8.Tektite.monospace("item-utc-offset", domain_5.Domain.timezoneOffsetString(item.offset)),
+                                        tektite_index_8.Tektite.monospace("item-date", domain_5.Domain.dateCoreStringFromTick(domain_5.Domain.getUTCTicks() - item.offset)),
+                                        tektite_index_8.Tektite.monospace("item-time", domain_5.Domain.timeFullCoreStringFromTick(domain_5.Domain.getTime(domain_5.Domain.getUTCTicks() - item.offset))),
                                     ]),
                                     Render.$div("item-time-bar")([]),
                                 ])
@@ -10395,14 +10395,14 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     Render.$span("value")(item.title),
                                 ]) :
                                 [],
-                            script_5.Tektite.monospace("current-date", domain_5.Domain.dateCoreStringFromTick(null !== item ?
+                            tektite_index_8.Tektite.monospace("current-date", domain_5.Domain.dateCoreStringFromTick(null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks())),
-                            script_5.Tektite.monospace("capital-time", domain_5.Domain.timeFullCoreStringFromTick(domain_5.Domain.getTime(null !== item ?
+                            tektite_index_8.Tektite.monospace("capital-time", domain_5.Domain.timeFullCoreStringFromTick(domain_5.Domain.getTime(null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks()))),
                             null !== item ?
-                                script_5.Tektite.monospace("current-utc-offset", domain_5.Domain.timezoneOffsetString(item.offset)) :
+                                tektite_index_8.Tektite.monospace("current-utc-offset", domain_5.Domain.timezoneOffsetString(item.offset)) :
                                 []];
                         _c = (_b = render_5.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_5.Render.screenHeaderFlashSegment(null, domain_5.Domain.getFlashIntervalPreset(), 
@@ -10540,7 +10540,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     case 1:
                                         capitalTime = domain_5.Domain.timeLongCoreStringFromTick(domain_5.Domain.getTime(tick));
                                         capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0];
-                                        if (minamo_js_13.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate) {
+                                        if (minamo_js_8.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate) {
                                             __7.tektite.setTitle(capitalTime + " - " + applicationTitle);
                                             if (capitalTime.endsWith(":00")) {
                                                 flashInterval = storage_9.Storage.RainbowClock.flashInterval.get();
@@ -10551,25 +10551,25 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                                 }
                                             }
                                             utc_1 = domain_5.Domain.getUTCTicks(now);
-                                            timezoneListDiv = minamo_js_13.minamo.dom.getDivsByClassName(screen, "timezone-list")[0];
+                                            timezoneListDiv = minamo_js_8.minamo.dom.getDivsByClassName(screen, "timezone-list")[0];
                                             if (timezoneListDiv) {
-                                                minamo_js_13.minamo.dom.getChildNodes(timezoneListDiv)
+                                                minamo_js_8.minamo.dom.getChildNodes(timezoneListDiv)
                                                     .forEach(function (dom, index) {
                                                     var getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_9.Storage.RainbowClock.colorPattern.get()];
                                                     var currentTick = utc_1 - (timezones[index].offset * domain_5.Domain.utcOffsetRate);
-                                                    var panel = minamo_js_13.minamo.dom.getDivsByClassName(dom, "item-panel")[0];
-                                                    var timeBar = minamo_js_13.minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
+                                                    var panel = minamo_js_8.minamo.dom.getDivsByClassName(dom, "item-panel")[0];
+                                                    var timeBar = minamo_js_8.minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
                                                     var currentHours = new Date(currentTick).getHours();
                                                     var currentColor = getRainbowColor(currentHours);
                                                     var hourUnit = 60 * 60 * 1000;
                                                     var minutes = (currentTick % hourUnit) / hourUnit;
                                                     var nextColor = getRainbowColor(currentHours + 1);
-                                                    minamo_js_13.minamo.dom.setStyleProperty(panel, "backgroundColor", currentColor);
-                                                    minamo_js_13.minamo.dom.setStyleProperty(timeBar, "backgroundColor", nextColor);
+                                                    minamo_js_8.minamo.dom.setStyleProperty(panel, "backgroundColor", currentColor);
+                                                    minamo_js_8.minamo.dom.setStyleProperty(timeBar, "backgroundColor", nextColor);
                                                     var percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                                                    minamo_js_13.minamo.dom.setStyleProperty(timeBar, "width", percentString);
-                                                    minamo_js_13.minamo.dom.setProperty(minamo_js_13.minamo.dom.getDivsByClassName(minamo_js_13.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", domain_5.Domain.dateCoreStringFromTick(currentTick) + " " + domain_5.Domain.weekday(currentTick));
-                                                    minamo_js_13.minamo.dom.getDivsByClassName(minamo_js_13.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = domain_5.Domain.timeLongCoreStringFromTick(domain_5.Domain.getTime(currentTick));
+                                                    minamo_js_8.minamo.dom.setStyleProperty(timeBar, "width", percentString);
+                                                    minamo_js_8.minamo.dom.setProperty(minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", domain_5.Domain.dateCoreStringFromTick(currentTick) + " " + domain_5.Domain.weekday(currentTick));
+                                                    minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = domain_5.Domain.timeLongCoreStringFromTick(domain_5.Domain.getTime(currentTick));
                                                 });
                                             }
                                         }
@@ -10577,15 +10577,15 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     case 2:
                                         dateString = domain_5.Domain.dateCoreStringFromTick(tick) + " " + domain_5.Domain.weekday(tick);
                                         currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0];
-                                        minamo_js_13.minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
+                                        minamo_js_8.minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                                         getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_9.Storage.RainbowClock.colorPattern.get()];
                                         currentColor = getRainbowColor(currentNow.getHours());
-                                        script_5.Tektite.setBackgroundColor(currentColor);
+                                        tektite_index_8.Tektite.setBackgroundColor(currentColor);
                                         hourUnit = 60 * 60 * 1000;
                                         minutes = (tick % hourUnit) / hourUnit;
                                         nextColor = getRainbowColor(currentNow.getHours() + 1);
                                         render_5.Render.setProgress(minutes, nextColor);
-                                        script_5.Tektite.setBodyColor(color_2.Color.mixColors(currentColor, nextColor, minutes));
+                                        tektite_index_8.Tektite.setBodyColor(color_2.Color.mixColors(currentColor, nextColor, minutes));
                                         return [3 /*break*/, 10];
                                     case 3: return [4 /*yield*/, render_5.Render.reload()];
                                     case 4:
@@ -10625,7 +10625,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
         }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("clockworks/script/application/countdowntimer/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/type", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/countdowntimer/operate"], function (require, exports, minamo_js_14, __8, script_6, type_2, color_3, storage_10, domain_6, resource_2, render_6, operate_6) {
+define("clockworks/script/application/countdowntimer/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/type", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/countdowntimer/operate"], function (require, exports, minamo_js_9, __8, tektite_index_9, type_2, color_3, storage_10, domain_6, resource_2, render_6, operate_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -10633,8 +10633,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
     var Render;
     (function (Render) {
         var _this = this;
-        Render.$make = minamo_js_14.minamo.dom.make;
-        Render.$tag = minamo_js_14.minamo.dom.tag;
+        Render.$make = minamo_js_9.minamo.dom.make;
+        Render.$tag = minamo_js_9.minamo.dom.tag;
         Render.$div = Render.$tag("div");
         Render.$span = Render.$tag("span");
         Render.labelSpan = Render.$span("label");
@@ -10654,7 +10654,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                         };
                         return [4 /*yield*/, Promise.all(alarms
                                 .concat([item])
-                                .sort(minamo_js_14.minamo.core.comparer.make([function (i) { return i.end; }]))
+                                .sort(minamo_js_9.minamo.core.comparer.make([function (i) { return i.end; }]))
                                 .filter(function (i, ix, list) { return ix === list.map(function (a) { return JSON.stringify(a); }).indexOf(JSON.stringify(i)); })
                                 .map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                 var _a, _b;
@@ -10663,7 +10663,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         case 0:
                                             _b = (_a = __8.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_2.Resource.loadSvgOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), script_6.Tektite.monospace(domain_6.Domain.dateStringFromTick(i.end))], domain_6.Domain.makePageParams("CountdownTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), tektite_index_9.Tektite.monospace(domain_6.Domain.dateStringFromTick(i.end))], domain_6.Domain.makePageParams("CountdownTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -10694,7 +10694,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                         _e = [
                             _d.apply(_c, [(_j.children = [
                                     _k.sent(),
-                                    script_6.Tektite.monospace("tick-elapsed-time", Render.alarmTitle(item))
+                                    tektite_index_9.Tektite.monospace("tick-elapsed-time", Render.alarmTitle(item))
                                 ],
                                     _j)])
                         ];
@@ -10709,8 +10709,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             ]])
                                     ])]),
                                 Render.$div("item-information")([
-                                    script_6.Tektite.monospace("alarm-due-timestamp", Render.label("Due timestamp"), domain_6.Domain.dateFullStringFromTick(item.end)),
-                                    script_6.Tektite.monospace("alarm-due-rest", Render.label("Rest"), domain_6.Domain.timeLongStringFromTick(item.end - domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("alarm-due-timestamp", Render.label("Due timestamp"), domain_6.Domain.dateFullStringFromTick(item.end)),
+                                    tektite_index_9.Tektite.monospace("alarm-due-rest", Render.label("Rest"), domain_6.Domain.timeLongStringFromTick(item.end - domain_6.Domain.getTicks())),
                                 ])
                             ]])];
                 }
@@ -10798,7 +10798,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                         _e = [
                             _d.apply(_c, [(_j.children = [
                                     _k.sent(),
-                                    script_6.Tektite.monospace("tick-elapsed-time", item.title)
+                                    tektite_index_9.Tektite.monospace("tick-elapsed-time", item.title)
                                 ],
                                     _j)])
                         ];
@@ -10813,8 +10813,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             ]])
                                     ])]),
                                 Render.$div("item-information")([
-                                    script_6.Tektite.monospace("event-timestamp", Render.label("Timestamp"), domain_6.Domain.dateFullStringFromTick(item.tick)),
-                                    script_6.Tektite.monospace("event-elapsed-time", Render.label("Elapsed time"), domain_6.Domain.timeLongStringFromTick(domain_6.Domain.getTicks() - item.tick)),
+                                    tektite_index_9.Tektite.monospace("event-timestamp", Render.label("Timestamp"), domain_6.Domain.dateFullStringFromTick(item.tick)),
+                                    tektite_index_9.Tektite.monospace("event-elapsed-time", Render.label("Elapsed time"), domain_6.Domain.timeLongStringFromTick(domain_6.Domain.getTicks() - item.tick)),
                                 ])
                             ]])];
                 }
@@ -10870,7 +10870,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         checkButtonList = Render.$make(HTMLDivElement)({ className: "check-button-list" });
                                         timerPreset = domain_6.Domain.getTimerPreset()
                                             .concat(storage_10.Storage.CountdownTimer.recentlyTimer.get())
-                                            .sort(minamo_js_14.minamo.core.comparer.make([function (i) { return i; }]))
+                                            .sort(minamo_js_9.minamo.core.comparer.make([function (i) { return i; }]))
                                             .filter(function (i, ix, list) { return ix === list.indexOf(i); });
                                         checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                             var _a, _b, _c;
@@ -10878,7 +10878,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             return __generator(this, function (_d) {
                                                 switch (_d.label) {
                                                     case 0:
-                                                        _b = (_a = minamo_js_14.minamo.dom).replaceChildren;
+                                                        _b = (_a = minamo_js_9.minamo.dom).replaceChildren;
                                                         _c = [checkButtonList];
                                                         return [4 /*yield*/, Promise.all(timerPreset.map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                                                 var _a;
@@ -11053,22 +11053,22 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                     "current-item schedule-item")([
                                     (item !== null && item !== void 0 ? item : alarms[0]) ?
                                         [
-                                            script_6.Tektite.monospace("current-title", Render.alarmTitle(item !== null && item !== void 0 ? item : alarms[0])),
+                                            tektite_index_9.Tektite.monospace("current-title", Render.alarmTitle(item !== null && item !== void 0 ? item : alarms[0])),
                                             "timer" === (item !== null && item !== void 0 ? item : alarms[0]).type ?
-                                                script_6.Tektite.monospace("current-due-timestamp", domain_6.Domain.dateFullStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)) :
-                                                script_6.Tektite.monospace("current-due-timestamp", domain_6.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)),
+                                                tektite_index_9.Tektite.monospace("current-due-timestamp", domain_6.Domain.dateFullStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)) :
+                                                tektite_index_9.Tektite.monospace("current-due-timestamp", domain_6.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)),
                                         ] : [],
-                                    script_6.Tektite.monospace("capital-interval", domain_6.Domain.timeLongStringFromTick(0)),
-                                    script_6.Tektite.monospace("current-timestamp", domain_6.Domain.dateStringFromTick(domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("capital-interval", domain_6.Domain.timeLongStringFromTick(0)),
+                                    tektite_index_9.Tektite.monospace("current-timestamp", domain_6.Domain.dateStringFromTick(domain_6.Domain.getTicks())),
                                 ]) :
                                 Render.$div("current-item")([
-                                    script_6.Tektite.monospace("capital-interval", domain_6.Domain.timeLongStringFromTick(0)),
-                                    script_6.Tektite.monospace("current-timestamp", domain_6.Domain.dateStringFromTick(domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("capital-interval", domain_6.Domain.timeLongStringFromTick(0)),
+                                    tektite_index_9.Tektite.monospace("current-timestamp", domain_6.Domain.dateStringFromTick(domain_6.Domain.getTicks())),
                                 ])];
                         _c = (_b = render_6.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_6.Render.screenHeaderFlashSegment(storage_10.Storage.CountdownTimer.recentlyFlashInterval.add, domain_6.Domain.getFlashIntervalPreset()
                                 .concat(storage_10.Storage.CountdownTimer.recentlyFlashInterval.get())
-                                .sort(minamo_js_14.minamo.core.comparer.make([function (i) { return i; }]))
+                                .sort(minamo_js_9.minamo.core.comparer.make([function (i) { return i; }]))
                                 .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_10.Storage.CountdownTimer.flashInterval.get(), storage_10.Storage.CountdownTimer.flashInterval.set, "tektite-flash-icon", "00:00:00 only")];
                     case 1: return [4 /*yield*/, _c.apply(_b, [_j.sent()])];
                     case 2:
@@ -11255,7 +11255,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             domain_6.Domain.timeLongStringFromTick(current ? Math.max(current.end - tick, 0) : 0);
                                         capitalTime = domain_6.Domain.dateStringFromTick(tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
-                                        minamo_js_14.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
+                                        minamo_js_9.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         flashInterval = storage_10.Storage.CountdownTimer.flashInterval.get();
                                         if (current) {
                                             rest = current.end - tick;
@@ -11274,7 +11274,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                                 lashFlashAt = tick;
                                             }
                                             currentColor = color_3.Color.getSolidRainbowColor(storage_10.Storage.CountdownTimer.ColorIndex.get());
-                                            script_6.Tektite.setBackgroundColor(currentColor);
+                                            tektite_index_9.Tektite.setBackgroundColor(currentColor);
                                             span = current.end - current.start;
                                             rate = Math.min(tick - current.start, span) / span;
                                             nextColor = color_3.Color.getSolidRainbowColor(storage_10.Storage.CountdownTimer.ColorIndex.get() + 1);
@@ -11287,15 +11287,15 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             render_6.Render.setProgress(null);
                                             __8.tektite.header.getElement().classList.remove("with-screen-prgress");
                                             currentColor = color_3.Color.getSolidRainbowColor(storage_10.Storage.CountdownTimer.ColorIndex.get());
-                                            script_6.Tektite.setBackgroundColor(currentColor);
+                                            tektite_index_9.Tektite.setBackgroundColor(currentColor);
                                             // setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
                                         __8.tektite.setTitle(current ? domain_6.Domain.timeShortStringFromTick(Math.max(current.end - tick, 0)) + " - " + applicationTitle : applicationTitle);
-                                        alarmListDiv = minamo_js_14.minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
+                                        alarmListDiv = minamo_js_9.minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
                                         if (alarmListDiv) {
-                                            minamo_js_14.minamo.dom.getChildNodes(alarmListDiv)
+                                            minamo_js_9.minamo.dom.getChildNodes(alarmListDiv)
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText =
                                                     domain_6.Domain.timeShortStringFromTick(Math.max(alarms[index].end - tick, 0));
@@ -11308,11 +11308,11 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             currentColor = color_3.Color.getSolidRainbowColor(primaryStep);
                                             nextColor = color_3.Color.getSolidRainbowColor(primaryStep + 1);
                                             rate = (Math.min(tick - current.start), unit) / unit;
-                                            script_6.Tektite.setBodyColor(color_3.Color.mixColors(currentColor, nextColor, rate));
+                                            tektite_index_9.Tektite.setBodyColor(color_3.Color.mixColors(currentColor, nextColor, rate));
                                         }
                                         else {
                                             currentColor = color_3.Color.getSolidRainbowColor(storage_10.Storage.CountdownTimer.ColorIndex.get());
-                                            script_6.Tektite.setBodyColor(currentColor);
+                                            tektite_index_9.Tektite.setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 10];
                                     case 3: return [4 /*yield*/, render_6.Render.reload()];
@@ -11354,7 +11354,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
         }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("clockworks/script/application/neverstopwatch/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/type", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/neverstopwatch/operate"], function (require, exports, minamo_js_15, __9, script_7, type_3, color_4, storage_11, domain_7, resource_3, render_7, operate_7) {
+define("clockworks/script/application/neverstopwatch/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/type", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/neverstopwatch/operate"], function (require, exports, minamo_js_10, __9, tektite_index_10, type_3, color_4, storage_11, domain_7, resource_3, render_7, operate_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -11362,8 +11362,8 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
     var Render;
     (function (Render) {
         var _this = this;
-        Render.$make = minamo_js_15.minamo.dom.make;
-        Render.$tag = minamo_js_15.minamo.dom.tag;
+        Render.$make = minamo_js_10.minamo.dom.make;
+        Render.$tag = minamo_js_10.minamo.dom.tag;
         Render.$div = Render.$tag("div");
         Render.$span = Render.$tag("span");
         Render.labelSpan = Render.$span("label");
@@ -11383,7 +11383,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                         };
                         return [4 /*yield*/, Promise.all(ticks
                                 .concat([item])
-                                .sort(minamo_js_15.minamo.core.comparer.make([function (i) { return -i; }]))
+                                .sort(minamo_js_10.minamo.core.comparer.make([function (i) { return -i; }]))
                                 .filter(function (i, ix, list) { return ix === list.indexOf(i); })
                                 .map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                 var _a, _b;
@@ -11392,7 +11392,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_7.Tektite.$span("monospace")(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_10.Tektite.$span("monospace")(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
                                     }
                                 });
@@ -11408,8 +11408,8 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
-                        _a = script_7.Tektite.$div("stamp-item flex-item");
-                        _b = script_7.Tektite.$div("item-header");
+                        _a = tektite_index_10.Tektite.$div("stamp-item flex-item");
+                        _b = tektite_index_10.Tektite.$div("item-header");
                         _d = (_c = __9.tektite).internalLink;
                         _j = {
                             className: "item-title",
@@ -11420,11 +11420,11 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                         _e = [
                             _d.apply(_c, [(_j.children = [
                                     _k.sent(),
-                                    script_7.Tektite.monospace("tick-elapsed-time", Render.label("Elapsed time"))
+                                    tektite_index_10.Tektite.monospace("tick-elapsed-time", Render.label("Elapsed time"))
                                 ],
                                     _j)])
                         ];
-                        _f = script_7.Tektite.$div("item-operator");
+                        _f = tektite_index_10.Tektite.$div("item-operator");
                         _h = (_g = __9.tektite.menu).button;
                         return [4 /*yield*/, Render.stampItemMenu(tick)];
                     case 2: return [4 /*yield*/, _h.apply(_g, [_k.sent()])];
@@ -11434,9 +11434,9 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                                 _k.sent()
                                             ]])
                                     ])]),
-                                script_7.Tektite.$div("item-information")([
-                                    script_7.Tektite.monospace("tick-timestamp", Render.label("Timestamp"), domain_7.Domain.dateFullStringFromTick(tick)),
-                                    script_7.Tektite.monospace("tick-interval", Render.label("Interval"), domain_7.Domain.timeLongStringFromTick(interval)),
+                                tektite_index_10.Tektite.$div("item-information")([
+                                    tektite_index_10.Tektite.monospace("tick-timestamp", Render.label("Timestamp"), domain_7.Domain.dateFullStringFromTick(tick)),
+                                    tektite_index_10.Tektite.monospace("tick-interval", Render.label("Interval"), domain_7.Domain.timeLongStringFromTick(interval)),
                                 ])
                             ]])];
                 }
@@ -11523,25 +11523,25 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                     case 0:
                         _f = {};
                         _g = {};
-                        _a = [script_7.Tektite.$div("current-item")([
-                                script_7.Tektite.monospace("previous-timestamp", null !== item ?
+                        _a = [tektite_index_10.Tektite.$div("current-item")([
+                                tektite_index_10.Tektite.monospace("previous-timestamp", null !== item ?
                                     domain_7.Domain.dateFullStringFromTick(item) :
                                     (0 < ticks.length ?
                                         domain_7.Domain.dateFullStringFromTick(ticks[0]) :
                                         "")),
-                                script_7.Tektite.monospace("capital-interval", domain_7.Domain.timeLongStringFromTick(0)),
-                                script_7.Tektite.monospace("current-timestamp", domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
+                                tektite_index_10.Tektite.monospace("capital-interval", domain_7.Domain.timeLongStringFromTick(0)),
+                                tektite_index_10.Tektite.monospace("current-timestamp", domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
                             ])];
                         _c = (_b = render_7.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_7.Render.screenHeaderFlashSegment(storage_11.Storage.NeverStopwatch.recentlyFlashInterval.add, domain_7.Domain.getFlashIntervalPreset()
                                 .concat(storage_11.Storage.NeverStopwatch.recentlyFlashInterval.get())
-                                .sort(minamo_js_15.minamo.core.comparer.make([function (i) { return i; }]))
+                                .sort(minamo_js_10.minamo.core.comparer.make([function (i) { return i; }]))
                                 .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_11.Storage.NeverStopwatch.flashInterval.get(), storage_11.Storage.NeverStopwatch.flashInterval.set)];
                     case 1: return [4 /*yield*/, _c.apply(_b, [_h.sent()])];
                     case 2:
                         _g.body = _a.concat([
                             _h.sent(),
-                            script_7.Tektite.$div("button-list")({
+                            tektite_index_10.Tektite.$div("button-list")({
                                 tag: "button",
                                 className: "default-button main-button long-button",
                                 children: Render.label("Stamp"),
@@ -11561,15 +11561,15 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                         _d = undefined;
                         return [3 /*break*/, 6];
                     case 4:
-                        _e = script_7.Tektite.$div("row-flex-list stamp-list");
+                        _e = tektite_index_10.Tektite.$div("row-flex-list stamp-list");
                         return [4 /*yield*/, Promise.all(ticks.map(function (tick, index) { return Render.stampItem(tick, "number" === typeof ticks[index + 1] ? tick - ticks[index + 1] : null); }))];
                     case 5:
                         _d = [
                             _e.apply(void 0, [_h.sent()]),
-                            script_7.Tektite.$div("description")(script_7.Tektite.$tag("ul")("locale-parallel-off")([
-                                script_7.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                script_7.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                script_7.Tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
+                            tektite_index_10.Tektite.$div("description")(tektite_index_10.Tektite.$tag("ul")("locale-parallel-off")([
+                                tektite_index_10.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                tektite_index_10.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                tektite_index_10.Tektite.$tag("li")("")([Render.label("You can use a link like this too:"), { tag: "a", style: "margin-inline-start:0.5em;", href: domain_7.Domain.makeStampUrl("new"), children: __9.Clockworks.localeMap("Stamp"), },]),
                             ]))
                         ];
                         _h.label = 6;
@@ -11667,7 +11667,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = domain_7.Domain.timeLongStringFromTick(tick - (current !== null && current !== void 0 ? current : tick));
                                         capitalTime = domain_7.Domain.dateStringFromTick(tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
-                                        minamo_js_15.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
+                                        minamo_js_10.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         if (0 < flashInterval && null !== current) {
                                             elapsed = domain_7.Domain.getTicks() - current;
                                             unit = flashInterval;
@@ -11676,7 +11676,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                                 __9.tektite.screen.flash();
                                             }
                                             currentColor = color_4.Color.getSolidRainbowColor(primaryStep);
-                                            script_7.Tektite.setBackgroundColor(currentColor);
+                                            tektite_index_10.Tektite.setBackgroundColor(currentColor);
                                             previousPrimaryStep = primaryStep;
                                             rate = ((domain_7.Domain.getTicks() - current) % unit) / unit;
                                             nextColor = color_4.Color.getSolidRainbowColor(primaryStep + 1);
@@ -11689,15 +11689,15 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                             render_7.Render.setProgress(null);
                                             __9.tektite.header.getElement().classList.remove("with-screen-prgress");
                                             currentColor = color_4.Color.getSolidRainbowColor(0);
-                                            script_7.Tektite.setBackgroundColor(currentColor);
+                                            tektite_index_10.Tektite.setBackgroundColor(currentColor);
                                             // setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 9];
                                     case 2:
                                         __9.tektite.setTitle(domain_7.Domain.timeShortStringFromTick(tick - (current !== null && current !== void 0 ? current : tick)) + " - " + applicationTitle);
-                                        stampListDiv = minamo_js_15.minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
+                                        stampListDiv = minamo_js_10.minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
                                         if (stampListDiv) {
-                                            minamo_js_15.minamo.dom.getChildNodes(stampListDiv)
+                                            minamo_js_10.minamo.dom.getChildNodes(stampListDiv)
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = domain_7.Domain.timeShortStringFromTick(domain_7.Domain.getTicks() - ticks[index]);
                                             });
@@ -11709,11 +11709,11 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                             currentColor = color_4.Color.getSolidRainbowColor(primaryStep);
                                             nextColor = color_4.Color.getSolidRainbowColor(primaryStep + 1);
                                             rate = ((domain_7.Domain.getTicks() - current) % unit) / unit;
-                                            script_7.Tektite.setBodyColor(color_4.Color.mixColors(currentColor, nextColor, rate));
+                                            tektite_index_10.Tektite.setBodyColor(color_4.Color.mixColors(currentColor, nextColor, rate));
                                         }
                                         else {
                                             currentColor = color_4.Color.getSolidRainbowColor(0);
-                                            script_7.Tektite.setBodyColor(currentColor);
+                                            tektite_index_10.Tektite.setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 9];
                                     case 3: return [4 /*yield*/, render_7.Render.reload()];
@@ -11752,7 +11752,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
         }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("clockworks/script/application/elapsedtimer/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/type", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/countdowntimer/render", "clockworks/script/application/elapsedtimer/operate"], function (require, exports, minamo_js_16, __10, script_8, type_4, color_5, storage_12, domain_8, resource_4, render_8, render_9, operate_8) {
+define("clockworks/script/application/elapsedtimer/render", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/type", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/index", "clockworks/script/application/countdowntimer/render", "clockworks/script/application/elapsedtimer/operate"], function (require, exports, minamo_js_11, __10, tektite_index_11, type_4, color_5, storage_12, domain_8, resource_4, render_8, render_9, operate_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -11760,8 +11760,8 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
     var Render;
     (function (Render) {
         var _this = this;
-        Render.$make = minamo_js_16.minamo.dom.make;
-        Render.$tag = minamo_js_16.minamo.dom.tag;
+        Render.$make = minamo_js_11.minamo.dom.make;
+        Render.$tag = minamo_js_11.minamo.dom.tag;
         Render.$div = Render.$tag("div");
         Render.$span = Render.$tag("span");
         Render.labelSpan = Render.$span("label");
@@ -11781,7 +11781,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                         };
                         return [4 /*yield*/, Promise.all(alarms
                                 .concat([item])
-                                .sort(minamo_js_16.minamo.core.comparer.make([function (i) { return i.tick; }]))
+                                .sort(minamo_js_11.minamo.core.comparer.make([function (i) { return i.tick; }]))
                                 .filter(function (i, ix, list) { return ix === list.map(function (a) { return JSON.stringify(a); }).indexOf(JSON.stringify(i)); })
                                 .map(function (i) { return __awaiter(_this, void 0, void 0, function () {
                                 var _a, _b;
@@ -11790,7 +11790,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         case 0:
                                             _b = (_a = __10.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_4.Resource.loadSvgOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), script_8.Tektite.$labelSpan(i.title), script_8.Tektite.monospace(domain_8.Domain.dateStringFromTick(i.tick))], domain_8.Domain.makePageParams("ElapsedTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_11.Tektite.$labelSpan(i.title), tektite_index_11.Tektite.monospace(domain_8.Domain.dateStringFromTick(i.tick))], domain_8.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -11846,23 +11846,23 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                         _g = {};
                         _h = {};
                         _a = [(item !== null && item !== void 0 ? item : events[0]) ?
-                                script_8.Tektite.$div("current-item event-item")([
+                                tektite_index_11.Tektite.$div("current-item event-item")([
                                     (item !== null && item !== void 0 ? item : events[0]) ?
                                         [
-                                            script_8.Tektite.monospace("current-title", (item !== null && item !== void 0 ? item : events[0]).title),
-                                            script_8.Tektite.monospace("current-due-timestamp", domain_8.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
+                                            tektite_index_11.Tektite.monospace("current-title", (item !== null && item !== void 0 ? item : events[0]).title),
+                                            tektite_index_11.Tektite.monospace("current-due-timestamp", domain_8.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
                                         ] : [],
-                                    script_8.Tektite.monospace("capital-interval", domain_8.Domain.timeLongStringFromTick(0)),
-                                    script_8.Tektite.monospace("current-timestamp", domain_8.Domain.dateStringFromTick(domain_8.Domain.getTicks())),
+                                    tektite_index_11.Tektite.monospace("capital-interval", domain_8.Domain.timeLongStringFromTick(0)),
+                                    tektite_index_11.Tektite.monospace("current-timestamp", domain_8.Domain.dateStringFromTick(domain_8.Domain.getTicks())),
                                 ]) :
-                                script_8.Tektite.$div("current-item")([
-                                    script_8.Tektite.monospace("capital-interval", domain_8.Domain.timeLongStringFromTick(0)),
-                                    script_8.Tektite.monospace("current-timestamp", domain_8.Domain.dateStringFromTick(domain_8.Domain.getTicks())),
+                                tektite_index_11.Tektite.$div("current-item")([
+                                    tektite_index_11.Tektite.monospace("capital-interval", domain_8.Domain.timeLongStringFromTick(0)),
+                                    tektite_index_11.Tektite.monospace("current-timestamp", domain_8.Domain.dateStringFromTick(domain_8.Domain.getTicks())),
                                 ])];
                         _c = (_b = render_8.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_8.Render.screenHeaderFlashSegment(storage_12.Storage.ElapsedTimer.recentlyFlashInterval.add, domain_8.Domain.getFlashIntervalPreset()
                                 .concat(storage_12.Storage.ElapsedTimer.recentlyFlashInterval.get())
-                                .sort(minamo_js_16.minamo.core.comparer.make([function (i) { return i; }]))
+                                .sort(minamo_js_11.minamo.core.comparer.make([function (i) { return i; }]))
                                 .filter(function (i, ix, list) { return ix === list.indexOf(i); }), storage_12.Storage.ElapsedTimer.flashInterval.get(), storage_12.Storage.ElapsedTimer.flashInterval.set, "tektite-flash-icon", "00:00:00 only")];
                     case 1: return [4 /*yield*/, _c.apply(_b, [_j.sent()])];
                     case 2:
@@ -11877,7 +11877,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                         _d = undefined;
                         return [3 /*break*/, 6];
                     case 4:
-                        _e = [script_8.Tektite.$div("button-list")([
+                        _e = [tektite_index_11.Tektite.$div("button-list")([
                                 {
                                     tag: "button",
                                     className: "main-button long-button",
@@ -11907,14 +11907,14 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                     }); }
                                 },
                             ])];
-                        _f = script_8.Tektite.$div("row-flex-list event-list");
+                        _f = tektite_index_11.Tektite.$div("row-flex-list event-list");
                         return [4 /*yield*/, Promise.all(events.map(function (item) { return render_9.Render.eventItem(item); }))];
                     case 5:
                         _d = _e.concat([
                             _f.apply(void 0, [_j.sent()]),
-                            script_8.Tektite.$div("description")(script_8.Tektite.$tag("ul")("locale-parallel-off")([
-                                script_8.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
-                                script_8.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                            tektite_index_11.Tektite.$div("description")(tektite_index_11.Tektite.$tag("ul")("locale-parallel-off")([
+                                tektite_index_11.Tektite.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
+                                tektite_index_11.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                             ]))
                         ]);
                         _j.label = 6;
@@ -12010,7 +12010,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = domain_8.Domain.timeLongStringFromTick(tick - ((_e = current === null || current === void 0 ? void 0 : current.tick) !== null && _e !== void 0 ? _e : tick));
                                         capitalTime = domain_8.Domain.dateStringFromTick(tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
-                                        minamo_js_16.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
+                                        minamo_js_11.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         if (0 < flashInterval && null !== current) {
                                             elapsed = tick - current.tick;
                                             unit = flashInterval;
@@ -12019,7 +12019,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                                 __10.tektite.screen.flash();
                                             }
                                             currentColor = color_5.Color.getSolidRainbowColor(primaryStep);
-                                            script_8.Tektite.setBackgroundColor(currentColor);
+                                            tektite_index_11.Tektite.setBackgroundColor(currentColor);
                                             previousPrimaryStep = primaryStep;
                                             rate = ((tick - current.tick) % unit) / unit;
                                             nextColor = color_5.Color.getSolidRainbowColor(primaryStep + 1);
@@ -12032,15 +12032,15 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                             render_8.Render.setProgress(null);
                                             __10.tektite.header.getElement().classList.remove("with-screen-prgress");
                                             currentColor = color_5.Color.getSolidRainbowColor(0);
-                                            script_8.Tektite.setBackgroundColor(currentColor);
+                                            tektite_index_11.Tektite.setBackgroundColor(currentColor);
                                             // setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
                                         __10.tektite.setTitle(domain_8.Domain.timeShortStringFromTick(tick - ((_f = current === null || current === void 0 ? void 0 : current.tick) !== null && _f !== void 0 ? _f : tick)) + " - " + applicationTitle);
-                                        eventListDiv = minamo_js_16.minamo.dom.getDivsByClassName(screen, "event-list")[0];
+                                        eventListDiv = minamo_js_11.minamo.dom.getDivsByClassName(screen, "event-list")[0];
                                         if (eventListDiv) {
-                                            minamo_js_16.minamo.dom.getChildNodes(eventListDiv)
+                                            minamo_js_11.minamo.dom.getChildNodes(eventListDiv)
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("event-elapsed-time")[0].getElementsByClassName("value")[0].innerText =
                                                     domain_8.Domain.timeShortStringFromTick(tick - events[index].tick);
@@ -12053,11 +12053,11 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                             currentColor = color_5.Color.getSolidRainbowColor(primaryStep);
                                             nextColor = color_5.Color.getSolidRainbowColor(primaryStep + 1);
                                             rate = ((domain_8.Domain.getTicks() - current.tick) % unit) / unit;
-                                            script_8.Tektite.setBodyColor(color_5.Color.mixColors(currentColor, nextColor, rate));
+                                            tektite_index_11.Tektite.setBodyColor(color_5.Color.mixColors(currentColor, nextColor, rate));
                                         }
                                         else {
                                             currentColor = color_5.Color.getSolidRainbowColor(0);
-                                            script_8.Tektite.setBodyColor(currentColor);
+                                            tektite_index_11.Tektite.setBodyColor(currentColor);
                                         }
                                         return [3 /*break*/, 10];
                                     case 3: return [4 /*yield*/, render_8.Render.reload()];
@@ -12099,7 +12099,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
         }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("clockworks/script/render/index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/index", "clockworks/script/type", "clockworks/script/base", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/operate", "clockworks/script/application/rainbowclock/render", "clockworks/script/application/countdowntimer/render", "clockworks/script/application/neverstopwatch/render", "clockworks/script/application/elapsedtimer/render", "clockworks/resource/config"], function (require, exports, minamo_js_17, __11, script_9, type_5, base_8, color_6, storage_13, domain_9, resource_5, operate_9, render_10, render_11, render_12, render_13, config_json_10) {
+define("clockworks/script/render/index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/script/index", "clockworks/tektite.js/script/tektite-index", "clockworks/script/type", "clockworks/script/base", "clockworks/script/color", "clockworks/script/storage", "clockworks/script/domain", "clockworks/script/render/resource", "clockworks/script/render/operate", "clockworks/script/application/rainbowclock/render", "clockworks/script/application/countdowntimer/render", "clockworks/script/application/neverstopwatch/render", "clockworks/script/application/elapsedtimer/render", "clockworks/resource/config"], function (require, exports, minamo_js_12, __11, tektite_index_12, type_5, base_8, color_6, storage_13, domain_9, resource_5, operate_9, render_10, render_11, render_12, render_13, config_json_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Render = void 0;
@@ -12114,7 +12114,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             var theme = "auto" === setting ? system : setting;
             ["light", "dark",].forEach(function (i) { return document.body.classList.toggle(i, i === theme); });
         };
-        Render.updateProgressBarStyle = function () { var _a; return script_9.Tektite.setProgressBarStyle((_a = storage_13.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto"); };
+        Render.updateProgressBarStyle = function () { var _a; return tektite_index_12.Tektite.setProgressBarStyle((_a = storage_13.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto"); };
         Render.Operate = operate_9.Operate;
         Render.cancelTextButton = function (onCanceled) {
             return ({
@@ -12125,7 +12125,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                     return __generator(this, function (_a) {
                         onCanceled();
                         __11.tektite.toast.make({
-                            content: script_9.Tektite.$span("")(Render.label("roll-backed")),
+                            content: tektite_index_12.Tektite.$span("")(Render.label("roll-backed")),
                             wait: 3000,
                         });
                         return [2 /*return*/];
@@ -12133,9 +12133,9 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 }); },
             });
         };
-        Render.label = function (label) { return script_9.Tektite.$labelSpan([
-            script_9.Tektite.$span("locale-parallel")(__11.Clockworks.localeParallel(label)),
-            script_9.Tektite.$span("locale-map")(__11.Clockworks.localeMap(label)),
+        Render.label = function (label) { return tektite_index_12.Tektite.$labelSpan([
+            tektite_index_12.Tektite.$span("locale-parallel")(__11.Clockworks.localeParallel(label)),
+            tektite_index_12.Tektite.$span("locale-map")(__11.Clockworks.localeMap(label)),
         ]); };
         // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
         // {
@@ -12163,7 +12163,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         // export const alert = (message: string) => makeToast({ content: message, });
         Render.systemConfirm = function (message) { return window.confirm(message); };
         // export const confirm = systemConfirm;
-        Render.popupTitle = function (title) { return minamo_js_17.minamo.core.exists(title) ? script_9.Tektite.$tag("h2")("")(title) : []; };
+        Render.popupTitle = function (title) { return minamo_js_12.minamo.core.exists(title) ? tektite_index_12.Tektite.$tag("h2")("")(title) : []; };
         Render.prompt = function (data) { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -12176,7 +12176,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                         children: [
                                             Render.popupTitle(data.title),
                                             data.content,
-                                            script_9.Tektite.$div("popup-operator")([
+                                            tektite_index_12.Tektite.$div("popup-operator")([
                                                 {
                                                     tag: "button",
                                                     className: "cancel-button",
@@ -12257,7 +12257,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             });
         };
         Render.popupCloseOperator = function (onclick) {
-            return script_9.Tektite.$div("popup-operator")(Render.closeButton(onclick));
+            return tektite_index_12.Tektite.$div("popup-operator")(Render.closeButton(onclick));
         };
         Render.themeSettingsPopup = function (settings) {
             if (settings === void 0) { settings = storage_13.Storage.Settings.get(); }
@@ -12273,14 +12273,14 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     switch (_b.label) {
                                         case 0:
                                             init = (_a = settings.theme) !== null && _a !== void 0 ? _a : "auto";
-                                            checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = tektite_index_12.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c;
                                                 var _this = this;
                                                 return __generator(this, function (_d) {
                                                     switch (_d.label) {
                                                         case 0:
-                                                            _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
+                                                            _b = (_a = minamo_js_12.minamo.dom).replaceChildren;
                                                             _c = [checkButtonList];
                                                             return [4 /*yield*/, Promise.all(type_5.Type.ThemeList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                     var _a;
@@ -12296,7 +12296,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                 return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
-                                                                                    script_9.Tektite.$span("")(Render.label("theme." + key))
+                                                                                    tektite_index_12.Tektite.$span("")(Render.label("theme." + key))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -12361,16 +12361,16 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                         case 0:
                                             init = (_a = settings.progressBarStyle) !== null && _a !== void 0 ? _a : "auto";
                                             selected = init;
-                                            checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = tektite_index_12.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c;
                                                 var _this = this;
                                                 return __generator(this, function (_d) {
                                                     switch (_d.label) {
                                                         case 0:
-                                                            _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
+                                                            _b = (_a = minamo_js_12.minamo.dom).replaceChildren;
                                                             _c = [checkButtonList];
-                                                            return [4 /*yield*/, Promise.all(script_9.Tektite.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                                            return [4 /*yield*/, Promise.all(tektite_index_12.Tektite.ProgressBarStyleList.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                     var _a;
                                                                     var _this = this;
                                                                     return __generator(this, function (_b) {
@@ -12383,7 +12383,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                 return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
-                                                                                    script_9.Tektite.$span("")(Render.label("progressBarStyle." + key))
+                                                                                    tektite_index_12.Tektite.$span("")(Render.label("progressBarStyle." + key))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         return __generator(this, function (_a) {
@@ -12444,7 +12444,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = tektite_index_12.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c, _d;
                                                 var _e;
@@ -12453,7 +12453,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                 return __generator(this, function (_g) {
                                                     switch (_g.label) {
                                                         case 0:
-                                                            _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
+                                                            _b = (_a = minamo_js_12.minamo.dom).replaceChildren;
                                                             _c = [checkButtonList];
                                                             _e = {
                                                                 tag: "button",
@@ -12464,7 +12464,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                             _d = [
                                                                 (_e.children = [
                                                                     _g.sent(),
-                                                                    script_9.Tektite.$span("")(Render.label("language.auto"))
+                                                                    tektite_index_12.Tektite.$span("")(Render.label("language.auto"))
                                                                 ],
                                                                     _e.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                         var _a;
@@ -12499,7 +12499,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                 return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
-                                                                                    script_9.Tektite.$span("")(script_9.Tektite.$labelSpan(__11.tektite.locale.getLocaleName(key)))
+                                                                                    tektite_index_12.Tektite.$span("")(tektite_index_12.Tektite.$labelSpan(__11.tektite.locale.getLocaleName(key)))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -12560,14 +12560,14 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            checkButtonList = script_9.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                                            checkButtonList = tektite_index_12.Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                                             checkButtonListUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
                                                 var _a, _b, _c;
                                                 var _this = this;
                                                 return __generator(this, function (_d) {
                                                     switch (_d.label) {
                                                         case 0:
-                                                            _b = (_a = minamo_js_17.minamo.dom).replaceChildren;
+                                                            _b = (_a = minamo_js_12.minamo.dom).replaceChildren;
                                                             _c = [checkButtonList];
                                                             return [4 /*yield*/, Promise.all(Object.keys(type_5.Type.rainbowClockColorPatternMap).map(function (key) { return __awaiter(_this, void 0, void 0, function () {
                                                                     var _a;
@@ -12582,7 +12582,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                 return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
-                                                                                    script_9.Tektite.$span("")(Render.label(key))
+                                                                                    tektite_index_12.Tektite.$span("")(Render.label(key))
                                                                                 ],
                                                                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                         var _a;
@@ -12636,7 +12636,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            inputTime = script_9.Tektite.$make(HTMLInputElement)({
+                            inputTime = tektite_index_12.Tektite.$make(HTMLInputElement)({
                                 tag: "input",
                                 type: "time",
                                 value: domain_9.Domain.timeLongCoreStringFromTick(tick),
@@ -12657,13 +12657,13 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        inputDate = script_9.Tektite.$make(HTMLInputElement)({
+                        inputDate = tektite_index_12.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
                             value: domain_9.Domain.dateCoreStringFromTick(tick),
                             required: "",
                         });
-                        inputTime = script_9.Tektite.$make(HTMLInputElement)({
+                        inputTime = tektite_index_12.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
                             value: domain_9.Domain.timeShortCoreStringFromTick(domain_9.Domain.getTime(tick)),
@@ -12693,12 +12693,12 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     return [2 /*return*/, ({
                                             // className: "add-remove-tags-popup",
                                             children: [
-                                                Render.popupTitle(script_9.Tektite.$labelSpan("シェア / Share")),
-                                                script_9.Tektite.$div("menu-button-list")([
+                                                Render.popupTitle(tektite_index_12.Tektite.$labelSpan("シェア / Share")),
+                                                tektite_index_12.Tektite.$div("menu-button-list")([
                                                     {
                                                         tag: "button",
                                                         className: "menu-item-button",
-                                                        children: script_9.Tektite.$span("")(script_9.Tektite.$labelSpan("Tweet / ツイート")),
+                                                        children: tektite_index_12.Tektite.$span("")(tektite_index_12.Tektite.$labelSpan("Tweet / ツイート")),
                                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                             return __generator(this, function (_a) {
                                                                 location.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('【' + title + '】 ' + url + ' ');
@@ -12710,7 +12710,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                     {
                                                         tag: "button",
                                                         className: "menu-item-button",
-                                                        children: script_9.Tektite.$span("")(script_9.Tektite.$labelSpan("Copy URL / URL をコピー")),
+                                                        children: tektite_index_12.Tektite.$span("")(tektite_index_12.Tektite.$labelSpan("Copy URL / URL をコピー")),
                                                         onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                                             return __generator(this, function (_a) {
                                                                 Render.Operate.copyToClipboard(url, "URL");
@@ -12781,7 +12781,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                         return [4 /*yield*/, resource_5.Resource.loadSvgOrCache(0 === i ? zeroIcon : "tektite-flash-icon")];
                                     case 1: return [2 /*return*/, _b.apply(_a, [[
                                                 _c.sent(),
-                                                script_9.Tektite.$labelSpan(0 === i ? __11.Clockworks.localeMap(zeroLabel) : __11.Clockworks.localeMap("Interval") + ": " + domain_9.Domain.makeTimerLabel(i))
+                                                tektite_index_12.Tektite.$labelSpan(0 === i ? __11.Clockworks.localeMap(zeroLabel) : __11.Clockworks.localeMap("Interval") + ": " + domain_9.Domain.makeTimerLabel(i))
                                             ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
@@ -12981,7 +12981,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             return __generator(this, function (_a) {
                 return [2 /*return*/, __11.tektite.externalLink({
                         href: config_json_10.default.repositoryUrl,
-                        children: __11.tektite.menu.item(script_9.Tektite.$labelSpan("GitHub")),
+                        children: __11.tektite.menu.item(tektite_index_12.Tektite.$labelSpan("GitHub")),
                     })];
             });
         }); };
@@ -13034,28 +13034,28 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                             _d.menu = Render.welcomeScreenMenu,
                             _d);
                         _e = {};
-                        _a = script_9.Tektite.$div("logo");
-                        _b = script_9.Tektite.$div("application-icon icon");
+                        _a = tektite_index_12.Tektite.$div("logo");
+                        _b = tektite_index_12.Tektite.$div("application-icon icon");
                         return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("application-icon")];
                     case 2: return [2 /*return*/, (_c.body = (_e.primary = [
                             _a.apply(void 0, [[
                                     _b.apply(void 0, [_f.sent()]),
-                                    script_9.Tektite.$span("logo-text")(config_json_10.default.applicationTitle)
+                                    tektite_index_12.Tektite.$span("logo-text")(config_json_10.default.applicationTitle)
                                 ]]),
-                            script_9.Tektite.$div("button-list")(type_5.Type.applicationIdList.map(function (i) {
+                            tektite_index_12.Tektite.$div("button-list")(type_5.Type.applicationIdList.map(function (i) {
                                 return __11.tektite.internalLink({
                                     href: { application: i },
                                     children: {
                                         tag: "button",
                                         className: "default-button main-button long-button",
-                                        children: script_9.Tektite.$labelSpan(type_5.Type.applicationList[i].title),
+                                        children: tektite_index_12.Tektite.$labelSpan(type_5.Type.applicationList[i].title),
                                         // onclick: async () => await showNeverStopwatchScreen(),
                                     }
                                 });
                             }))
                         ],
-                            _e.trail = script_9.Tektite.$div("description")(script_9.Tektite.$tag("ul")("locale-parallel-off")([
-                                script_9.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                            _e.trail = tektite_index_12.Tektite.$div("description")(tektite_index_12.Tektite.$tag("ul")("locale-parallel-off")([
+                                tektite_index_12.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                             ])),
                             _e),
                             _c)];
@@ -13084,7 +13084,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                 return [2 /*return*/];
                             });
                         }); };
-                        script_9.Tektite.setBodyColor(color_6.Color.getSolidRainbowColor(0));
+                        tektite_index_12.Tektite.setBodyColor(color_6.Color.getSolidRainbowColor(0));
                         _a = Render.showWindow;
                         return [4 /*yield*/, Render.welcomeScreen()];
                     case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent(), updateWindow])];
@@ -13146,7 +13146,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 switch (_b.label) {
                     case 0:
                         if (!(null !== item)) return [3 /*break*/, 1];
-                        _a = script_9.Tektite.$div("button-list")([
+                        _a = tektite_index_12.Tektite.$div("button-list")([
                             __11.tektite.internalLink({
                                 href: { application: application, },
                                 children: {
@@ -13201,7 +13201,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         }); };
         Render.updateTitle = function () {
             var _a, _b, _c;
-            document.title = (_c = (_b = (_a = minamo_js_17.minamo.dom.getDivsByClassName(__11.tektite.header.getElement(), "segment-title")) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : config_json_10.default.applicationTitle;
+            document.title = (_c = (_b = (_a = minamo_js_12.minamo.dom.getDivsByClassName(__11.tektite.header.getElement(), "segment-title")) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : config_json_10.default.applicationTitle;
         };
         Render.showWindow = function (screen, updateWindow) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -13209,32 +13209,32 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                     case 0: return [4 /*yield*/, __11.tektite.screen.show(screen, updateWindow)];
                     case 1:
                         _a.sent();
-                        script_9.Tektite.setBackgroundColor(color_6.Color.getSolidRainbowColor(0));
+                        tektite_index_12.Tektite.setBackgroundColor(color_6.Color.getSolidRainbowColor(0));
                         Render.updateTitle();
                         Render.resizeFlexList();
                         return [2 /*return*/];
                 }
             });
         }); };
-        Render.setProgress = function (percent, color) { var _a; return script_9.Tektite.setProgress((_a = storage_13.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto", percent, color); };
+        Render.setProgress = function (percent, color) { var _a; return tektite_index_12.Tektite.setProgress((_a = storage_13.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto", percent, color); };
         Render.resizeFlexList = function () {
             var minColumns = 1 + Math.floor(window.innerWidth / 780);
             var maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
             var FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
             var border = FontRemUnit * 26 + 10;
-            minamo_js_17.minamo.dom.getDivsByClassName(document, "menu-popup").forEach(function (header) {
-                minamo_js_17.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
-                minamo_js_17.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
+            minamo_js_12.minamo.dom.getDivsByClassName(document, "menu-popup").forEach(function (header) {
+                minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
+                minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
             });
             [document.getElementById("screen-toast")].forEach(function (header) {
-                minamo_js_17.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
-                minamo_js_17.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
+                minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
+                minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
             });
-            minamo_js_17.minamo.dom.getDivsByClassName(document, "button-list").forEach(function (header) {
-                minamo_js_17.minamo.dom.toggleCSSClass(header, "locale-parallel-on", true);
-                minamo_js_17.minamo.dom.toggleCSSClass(header, "locale-parallel-off", false);
+            minamo_js_12.minamo.dom.getDivsByClassName(document, "button-list").forEach(function (header) {
+                minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-on", true);
+                minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-off", false);
             });
-            minamo_js_17.minamo.dom.getDivsByClassName(document, "column-flex-list").forEach(function (list) {
+            minamo_js_12.minamo.dom.getDivsByClassName(document, "column-flex-list").forEach(function (list) {
                 var length = list.childNodes.length;
                 list.classList.forEach(function (i) {
                     if (/^max-column-\d+$/.test(i)) {
@@ -13242,24 +13242,24 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                     }
                 });
                 if (length <= 1 || maxColumns <= 1) {
-                    minamo_js_17.minamo.dom.removeCSSStyleProperty(list.style, "height");
+                    minamo_js_12.minamo.dom.removeCSSStyleProperty(list.style, "height");
                 }
                 else {
                     var height = window.innerHeight - list.offsetTop;
                     var itemHeight = list.childNodes[0].offsetHeight + 1;
                     var columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
                     var row = Math.max(Math.ceil(length / columns), Math.min(length, Math.floor(height / itemHeight)));
-                    minamo_js_17.minamo.dom.setStyleProperty(list, "height", row * itemHeight + "px");
-                    minamo_js_17.minamo.dom.addCSSClass(list, "max-column-" + columns);
+                    minamo_js_12.minamo.dom.setStyleProperty(list, "height", row * itemHeight + "px");
+                    minamo_js_12.minamo.dom.addCSSClass(list, "max-column-" + columns);
                 }
                 if (0 < length) {
                     var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
-                    minamo_js_17.minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
-                    minamo_js_17.minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
+                    minamo_js_12.minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
+                    minamo_js_12.minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
                 }
                 list.classList.toggle("empty-list", length <= 0);
             });
-            minamo_js_17.minamo.dom.getDivsByClassName(document, "row-flex-list").forEach(function (list) {
+            minamo_js_12.minamo.dom.getDivsByClassName(document, "row-flex-list").forEach(function (list) {
                 var length = list.childNodes.length;
                 list.classList.forEach(function (i) {
                     if (/^max-column-\d+$/.test(i)) {
@@ -13274,12 +13274,12 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                     var columns = list.classList.contains("compact-flex-list") ?
                         Math.min(maxColumns, length) :
                         Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
-                    minamo_js_17.minamo.dom.addCSSClass(list, "max-column-" + columns);
+                    minamo_js_12.minamo.dom.addCSSClass(list, "max-column-" + columns);
                     var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
-                    minamo_js_17.minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
-                    minamo_js_17.minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
+                    minamo_js_12.minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
+                    minamo_js_12.minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
                 }
-                minamo_js_17.minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
+                minamo_js_12.minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
             });
         };
         var onWindowResizeTimestamp = 0;
@@ -13297,9 +13297,9 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             if (!__11.tektite.key.isComposing(event)) {
                 switch (event.key) {
                     case "Enter":
-                        minamo_js_17.minamo.dom.getElementsByClassName(document, "popup")
+                        minamo_js_12.minamo.dom.getElementsByClassName(document, "popup")
                             .filter(function (_i, ix, list) { return (ix + 1) === list.length; })
-                            .forEach(function (popup) { var _a, _b; return (_b = (_a = minamo_js_17.minamo.dom.getElementsByClassName(popup, "default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
+                            .forEach(function (popup) { var _a, _b; return (_b = (_a = minamo_js_12.minamo.dom.getElementsByClassName(popup, "default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
                         break;
                     case "Escape":
                         if (__11.tektite.escape()) {
@@ -13637,7 +13637,7 @@ define("clockworks/resource/lang.ja", [], {
     "timezone.New York": "ニューヨーク",
     "timezone.Seattle": "シアトル"
 });
-define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/script/index", "clockworks/script/render/index", "clockworks/script/render/resource", "clockworks/script/storage", "clockworks/script/domain", "clockworks/resource/lang.en", "clockworks/resource/lang.ja"], function (require, exports, script_10, render_14, resource_6, storage_14, domain_10, lang_en_json_1, lang_ja_json_1) {
+define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/script/tektite-index", "clockworks/script/render/index", "clockworks/script/render/resource", "clockworks/script/storage", "clockworks/script/domain", "clockworks/resource/lang.en", "clockworks/resource/lang.ja"], function (require, exports, tektite_index_13, render_14, resource_6, storage_14, domain_10, lang_en_json_1, lang_ja_json_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.tektite = exports.Clockworks = void 0;
@@ -13682,7 +13682,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
             });
         }); };
     })(Clockworks = exports.Clockworks || (exports.Clockworks = {}));
-    exports.tektite = script_10.Tektite.make({
+    exports.tektite = tektite_index_13.Tektite.make({
         makeUrl: domain_10.Domain.makeUrl,
         showUrl: render_14.Render.showUrl,
         showPage: render_14.Render.showPage,
@@ -13703,7 +13703,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640006725796), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640051977030), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

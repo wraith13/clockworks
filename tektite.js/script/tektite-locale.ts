@@ -1,4 +1,4 @@
-import { Tektite } from "./index.js";
+import { Tektite } from "./tektite-index.js";
 export module Locale
 {
     export class Locale<LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>

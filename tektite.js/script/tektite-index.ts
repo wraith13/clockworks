@@ -1,12 +1,12 @@
-import { minamo } from "../../nephila/minamo.js";
-import { Locale } from "./locale";
-import { Fullscreen as FullscreenModule } from "./fullscreen";
-import { Screen } from "./screen";
-import { Toast as ToastModule } from "./toast";
-import { Header } from "./header";
-import { Menu } from "./menu";
-import { Key as KeyModule } from "./key";
-import tektiteResource from "..//images.json";
+import { minamo } from "../../nephila/minamo.js/index.js";
+import { Locale } from "./tektite-locale";
+import { Fullscreen as FullscreenModule } from "./tektite-fullscreen";
+import { Screen } from "./tektite-screen";
+import { Toast as ToastModule } from "./tektite-toast";
+import { Header } from "./tektite-header";
+import { Menu } from "./tektite-menu";
+import { Key as KeyModule } from "./tektite-key";
+import tektiteResource from "../images.json";
 export module Tektite
 {
     export const $make = minamo.dom.make;

@@ -1,5 +1,5 @@
 import { Clockworks, tektite } from "../..";
-import { Tektite } from "../../../tektite.js/script";
+import { Tektite } from "../../../tektite.js/script/tektite-index";
 import { Type } from "../../type";
 import { Base } from "../../base";
 import { Storage } from "../../storage";

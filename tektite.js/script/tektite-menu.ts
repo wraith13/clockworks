@@ -1,5 +1,5 @@
-import { minamo } from "../../nephila/minamo.js";
-import { Tektite } from "./index.js";
+import { minamo } from "../../nephila/minamo.js/index.js";
+import { Tektite } from "./tektite-index.js";
 export module Menu
 {
     const $make = minamo.dom.make;

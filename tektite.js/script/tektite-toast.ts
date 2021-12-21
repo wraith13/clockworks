@@ -1,5 +1,5 @@
-import { minamo } from "../../nephila/minamo.js";
-import { Tektite } from ".";
+import { minamo } from "../../nephila/minamo.js/index.js";
+import { Tektite } from "./tektite-index";
 export module Toast
 {
     export interface Type
