@@ -13,9 +13,9 @@ export module Fullscreen
         {
             await ((element as any).webkitRequestFullscreen)();
         }
-        if ( ! document.body.classList.contains("sleep-mouse"))
+        if ( ! document.body.classList.contains("tektite-sleep-mouse"))
         {
-            document.body.classList.add("sleep-mouse");
+            document.body.classList.add("tektite-sleep-mouse");
         }
     };
     export const exit = async () =>
@@ -29,9 +29,9 @@ export module Fullscreen
         {
             await ((document as any).webkitCancelFullScreen)();
         }
-        if (document.body.classList.contains("sleep-mouse"))
+        if (document.body.classList.contains("tektite-sleep-mouse"))
         {
-            document.body.classList.remove("sleep-mouse");
+            document.body.classList.remove("tektite-sleep-mouse");
         }
     };
 }

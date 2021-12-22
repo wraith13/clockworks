@@ -170,12 +170,12 @@ export module Tektite
     export const setBackgroundColor = (color: string | null) =>
     {
         latestColor = color;
-        if (document.body.classList.contains("tektite-classic"))
+        if (document.body.classList.contains("tektite-style-classic"))
         {
             setHeaderColor(color);
             setFoundationColor(null);
         }
-        if (document.body.classList.contains("tektite-modern"))
+        if (document.body.classList.contains("tektite-style-modern"))
         {
             setFoundationColor(color);
             setHeaderColor(null);
@@ -186,8 +186,8 @@ export module Tektite
         if
         (
             [
-                { className: "tektite-modern", tottle: "modern" === style, },
-                { className: "tektite-classic", tottle: "classic" === style, },
+                { className: "tektite-style-modern", tottle: "modern" === style, },
+                { className: "tektite-style-classic", tottle: "classic" === style, },
             ]
             .map(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate)
             .reduce((a, b) => a || b, false)

@@ -936,9 +936,9 @@ export module Render
         if (tektite.fullscreen.enabled())
         {
             const now = lastMouseMouseAt = new Date().getTime();
-            if (document.body.classList.contains("sleep-mouse"))
+            if (document.body.classList.contains("tektite-sleep-mouse"))
             {
-                document.body.classList.remove("sleep-mouse");
+                document.body.classList.remove("tektite-sleep-mouse");
             }
             if (tektite.fullscreen.element())
             {
@@ -948,9 +948,9 @@ export module Render
                     {
                         if (tektite.fullscreen.element() && now === lastMouseMouseAt)
                         {
-                            if ( ! document.body.classList.contains("sleep-mouse"))
+                            if ( ! document.body.classList.contains("tektite-sleep-mouse"))
                             {
-                                document.body.classList.add("sleep-mouse");
+                                document.body.classList.add("tektite-sleep-mouse");
                             }
                         }
                     },
