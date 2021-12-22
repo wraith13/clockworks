@@ -1,11 +1,9 @@
+// out: style/theme.dark.css, sourceMap: style/theme.dark.css.map
 @import "style/params.less";
 @main-color: #FFFFFF;
 @base-color: #000022;
 body.dark
 {
-    ::-webkit-calendar-picker-indicator
-    {
-        filter: invert(1);
-    }
     @import "style/index.less";
+    .tektite-dark-trait;
 }

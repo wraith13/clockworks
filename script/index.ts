@@ -26,6 +26,7 @@ export module Clockworks
     export const start = async (params:{ buildTimestamp: string, }) =>
     {
         console.log(`start timestamp: ${new Date()}`);
+        console.log(`buildTimestamp: ${params.buildTimestamp}`);
         console.log(`${JSON.stringify(params)}`);
         tektite.locale.setLocale(Storage.Settings.get().locale);
         tektite.onLoad();
