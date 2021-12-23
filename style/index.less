@@ -3,7 +3,7 @@
 
 .monospace
 {
-    .monospace-trait;
+    .tektite-monospace-trait;
 }
 .locale-parallel-on
 {
@@ -136,7 +136,7 @@
 }
 .text-button
 {
-    .link-trait;
+    .tektite-link-trait;
     border-style: none;
     border-width: 0px;
     border-radius: 0px;
@@ -154,7 +154,7 @@ h2
 h1, h2
 {
     margin: 0rem;
-    .negative-foreground-coloring-trait;
+    .tektite-negative-foreground-coloring-trait;
     background-color: @accent-color;
     text-decoration: none;
 }
@@ -187,10 +187,10 @@ select
 }
 button
 {
-    .secondary-operator-coloring-trait;
+    .tektite-secondary-operator-coloring-trait;
     &.default-button
     {
-        .primary-operator-coloring-trait;
+        .tektite-primary-operator-coloring-trait;
     }
     margin: 4px;
     padding: 4px 12px;
@@ -229,7 +229,7 @@ button
     }
     &.delete-button
     {
-        .delete-operator-coloring-trait;
+        .tektite-delete-operator-coloring-trait;
     }
 }
 .long-button
@@ -266,7 +266,7 @@ button
         flex-direction: column;
     }
     color: @accent-color;
-    .alpha-positive-background-coloring-trait;
+    .alpha-tektite-positive-background-coloring-trait;
     border-style: solid;
     border-width: 1px;
     border-radius: 0.5rem;
@@ -294,7 +294,7 @@ button
         }
         &.current-item
         {
-            .primary-operator-coloring-trait;
+            .tektite-primary-operator-coloring-trait;
         }
         &:not(.current-item)
         {
@@ -382,7 +382,7 @@ button
     border-width: 2px;
     border-radius: 16px;
     border-color: @accent-color;
-    .positive-background-coloring-trait;
+    .tektite-positive-background-coloring-trait;
     overflow: auto;
     min-width: 240px;
     max-width: calc(100vw - 16px);
@@ -640,7 +640,7 @@ button
         min-height: 1.4em;
         margin-right: 4px;
     }
-    .positive-foreground-coloring-trait;
+    .tektite-positive-foreground-coloring-trait;
 }
 .stamp-item,
 .alarm-item,
@@ -657,7 +657,7 @@ button
         // position: sticky;
         // top: 0px;
         // z-index: 100;
-        // .positive-background-coloring-trait;
+        // .tektite-positive-background-coloring-trait;
         display: flex;
         padding: 0.5rem;
         flex-direction: row;
@@ -711,7 +711,7 @@ button
         z-index: 0;
         .item-panel-body
         {
-            .negative-foreground-coloring-trait;
+            .tektite-negative-foreground-coloring-trait;
             position: relative;
             z-index: 20;
             padding: 1rem;
@@ -883,7 +883,7 @@ button
             {
                 font-size: 7vw;
                 line-height: 100%;
-                .primary-text-font-size-trait;
+                .tektite-primary-text-font-size-trait;
             }
         }
         .previous-timestamp,
@@ -898,7 +898,7 @@ button
             {
                 font-size: 4.4vw;
                 line-height: 100%;
-                .second-text-font-size-trait;
+                .tektite-second-text-font-size-trait;
             }
         }
     }
@@ -923,7 +923,7 @@ button
                 {
                     font-size: 15vw;
                     line-height: 100%;
-                    .primary-text-font-size-trait;
+                    .tektite-primary-text-font-size-trait;
                 }
             }
             .current-title,
@@ -937,7 +937,7 @@ button
                 {
                     font-size: 6vw;
                     line-height: 120%; // 本当は 100% にしておきたいが 100% だと Safari で日本語文字上部が表示されない。
-                    .second-text-font-size-trait;
+                    .tektite-second-text-font-size-trait;
                 }
             }
         }

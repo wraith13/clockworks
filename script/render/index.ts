@@ -687,7 +687,7 @@ export module Render
     });
     export const showWelcomeScreen = async () =>
     {
-        document.body.classList.remove("hide-scroll-bar");
+        document.body.classList.remove("tektite-hide-scroll-bar");
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
             switch(event)

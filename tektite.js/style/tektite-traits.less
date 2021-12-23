@@ -14,13 +14,13 @@
     //     filter: invert(1);
     // }
 }
-.clickable-trait
+.tektite-clickable-trait
 {
     cursor: pointer;
 }
-.link-trait
+.tektite-link-trait
 {
-    .clickable-trait;
+    .tektite-clickable-trait;
     @media (hover: hover)
     {
         &:hover
@@ -40,32 +40,32 @@
         text-decoration: none;
     }
 }
-.monospace-trait
+.tektite-monospace-trait
 {
     font-family: monospace;
 }
-.positive-foreground-coloring-trait
+.tektite-positive-foreground-coloring-trait
 {
     color: @main-color;
     fill: @main-color;
 }
-.positive-background-coloring-trait
+.tektite-positive-background-coloring-trait
 {
     background-color: @base-color;
 }
-.alpha-positive-background-coloring-trait
+.alpha-tektite-positive-background-coloring-trait
 {
     background-color: e(%("%s%s", @base-color, "DD"));
 }
-.negative-foreground-coloring-trait
+.tektite-negative-foreground-coloring-trait
 {
     color: @base-color;
     fill: @base-color;
 }
-.primary-operator-coloring-trait
+.tektite-primary-operator-coloring-trait
 {
-    .clickable-trait;
-    .negative-foreground-coloring-trait;
+    .tektite-clickable-trait;
+    .tektite-negative-foreground-coloring-trait;
     @media (hover: hover)
     {
         &:not(:hover)
@@ -88,9 +88,9 @@
         }
     }
 }
-.secondary-operator-coloring-trait
+.tektite-secondary-operator-coloring-trait
 {
-    .clickable-trait;
+    .tektite-clickable-trait;
     @media (hover: hover)
     {
         &:not(:hover)
@@ -98,11 +98,11 @@
             color: @accent-color;
             fill: @accent-color;
             border-color: @accent-color;
-            .positive-background-coloring-trait;
+            .tektite-positive-background-coloring-trait;
         }
         &:hover
         {
-            .negative-foreground-coloring-trait;
+            .tektite-negative-foreground-coloring-trait;
             border-color: @active-color;
             background-color: @active-color;
         }
@@ -114,13 +114,13 @@
             color: @accent-color;
             fill: @accent-color;
             border-color: @accent-color;
-            .positive-background-coloring-trait;
+            .tektite-positive-background-coloring-trait;
         }
     }
 }
-.tertiary-operator-coloring-trait
+.tektite-tertiary-operator-coloring-trait
 {
-    .clickable-trait;
+    .tektite-clickable-trait;
     @media (hover: hover)
     {
         &:hover
@@ -130,9 +130,9 @@
         }
     }
 }
-.delete-operator-coloring-trait
+.tektite-delete-operator-coloring-trait
 {
-    .clickable-trait;
+    .tektite-clickable-trait;
     @media (hover: hover)
     {
         &:not(:hover)
@@ -140,11 +140,11 @@
             color: @delete-color;
             fill: @delete-color;
             border-color: @delete-color;
-            .positive-background-coloring-trait;
+            .tektite-positive-background-coloring-trait;
         }
         &:hover
         {
-            .negative-foreground-coloring-trait;
+            .tektite-negative-foreground-coloring-trait;
             border-color: @delete-color;
             background-color: @delete-color;
         }
@@ -156,11 +156,11 @@
             color: @delete-color;
             fill: @delete-color;
             border-color: @delete-color;
-            .positive-background-coloring-trait;
+            .tektite-positive-background-coloring-trait;
         }
     }
 }
-.hide-scroll-bar
+.tektite-hide-scroll-bar
 {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -169,47 +169,47 @@
         display: none;
     }
 }
-.primary-text-font-size-core-trait
+.tektite-primary-text-font-size-core-trait
 {
     font-size: calc((100vh - 6rem) * 0.2);
 }
-.primary-text-font-size-trait
+.tektite-primary-text-font-size-trait
 {
     @media (max-height: 7680px) and (min-width: 11520px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 5760px) and (min-width: 7680px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 3840px) and (min-width: 5760px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 2880px) and (min-width: 3840px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 1920px) and (min-width: 2880px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 1440px) and (min-width: 1920px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 960px) and (min-width: 1440px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 720px) and (min-width: 960px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 480px) and (min-width: 720px)
     {
-        .primary-text-font-size-core-trait;
+        .tektite-primary-text-font-size-core-trait;
     }
     @media (max-height: 480px) and (min-width: 480px)
     {
@@ -224,47 +224,47 @@
         font-size: 2rem;
     }
 }
-.second-text-font-size-core-trait
+.tektite-second-text-font-size-core-trait
 {
     font-size: calc((100vh - 6rem) * 0.1);
 }
-.second-text-font-size-trait
+.tektite-second-text-font-size-trait
 {
     @media (max-height: 7680px) and (min-width: 11520px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 5760px) and (min-width: 7680px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 3840px) and (min-width: 5760px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 2880px) and (min-width: 3840px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 1920px) and (min-width: 2880px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 1440px) and (min-width: 1920px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 960px) and (min-width: 1440px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 720px) and (min-width: 960px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 480px) and (min-width: 720px)
     {
-        .second-text-font-size-core-trait;
+        .tektite-second-text-font-size-core-trait;
     }
     @media (max-height: 480px) and (min-width: 480px)
     {

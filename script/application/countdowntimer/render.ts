@@ -465,7 +465,7 @@ export module Render
     export const showCountdownTimerScreen = async (item: Type.AlarmEntry | null) =>
     {
         const applicationTitle = Type.applicationList["CountdownTimer"].title;
-        document.body.classList.add("hide-scroll-bar");
+        document.body.classList.add("tektite-hide-scroll-bar");
         let alarms = Storage.CountdownTimer.Alarms.get();
         let lashFlashAt = 0;
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>

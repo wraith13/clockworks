@@ -269,7 +269,7 @@ export module Render
     export const showRainbowClockScreen = async (item: Type.TimezoneEntry | null) =>
     {
         const applicationTitle = Type.applicationList["RainbowClock"].title;
-        document.body.classList.add("hide-scroll-bar");
+        document.body.classList.add("tektite-hide-scroll-bar");
         let timezones = Storage.RainbowClock.Timezone.get();
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {

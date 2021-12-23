@@ -1,7 +1,7 @@
 // out: false
 #foundation
 {
-    .positive-background-coloring-trait;
+    .tektite-positive-background-coloring-trait;
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -15,7 +15,7 @@
     right: 0px;
     bottom: 0px;
     filter: drop-shadow(0.0rem -0rem 3rem @accent-color); // #screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
-    .alpha-positive-background-coloring-trait;
+    .alpha-tektite-positive-background-coloring-trait;
     .item
     {
         border-top-color: @accent-color;
@@ -90,7 +90,7 @@
 }
 .screen
 {
-    .positive-foreground-coloring-trait;
+    .tektite-positive-foreground-coloring-trait;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -158,12 +158,12 @@
             &.label-segment
             {
                 cursor: default;
-                .negative-foreground-coloring-trait;
+                .tektite-negative-foreground-coloring-trait;
                 background-color: @accent-color;
             }
             &:not(.label-segment)
             {
-                .primary-operator-coloring-trait;
+                .tektite-primary-operator-coloring-trait;
             }
             &.fill-header-segment
             {
@@ -219,7 +219,7 @@
         {
             margin: 0px;
             margin-right: 0.25rem;
-            .primary-operator-coloring-trait;
+            .tektite-primary-operator-coloring-trait;
             border-color: transparent !important;
             right: 0.25rem;
             position: absolute;
@@ -300,7 +300,7 @@
         overflow-y: auto;
         flex-grow: 1;
 
-        .hide-scroll-bar;
+        .tektite-hide-scroll-bar;
         .primary-page
         {
             box-sizing: border-box;
@@ -312,7 +312,7 @@
             align-items: stretch;
             justify-content: stretch;
             flex-direction: column;
-            // .negative-foreground-coloring-trait;
+            // .tektite-negative-foreground-coloring-trait;
             // padding-bottom: 2.5rem;
             // .default-button
             // {
@@ -451,10 +451,10 @@
         }
         .screen-body
         {
-            .hide-scroll-bar;
+            .tektite-hide-scroll-bar;
             .primary-page
             {
-                .negative-foreground-coloring-trait;
+                .tektite-negative-foreground-coloring-trait;
                 button
                 {
                     color: @base-color;

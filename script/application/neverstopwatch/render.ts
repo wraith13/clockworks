@@ -212,7 +212,7 @@ export module Render
     export const showNeverStopwatchScreen = async (item: number | null) =>
     {
         const applicationTitle = Type.applicationList["NeverStopwatch"].title;
-        document.body.classList.add("hide-scroll-bar");
+        document.body.classList.add("tektite-hide-scroll-bar");
         let ticks = Storage.NeverStopwatch.Stamps.get();
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
