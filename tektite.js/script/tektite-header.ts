@@ -21,7 +21,7 @@ export module Header
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
-        getElement = () => document.getElementById("screen-header") as HTMLDivElement;
+        getElement = () => document.getElementById("tektite-screen-header") as HTMLDivElement;
         getLastSegmentClass = (ix: number, items: SegmentSource<PageParams, IconKeyType>[]) =>
             [
                 ix === 0 ? "first-segment": undefined,

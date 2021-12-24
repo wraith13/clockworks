@@ -273,7 +273,7 @@ export module Render
         let timezones = Storage.RainbowClock.Timezone.get();
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
-            const screen = document.getElementById("screen") as HTMLDivElement;
+            const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
             const tick = null !== item ?
                 (Domain.getUTCTicks(now) -(item.offset *Domain.utcOffsetRate)):
@@ -349,7 +349,7 @@ export module Render
                     await tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
                     RenderBase.resizeFlexList();
                     await updateWindow("timer");
-                    await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }

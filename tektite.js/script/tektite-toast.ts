@@ -50,7 +50,7 @@ export module Toast
                 await minamo.core.timeout(wait);
                 minamo.dom.remove(dom);
                 // // 以下は Safari での CSS バグをクリアする為の細工。本質的には必要の無い呼び出し。
-                // if (document.getElementById("screen-toast").getElementsByClassName("item").length <= 0)
+                // if (document.getElementById("tektite-screen-toast").getElementsByClassName("item").length <= 0)
                 // {
                 //     await minamo.core.timeout(10);
                 //     updateWindow("operate");
@@ -64,7 +64,7 @@ export module Toast
             timer: 0 < wait ? setTimeout(() => hideRaw("slow-slide-down-out", 500), wait): null,
             hide: async () => await hideRaw("slide-down-out", 250),
         };
-        document.getElementById("screen-toast").appendChild(dom);
+        document.getElementById("tektite-screen-toast").appendChild(dom);
         setTimeout(() => dom.classList.remove("slide-up-in"), 250);
         return result;
     };

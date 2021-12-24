@@ -1,5 +1,5 @@
 // out: false
-#foundation
+#tektite-foundation
 {
     .tektite-positive-background-coloring-trait;
     position: absolute;
@@ -8,13 +8,13 @@
     right: 0px;
     left: 0px;
 }
-#screen-toast
+#tektite-screen-toast
 {
     position: fixed;
     left: 0px;
     right: 0px;
     bottom: 0px;
-    filter: drop-shadow(0.0rem -0rem 3rem @accent-color); // #screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
+    filter: drop-shadow(0.0rem -0rem 3rem @accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     .alpha-tektite-positive-background-coloring-trait;
     .item
     {
@@ -52,7 +52,7 @@
         }
     }
 }
-.screen-cover
+.tektite-screen-cover
 {
     position: fixed;
     top: 0px;
@@ -80,15 +80,15 @@
     animation-timing-function: ease-in-out;
     animation-fill-mode: both;
 }
-&.fxxking-ipad-fullscreen
+&.tektite-fxxking-ipad-fullscreen
 {
-    .screen
+    .tektite-screen
     {
         // padding-top: env(safe-area-inset-top, 0px); // do not work safe-area-inset-top on iPad safari fullscreen mode.
         padding-top: 21px;
     }
 }
-.screen
+.tektite-screen
 {
     .tektite-positive-foreground-coloring-trait;
     display: flex;
@@ -102,7 +102,7 @@
     left: 0px;
     max-width: 100vw;
     max-height: 100vh;
-    & > :not(.screen-body)
+    & > :not(.tektite-screen-body)
     {
         flex-shrink: 0;
     }
@@ -294,7 +294,7 @@
             }
         }
     }
-    & > .screen-body
+    & > .tektite-screen-body
     {
         overflow-x: hidden;
         overflow-y: auto;
@@ -396,7 +396,7 @@
             }
         }
     }
-    .screen-bar
+    .tektite-screen-bar
     {
         z-index: -10;
         position: fixed;
@@ -423,7 +423,7 @@
 }
 &.tektite-style-modern
 {
-    .screen
+    .tektite-screen
     {
         header
         {
@@ -449,7 +449,7 @@
                 }
             }
         }
-        .screen-body
+        .tektite-screen-body
         {
             .tektite-hide-scroll-bar;
             .primary-page
@@ -490,9 +490,9 @@
     }
     &.flash
     {
-        .screen-bar
+        .tektite-screen-bar
         {
-            .screen-bar-flash-layer
+            .tektite-screen-bar-flash-layer
             {
                 position: fixed;
                 top: 0px;

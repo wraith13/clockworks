@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Fri Dec 24 2021 10:17:29 GMT+0900 (GMT+09:00)
+    build at: Fri Dec 24 2021 23:18:47 GMT+0900 (GMT+09:00)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -33,7 +33,7 @@ DEALINGS IN THE SOFTWARE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=contain">
-<meta name="theme-color" content="#5F42A7" id="theme-color">
+<meta name="theme-color" content="#5F42A7" id="tektite-theme-color">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Clockworks">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -316,6 +316,7 @@ body.light * {
   outline: none;
 }
 body.light input,
+body.light select,
 body.light textarea {
   color: #000022;
   fill: #000022;
@@ -353,7 +354,7 @@ body.light ul {
   padding-inline-end: 16px;
   padding-inline-start: 40px;
 }
-body.light #foundation {
+body.light #tektite-foundation {
   background-color: #FFFFFF;
   position: absolute;
   top: 0px;
@@ -361,7 +362,7 @@ body.light #foundation {
   right: 0px;
   left: 0px;
 }
-body.light #screen-toast {
+body.light #tektite-screen-toast {
   position: fixed;
   left: 0px;
   right: 0px;
@@ -369,7 +370,7 @@ body.light #screen-toast {
   filter: drop-shadow(0rem 0rem 3rem #5F42A7);
   background-color: #FFFFFFDD;
 }
-body.light #screen-toast .item {
+body.light #tektite-screen-toast .item {
   border-top-color: #5F42A7;
   border-top-width: 1px;
   border-top-style: solid;
@@ -379,28 +380,28 @@ body.light #screen-toast .item {
   justify-content: stretch;
   align-items: center;
 }
-body.light #screen-toast .item > button:first-child,
-body.light #screen-toast .item > div:first-child,
-body.light #screen-toast .item > span:first-child {
+body.light #tektite-screen-toast .item > button:first-child,
+body.light #tektite-screen-toast .item > div:first-child,
+body.light #tektite-screen-toast .item > span:first-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: left;
 }
-body.light #screen-toast .item > button:not(:first-child):not(:last-child),
-body.light #screen-toast .item > div:not(:first-child):not(:last-child),
-body.light #screen-toast .item > span:not(:first-child):not(:last-child) {
+body.light #tektite-screen-toast .item > button:not(:first-child):not(:last-child),
+body.light #tektite-screen-toast .item > div:not(:first-child):not(:last-child),
+body.light #tektite-screen-toast .item > span:not(:first-child):not(:last-child) {
   min-width: calc(100% / 2);
   max-width: calc(100% / 2);
   text-align: center;
 }
-body.light #screen-toast .item > button:last-child,
-body.light #screen-toast .item > div:last-child,
-body.light #screen-toast .item > span:last-child {
+body.light #tektite-screen-toast .item > button:last-child,
+body.light #tektite-screen-toast .item > div:last-child,
+body.light #tektite-screen-toast .item > span:last-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: right;
 }
-body.light .screen-cover {
+body.light .tektite-screen-cover {
   position: fixed;
   top: 0px;
   right: 0px;
@@ -418,16 +419,16 @@ body.light .screen-cover {
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.light .screen-cover.fade-in {
+body.light .tektite-screen-cover.fade-in {
   animation-name: fade-in;
 }
-body.light .screen-cover.fade-out {
+body.light .tektite-screen-cover.fade-out {
   animation-name: fade-out;
 }
-body.light.fxxking-ipad-fullscreen .screen {
+body.light.tektite-fxxking-ipad-fullscreen .tektite-screen {
   padding-top: 21px;
 }
-body.light .screen {
+body.light .tektite-screen {
   color: #000022;
   fill: #000022;
   display: flex;
@@ -442,10 +443,10 @@ body.light .screen {
   max-width: 100vw;
   max-height: 100vh;
 }
-body.light .screen > :not(.screen-body) {
+body.light .tektite-screen > :not(.tektite-screen-body) {
   flex-shrink: 0;
 }
-body.light .screen > header {
+body.light .tektite-screen > header {
   padding: 0rem;
   font-size: 1.2rem;
   font-weight: normal;
@@ -457,19 +458,19 @@ body.light .screen > header {
   justify-content: space-between;
   align-items: center;
 }
-body.light .screen > header.segmented {
+body.light .tektite-screen > header.segmented {
   white-space: nowrap;
   justify-content: start;
 }
-body.light .screen > header .icon {
+body.light .tektite-screen > header .icon {
   display: inline-block;
   padding: 0.25rem;
 }
-body.light .screen > header .icon svg {
+body.light .tektite-screen > header .icon svg {
   width: 2rem;
   height: 2rem;
 }
-body.light .screen > header .segment {
+body.light .tektite-screen > header .segment {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -482,81 +483,81 @@ body.light .screen > header .segment {
   text-decoration: none;
   min-width: 2.25rem;
 }
-body.light .screen > header .segment > * {
+body.light .tektite-screen > header .segment > * {
   transform: skewX(-150deg);
 }
-body.light .screen > header .segment:first-child {
+body.light .tektite-screen > header .segment:first-child {
   min-width: 2.75rem;
 }
-body.light .screen > header .segment.label-segment {
+body.light .tektite-screen > header .segment.label-segment {
   cursor: default;
   color: #FFFFFF;
   fill: #FFFFFF;
   background-color: #5F42A7;
 }
-body.light .screen > header .segment:not(.label-segment) {
+body.light .tektite-screen > header .segment:not(.label-segment) {
   cursor: pointer;
   color: #FFFFFF;
   fill: #FFFFFF;
 }
 @media (hover: hover) {
-  body.light .screen > header .segment:not(.label-segment):not(:hover) {
+  body.light .tektite-screen > header .segment:not(.label-segment):not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.light .screen > header .segment:not(.label-segment):hover {
+  body.light .tektite-screen > header .segment:not(.label-segment):hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.light .screen > header .segment:not(.label-segment) {
+  body.light .tektite-screen > header .segment:not(.label-segment) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
-body.light .screen > header .segment.fill-header-segment {
+body.light .tektite-screen > header .segment.fill-header-segment {
   flex-grow: 1;
   margin-right: -3rem;
 }
-body.light .screen > header .segment:not(:hover) {
+body.light .tektite-screen > header .segment:not(:hover) {
   background-color: transparent !important;
 }
-body.light .screen > header .segment:first-child,
-body.light .screen > header .progress-bar + .segment {
+body.light .tektite-screen > header .segment:first-child,
+body.light .tektite-screen > header .progress-bar + .segment {
   padding-left: 1.25rem;
   margin-left: -0.75rem;
 }
-body.light .screen > header .segment + .segment,
-body.light .screen > header .segment + .menu-popup + .segment {
+body.light .tektite-screen > header .segment + .segment,
+body.light .tektite-screen > header .segment + .menu-popup + .segment {
   padding-left: 0.5rem;
   margin-left: 0rem;
   border-left-style: solid;
   border-left-width: 1px;
   border-left-color: #FFFFFF !important;
 }
-body.light .screen > header .segment + .segment .icon,
-body.light .screen > header .segment + .menu-popup + .segment .icon {
+body.light .tektite-screen > header .segment + .segment .icon,
+body.light .tektite-screen > header .segment + .menu-popup + .segment .icon {
   padding: 0.5rem 0.25rem;
 }
-body.light .screen > header .segment + .segment .icon svg,
-body.light .screen > header .segment + .menu-popup + .segment .icon svg {
+body.light .tektite-screen > header .segment + .segment .icon svg,
+body.light .tektite-screen > header .segment + .menu-popup + .segment .icon svg {
   width: 1.5rem;
   height: 1.5rem;
 }
-body.light .screen > header .segment + .menu-popup {
+body.light .tektite-screen > header .segment + .menu-popup {
   white-space: nowrap;
 }
 @media (max-width: 780px) {
-  body.light .screen > header .segment:not(.last-segment) {
+  body.light .tektite-screen > header .segment:not(.last-segment) {
     padding-right: 0.5rem;
   }
-  body.light .screen > header .segment:not(.last-segment) .segment-title {
+  body.light .tektite-screen > header .segment:not(.last-segment) .segment-title {
     display: none;
   }
 }
-body.light .screen > header button.icon-button,
-body.light .screen > header button.menu-button {
+body.light .tektite-screen > header button.icon-button,
+body.light .tektite-screen > header button.menu-button {
   margin: 0px;
   margin-right: 0.25rem;
   cursor: pointer;
@@ -567,36 +568,36 @@ body.light .screen > header button.menu-button {
   position: absolute;
 }
 @media (hover: hover) {
-  body.light .screen > header button.icon-button:not(:hover),
-  body.light .screen > header button.menu-button:not(:hover) {
+  body.light .tektite-screen > header button.icon-button:not(:hover),
+  body.light .tektite-screen > header button.menu-button:not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.light .screen > header button.icon-button:hover,
-  body.light .screen > header button.menu-button:hover {
+  body.light .tektite-screen > header button.icon-button:hover,
+  body.light .tektite-screen > header button.menu-button:hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.light .screen > header button.icon-button,
-  body.light .screen > header button.menu-button {
+  body.light .tektite-screen > header button.icon-button,
+  body.light .tektite-screen > header button.menu-button {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
-body.light .screen > header button.icon-button:not(:hover),
-body.light .screen > header button.menu-button:not(:hover) {
+body.light .tektite-screen > header button.icon-button:not(:hover),
+body.light .tektite-screen > header button.menu-button:not(:hover) {
   background-color: transparent !important;
 }
-body.light .screen > header button.icon-button + button.menu-button {
+body.light .tektite-screen > header button.icon-button + button.menu-button {
   right: 2.5rem;
 }
-body.light .screen > header .menu-popup:not(.segment-popup) {
+body.light .tektite-screen > header .menu-popup:not(.segment-popup) {
   top: calc(10px + 2rem);
   right: 0.5rem;
 }
-body.light .screen > header .header-operator {
+body.light .tektite-screen > header .header-operator {
   flex-grow: 1;
   margin-right: 5.25rem;
   display: flex;
@@ -604,7 +605,7 @@ body.light .screen > header .header-operator {
   justify-content: flex-end;
   z-index: 1000;
 }
-body.light .screen > header .progress-bar {
+body.light .tektite-screen > header .progress-bar {
   position: absolute;
   background-color: #1079C0;
   left: 0px;
@@ -616,7 +617,7 @@ body.light .screen > header .progress-bar {
   box-sizing: border-box;
   border-right-width: 1px;
 }
-body.light .screen > header.update .progress-bar {
+body.light .tektite-screen > header.update .progress-bar {
   animation-name: update-progress;
   animation-direction: normal;
   animation-delay: 0s;
@@ -624,10 +625,10 @@ body.light .screen > header.update .progress-bar {
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.light .screen > header.max-progress .progress-bar {
+body.light .tektite-screen > header.max-progress .progress-bar {
   width: 100vw;
 }
-body.light .screen > header.obsolescence .progress-bar {
+body.light .tektite-screen > header.obsolescence .progress-bar {
   left: initial;
   right: 0px;
   background-color: #888;
@@ -638,17 +639,17 @@ body.light .screen > header.obsolescence .progress-bar {
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.light .screen > .screen-body {
+body.light .tektite-screen > .tektite-screen-body {
   overflow-x: hidden;
   overflow-y: auto;
   flex-grow: 1;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-body.light .screen > .screen-body::-webkit-scrollbar {
+body.light .tektite-screen > .tektite-screen-body::-webkit-scrollbar {
   display: none;
 }
-body.light .screen > .screen-body .primary-page {
+body.light .tektite-screen > .tektite-screen-body .primary-page {
   box-sizing: border-box;
   width: 100%;
   height: calc(100vh - 2.5rem);
@@ -659,7 +660,7 @@ body.light .screen > .screen-body .primary-page {
   justify-content: stretch;
   flex-direction: column;
 }
-body.light .screen > .screen-body .primary-page .flash-interval {
+body.light .tektite-screen > .tektite-screen-body .primary-page .flash-interval {
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
@@ -672,16 +673,16 @@ body.light .screen > .screen-body .primary-page .flash-interval {
   padding: 0.5rem;
 }
 @media (hover: hover) {
-  body.light .screen > .screen-body .primary-page .flash-interval:hover {
+  body.light .tektite-screen > .tektite-screen-body .primary-page .flash-interval:hover {
     opacity: 1;
   }
 }
-body.light .screen > .screen-body .primary-page .flash-interval svg {
+body.light .tektite-screen > .tektite-screen-body .primary-page .flash-interval svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
 }
-body.light .screen > .screen-body .primary-page .page-body {
+body.light .tektite-screen > .tektite-screen-body .primary-page .page-body {
   position: relative;
   display: flex;
   align-items: center;
@@ -689,7 +690,7 @@ body.light .screen > .screen-body .primary-page .page-body {
   flex-direction: column;
   flex-grow: 9;
 }
-body.light .screen > .screen-body .primary-page .page-footer {
+body.light .tektite-screen > .tektite-screen-body .primary-page .page-footer {
   flex-grow: 0;
   padding-bottom: 0.5rem;
   display: flex;
@@ -697,23 +698,23 @@ body.light .screen > .screen-body .primary-page .page-footer {
   justify-content: center;
   flex-direction: row;
 }
-body.light .screen > .screen-body .primary-page .page-footer .down-page-link {
+body.light .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link {
   cursor: pointer;
 }
-body.light .screen > .screen-body .primary-page .page-footer .down-page-link.icon {
+body.light .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link.icon {
   opacity: 0.2;
   width: 2rem;
   height: 2rem;
 }
 @media (hover: hover) {
-  body.light .screen > .screen-body .primary-page .page-footer .down-page-link.icon:hover {
+  body.light .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link.icon:hover {
     opacity: 1;
   }
 }
-body.light .screen > .screen-body .primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
+body.light .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
   transform: scale(1, -1);
 }
-body.light .screen .screen-bar {
+body.light .tektite-screen .tektite-screen-bar {
   z-index: -10;
   position: fixed;
   border-width: 0px;
@@ -722,64 +723,64 @@ body.light .screen .screen-bar {
   box-sizing: border-box;
   overflow: hidden;
 }
-body.light .screen .screen-bar.horizontal {
+body.light .tektite-screen .tektite-screen-bar.horizontal {
   top: 0px;
   bottom: 0px;
   left: 0px;
   border-right-width: 1px;
 }
-body.light .screen .screen-bar.vertical {
+body.light .tektite-screen .tektite-screen-bar.vertical {
   top: 0px;
   left: 0px;
   right: 0px;
   border-bottom-width: 1px;
 }
-body.light.tektite-style-modern .screen header {
+body.light.tektite-style-modern .tektite-screen header {
   background-color: #00002211;
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .screen header .segment:not(.label-segment):hover {
+  body.light.tektite-style-modern .tektite-screen header .segment:not(.label-segment):hover {
     background-color: #FFFFFF11;
   }
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .screen header > button:hover {
+  body.light.tektite-style-modern .tektite-screen header > button:hover {
     background-color: #FFFFFF22;
   }
 }
-body.light.tektite-style-modern .screen .screen-body {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-body.light.tektite-style-modern .screen .screen-body::-webkit-scrollbar {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body::-webkit-scrollbar {
   display: none;
 }
-body.light.tektite-style-modern .screen .screen-body .primary-page {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page {
   color: #FFFFFF;
   fill: #FFFFFF;
 }
-body.light.tektite-style-modern .screen .screen-body .primary-page button {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button {
   color: #FFFFFF;
   border-color: #FFFFFF;
   background-color: transparent;
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .screen .screen-body .primary-page button:hover {
+  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button:hover {
     background-color: #FFFFFF11;
   }
 }
-body.light.tektite-style-modern .screen .screen-body .primary-page button:not(.default-button) {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button:not(.default-button) {
   border-color: #FFFFFF88;
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .screen .screen-body .primary-page button:not(.default-button):hover {
+  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button:not(.default-button):hover {
     border-color: #FFFFFF;
   }
 }
-body.light.tektite-style-modern .screen .screen-body .trail-page {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body .trail-page {
   background-color: #FFFFFFBB;
 }
-body.light.tektite-style-modern.flash .screen-bar .screen-bar-flash-layer {
+body.light.tektite-style-modern.flash .tektite-screen-bar .tektite-screen-bar-flash-layer {
   position: fixed;
   top: 0px;
   right: 0px;
@@ -798,17 +799,17 @@ body.light.tektite-sleep-mouse {
 body.light.tektite-sleep-mouse * {
   cursor: none !important;
 }
-body.light.tektite-flash .screen {
+body.light.tektite-flash .tektite-screen {
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 1.5s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.light.tektite-flash.tektite-style-modern .screen {
+body.light.tektite-flash.tektite-style-modern .tektite-screen {
   animation-name: tektite-white-flash;
 }
-body.light.tektite-flash.tektite-style-classic .screen {
+body.light.tektite-flash.tektite-style-classic .tektite-screen {
   animation-name: tektite-accent-flash;
 }
 @keyframes tektite-white-flash {
@@ -2145,481 +2146,481 @@ body.light.tektite-style-classic .logo > .application-icon svg {
 body.light.tektite-style-classic .logo > .logo-text {
   color: #5F42A7;
 }
-body.light .never-stopwatch-screen .screen-body .current-item,
-body.light .countdown-timer-screen .screen-body .current-item,
-body.light .elapsed-timer-screen .screen-body .current-item {
+body.light .never-stopwatch-screen .tektite-screen-body .current-item,
+body.light .countdown-timer-screen .tektite-screen-body .current-item,
+body.light .elapsed-timer-screen .tektite-screen-body .current-item {
   align-items: start;
   display: flex;
   flex-direction: column;
 }
-body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-body.light .countdown-timer-screen .screen-body .capital-interval .value,
-body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
   font-size: 7vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: 2rem;
   }
 }
-body.light .never-stopwatch-screen .screen-body .previous-timestamp,
-body.light .countdown-timer-screen .screen-body .previous-timestamp,
-body.light .elapsed-timer-screen .screen-body .previous-timestamp,
-body.light .never-stopwatch-screen .screen-body .current-title,
-body.light .countdown-timer-screen .screen-body .current-title,
-body.light .elapsed-timer-screen .screen-body .current-title,
-body.light .never-stopwatch-screen .screen-body .current-due-timestamp,
-body.light .countdown-timer-screen .screen-body .current-due-timestamp,
-body.light .elapsed-timer-screen .screen-body .current-due-timestamp,
-body.light .never-stopwatch-screen .screen-body .current-timestamp,
-body.light .countdown-timer-screen .screen-body .current-timestamp,
-body.light .elapsed-timer-screen .screen-body .current-timestamp {
+body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp,
+body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp,
+body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp,
+body.light .never-stopwatch-screen .tektite-screen-body .current-title,
+body.light .countdown-timer-screen .tektite-screen-body .current-title,
+body.light .elapsed-timer-screen .tektite-screen-body .current-title,
+body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp,
+body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp,
+body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp,
+body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp,
+body.light .countdown-timer-screen .tektite-screen-body .current-timestamp,
+body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp {
   text-align: center;
   opacity: 0.5;
 }
-body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-body.light .never-stopwatch-screen .screen-body .current-title .value,
-body.light .countdown-timer-screen .screen-body .current-title .value,
-body.light .elapsed-timer-screen .screen-body .current-title .value,
-body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
   font-size: 4.4vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-title .value,
-  body.light .countdown-timer-screen .screen-body .current-title .value,
-  body.light .elapsed-timer-screen .screen-body .current-title .value,
-  body.light .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: 1rem;
   }
 }
-body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
   font-size: 15vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: 2rem;
   }
 }
-body.light .rainbow-clock-screen .screen-body .main-panel .current-title,
-body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset,
-body.light .rainbow-clock-screen .screen-body .main-panel .current-date {
+body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title,
+body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset,
+body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date {
   opacity: 0.333;
 }
-body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
   font-size: 6vw;
   line-height: 120%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: 1rem;
   }
 }
@@ -2939,6 +2940,7 @@ body.dark * {
   outline: none;
 }
 body.dark input,
+body.dark select,
 body.dark textarea {
   color: #FFFFFF;
   fill: #FFFFFF;
@@ -2976,7 +2978,7 @@ body.dark ul {
   padding-inline-end: 16px;
   padding-inline-start: 40px;
 }
-body.dark #foundation {
+body.dark #tektite-foundation {
   background-color: #000022;
   position: absolute;
   top: 0px;
@@ -2984,7 +2986,7 @@ body.dark #foundation {
   right: 0px;
   left: 0px;
 }
-body.dark #screen-toast {
+body.dark #tektite-screen-toast {
   position: fixed;
   left: 0px;
   right: 0px;
@@ -2992,7 +2994,7 @@ body.dark #screen-toast {
   filter: drop-shadow(0rem 0rem 3rem #5F42A7);
   background-color: #000022DD;
 }
-body.dark #screen-toast .item {
+body.dark #tektite-screen-toast .item {
   border-top-color: #5F42A7;
   border-top-width: 1px;
   border-top-style: solid;
@@ -3002,28 +3004,28 @@ body.dark #screen-toast .item {
   justify-content: stretch;
   align-items: center;
 }
-body.dark #screen-toast .item > button:first-child,
-body.dark #screen-toast .item > div:first-child,
-body.dark #screen-toast .item > span:first-child {
+body.dark #tektite-screen-toast .item > button:first-child,
+body.dark #tektite-screen-toast .item > div:first-child,
+body.dark #tektite-screen-toast .item > span:first-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: left;
 }
-body.dark #screen-toast .item > button:not(:first-child):not(:last-child),
-body.dark #screen-toast .item > div:not(:first-child):not(:last-child),
-body.dark #screen-toast .item > span:not(:first-child):not(:last-child) {
+body.dark #tektite-screen-toast .item > button:not(:first-child):not(:last-child),
+body.dark #tektite-screen-toast .item > div:not(:first-child):not(:last-child),
+body.dark #tektite-screen-toast .item > span:not(:first-child):not(:last-child) {
   min-width: calc(100% / 2);
   max-width: calc(100% / 2);
   text-align: center;
 }
-body.dark #screen-toast .item > button:last-child,
-body.dark #screen-toast .item > div:last-child,
-body.dark #screen-toast .item > span:last-child {
+body.dark #tektite-screen-toast .item > button:last-child,
+body.dark #tektite-screen-toast .item > div:last-child,
+body.dark #tektite-screen-toast .item > span:last-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: right;
 }
-body.dark .screen-cover {
+body.dark .tektite-screen-cover {
   position: fixed;
   top: 0px;
   right: 0px;
@@ -3041,16 +3043,16 @@ body.dark .screen-cover {
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.dark .screen-cover.fade-in {
+body.dark .tektite-screen-cover.fade-in {
   animation-name: fade-in;
 }
-body.dark .screen-cover.fade-out {
+body.dark .tektite-screen-cover.fade-out {
   animation-name: fade-out;
 }
-body.dark.fxxking-ipad-fullscreen .screen {
+body.dark.tektite-fxxking-ipad-fullscreen .tektite-screen {
   padding-top: 21px;
 }
-body.dark .screen {
+body.dark .tektite-screen {
   color: #FFFFFF;
   fill: #FFFFFF;
   display: flex;
@@ -3065,10 +3067,10 @@ body.dark .screen {
   max-width: 100vw;
   max-height: 100vh;
 }
-body.dark .screen > :not(.screen-body) {
+body.dark .tektite-screen > :not(.tektite-screen-body) {
   flex-shrink: 0;
 }
-body.dark .screen > header {
+body.dark .tektite-screen > header {
   padding: 0rem;
   font-size: 1.2rem;
   font-weight: normal;
@@ -3080,19 +3082,19 @@ body.dark .screen > header {
   justify-content: space-between;
   align-items: center;
 }
-body.dark .screen > header.segmented {
+body.dark .tektite-screen > header.segmented {
   white-space: nowrap;
   justify-content: start;
 }
-body.dark .screen > header .icon {
+body.dark .tektite-screen > header .icon {
   display: inline-block;
   padding: 0.25rem;
 }
-body.dark .screen > header .icon svg {
+body.dark .tektite-screen > header .icon svg {
   width: 2rem;
   height: 2rem;
 }
-body.dark .screen > header .segment {
+body.dark .tektite-screen > header .segment {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -3105,81 +3107,81 @@ body.dark .screen > header .segment {
   text-decoration: none;
   min-width: 2.25rem;
 }
-body.dark .screen > header .segment > * {
+body.dark .tektite-screen > header .segment > * {
   transform: skewX(-150deg);
 }
-body.dark .screen > header .segment:first-child {
+body.dark .tektite-screen > header .segment:first-child {
   min-width: 2.75rem;
 }
-body.dark .screen > header .segment.label-segment {
+body.dark .tektite-screen > header .segment.label-segment {
   cursor: default;
   color: #000022;
   fill: #000022;
   background-color: #5F42A7;
 }
-body.dark .screen > header .segment:not(.label-segment) {
+body.dark .tektite-screen > header .segment:not(.label-segment) {
   cursor: pointer;
   color: #000022;
   fill: #000022;
 }
 @media (hover: hover) {
-  body.dark .screen > header .segment:not(.label-segment):not(:hover) {
+  body.dark .tektite-screen > header .segment:not(.label-segment):not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.dark .screen > header .segment:not(.label-segment):hover {
+  body.dark .tektite-screen > header .segment:not(.label-segment):hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.dark .screen > header .segment:not(.label-segment) {
+  body.dark .tektite-screen > header .segment:not(.label-segment) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
-body.dark .screen > header .segment.fill-header-segment {
+body.dark .tektite-screen > header .segment.fill-header-segment {
   flex-grow: 1;
   margin-right: -3rem;
 }
-body.dark .screen > header .segment:not(:hover) {
+body.dark .tektite-screen > header .segment:not(:hover) {
   background-color: transparent !important;
 }
-body.dark .screen > header .segment:first-child,
-body.dark .screen > header .progress-bar + .segment {
+body.dark .tektite-screen > header .segment:first-child,
+body.dark .tektite-screen > header .progress-bar + .segment {
   padding-left: 1.25rem;
   margin-left: -0.75rem;
 }
-body.dark .screen > header .segment + .segment,
-body.dark .screen > header .segment + .menu-popup + .segment {
+body.dark .tektite-screen > header .segment + .segment,
+body.dark .tektite-screen > header .segment + .menu-popup + .segment {
   padding-left: 0.5rem;
   margin-left: 0rem;
   border-left-style: solid;
   border-left-width: 1px;
   border-left-color: #000022 !important;
 }
-body.dark .screen > header .segment + .segment .icon,
-body.dark .screen > header .segment + .menu-popup + .segment .icon {
+body.dark .tektite-screen > header .segment + .segment .icon,
+body.dark .tektite-screen > header .segment + .menu-popup + .segment .icon {
   padding: 0.5rem 0.25rem;
 }
-body.dark .screen > header .segment + .segment .icon svg,
-body.dark .screen > header .segment + .menu-popup + .segment .icon svg {
+body.dark .tektite-screen > header .segment + .segment .icon svg,
+body.dark .tektite-screen > header .segment + .menu-popup + .segment .icon svg {
   width: 1.5rem;
   height: 1.5rem;
 }
-body.dark .screen > header .segment + .menu-popup {
+body.dark .tektite-screen > header .segment + .menu-popup {
   white-space: nowrap;
 }
 @media (max-width: 780px) {
-  body.dark .screen > header .segment:not(.last-segment) {
+  body.dark .tektite-screen > header .segment:not(.last-segment) {
     padding-right: 0.5rem;
   }
-  body.dark .screen > header .segment:not(.last-segment) .segment-title {
+  body.dark .tektite-screen > header .segment:not(.last-segment) .segment-title {
     display: none;
   }
 }
-body.dark .screen > header button.icon-button,
-body.dark .screen > header button.menu-button {
+body.dark .tektite-screen > header button.icon-button,
+body.dark .tektite-screen > header button.menu-button {
   margin: 0px;
   margin-right: 0.25rem;
   cursor: pointer;
@@ -3190,36 +3192,36 @@ body.dark .screen > header button.menu-button {
   position: absolute;
 }
 @media (hover: hover) {
-  body.dark .screen > header button.icon-button:not(:hover),
-  body.dark .screen > header button.menu-button:not(:hover) {
+  body.dark .tektite-screen > header button.icon-button:not(:hover),
+  body.dark .tektite-screen > header button.menu-button:not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.dark .screen > header button.icon-button:hover,
-  body.dark .screen > header button.menu-button:hover {
+  body.dark .tektite-screen > header button.icon-button:hover,
+  body.dark .tektite-screen > header button.menu-button:hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.dark .screen > header button.icon-button,
-  body.dark .screen > header button.menu-button {
+  body.dark .tektite-screen > header button.icon-button,
+  body.dark .tektite-screen > header button.menu-button {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
-body.dark .screen > header button.icon-button:not(:hover),
-body.dark .screen > header button.menu-button:not(:hover) {
+body.dark .tektite-screen > header button.icon-button:not(:hover),
+body.dark .tektite-screen > header button.menu-button:not(:hover) {
   background-color: transparent !important;
 }
-body.dark .screen > header button.icon-button + button.menu-button {
+body.dark .tektite-screen > header button.icon-button + button.menu-button {
   right: 2.5rem;
 }
-body.dark .screen > header .menu-popup:not(.segment-popup) {
+body.dark .tektite-screen > header .menu-popup:not(.segment-popup) {
   top: calc(10px + 2rem);
   right: 0.5rem;
 }
-body.dark .screen > header .header-operator {
+body.dark .tektite-screen > header .header-operator {
   flex-grow: 1;
   margin-right: 5.25rem;
   display: flex;
@@ -3227,7 +3229,7 @@ body.dark .screen > header .header-operator {
   justify-content: flex-end;
   z-index: 1000;
 }
-body.dark .screen > header .progress-bar {
+body.dark .tektite-screen > header .progress-bar {
   position: absolute;
   background-color: #1079C0;
   left: 0px;
@@ -3239,7 +3241,7 @@ body.dark .screen > header .progress-bar {
   box-sizing: border-box;
   border-right-width: 1px;
 }
-body.dark .screen > header.update .progress-bar {
+body.dark .tektite-screen > header.update .progress-bar {
   animation-name: update-progress;
   animation-direction: normal;
   animation-delay: 0s;
@@ -3247,10 +3249,10 @@ body.dark .screen > header.update .progress-bar {
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.dark .screen > header.max-progress .progress-bar {
+body.dark .tektite-screen > header.max-progress .progress-bar {
   width: 100vw;
 }
-body.dark .screen > header.obsolescence .progress-bar {
+body.dark .tektite-screen > header.obsolescence .progress-bar {
   left: initial;
   right: 0px;
   background-color: #888;
@@ -3261,17 +3263,17 @@ body.dark .screen > header.obsolescence .progress-bar {
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.dark .screen > .screen-body {
+body.dark .tektite-screen > .tektite-screen-body {
   overflow-x: hidden;
   overflow-y: auto;
   flex-grow: 1;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-body.dark .screen > .screen-body::-webkit-scrollbar {
+body.dark .tektite-screen > .tektite-screen-body::-webkit-scrollbar {
   display: none;
 }
-body.dark .screen > .screen-body .primary-page {
+body.dark .tektite-screen > .tektite-screen-body .primary-page {
   box-sizing: border-box;
   width: 100%;
   height: calc(100vh - 2.5rem);
@@ -3282,7 +3284,7 @@ body.dark .screen > .screen-body .primary-page {
   justify-content: stretch;
   flex-direction: column;
 }
-body.dark .screen > .screen-body .primary-page .flash-interval {
+body.dark .tektite-screen > .tektite-screen-body .primary-page .flash-interval {
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
@@ -3295,16 +3297,16 @@ body.dark .screen > .screen-body .primary-page .flash-interval {
   padding: 0.5rem;
 }
 @media (hover: hover) {
-  body.dark .screen > .screen-body .primary-page .flash-interval:hover {
+  body.dark .tektite-screen > .tektite-screen-body .primary-page .flash-interval:hover {
     opacity: 1;
   }
 }
-body.dark .screen > .screen-body .primary-page .flash-interval svg {
+body.dark .tektite-screen > .tektite-screen-body .primary-page .flash-interval svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
 }
-body.dark .screen > .screen-body .primary-page .page-body {
+body.dark .tektite-screen > .tektite-screen-body .primary-page .page-body {
   position: relative;
   display: flex;
   align-items: center;
@@ -3312,7 +3314,7 @@ body.dark .screen > .screen-body .primary-page .page-body {
   flex-direction: column;
   flex-grow: 9;
 }
-body.dark .screen > .screen-body .primary-page .page-footer {
+body.dark .tektite-screen > .tektite-screen-body .primary-page .page-footer {
   flex-grow: 0;
   padding-bottom: 0.5rem;
   display: flex;
@@ -3320,23 +3322,23 @@ body.dark .screen > .screen-body .primary-page .page-footer {
   justify-content: center;
   flex-direction: row;
 }
-body.dark .screen > .screen-body .primary-page .page-footer .down-page-link {
+body.dark .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link {
   cursor: pointer;
 }
-body.dark .screen > .screen-body .primary-page .page-footer .down-page-link.icon {
+body.dark .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link.icon {
   opacity: 0.2;
   width: 2rem;
   height: 2rem;
 }
 @media (hover: hover) {
-  body.dark .screen > .screen-body .primary-page .page-footer .down-page-link.icon:hover {
+  body.dark .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link.icon:hover {
     opacity: 1;
   }
 }
-body.dark .screen > .screen-body .primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
+body.dark .tektite-screen > .tektite-screen-body .primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
   transform: scale(1, -1);
 }
-body.dark .screen .screen-bar {
+body.dark .tektite-screen .tektite-screen-bar {
   z-index: -10;
   position: fixed;
   border-width: 0px;
@@ -3345,64 +3347,64 @@ body.dark .screen .screen-bar {
   box-sizing: border-box;
   overflow: hidden;
 }
-body.dark .screen .screen-bar.horizontal {
+body.dark .tektite-screen .tektite-screen-bar.horizontal {
   top: 0px;
   bottom: 0px;
   left: 0px;
   border-right-width: 1px;
 }
-body.dark .screen .screen-bar.vertical {
+body.dark .tektite-screen .tektite-screen-bar.vertical {
   top: 0px;
   left: 0px;
   right: 0px;
   border-bottom-width: 1px;
 }
-body.dark.tektite-style-modern .screen header {
+body.dark.tektite-style-modern .tektite-screen header {
   background-color: #FFFFFF11;
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .screen header .segment:not(.label-segment):hover {
+  body.dark.tektite-style-modern .tektite-screen header .segment:not(.label-segment):hover {
     background-color: #00002211;
   }
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .screen header > button:hover {
+  body.dark.tektite-style-modern .tektite-screen header > button:hover {
     background-color: #00002222;
   }
 }
-body.dark.tektite-style-modern .screen .screen-body {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-body.dark.tektite-style-modern .screen .screen-body::-webkit-scrollbar {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body::-webkit-scrollbar {
   display: none;
 }
-body.dark.tektite-style-modern .screen .screen-body .primary-page {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page {
   color: #000022;
   fill: #000022;
 }
-body.dark.tektite-style-modern .screen .screen-body .primary-page button {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button {
   color: #000022;
   border-color: #000022;
   background-color: transparent;
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .screen .screen-body .primary-page button:hover {
+  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button:hover {
     background-color: #00002211;
   }
 }
-body.dark.tektite-style-modern .screen .screen-body .primary-page button:not(.default-button) {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button:not(.default-button) {
   border-color: #00002288;
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .screen .screen-body .primary-page button:not(.default-button):hover {
+  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .primary-page button:not(.default-button):hover {
     border-color: #000022;
   }
 }
-body.dark.tektite-style-modern .screen .screen-body .trail-page {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .trail-page {
   background-color: #000022BB;
 }
-body.dark.tektite-style-modern.flash .screen-bar .screen-bar-flash-layer {
+body.dark.tektite-style-modern.flash .tektite-screen-bar .tektite-screen-bar-flash-layer {
   position: fixed;
   top: 0px;
   right: 0px;
@@ -3421,17 +3423,17 @@ body.dark.tektite-sleep-mouse {
 body.dark.tektite-sleep-mouse * {
   cursor: none !important;
 }
-body.dark.tektite-flash .screen {
+body.dark.tektite-flash .tektite-screen {
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 1.5s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-body.dark.tektite-flash.tektite-style-modern .screen {
+body.dark.tektite-flash.tektite-style-modern .tektite-screen {
   animation-name: tektite-white-flash;
 }
-body.dark.tektite-flash.tektite-style-classic .screen {
+body.dark.tektite-flash.tektite-style-classic .tektite-screen {
   animation-name: tektite-accent-flash;
 }
 @keyframes tektite-white-flash {
@@ -4768,481 +4770,481 @@ body.dark.tektite-style-classic .logo > .application-icon svg {
 body.dark.tektite-style-classic .logo > .logo-text {
   color: #5F42A7;
 }
-body.dark .never-stopwatch-screen .screen-body .current-item,
-body.dark .countdown-timer-screen .screen-body .current-item,
-body.dark .elapsed-timer-screen .screen-body .current-item {
+body.dark .never-stopwatch-screen .tektite-screen-body .current-item,
+body.dark .countdown-timer-screen .tektite-screen-body .current-item,
+body.dark .elapsed-timer-screen .tektite-screen-body .current-item {
   align-items: start;
   display: flex;
   flex-direction: column;
 }
-body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
   font-size: 7vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .never-stopwatch-screen .screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
     font-size: 2rem;
   }
 }
-body.dark .never-stopwatch-screen .screen-body .previous-timestamp,
-body.dark .countdown-timer-screen .screen-body .previous-timestamp,
-body.dark .elapsed-timer-screen .screen-body .previous-timestamp,
-body.dark .never-stopwatch-screen .screen-body .current-title,
-body.dark .countdown-timer-screen .screen-body .current-title,
-body.dark .elapsed-timer-screen .screen-body .current-title,
-body.dark .never-stopwatch-screen .screen-body .current-due-timestamp,
-body.dark .countdown-timer-screen .screen-body .current-due-timestamp,
-body.dark .elapsed-timer-screen .screen-body .current-due-timestamp,
-body.dark .never-stopwatch-screen .screen-body .current-timestamp,
-body.dark .countdown-timer-screen .screen-body .current-timestamp,
-body.dark .elapsed-timer-screen .screen-body .current-timestamp {
+body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp,
+body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp,
+body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp,
+body.dark .never-stopwatch-screen .tektite-screen-body .current-title,
+body.dark .countdown-timer-screen .tektite-screen-body .current-title,
+body.dark .elapsed-timer-screen .tektite-screen-body .current-title,
+body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp,
+body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp,
+body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp,
+body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp,
+body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp,
+body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp {
   text-align: center;
   opacity: 0.5;
 }
-body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-body.dark .never-stopwatch-screen .screen-body .current-title .value,
-body.dark .countdown-timer-screen .screen-body .current-title .value,
-body.dark .elapsed-timer-screen .screen-body .current-title .value,
-body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
   font-size: 4.4vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .never-stopwatch-screen .screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-title .value,
-  body.dark .countdown-timer-screen .screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: 1rem;
   }
 }
-body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
   font-size: 15vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
     font-size: 2rem;
   }
 }
-body.dark .rainbow-clock-screen .screen-body .main-panel .current-title,
-body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset,
-body.dark .rainbow-clock-screen .screen-body .main-panel .current-date {
+body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title,
+body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset,
+body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date {
   opacity: 0.333;
 }
-body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
   font-size: 6vw;
   line-height: 120%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
     font-size: 1rem;
   }
 }
@@ -6666,7 +6668,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
             function Screen(tektite) {
                 var _this = this;
                 this.tektite = tektite;
-                this.getElement = function () { return document.getElementById("screen"); };
+                this.getElement = function () { return document.getElementById("tektite-screen"); };
                 this.updateWindowTimer = undefined;
                 this.updateWindowHighResolutionTimer = undefined;
                 this.onWindowFocus = function () {
@@ -6691,17 +6693,17 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                     window.addEventListener("focus", _this.onWindowFocus);
                     window.addEventListener("blur", _this.onWindowBlur);
                     window.addEventListener("storage", _this.onUpdateStorage);
-                    document.getElementById("screen-header").addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    document.getElementById("tektite-screen-header").addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.scrollToOffset(document.getElementById("screen-body"), 0)];
+                            case 0: return [4 /*yield*/, this.scrollToOffset(document.getElementById("tektite-screen-body"), 0)];
                             case 1: return [2 /*return*/, _a.sent()];
                         }
                     }); }); });
-                    document.getElementById("screen-body").addEventListener("scroll", function () {
+                    document.getElementById("tektite-screen-body").addEventListener("scroll", function () {
                         var _a;
                         _this.adjustPageFooterPosition();
                         _this.adjustDownPageLinkDirection();
-                        if (document.getElementById("screen-body").scrollTop <= 0) {
+                        if (document.getElementById("tektite-screen-body").scrollTop <= 0) {
                             (_a = _this.updateWindow) === null || _a === void 0 ? void 0 : _a.call(_this, "scroll");
                         }
                     });
@@ -6717,7 +6719,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                         var _a;
                         return __generator(this, function (_b) {
                             if (dom === ((_a = this.lastMouseDownTarget) !== null && _a !== void 0 ? _a : dom)) {
-                                console.log("screen-cover.click!");
+                                console.log("tektite-screen-cover.click!");
                                 dom.onclick = undefined;
                                 data.onclick();
                                 close();
@@ -6727,7 +6729,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                     }); };
                     var dom = $make(HTMLDivElement)({
                         tag: "div",
-                        className: "screen-cover fade-in",
+                        className: "tektite-screen-cover fade-in",
                         children: data.children,
                         onclick: onclick,
                     });
@@ -6753,7 +6755,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                     };
                     return result;
                 };
-                this.getScreenCoverList = function () { return index_js_1.minamo.dom.getDivsByClassName(document, "screen-cover"); };
+                this.getScreenCoverList = function () { return index_js_1.minamo.dom.getDivsByClassName(document, "tektite-screen-cover"); };
                 this.getScreenCover = function () { return _this.getScreenCoverList().filter(function (_i, ix, list) { return (ix + 1) === list.length; })[0]; };
                 this.hasScreenCover = function () { return 0 < _this.getScreenCoverList().length; };
                 // public popup =
@@ -6906,7 +6908,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                         switch (_d.label) {
                             case 0:
                                 _b = (_a = index_js_1.minamo.dom).replaceChildren;
-                                _c = [document.getElementById("screen-body")];
+                                _c = [document.getElementById("tektite-screen-body")];
                                 return [4 /*yield*/, this.makeBody(body)];
                             case 1: return [2 /*return*/, _b.apply(_a, _c.concat([_d.sent()]))];
                         }
@@ -6954,7 +6956,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                 }); };
                 this.getBodyScrollTop = function (topChild) {
                     if (topChild === void 0) { topChild = index_js_1.minamo.dom.getDivsByClassName(document, "primary-page")[0]; }
-                    var body = document.getElementById("screen-body");
+                    var body = document.getElementById("tektite-screen-body");
                     var primaryPageOffsetTop = Math.min(topChild.offsetTop - body.offsetTop, body.scrollHeight - body.clientHeight);
                     return body.scrollTop - primaryPageOffsetTop;
                 };
@@ -6995,7 +6997,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                 this.adjustPageFooterPosition = function () {
                     var primaryPage = document.getElementsByClassName("primary-page")[0];
                     if (primaryPage) {
-                        var body = document.getElementById("screen-body");
+                        var body = document.getElementById("tektite-screen-body");
                         var delta_1 = Math.max(primaryPage.clientHeight - (body.clientHeight + _this.getBodyScrollTop()), 0);
                         index_js_1.minamo.dom.getDivsByClassName(document, "page-footer")
                             .forEach(function (i) { return index_js_1.minamo.dom.setStyleProperty(i, "paddingBottom", "calc(1rem + " + delta_1 + "px)"); });
@@ -7167,7 +7169,7 @@ define("clockworks/tektite.js/script/tektite-toast", ["require", "exports", "clo
                     }
                 }); }); },
             };
-            document.getElementById("screen-toast").appendChild(dom);
+            document.getElementById("tektite-screen-toast").appendChild(dom);
             setTimeout(function () { return dom.classList.remove("slide-up-in"); }, 250);
             return result;
         };
@@ -7190,7 +7192,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
             function Header(tektite) {
                 var _this = this;
                 this.tektite = tektite;
-                this.getElement = function () { return document.getElementById("screen-header"); };
+                this.getElement = function () { return document.getElementById("tektite-screen-header"); };
                 this.getLastSegmentClass = function (ix, items) {
                     return [
                         ix === 0 ? "first-segment" : undefined,
@@ -7560,33 +7562,33 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                     index_js_5.minamo.dom.make({
                         parent: document.body,
                         tag: "div",
-                        id: "foundation",
+                        id: "tektite-foundation",
                         children: {
                             tag: "div",
-                            id: "screen",
-                            className: "screen",
+                            id: "tektite-screen",
+                            className: "tektite-screen",
                             children: [
                                 {
                                     tag: "header",
-                                    id: "screen-header",
+                                    id: "tektite-screen-header",
                                     className: "segmented",
                                 },
                                 {
                                     tag: "div",
-                                    id: "screen-body",
-                                    className: "screen-body",
+                                    id: "tektite-screen-body",
+                                    className: "tektite-screen-body",
                                 },
                                 {
                                     tag: "div",
-                                    className: "screen-bar",
+                                    className: "tektite-screen-bar",
                                     childNodes: {
                                         tag: "div",
-                                        className: "screen-bar-flash-layer",
+                                        className: "tektite-screen-bar-flash-layer",
                                     },
                                 },
                                 {
                                     tag: "div",
-                                    id: "screen-toast",
+                                    id: "tektite-screen-toast",
                                 },
                             ]
                         }
@@ -7623,7 +7625,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                 };
                 this.onWebkitFullscreenChange = function (_event) {
                     if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document)) {
-                        document.body.classList.toggle("fxxking-ipad-fullscreen", _this.fullscreen.element());
+                        document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", _this.fullscreen.element());
                     }
                 };
                 this.reload = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -7653,14 +7655,14 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
             return new Tektite(params);
         };
         Tektite_1.setHeaderColor = function (color) {
-            return index_js_5.minamo.dom.setProperty("#screen-header", "backgroundColor", color !== null && color !== void 0 ? color : "");
+            return index_js_5.minamo.dom.setProperty("#tektite-screen-header", "backgroundColor", color !== null && color !== void 0 ? color : "");
         };
         Tektite_1.setBodyColor = function (color) {
             index_js_5.minamo.dom.setStyleProperty(document.body, "backgroundColor", color + "E8");
-            index_js_5.minamo.dom.setProperty("#theme-color", "content", color);
+            index_js_5.minamo.dom.setProperty("#tektite-theme-color", "content", color);
         };
         Tektite_1.setFoundationColor = function (color) {
-            return index_js_5.minamo.dom.setStyleProperty("#foundation", "backgroundColor", color !== null && color !== void 0 ? color : "");
+            return index_js_5.minamo.dom.setStyleProperty("#tektite-foundation", "backgroundColor", color !== null && color !== void 0 ? color : "");
         };
         var latestColor;
         Tektite_1.setBackgroundColor = function (color) {
@@ -7687,8 +7689,8 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
         Tektite_1.setProgressBarStyle = function (progressBarStyle) {
             return Tektite_1.setStyle("header" !== progressBarStyle ? "modern" : "classic");
         };
-        Tektite_1.getProgressElement = function () { return document.getElementById("screen-header").getElementsByClassName("progress-bar")[0]; };
-        Tektite_1.getScreenBarElement = function () { return document.getElementsByClassName("screen-bar")[0]; };
+        Tektite_1.getProgressElement = function () { return document.getElementById("tektite-screen-header").getElementsByClassName("progress-bar")[0]; };
+        Tektite_1.getScreenBarElement = function () { return document.getElementsByClassName("tektite-screen-bar")[0]; };
         var resetScreenBarProgress = function () {
             var screenBar = Tektite_1.getScreenBarElement();
             index_js_5.minamo.dom.setStyleProperty(screenBar, "display", "none");
@@ -10529,7 +10531,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                             return __generator(this, function (_d) {
                                 switch (_d.label) {
                                     case 0:
-                                        screen = document.getElementById("screen");
+                                        screen = document.getElementById("tektite-screen");
                                         now = new Date();
                                         tick = null !== item ?
                                             (domain_5.Domain.getUTCTicks(now) - (item.offset * domain_5.Domain.utcOffsetRate)) :
@@ -10608,7 +10610,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                         return [4 /*yield*/, updateWindow("timer")];
                                     case 8:
                                         _d.sent();
-                                        return [4 /*yield*/, __7.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0)];
+                                        return [4 /*yield*/, __7.tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0)];
                                     case 9:
                                         _d.sent();
                                         __7.tektite.screen.adjustPageFooterPosition();
@@ -11244,7 +11246,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                             return __generator(this, function (_e) {
                                 switch (_e.label) {
                                     case 0:
-                                        screen = document.getElementById("screen");
+                                        screen = document.getElementById("tektite-screen");
                                         now = new Date();
                                         tick = domain_6.Domain.getTicks(now);
                                         current = (_d = item !== null && item !== void 0 ? item : alarms[0]) !== null && _d !== void 0 ? _d : null;
@@ -11337,7 +11339,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         return [4 /*yield*/, updateWindow("timer")];
                                     case 8:
                                         _e.sent();
-                                        return [4 /*yield*/, __8.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0)];
+                                        return [4 /*yield*/, __8.tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0)];
                                     case 9:
                                         _e.sent();
                                         __8.tektite.screen.adjustPageFooterPosition();
@@ -11656,7 +11658,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                             return __generator(this, function (_e) {
                                 switch (_e.label) {
                                     case 0:
-                                        screen = document.getElementById("screen");
+                                        screen = document.getElementById("tektite-screen");
                                         now = new Date();
                                         tick = domain_7.Domain.getTicks(now);
                                         current = (_d = item !== null && item !== void 0 ? item : ticks[0]) !== null && _d !== void 0 ? _d : null;
@@ -11999,7 +12001,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                             return __generator(this, function (_g) {
                                 switch (_g.label) {
                                     case 0:
-                                        screen = document.getElementById("screen");
+                                        screen = document.getElementById("tektite-screen");
                                         now = new Date();
                                         tick = domain_8.Domain.getTicks(now);
                                         current = (_d = item !== null && item !== void 0 ? item : events[0]) !== null && _d !== void 0 ? _d : null;
@@ -12082,7 +12084,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         return [4 /*yield*/, updateWindow("timer")];
                                     case 8:
                                         _g.sent();
-                                        return [4 /*yield*/, __10.tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0)];
+                                        return [4 /*yield*/, __10.tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0)];
                                     case 9:
                                         _g.sent();
                                         __10.tektite.screen.adjustPageFooterPosition();
@@ -13232,7 +13234,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
                 minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
             });
-            [document.getElementById("screen-toast")].forEach(function (header) {
+            [document.getElementById("tektite-screen-toast")].forEach(function (header) {
                 minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
                 minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
             });
@@ -13395,7 +13397,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         case 0:
                             (_a = __11.tektite.screen.getScreenCover()) === null || _a === void 0 ? void 0 : _a.click();
                             window.scrollTo(0, 0);
-                            document.getElementById("screen-body").scrollTo(0, 0);
+                            document.getElementById("tektite-screen-body").scrollTo(0, 0);
                             hash = base_8.Base.getUrlHash(url).split("/");
                             applicationType = hash[0];
                             itemJson = hash[1];
@@ -13710,7 +13712,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640308649521), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640355527946), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

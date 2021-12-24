@@ -470,7 +470,7 @@ export module Render
         let lashFlashAt = 0;
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
-            const screen = document.getElementById("screen") as HTMLDivElement;
+            const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
             const tick = Domain.getTicks(now);
             const current = item ?? alarms[0] ?? null;
@@ -562,7 +562,7 @@ export module Render
                     await tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
                     RenderBase.resizeFlexList();
                     await updateWindow("timer");
-                    await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }

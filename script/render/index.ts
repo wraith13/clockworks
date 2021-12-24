@@ -787,7 +787,7 @@ export module Render
                 minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
             }
         );
-        [document.getElementById("screen-toast") as HTMLDivElement].forEach
+        [document.getElementById("tektite-screen-toast") as HTMLDivElement].forEach
         (
             header =>
             {
@@ -1011,7 +1011,7 @@ export module Render
     {
         tektite.screen.getScreenCover()?.click();
         window.scrollTo(0,0);
-        document.getElementById("screen-body").scrollTo(0,0);
+        document.getElementById("tektite-screen-body").scrollTo(0,0);
         // const urlParams = getUrlParams(url);
         const hash = Base.getUrlHash(url).split("/");
         const applicationType = hash[0] as Type.ApplicationType;

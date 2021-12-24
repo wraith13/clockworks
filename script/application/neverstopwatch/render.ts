@@ -216,7 +216,7 @@ export module Render
         let ticks = Storage.NeverStopwatch.Stamps.get();
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
-            const screen = document.getElementById("screen") as HTMLDivElement;
+            const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
             const tick = Domain.getTicks(now);
             const current = item ?? ticks[0] ?? null;

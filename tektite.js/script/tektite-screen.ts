@@ -21,7 +21,7 @@ export module Screen
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
-        getElement = () => document.getElementById("screen") as HTMLDivElement;
+        getElement = () => document.getElementById("tektite-screen") as HTMLDivElement;
         updateWindow: (event: Tektite.UpdateWindowEventEype) => unknown;
         private updateWindowTimer = undefined;
         private updateWindowHighResolutionTimer = undefined;
@@ -54,19 +54,19 @@ export module Screen
             window.addEventListener("focus", this.onWindowFocus);
             window.addEventListener("blur", this.onWindowBlur);
             window.addEventListener("storage", this.onUpdateStorage);
-            document.getElementById("screen-header").addEventListener
+            document.getElementById("tektite-screen-header").addEventListener
             (
                 'click',
-                async () => await this.scrollToOffset(document.getElementById("screen-body"), 0)
+                async () => await this.scrollToOffset(document.getElementById("tektite-screen-body"), 0)
             );
-            document.getElementById("screen-body").addEventListener
+            document.getElementById("tektite-screen-body").addEventListener
             (
                 "scroll",
                 () =>
                 {
                     this.adjustPageFooterPosition();
                     this.adjustDownPageLinkDirection();
-                    if (document.getElementById("screen-body").scrollTop <= 0)
+                    if (document.getElementById("tektite-screen-body").scrollTop <= 0)
                     {
                         this.updateWindow?.("scroll");
                     }
@@ -95,7 +95,7 @@ export module Screen
             {
                 if (dom === (this.lastMouseDownTarget ?? dom))
                 {
-                    console.log("screen-cover.click!");
+                    console.log("tektite-screen-cover.click!");
                     dom.onclick = undefined;
                     data.onclick();
                     close();
@@ -104,7 +104,7 @@ export module Screen
             const dom = $make(HTMLDivElement)
             ({
                 tag: "div",
-                className: "screen-cover fade-in",
+                className: "tektite-screen-cover fade-in",
                 children: data.children,
                 onclick,
             });
@@ -124,7 +124,7 @@ export module Screen
             };
             return result;
         };
-        public getScreenCoverList = () => minamo.dom.getDivsByClassName(document, "screen-cover");
+        public getScreenCoverList = () => minamo.dom.getDivsByClassName(document, "tektite-screen-cover");
         public getScreenCover = () => this.getScreenCoverList().filter((_i, ix, list) => (ix +1) === list.length)[0];
         public hasScreenCover = () => 0 < this.getScreenCoverList().length;
         // public popup =
@@ -246,7 +246,7 @@ export module Screen
         };
         replaceBody = async (body: Tektite.PageSource | minamo.dom.Source) => minamo.dom.replaceChildren
         (
-            document.getElementById("screen-body"),
+            document.getElementById("tektite-screen-body"),
             await this.makeBody(body)
         );
         scrollToOffset = async (target: HTMLElement, offset: number) =>
@@ -269,7 +269,7 @@ export module Screen
         };
         getBodyScrollTop = (topChild = minamo.dom.getDivsByClassName(document, "primary-page")[0]) =>
         {
-            const body = document.getElementById("screen-body");
+            const body = document.getElementById("tektite-screen-body");
             const primaryPageOffsetTop = Math.min(topChild.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
             return body.scrollTop -primaryPageOffsetTop;
         };
@@ -296,7 +296,7 @@ export module Screen
             const primaryPage = document.getElementsByClassName("primary-page")[0];
             if (primaryPage)
             {
-                const body = document.getElementById("screen-body");
+                const body = document.getElementById("tektite-screen-body");
                 const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +this.getBodyScrollTop()), 0);
                 minamo.dom.getDivsByClassName(document, "page-footer")
                     .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(1rem + ${delta}px)`));

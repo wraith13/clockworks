@@ -170,7 +170,7 @@ export module Render
         let events = Storage.ElapsedTimer.Events.get();
         const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
         {
-            const screen = document.getElementById("screen") as HTMLDivElement;
+            const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
             const tick = Domain.getTicks(now);
             const current = item ?? events[0] ?? null;
@@ -250,7 +250,7 @@ export module Render
                     await tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
                     RenderBase.resizeFlexList();
                     await updateWindow("timer");
-                    await tektite.screen.scrollToOffset(document.getElementById("screen-body"), 0);
+                    await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }

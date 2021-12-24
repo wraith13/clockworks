@@ -70,36 +70,36 @@ export module Tektite
             ({
                 parent: document.body,
                 tag: "div",
-                id: "foundation",
+                id: "tektite-foundation",
                 children:
                 {
                     tag: "div",
-                    id: "screen",
-                    className: "screen",
+                    id: "tektite-screen",
+                    className: "tektite-screen",
                     children:
                     [
                         {
                             tag: "header",
-                            id: "screen-header",
+                            id: "tektite-screen-header",
                             className: "segmented",
                         },
                         {
                             tag: "div",
-                            id: "screen-body",
-                            className: "screen-body",
+                            id: "tektite-screen-body",
+                            className: "tektite-screen-body",
                         },
                         {
                             tag: "div",
-                            className: "screen-bar",
+                            className: "tektite-screen-bar",
                             childNodes:
                             {
                                 tag: "div",
-                                className: "screen-bar-flash-layer",
+                                className: "tektite-screen-bar-flash-layer",
                             },
                         },
                         {
                             tag: "div",
-                            id: "screen-toast",
+                            id: "tektite-screen-toast",
                         },
                     ]
                 }
@@ -137,7 +137,7 @@ export module Tektite
         {
             if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document))
             {
-                document.body.classList.toggle("fxxking-ipad-fullscreen", this.fullscreen.element());
+                document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", this.fullscreen.element());
             }
         };
         public reload = async () => await this.params.showPage(location.href);
@@ -158,14 +158,14 @@ export module Tektite
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);
     export const setHeaderColor = (color: string | null) =>
-        minamo.dom.setProperty("#screen-header", "backgroundColor", color ?? "");
+        minamo.dom.setProperty("#tektite-screen-header", "backgroundColor", color ?? "");
     export const setBodyColor = (color: string) =>
     {
         minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
-        minamo.dom.setProperty("#theme-color", "content", color);
+        minamo.dom.setProperty("#tektite-theme-color", "content", color);
     };
     export const setFoundationColor = (color: string | null) =>
-            minamo.dom.setStyleProperty("#foundation", "backgroundColor", color ?? "");
+            minamo.dom.setStyleProperty("#tektite-foundation", "backgroundColor", color ?? "");
     let latestColor: string | null;
     export const setBackgroundColor = (color: string | null) =>
     {
@@ -198,8 +198,8 @@ export module Tektite
     }
     export const setProgressBarStyle = (progressBarStyle: ProgressBarStyleType) =>
         setStyle("header" !== progressBarStyle ? "modern": "classic");
-    export const getProgressElement = () => document.getElementById("screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
-    export const getScreenBarElement = () => document.getElementsByClassName("screen-bar")[0] as HTMLDivElement;
+    export const getProgressElement = () => document.getElementById("tektite-screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
+    export const getScreenBarElement = () => document.getElementsByClassName("tektite-screen-bar")[0] as HTMLDivElement;
     const resetScreenBarProgress = () =>
     {
         const screenBar = getScreenBarElement();
