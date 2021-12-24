@@ -241,8 +241,8 @@ export module Screen
         public clearLastMouseDownTarget = () => this.lastMouseDownTarget = null;
         public flash = () =>
         {
-            document.body.classList.add("flash");
-            setTimeout(() => document.body.classList.remove("flash"), 1500);
+            document.body.classList.add("tektite-flash");
+            setTimeout(() => document.body.classList.remove("tektite-flash"), 1500);
         };
         replaceBody = async (body: Tektite.PageSource | minamo.dom.Source) => minamo.dom.replaceChildren
         (

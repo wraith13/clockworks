@@ -7,7 +7,7 @@
         cursor: none !important;
     }
 }
-&.flash
+&.tektite-flash
 {
     .screen
     {
@@ -18,21 +18,21 @@
         animation-fill-mode: both;
     }
 }
-&.flash.tektite-style-modern
+&.tektite-flash.tektite-style-modern
 {
     .screen
     {
-        animation-name: white-flash;
+        animation-name: tektite-white-flash;
     }
 }
-&.flash.tektite-style-classic
+&.tektite-flash.tektite-style-classic
 {
     .screen
     {
-        animation-name: accent-flash;
+        animation-name: tektite-accent-flash;
     }
 }
-@keyframes white-flash
+@keyframes tektite-white-flash
 {
     0% { background: radial-gradient(@white-flash-color 0%, transparent 0%); }
     1.25% { background: radial-gradient(@white-flash-color 0%, transparent 5%); }
@@ -116,7 +116,7 @@
     98.75% { background: radial-gradient(transparent 95%, @white-flash-color 100%); }
     100% { background: radial-gradient(transparent 100%, @white-flash-color 100%); }
 }
-@keyframes accent-flash
+@keyframes tektite-accent-flash
 {
     0% { background: radial-gradient(@accent-color 0%, transparent 0%); }
     1.25% { background: radial-gradient(@accent-color 0%, transparent 5%); }
