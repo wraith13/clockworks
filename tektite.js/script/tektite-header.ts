@@ -24,8 +24,8 @@ export module Header
         getElement = () => document.getElementById("tektite-screen-header") as HTMLDivElement;
         getLastSegmentClass = (ix: number, items: SegmentSource<PageParams, IconKeyType>[]) =>
             [
-                ix === 0 ? "first-segment": undefined,
-                ix === items.length -1 ? "last-segment": undefined,
+                ix === 0 ? "first-tektite-segment": undefined,
+                ix === items.length -1 ? "last-tektite-segment": undefined,
             ]
             .filter(i => undefined !== i)
             .join(" ");
@@ -76,13 +76,13 @@ export module Header
         segmentCore = async (item: SegmentSource<PageParams, IconKeyType>) =>
         [
             Tektite.$div("icon")(await this.tektite.params.loadSvgOrCache(item.icon)),
-            Tektite.$div("segment-title")(item.title),
+            Tektite.$div("tektite-segment-title")(item.title),
         ];
         labelSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") =>
-        Tektite.$div(`segment label-segment ${className}`)(await this.segmentCore(item));
+        Tektite.$div(`tektite-segment label-tektite-segment ${className}`)(await this.segmentCore(item));
         linkSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") => this.tektite.internalLink
         ({
-            className: `segment ${className}`,
+            className: `tektite-segment ${className}`,
             href: item.href,
             children: await this.segmentCore(item),
         });
@@ -97,7 +97,7 @@ export module Header
             const popup = Tektite.$make(HTMLDivElement)
             ({
                 tag: "div",
-                className: "menu-popup segment-popup",
+                className: "menu-popup tektite-segment-popup",
                 children: "function" !== typeof item.menu ? item.menu: [ ],
                 onclick: async (event: MouseEvent) =>
                 {
@@ -110,7 +110,7 @@ export module Header
             const segment = Tektite.$make(HTMLDivElement)
             ({
                 tag: "div",
-                className: `segment ${className}`,
+                className: `tektite-segment ${className}`,
                 children: await this.segmentCore(item),
                 onclick: async (event: MouseEvent) =>
                 {

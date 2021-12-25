@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Sat Dec 25 2021 18:19:15 GMT+0900 (GMT+09:00)
+    build at: Sun Dec 26 2021 03:17:35 GMT+0900 (GMT+09:00)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -57,6 +57,9 @@ body.light {
 }
 body.light .tektite-dark-trait ::-webkit-calendar-picker-indicator {
   filter: invert(1);
+}
+body.light .tektite-light-trait .tektite-dummy-class {
+  display: inherit;
 }
 body.light .tektite-clickable-trait {
   cursor: pointer;
@@ -470,7 +473,7 @@ body.light .tektite-screen > header .icon svg {
   width: 2rem;
   height: 2rem;
 }
-body.light .tektite-screen > header .segment {
+body.light .tektite-screen > header .tektite-segment {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -483,76 +486,76 @@ body.light .tektite-screen > header .segment {
   text-decoration: none;
   min-width: 2.25rem;
 }
-body.light .tektite-screen > header .segment > * {
+body.light .tektite-screen > header .tektite-segment > * {
   transform: skewX(-150deg);
 }
-body.light .tektite-screen > header .segment:first-child {
+body.light .tektite-screen > header .tektite-segment:first-child {
   min-width: 2.75rem;
 }
-body.light .tektite-screen > header .segment.label-segment {
+body.light .tektite-screen > header .tektite-segment.label-segment {
   cursor: default;
   color: #FFFFFF;
   fill: #FFFFFF;
   background-color: #5F42A7;
 }
-body.light .tektite-screen > header .segment:not(.label-segment) {
+body.light .tektite-screen > header .tektite-segment:not(.label-segment) {
   cursor: pointer;
   color: #FFFFFF;
   fill: #FFFFFF;
 }
 @media (hover: hover) {
-  body.light .tektite-screen > header .segment:not(.label-segment):not(:hover) {
+  body.light .tektite-screen > header .tektite-segment:not(.label-segment):not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.light .tektite-screen > header .segment:not(.label-segment):hover {
+  body.light .tektite-screen > header .tektite-segment:not(.label-segment):hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.light .tektite-screen > header .segment:not(.label-segment) {
+  body.light .tektite-screen > header .tektite-segment:not(.label-segment) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
-body.light .tektite-screen > header .segment.fill-header-segment {
+body.light .tektite-screen > header .tektite-segment.fill-header-segment {
   flex-grow: 1;
   margin-right: -3rem;
 }
-body.light .tektite-screen > header .segment:not(:hover) {
+body.light .tektite-screen > header .tektite-segment:not(:hover) {
   background-color: transparent !important;
 }
-body.light .tektite-screen > header .segment:first-child,
-body.light .tektite-screen > header .progress-bar + .segment {
+body.light .tektite-screen > header .tektite-segment:first-child,
+body.light .tektite-screen > header .progress-bar + .tektite-segment {
   padding-left: 1.25rem;
   margin-left: -0.75rem;
 }
-body.light .tektite-screen > header .segment + .segment,
-body.light .tektite-screen > header .segment + .menu-popup + .segment {
+body.light .tektite-screen > header .tektite-segment + .tektite-segment,
+body.light .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment {
   padding-left: 0.5rem;
   margin-left: 0rem;
   border-left-style: solid;
   border-left-width: 1px;
   border-left-color: #FFFFFF !important;
 }
-body.light .tektite-screen > header .segment + .segment .icon,
-body.light .tektite-screen > header .segment + .menu-popup + .segment .icon {
+body.light .tektite-screen > header .tektite-segment + .tektite-segment .icon,
+body.light .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon {
   padding: 0.5rem 0.25rem;
 }
-body.light .tektite-screen > header .segment + .segment .icon svg,
-body.light .tektite-screen > header .segment + .menu-popup + .segment .icon svg {
+body.light .tektite-screen > header .tektite-segment + .tektite-segment .icon svg,
+body.light .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon svg {
   width: 1.5rem;
   height: 1.5rem;
 }
-body.light .tektite-screen > header .segment + .menu-popup {
+body.light .tektite-screen > header .tektite-segment + .menu-popup {
   white-space: nowrap;
 }
 @media (max-width: 780px) {
-  body.light .tektite-screen > header .segment:not(.last-segment) {
+  body.light .tektite-screen > header .tektite-segment:not(.last-segment) {
     padding-right: 0.5rem;
   }
-  body.light .tektite-screen > header .segment:not(.last-segment) .segment-title {
+  body.light .tektite-screen > header .tektite-segment:not(.last-segment) .tektite-segment-title {
     display: none;
   }
 }
@@ -593,7 +596,7 @@ body.light .tektite-screen > header button.menu-button:not(:hover) {
 body.light .tektite-screen > header button.icon-button + button.menu-button {
   right: 2.5rem;
 }
-body.light .tektite-screen > header .menu-popup:not(.segment-popup) {
+body.light .tektite-screen > header .menu-popup:not(.tektite-segment-popup) {
   top: calc(10px + 2rem);
   right: 0.5rem;
 }
@@ -739,7 +742,7 @@ body.light.tektite-style-modern .tektite-screen header {
   background-color: #00002211;
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .tektite-screen header .segment:not(.label-segment):hover {
+  body.light.tektite-style-modern .tektite-screen header .tektite-segment:not(.label-segment):hover {
     background-color: #FFFFFF11;
   }
 }
@@ -1319,8 +1322,8 @@ body.light .locale-parallel-off .locale-parallel,
 body.light .menu-popup .locale-parallel {
   display: none;
 }
-body.light.tektite-style-modern .segment + .segment,
-body.light.tektite-style-modern .segment + .menu-popup + .segment {
+body.light.tektite-style-modern .tektite-segment + .tektite-segment,
+body.light.tektite-style-modern .tektite-segment + .menu-popup + .tektite-segment {
   border-left-color: #FFFFFF44 !important;
 }
 @keyframes update-progress {
@@ -2652,6 +2655,9 @@ body.light .loading-spinner {
     transform: rotate(360deg);
   }
 }
+body.light .tektite-dummy-class {
+  display: inherit;
+}
 /*# sourceMappingURL=style/theme.light.css.map */
 </style>
 <style type="text/css" id="style">
@@ -2670,6 +2676,9 @@ body.dark {
 }
 body.dark .tektite-dark-trait ::-webkit-calendar-picker-indicator {
   filter: invert(1);
+}
+body.dark .tektite-light-trait .tektite-dummy-class {
+  display: inherit;
 }
 body.dark .tektite-clickable-trait {
   cursor: pointer;
@@ -3083,7 +3092,7 @@ body.dark .tektite-screen > header .icon svg {
   width: 2rem;
   height: 2rem;
 }
-body.dark .tektite-screen > header .segment {
+body.dark .tektite-screen > header .tektite-segment {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -3096,76 +3105,76 @@ body.dark .tektite-screen > header .segment {
   text-decoration: none;
   min-width: 2.25rem;
 }
-body.dark .tektite-screen > header .segment > * {
+body.dark .tektite-screen > header .tektite-segment > * {
   transform: skewX(-150deg);
 }
-body.dark .tektite-screen > header .segment:first-child {
+body.dark .tektite-screen > header .tektite-segment:first-child {
   min-width: 2.75rem;
 }
-body.dark .tektite-screen > header .segment.label-segment {
+body.dark .tektite-screen > header .tektite-segment.label-segment {
   cursor: default;
   color: #000022;
   fill: #000022;
   background-color: #5F42A7;
 }
-body.dark .tektite-screen > header .segment:not(.label-segment) {
+body.dark .tektite-screen > header .tektite-segment:not(.label-segment) {
   cursor: pointer;
   color: #000022;
   fill: #000022;
 }
 @media (hover: hover) {
-  body.dark .tektite-screen > header .segment:not(.label-segment):not(:hover) {
+  body.dark .tektite-screen > header .tektite-segment:not(.label-segment):not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.dark .tektite-screen > header .segment:not(.label-segment):hover {
+  body.dark .tektite-screen > header .tektite-segment:not(.label-segment):hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.dark .tektite-screen > header .segment:not(.label-segment) {
+  body.dark .tektite-screen > header .tektite-segment:not(.label-segment) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
-body.dark .tektite-screen > header .segment.fill-header-segment {
+body.dark .tektite-screen > header .tektite-segment.fill-header-segment {
   flex-grow: 1;
   margin-right: -3rem;
 }
-body.dark .tektite-screen > header .segment:not(:hover) {
+body.dark .tektite-screen > header .tektite-segment:not(:hover) {
   background-color: transparent !important;
 }
-body.dark .tektite-screen > header .segment:first-child,
-body.dark .tektite-screen > header .progress-bar + .segment {
+body.dark .tektite-screen > header .tektite-segment:first-child,
+body.dark .tektite-screen > header .progress-bar + .tektite-segment {
   padding-left: 1.25rem;
   margin-left: -0.75rem;
 }
-body.dark .tektite-screen > header .segment + .segment,
-body.dark .tektite-screen > header .segment + .menu-popup + .segment {
+body.dark .tektite-screen > header .tektite-segment + .tektite-segment,
+body.dark .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment {
   padding-left: 0.5rem;
   margin-left: 0rem;
   border-left-style: solid;
   border-left-width: 1px;
   border-left-color: #000022 !important;
 }
-body.dark .tektite-screen > header .segment + .segment .icon,
-body.dark .tektite-screen > header .segment + .menu-popup + .segment .icon {
+body.dark .tektite-screen > header .tektite-segment + .tektite-segment .icon,
+body.dark .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon {
   padding: 0.5rem 0.25rem;
 }
-body.dark .tektite-screen > header .segment + .segment .icon svg,
-body.dark .tektite-screen > header .segment + .menu-popup + .segment .icon svg {
+body.dark .tektite-screen > header .tektite-segment + .tektite-segment .icon svg,
+body.dark .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon svg {
   width: 1.5rem;
   height: 1.5rem;
 }
-body.dark .tektite-screen > header .segment + .menu-popup {
+body.dark .tektite-screen > header .tektite-segment + .menu-popup {
   white-space: nowrap;
 }
 @media (max-width: 780px) {
-  body.dark .tektite-screen > header .segment:not(.last-segment) {
+  body.dark .tektite-screen > header .tektite-segment:not(.last-segment) {
     padding-right: 0.5rem;
   }
-  body.dark .tektite-screen > header .segment:not(.last-segment) .segment-title {
+  body.dark .tektite-screen > header .tektite-segment:not(.last-segment) .tektite-segment-title {
     display: none;
   }
 }
@@ -3206,7 +3215,7 @@ body.dark .tektite-screen > header button.menu-button:not(:hover) {
 body.dark .tektite-screen > header button.icon-button + button.menu-button {
   right: 2.5rem;
 }
-body.dark .tektite-screen > header .menu-popup:not(.segment-popup) {
+body.dark .tektite-screen > header .menu-popup:not(.tektite-segment-popup) {
   top: calc(10px + 2rem);
   right: 0.5rem;
 }
@@ -3352,7 +3361,7 @@ body.dark.tektite-style-modern .tektite-screen header {
   background-color: #FFFFFF11;
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .tektite-screen header .segment:not(.label-segment):hover {
+  body.dark.tektite-style-modern .tektite-screen header .tektite-segment:not(.label-segment):hover {
     background-color: #00002211;
   }
 }
@@ -3932,8 +3941,8 @@ body.dark .locale-parallel-off .locale-parallel,
 body.dark .menu-popup .locale-parallel {
   display: none;
 }
-body.dark.tektite-style-modern .segment + .segment,
-body.dark.tektite-style-modern .segment + .menu-popup + .segment {
+body.dark.tektite-style-modern .tektite-segment + .tektite-segment,
+body.dark.tektite-style-modern .tektite-segment + .menu-popup + .tektite-segment {
   border-left-color: #00002244 !important;
 }
 @keyframes update-progress {
@@ -7173,8 +7182,8 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                 this.getElement = function () { return document.getElementById("tektite-screen-header"); };
                 this.getLastSegmentClass = function (ix, items) {
                     return [
-                        ix === 0 ? "first-segment" : undefined,
-                        ix === items.length - 1 ? "last-segment" : undefined,
+                        ix === 0 ? "first-tektite-segment" : undefined,
+                        ix === items.length - 1 ? "last-tektite-segment" : undefined,
                     ]
                         .filter(function (i) { return undefined !== i; })
                         .join(" ");
@@ -7256,7 +7265,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                 return [4 /*yield*/, this.tektite.params.loadSvgOrCache(item.icon)];
                             case 1: return [2 /*return*/, [
                                     _a.apply(void 0, [_b.sent()]),
-                                    tektite_index_3.Tektite.$div("segment-title")(item.title)
+                                    tektite_index_3.Tektite.$div("tektite-segment-title")(item.title)
                                 ]];
                         }
                     });
@@ -7266,7 +7275,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                     return __awaiter(_this, void 0, void 0, function () { var _a; return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = tektite_index_3.Tektite.$div("segment label-segment " + className);
+                                _a = tektite_index_3.Tektite.$div("tektite-segment label-tektite-segment " + className);
                                 return [4 /*yield*/, this.segmentCore(item)];
                             case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent()])];
                         }
@@ -7282,7 +7291,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                 case 0:
                                     _b = (_a = this.tektite).internalLink;
                                     _c = {
-                                        className: "segment " + className,
+                                        className: "tektite-segment " + className,
                                         href: item.href
                                     };
                                     return [4 /*yield*/, this.segmentCore(item)];
@@ -7307,7 +7316,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                     };
                                     popup = tektite_index_3.Tektite.$make(HTMLDivElement)({
                                         tag: "div",
-                                        className: "menu-popup segment-popup",
+                                        className: "menu-popup tektite-segment-popup",
                                         children: "function" !== typeof item.menu ? item.menu : [],
                                         onclick: function (event) { return __awaiter(_this, void 0, void 0, function () {
                                             return __generator(this, function (_a) {
@@ -7322,7 +7331,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                     _a = tektite_index_3.Tektite.$make(HTMLDivElement);
                                     _b = {
                                         tag: "div",
-                                        className: "segment " + className
+                                        className: "tektite-segment " + className
                                     };
                                     return [4 /*yield*/, this.segmentCore(item)];
                                 case 1:
@@ -13187,7 +13196,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         }); };
         Render.updateTitle = function () {
             var _a, _b, _c;
-            document.title = (_c = (_b = (_a = minamo_js_12.minamo.dom.getDivsByClassName(__11.tektite.header.getElement(), "segment-title")) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : config_json_10.default.applicationTitle;
+            document.title = (_c = (_b = (_a = minamo_js_12.minamo.dom.getDivsByClassName(__11.tektite.header.getElement(), "tektite-segment-title")) === null || _a === void 0 ? void 0 : _a.map(function (div) { return div.innerText; })) === null || _b === void 0 ? void 0 : _b.join(" / ")) !== null && _c !== void 0 ? _c : config_json_10.default.applicationTitle;
         };
         Render.showWindow = function (screen, updateWindow) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -13690,7 +13699,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640423955840), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1640456255463), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

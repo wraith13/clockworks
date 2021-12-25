@@ -758,7 +758,7 @@ export module Render
         );
     export const updateTitle = () =>
     {
-        document.title = minamo.dom.getDivsByClassName(tektite.header.getElement(), "segment-title")
+        document.title = minamo.dom.getDivsByClassName(tektite.header.getElement(), "tektite-segment-title")
             ?.map(div => div.innerText)
             // ?.reverse()
             ?.join(" / ")

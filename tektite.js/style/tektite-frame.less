@@ -134,7 +134,7 @@
             padding: 0.25rem;
             // margin-right: 0.25rem;
         }
-        .segment
+        .tektite-segment
         {
             position: relative;
             display: flex;
@@ -175,14 +175,14 @@
                 background-color: transparent !important;
             }
         }
-        .segment:first-child,
-        .progress-bar + .segment
+        .tektite-segment:first-child,
+        .progress-bar + .tektite-segment
         {
             padding-left: 1.25rem;
             margin-left: -0.75rem;
         }
-        .segment + .segment,
-        .segment +.menu-popup + .segment
+        .tektite-segment + .tektite-segment,
+        .tektite-segment +.menu-popup + .tektite-segment
         {
             padding-left: 0.5rem;
             margin-left: 0rem;
@@ -199,16 +199,16 @@
                 }
             }
         }
-        .segment +.menu-popup
+        .tektite-segment +.menu-popup
         {
             white-space: nowrap;
         }
         @media (max-width:780px)
         {
-            .segment:not(.last-segment)
+            .tektite-segment:not(.last-segment)
             {
                 padding-right: 0.5rem;
-                .segment-title
+                .tektite-segment-title
                 {
                     display: none;
                 }
@@ -232,7 +232,7 @@
         {
             right: 2.50rem;
         }
-        .menu-popup:not(.segment-popup)
+        .menu-popup:not(.tektite-segment-popup)
         {
             top: calc(10px + 2.0rem);
             right: 0.5rem;
@@ -428,7 +428,7 @@
         header
         {
             background-color: e(%("%s%s", @main-color, "11"));
-            .segment:not(.label-segment)
+            .tektite-segment:not(.label-segment)
             {
                 @media (hover: hover)
                 {
