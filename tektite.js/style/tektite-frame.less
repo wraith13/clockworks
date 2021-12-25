@@ -15,7 +15,7 @@
     right: 0px;
     bottom: 0px;
     filter: drop-shadow(0.0rem -0rem 3rem @accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
-    .alpha-tektite-positive-background-coloring-trait;
+    .tektite-alpha-positive-background-coloring-trait;
     .item
     {
         border-top-color: @accent-color;
@@ -66,13 +66,13 @@
     align-items: center;
     background-color: @screen-cover-color;
     z-index: 88888;
-    &.fade-in
+    &.tektite-fade-in
     {
-        animation-name: fade-in;
+        animation-name: tektite-fade-in;
     }
-    &.fade-out
+    &.tektite-fade-out
     {
-        animation-name: fade-out;
+        animation-name: tektite-fade-out;
     }
     animation-direction: normal;
     animation-delay: 0s;

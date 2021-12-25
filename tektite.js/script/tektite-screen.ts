@@ -104,15 +104,15 @@ export module Screen
             const dom = $make(HTMLDivElement)
             ({
                 tag: "div",
-                className: "tektite-screen-cover fade-in",
+                className: "tektite-screen-cover tektite-fade-in",
                 children: data.children,
                 onclick,
             });
             // dom.addEventListener("mousedown", onclick);
             const close = async () =>
             {
-                dom.classList.remove("fade-in");
-                dom.classList.add("fade-out");
+                dom.classList.remove("tektite-fade-in");
+                dom.classList.add("tektite-fade-out");
                 await minamo.core.timeout(500);
                 minamo.dom.remove(dom);
             };

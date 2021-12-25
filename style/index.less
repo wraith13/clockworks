@@ -103,16 +103,16 @@
         padding: 0rem;
     }
 }
-.fade-and-slide-out
+.tektite-fade-and-slide-out
 {
-    animation-name: fade-and-slide-out;
+    animation-name: tektite-fade-and-slide-out;
     animation-direction: normal;
     animation-delay: 0s;
     animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: both;
 }
-@keyframes fade-and-slide-out
+@keyframes tektite-fade-and-slide-out
 {
     //  margin-bottom は対象となってる箇所の CSS が抱えてる問題に引き摺られてアニメーション終了時でも隙間が残る問題を回避する為の暫定的な処置
     0%
@@ -266,7 +266,7 @@ button
         flex-direction: column;
     }
     color: @accent-color;
-    .alpha-tektite-positive-background-coloring-trait;
+    .tektite-alpha-positive-background-coloring-trait;
     border-style: solid;
     border-width: 1px;
     border-radius: 0.5rem;
@@ -406,7 +406,7 @@ button
         }
     }
 }
-@keyframes fade-in
+@keyframes tektite-fade-in
 {
     0%
     {
@@ -417,7 +417,7 @@ button
         opacity: 1.0;
     }
 }
-@keyframes fade-out
+@keyframes tektite-fade-out
 {
     0%
     {
@@ -941,21 +941,6 @@ button
                 }
             }
         }
-    }
-}
-@keyframes late-fade-in
-{
-    0%
-    {
-        opacity: 0.0;
-    }
-    90%
-    {
-        opacity: 0.0;
-    }
-    100%
-    {
-        opacity: 1.0;
     }
 }
 .export-screen
