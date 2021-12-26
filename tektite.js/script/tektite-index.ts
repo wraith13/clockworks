@@ -81,7 +81,7 @@ export module Tektite
                         {
                             tag: "header",
                             id: "tektite-screen-header",
-                            className: "segmented",
+                            className: "tektite-segmented",
                         },
                         {
                             tag: "div",
