@@ -49,7 +49,7 @@ export module Header
             data.parent ?
                 {
                     tag: "button",
-                    className: "icon-button close-button",
+                    className: "tektite-icon-button tektite-close-button",
                     children:
                     [
                         await this.tektite.loadSvgOrCache("tektite-cross-icon"),
@@ -72,7 +72,7 @@ export module Header
             data.menu ? await this.tektite.menu.button(data.menu): [],
             data.operator ? Tektite.$div("header-operator")(data.operator): [],
         ];
-        getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "close-button")[0];
+        getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "tektite-close-button")[0];
         segmentCore = async (item: SegmentSource<PageParams, IconKeyType>) =>
         [
             Tektite.$div("icon")(await this.tektite.params.loadSvgOrCache(item.icon)),
