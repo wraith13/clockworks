@@ -24,8 +24,8 @@ export module Header
         getElement = () => document.getElementById("tektite-screen-header") as HTMLDivElement;
         getLastSegmentClass = (ix: number, items: SegmentSource<PageParams, IconKeyType>[]) =>
             [
-                ix === 0 ? "first-tektite-segment": undefined,
-                ix === items.length -1 ? "last-tektite-segment": undefined,
+                ix === 0 ? "tektite-first-segment": undefined,
+                ix === items.length -1 ? "tektite-last-segment": undefined,
             ]
             .filter(i => undefined !== i)
             .join(" ");
