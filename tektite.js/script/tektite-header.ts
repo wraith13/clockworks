@@ -97,12 +97,12 @@ export module Header
             const popup = Tektite.$make(HTMLDivElement)
             ({
                 tag: "div",
-                className: "menu-popup tektite-segment-popup",
+                className: "tektite-menu-popup tektite-segment-popup",
                 children: "function" !== typeof item.menu ? item.menu: [ ],
                 onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
-                    console.log("menu-popup.click!");
+                    console.log("tektite-menu-popup.click!");
                     cover?.close();
                     close();
                 },

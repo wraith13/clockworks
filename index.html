@@ -532,7 +532,7 @@ body.light .tektite-screen > header .progress-bar + .tektite-segment {
   margin-left: -0.75rem;
 }
 body.light .tektite-screen > header .tektite-segment + .tektite-segment,
-body.light .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment {
+body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment {
   padding-left: 0.5rem;
   margin-left: 0rem;
   border-left-style: solid;
@@ -540,15 +540,15 @@ body.light .tektite-screen > header .tektite-segment + .menu-popup + .tektite-se
   border-left-color: #FFFFFF !important;
 }
 body.light .tektite-screen > header .tektite-segment + .tektite-segment .icon,
-body.light .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon {
+body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .icon {
   padding: 0.5rem 0.25rem;
 }
 body.light .tektite-screen > header .tektite-segment + .tektite-segment .icon svg,
-body.light .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon svg {
+body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .icon svg {
   width: 1.5rem;
   height: 1.5rem;
 }
-body.light .tektite-screen > header .tektite-segment + .menu-popup {
+body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup {
   white-space: nowrap;
 }
 @media (max-width: 780px) {
@@ -596,7 +596,7 @@ body.light .tektite-screen > header button.menu-button:not(:hover) {
 body.light .tektite-screen > header button.tektite-icon-button + button.menu-button {
   right: 2.5rem;
 }
-body.light .tektite-screen > header .menu-popup:not(.tektite-segment-popup) {
+body.light .tektite-screen > header .tektite-menu-popup:not(.tektite-segment-popup) {
   top: calc(10px + 2rem);
   right: 0.5rem;
 }
@@ -1315,15 +1315,15 @@ body.light .locale-parallel-on .locale-parallel {
   display: initial;
 }
 body.light .locale-parallel-off .locale-map,
-body.light .menu-popup .locale-map {
+body.light .tektite-menu-popup .locale-map {
   display: initial;
 }
 body.light .locale-parallel-off .locale-parallel,
-body.light .menu-popup .locale-parallel {
+body.light .tektite-menu-popup .locale-parallel {
   display: none;
 }
 body.light.tektite-style-modern .tektite-segment + .tektite-segment,
-body.light.tektite-style-modern .tektite-segment + .menu-popup + .tektite-segment {
+body.light.tektite-style-modern .tektite-segment + .tektite-menu-popup + .tektite-segment {
   border-left-color: #FFFFFF44 !important;
 }
 @keyframes update-progress {
@@ -1577,16 +1577,16 @@ body.light .long-button {
   max-width: 640px;
   float: center;
 }
-body.light .menu-popup {
+body.light .tektite-menu-popup {
   position: absolute;
   top: calc(10px + 1.5rem);
   right: 0rem;
   z-index: 99999;
 }
-body.light .menu-popup:not(.show) {
+body.light .tektite-menu-popup:not(.show) {
   display: none;
 }
-body.light .menu-popup,
+body.light .tektite-menu-popup,
 body.light .bare-popup {
   max-height: calc(100vh - 15rem);
   overflow: hidden;
@@ -1599,18 +1599,18 @@ body.light .bare-popup {
   line-height: 1.5rem;
   font-size: 1.5rem;
 }
-body.light .menu-popup,
+body.light .tektite-menu-popup,
 body.light .bare-popup,
-body.light .menu-popup > a,
+body.light .tektite-menu-popup > a,
 body.light .bare-popup > a {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   flex-direction: column;
 }
-body.light .menu-popup a,
+body.light .tektite-menu-popup a,
 body.light .bare-popup a,
-body.light .menu-popup button,
+body.light .tektite-menu-popup button,
 body.light .bare-popup button {
   border-radius: 0px;
   margin: 0px !important;
@@ -1624,79 +1624,79 @@ body.light .bare-popup button {
   justify-content: start;
   align-items: center;
 }
-body.light .menu-popup a svg,
+body.light .tektite-menu-popup a svg,
 body.light .bare-popup a svg,
-body.light .menu-popup button svg,
+body.light .tektite-menu-popup button svg,
 body.light .bare-popup button svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-left: -0.25rem;
   margin-right: 0.5rem;
 }
-body.light .menu-popup a.current-item,
+body.light .tektite-menu-popup a.current-item,
 body.light .bare-popup a.current-item,
-body.light .menu-popup button.current-item,
+body.light .tektite-menu-popup button.current-item,
 body.light .bare-popup button.current-item {
   cursor: pointer;
   color: #FFFFFF;
   fill: #FFFFFF;
 }
 @media (hover: hover) {
-  body.light .menu-popup a.current-item:not(:hover),
+  body.light .tektite-menu-popup a.current-item:not(:hover),
   body.light .bare-popup a.current-item:not(:hover),
-  body.light .menu-popup button.current-item:not(:hover),
+  body.light .tektite-menu-popup button.current-item:not(:hover),
   body.light .bare-popup button.current-item:not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.light .menu-popup a.current-item:hover,
+  body.light .tektite-menu-popup a.current-item:hover,
   body.light .bare-popup a.current-item:hover,
-  body.light .menu-popup button.current-item:hover,
+  body.light .tektite-menu-popup button.current-item:hover,
   body.light .bare-popup button.current-item:hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.light .menu-popup a.current-item,
+  body.light .tektite-menu-popup a.current-item,
   body.light .bare-popup a.current-item,
-  body.light .menu-popup button.current-item,
+  body.light .tektite-menu-popup button.current-item,
   body.light .bare-popup button.current-item {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
 @media (hover: hover) {
-  body.light .menu-popup a:not(.current-item):not(:hover),
+  body.light .tektite-menu-popup a:not(.current-item):not(:hover),
   body.light .bare-popup a:not(.current-item):not(:hover),
-  body.light .menu-popup button:not(.current-item):not(:hover),
+  body.light .tektite-menu-popup button:not(.current-item):not(:hover),
   body.light .bare-popup button:not(.current-item):not(:hover) {
     background-color: transparent;
   }
 }
 @media (hover: none) {
-  body.light .menu-popup a:not(.current-item),
+  body.light .tektite-menu-popup a:not(.current-item),
   body.light .bare-popup a:not(.current-item),
-  body.light .menu-popup button:not(.current-item),
+  body.light .tektite-menu-popup button:not(.current-item),
   body.light .bare-popup button:not(.current-item) {
     background-color: transparent;
   }
 }
-body.light .menu-popup a > .label + .value,
+body.light .tektite-menu-popup a > .label + .value,
 body.light .bare-popup a > .label + .value,
-body.light .menu-popup button > .label + .value,
+body.light .tektite-menu-popup button > .label + .value,
 body.light .bare-popup button > .label + .value {
   margin-left: 0.5rem;
   text-align: right;
   flex-grow: 1;
 }
-body.light .menu-popup a:not(.current-item):not(:hover) > .label + .value,
+body.light .tektite-menu-popup a:not(.current-item):not(:hover) > .label + .value,
 body.light .bare-popup a:not(.current-item):not(:hover) > .label + .value,
-body.light .menu-popup button:not(.current-item):not(:hover) > .label + .value,
+body.light .tektite-menu-popup button:not(.current-item):not(:hover) > .label + .value,
 body.light .bare-popup button:not(.current-item):not(:hover) > .label + .value {
   color: #888;
 }
-body.light .menu-popup a button,
+body.light .tektite-menu-popup a button,
 body.light .bare-popup a button {
   width: 100%;
 }
@@ -1811,11 +1811,11 @@ body.light .button-line {
 body.light .button-line button + .menu-button {
   margin-left: -1rem;
 }
-body.light .button-line .menu-popup {
+body.light .button-line .tektite-menu-popup {
   right: 4px;
 }
 @media (min-width: 640px) {
-  body.light .button-line .menu-popup {
+  body.light .button-line .tektite-menu-popup {
     right: calc(50vw - 330px);
   }
 }
@@ -3151,7 +3151,7 @@ body.dark .tektite-screen > header .progress-bar + .tektite-segment {
   margin-left: -0.75rem;
 }
 body.dark .tektite-screen > header .tektite-segment + .tektite-segment,
-body.dark .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment {
+body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment {
   padding-left: 0.5rem;
   margin-left: 0rem;
   border-left-style: solid;
@@ -3159,15 +3159,15 @@ body.dark .tektite-screen > header .tektite-segment + .menu-popup + .tektite-seg
   border-left-color: #000022 !important;
 }
 body.dark .tektite-screen > header .tektite-segment + .tektite-segment .icon,
-body.dark .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon {
+body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .icon {
   padding: 0.5rem 0.25rem;
 }
 body.dark .tektite-screen > header .tektite-segment + .tektite-segment .icon svg,
-body.dark .tektite-screen > header .tektite-segment + .menu-popup + .tektite-segment .icon svg {
+body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .icon svg {
   width: 1.5rem;
   height: 1.5rem;
 }
-body.dark .tektite-screen > header .tektite-segment + .menu-popup {
+body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup {
   white-space: nowrap;
 }
 @media (max-width: 780px) {
@@ -3215,7 +3215,7 @@ body.dark .tektite-screen > header button.menu-button:not(:hover) {
 body.dark .tektite-screen > header button.tektite-icon-button + button.menu-button {
   right: 2.5rem;
 }
-body.dark .tektite-screen > header .menu-popup:not(.tektite-segment-popup) {
+body.dark .tektite-screen > header .tektite-menu-popup:not(.tektite-segment-popup) {
   top: calc(10px + 2rem);
   right: 0.5rem;
 }
@@ -3934,15 +3934,15 @@ body.dark .locale-parallel-on .locale-parallel {
   display: initial;
 }
 body.dark .locale-parallel-off .locale-map,
-body.dark .menu-popup .locale-map {
+body.dark .tektite-menu-popup .locale-map {
   display: initial;
 }
 body.dark .locale-parallel-off .locale-parallel,
-body.dark .menu-popup .locale-parallel {
+body.dark .tektite-menu-popup .locale-parallel {
   display: none;
 }
 body.dark.tektite-style-modern .tektite-segment + .tektite-segment,
-body.dark.tektite-style-modern .tektite-segment + .menu-popup + .tektite-segment {
+body.dark.tektite-style-modern .tektite-segment + .tektite-menu-popup + .tektite-segment {
   border-left-color: #00002244 !important;
 }
 @keyframes update-progress {
@@ -4196,16 +4196,16 @@ body.dark .long-button {
   max-width: 640px;
   float: center;
 }
-body.dark .menu-popup {
+body.dark .tektite-menu-popup {
   position: absolute;
   top: calc(10px + 1.5rem);
   right: 0rem;
   z-index: 99999;
 }
-body.dark .menu-popup:not(.show) {
+body.dark .tektite-menu-popup:not(.show) {
   display: none;
 }
-body.dark .menu-popup,
+body.dark .tektite-menu-popup,
 body.dark .bare-popup {
   max-height: calc(100vh - 15rem);
   overflow: hidden;
@@ -4218,18 +4218,18 @@ body.dark .bare-popup {
   line-height: 1.5rem;
   font-size: 1.5rem;
 }
-body.dark .menu-popup,
+body.dark .tektite-menu-popup,
 body.dark .bare-popup,
-body.dark .menu-popup > a,
+body.dark .tektite-menu-popup > a,
 body.dark .bare-popup > a {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   flex-direction: column;
 }
-body.dark .menu-popup a,
+body.dark .tektite-menu-popup a,
 body.dark .bare-popup a,
-body.dark .menu-popup button,
+body.dark .tektite-menu-popup button,
 body.dark .bare-popup button {
   border-radius: 0px;
   margin: 0px !important;
@@ -4243,79 +4243,79 @@ body.dark .bare-popup button {
   justify-content: start;
   align-items: center;
 }
-body.dark .menu-popup a svg,
+body.dark .tektite-menu-popup a svg,
 body.dark .bare-popup a svg,
-body.dark .menu-popup button svg,
+body.dark .tektite-menu-popup button svg,
 body.dark .bare-popup button svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-left: -0.25rem;
   margin-right: 0.5rem;
 }
-body.dark .menu-popup a.current-item,
+body.dark .tektite-menu-popup a.current-item,
 body.dark .bare-popup a.current-item,
-body.dark .menu-popup button.current-item,
+body.dark .tektite-menu-popup button.current-item,
 body.dark .bare-popup button.current-item {
   cursor: pointer;
   color: #000022;
   fill: #000022;
 }
 @media (hover: hover) {
-  body.dark .menu-popup a.current-item:not(:hover),
+  body.dark .tektite-menu-popup a.current-item:not(:hover),
   body.dark .bare-popup a.current-item:not(:hover),
-  body.dark .menu-popup button.current-item:not(:hover),
+  body.dark .tektite-menu-popup button.current-item:not(:hover),
   body.dark .bare-popup button.current-item:not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.dark .menu-popup a.current-item:hover,
+  body.dark .tektite-menu-popup a.current-item:hover,
   body.dark .bare-popup a.current-item:hover,
-  body.dark .menu-popup button.current-item:hover,
+  body.dark .tektite-menu-popup button.current-item:hover,
   body.dark .bare-popup button.current-item:hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.dark .menu-popup a.current-item,
+  body.dark .tektite-menu-popup a.current-item,
   body.dark .bare-popup a.current-item,
-  body.dark .menu-popup button.current-item,
+  body.dark .tektite-menu-popup button.current-item,
   body.dark .bare-popup button.current-item {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
 }
 @media (hover: hover) {
-  body.dark .menu-popup a:not(.current-item):not(:hover),
+  body.dark .tektite-menu-popup a:not(.current-item):not(:hover),
   body.dark .bare-popup a:not(.current-item):not(:hover),
-  body.dark .menu-popup button:not(.current-item):not(:hover),
+  body.dark .tektite-menu-popup button:not(.current-item):not(:hover),
   body.dark .bare-popup button:not(.current-item):not(:hover) {
     background-color: transparent;
   }
 }
 @media (hover: none) {
-  body.dark .menu-popup a:not(.current-item),
+  body.dark .tektite-menu-popup a:not(.current-item),
   body.dark .bare-popup a:not(.current-item),
-  body.dark .menu-popup button:not(.current-item),
+  body.dark .tektite-menu-popup button:not(.current-item),
   body.dark .bare-popup button:not(.current-item) {
     background-color: transparent;
   }
 }
-body.dark .menu-popup a > .label + .value,
+body.dark .tektite-menu-popup a > .label + .value,
 body.dark .bare-popup a > .label + .value,
-body.dark .menu-popup button > .label + .value,
+body.dark .tektite-menu-popup button > .label + .value,
 body.dark .bare-popup button > .label + .value {
   margin-left: 0.5rem;
   text-align: right;
   flex-grow: 1;
 }
-body.dark .menu-popup a:not(.current-item):not(:hover) > .label + .value,
+body.dark .tektite-menu-popup a:not(.current-item):not(:hover) > .label + .value,
 body.dark .bare-popup a:not(.current-item):not(:hover) > .label + .value,
-body.dark .menu-popup button:not(.current-item):not(:hover) > .label + .value,
+body.dark .tektite-menu-popup button:not(.current-item):not(:hover) > .label + .value,
 body.dark .bare-popup button:not(.current-item):not(:hover) > .label + .value {
   color: #888;
 }
-body.dark .menu-popup a button,
+body.dark .tektite-menu-popup a button,
 body.dark .bare-popup a button {
   width: 100%;
 }
@@ -4430,11 +4430,11 @@ body.dark .button-line {
 body.dark .button-line button + .menu-button {
   margin-left: -1rem;
 }
-body.dark .button-line .menu-popup {
+body.dark .button-line .tektite-menu-popup {
   right: 4px;
 }
 @media (min-width: 640px) {
-  body.dark .button-line .menu-popup {
+  body.dark .button-line .tektite-menu-popup {
     right: calc(50vw - 330px);
   }
 }
@@ -7316,12 +7316,12 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                     };
                                     popup = tektite_index_3.Tektite.$make(HTMLDivElement)({
                                         tag: "div",
-                                        className: "menu-popup tektite-segment-popup",
+                                        className: "tektite-menu-popup tektite-segment-popup",
                                         children: "function" !== typeof item.menu ? item.menu : [],
                                         onclick: function (event) { return __awaiter(_this, void 0, void 0, function () {
                                             return __generator(this, function (_a) {
                                                 event.stopPropagation();
-                                                console.log("menu-popup.click!");
+                                                console.log("tektite-menu-popup.click!");
                                                 cover === null || cover === void 0 ? void 0 : cover.close();
                                                 close();
                                                 return [2 /*return*/];
@@ -7414,12 +7414,12 @@ define("clockworks/tektite.js/script/tektite-menu", ["require", "exports", "cloc
                                 };
                                 popup = $make(HTMLDivElement)({
                                     tag: "div",
-                                    className: "menu-popup",
+                                    className: "tektite-menu-popup",
                                     children: "function" !== typeof menu ? menu : [],
                                     onclick: function (event) { return __awaiter(_this, void 0, void 0, function () {
                                         return __generator(this, function (_a) {
                                             event.stopPropagation();
-                                            console.log("menu-popup.click!");
+                                            console.log("tektite-menu-popup.click!");
                                             cover === null || cover === void 0 ? void 0 : cover.close();
                                             close();
                                             return [2 /*return*/];
@@ -13218,7 +13218,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             var maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
             var FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
             var border = FontRemUnit * 26 + 10;
-            minamo_js_12.minamo.dom.getDivsByClassName(document, "menu-popup").forEach(function (header) {
+            minamo_js_12.minamo.dom.getDivsByClassName(document, "tektite-menu-popup").forEach(function (header) {
                 minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
                 minamo_js_12.minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
             });

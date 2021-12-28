@@ -779,7 +779,7 @@ export module Render
         const maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
         const FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
         const border = FontRemUnit *26 +10;
-        minamo.dom.getDivsByClassName(document, "menu-popup").forEach
+        minamo.dom.getDivsByClassName(document, "tektite-menu-popup").forEach
         (
             header =>
             {

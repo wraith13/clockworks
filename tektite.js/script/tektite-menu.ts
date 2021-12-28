@@ -19,12 +19,12 @@ export module Menu
             const popup = $make(HTMLDivElement)
             ({
                 tag: "div",
-                className: "menu-popup",
+                className: "tektite-menu-popup",
                 children: "function" !== typeof menu ? menu: [ ],
                 onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
-                    console.log("menu-popup.click!");
+                    console.log("tektite-menu-popup.click!");
                     cover?.close();
                     close();
                 },
