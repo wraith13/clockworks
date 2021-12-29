@@ -33,7 +33,7 @@
     .tektite-segment + .tektite-segment,
     .tektite-segment +.tektite-menu-popup + .tektite-segment
     {
-        border-left-color: e(%("%s%s", @base-color, "44")) !important;
+        border-left-color: e(%("%s%s", @tektite-base-color, "44")) !important;
     }
 }
 @keyframes update-progress
@@ -155,7 +155,7 @@ h1, h2
 {
     margin: 0rem;
     .tektite-negative-foreground-coloring-trait;
-    background-color: @accent-color;
+    background-color: @tektite-accent-color;
     text-decoration: none;
 }
 label
@@ -169,7 +169,7 @@ label
     {
         &:hover
         {
-            color: @active-color;
+            color: @tektite-active-color;
         }
     }
 }
@@ -265,7 +265,7 @@ button
         justify-content: stretch;
         flex-direction: column;
     }
-    color: @accent-color;
+    color: @tektite-accent-color;
     .tektite-alpha-positive-background-coloring-trait;
     border-style: solid;
     border-width: 1px;
@@ -381,7 +381,7 @@ button
     border-style: solid;
     border-width: 2px;
     border-radius: 16px;
-    border-color: @accent-color;
+    border-color: @tektite-accent-color;
     .tektite-positive-background-coloring-trait;
     overflow: auto;
     min-width: 240px;
@@ -736,7 +736,7 @@ button
         .item-time-bar
         {
             position: absolute;
-            // background-color: @progress-bar-color;
+            // background-color: @tektite-progress-bar-color;
             left: 0px;
             top: 0px;
             height: 100%;
@@ -843,13 +843,13 @@ button
         {
             svg
             {
-                color: @accent-color;
-                fill: @accent-color;
+                color: @tektite-accent-color;
+                fill: @tektite-accent-color;
             }
         }
         & > .logo-text
         {
-            color: @accent-color;
+            color: @tektite-accent-color;
             // グラデーション
             // background: -webkit-linear-gradient(top, #28D928, #136E13);
             // background-clip: text;
@@ -865,7 +865,7 @@ button
 {
     // header.with-screen-prgress
     // {
-    //     background-color: e(%("%s%s", @main-color, "11"));
+    //     background-color: e(%("%s%s", @tektite-main-color, "11"));
     // }
     .tektite-screen-body
     {

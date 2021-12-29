@@ -158,7 +158,7 @@ export module Tektite
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);
     export const setHeaderColor = (color: string | null) =>
-        minamo.dom.setProperty("#tektite-screen-header", "backgroundColor", color ?? "");
+        minamo.dom.setStyleProperty("#tektite-screen-header", "backgroundColor", color ?? "");
     export const setBodyColor = (color: string) =>
     {
         minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
@@ -172,6 +172,7 @@ export module Tektite
         latestColor = color;
         if (document.body.classList.contains("tektite-style-classic"))
         {
+console.log(`setBackgroundColor: classic! ${color}`);
             setHeaderColor(color);
             setFoundationColor(null);
         }
@@ -198,7 +199,7 @@ export module Tektite
     }
     export const setProgressBarStyle = (progressBarStyle: ProgressBarStyleType) =>
         setStyle("header" !== progressBarStyle ? "modern": "classic");
-    export const getProgressElement = () => document.getElementById("tektite-screen-header").getElementsByClassName("progress-bar")[0] as HTMLDivElement;
+    export const getProgressElement = () => document.getElementById("tektite-screen-header").getElementsByClassName("tektite-progress-bar")[0] as HTMLDivElement;
     export const getScreenBarElement = () => document.getElementsByClassName("tektite-screen-bar")[0] as HTMLDivElement;
     const resetScreenBarProgress = () =>
     {

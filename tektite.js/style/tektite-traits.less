@@ -27,8 +27,8 @@
         &:hover
         {
             opacity: 1.0;
-            color: @active-color;
-            fill: @active-color;
+            color: @tektite-active-color;
+            fill: @tektite-active-color;
             text-decoration: underline;
         }
         &:not(:hover)
@@ -47,21 +47,21 @@
 }
 .tektite-positive-foreground-coloring-trait
 {
-    color: @main-color;
-    fill: @main-color;
+    color: @tektite-main-color;
+    fill: @tektite-main-color;
 }
 .tektite-positive-background-coloring-trait
 {
-    background-color: @base-color;
+    background-color: @tektite-base-color;
 }
 .tektite-alpha-positive-background-coloring-trait
 {
-    background-color: e(%("%s%s", @base-color, "DD"));
+    background-color: e(%("%s%s", @tektite-base-color, "DD"));
 }
 .tektite-negative-foreground-coloring-trait
 {
-    color: @base-color;
-    fill: @base-color;
+    color: @tektite-base-color;
+    fill: @tektite-base-color;
 }
 .tektite-primary-operator-coloring-trait
 {
@@ -71,21 +71,21 @@
     {
         &:not(:hover)
         {
-            border-color: @accent-color;
-            background-color: @accent-color;
+            border-color: @tektite-accent-color;
+            background-color: @tektite-accent-color;
         }
         &:hover
         {
-            border-color: @active-color;
-            background-color: @active-color;
+            border-color: @tektite-active-color;
+            background-color: @tektite-active-color;
         }
     }
     @media (hover: none)
     {
         &
         {
-            border-color: @accent-color;
-            background-color: @accent-color;
+            border-color: @tektite-accent-color;
+            background-color: @tektite-accent-color;
         }
     }
 }
@@ -96,25 +96,25 @@
     {
         &:not(:hover)
         {
-            color: @accent-color;
-            fill: @accent-color;
-            border-color: @accent-color;
+            color: @tektite-accent-color;
+            fill: @tektite-accent-color;
+            border-color: @tektite-accent-color;
             .tektite-positive-background-coloring-trait;
         }
         &:hover
         {
             .tektite-negative-foreground-coloring-trait;
-            border-color: @active-color;
-            background-color: @active-color;
+            border-color: @tektite-active-color;
+            background-color: @tektite-active-color;
         }
     }
     @media (hover: none)
     {
         &
         {
-            color: @accent-color;
-            fill: @accent-color;
-            border-color: @accent-color;
+            color: @tektite-accent-color;
+            fill: @tektite-accent-color;
+            border-color: @tektite-accent-color;
             .tektite-positive-background-coloring-trait;
         }
     }
@@ -126,8 +126,8 @@
     {
         &:hover
         {
-            color: @active-color;
-            fill: @active-color;
+            color: @tektite-active-color;
+            fill: @tektite-active-color;
         }
     }
 }
@@ -138,25 +138,25 @@
     {
         &:not(:hover)
         {
-            color: @delete-color;
-            fill: @delete-color;
-            border-color: @delete-color;
+            color: @tektite-delete-color;
+            fill: @tektite-delete-color;
+            border-color: @tektite-delete-color;
             .tektite-positive-background-coloring-trait;
         }
         &:hover
         {
             .tektite-negative-foreground-coloring-trait;
-            border-color: @delete-color;
-            background-color: @delete-color;
+            border-color: @tektite-delete-color;
+            background-color: @tektite-delete-color;
         }
     }
     @media (hover: none)
     {
         &
         {
-            color: @delete-color;
-            fill: @delete-color;
-            border-color: @delete-color;
+            color: @tektite-delete-color;
+            fill: @tektite-delete-color;
+            border-color: @tektite-delete-color;
             .tektite-positive-background-coloring-trait;
         }
     }

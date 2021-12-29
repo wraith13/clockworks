@@ -31,7 +31,7 @@ export module Header
             .join(" ");
         segmented = async (data: Source<PageParams, IconKeyType>) =>
         [
-            Tektite.$div("progress-bar")([]),
+            Tektite.$div("tektite-progress-bar")([]),
             (
                 await Promise.all
                 (

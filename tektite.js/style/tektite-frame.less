@@ -14,11 +14,11 @@
     left: 0px;
     right: 0px;
     bottom: 0px;
-    filter: drop-shadow(0.0rem -0rem 3rem @accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
+    filter: drop-shadow(0.0rem -0rem 3rem @tektite-accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     .tektite-alpha-positive-background-coloring-trait;
     .item
     {
-        border-top-color: @accent-color;
+        border-top-color: @tektite-accent-color;
         border-top-width: 1px;
         border-top-style: solid;
         padding: 2rem 1.5rem;
@@ -64,7 +64,7 @@
     // justify-content: center;
     justify-content: space-around;
     align-items: center;
-    background-color: @screen-cover-color;
+    background-color: @tektite-screen-cover-color;
     z-index: 88888;
     &.tektite-fade-in
     {
@@ -155,13 +155,13 @@
             {
                 min-width: 2.75rem;
             }
-            &.label-segment
+            &.tektite-label-segment
             {
                 cursor: default;
                 .tektite-negative-foreground-coloring-trait;
-                background-color: @accent-color;
+                background-color: @tektite-accent-color;
             }
-            &:not(.label-segment)
+            &:not(.tektite-label-segment)
             {
                 .tektite-primary-operator-coloring-trait;
             }
@@ -176,7 +176,7 @@
             }
         }
         .tektite-segment:first-child,
-        .progress-bar + .tektite-segment
+        .tektite-progress-bar + .tektite-segment
         {
             padding-left: 1.25rem;
             margin-left: -0.75rem;
@@ -188,7 +188,7 @@
             margin-left: 0rem;
             border-left-style: solid;
             border-left-width: 1px;
-            border-left-color: @base-color !important;
+            border-left-color: @tektite-base-color !important;
             .icon
             {
                 padding: 0.5rem 0.25rem;
@@ -246,10 +246,10 @@
             justify-content: flex-end;
             z-index: 1000;
         }
-        .progress-bar
+        .tektite-progress-bar
         {
             position: absolute;
-            background-color: @progress-bar-color;
+            background-color: @tektite-progress-bar-color;
             left: 0px;
             top: 0px;
             height: 2.5rem;
@@ -261,7 +261,7 @@
         }
         &.update
         {
-            .progress-bar
+            .tektite-progress-bar
             {
                 animation-name: update-progress;
                 animation-direction: normal;
@@ -273,14 +273,14 @@
         }
         &.max-progress
         {
-            .progress-bar
+            .tektite-progress-bar
             {
                 width: 100vw;
             }
         }
         &.obsolescence
         {
-            .progress-bar
+            .tektite-progress-bar
             {
                 left: initial;
                 right: 0px;
@@ -316,7 +316,7 @@
             // padding-bottom: 2.5rem;
             // .default-button
             // {
-            //     border-color: @base-color;
+            //     border-color: @tektite-base-color;
             //     background-color: transparent;
             // }
             .flash-interval
@@ -427,14 +427,14 @@
     {
         header
         {
-            background-color: e(%("%s%s", @main-color, "11"));
-            .tektite-segment:not(.label-segment)
+            background-color: e(%("%s%s", @tektite-main-color, "11"));
+            .tektite-segment:not(.tektite-label-segment)
             {
                 @media (hover: hover)
                 {
                     &:hover
                     {
-                        background-color: e(%("%s%s", @base-color, "11"));
+                        background-color: e(%("%s%s", @tektite-base-color, "11"));
                     }
                 }
             }
@@ -444,7 +444,7 @@
                 {
                     &:hover
                     {
-                        background-color: e(%("%s%s", @base-color, "22"));
+                        background-color: e(%("%s%s", @tektite-base-color, "22"));
                     }
                 }
             }
@@ -457,25 +457,25 @@
                 .tektite-negative-foreground-coloring-trait;
                 button
                 {
-                    color: @base-color;
-                    border-color: @base-color;
+                    color: @tektite-base-color;
+                    border-color: @tektite-base-color;
                     background-color: transparent;
                     @media (hover: hover)
                     {
                         &:hover
                         {
-                            background-color: e(%("%s%s", @base-color, "11"));
+                            background-color: e(%("%s%s", @tektite-base-color, "11"));
                         }
                     }
                     &:not(.default-button)
                     {
-                        border-color: e(%("%s%s", @base-color, "88"));
+                        border-color: e(%("%s%s", @tektite-base-color, "88"));
                         // opacity: 0.5;
                         @media (hover: hover)
                         {
                             &:hover
                             {
-                                border-color: @base-color;
+                                border-color: @tektite-base-color;
                                 // opacity: 1.0;
                             }
                         }
@@ -484,7 +484,7 @@
             }
             .trail-page
             {
-                background-color: e(%("%s%s", @base-color, "BB"));
+                background-color: e(%("%s%s", @tektite-base-color, "BB"));
             }
         }
     }
