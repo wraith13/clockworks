@@ -78,11 +78,7 @@ export module Tektite
                     className: "tektite-screen",
                     children:
                     [
-                        {
-                            tag: "header",
-                            id: "tektite-screen-header",
-                            className: "tektite-segmented",
-                        },
+                        Header.domSource,
                         {
                             tag: "div",
                             id: "tektite-screen-body",
@@ -109,7 +105,6 @@ export module Tektite
         public fullscreen = FullscreenModule;
         public key = KeyModule;
         public screen = Screen.make(this);
-        public header = Header.make(this);
         public menu = Menu.make(this);
         public locale = Locale.make(this);
         public toast = ToastModule;
@@ -150,11 +145,13 @@ export module Tektite
         };
         public escape = () =>
         {
-            const target = this.screen.getScreenCover() ?? this.header.getCloseButton();
+            const target = this.screen.getScreenCover() ?? this.screen.header.getCloseButton();
             target?.click();
             return !! target;
         }
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Tektite(params);
+    export const makePercentString = (percent: number) =>
+        percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
 }

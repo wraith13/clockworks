@@ -1,7 +1,16 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
+import { Screen } from "./tektite-screen";
 export module Header
 {
+    export const elementId = "tektite-screen-header";
+    export const progressBarClassName = "tektite-progress-bar";
+    export const domSource =
+    {
+        tag: "header",
+        id: elementId,
+        className: "tektite-segmented",
+    };
     export interface SegmentSource<PageParams, IconKeyType>
     {
         icon: IconKeyType;
@@ -21,7 +30,40 @@ export module Header
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
-        getElement = () => document.getElementById("tektite-screen-header") as HTMLDivElement;
+        getElement = () => document.getElementById(elementId) as HTMLDivElement;
+        getProgressBarElement = () => this.getElement().getElementsByClassName(progressBarClassName)[0] as HTMLDivElement;
+        public onLoad = (screen: Screen.Screen<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+            this.getElement().addEventListener
+            (
+                'click',
+                async () => await screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0)
+            );
+        public setColor = (color: string | null) =>
+            minamo.dom.setStyleProperty(this.getElement(), "backgroundColor", color ?? "");
+        public resetProgress = () =>
+        {
+            const progressBar = this.getProgressBarElement();
+            minamo.dom.setStyleProperty(progressBar, "width", "0%");
+            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
+        }
+        public setProgress = (percent: null | number, color?: string) =>
+        {
+            if (null !== percent)
+            {
+                const progressBar = this.getProgressBarElement();
+                if (color)
+                {
+                    minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
+                }
+                const percentString = Tektite.makePercentString(percent);
+                minamo.dom.setStyleProperty(progressBar, "width", percentString);
+                minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
+            }
+            else
+            {
+                this.resetProgress();
+            }
+        };
         getLastSegmentClass = (ix: number, items: SegmentSource<PageParams, IconKeyType>[]) =>
             [
                 ix === 0 ? "tektite-first-segment": undefined,
@@ -31,7 +73,7 @@ export module Header
             .join(" ");
         segmented = async (data: Source<PageParams, IconKeyType>) =>
         [
-            Tektite.$div("tektite-progress-bar")([]),
+            Tektite.$div(progressBarClassName)([]),
             (
                 await Promise.all
                 (

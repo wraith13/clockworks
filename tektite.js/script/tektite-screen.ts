@@ -1,5 +1,6 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
+import { Header } from "./tektite-header";
 export module Screen
 {
     const $make = minamo.dom.make;
@@ -21,6 +22,7 @@ export module Screen
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
+        public header = Header.make(this.tektite);
         getElement = () => document.getElementById("tektite-screen") as HTMLDivElement;
         updateWindow: (event: Tektite.UpdateWindowEventEype) => unknown;
         private updateWindowTimer = undefined;
@@ -54,11 +56,7 @@ export module Screen
             window.addEventListener("focus", this.onWindowFocus);
             window.addEventListener("blur", this.onWindowBlur);
             window.addEventListener("storage", this.onUpdateStorage);
-            document.getElementById("tektite-screen-header").addEventListener
-            (
-                'click',
-                async () => await this.scrollToOffset(document.getElementById("tektite-screen-body"), 0)
-            );
+            this.header.onLoad(this);
             document.getElementById("tektite-screen-body").addEventListener
             (
                 "scroll",
@@ -267,7 +265,7 @@ export module Screen
             const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
             await this.scrollToOffset(parent, targetOffsetTop);
         };
-        getBodyScrollTop = (topChild = minamo.dom.getDivsByClassName(document, "primary-page")[0]) =>
+        getBodyScrollTop = (topChild = minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]) =>
         {
             const body = document.getElementById("tektite-screen-body");
             const primaryPageOffsetTop = Math.min(topChild.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
@@ -283,17 +281,17 @@ export module Screen
             {
                 if (this.isStrictShowPrimaryPage())
                 {
-                    await this.scrollToElement(minamo.dom.getDivsByClassName(document, "trail-page")[0]);
+                    await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
                 }
                 else
                 {
-                    await this.scrollToElement(minamo.dom.getDivsByClassName(document, "primary-page")[0]);
+                    await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
                 }
             },
         });
         adjustPageFooterPosition = () =>
         {
-            const primaryPage = document.getElementsByClassName("primary-page")[0];
+            const primaryPage = document.getElementsByClassName("tektite-primary-page")[0];
             if (primaryPage)
             {
                 const body = document.getElementById("tektite-screen-body");
@@ -338,7 +336,7 @@ export module Screen
             }
             this.resetProgress();
             this.setClass(screen.className);
-            this.tektite.header.replace(screen.header);
+            this.header.replace(screen.header);
             await this.replaceBody(screen.body);
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();
@@ -349,7 +347,7 @@ export module Screen
                 await this.makePage((body as Tektite.PageSource).primary, (body as Tektite.PageSource).trail);
         public makePage = async (primary: Tektite.PrimaryPageSource | minamo.dom.Source, trail?: minamo.dom.Source) =>
         [
-            Tektite.$div("primary-page")
+            Tektite.$div("tektite-primary-page")
             ([
                 Tektite.$div("page-body")
                 (
@@ -372,11 +370,9 @@ export module Screen
                 ),
             ]),
             undefined !== trail ?
-                Tektite.$div("trail-page")(trail):
+                Tektite.$div("tektite-trail-page")(trail):
                 [],
         ];
-        public setHeaderColor = (color: string | null) =>
-            minamo.dom.setStyleProperty("#tektite-screen-header", "backgroundColor", color ?? "");
         public setBodyColor = (color: string) =>
         {
             minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
@@ -390,13 +386,13 @@ export module Screen
             this.latestColor = color;
             if (document.body.classList.contains("tektite-style-classic"))
             {
-                this.setHeaderColor(color);
+                this.header.setColor(color);
                 this.setFoundationColor(null);
             }
             if (document.body.classList.contains("tektite-style-modern"))
             {
                 this.setFoundationColor(color);
-                this.setHeaderColor(null);
+                this.header.setColor(null);
             }
         };
         public setStyle = (style: "modern" | "classic") =>
@@ -416,35 +412,28 @@ export module Screen
         }
         public setProgressBarStyle = (progressBarStyle: Tektite.ProgressBarStyleType) =>
             this.setStyle("header" !== progressBarStyle ? "modern": "classic");
-        public getProgressElement = () => document.getElementById("tektite-screen-header").getElementsByClassName("tektite-progress-bar")[0] as HTMLDivElement;
         public getScreenBarElement = () => document.getElementsByClassName("tektite-screen-bar")[0] as HTMLDivElement;
         public resetScreenBarProgress = () =>
         {
             const screenBar = this.getScreenBarElement();
             minamo.dom.setStyleProperty(screenBar, "display", "none");
         }
-        public resetHeaderProgress = () =>
-        {
-            const progressBar = this.getProgressElement();
-            minamo.dom.setStyleProperty(progressBar, "width", "0%");
-            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
-        }
         public resetProgress = () =>
         {
             this.resetScreenBarProgress();
-            this.resetHeaderProgress();
+            this.header.resetProgress();
         }
         public setProgress = (progressBarStyle: Tektite.ProgressBarStyleType, percent: null | number, color?: string) =>
         {
             this.setProgressBarStyle(progressBarStyle);
-            const screenBar = this.getScreenBarElement();
             if (null !== percent && "header" !== progressBarStyle)
             {
+                const screenBar = this.getScreenBarElement();
                 if (color)
                 {
                     minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
                 }
-                const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                const percentString = Tektite.makePercentString(percent);
                 if ((window.innerHeight < window.innerWidth && "vertical" !== progressBarStyle) || "horizontal" === progressBarStyle)
                 {
                     minamo.dom.addCSSClass(screenBar, "horizontal");
@@ -469,20 +458,13 @@ export module Screen
             {
                 this.resetScreenBarProgress();
             }
-            const progressBar = this.getProgressElement();
             if (null !== percent && "header" === progressBarStyle)
             {
-                if (color)
-                {
-                    minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
-                }
-                const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                minamo.dom.setStyleProperty(progressBar, "width", percentString);
-                minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
+                this.header.setProgress(percent, color);
             }
             else
             {
-                this.resetHeaderProgress();
+                this.header.resetProgress();
             }
         };
     }

@@ -510,13 +510,13 @@ export module Render
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
                         RenderBase.setProgress(rate, nextColor);
                         // setBodyColor(nextColor);
-                        tektite.header.getElement().classList.add("with-screen-prgress");
+                        tektite.screen.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         RenderBase.setProgress(null);
-                        tektite.header.getElement().classList.remove("with-screen-prgress");
+                        tektite.screen.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                         tektite.screen.setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
