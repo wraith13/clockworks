@@ -26,7 +26,7 @@ export module Render
         );
     };
     export const updateProgressBarStyle = () =>
-        Tektite.setProgressBarStyle(Storage.Settings.get().progressBarStyle ?? "auto");
+        tektite.screen.setProgressBarStyle(Storage.Settings.get().progressBarStyle ?? "auto");
     export const Operate = RenderOperate;
     export const cancelTextButton = (onCanceled: () => unknown) =>
     ({
@@ -702,7 +702,7 @@ export module Render
                 break;
             }
         };
-        Tektite.setBodyColor(Color.getSolidRainbowColor(0));
+        tektite.screen.setBodyColor(Color.getSolidRainbowColor(0));
         await showWindow(await welcomeScreen(), updateWindow);
         await updateWindow("timer");
     };
@@ -767,12 +767,12 @@ export module Render
     export const showWindow = async (screen: ScreenSource, updateWindow?: (event: Tektite.UpdateWindowEventEype) => unknown) =>
     {
         await tektite.screen.show(screen, updateWindow);
-        Tektite.setBackgroundColor(Color.getSolidRainbowColor(0));
+        tektite.screen.setBackgroundColor(Color.getSolidRainbowColor(0));
         updateTitle();
         resizeFlexList();
     };
     export const setProgress = (percent: null | number, color?: string) =>
-        Tektite.setProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
+        tektite.screen.setProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
     export const resizeFlexList = () =>
     {
         const minColumns = 1 +Math.floor(window.innerWidth / 780);

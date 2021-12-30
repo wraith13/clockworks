@@ -504,7 +504,7 @@ export module Render
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        Tektite.setBackgroundColor(currentColor);
+                        tektite.screen.setBackgroundColor(currentColor);
                         const span = current.end - current.start;
                         const rate = Math.min(tick - current.start, span) /span;
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
@@ -518,7 +518,7 @@ export module Render
                         RenderBase.setProgress(null);
                         tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        Tektite.setBackgroundColor(currentColor);
+                        tektite.screen.setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
@@ -545,12 +545,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = (Math.min(tick - current.start), unit) /unit;
-                        Tektite.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        tektite.screen.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        Tektite.setBodyColor(currentColor);
+                        tektite.screen.setBodyColor(currentColor);
                     }
                     break;
                 case "storage":

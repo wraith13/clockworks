@@ -336,7 +336,7 @@ export module Screen
                     }
                 };
             }
-            Tektite.resetProgress();
+            this.resetProgress();
             this.setClass(screen.className);
             this.tektite.header.replace(screen.header);
             await this.replaceBody(screen.body);
@@ -375,6 +375,116 @@ export module Screen
                 Tektite.$div("trail-page")(trail):
                 [],
         ];
+        public setHeaderColor = (color: string | null) =>
+            minamo.dom.setStyleProperty("#tektite-screen-header", "backgroundColor", color ?? "");
+        public setBodyColor = (color: string) =>
+        {
+            minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
+            minamo.dom.setProperty("#tektite-theme-color", "content", color);
+        };
+        public setFoundationColor = (color: string | null) =>
+                minamo.dom.setStyleProperty("#tektite-foundation", "backgroundColor", color ?? "");
+        latestColor: string | null;
+        public setBackgroundColor = (color: string | null) =>
+        {
+            this.latestColor = color;
+            if (document.body.classList.contains("tektite-style-classic"))
+            {
+                this.setHeaderColor(color);
+                this.setFoundationColor(null);
+            }
+            if (document.body.classList.contains("tektite-style-modern"))
+            {
+                this.setFoundationColor(color);
+                this.setHeaderColor(null);
+            }
+        };
+        public setStyle = (style: "modern" | "classic") =>
+        {
+            if
+            (
+                [
+                    { className: "tektite-style-modern", tottle: "modern" === style, },
+                    { className: "tektite-style-classic", tottle: "classic" === style, },
+                ]
+                .map(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate)
+                .reduce((a, b) => a || b, false)
+            )
+            {
+                this.setBackgroundColor(this.latestColor ?? null);
+            }
+        }
+        public setProgressBarStyle = (progressBarStyle: Tektite.ProgressBarStyleType) =>
+            this.setStyle("header" !== progressBarStyle ? "modern": "classic");
+        public getProgressElement = () => document.getElementById("tektite-screen-header").getElementsByClassName("tektite-progress-bar")[0] as HTMLDivElement;
+        public getScreenBarElement = () => document.getElementsByClassName("tektite-screen-bar")[0] as HTMLDivElement;
+        public resetScreenBarProgress = () =>
+        {
+            const screenBar = this.getScreenBarElement();
+            minamo.dom.setStyleProperty(screenBar, "display", "none");
+        }
+        public resetHeaderProgress = () =>
+        {
+            const progressBar = this.getProgressElement();
+            minamo.dom.setStyleProperty(progressBar, "width", "0%");
+            minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "0px");
+        }
+        public resetProgress = () =>
+        {
+            this.resetScreenBarProgress();
+            this.resetHeaderProgress();
+        }
+        public setProgress = (progressBarStyle: Tektite.ProgressBarStyleType, percent: null | number, color?: string) =>
+        {
+            this.setProgressBarStyle(progressBarStyle);
+            const screenBar = this.getScreenBarElement();
+            if (null !== percent && "header" !== progressBarStyle)
+            {
+                if (color)
+                {
+                    minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
+                }
+                const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                if ((window.innerHeight < window.innerWidth && "vertical" !== progressBarStyle) || "horizontal" === progressBarStyle)
+                {
+                    minamo.dom.addCSSClass(screenBar, "horizontal");
+                    minamo.dom.removeCSSClass(screenBar, "vertical");
+                    minamo.dom.setStyleProperty(screenBar, "height", "initial");
+                    minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
+                    minamo.dom.setStyleProperty(screenBar, "width", percentString);
+                    minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
+                }
+                else
+                {
+                    minamo.dom.addCSSClass(screenBar, "vertical");
+                    minamo.dom.removeCSSClass(screenBar, "horizontal");
+                    minamo.dom.setStyleProperty(screenBar, "width", "initial");
+                    minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
+                    minamo.dom.setStyleProperty(screenBar, "height", percentString);
+                    minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
+                }
+                minamo.dom.setStyleProperty(screenBar, "display", "block");
+            }
+            else
+            {
+                this.resetScreenBarProgress();
+            }
+            const progressBar = this.getProgressElement();
+            if (null !== percent && "header" === progressBarStyle)
+            {
+                if (color)
+                {
+                    minamo.dom.setStyleProperty(progressBar, "backgroundColor", color);
+                }
+                const percentString = percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                minamo.dom.setStyleProperty(progressBar, "width", percentString);
+                minamo.dom.setStyleProperty(progressBar, "borderRightWidth", "1px");
+            }
+            else
+            {
+                this.resetHeaderProgress();
+            }
+        };
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Screen(tektite);

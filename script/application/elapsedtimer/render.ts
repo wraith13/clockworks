@@ -192,7 +192,7 @@ export module Render
                             tektite.screen.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        Tektite.setBackgroundColor(currentColor);
+                        tektite.screen.setBackgroundColor(currentColor);
                         previousPrimaryStep = primaryStep;
                         const rate = ((tick -current.tick) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
@@ -206,7 +206,7 @@ export module Render
                         RenderBase.setProgress(null);
                         tektite.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(0);
-                        Tektite.setBackgroundColor(currentColor);
+                        tektite.screen.setBackgroundColor(currentColor);
                         // setBodyColor(currentColor);
                     }
                     break;
@@ -233,12 +233,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = ((Domain.getTicks() -current.tick) %unit) /unit;
-                        Tektite.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        tektite.screen.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(0);
-                        Tektite.setBodyColor(currentColor);
+                        tektite.screen.setBodyColor(currentColor);
                     }
                     break;
                 case "storage":
