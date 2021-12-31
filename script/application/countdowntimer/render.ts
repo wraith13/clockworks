@@ -509,17 +509,13 @@ export module Render
                         const rate = Math.min(tick - current.start, span) /span;
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
                         RenderBase.setProgress(rate, nextColor);
-                        // setBodyColor(nextColor);
-                        tektite.screen.header.getElement().classList.add("with-screen-prgress");
                     }
                     else
                     {
                         previousPrimaryStep = 0;
                         RenderBase.setProgress(null);
-                        tektite.screen.header.getElement().classList.remove("with-screen-prgress");
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
                         tektite.screen.setBackgroundColor(currentColor);
-                        // setBodyColor(currentColor);
                     }
                     break;
                 case "timer":

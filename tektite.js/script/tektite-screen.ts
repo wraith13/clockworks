@@ -466,6 +466,7 @@ export module Screen
             {
                 this.header.resetProgress();
             }
+            // minamo.dom.toggleCSSClass(this.header.getElement(), "with-screen-prgress", null !== percent);
         };
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
