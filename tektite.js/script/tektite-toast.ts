@@ -53,7 +53,7 @@ export module Toast
                 // if (document.getElementById("tektite-screen-toast").getElementsByClassName("item").length <= 0)
                 // {
                 //     await minamo.core.timeout(10);
-                //     updateWindow("operate");
+                //     tektite.screen.update("operate");
                 // }
             }
         };

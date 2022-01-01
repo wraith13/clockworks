@@ -168,7 +168,7 @@ export module Render
         const applicationTitle = Type.applicationList["ElapsedTimer"].title;
         document.body.classList.add("tektite-hide-scroll-bar");
         let events = Storage.ElapsedTimer.Events.get();
-        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
+        const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
             const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
@@ -189,10 +189,10 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            tektite.screen.flash();
+                            tektite.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        tektite.screen.setBackgroundColor(currentColor);
+                        tektite.setBackgroundColor(currentColor);
                         previousPrimaryStep = primaryStep;
                         const rate = ((tick -current.tick) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
@@ -203,7 +203,7 @@ export module Render
                         previousPrimaryStep = 0;
                         RenderBase.setProgress(null);
                         const currentColor = Color.getSolidRainbowColor(0);
-                        tektite.screen.setBackgroundColor(currentColor);
+                        tektite.setBackgroundColor(currentColor);
                     }
                     break;
                 case "timer":
@@ -229,12 +229,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = ((Domain.getTicks() -current.tick) %unit) /unit;
-                        tektite.screen.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        tektite.setWindowColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(0);
-                        tektite.screen.setBodyColor(currentColor);
+                        tektite.setWindowColor(currentColor);
                     }
                     break;
                 case "storage":
@@ -245,13 +245,13 @@ export module Render
                     events = Storage.ElapsedTimer.Events.get();
                     await tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
                     RenderBase.resizeFlexList();
-                    await updateWindow("timer");
+                    await updateScreen("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };
-        await RenderBase.showWindow(await elapsedTimerScreen(item, events), updateWindow);
-        await updateWindow("timer");
+        await RenderBase.showScreen(await elapsedTimerScreen(item, events), updateScreen);
+        await updateScreen("timer");
     };
 }

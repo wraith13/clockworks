@@ -214,7 +214,7 @@ export module Render
         const applicationTitle = Type.applicationList["NeverStopwatch"].title;
         document.body.classList.add("tektite-hide-scroll-bar");
         let ticks = Storage.NeverStopwatch.Stamps.get();
-        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
+        const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
             const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
@@ -235,10 +235,10 @@ export module Render
                         const primaryStep = Math.floor(elapsed / unit);
                         if (primaryStep === previousPrimaryStep +1 && (elapsed % unit) < 5 *1000)
                         {
-                            tektite.screen.flash();
+                            tektite.flash();
                         }
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
-                        tektite.screen.setBackgroundColor(currentColor);
+                        tektite.setBackgroundColor(currentColor);
                         previousPrimaryStep = primaryStep;
                         const rate = ((Domain.getTicks() -current) %unit) /unit;
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
@@ -249,7 +249,7 @@ export module Render
                         previousPrimaryStep = 0;
                         RenderBase.setProgress(null);
                         const currentColor = Color.getSolidRainbowColor(0);
-                        tektite.screen.setBackgroundColor(currentColor);
+                        tektite.setBackgroundColor(currentColor);
                     }
                     break;
                 case "timer":
@@ -274,12 +274,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = ((Domain.getTicks() -current) %unit) /unit;
-                        tektite.screen.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        tektite.setWindowColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(0);
-                        tektite.screen.setBodyColor(currentColor);
+                        tektite.setWindowColor(currentColor);
                     }
                     break;
                 case "storage":
@@ -291,11 +291,11 @@ export module Render
                     await tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
                     RenderBase.resizeFlexList();
                     tektite.screen.adjustPageFooterPosition();
-                    await updateWindow("timer");
+                    await updateScreen("timer");
                     break;
             }
         };
-        await RenderBase.showWindow(await neverStopwatchScreen(item, ticks), updateWindow);
-        await updateWindow("timer");
+        await RenderBase.showScreen(await neverStopwatchScreen(item, ticks), updateScreen);
+        await updateScreen("timer");
     };
 }

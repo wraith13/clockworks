@@ -26,7 +26,7 @@ export module Render
         );
     };
     export const updateProgressBarStyle = () =>
-        tektite.screen.setProgressBarStyle(Storage.Settings.get().progressBarStyle ?? "auto");
+        tektite.setProgressBarStyle(Storage.Settings.get().progressBarStyle ?? "auto");
     export const Operate = RenderOperate;
     export const cancelTextButton = (onCanceled: () => unknown) =>
     ({
@@ -688,7 +688,7 @@ export module Render
     export const showWelcomeScreen = async () =>
     {
         document.body.classList.remove("tektite-hide-scroll-bar");
-        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
+        const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
             switch(event)
             {
@@ -702,9 +702,9 @@ export module Render
                 break;
             }
         };
-        tektite.screen.setBodyColor(Color.getSolidRainbowColor(0));
-        await showWindow(await welcomeScreen(), updateWindow);
-        await updateWindow("timer");
+        tektite.setWindowColor(Color.getSolidRainbowColor(0));
+        await showScreen(await welcomeScreen(), updateScreen);
+        await updateScreen("timer");
     };
     export const flashIntervalLabel = async (entry: HeaderSegmentSource) =>
     ({
@@ -764,15 +764,15 @@ export module Render
             ?.join(" / ")
             ?? config.applicationTitle;
     };
-    export const showWindow = async (screen: ScreenSource, updateWindow?: (event: Tektite.UpdateWindowEventEype) => unknown) =>
+    export const showScreen = async (screen: ScreenSource, updateScreen?: (event: Tektite.UpdateScreenEventEype) => unknown) =>
     {
-        await tektite.screen.show(screen, updateWindow);
-        tektite.screen.setBackgroundColor(Color.getSolidRainbowColor(0));
+        await tektite.screen.show(screen, updateScreen);
+        tektite.setBackgroundColor(Color.getSolidRainbowColor(0));
         updateTitle();
         resizeFlexList();
     };
     export const setProgress = (percent: null | number, color?: string) =>
-        tektite.screen.setProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
+        tektite.setProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
     export const resizeFlexList = () =>
     {
         const minColumns = 1 +Math.floor(window.innerWidth / 780);

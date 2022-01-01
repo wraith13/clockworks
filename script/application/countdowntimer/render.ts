@@ -468,7 +468,7 @@ export module Render
         document.body.classList.add("tektite-hide-scroll-bar");
         let alarms = Storage.CountdownTimer.Alarms.get();
         let lashFlashAt = 0;
-        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
+        const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
             const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
@@ -492,7 +492,7 @@ export module Render
                             const primaryStep = 0 < unit ? Math.floor(rest / unit): 0;
                             if ((primaryStep +1 === previousPrimaryStep && -5 *1000 < (rest % unit) && 500 < tick -current.start))
                             {
-                                tektite.screen.flash();
+                                tektite.flash();
                                 lashFlashAt = tick;
                             }
                             previousPrimaryStep = primaryStep;
@@ -500,11 +500,11 @@ export module Render
                         const cycle = "timer" === current.type ? 3000: 10000;
                         if (rest <= 0 && lashFlashAt +cycle <= tick)
                         {
-                            tektite.screen.flash();
+                            tektite.flash();
                             lashFlashAt = tick;
                         }
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        tektite.screen.setBackgroundColor(currentColor);
+                        tektite.setBackgroundColor(currentColor);
                         const span = current.end - current.start;
                         const rate = Math.min(tick - current.start, span) /span;
                         const nextColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get() +1);
@@ -515,7 +515,7 @@ export module Render
                         previousPrimaryStep = 0;
                         RenderBase.setProgress(null);
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        tektite.screen.setBackgroundColor(currentColor);
+                        tektite.setBackgroundColor(currentColor);
                     }
                     break;
                 case "timer":
@@ -541,12 +541,12 @@ export module Render
                         const currentColor = Color.getSolidRainbowColor(primaryStep);
                         const nextColor = Color.getSolidRainbowColor(primaryStep +1);
                         const rate = (Math.min(tick - current.start), unit) /unit;
-                        tektite.screen.setBodyColor(Color.mixColors(currentColor, nextColor, rate));
+                        tektite.setWindowColor(Color.mixColors(currentColor, nextColor, rate));
                     }
                     else
                     {
                         const currentColor = Color.getSolidRainbowColor(Storage.CountdownTimer.ColorIndex.get());
-                        tektite.screen.setBodyColor(currentColor);
+                        tektite.setWindowColor(currentColor);
                     }
                     break;
                 case "storage":
@@ -557,13 +557,13 @@ export module Render
                     alarms = Storage.CountdownTimer.Alarms.get();
                     await tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
                     RenderBase.resizeFlexList();
-                    await updateWindow("timer");
+                    await updateScreen("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };
-        await RenderBase.showWindow(await countdownTimerScreen(item, alarms), updateWindow);
-        await updateWindow("timer");
+        await RenderBase.showScreen(await countdownTimerScreen(item, alarms), updateScreen);
+        await updateScreen("timer");
     };
 }

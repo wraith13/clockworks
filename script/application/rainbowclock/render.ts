@@ -271,7 +271,7 @@ export module Render
         const applicationTitle = Type.applicationList["RainbowClock"].title;
         document.body.classList.add("tektite-hide-scroll-bar");
         let timezones = Storage.RainbowClock.Timezone.get();
-        const updateWindow = async (event: Tektite.UpdateWindowEventEype) =>
+        const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
             const screen = document.getElementById("tektite-screen") as HTMLDivElement;
             const now = new Date();
@@ -294,7 +294,7 @@ export module Render
                             {
                                 if (0 === (tick % flashInterval))
                                 {
-                                    tektite.screen.flash();
+                                    tektite.flash();
                                 }
                             }
                         }
@@ -334,12 +334,12 @@ export module Render
                     minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                     const getRainbowColor = Type.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                     const currentColor = getRainbowColor(currentNow.getHours());
-                    tektite.screen.setBackgroundColor(currentColor);
+                    tektite.setBackgroundColor(currentColor);
                     const hourUnit = 60 *60 *1000;
                     const minutes = (tick % hourUnit) / hourUnit;
                     const nextColor = getRainbowColor(currentNow.getHours() +1);
                     RenderBase.setProgress(minutes, nextColor);
-                    tektite.screen.setBodyColor(Color.mixColors(currentColor, nextColor, minutes));
+                    tektite.setWindowColor(Color.mixColors(currentColor, nextColor, minutes));
                     break;
                 case "storage":
                     await RenderBase.reload();
@@ -348,13 +348,13 @@ export module Render
                     timezones = Storage.RainbowClock.Timezone.get();
                     await tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
                     RenderBase.resizeFlexList();
-                    await updateWindow("timer");
+                    await updateScreen("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }
         };
-        await RenderBase.showWindow(await rainbowClockScreen(item, timezones), updateWindow);
-        await updateWindow("timer");
+        await RenderBase.showScreen(await rainbowClockScreen(item, timezones), updateScreen);
+        await updateScreen("timer");
     };
 }
