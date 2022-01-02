@@ -32,7 +32,7 @@ export module Menu
             const button = $make(HTMLButtonElement)
             ({
                 tag: "button",
-                className: "menu-button",
+                className: "tektite-menu-button",
                 children:
                 [
                     await this.tektite.loadSvgOrCache("tektite-ellipsis-icon"),
@@ -40,7 +40,7 @@ export module Menu
                 onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
-                    console.log("menu-button.click!");
+                    console.log("tektite-menu-button.click!");
                     if ("function" === typeof menu)
                     {
                         minamo.dom.replaceChildren(popup, await menu());

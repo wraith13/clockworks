@@ -161,7 +161,7 @@ export module Render
     export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
         await tektite.screen.popup<boolean>
         (
-            async instance =>
+            async (instance: Tektite.PopupInstance<boolean>) =>
             {
                 const init = settings.theme ?? "auto";
                 const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
@@ -214,7 +214,7 @@ export module Render
     export const progressBarStyleSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
         await tektite.screen.popup<boolean>
         (
-            async instance =>
+            async (instance: Tektite.PopupInstance<boolean>) =>
             {
                 const init = settings.progressBarStyle ?? "auto";
                 let selected = init;
@@ -266,7 +266,7 @@ export module Render
     export const localeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
         await tektite.screen.popup<boolean>
         (
-            async instance =>
+            async (instance: Tektite.PopupInstance<boolean>) =>
             {
                 const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
@@ -336,7 +336,7 @@ export module Render
     export const colorSettingsPopup = async (settings = Storage.RainbowClock.colorPattern.get()): Promise<boolean> =>
         await tektite.screen.popup<boolean>
         (
-            async instance =>
+            async (instance: Tektite.PopupInstance<boolean>) =>
             {
                 const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
@@ -428,13 +428,13 @@ export module Render
     export const sharePopup = async (title: string, url: string = location.href) =>
         await tektite.screen.popup<unknown>
         (
-            async instance =>
+            async (instance: Tektite.PopupInstance<unknown>) =>
             ({
                 // className: "add-remove-tags-popup",
                 children:
                 [
                     popupTitle(Tektite.$labelSpan("シェア / Share")),
-                    Tektite.$div("menu-button-list")
+                    Tektite.$div("tektite-menu-button-list")
                     ([
                         {
                             tag: "button",

@@ -99,7 +99,7 @@ export module Header
                     onclick: (event: MouseEvent) =>
                     {
                         event.stopPropagation();
-                        // if ("" !== getFilterText() || getHeaderElement().classList.contains("header-operator-has-focus"))
+                        // if ("" !== getFilterText() || getHeaderElement().classList.contains("tektite-header-operator-has-focus"))
                         // {
                         //     setFilterText("");
                         //     blurFilterInputElement();
@@ -112,12 +112,12 @@ export module Header
                 }:
                 [],
             data.menu ? await this.tektite.menu.button(data.menu): [],
-            data.operator ? Tektite.$div("header-operator")(data.operator): [],
+            data.operator ? Tektite.$div("tektite-header-operator")(data.operator): [],
         ];
         getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "tektite-close-button")[0];
         segmentCore = async (item: SegmentSource<PageParams, IconKeyType>) =>
         [
-            Tektite.$div("icon")(await this.tektite.params.loadSvgOrCache(item.icon)),
+            Tektite.$div("tektite-icon")(await this.tektite.params.loadSvgOrCache(item.icon)),
             Tektite.$div("tektite-segment-title")(item.title),
         ];
         labelSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") =>
@@ -157,7 +157,7 @@ export module Header
                 onclick: async (event: MouseEvent) =>
                 {
                     event.stopPropagation();
-                    console.log("menu-button.click!");
+                    console.log("tektite-menu-button.click!");
                     if ("function" === typeof item.menu)
                     {
                         minamo.dom.replaceChildren(popup, await item.menu());

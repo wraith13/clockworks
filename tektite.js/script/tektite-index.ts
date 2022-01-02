@@ -56,6 +56,19 @@ export module Tektite
         localeMaster: LocaleMapType;
         timer?: { resolution?: number, highResolution?: number, };
     }
+    export interface PopupInstance<ResultType>
+    {
+        set: (result: ResultType) => PopupInstance<ResultType>;
+        close: () => PopupInstance<ResultType>;
+        getDom: () => HTMLDivElement;
+    }
+    export interface PopupArguments<ResultType>
+    {
+        initialValue?: ResultType;
+        className?: string;
+        children: minamo.dom.Source;
+        onClose?: () => Promise<unknown>;
+    }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -118,7 +131,7 @@ export module Tektite
             minamo.dom.setProperty("#tektite-theme-color", "content", color);
         };
         public setFoundationColor = (color: string | null) =>
-                minamo.dom.setStyleProperty("#tektite-foundation", "backgroundColor", color ?? "");
+            minamo.dom.setStyleProperty("#tektite-foundation", "backgroundColor", color ?? "");
         latestColor: string | null;
         public setBackgroundColor = (color: string | null) =>
         {

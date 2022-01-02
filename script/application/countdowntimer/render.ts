@@ -196,7 +196,7 @@ export module Render
     export const newTimerPopup = async (): Promise<boolean> =>
         await tektite.screen.popup<boolean>
         (
-            async instance =>
+            async (instance: Tektite.PopupInstance<boolean>) =>
             {
                 const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
                 const timerPreset = Domain.getTimerPreset()

@@ -4,19 +4,6 @@ import { Header } from "./tektite-header";
 export module Screen
 {
     const $make = minamo.dom.make;
-    export interface PopupInstance<ResultType>
-    {
-        set: (result: ResultType) => PopupInstance<ResultType>;
-        close: () => PopupInstance<ResultType>;
-        getDom: () => HTMLDivElement;
-    }
-    export interface PopupArguments<ResultType>
-    {
-        initialValue?: ResultType;
-        className?: string;
-        children: minamo.dom.Source;
-        onClose?: () => Promise<unknown>;
-    }
     export class Screen<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -111,7 +98,7 @@ export module Screen
         //     };
         //     return result;
         // };
-        public popup = async <ResultType>(builder: PopupArguments<ResultType> | ((instance: PopupInstance<ResultType>) => Promise<PopupArguments<ResultType>>)) => await new Promise<ResultType>
+        public popup = async <ResultType>(builder: Tektite.PopupArguments<ResultType> | ((instance: Tektite.PopupInstance<ResultType>) => Promise<Tektite.PopupArguments<ResultType>>)) => await new Promise<ResultType>
         (
             async resolve =>
             {
