@@ -47,16 +47,16 @@
         width: 100vw;
     }
 }
-.slide-up-in
+.tektite-slide-up-in
 {
-    animation-name: slide-up-in;
+    animation-name: tektite-slide-up-in;
     animation-direction: normal;
     animation-delay: 0s;
     animation-duration: 0.25s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: both;
 }
-@keyframes slide-up-in
+@keyframes tektite-slide-up-in
 {
     0%
     {
@@ -73,9 +73,9 @@
         padding-bottom: 2rem;
     }
 }
-.slide-down-out
+.tektite-slide-down-out
 {
-    animation-name: slide-down-out;
+    animation-name: tektite-slide-down-out;
     animation-direction: normal;
     animation-delay: 0s;
     animation-duration: 0.25s;
@@ -83,12 +83,12 @@
     animation-fill-mode: both;
     overflow-y: hidden;
 }
-.slow-slide-down-out
+.tektite-slow-slide-down-out
 {
-    .slide-down-out;
+    .tektite-slide-down-out;
     animation-duration: 0.5s;
 }
-@keyframes slide-down-out
+@keyframes tektite-slide-down-out
 {
     0%
     {
@@ -188,7 +188,7 @@ select
 button
 {
     .tektite-secondary-operator-coloring-trait;
-    &.default-button
+    &.tektite-default-button
     {
         .tektite-primary-operator-coloring-trait;
     }
@@ -399,7 +399,7 @@ button
             float: left;
             border-color: transparent;
         }
-        .default-button
+        .tektite-default-button
         {
             float: right;
             min-width: 120px;
@@ -908,7 +908,7 @@ button
     // }
     .tektite-screen-body
     {
-        .main-panel
+        .tektite-main-panel
         {
             // z-index: 100;
             .capital-time

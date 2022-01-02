@@ -105,7 +105,7 @@ export module Render
                     },
                     {
                         tag: "button",
-                        className: "default-button",
+                        className: "tektite-default-button",
                         children: Clockworks.localeMap("OK"),
                         onclick: async () => instance.set(await data.onCommit()).close(),
                     },
@@ -140,7 +140,7 @@ export module Render
     //                 },
     //                 {
     //                     tag: "button",
-    //                     className: "default-button",
+    //                     className: "tektite-default-button",
     //                     children: Clockworks.localeMap("OK"),
     //                     onclick: async () => instance.close(await data.onCommit()),
     //                 },
@@ -152,7 +152,7 @@ export module Render
     export const closeButton = (onclick?: () => unknown) =>
     ({
         tag: "button",
-        className: "default-button",
+        className: "tektite-default-button",
         children: label("Close"),
         onclick,
     });
@@ -668,7 +668,7 @@ export module Render
                             children:
                             {
                                 tag: "button",
-                                className: "default-button main-button long-button",
+                                className: "tektite-default-button main-button long-button",
                                 children: Tektite.$labelSpan(Type.applicationList[i].title),
                                 // onclick: async () => await showNeverStopwatchScreen(),
                             }
@@ -709,7 +709,7 @@ export module Render
     export const flashIntervalLabel = async (entry: HeaderSegmentSource) =>
     ({
         tag: "div",
-        className: "flash-interval",
+        className: "tektite-flash-interval",
         children:
         [
             await Resource.loadSvgOrCache(entry.icon),
@@ -899,7 +899,7 @@ export module Render
                 case "Enter":
                     minamo.dom.getElementsByClassName<HTMLDivElement>(document, "popup")
                         .filter((_i, ix, list) => (ix +1) === list.length)
-                        .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "default-button")?.[0]?.click());
+                        .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "tektite-default-button")?.[0]?.click());
                     break;
                 case "Escape":
                     if (tektite.escape())

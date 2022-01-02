@@ -188,8 +188,8 @@ export module Tektite
                 const percentString = makePercentString(percent);
                 if ((window.innerHeight < window.innerWidth && "vertical" !== progressBarStyle) || "horizontal" === progressBarStyle)
                 {
-                    minamo.dom.addCSSClass(screenBar, "horizontal");
-                    minamo.dom.removeCSSClass(screenBar, "vertical");
+                    minamo.dom.addCSSClass(screenBar, "tektite-horizontal");
+                    minamo.dom.removeCSSClass(screenBar, "tektite-vertical");
                     minamo.dom.setStyleProperty(screenBar, "height", "initial");
                     minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
                     minamo.dom.setStyleProperty(screenBar, "width", percentString);
@@ -197,8 +197,8 @@ export module Tektite
                 }
                 else
                 {
-                    minamo.dom.addCSSClass(screenBar, "vertical");
-                    minamo.dom.removeCSSClass(screenBar, "horizontal");
+                    minamo.dom.addCSSClass(screenBar, "tektite-vertical");
+                    minamo.dom.removeCSSClass(screenBar, "tektite-horizontal");
                     minamo.dom.setStyleProperty(screenBar, "width", "initial");
                     minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
                     minamo.dom.setStyleProperty(screenBar, "height", percentString);

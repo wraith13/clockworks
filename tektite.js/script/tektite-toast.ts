@@ -23,7 +23,7 @@ export module Toast
         const dom = Tektite.$make(HTMLDivElement)
         ({
             tag: "div",
-            className: "item slide-up-in",
+            className: "tektite-item tektite-slide-up-in",
             children: data.isWideContent ?
             [
                 data.backwardOperator,
@@ -31,9 +31,9 @@ export module Toast
                 data.forwardOperator,
             ].filter(i => undefined !== i):
             [
-                data.backwardOperator ?? Tektite.$span("dummy")([]),
+                data.backwardOperator ?? Tektite.$span("tektite-dummy")([]),
                 data.content,
-                data.forwardOperator ?? Tektite.$span("dummy")([]),
+                data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
             ],
         });
         const hideRaw = async (className: string, wait: number) =>
@@ -45,7 +45,7 @@ export module Toast
             }
             if (dom.parentElement)
             {
-                dom.classList.remove("slide-up-in");
+                dom.classList.remove("tektite-slide-up-in");
                 dom.classList.add(className);
                 await minamo.core.timeout(wait);
                 minamo.dom.remove(dom);
@@ -61,11 +61,11 @@ export module Toast
         const result =
         {
             dom,
-            timer: 0 < wait ? setTimeout(() => hideRaw("slow-slide-down-out", 500), wait): null,
-            hide: async () => await hideRaw("slide-down-out", 250),
+            timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
+            hide: async () => await hideRaw("tektite-slide-down-out", 250),
         };
         document.getElementById("tektite-screen-toast").appendChild(dom);
-        setTimeout(() => dom.classList.remove("slide-up-in"), 250);
+        setTimeout(() => dom.classList.remove("tektite-slide-up-in"), 250);
         return result;
     };
     let latestPrimaryToast: Type;

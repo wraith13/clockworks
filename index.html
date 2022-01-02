@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Sun Jan 02 2022 17:24:32 GMT+0900 (日本標準時)
+    build at: Mon Jan 03 2022 01:52:24 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -373,7 +373,7 @@ body.light #tektite-screen-toast {
   filter: drop-shadow(0rem 0rem 3rem #5F42A7);
   background-color: #FFFFFFDD;
 }
-body.light #tektite-screen-toast .item {
+body.light #tektite-screen-toast .tektite-item {
   border-top-color: #5F42A7;
   border-top-width: 1px;
   border-top-style: solid;
@@ -383,23 +383,23 @@ body.light #tektite-screen-toast .item {
   justify-content: stretch;
   align-items: center;
 }
-body.light #tektite-screen-toast .item > button:first-child,
-body.light #tektite-screen-toast .item > div:first-child,
-body.light #tektite-screen-toast .item > span:first-child {
+body.light #tektite-screen-toast .tektite-item > button:first-child,
+body.light #tektite-screen-toast .tektite-item > div:first-child,
+body.light #tektite-screen-toast .tektite-item > span:first-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: left;
 }
-body.light #tektite-screen-toast .item > button:not(:first-child):not(:last-child),
-body.light #tektite-screen-toast .item > div:not(:first-child):not(:last-child),
-body.light #tektite-screen-toast .item > span:not(:first-child):not(:last-child) {
+body.light #tektite-screen-toast .tektite-item > button:not(:first-child):not(:last-child),
+body.light #tektite-screen-toast .tektite-item > div:not(:first-child):not(:last-child),
+body.light #tektite-screen-toast .tektite-item > span:not(:first-child):not(:last-child) {
   min-width: calc(100% / 2);
   max-width: calc(100% / 2);
   text-align: center;
 }
-body.light #tektite-screen-toast .item > button:last-child,
-body.light #tektite-screen-toast .item > div:last-child,
-body.light #tektite-screen-toast .item > span:last-child {
+body.light #tektite-screen-toast .tektite-item > button:last-child,
+body.light #tektite-screen-toast .tektite-item > div:last-child,
+body.light #tektite-screen-toast .tektite-item > span:last-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: right;
@@ -663,7 +663,7 @@ body.light .tektite-screen > .tektite-screen-body .tektite-primary-page {
   justify-content: stretch;
   flex-direction: column;
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-interval {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval {
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
@@ -676,16 +676,16 @@ body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-i
   padding: 0.5rem;
 }
 @media (hover: hover) {
-  body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-interval:hover {
+  body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval:hover {
     opacity: 1;
   }
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-interval svg {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-body {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-body {
   position: relative;
   display: flex;
   align-items: center;
@@ -693,7 +693,7 @@ body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-bo
   flex-direction: column;
   flex-grow: 9;
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer {
   flex-grow: 0;
   padding-bottom: 0.5rem;
   display: flex;
@@ -701,20 +701,20 @@ body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-fo
   justify-content: center;
   flex-direction: row;
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link {
   cursor: pointer;
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link.icon {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon {
   opacity: 0.2;
   width: 2rem;
   height: 2rem;
 }
 @media (hover: hover) {
-  body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link.icon:hover {
+  body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon:hover {
     opacity: 1;
   }
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link:not(.tektite-reverse-down-page-link).tektite-icon {
   transform: scale(1, -1);
 }
 body.light .tektite-screen .tektite-screen-bar {
@@ -726,13 +726,13 @@ body.light .tektite-screen .tektite-screen-bar {
   box-sizing: border-box;
   overflow: hidden;
 }
-body.light .tektite-screen .tektite-screen-bar.horizontal {
+body.light .tektite-screen .tektite-screen-bar.tektite-horizontal {
   top: 0px;
   bottom: 0px;
   left: 0px;
   border-right-width: 1px;
 }
-body.light .tektite-screen .tektite-screen-bar.vertical {
+body.light .tektite-screen .tektite-screen-bar.tektite-vertical {
   top: 0px;
   left: 0px;
   right: 0px;
@@ -772,18 +772,18 @@ body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-pr
     background-color: #FFFFFF11;
   }
 }
-body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.default-button) {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button) {
   border-color: #FFFFFF88;
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.default-button):hover {
+  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button):hover {
     border-color: #FFFFFF;
   }
 }
 body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-trail-page {
   background-color: #FFFFFFBB;
 }
-body.light.tektite-style-modern.flash .tektite-screen-bar .tektite-screen-bar-flash-layer {
+body.light.tektite-style-modern.tektite-flash .tektite-screen-bar .tektite-screen-bar-flash-layer {
   position: fixed;
   top: 0px;
   right: 0px;
@@ -1334,15 +1334,15 @@ body.light.tektite-style-modern .tektite-segment + .tektite-menu-popup + .tektit
     width: 100vw;
   }
 }
-body.light .slide-up-in {
-  animation-name: slide-up-in;
+body.light .tektite-slide-up-in {
+  animation-name: tektite-slide-up-in;
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 0.25s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-@keyframes slide-up-in {
+@keyframes tektite-slide-up-in {
   0% {
     opacity: 0;
     max-height: 0px;
@@ -1356,8 +1356,8 @@ body.light .slide-up-in {
     padding-bottom: 2rem;
   }
 }
-body.light .slide-down-out {
-  animation-name: slide-down-out;
+body.light .tektite-slide-down-out {
+  animation-name: tektite-slide-down-out;
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 0.25s;
@@ -1365,8 +1365,8 @@ body.light .slide-down-out {
   animation-fill-mode: both;
   overflow-y: hidden;
 }
-body.light .slow-slide-down-out {
-  animation-name: slide-down-out;
+body.light .tektite-slow-slide-down-out {
+  animation-name: tektite-slide-down-out;
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 0.25s;
@@ -1375,7 +1375,7 @@ body.light .slow-slide-down-out {
   overflow-y: hidden;
   animation-duration: 0.5s;
 }
-@keyframes slide-down-out {
+@keyframes tektite-slide-down-out {
   0% {
     opacity: 1;
     max-height: 6rem;
@@ -1501,23 +1501,23 @@ body.light button {
     background-color: #FFFFFF;
   }
 }
-body.light button.default-button {
+body.light button.tektite-default-button {
   cursor: pointer;
   color: #FFFFFF;
   fill: #FFFFFF;
 }
 @media (hover: hover) {
-  body.light button.default-button:not(:hover) {
+  body.light button.tektite-default-button:not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.light button.default-button:hover {
+  body.light button.tektite-default-button:hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.light button.default-button {
+  body.light button.tektite-default-button {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
@@ -1760,7 +1760,7 @@ body.light .popup .popup-operator .cancel-button {
   float: left;
   border-color: transparent;
 }
-body.light .popup .popup-operator .default-button {
+body.light .popup .popup-operator .tektite-default-button {
   float: right;
   min-width: 120px;
 }
@@ -2468,162 +2468,162 @@ body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value 
     font-size: 1rem;
   }
 }
-body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
   font-size: 15vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: 2rem;
   }
 }
-body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title,
-body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset,
-body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date {
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset,
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date {
   opacity: 0.333;
 }
-body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
   font-size: 6vw;
   line-height: 120%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.light .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: 1rem;
   }
 }
@@ -2992,7 +2992,7 @@ body.dark #tektite-screen-toast {
   filter: drop-shadow(0rem 0rem 3rem #5F42A7);
   background-color: #000022DD;
 }
-body.dark #tektite-screen-toast .item {
+body.dark #tektite-screen-toast .tektite-item {
   border-top-color: #5F42A7;
   border-top-width: 1px;
   border-top-style: solid;
@@ -3002,23 +3002,23 @@ body.dark #tektite-screen-toast .item {
   justify-content: stretch;
   align-items: center;
 }
-body.dark #tektite-screen-toast .item > button:first-child,
-body.dark #tektite-screen-toast .item > div:first-child,
-body.dark #tektite-screen-toast .item > span:first-child {
+body.dark #tektite-screen-toast .tektite-item > button:first-child,
+body.dark #tektite-screen-toast .tektite-item > div:first-child,
+body.dark #tektite-screen-toast .tektite-item > span:first-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: left;
 }
-body.dark #tektite-screen-toast .item > button:not(:first-child):not(:last-child),
-body.dark #tektite-screen-toast .item > div:not(:first-child):not(:last-child),
-body.dark #tektite-screen-toast .item > span:not(:first-child):not(:last-child) {
+body.dark #tektite-screen-toast .tektite-item > button:not(:first-child):not(:last-child),
+body.dark #tektite-screen-toast .tektite-item > div:not(:first-child):not(:last-child),
+body.dark #tektite-screen-toast .tektite-item > span:not(:first-child):not(:last-child) {
   min-width: calc(100% / 2);
   max-width: calc(100% / 2);
   text-align: center;
 }
-body.dark #tektite-screen-toast .item > button:last-child,
-body.dark #tektite-screen-toast .item > div:last-child,
-body.dark #tektite-screen-toast .item > span:last-child {
+body.dark #tektite-screen-toast .tektite-item > button:last-child,
+body.dark #tektite-screen-toast .tektite-item > div:last-child,
+body.dark #tektite-screen-toast .tektite-item > span:last-child {
   min-width: calc(100% / 4);
   max-width: calc(100% / 4);
   text-align: right;
@@ -3282,7 +3282,7 @@ body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page {
   justify-content: stretch;
   flex-direction: column;
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-interval {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval {
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
@@ -3295,16 +3295,16 @@ body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-in
   padding: 0.5rem;
 }
 @media (hover: hover) {
-  body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-interval:hover {
+  body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval:hover {
     opacity: 1;
   }
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .flash-interval svg {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-body {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-body {
   position: relative;
   display: flex;
   align-items: center;
@@ -3312,7 +3312,7 @@ body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-bod
   flex-direction: column;
   flex-grow: 9;
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer {
   flex-grow: 0;
   padding-bottom: 0.5rem;
   display: flex;
@@ -3320,20 +3320,20 @@ body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-foo
   justify-content: center;
   flex-direction: row;
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link {
   cursor: pointer;
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link.icon {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon {
   opacity: 0.2;
   width: 2rem;
   height: 2rem;
 }
 @media (hover: hover) {
-  body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link.icon:hover {
+  body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon:hover {
     opacity: 1;
   }
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .page-footer .down-page-link:not(.reverse-down-page-link).icon {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link:not(.tektite-reverse-down-page-link).tektite-icon {
   transform: scale(1, -1);
 }
 body.dark .tektite-screen .tektite-screen-bar {
@@ -3345,13 +3345,13 @@ body.dark .tektite-screen .tektite-screen-bar {
   box-sizing: border-box;
   overflow: hidden;
 }
-body.dark .tektite-screen .tektite-screen-bar.horizontal {
+body.dark .tektite-screen .tektite-screen-bar.tektite-horizontal {
   top: 0px;
   bottom: 0px;
   left: 0px;
   border-right-width: 1px;
 }
-body.dark .tektite-screen .tektite-screen-bar.vertical {
+body.dark .tektite-screen .tektite-screen-bar.tektite-vertical {
   top: 0px;
   left: 0px;
   right: 0px;
@@ -3391,18 +3391,18 @@ body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-pri
     background-color: #00002211;
   }
 }
-body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.default-button) {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button) {
   border-color: #00002288;
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.default-button):hover {
+  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button):hover {
     border-color: #000022;
   }
 }
 body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-trail-page {
   background-color: #000022BB;
 }
-body.dark.tektite-style-modern.flash .tektite-screen-bar .tektite-screen-bar-flash-layer {
+body.dark.tektite-style-modern.tektite-flash .tektite-screen-bar .tektite-screen-bar-flash-layer {
   position: fixed;
   top: 0px;
   right: 0px;
@@ -3953,15 +3953,15 @@ body.dark.tektite-style-modern .tektite-segment + .tektite-menu-popup + .tektite
     width: 100vw;
   }
 }
-body.dark .slide-up-in {
-  animation-name: slide-up-in;
+body.dark .tektite-slide-up-in {
+  animation-name: tektite-slide-up-in;
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 0.25s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
-@keyframes slide-up-in {
+@keyframes tektite-slide-up-in {
   0% {
     opacity: 0;
     max-height: 0px;
@@ -3975,8 +3975,8 @@ body.dark .slide-up-in {
     padding-bottom: 2rem;
   }
 }
-body.dark .slide-down-out {
-  animation-name: slide-down-out;
+body.dark .tektite-slide-down-out {
+  animation-name: tektite-slide-down-out;
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 0.25s;
@@ -3984,8 +3984,8 @@ body.dark .slide-down-out {
   animation-fill-mode: both;
   overflow-y: hidden;
 }
-body.dark .slow-slide-down-out {
-  animation-name: slide-down-out;
+body.dark .tektite-slow-slide-down-out {
+  animation-name: tektite-slide-down-out;
   animation-direction: normal;
   animation-delay: 0s;
   animation-duration: 0.25s;
@@ -3994,7 +3994,7 @@ body.dark .slow-slide-down-out {
   overflow-y: hidden;
   animation-duration: 0.5s;
 }
-@keyframes slide-down-out {
+@keyframes tektite-slide-down-out {
   0% {
     opacity: 1;
     max-height: 6rem;
@@ -4120,23 +4120,23 @@ body.dark button {
     background-color: #000022;
   }
 }
-body.dark button.default-button {
+body.dark button.tektite-default-button {
   cursor: pointer;
   color: #000022;
   fill: #000022;
 }
 @media (hover: hover) {
-  body.dark button.default-button:not(:hover) {
+  body.dark button.tektite-default-button:not(:hover) {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
-  body.dark button.default-button:hover {
+  body.dark button.tektite-default-button:hover {
     border-color: #51A94E;
     background-color: #51A94E;
   }
 }
 @media (hover: none) {
-  body.dark button.default-button {
+  body.dark button.tektite-default-button {
     border-color: #5F42A7;
     background-color: #5F42A7;
   }
@@ -4379,7 +4379,7 @@ body.dark .popup .popup-operator .cancel-button {
   float: left;
   border-color: transparent;
 }
-body.dark .popup .popup-operator .default-button {
+body.dark .popup .popup-operator .tektite-default-button {
   float: right;
   min-width: 120px;
 }
@@ -5087,162 +5087,162 @@ body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
     font-size: 1rem;
   }
 }
-body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
   font-size: 15vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .capital-time .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
     font-size: 2rem;
   }
 }
-body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title,
-body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset,
-body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date {
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset,
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date {
   opacity: 0.333;
 }
-body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
   font-size: 6vw;
   line-height: 120%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-title .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-utc-offset .value,
-  body.dark .rainbow-clock-screen .tektite-screen-body .main-panel .current-date .value {
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-utc-offset .value,
+  body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .current-date .value {
     font-size: 1rem;
   }
 }
@@ -7167,7 +7167,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                             case 0:
                                 _a = {
                                     tag: "div",
-                                    className: "down-page-link icon"
+                                    className: "tektite-down-page-link tektite-icon"
                                 };
                                 return [4 /*yield*/, this.tektite.loadSvgOrCache("tektite-down-triangle-icon")];
                             case 1: return [2 /*return*/, (_a.children = _b.sent(),
@@ -7197,15 +7197,15 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                     if (primaryPage) {
                         var body = document.getElementById("tektite-screen-body");
                         var delta_1 = Math.max(primaryPage.clientHeight - (body.clientHeight + _this.getBodyScrollTop()), 0);
-                        index_js_2.minamo.dom.getDivsByClassName(document, "page-footer")
+                        index_js_2.minamo.dom.getDivsByClassName(document, "tektite-page-footer")
                             .forEach(function (i) { return index_js_2.minamo.dom.setStyleProperty(i, "paddingBottom", "calc(1rem + ".concat(delta_1, "px)")); });
-                        // minamo.dom.getDivsByClassName(document, "down-page-link")
+                        // minamo.dom.getDivsByClassName(document, "tektite-down-page-link")
                         //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
                     }
                 };
                 this.adjustDownPageLinkDirection = function () {
-                    return index_js_2.minamo.dom.getDivsByClassName(document, "down-page-link")
-                        .forEach(function (i) { return index_js_2.minamo.dom.toggleCSSClass(i, "reverse-down-page-link", !_this.isStrictShowPrimaryPage()); });
+                    return index_js_2.minamo.dom.getDivsByClassName(document, "tektite-down-page-link")
+                        .forEach(function (i) { return index_js_2.minamo.dom.toggleCSSClass(i, "tektite-reverse-down-page-link", !_this.isStrictShowPrimaryPage()); });
                 };
                 this.setClass = function (className) {
                     if (undefined !== _this.lastScreenName) {
@@ -7273,10 +7273,10 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                         switch (_f.label) {
                             case 0:
                                 _a = tektite_index_2.Tektite.$div("tektite-primary-page");
-                                _b = [tektite_index_2.Tektite.$div("page-body")(tektite_index_2.Tektite.$div("main-panel")(undefined === primary.body ?
+                                _b = [tektite_index_2.Tektite.$div("tektite-page-body")(tektite_index_2.Tektite.$div("tektite-main-panel")(undefined === primary.body ?
                                         primary :
                                         primary.body))];
-                                _c = tektite_index_2.Tektite.$div("page-footer");
+                                _c = tektite_index_2.Tektite.$div("tektite-page-footer");
                                 if (!(undefined !== primary.footer)) return [3 /*break*/, 1];
                                 _d = primary.footer;
                                 return [3 /*break*/, 5];
@@ -7323,7 +7323,7 @@ define("clockworks/tektite.js/script/tektite-toast", ["require", "exports", "clo
             var _a, _b, _c;
             var dom = tektite_index_3.Tektite.$make(HTMLDivElement)({
                 tag: "div",
-                className: "item slide-up-in",
+                className: "tektite-item tektite-slide-up-in",
                 children: data.isWideContent ?
                     [
                         data.backwardOperator,
@@ -7331,9 +7331,9 @@ define("clockworks/tektite.js/script/tektite-toast", ["require", "exports", "clo
                         data.forwardOperator,
                     ].filter(function (i) { return undefined !== i; }) :
                     [
-                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : tektite_index_3.Tektite.$span("dummy")([]),
+                        (_a = data.backwardOperator) !== null && _a !== void 0 ? _a : tektite_index_3.Tektite.$span("tektite-dummy")([]),
                         data.content,
-                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : tektite_index_3.Tektite.$span("dummy")([]),
+                        (_b = data.forwardOperator) !== null && _b !== void 0 ? _b : tektite_index_3.Tektite.$span("tektite-dummy")([]),
                     ],
             });
             var hideRaw = function (className, wait) { return __awaiter(_this, void 0, void 0, function () {
@@ -7345,7 +7345,7 @@ define("clockworks/tektite.js/script/tektite-toast", ["require", "exports", "clo
                                 result.timer = null;
                             }
                             if (!dom.parentElement) return [3 /*break*/, 2];
-                            dom.classList.remove("slide-up-in");
+                            dom.classList.remove("tektite-slide-up-in");
                             dom.classList.add(className);
                             return [4 /*yield*/, index_js_3.minamo.core.timeout(wait)];
                         case 1:
@@ -7359,16 +7359,16 @@ define("clockworks/tektite.js/script/tektite-toast", ["require", "exports", "clo
             var wait = (_c = data.wait) !== null && _c !== void 0 ? _c : 5000;
             var result = {
                 dom: dom,
-                timer: 0 < wait ? setTimeout(function () { return hideRaw("slow-slide-down-out", 500); }, wait) : null,
+                timer: 0 < wait ? setTimeout(function () { return hideRaw("tektite-slow-slide-down-out", 500); }, wait) : null,
                 hide: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, hideRaw("slide-down-out", 250)];
+                        case 0: return [4 /*yield*/, hideRaw("tektite-slide-down-out", 250)];
                         case 1: return [2 /*return*/, _a.sent()];
                     }
                 }); }); },
             };
             document.getElementById("tektite-screen-toast").appendChild(dom);
-            setTimeout(function () { return dom.classList.remove("slide-up-in"); }, 250);
+            setTimeout(function () { return dom.classList.remove("tektite-slide-up-in"); }, 250);
             return result;
         };
         var latestPrimaryToast;
@@ -7635,16 +7635,16 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                         }
                         var percentString = Tektite_1.makePercentString(percent);
                         if ((window.innerHeight < window.innerWidth && "vertical" !== progressBarStyle) || "horizontal" === progressBarStyle) {
-                            index_js_5.minamo.dom.addCSSClass(screenBar, "horizontal");
-                            index_js_5.minamo.dom.removeCSSClass(screenBar, "vertical");
+                            index_js_5.minamo.dom.addCSSClass(screenBar, "tektite-horizontal");
+                            index_js_5.minamo.dom.removeCSSClass(screenBar, "tektite-vertical");
                             index_js_5.minamo.dom.setStyleProperty(screenBar, "height", "initial");
                             index_js_5.minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
                             index_js_5.minamo.dom.setStyleProperty(screenBar, "width", percentString);
                             index_js_5.minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
                         }
                         else {
-                            index_js_5.minamo.dom.addCSSClass(screenBar, "vertical");
-                            index_js_5.minamo.dom.removeCSSClass(screenBar, "horizontal");
+                            index_js_5.minamo.dom.addCSSClass(screenBar, "tektite-vertical");
+                            index_js_5.minamo.dom.removeCSSClass(screenBar, "tektite-horizontal");
                             index_js_5.minamo.dom.setStyleProperty(screenBar, "width", "initial");
                             index_js_5.minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
                             index_js_5.minamo.dom.setStyleProperty(screenBar, "height", percentString);
@@ -11088,7 +11088,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                             Render.$div("button-list")({
                                 tag: "button",
                                 id: "done-button",
-                                className: "default-button main-button long-button",
+                                className: "tektite-default-button main-button long-button",
                                 children: Render.label("Done"),
                                 onclick: function () { return __awaiter(_this, void 0, void 0, function () {
                                     var current;
@@ -11550,7 +11550,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                             _h.sent(),
                             tektite_index_10.Tektite.$div("button-list")({
                                 tag: "button",
-                                className: "default-button main-button long-button",
+                                className: "tektite-default-button main-button long-button",
                                 children: Render.label("Stamp"),
                                 onclick: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                     switch (_a.label) {
@@ -12191,7 +12191,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                 },
                                                 {
                                                     tag: "button",
-                                                    className: "default-button",
+                                                    className: "tektite-default-button",
                                                     children: __11.Clockworks.localeMap("OK"),
                                                     onclick: function () { return __awaiter(_this, void 0, void 0, function () { var _a, _b; return __generator(this, function (_c) {
                                                         switch (_c.label) {
@@ -12238,7 +12238,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         //                 },
         //                 {
         //                     tag: "button",
-        //                     className: "default-button",
+        //                     className: "tektite-default-button",
         //                     children: Clockworks.localeMap("OK"),
         //                     onclick: async () => instance.close(await data.onCommit()),
         //                 },
@@ -12250,7 +12250,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         Render.closeButton = function (onclick) {
             return ({
                 tag: "button",
-                className: "default-button",
+                className: "tektite-default-button",
                 children: Render.label("Close"),
                 onclick: onclick,
             });
@@ -13047,7 +13047,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     href: { application: i },
                                     children: {
                                         tag: "button",
-                                        className: "default-button main-button long-button",
+                                        className: "tektite-default-button main-button long-button",
                                         children: tektite_index_12.Tektite.$labelSpan(type_5.Type.applicationList[i].title),
                                         // onclick: async () => await showNeverStopwatchScreen(),
                                     }
@@ -13105,7 +13105,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                     case 0:
                         _a = {
                             tag: "div",
-                            className: "flash-interval"
+                            className: "tektite-flash-interval"
                         };
                         return [4 /*yield*/, resource_5.Resource.loadSvgOrCache(entry.icon)];
                     case 1: return [2 /*return*/, (_a.children = [
@@ -13299,7 +13299,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                     case "Enter":
                         minamo_js_12.minamo.dom.getElementsByClassName(document, "popup")
                             .filter(function (_i, ix, list) { return (ix + 1) === list.length; })
-                            .forEach(function (popup) { var _a, _b; return (_b = (_a = minamo_js_12.minamo.dom.getElementsByClassName(popup, "default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
+                            .forEach(function (popup) { var _a, _b; return (_b = (_a = minamo_js_12.minamo.dom.getElementsByClassName(popup, "tektite-default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
                         break;
                     case "Escape":
                         if (__11.tektite.escape()) {
@@ -13704,7 +13704,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1641111872007), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1641142344265), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

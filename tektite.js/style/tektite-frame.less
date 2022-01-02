@@ -16,7 +16,7 @@
     bottom: 0px;
     filter: drop-shadow(0.0rem -0rem 3rem @tektite-accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     .tektite-alpha-positive-background-coloring-trait;
-    .item
+    .tektite-item
     {
         border-top-color: @tektite-accent-color;
         border-top-width: 1px;
@@ -303,7 +303,6 @@
         overflow-x: hidden;
         overflow-y: auto;
         flex-grow: 1;
-
         .tektite-hide-scroll-bar;
         .tektite-primary-page
         {
@@ -318,12 +317,12 @@
             flex-direction: column;
             // .tektite-negative-foreground-coloring-trait;
             // padding-bottom: 2.5rem;
-            // .default-button
+            // .tektite-default-button
             // {
             //     border-color: @tektite-base-color;
             //     background-color: transparent;
             // }
-            .flash-interval
+            .tektite-flash-interval
             {
                 cursor: pointer;
                 // position: absolute;
@@ -352,7 +351,7 @@
                 }
                 padding: 0.5rem;
             }
-            .page-body
+            .tektite-page-body
             {
                 position: relative;
                 display: flex;
@@ -361,7 +360,7 @@
                 flex-direction: column;
                 flex-grow: 9;
             }
-            .page-footer
+            .tektite-page-footer
             {
                 flex-grow: 0;
                 // position: absolute;
@@ -373,13 +372,13 @@
                 align-items: center;
                 justify-content: center;
                 flex-direction: row;
-                .down-page-link
+                .tektite-down-page-link
                 {
                     cursor: pointer;
                     // position: absolute;
                     // left: calc(50vw - 1.25rem);
                     // bottom: 1rem; // コードで調整するのでこの値に意味はない。
-                    &.icon
+                    &.tektite-icon
                     {
                         opacity: 0.2;
                         width: 2.0rem;
@@ -392,7 +391,7 @@
                             }
                         }
                     }
-                    &:not(.reverse-down-page-link).icon
+                    &:not(.tektite-reverse-down-page-link).tektite-icon
                     {
                         transform: scale(1, -1);
                     }
@@ -408,14 +407,14 @@
         border-style: solid;
         border-color: #0008;
         box-sizing: border-box;
-        &.horizontal
+        &.tektite-horizontal
         {
             top: 0px;
             bottom: 0px;
             left: 0px;
             border-right-width: 1px;
         }
-        &.vertical
+        &.tektite-vertical
         {
             top: 0px;
             left: 0px;
@@ -471,7 +470,7 @@
                             background-color: e(%("%s%s", @tektite-base-color, "11"));
                         }
                     }
-                    &:not(.default-button)
+                    &:not(.tektite-default-button)
                     {
                         border-color: e(%("%s%s", @tektite-base-color, "88"));
                         // opacity: 0.5;
@@ -492,7 +491,7 @@
             }
         }
     }
-    &.flash
+    &.tektite-flash
     {
         .tektite-screen-bar
         {

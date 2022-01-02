@@ -195,7 +195,7 @@ export module Screen
         downPageLink = async () =>
         ({
             tag: "div",
-            className: "down-page-link icon",
+            className: "tektite-down-page-link tektite-icon",
             children: await this.tektite.loadSvgOrCache("tektite-down-triangle-icon"),
             onclick: async () =>
             {
@@ -216,15 +216,15 @@ export module Screen
             {
                 const body = document.getElementById("tektite-screen-body");
                 const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +this.getBodyScrollTop()), 0);
-                minamo.dom.getDivsByClassName(document, "page-footer")
+                minamo.dom.getDivsByClassName(document, "tektite-page-footer")
                     .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(1rem + ${delta}px)`));
-                // minamo.dom.getDivsByClassName(document, "down-page-link")
+                // minamo.dom.getDivsByClassName(document, "tektite-down-page-link")
                 //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
             }
         };
         adjustDownPageLinkDirection = () =>
-            minamo.dom.getDivsByClassName(document, "down-page-link")
-                .forEach(i => minamo.dom.toggleCSSClass(i, "reverse-down-page-link", ! this.isStrictShowPrimaryPage()));
+            minamo.dom.getDivsByClassName(document, "tektite-down-page-link")
+                .forEach(i => minamo.dom.toggleCSSClass(i, "tektite-reverse-down-page-link", ! this.isStrictShowPrimaryPage()));
         public lastScreenName?: string;
         public setClass = (className?: string) =>
         {
@@ -269,16 +269,16 @@ export module Screen
         [
             Tektite.$div("tektite-primary-page")
             ([
-                Tektite.$div("page-body")
+                Tektite.$div("tektite-page-body")
                 (
-                    Tektite.$div("main-panel")
+                    Tektite.$div("tektite-main-panel")
                     (
                         undefined === (primary as Tektite.PrimaryPageSource).body ?
                             primary as minamo.dom.Source:
                             (primary as Tektite.PrimaryPageSource).body
                     )
                 ),
-                Tektite.$div("page-footer")
+                Tektite.$div("tektite-page-footer")
                 (
                     undefined !== (primary as Tektite.PrimaryPageSource).footer ?
                         (primary as Tektite.PrimaryPageSource).footer:

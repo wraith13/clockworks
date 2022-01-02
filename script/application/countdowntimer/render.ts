@@ -357,7 +357,7 @@ export module Render
                 ({
                     tag: "button",
                     id: "done-button",
-                    className: "default-button main-button long-button",
+                    className: "tektite-default-button main-button long-button",
                     children: label("Done"),
                     onclick: async () =>
                     {
