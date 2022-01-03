@@ -31,7 +31,7 @@ export module Render
     export const cancelTextButton = (onCanceled: () => unknown) =>
     ({
         tag: "button",
-        className: "text-button",
+        className: "tektite-text-button",
         children: label("roll-back"),
         onclick: async () =>
         {
@@ -95,11 +95,11 @@ export module Render
             [
                 popupTitle(data.title),
                 data.content,
-                Tektite.$div("popup-operator")
+                Tektite.$div("tektite-popup-operator")
                 ([
                     {
                         tag: "button",
-                        className: "cancel-button",
+                        className: "tektite-cancel-button",
                         children: Clockworks.localeMap("Cancel"),
                         onclick: async () => instance.set((await data.onCancel?.()) ?? null).close(),
                     },
@@ -130,11 +130,11 @@ export module Render
     //         [
     //             undefined !== data.title ? Tektite.$tag("h2")("")(data.title): [],
     //             data.content,
-    //             Tektite.$div("popup-operator")
+    //             Tektite.$div("tektite-popup-operator")
     //             ([
     //                 {
     //                     tag: "button",
-    //                     className: "cancel-button",
+    //                     className: "tektite-cancel-button",
     //                     children: Clockworks.localeMap("Cancel"),
     //                     onclick: async () => instance.close((await data.onCancel?.()) ?? null),
     //                 },
@@ -157,14 +157,14 @@ export module Render
         onclick,
     });
     export const popupCloseOperator = (onclick?: () => unknown) =>
-        Tektite.$div("popup-operator")(closeButton(onclick));
+        Tektite.$div("tektite-popup-operator")(closeButton(onclick));
     export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
         await tektite.screen.popup<boolean>
         (
             async (instance: Tektite.PopupInstance<boolean>) =>
             {
                 const init = settings.theme ?? "auto";
-                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "tektite-check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -176,7 +176,7 @@ export module Render
                                 async (key: Type.ThemeType) =>
                                 ({
                                     tag: "button",
-                                    className: `check-button ${key === (settings.theme ?? "auto") ? "checked": ""}`,
+                                    className: `tektite-check-button ${key === (settings.theme ?? "auto") ? "checked": ""}`,
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("tektite-check-icon"),
@@ -218,7 +218,7 @@ export module Render
             {
                 const init = settings.progressBarStyle ?? "auto";
                 let selected = init;
-                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "tektite-check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -229,7 +229,7 @@ export module Render
                             async (key: Tektite.ProgressBarStyleType) =>
                             ({
                                 tag: "button",
-                                className: `check-button ${key === selected ? "checked": ""}`,
+                                className: `tektite-check-button ${key === selected ? "checked": ""}`,
                                 children:
                                 [
                                     await Resource.loadSvgOrCache("tektite-check-icon"),
@@ -268,14 +268,14 @@ export module Render
         (
             async (instance: Tektite.PopupInstance<boolean>) =>
             {
-                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "tektite-check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
                     [
                         {
                             tag: "button",
-                            className: `check-button ${"@auto" === (settings.locale ?? "@auto") ? "checked": ""}`,
+                            className: `tektite-check-button ${"@auto" === (settings.locale ?? "@auto") ? "checked": ""}`,
                             children:
                             [
                                 await Resource.loadSvgOrCache("tektite-check-icon"),
@@ -299,7 +299,7 @@ export module Render
                                 async (key: Clockworks.LocaleType) =>
                                 ({
                                     tag: "button",
-                                    className: `check-button ${key === (settings.locale ?? "@auto") ? "checked": ""}`,
+                                    className: `tektite-check-button ${key === (settings.locale ?? "@auto") ? "checked": ""}`,
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("tektite-check-icon"),
@@ -338,7 +338,7 @@ export module Render
         (
             async (instance: Tektite.PopupInstance<boolean>) =>
             {
-                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = Tektite.$make(HTMLDivElement)({ className: "tektite-check-button-list" });
                 const checkButtonListUpdate = async () => minamo.dom.replaceChildren
                 (
                     checkButtonList,
@@ -349,7 +349,7 @@ export module Render
                             async (key: Type.rainbowClockColorPatternType) =>
                             ({
                                 tag: "button",
-                                className: `check-button ${key === settings ? "checked": ""}`,
+                                className: `tektite-check-button ${key === settings ? "checked": ""}`,
                                 children:
                                 [
                                     await Resource.loadSvgOrCache("tektite-check-icon"),
@@ -438,7 +438,7 @@ export module Render
                     ([
                         {
                             tag: "button",
-                            className: "menu-item-button",
+                            className: "tektite-menu-item-button",
                             children: Tektite.$span("")(Tektite.$labelSpan("Tweet / ツイート")),
                             onclick: async () =>
                             {
@@ -448,7 +448,7 @@ export module Render
                         },
                         {
                             tag: "button",
-                            className: "menu-item-button",
+                            className: "tektite-menu-item-button",
                             children: Tektite.$span("")(Tektite.$labelSpan("Copy URL / URL をコピー")),
                             onclick: async () =>
                             {
@@ -657,7 +657,7 @@ export module Render
                     Tektite.$div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
                     Tektite.$span("logo-text")(config.applicationTitle)
                 ]),
-                Tektite.$div("button-list")
+                Tektite.$div("tektite-button-list")
                 (
                     Type.applicationIdList.map
                     (
@@ -668,7 +668,7 @@ export module Render
                             children:
                             {
                                 tag: "button",
-                                className: "tektite-default-button main-button long-button",
+                                className: "tektite-default-button tektite-main-button tektite-main-button",
                                 children: Tektite.$labelSpan(Type.applicationList[i].title),
                                 // onclick: async () => await showNeverStopwatchScreen(),
                             }
@@ -678,7 +678,7 @@ export module Render
             ],
             trail: Tektite.$div("description")
             (
-                Tektite.$tag("ul")("locale-parallel-off")
+                Tektite.$tag("ul")("tektite-locale-parallel-off")
                 ([
                     Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
                 ])
@@ -723,7 +723,7 @@ export module Render
     });
     export const itemFooter = async <T>(item: T, application: Type.ApplicationType, getShareTitle: (item: T) => string, isSaved: (item: T) => boolean, save: (item: T) => Promise<unknown>) =>
         null !== item ?
-            Tektite.$div("button-list")
+            Tektite.$div("tektite-button-list")
             ([
                 tektite.internalLink
                 ({
@@ -731,20 +731,20 @@ export module Render
                     children:
                     {
                         tag: "button",
-                        className: "main-button long-button",
+                        className: "tektite-main-button tektite-main-button",
                         children: "閉じる / Close",
                     }
                 }),
                 isSaved(item) ?
                     {
                         tag: "button",
-                        className: "main-button long-button",
+                        className: "tektite-main-button tektite-main-button",
                         children: "シェア / Share",
                         onclick: async () => await sharePopup(getShareTitle(item)),
                     }:
                     {
                         tag: "button",
-                        className: "main-button long-button",
+                        className: "tektite-main-button tektite-main-button",
                         children: "保存 / Save",
                         onclick: async () => await save(item),
                     }
@@ -783,27 +783,27 @@ export module Render
         (
             header =>
             {
-                minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
-                minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
+                minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
+                minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
             }
         );
         [document.getElementById("tektite-screen-toast") as HTMLDivElement].forEach
         (
             header =>
             {
-                minamo.dom.toggleCSSClass(header, "locale-parallel-on", 2 <= minColumns);
-                minamo.dom.toggleCSSClass(header, "locale-parallel-off", minColumns < 2);
+                minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
+                minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
             }
         );
-        minamo.dom.getDivsByClassName(document, "button-list").forEach
+        minamo.dom.getDivsByClassName(document, "tektite-button-list").forEach
         (
             header =>
             {
-                minamo.dom.toggleCSSClass(header, "locale-parallel-on", true);
-                minamo.dom.toggleCSSClass(header, "locale-parallel-off", false);
+                minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", true);
+                minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", false);
             }
         );
-        minamo.dom.getDivsByClassName(document, "column-flex-list").forEach
+        minamo.dom.getDivsByClassName(document, "tektite-column-flex-list").forEach
         (
             list =>
             {
@@ -812,7 +812,7 @@ export module Render
                 (
                     i =>
                     {
-                        if (/^max-column-\d+$/.test(i))
+                        if (/^tektite-max-column-\d+$/.test(i))
                         {
                             list.classList.remove(i);
                         }
@@ -829,18 +829,18 @@ export module Render
                     const columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
                     const row = Math.max(Math.ceil(length /columns), Math.min(length, Math.floor(height / itemHeight)));
                     minamo.dom.setStyleProperty(list, "height", `${row *itemHeight}px`);
-                    minamo.dom.addCSSClass(list, `max-column-${columns}`);
+                    minamo.dom.addCSSClass(list, `tektite-max-column-${columns}`);
                 }
                 if (0 < length)
                 {
                     const itemWidth = Math.min(window.innerWidth, (list.childNodes[0] as HTMLElement).offsetWidth);
-                    minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
-                    minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
+                    minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
+                    minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
                 }
                 list.classList.toggle("empty-list", length <= 0);
             }
         );
-        minamo.dom.getDivsByClassName(document, "row-flex-list").forEach
+        minamo.dom.getDivsByClassName(document, "tektite-row-flex-list").forEach
         (
             list =>
             {
@@ -849,7 +849,7 @@ export module Render
                 (
                     i =>
                     {
-                        if (/^max-column-\d+$/.test(i))
+                        if (/^tektite-max-column-\d+$/.test(i))
                         {
                             list.classList.remove(i);
                         }
@@ -858,16 +858,16 @@ export module Render
                 if (0 < length)
                 {
                     // const columns = Math.min(maxColumns, Math.max(1, length));
-                    // list.classList.add(`max-column-${columns}`);
+                    // list.classList.add(`tektite-max-column-${columns}`);
                     const height = window.innerHeight -list.offsetTop;
                     const itemHeight = (list.childNodes[0] as HTMLElement).offsetHeight;
                     const columns = list.classList.contains("compact-flex-list") ?
                         Math.min(maxColumns, length):
                         Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
-                    minamo.dom.addCSSClass(list, `max-column-${columns}`);
+                    minamo.dom.addCSSClass(list, `tektite-max-column-${columns}`);
                     const itemWidth = Math.min(window.innerWidth, (list.childNodes[0] as HTMLElement).offsetWidth);
-                    minamo.dom.toggleCSSClass(list, "locale-parallel-on", border < itemWidth);
-                    minamo.dom.toggleCSSClass(list, "locale-parallel-off", itemWidth <= border);
+                    minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
+                    minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
                 }
                 minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
             }

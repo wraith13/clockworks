@@ -200,3 +200,101 @@
     98.75% { background: radial-gradient(transparent 95%, @tektite-accent-color 100%); }
     100% { background: radial-gradient(transparent 100%, @tektite-accent-color 100%); }
 }
+@keyframes tektite-update-progress
+{
+    0%
+    {
+        width: 0vw;
+    }
+    100%
+    {
+        width: 100vw;
+    }
+}
+.tektite-slide-up-in
+{
+    animation-name: tektite-slide-up-in;
+    animation-direction: normal;
+    animation-delay: 0s;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}
+@keyframes tektite-slide-up-in
+{
+    0%
+    {
+        opacity: 0.0;
+        max-height: 0px;
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+    }
+    100%
+    {
+        opacity: 1.0;
+        max-height: 6rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+}
+.tektite-slide-down-out
+{
+    animation-name: tektite-slide-down-out;
+    animation-direction: normal;
+    animation-delay: 0s;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+    overflow-y: hidden;
+}
+.tektite-slow-slide-down-out
+{
+    .tektite-slide-down-out;
+    animation-duration: 0.5s;
+}
+@keyframes tektite-slide-down-out
+{
+    0%
+    {
+        opacity: 1.0;
+        max-height: 6rem;
+        padding: 2rem;
+    }
+    100%
+    {
+        opacity: 0.0;
+        max-height: 0px;
+        padding: 0rem;
+    }
+}
+.tektite-fade-and-slide-out
+{
+    animation-name: tektite-fade-and-slide-out;
+    animation-direction: normal;
+    animation-delay: 0s;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}
+@keyframes tektite-fade-and-slide-out
+{
+    //  margin-bottom は対象となってる箇所の CSS が抱えてる問題に引き摺られてアニメーション終了時でも隙間が残る問題を回避する為の暫定的な処置
+    0%
+    {
+        opacity: 1.0;
+        max-height: 15rem;
+        margin-bottom: 0px;
+    }
+    50%
+    {
+        opacity: 0.0;
+        max-height: 15rem;
+        margin-bottom: 0px;
+    }
+    100%
+    {
+        opacity: 0.0;
+        max-height: 0rem;
+        margin-bottom: -1rem;
+    }
+}

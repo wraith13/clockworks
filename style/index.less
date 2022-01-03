@@ -5,7 +5,7 @@
 {
     .tektite-monospace-trait;
 }
-.locale-parallel-on
+.tektite-locale-parallel-on
 {
     .locale-map
     {
@@ -16,7 +16,7 @@
         display: initial;
     }
 }
-.locale-parallel-off,
+.tektite-locale-parallel-off,
 .tektite-menu-popup
 {
     .locale-map
@@ -28,113 +28,7 @@
         display: none;
     }
 }
-&.tektite-style-modern
-{
-    .tektite-segment + .tektite-segment,
-    .tektite-segment +.tektite-menu-popup + .tektite-segment
-    {
-        border-left-color: e(%("%s%s", @tektite-base-color, "44")) !important;
-    }
-}
-@keyframes update-progress
-{
-    0%
-    {
-        width: 0vw;
-    }
-    100%
-    {
-        width: 100vw;
-    }
-}
-.tektite-slide-up-in
-{
-    animation-name: tektite-slide-up-in;
-    animation-direction: normal;
-    animation-delay: 0s;
-    animation-duration: 0.25s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: both;
-}
-@keyframes tektite-slide-up-in
-{
-    0%
-    {
-        opacity: 0.0;
-        max-height: 0px;
-        padding-top: 0rem;
-        padding-bottom: 0rem;
-    }
-    100%
-    {
-        opacity: 1.0;
-        max-height: 6rem;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-}
-.tektite-slide-down-out
-{
-    animation-name: tektite-slide-down-out;
-    animation-direction: normal;
-    animation-delay: 0s;
-    animation-duration: 0.25s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: both;
-    overflow-y: hidden;
-}
-.tektite-slow-slide-down-out
-{
-    .tektite-slide-down-out;
-    animation-duration: 0.5s;
-}
-@keyframes tektite-slide-down-out
-{
-    0%
-    {
-        opacity: 1.0;
-        max-height: 6rem;
-        padding: 2rem;
-    }
-    100%
-    {
-        opacity: 0.0;
-        max-height: 0px;
-        padding: 0rem;
-    }
-}
-.tektite-fade-and-slide-out
-{
-    animation-name: tektite-fade-and-slide-out;
-    animation-direction: normal;
-    animation-delay: 0s;
-    animation-duration: 0.5s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: both;
-}
-@keyframes tektite-fade-and-slide-out
-{
-    //  margin-bottom は対象となってる箇所の CSS が抱えてる問題に引き摺られてアニメーション終了時でも隙間が残る問題を回避する為の暫定的な処置
-    0%
-    {
-        opacity: 1.0;
-        max-height: 15rem;
-        margin-bottom: 0px;
-    }
-    50%
-    {
-        opacity: 0.0;
-        max-height: 15rem;
-        margin-bottom: 0px;
-    }
-    100%
-    {
-        opacity: 0.0;
-        max-height: 0rem;
-        margin-bottom: -1rem;
-    }
-}
-.text-button
+.tektite-text-button
 {
     .tektite-link-trait;
     border-style: none;
@@ -232,7 +126,7 @@ button
         .tektite-delete-operator-coloring-trait;
     }
 }
-.long-button
+.tektite-main-button
 {
     position: relative;
     margin: 0.5rem 1rem;
@@ -333,7 +227,7 @@ button
 {
     display: none;
 }
-.menu-item-button
+.tektite-menu-item-button
 {
     display: flex;
     position: relative;
@@ -349,7 +243,7 @@ button
     border-style: none;
     border-width: 0px;
 }
-.check-button
+.tektite-check-button
 {
     display: flex;
     position: relative;
@@ -376,7 +270,7 @@ button
         visibility: hidden;
     }
 }
-.popup
+.tektite-popup
 {
     border-style: solid;
     border-width: 2px;
@@ -391,10 +285,10 @@ button
     {
         width: calc(100% - 8px);
     }
-    .popup-operator
+    .tektite-popup-operator
     {
         width: 100%;
-        .cancel-button
+        .tektite-cancel-button
         {
             float: left;
             border-color: transparent;
@@ -429,7 +323,7 @@ button
     }
 }
 .tektite-menu-button-list,
-.check-button-list
+.tektite-check-button-list
 {
     display: flex;
     position: relative;
@@ -446,13 +340,13 @@ button
         border-width: 0px 0px 1px 0px;
     }
 }
-.button-list
+.tektite-button-list
 {
     text-align: center;
     padding: 0.5rem;
     width: 100%;
 }
-.button-line
+.tektite-button-line
 {
     position: relative;
     display: flex;
@@ -476,8 +370,8 @@ button
         }
     }
 }
-.row-flex-list,
-.column-flex-list
+.tektite-row-flex-list,
+.tektite-column-flex-list
 {
     // content-visibility: auto;
     position: relative;
@@ -494,16 +388,16 @@ button
         border-width: 1px 0px 0px 1px;
     }
 }
-.row-flex-list
+.tektite-row-flex-list
 {
     flex-direction: row;
 }
-.column-flex-list
+.tektite-column-flex-list
 {
     flex-direction: column;
     //height: calc(100vh - (2.5rem + 10px));
 }
-.flex-item
+.tektite-flex-item
 {
     position: relative;
     display: inline-block;
@@ -558,62 +452,62 @@ button
         min-width: calc((100% - 1px) / 12);
     }
 }
-.max-column-1 .flex-item
+.tektite-max-column-1 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 1);
     max-width: calc((100% - 1px) / 1);
 }
-.max-column-2 .flex-item
+.tektite-max-column-2 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 2);
     max-width: calc((100% - 1px) / 2);
 }
-.max-column-3 .flex-item
+.tektite-max-column-3 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 3);
     max-width: calc((100% - 1px) / 3);
 }
-.max-column-4 .flex-item
+.tektite-max-column-4 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 4);
     max-width: calc((100% - 1px) / 4);
 }
-.max-column-5 .flex-item
+.tektite-max-column-5 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 5);
     max-width: calc((100% - 1px) / 5);
 }
-.max-column-6 .flex-item
+.tektite-max-column-6 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 6);
     max-width: calc((100% - 1px) / 6);
 }
-.max-column-7 .flex-item
+.tektite-max-column-7 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 7);
     max-width: calc((100% - 1px) / 7);
 }
-.max-column-8 .flex-item
+.tektite-max-column-8 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 8);
     max-width: calc((100% - 1px) / 8);
 }
-.max-column-9 .flex-item
+.tektite-max-column-9 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 9);
     max-width: calc((100% - 1px) / 9);
 }
-.max-column-10 .flex-item
+.tektite-max-column-10 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 10);
     max-width: calc((100% - 1px) / 10);
 }
-.max-column-11 .flex-item
+.tektite-max-column-11 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 11);
     max-width: calc((100% - 1px) / 11);
 }
-.max-column-12 .flex-item
+.tektite-max-column-12 .tektite-flex-item
 {
     min-width: calc((100% - 1px) / 12);
     max-width: calc((100% - 1px) / 12);
@@ -815,7 +709,7 @@ button
             margin-bottom: 10vh;
         }
     }
-    .button-list
+    .tektite-button-list
     {
         display: flex;
         flex-wrap: nowrap;
@@ -824,11 +718,11 @@ button
         flex-direction: column;
         a
         {
-            //  .long-button との調整
+            //  .tektite-main-button との調整
             width: 100%;
             max-width: calc(640px + (2rem + 2px));
             margin: 0.5rem 1rem;
-            .long-button
+            .tektite-main-button
             {
                 margin: 0px;
             }

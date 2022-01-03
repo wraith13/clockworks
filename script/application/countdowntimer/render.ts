@@ -46,7 +46,7 @@ export module Render
     export const alarmTitle = (item: Type.AlarmEntry) => "timer" === item.type ?
         `${Domain.makeTimerLabel(item.end -item.start)} ${Clockworks.localeMap("Timer")}`:
         item.title;
-    export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item flex-item")
+    export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item tektite-flex-item")
     ([
         $div("item-header")
         ([
@@ -133,7 +133,7 @@ export module Render
             "delete-button"
         )
     ];
-    export const eventItem = async (item: Type.EventEntry) => $div("event-item flex-item")
+    export const eventItem = async (item: Type.EventEntry) => $div("event-item tektite-flex-item")
     ([
         $div("item-header")
         ([
@@ -198,7 +198,7 @@ export module Render
         (
             async (instance: Tektite.PopupInstance<boolean>) =>
             {
-                const checkButtonList = $make(HTMLDivElement)({ className: "check-button-list" });
+                const checkButtonList = $make(HTMLDivElement)({ className: "tektite-check-button-list" });
                 const timerPreset = Domain.getTimerPreset()
                     .concat(Storage.CountdownTimer.recentlyTimer.get())
                     .sort(minamo.core.comparer.make([i => i]))
@@ -214,7 +214,7 @@ export module Render
                                 async (i: number) =>
                                 ({
                                     tag: "button",
-                                    className: `check-button`,
+                                    className: `tektite-check-button`,
                                     children:
                                     [
                                         await Resource.loadSvgOrCache("tektite-check-icon"),
@@ -238,11 +238,11 @@ export module Render
                     [
                         RenderBase.popupTitle(label("New Timer")),
                         checkButtonList,
-                        $div("popup-operator")
+                        $div("tektite-popup-operator")
                         ([
                             {
                                 tag: "button",
-                                className: "cancel-button",
+                                className: "tektite-cancel-button",
                                 children: label("input a time"),
                                 onclick: async () =>
                                 {
@@ -353,11 +353,11 @@ export module Render
                         "00:00:00 only"
                     )
                 ),
-                $div("button-list")
+                $div("tektite-button-list")
                 ({
                     tag: "button",
                     id: "done-button",
-                    className: "tektite-default-button main-button long-button",
+                    className: "tektite-default-button tektite-main-button tektite-main-button",
                     children: label("Done"),
                     onclick: async () =>
                     {
@@ -388,17 +388,17 @@ export module Render
         trail: null !== item ?
             undefined:
             [
-                $div("button-list")
+                $div("tektite-button-list")
                 ([
                     {
                         tag: "button",
-                        className: "main-button long-button",
+                        className: "tektite-main-button tektite-main-button",
                         children: label("New Timer"),
                         onclick: async () => await newTimerPopup(),
                     },
                     {
                         tag: "button",
-                        className: "main-button long-button",
+                        className: "tektite-main-button tektite-main-button",
                         children: label("New Schedule"),
                         onclick: async () =>
                         {
@@ -421,13 +421,13 @@ export module Render
                         }
                     },
                 ]),
-                $div("row-flex-list alarm-list")
+                $div("tektite-row-flex-list alarm-list")
                 (
                     await Promise.all(alarms.map(item => alarmItem(item)))
                 ),
                 $div("description")
                 (
-                    $tag("ul")("locale-parallel-off")
+                    $tag("ul")("tektite-locale-parallel-off")
                     ([
                         $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                         $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),

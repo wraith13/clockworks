@@ -63,7 +63,7 @@ export module Screen
         //     const dom = $make(HTMLDivElement)
         //     ({
         //         tag: "div",
-        //         className: `popup locale-parallel-off ${data.className ?? ""}`,
+        //         className: `tektite-popup tektite-locale-parallel-off ${data.className ?? ""}`,
         //         children: data.children,
         //         onclick: async (event: MouseEvent) =>
         //         {
@@ -121,7 +121,7 @@ export module Screen
                 const dom = $make(HTMLDivElement)
                 ({
                     tag: "div",
-                    className: `popup locale-parallel-off ${data.className ?? ""}`,
+                    className: `tektite-popup tektite-locale-parallel-off ${data.className ?? ""}`,
                     children: data.children,
                     onclick: async (event: MouseEvent) =>
                     {

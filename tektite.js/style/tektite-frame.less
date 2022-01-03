@@ -267,7 +267,7 @@
         {
             .tektite-progress-bar
             {
-                animation-name: update-progress;
+                animation-name: tektite-update-progress;
                 animation-direction: normal;
                 animation-delay: 0s;
                 animation-duration: 1.0s;
@@ -289,7 +289,7 @@
                 left: initial;
                 right: 0px;
                 background-color: #888;
-                animation-name: update-progress;
+                animation-name: tektite-update-progress;
                 animation-direction: normal;
                 animation-delay: 0s;
                 animation-duration: 3600.0s;
@@ -440,6 +440,11 @@
                         background-color: e(%("%s%s", @tektite-base-color, "11"));
                     }
                 }
+            }
+            .tektite-segment + .tektite-segment,
+            .tektite-segment +.tektite-menu-popup + .tektite-segment
+            {
+                border-left-color: e(%("%s%s", @tektite-base-color, "44")) !important;
             }
             & > button
             {

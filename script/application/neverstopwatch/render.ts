@@ -43,7 +43,7 @@ export module Render
                 )
         )
     });
-    export const stampItem = async (tick: number, interval: number | null) => Tektite.$div("stamp-item flex-item")
+    export const stampItem = async (tick: number, interval: number | null) => Tektite.$div("stamp-item tektite-flex-item")
     ([
         Tektite.$div("item-header")
         ([
@@ -143,10 +143,10 @@ export module Render
                         Storage.NeverStopwatch.flashInterval.set
                     )
                 ),
-                Tektite.$div("button-list")
+                Tektite.$div("tektite-button-list")
                 ({
                     tag: "button",
-                    className: "tektite-default-button main-button long-button",
+                    className: "tektite-default-button tektite-main-button tektite-main-button",
                     children: label("Stamp"),
                     onclick: async () => await Operate.stamp(Domain.getTicks())
                 }),
@@ -156,7 +156,7 @@ export module Render
         trail: null !== item ?
             undefined:
             [
-                Tektite.$div("row-flex-list stamp-list")
+                Tektite.$div("tektite-row-flex-list stamp-list")
                 (
                     await Promise.all
                     (
@@ -172,7 +172,7 @@ export module Render
                 ),
                 Tektite.$div("description")
                 (
-                    Tektite.$tag("ul")("locale-parallel-off")
+                    Tektite.$tag("ul")("tektite-locale-parallel-off")
                     ([
                         Tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                         Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),

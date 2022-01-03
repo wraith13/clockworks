@@ -43,7 +43,7 @@ export module Render
                 )
         )
     });
-    export const timezoneItem = async (item: Type.TimezoneEntry) => $div("timezone-item flex-item")
+    export const timezoneItem = async (item: Type.TimezoneEntry) => $div("timezone-item tektite-flex-item")
     ([
         $div("item-header")
         ([
@@ -211,11 +211,11 @@ export module Render
         },
         trail:
         [
-            $div("button-list")
+            $div("tektite-button-list")
             ([
                 {
                     tag: "button",
-                    className: "main-button long-button",
+                    className: "tektite-main-button tektite-main-button",
                     children: label("New Time zone"),
                     onclick: async () =>
                     {
@@ -227,13 +227,13 @@ export module Render
                     }
                 },
             ]),
-            $div("row-flex-list timezone-list")
+            $div("tektite-row-flex-list timezone-list")
             (
                 await Promise.all(timezones.map(item => timezoneItem(item)))
             ),
             $div("description")
             (
-                $tag("ul")("locale-parallel-off")
+                $tag("ul")("tektite-locale-parallel-off")
                 ([
                     $tag("li")("")(label("Not support daylight savings time.")),
                     $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),

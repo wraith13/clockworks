@@ -96,11 +96,11 @@ export module Render
         trail: null !== item ?
             undefined:
             [
-                Tektite.$div("button-list")
+                Tektite.$div("tektite-button-list")
                 ([
                     {
                         tag: "button",
-                        className: "main-button long-button",
+                        className: "tektite-main-button tektite-main-button",
                         children: label("New Event"),
                         onclick: async () =>
                         {
@@ -123,13 +123,13 @@ export module Render
                         }
                     },
                 ]),
-                Tektite.$div("row-flex-list event-list")
+                Tektite.$div("tektite-row-flex-list event-list")
                 (
                     await Promise.all(events.map(item => CountdownTimerRender.eventItem(item)))
                 ),
                 Tektite.$div("description")
                 (
-                    Tektite.$tag("ul")("locale-parallel-off")
+                    Tektite.$tag("ul")("tektite-locale-parallel-off")
                     ([
                         Tektite.$tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                         Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
