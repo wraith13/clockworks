@@ -244,7 +244,7 @@ export module Render
                     previousPrimaryStep = 0;
                     events = Storage.ElapsedTimer.Events.get();
                     await tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
-                    RenderBase.resizeFlexList();
+                    tektite.screen.resizeFlexList();
                     await updateScreen("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();

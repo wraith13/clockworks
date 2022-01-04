@@ -518,3 +518,193 @@
 
     }
 }
+.tektite-menu-button-list,
+.tektite-check-button-list
+{
+    display: flex;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: stretch;
+    flex-direction: column;
+
+    button
+    {
+        border-color: rgba(128,128,128,0.5);
+        border-style: solid;
+        border-width: 0px 0px 1px 0px;
+    }
+}
+.tektite-button-list
+{
+    text-align: center;
+    padding: 0.5rem;
+    width: 100%;
+}
+.tektite-button-line
+{
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    button + .tektite-menu-button
+    {
+        margin-left: -1rem;
+    }
+    .tektite-menu-popup
+    {
+        right: 4px;
+    }
+    @media (min-width: 640px)
+    {
+        .tektite-menu-popup
+        {
+            right: calc(50vw - 330px);
+        }
+    }
+}
+.tektite-row-flex-list,
+.tektite-column-flex-list
+{
+    // content-visibility: auto;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    &:not(.empty-list)
+    {
+        border-color: rgba(128,128,128,0.5);
+        border-style: solid;
+        border-width: 1px 0px 0px 1px;
+    }
+}
+.tektite-row-flex-list
+{
+    flex-direction: row;
+}
+.tektite-column-flex-list
+{
+    flex-direction: column;
+    //height: calc(100vh - (2.5rem + 10px));
+}
+.tektite-flex-item
+{
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    min-width: calc(100% / 1);
+    border-color: rgba(128,128,128,0.5);
+    border-style: solid;
+    border-width: 0px 1px 1px 0px;
+    margin: 0px;
+    @media (min-width:780px)
+    {
+        min-width: calc((100% - 1px) / 2);
+    }
+    @media (min-width:1170px)
+    {
+        min-width: calc((100% - 1px) / 3);
+    }
+    @media (min-width:1560px)
+    {
+        min-width: calc((100% - 1px) / 4);
+    }
+    @media (min-width:1950px)
+    {
+        min-width: calc((100% - 1px) / 5);
+    }
+    @media (min-width:2340px)
+    {
+        min-width: calc((100% - 1px) / 6);
+    }
+    @media (min-width:2730px)
+    {
+        min-width: calc((100% - 1px) / 7);
+    }
+    @media (min-width:3120px)
+    {
+        min-width: calc((100% - 1px) / 8);
+    }
+    @media (min-width:3510px)
+    {
+        min-width: calc((100% - 1px) / 9);
+    }
+    @media (min-width:3900px)
+    {
+        min-width: calc((100% - 1px) / 10);
+    }
+    @media (min-width:4290px)
+    {
+        min-width: calc((100% - 1px) / 11);
+    }
+    @media (min-width:4680px)
+    {
+        min-width: calc((100% - 1px) / 12);
+    }
+}
+.tektite-max-column-1 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 1);
+    max-width: calc((100% - 1px) / 1);
+}
+.tektite-max-column-2 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 2);
+    max-width: calc((100% - 1px) / 2);
+}
+.tektite-max-column-3 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 3);
+    max-width: calc((100% - 1px) / 3);
+}
+.tektite-max-column-4 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 4);
+    max-width: calc((100% - 1px) / 4);
+}
+.tektite-max-column-5 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 5);
+    max-width: calc((100% - 1px) / 5);
+}
+.tektite-max-column-6 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 6);
+    max-width: calc((100% - 1px) / 6);
+}
+.tektite-max-column-7 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 7);
+    max-width: calc((100% - 1px) / 7);
+}
+.tektite-max-column-8 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 8);
+    max-width: calc((100% - 1px) / 8);
+}
+.tektite-max-column-9 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 9);
+    max-width: calc((100% - 1px) / 9);
+}
+.tektite-max-column-10 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 10);
+    max-width: calc((100% - 1px) / 10);
+}
+.tektite-max-column-11 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 11);
+    max-width: calc((100% - 1px) / 11);
+}
+.tektite-max-column-12 .tektite-flex-item
+{
+    min-width: calc((100% - 1px) / 12);
+    max-width: calc((100% - 1px) / 12);
+}

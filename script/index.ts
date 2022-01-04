@@ -31,13 +31,7 @@ export module Clockworks
         tektite.locale.setLocale(Storage.Settings.get().locale);
         tektite.onLoad();
         window.onpopstate = () => Render.showPage();
-        window.addEventListener("resize", Render.onWindowResize);
         window.addEventListener("keydown", Render.onKeydown);
-        window.addEventListener("mousemove", Render.onMouseMove);
-        window.addEventListener("mousedown", tektite.screen.onMouseDown);
-        window.addEventListener("mouseup", tektite.screen.onMouseUp);
-        document.addEventListener("fullscreenchange", Render.onFullscreenChange);
-        document.addEventListener("webkitfullscreenchange", Render.onWebkitFullscreenChange);
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
         Render.updateStyle();
         Render.updateProgressBarStyle();

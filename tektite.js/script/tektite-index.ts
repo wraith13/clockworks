@@ -103,8 +103,42 @@ export module Tektite
             href: data.href,
             children: data.children,
         });
+        lastMouseMouseAt = 0;
+        onMouseMove = (_evnet: MouseEvent) =>
+        {
+            if (this.fullscreen.enabled())
+            {
+                const now = this.lastMouseMouseAt = new Date().getTime();
+                if (document.body.classList.contains("tektite-sleep-mouse"))
+                {
+                    document.body.classList.remove("tektite-sleep-mouse");
+                }
+                if (this.fullscreen.element())
+                {
+                    setTimeout
+                    (
+                        () =>
+                        {
+                            if (this.fullscreen.element() && now === this.lastMouseMouseAt)
+                            {
+                                if ( ! document.body.classList.contains("tektite-sleep-mouse"))
+                                {
+                                    document.body.classList.add("tektite-sleep-mouse");
+                                }
+                            }
+                        },
+                        3000
+                    );
+                }
+            }
+        };
+        public onFullscreenChange = (_event: Event) =>
+        {
+            this.screen.onWindowResize();
+        };
         public onWebkitFullscreenChange = (_event: Event) =>
         {
+            this.screen.onWindowResize();
             if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document))
             {
                 document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", this.fullscreen.element());
@@ -290,6 +324,12 @@ export module Tektite
             window.addEventListener("focus", this.onWindowFocus);
             window.addEventListener("blur", this.onWindowBlur);
             window.addEventListener("storage", this.onUpdateStorage);
+            window.addEventListener("resize", this.screen.onWindowResize);
+            window.addEventListener("mousemove", this.onMouseMove);
+            window.addEventListener("mousedown", this.screen.onMouseDown);
+            window.addEventListener("mouseup", this.screen.onMouseUp);
+            document.addEventListener("fullscreenchange", this.onFullscreenChange);
+            document.addEventListener("webkitfullscreenchange", this.onWebkitFullscreenChange);
             this.screen.header.onLoad(this.screen);
             document.getElementById("tektite-screen-body").addEventListener
             (

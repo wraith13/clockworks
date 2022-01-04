@@ -289,7 +289,7 @@ export module Render
                     previousPrimaryStep = 0;
                     ticks = Storage.NeverStopwatch.Stamps.get();
                     await tektite.screen.replaceBody(await neverStopwatchScreenBody(item, ticks));
-                    RenderBase.resizeFlexList();
+                    tektite.screen.resizeFlexList();
                     tektite.screen.adjustPageFooterPosition();
                     await updateScreen("timer");
                     break;

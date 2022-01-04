@@ -556,7 +556,7 @@ export module Render
                     previousPrimaryStep = 0;
                     alarms = Storage.CountdownTimer.Alarms.get();
                     await tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
-                    RenderBase.resizeFlexList();
+                    tektite.screen.resizeFlexList();
                     await updateScreen("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();

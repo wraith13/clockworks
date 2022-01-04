@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Mon Jan 03 2022 23:56:46 GMT+0900 (日本標準時)
+    build at: Tue Jan 04 2022 22:34:32 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -800,6 +800,180 @@ body.light.tektite-style-modern.tektite-flash .tektite-screen-bar .tektite-scree
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
+body.light .tektite-menu-button-list,
+body.light .tektite-check-button-list {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-direction: column;
+}
+body.light .tektite-menu-button-list button,
+body.light .tektite-check-button-list button {
+  border-color: rgba(128, 128, 128, 0.5);
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+}
+body.light .tektite-button-list {
+  text-align: center;
+  padding: 0.5rem;
+  width: 100%;
+}
+body.light .tektite-button-line {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+body.light .tektite-button-line button + .tektite-menu-button {
+  margin-left: -1rem;
+}
+body.light .tektite-button-line .tektite-menu-popup {
+  right: 4px;
+}
+@media (min-width: 640px) {
+  body.light .tektite-button-line .tektite-menu-popup {
+    right: calc(50vw - 330px);
+  }
+}
+body.light .tektite-row-flex-list,
+body.light .tektite-column-flex-list {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+body.light .tektite-row-flex-list:not(.empty-list),
+body.light .tektite-column-flex-list:not(.empty-list) {
+  border-color: rgba(128, 128, 128, 0.5);
+  border-style: solid;
+  border-width: 1px 0px 0px 1px;
+}
+body.light .tektite-row-flex-list {
+  flex-direction: row;
+}
+body.light .tektite-column-flex-list {
+  flex-direction: column;
+}
+body.light .tektite-flex-item {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  min-width: calc(100% / 1);
+  border-color: rgba(128, 128, 128, 0.5);
+  border-style: solid;
+  border-width: 0px 1px 1px 0px;
+  margin: 0px;
+}
+@media (min-width: 780px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 2);
+  }
+}
+@media (min-width: 1170px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 3);
+  }
+}
+@media (min-width: 1560px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 4);
+  }
+}
+@media (min-width: 1950px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 5);
+  }
+}
+@media (min-width: 2340px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 6);
+  }
+}
+@media (min-width: 2730px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 7);
+  }
+}
+@media (min-width: 3120px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 8);
+  }
+}
+@media (min-width: 3510px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 9);
+  }
+}
+@media (min-width: 3900px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 10);
+  }
+}
+@media (min-width: 4290px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 11);
+  }
+}
+@media (min-width: 4680px) {
+  body.light .tektite-flex-item {
+    min-width: calc((100% - 1px) / 12);
+  }
+}
+body.light .tektite-max-column-1 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 1);
+  max-width: calc((100% - 1px) / 1);
+}
+body.light .tektite-max-column-2 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 2);
+  max-width: calc((100% - 1px) / 2);
+}
+body.light .tektite-max-column-3 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 3);
+  max-width: calc((100% - 1px) / 3);
+}
+body.light .tektite-max-column-4 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 4);
+  max-width: calc((100% - 1px) / 4);
+}
+body.light .tektite-max-column-5 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 5);
+  max-width: calc((100% - 1px) / 5);
+}
+body.light .tektite-max-column-6 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 6);
+  max-width: calc((100% - 1px) / 6);
+}
+body.light .tektite-max-column-7 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 7);
+  max-width: calc((100% - 1px) / 7);
+}
+body.light .tektite-max-column-8 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 8);
+  max-width: calc((100% - 1px) / 8);
+}
+body.light .tektite-max-column-9 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 9);
+  max-width: calc((100% - 1px) / 9);
+}
+body.light .tektite-max-column-10 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 10);
+  max-width: calc((100% - 1px) / 10);
+}
+body.light .tektite-max-column-11 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 11);
+  max-width: calc((100% - 1px) / 11);
+}
+body.light .tektite-max-column-12 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 12);
+  max-width: calc((100% - 1px) / 12);
+}
 body.light.tektite-sleep-mouse {
   cursor: none;
 }
@@ -1395,6 +1569,22 @@ body.light .tektite-fade-and-slide-out {
     margin-bottom: -1rem;
   }
 }
+@keyframes tektite-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes tektite-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 body.light .monospace {
   font-family: monospace;
 }
@@ -1763,196 +1953,6 @@ body.light .tektite-popup .tektite-popup-operator .tektite-cancel-button {
 body.light .tektite-popup .tektite-popup-operator .tektite-default-button {
   float: right;
   min-width: 120px;
-}
-@keyframes tektite-fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes tektite-fade-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-body.light .tektite-menu-button-list,
-body.light .tektite-check-button-list {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  flex-direction: column;
-}
-body.light .tektite-menu-button-list button,
-body.light .tektite-check-button-list button {
-  border-color: rgba(128, 128, 128, 0.5);
-  border-style: solid;
-  border-width: 0px 0px 1px 0px;
-}
-body.light .tektite-button-list {
-  text-align: center;
-  padding: 0.5rem;
-  width: 100%;
-}
-body.light .tektite-button-line {
-  position: relative;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-}
-body.light .tektite-button-line button + .tektite-menu-button {
-  margin-left: -1rem;
-}
-body.light .tektite-button-line .tektite-menu-popup {
-  right: 4px;
-}
-@media (min-width: 640px) {
-  body.light .tektite-button-line .tektite-menu-popup {
-    right: calc(50vw - 330px);
-  }
-}
-body.light .tektite-row-flex-list,
-body.light .tektite-column-flex-list {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  width: 100%;
-  box-sizing: border-box;
-}
-body.light .tektite-row-flex-list:not(.empty-list),
-body.light .tektite-column-flex-list:not(.empty-list) {
-  border-color: rgba(128, 128, 128, 0.5);
-  border-style: solid;
-  border-width: 1px 0px 0px 1px;
-}
-body.light .tektite-row-flex-list {
-  flex-direction: row;
-}
-body.light .tektite-column-flex-list {
-  flex-direction: column;
-}
-body.light .tektite-flex-item {
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  min-width: calc(100% / 1);
-  border-color: rgba(128, 128, 128, 0.5);
-  border-style: solid;
-  border-width: 0px 1px 1px 0px;
-  margin: 0px;
-}
-@media (min-width: 780px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 2);
-  }
-}
-@media (min-width: 1170px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 3);
-  }
-}
-@media (min-width: 1560px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 4);
-  }
-}
-@media (min-width: 1950px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 5);
-  }
-}
-@media (min-width: 2340px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 6);
-  }
-}
-@media (min-width: 2730px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 7);
-  }
-}
-@media (min-width: 3120px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 8);
-  }
-}
-@media (min-width: 3510px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 9);
-  }
-}
-@media (min-width: 3900px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 10);
-  }
-}
-@media (min-width: 4290px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 11);
-  }
-}
-@media (min-width: 4680px) {
-  body.light .tektite-flex-item {
-    min-width: calc((100% - 1px) / 12);
-  }
-}
-body.light .tektite-max-column-1 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 1);
-  max-width: calc((100% - 1px) / 1);
-}
-body.light .tektite-max-column-2 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 2);
-  max-width: calc((100% - 1px) / 2);
-}
-body.light .tektite-max-column-3 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 3);
-  max-width: calc((100% - 1px) / 3);
-}
-body.light .tektite-max-column-4 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 4);
-  max-width: calc((100% - 1px) / 4);
-}
-body.light .tektite-max-column-5 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 5);
-  max-width: calc((100% - 1px) / 5);
-}
-body.light .tektite-max-column-6 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 6);
-  max-width: calc((100% - 1px) / 6);
-}
-body.light .tektite-max-column-7 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 7);
-  max-width: calc((100% - 1px) / 7);
-}
-body.light .tektite-max-column-8 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 8);
-  max-width: calc((100% - 1px) / 8);
-}
-body.light .tektite-max-column-9 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 9);
-  max-width: calc((100% - 1px) / 9);
-}
-body.light .tektite-max-column-10 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 10);
-  max-width: calc((100% - 1px) / 10);
-}
-body.light .tektite-max-column-11 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 11);
-  max-width: calc((100% - 1px) / 11);
-}
-body.light .tektite-max-column-12 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 12);
-  max-width: calc((100% - 1px) / 12);
 }
 body.light .item-title {
   display: inline-flex;
@@ -3419,6 +3419,180 @@ body.dark.tektite-style-modern.tektite-flash .tektite-screen-bar .tektite-screen
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
+body.dark .tektite-menu-button-list,
+body.dark .tektite-check-button-list {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-direction: column;
+}
+body.dark .tektite-menu-button-list button,
+body.dark .tektite-check-button-list button {
+  border-color: rgba(128, 128, 128, 0.5);
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+}
+body.dark .tektite-button-list {
+  text-align: center;
+  padding: 0.5rem;
+  width: 100%;
+}
+body.dark .tektite-button-line {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+body.dark .tektite-button-line button + .tektite-menu-button {
+  margin-left: -1rem;
+}
+body.dark .tektite-button-line .tektite-menu-popup {
+  right: 4px;
+}
+@media (min-width: 640px) {
+  body.dark .tektite-button-line .tektite-menu-popup {
+    right: calc(50vw - 330px);
+  }
+}
+body.dark .tektite-row-flex-list,
+body.dark .tektite-column-flex-list {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+body.dark .tektite-row-flex-list:not(.empty-list),
+body.dark .tektite-column-flex-list:not(.empty-list) {
+  border-color: rgba(128, 128, 128, 0.5);
+  border-style: solid;
+  border-width: 1px 0px 0px 1px;
+}
+body.dark .tektite-row-flex-list {
+  flex-direction: row;
+}
+body.dark .tektite-column-flex-list {
+  flex-direction: column;
+}
+body.dark .tektite-flex-item {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  min-width: calc(100% / 1);
+  border-color: rgba(128, 128, 128, 0.5);
+  border-style: solid;
+  border-width: 0px 1px 1px 0px;
+  margin: 0px;
+}
+@media (min-width: 780px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 2);
+  }
+}
+@media (min-width: 1170px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 3);
+  }
+}
+@media (min-width: 1560px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 4);
+  }
+}
+@media (min-width: 1950px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 5);
+  }
+}
+@media (min-width: 2340px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 6);
+  }
+}
+@media (min-width: 2730px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 7);
+  }
+}
+@media (min-width: 3120px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 8);
+  }
+}
+@media (min-width: 3510px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 9);
+  }
+}
+@media (min-width: 3900px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 10);
+  }
+}
+@media (min-width: 4290px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 11);
+  }
+}
+@media (min-width: 4680px) {
+  body.dark .tektite-flex-item {
+    min-width: calc((100% - 1px) / 12);
+  }
+}
+body.dark .tektite-max-column-1 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 1);
+  max-width: calc((100% - 1px) / 1);
+}
+body.dark .tektite-max-column-2 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 2);
+  max-width: calc((100% - 1px) / 2);
+}
+body.dark .tektite-max-column-3 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 3);
+  max-width: calc((100% - 1px) / 3);
+}
+body.dark .tektite-max-column-4 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 4);
+  max-width: calc((100% - 1px) / 4);
+}
+body.dark .tektite-max-column-5 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 5);
+  max-width: calc((100% - 1px) / 5);
+}
+body.dark .tektite-max-column-6 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 6);
+  max-width: calc((100% - 1px) / 6);
+}
+body.dark .tektite-max-column-7 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 7);
+  max-width: calc((100% - 1px) / 7);
+}
+body.dark .tektite-max-column-8 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 8);
+  max-width: calc((100% - 1px) / 8);
+}
+body.dark .tektite-max-column-9 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 9);
+  max-width: calc((100% - 1px) / 9);
+}
+body.dark .tektite-max-column-10 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 10);
+  max-width: calc((100% - 1px) / 10);
+}
+body.dark .tektite-max-column-11 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 11);
+  max-width: calc((100% - 1px) / 11);
+}
+body.dark .tektite-max-column-12 .tektite-flex-item {
+  min-width: calc((100% - 1px) / 12);
+  max-width: calc((100% - 1px) / 12);
+}
 body.dark.tektite-sleep-mouse {
   cursor: none;
 }
@@ -4014,6 +4188,22 @@ body.dark .tektite-fade-and-slide-out {
     margin-bottom: -1rem;
   }
 }
+@keyframes tektite-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes tektite-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 body.dark .monospace {
   font-family: monospace;
 }
@@ -4382,196 +4572,6 @@ body.dark .tektite-popup .tektite-popup-operator .tektite-cancel-button {
 body.dark .tektite-popup .tektite-popup-operator .tektite-default-button {
   float: right;
   min-width: 120px;
-}
-@keyframes tektite-fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes tektite-fade-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-body.dark .tektite-menu-button-list,
-body.dark .tektite-check-button-list {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  flex-direction: column;
-}
-body.dark .tektite-menu-button-list button,
-body.dark .tektite-check-button-list button {
-  border-color: rgba(128, 128, 128, 0.5);
-  border-style: solid;
-  border-width: 0px 0px 1px 0px;
-}
-body.dark .tektite-button-list {
-  text-align: center;
-  padding: 0.5rem;
-  width: 100%;
-}
-body.dark .tektite-button-line {
-  position: relative;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-}
-body.dark .tektite-button-line button + .tektite-menu-button {
-  margin-left: -1rem;
-}
-body.dark .tektite-button-line .tektite-menu-popup {
-  right: 4px;
-}
-@media (min-width: 640px) {
-  body.dark .tektite-button-line .tektite-menu-popup {
-    right: calc(50vw - 330px);
-  }
-}
-body.dark .tektite-row-flex-list,
-body.dark .tektite-column-flex-list {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  width: 100%;
-  box-sizing: border-box;
-}
-body.dark .tektite-row-flex-list:not(.empty-list),
-body.dark .tektite-column-flex-list:not(.empty-list) {
-  border-color: rgba(128, 128, 128, 0.5);
-  border-style: solid;
-  border-width: 1px 0px 0px 1px;
-}
-body.dark .tektite-row-flex-list {
-  flex-direction: row;
-}
-body.dark .tektite-column-flex-list {
-  flex-direction: column;
-}
-body.dark .tektite-flex-item {
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  min-width: calc(100% / 1);
-  border-color: rgba(128, 128, 128, 0.5);
-  border-style: solid;
-  border-width: 0px 1px 1px 0px;
-  margin: 0px;
-}
-@media (min-width: 780px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 2);
-  }
-}
-@media (min-width: 1170px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 3);
-  }
-}
-@media (min-width: 1560px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 4);
-  }
-}
-@media (min-width: 1950px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 5);
-  }
-}
-@media (min-width: 2340px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 6);
-  }
-}
-@media (min-width: 2730px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 7);
-  }
-}
-@media (min-width: 3120px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 8);
-  }
-}
-@media (min-width: 3510px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 9);
-  }
-}
-@media (min-width: 3900px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 10);
-  }
-}
-@media (min-width: 4290px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 11);
-  }
-}
-@media (min-width: 4680px) {
-  body.dark .tektite-flex-item {
-    min-width: calc((100% - 1px) / 12);
-  }
-}
-body.dark .tektite-max-column-1 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 1);
-  max-width: calc((100% - 1px) / 1);
-}
-body.dark .tektite-max-column-2 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 2);
-  max-width: calc((100% - 1px) / 2);
-}
-body.dark .tektite-max-column-3 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 3);
-  max-width: calc((100% - 1px) / 3);
-}
-body.dark .tektite-max-column-4 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 4);
-  max-width: calc((100% - 1px) / 4);
-}
-body.dark .tektite-max-column-5 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 5);
-  max-width: calc((100% - 1px) / 5);
-}
-body.dark .tektite-max-column-6 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 6);
-  max-width: calc((100% - 1px) / 6);
-}
-body.dark .tektite-max-column-7 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 7);
-  max-width: calc((100% - 1px) / 7);
-}
-body.dark .tektite-max-column-8 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 8);
-  max-width: calc((100% - 1px) / 8);
-}
-body.dark .tektite-max-column-9 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 9);
-  max-width: calc((100% - 1px) / 9);
-}
-body.dark .tektite-max-column-10 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 10);
-  max-width: calc((100% - 1px) / 10);
-}
-body.dark .tektite-max-column-11 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 11);
-  max-width: calc((100% - 1px) / 11);
-}
-body.dark .tektite-max-column-12 .tektite-flex-item {
-  min-width: calc((100% - 1px) / 12);
-  max-width: calc((100% - 1px) / 12);
 }
 body.dark .item-title {
   display: inline-flex;
@@ -7247,6 +7247,7 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                                 _a.sent();
                                 this.adjustPageFooterPosition();
                                 this.adjustDownPageLinkDirection();
+                                this.resizeFlexList();
                                 return [2 /*return*/];
                         }
                     });
@@ -7303,6 +7304,81 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                         }
                     });
                 }); };
+                this.resizeFlexList = function () {
+                    var minColumns = 1 + Math.floor(window.innerWidth / 780);
+                    var maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
+                    var FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
+                    var border = FontRemUnit * 26 + 10;
+                    index_js_2.minamo.dom.getDivsByClassName(document, "tektite-menu-popup").forEach(function (header) {
+                        index_js_2.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
+                        index_js_2.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
+                    });
+                    [document.getElementById("tektite-screen-toast")].forEach(function (header) {
+                        index_js_2.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
+                        index_js_2.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
+                    });
+                    index_js_2.minamo.dom.getDivsByClassName(document, "tektite-button-list").forEach(function (header) {
+                        index_js_2.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", true);
+                        index_js_2.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", false);
+                    });
+                    index_js_2.minamo.dom.getDivsByClassName(document, "tektite-column-flex-list").forEach(function (list) {
+                        var length = list.childNodes.length;
+                        list.classList.forEach(function (i) {
+                            if (/^tektite-max-column-\d+$/.test(i)) {
+                                list.classList.remove(i);
+                            }
+                        });
+                        if (length <= 1 || maxColumns <= 1) {
+                            index_js_2.minamo.dom.removeCSSStyleProperty(list.style, "height");
+                        }
+                        else {
+                            var height = window.innerHeight - list.offsetTop;
+                            var itemHeight = list.childNodes[0].offsetHeight + 1;
+                            var columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
+                            var row = Math.max(Math.ceil(length / columns), Math.min(length, Math.floor(height / itemHeight)));
+                            index_js_2.minamo.dom.setStyleProperty(list, "height", "".concat(row * itemHeight, "px"));
+                            index_js_2.minamo.dom.addCSSClass(list, "tektite-max-column-".concat(columns));
+                        }
+                        if (0 < length) {
+                            var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
+                            index_js_2.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
+                            index_js_2.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
+                        }
+                        list.classList.toggle("empty-list", length <= 0);
+                    });
+                    index_js_2.minamo.dom.getDivsByClassName(document, "tektite-row-flex-list").forEach(function (list) {
+                        var length = list.childNodes.length;
+                        list.classList.forEach(function (i) {
+                            if (/^tektite-max-column-\d+$/.test(i)) {
+                                list.classList.remove(i);
+                            }
+                        });
+                        if (0 < length) {
+                            // const columns = Math.min(maxColumns, Math.max(1, length));
+                            // list.classList.add(`tektite-max-column-${columns}`);
+                            var height = window.innerHeight - list.offsetTop;
+                            var itemHeight = list.childNodes[0].offsetHeight;
+                            var columns = list.classList.contains("compact-flex-list") ?
+                                Math.min(maxColumns, length) :
+                                Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
+                            index_js_2.minamo.dom.addCSSClass(list, "tektite-max-column-".concat(columns));
+                            var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
+                            index_js_2.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
+                            index_js_2.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
+                        }
+                        index_js_2.minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
+                    });
+                };
+                this.onWindowResizeTimestamp = 0;
+                this.onWindowResize = function () {
+                    var timestamp = _this.onWindowResizeTimestamp = new Date().getTime();
+                    setTimeout(function () {
+                        if (timestamp === _this.onWindowResizeTimestamp) {
+                            _this.resizeFlexList();
+                            _this.adjustPageFooterPosition();
+                        }
+                    }, 100);
+                };
             }
             return Screen;
         }());
@@ -7562,7 +7638,29 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                         children: data.children,
                     });
                 };
+                this.lastMouseMouseAt = 0;
+                this.onMouseMove = function (_evnet) {
+                    if (_this.fullscreen.enabled()) {
+                        var now_1 = _this.lastMouseMouseAt = new Date().getTime();
+                        if (document.body.classList.contains("tektite-sleep-mouse")) {
+                            document.body.classList.remove("tektite-sleep-mouse");
+                        }
+                        if (_this.fullscreen.element()) {
+                            setTimeout(function () {
+                                if (_this.fullscreen.element() && now_1 === _this.lastMouseMouseAt) {
+                                    if (!document.body.classList.contains("tektite-sleep-mouse")) {
+                                        document.body.classList.add("tektite-sleep-mouse");
+                                    }
+                                }
+                            }, 3000);
+                        }
+                    }
+                };
+                this.onFullscreenChange = function (_event) {
+                    _this.screen.onWindowResize();
+                };
                 this.onWebkitFullscreenChange = function (_event) {
+                    _this.screen.onWindowResize();
                     if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document)) {
                         document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", _this.fullscreen.element());
                     }
@@ -7721,6 +7819,12 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                     window.addEventListener("focus", _this.onWindowFocus);
                     window.addEventListener("blur", _this.onWindowBlur);
                     window.addEventListener("storage", _this.onUpdateStorage);
+                    window.addEventListener("resize", _this.screen.onWindowResize);
+                    window.addEventListener("mousemove", _this.onMouseMove);
+                    window.addEventListener("mousedown", _this.screen.onMouseDown);
+                    window.addEventListener("mouseup", _this.screen.onMouseUp);
+                    document.addEventListener("fullscreenchange", _this.onFullscreenChange);
+                    document.addEventListener("webkitfullscreenchange", _this.onWebkitFullscreenChange);
                     _this.screen.header.onLoad(_this.screen);
                     document.getElementById("tektite-screen-body").addEventListener("scroll", function () {
                         var _a, _b;
@@ -10609,7 +10713,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     case 6: return [4 /*yield*/, _c.apply(_b, [_d.sent()])];
                                     case 7:
                                         _d.sent();
-                                        render_5.Render.resizeFlexList();
+                                        __7.tektite.screen.resizeFlexList();
                                         return [4 /*yield*/, updateScreen("timer")];
                                     case 8:
                                         _d.sent();
@@ -11334,7 +11438,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                     case 6: return [4 /*yield*/, _c.apply(_b, [_e.sent()])];
                                     case 7:
                                         _e.sent();
-                                        render_6.Render.resizeFlexList();
+                                        __8.tektite.screen.resizeFlexList();
                                         return [4 /*yield*/, updateScreen("timer")];
                                     case 8:
                                         _e.sent();
@@ -11731,7 +11835,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                     case 6: return [4 /*yield*/, _c.apply(_b, [_e.sent()])];
                                     case 7:
                                         _e.sent();
-                                        render_7.Render.resizeFlexList();
+                                        __9.tektite.screen.resizeFlexList();
                                         __9.tektite.screen.adjustPageFooterPosition();
                                         return [4 /*yield*/, updateScreen("timer")];
                                     case 8:
@@ -12071,7 +12175,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                     case 6: return [4 /*yield*/, _c.apply(_b, [_g.sent()])];
                                     case 7:
                                         _g.sent();
-                                        render_8.Render.resizeFlexList();
+                                        __10.tektite.screen.resizeFlexList();
                                         return [4 /*yield*/, updateScreen("timer")];
                                     case 8:
                                         _g.sent();
@@ -13211,87 +13315,11 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         _a.sent();
                         __11.tektite.setBackgroundColor(color_6.Color.getSolidRainbowColor(0));
                         Render.updateTitle();
-                        Render.resizeFlexList();
                         return [2 /*return*/];
                 }
             });
         }); };
         Render.setProgress = function (percent, color) { var _a; return __11.tektite.setProgress((_a = storage_13.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto", percent, color); };
-        Render.resizeFlexList = function () {
-            var minColumns = 1 + Math.floor(window.innerWidth / 780);
-            var maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
-            var FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
-            var border = FontRemUnit * 26 + 10;
-            minamo_js_12.minamo.dom.getDivsByClassName(document, "tektite-menu-popup").forEach(function (header) {
-                minamo_js_12.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
-                minamo_js_12.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
-            });
-            [document.getElementById("tektite-screen-toast")].forEach(function (header) {
-                minamo_js_12.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
-                minamo_js_12.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
-            });
-            minamo_js_12.minamo.dom.getDivsByClassName(document, "tektite-button-list").forEach(function (header) {
-                minamo_js_12.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", true);
-                minamo_js_12.minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", false);
-            });
-            minamo_js_12.minamo.dom.getDivsByClassName(document, "tektite-column-flex-list").forEach(function (list) {
-                var length = list.childNodes.length;
-                list.classList.forEach(function (i) {
-                    if (/^tektite-max-column-\d+$/.test(i)) {
-                        list.classList.remove(i);
-                    }
-                });
-                if (length <= 1 || maxColumns <= 1) {
-                    minamo_js_12.minamo.dom.removeCSSStyleProperty(list.style, "height");
-                }
-                else {
-                    var height = window.innerHeight - list.offsetTop;
-                    var itemHeight = list.childNodes[0].offsetHeight + 1;
-                    var columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
-                    var row = Math.max(Math.ceil(length / columns), Math.min(length, Math.floor(height / itemHeight)));
-                    minamo_js_12.minamo.dom.setStyleProperty(list, "height", "".concat(row * itemHeight, "px"));
-                    minamo_js_12.minamo.dom.addCSSClass(list, "tektite-max-column-".concat(columns));
-                }
-                if (0 < length) {
-                    var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
-                    minamo_js_12.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
-                    minamo_js_12.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
-                }
-                list.classList.toggle("empty-list", length <= 0);
-            });
-            minamo_js_12.minamo.dom.getDivsByClassName(document, "tektite-row-flex-list").forEach(function (list) {
-                var length = list.childNodes.length;
-                list.classList.forEach(function (i) {
-                    if (/^tektite-max-column-\d+$/.test(i)) {
-                        list.classList.remove(i);
-                    }
-                });
-                if (0 < length) {
-                    // const columns = Math.min(maxColumns, Math.max(1, length));
-                    // list.classList.add(`tektite-max-column-${columns}`);
-                    var height = window.innerHeight - list.offsetTop;
-                    var itemHeight = list.childNodes[0].offsetHeight;
-                    var columns = list.classList.contains("compact-flex-list") ?
-                        Math.min(maxColumns, length) :
-                        Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
-                    minamo_js_12.minamo.dom.addCSSClass(list, "tektite-max-column-".concat(columns));
-                    var itemWidth = Math.min(window.innerWidth, list.childNodes[0].offsetWidth);
-                    minamo_js_12.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
-                    minamo_js_12.minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
-                }
-                minamo_js_12.minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
-            });
-        };
-        var onWindowResizeTimestamp = 0;
-        Render.onWindowResize = function () {
-            var timestamp = onWindowResizeTimestamp = new Date().getTime();
-            setTimeout(function () {
-                if (timestamp === onWindowResizeTimestamp) {
-                    Render.resizeFlexList();
-                    __11.tektite.screen.adjustPageFooterPosition();
-                }
-            }, 100);
-        };
         Render.onKeydown = function (event) {
             var _a, _b, _c;
             if (!__11.tektite.key.isComposing(event)) {
@@ -13323,31 +13351,6 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                     }
                 }
             }
-        };
-        var lastMouseMouseAt = 0;
-        Render.onMouseMove = function (_evnet) {
-            if (__11.tektite.fullscreen.enabled()) {
-                var now_1 = lastMouseMouseAt = new Date().getTime();
-                if (document.body.classList.contains("tektite-sleep-mouse")) {
-                    document.body.classList.remove("tektite-sleep-mouse");
-                }
-                if (__11.tektite.fullscreen.element()) {
-                    setTimeout(function () {
-                        if (__11.tektite.fullscreen.element() && now_1 === lastMouseMouseAt) {
-                            if (!document.body.classList.contains("tektite-sleep-mouse")) {
-                                document.body.classList.add("tektite-sleep-mouse");
-                            }
-                        }
-                    }, 3000);
-                }
-            }
-        };
-        Render.onFullscreenChange = function (_event) {
-            Render.onWindowResize();
-        };
-        Render.onWebkitFullscreenChange = function (event) {
-            Render.onWindowResize();
-            __11.tektite.onWebkitFullscreenChange(event);
         };
         Render.itemState = function (itemJson, item) {
             if (!itemJson) {
@@ -13665,13 +13668,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                         exports.tektite.locale.setLocale(storage_14.Storage.Settings.get().locale);
                         exports.tektite.onLoad();
                         window.onpopstate = function () { return render_14.Render.showPage(); };
-                        window.addEventListener("resize", render_14.Render.onWindowResize);
                         window.addEventListener("keydown", render_14.Render.onKeydown);
-                        window.addEventListener("mousemove", render_14.Render.onMouseMove);
-                        window.addEventListener("mousedown", exports.tektite.screen.onMouseDown);
-                        window.addEventListener("mouseup", exports.tektite.screen.onMouseUp);
-                        document.addEventListener("fullscreenchange", render_14.Render.onFullscreenChange);
-                        document.addEventListener("webkitfullscreenchange", render_14.Render.onWebkitFullscreenChange);
                         window.matchMedia("(prefers-color-scheme: dark)").addListener(render_14.Render.updateStyle);
                         render_14.Render.updateStyle();
                         render_14.Render.updateProgressBarStyle();
@@ -13704,7 +13701,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1641221806386), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1641303272176), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

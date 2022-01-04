@@ -260,6 +260,7 @@ export module Screen
             await this.replaceBody(screen.body);
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();
+            this.resizeFlexList();
         };
         public makeBody = async (body: Tektite.PageSource | minamo.dom.Source) =>
             undefined === (body as Tektite.PageSource).primary ?
@@ -293,6 +294,123 @@ export module Screen
                 Tektite.$div("tektite-trail-page")(trail):
                 [],
         ];
+        public resizeFlexList = () =>
+        {
+            const minColumns = 1 +Math.floor(window.innerWidth / 780);
+            const maxColumns = Math.min(12, Math.max(minColumns, Math.floor(window.innerWidth / 450)));
+            const FontRemUnit = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            const border = FontRemUnit *26 +10;
+            minamo.dom.getDivsByClassName(document, "tektite-menu-popup").forEach
+            (
+                header =>
+                {
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
+                }
+            );
+            [document.getElementById("tektite-screen-toast") as HTMLDivElement].forEach
+            (
+                header =>
+                {
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", 2 <= minColumns);
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
+                }
+            );
+            minamo.dom.getDivsByClassName(document, "tektite-button-list").forEach
+            (
+                header =>
+                {
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", true);
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", false);
+                }
+            );
+            minamo.dom.getDivsByClassName(document, "tektite-column-flex-list").forEach
+            (
+                list =>
+                {
+                    const length = list.childNodes.length;
+                    list.classList.forEach
+                    (
+                        i =>
+                        {
+                            if (/^tektite-max-column-\d+$/.test(i))
+                            {
+                                list.classList.remove(i);
+                            }
+                        }
+                    );
+                    if (length <= 1 || maxColumns <= 1)
+                    {
+                        minamo.dom.removeCSSStyleProperty(list.style, "height");
+                    }
+                    else
+                    {
+                        const height = window.innerHeight -list.offsetTop;
+                        const itemHeight = (list.childNodes[0] as HTMLElement).offsetHeight +1;
+                        const columns = Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
+                        const row = Math.max(Math.ceil(length /columns), Math.min(length, Math.floor(height / itemHeight)));
+                        minamo.dom.setStyleProperty(list, "height", `${row *itemHeight}px`);
+                        minamo.dom.addCSSClass(list, `tektite-max-column-${columns}`);
+                    }
+                    if (0 < length)
+                    {
+                        const itemWidth = Math.min(window.innerWidth, (list.childNodes[0] as HTMLElement).offsetWidth);
+                        minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
+                        minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
+                    }
+                    list.classList.toggle("empty-list", length <= 0);
+                }
+            );
+            minamo.dom.getDivsByClassName(document, "tektite-row-flex-list").forEach
+            (
+                list =>
+                {
+                    const length = list.childNodes.length;
+                    list.classList.forEach
+                    (
+                        i =>
+                        {
+                            if (/^tektite-max-column-\d+$/.test(i))
+                            {
+                                list.classList.remove(i);
+                            }
+                        }
+                    );
+                    if (0 < length)
+                    {
+                        // const columns = Math.min(maxColumns, Math.max(1, length));
+                        // list.classList.add(`tektite-max-column-${columns}`);
+                        const height = window.innerHeight -list.offsetTop;
+                        const itemHeight = (list.childNodes[0] as HTMLElement).offsetHeight;
+                        const columns = list.classList.contains("compact-flex-list") ?
+                            Math.min(maxColumns, length):
+                            Math.min(maxColumns, Math.ceil(length / Math.max(1.0, Math.floor(height / itemHeight))));
+                        minamo.dom.addCSSClass(list, `tektite-max-column-${columns}`);
+                        const itemWidth = Math.min(window.innerWidth, (list.childNodes[0] as HTMLElement).offsetWidth);
+                        minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-on", border < itemWidth);
+                        minamo.dom.toggleCSSClass(list, "tektite-locale-parallel-off", itemWidth <= border);
+                    }
+                    minamo.dom.toggleCSSClass(list, "empty-list", length <= 0);
+                }
+            );
+        };
+        onWindowResizeTimestamp = 0;
+        public onWindowResize = () =>
+        {
+            const timestamp = this.onWindowResizeTimestamp = new Date().getTime();
+            setTimeout
+            (
+                () =>
+                {
+                    if (timestamp === this.onWindowResizeTimestamp)
+                    {
+                        this.resizeFlexList();
+                        this.adjustPageFooterPosition();
+                    }
+                },
+                100,
+            );
+        };
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
         new Screen(tektite);

@@ -347,7 +347,7 @@ export module Render
                 case "operate":
                     timezones = Storage.RainbowClock.Timezone.get();
                     await tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
-                    RenderBase.resizeFlexList();
+                    tektite.screen.resizeFlexList();
                     await updateScreen("timer");
                     await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
                     tektite.screen.adjustPageFooterPosition();
