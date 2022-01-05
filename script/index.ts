@@ -30,8 +30,6 @@ export module Clockworks
         console.log(`${JSON.stringify(params)}`);
         tektite.locale.setLocale(Storage.Settings.get().locale);
         tektite.onLoad();
-        window.onpopstate = () => Render.showPage();
-        window.addEventListener("keydown", Render.onKeydown);
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
         Render.updateStyle();
         Render.updateProgressBarStyle();

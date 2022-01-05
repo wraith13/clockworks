@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Tue Jan 04 2022 22:34:32 GMT+0900 (日本標準時)
+    build at: Wed Jan 05 2022 11:00:09 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -356,6 +356,138 @@ body.light ul {
   padding-block-end: 1em;
   padding-inline-end: 16px;
   padding-inline-start: 40px;
+}
+body.light h2 {
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+}
+body.light h1,
+body.light h2 {
+  margin: 0rem;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+  background-color: #5F42A7;
+  text-decoration: none;
+}
+body.light label {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  body.light label:hover {
+    color: #51A94E;
+  }
+}
+body.light input,
+body.light select {
+  margin: 4px;
+  padding: 4px 16px;
+  border-radius: 32px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #888;
+  font-size: 1rem;
+  min-width: 120px;
+}
+body.light button {
+  cursor: pointer;
+  margin: 4px;
+  padding: 4px 12px;
+  border-radius: 32px;
+  border-style: solid;
+  border-width: 1px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+@media (hover: hover) {
+  body.light button:not(:hover) {
+    color: #5F42A7;
+    fill: #5F42A7;
+    border-color: #5F42A7;
+    background-color: #FFFFFF;
+  }
+  body.light button:hover {
+    color: #FFFFFF;
+    fill: #FFFFFF;
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.light button {
+    color: #5F42A7;
+    fill: #5F42A7;
+    border-color: #5F42A7;
+    background-color: #FFFFFF;
+  }
+}
+body.light button.tektite-default-button {
+  cursor: pointer;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+@media (hover: hover) {
+  body.light button.tektite-default-button:not(:hover) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+  body.light button.tektite-default-button:hover {
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.light button.tektite-default-button {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+}
+body.light button.tektite-icon-button,
+body.light button.tektite-menu-button {
+  padding: 4px;
+}
+@media (hover: hover) {
+  body.light button.tektite-icon-button:not(:hover),
+  body.light button.tektite-menu-button:not(:hover) {
+    background-color: transparent;
+    border-color: transparent;
+  }
+}
+@media (hover: none) {
+  body.light button.tektite-icon-button,
+  body.light button.tektite-menu-button {
+    background-color: transparent;
+    border-color: transparent;
+  }
+}
+body.light button.tektite-icon-button svg,
+body.light button.tektite-menu-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+body.light button.delete-button {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  body.light button.delete-button:not(:hover) {
+    color: #831B50;
+    fill: #831B50;
+    border-color: #831B50;
+    background-color: #FFFFFF;
+  }
+  body.light button.delete-button:hover {
+    color: #FFFFFF;
+    fill: #FFFFFF;
+    border-color: #831B50;
+    background-color: #831B50;
+  }
+}
+@media (hover: none) {
+  body.light button.delete-button {
+    color: #831B50;
+    fill: #831B50;
+    border-color: #831B50;
+    background-color: #FFFFFF;
+  }
 }
 body.light #tektite-foundation {
   background-color: #FFFFFF;
@@ -973,6 +1105,31 @@ body.light .tektite-max-column-11 .tektite-flex-item {
 body.light .tektite-max-column-12 .tektite-flex-item {
   min-width: calc((100% - 1px) / 12);
   max-width: calc((100% - 1px) / 12);
+}
+body.light .tektite-popup {
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 16px;
+  border-color: #5F42A7;
+  background-color: #FFFFFF;
+  overflow: auto;
+  min-width: 240px;
+  max-width: calc(100vw - 16px);
+}
+body.light .tektite-popup input,
+body.light .tektite-popup select {
+  width: calc(100% - 8px);
+}
+body.light .tektite-popup .tektite-popup-operator {
+  width: 100%;
+}
+body.light .tektite-popup .tektite-popup-operator .tektite-cancel-button {
+  float: left;
+  border-color: transparent;
+}
+body.light .tektite-popup .tektite-popup-operator .tektite-default-button {
+  float: right;
+  min-width: 120px;
 }
 body.light.tektite-sleep-mouse {
   cursor: none;
@@ -1628,138 +1785,6 @@ body.light .tektite-text-button {
     text-decoration: none;
   }
 }
-body.light h2 {
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
-}
-body.light h1,
-body.light h2 {
-  margin: 0rem;
-  color: #FFFFFF;
-  fill: #FFFFFF;
-  background-color: #5F42A7;
-  text-decoration: none;
-}
-body.light label {
-  cursor: pointer;
-}
-@media (hover: hover) {
-  body.light label:hover {
-    color: #51A94E;
-  }
-}
-body.light input,
-body.light select {
-  margin: 4px;
-  padding: 4px 16px;
-  border-radius: 32px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #888;
-  font-size: 1rem;
-  min-width: 120px;
-}
-body.light button {
-  cursor: pointer;
-  margin: 4px;
-  padding: 4px 12px;
-  border-radius: 32px;
-  border-style: solid;
-  border-width: 1px;
-  font-weight: bold;
-  font-size: 1rem;
-}
-@media (hover: hover) {
-  body.light button:not(:hover) {
-    color: #5F42A7;
-    fill: #5F42A7;
-    border-color: #5F42A7;
-    background-color: #FFFFFF;
-  }
-  body.light button:hover {
-    color: #FFFFFF;
-    fill: #FFFFFF;
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.light button {
-    color: #5F42A7;
-    fill: #5F42A7;
-    border-color: #5F42A7;
-    background-color: #FFFFFF;
-  }
-}
-body.light button.tektite-default-button {
-  cursor: pointer;
-  color: #FFFFFF;
-  fill: #FFFFFF;
-}
-@media (hover: hover) {
-  body.light button.tektite-default-button:not(:hover) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-  body.light button.tektite-default-button:hover {
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.light button.tektite-default-button {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-}
-body.light button.tektite-icon-button,
-body.light button.tektite-menu-button {
-  padding: 4px;
-}
-@media (hover: hover) {
-  body.light button.tektite-icon-button:not(:hover),
-  body.light button.tektite-menu-button:not(:hover) {
-    background-color: transparent;
-    border-color: transparent;
-  }
-}
-@media (hover: none) {
-  body.light button.tektite-icon-button,
-  body.light button.tektite-menu-button {
-    background-color: transparent;
-    border-color: transparent;
-  }
-}
-body.light button.tektite-icon-button svg,
-body.light button.tektite-menu-button svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-body.light button.delete-button {
-  cursor: pointer;
-}
-@media (hover: hover) {
-  body.light button.delete-button:not(:hover) {
-    color: #831B50;
-    fill: #831B50;
-    border-color: #831B50;
-    background-color: #FFFFFF;
-  }
-  body.light button.delete-button:hover {
-    color: #FFFFFF;
-    fill: #FFFFFF;
-    border-color: #831B50;
-    background-color: #831B50;
-  }
-}
-@media (hover: none) {
-  body.light button.delete-button {
-    color: #831B50;
-    fill: #831B50;
-    border-color: #831B50;
-    background-color: #FFFFFF;
-  }
-}
 body.light .tektite-main-button {
   position: relative;
   margin: 0.5rem 1rem;
@@ -1928,31 +1953,6 @@ body.light .tektite-check-button svg {
 }
 body.light .tektite-check-button:not(.checked) svg {
   visibility: hidden;
-}
-body.light .tektite-popup {
-  border-style: solid;
-  border-width: 2px;
-  border-radius: 16px;
-  border-color: #5F42A7;
-  background-color: #FFFFFF;
-  overflow: auto;
-  min-width: 240px;
-  max-width: calc(100vw - 16px);
-}
-body.light .tektite-popup input,
-body.light .tektite-popup select {
-  width: calc(100% - 8px);
-}
-body.light .tektite-popup .tektite-popup-operator {
-  width: 100%;
-}
-body.light .tektite-popup .tektite-popup-operator .tektite-cancel-button {
-  float: left;
-  border-color: transparent;
-}
-body.light .tektite-popup .tektite-popup-operator .tektite-default-button {
-  float: right;
-  min-width: 120px;
 }
 body.light .item-title {
   display: inline-flex;
@@ -2976,6 +2976,138 @@ body.dark ul {
   padding-inline-end: 16px;
   padding-inline-start: 40px;
 }
+body.dark h2 {
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+}
+body.dark h1,
+body.dark h2 {
+  margin: 0rem;
+  color: #000022;
+  fill: #000022;
+  background-color: #5F42A7;
+  text-decoration: none;
+}
+body.dark label {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  body.dark label:hover {
+    color: #51A94E;
+  }
+}
+body.dark input,
+body.dark select {
+  margin: 4px;
+  padding: 4px 16px;
+  border-radius: 32px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #888;
+  font-size: 1rem;
+  min-width: 120px;
+}
+body.dark button {
+  cursor: pointer;
+  margin: 4px;
+  padding: 4px 12px;
+  border-radius: 32px;
+  border-style: solid;
+  border-width: 1px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+@media (hover: hover) {
+  body.dark button:not(:hover) {
+    color: #5F42A7;
+    fill: #5F42A7;
+    border-color: #5F42A7;
+    background-color: #000022;
+  }
+  body.dark button:hover {
+    color: #000022;
+    fill: #000022;
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.dark button {
+    color: #5F42A7;
+    fill: #5F42A7;
+    border-color: #5F42A7;
+    background-color: #000022;
+  }
+}
+body.dark button.tektite-default-button {
+  cursor: pointer;
+  color: #000022;
+  fill: #000022;
+}
+@media (hover: hover) {
+  body.dark button.tektite-default-button:not(:hover) {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+  body.dark button.tektite-default-button:hover {
+    border-color: #51A94E;
+    background-color: #51A94E;
+  }
+}
+@media (hover: none) {
+  body.dark button.tektite-default-button {
+    border-color: #5F42A7;
+    background-color: #5F42A7;
+  }
+}
+body.dark button.tektite-icon-button,
+body.dark button.tektite-menu-button {
+  padding: 4px;
+}
+@media (hover: hover) {
+  body.dark button.tektite-icon-button:not(:hover),
+  body.dark button.tektite-menu-button:not(:hover) {
+    background-color: transparent;
+    border-color: transparent;
+  }
+}
+@media (hover: none) {
+  body.dark button.tektite-icon-button,
+  body.dark button.tektite-menu-button {
+    background-color: transparent;
+    border-color: transparent;
+  }
+}
+body.dark button.tektite-icon-button svg,
+body.dark button.tektite-menu-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+body.dark button.delete-button {
+  cursor: pointer;
+}
+@media (hover: hover) {
+  body.dark button.delete-button:not(:hover) {
+    color: #831B50;
+    fill: #831B50;
+    border-color: #831B50;
+    background-color: #000022;
+  }
+  body.dark button.delete-button:hover {
+    color: #000022;
+    fill: #000022;
+    border-color: #831B50;
+    background-color: #831B50;
+  }
+}
+@media (hover: none) {
+  body.dark button.delete-button {
+    color: #831B50;
+    fill: #831B50;
+    border-color: #831B50;
+    background-color: #000022;
+  }
+}
 body.dark #tektite-foundation {
   background-color: #000022;
   position: absolute;
@@ -3592,6 +3724,31 @@ body.dark .tektite-max-column-11 .tektite-flex-item {
 body.dark .tektite-max-column-12 .tektite-flex-item {
   min-width: calc((100% - 1px) / 12);
   max-width: calc((100% - 1px) / 12);
+}
+body.dark .tektite-popup {
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 16px;
+  border-color: #5F42A7;
+  background-color: #000022;
+  overflow: auto;
+  min-width: 240px;
+  max-width: calc(100vw - 16px);
+}
+body.dark .tektite-popup input,
+body.dark .tektite-popup select {
+  width: calc(100% - 8px);
+}
+body.dark .tektite-popup .tektite-popup-operator {
+  width: 100%;
+}
+body.dark .tektite-popup .tektite-popup-operator .tektite-cancel-button {
+  float: left;
+  border-color: transparent;
+}
+body.dark .tektite-popup .tektite-popup-operator .tektite-default-button {
+  float: right;
+  min-width: 120px;
 }
 body.dark.tektite-sleep-mouse {
   cursor: none;
@@ -4247,138 +4404,6 @@ body.dark .tektite-text-button {
     text-decoration: none;
   }
 }
-body.dark h2 {
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
-}
-body.dark h1,
-body.dark h2 {
-  margin: 0rem;
-  color: #000022;
-  fill: #000022;
-  background-color: #5F42A7;
-  text-decoration: none;
-}
-body.dark label {
-  cursor: pointer;
-}
-@media (hover: hover) {
-  body.dark label:hover {
-    color: #51A94E;
-  }
-}
-body.dark input,
-body.dark select {
-  margin: 4px;
-  padding: 4px 16px;
-  border-radius: 32px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #888;
-  font-size: 1rem;
-  min-width: 120px;
-}
-body.dark button {
-  cursor: pointer;
-  margin: 4px;
-  padding: 4px 12px;
-  border-radius: 32px;
-  border-style: solid;
-  border-width: 1px;
-  font-weight: bold;
-  font-size: 1rem;
-}
-@media (hover: hover) {
-  body.dark button:not(:hover) {
-    color: #5F42A7;
-    fill: #5F42A7;
-    border-color: #5F42A7;
-    background-color: #000022;
-  }
-  body.dark button:hover {
-    color: #000022;
-    fill: #000022;
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.dark button {
-    color: #5F42A7;
-    fill: #5F42A7;
-    border-color: #5F42A7;
-    background-color: #000022;
-  }
-}
-body.dark button.tektite-default-button {
-  cursor: pointer;
-  color: #000022;
-  fill: #000022;
-}
-@media (hover: hover) {
-  body.dark button.tektite-default-button:not(:hover) {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-  body.dark button.tektite-default-button:hover {
-    border-color: #51A94E;
-    background-color: #51A94E;
-  }
-}
-@media (hover: none) {
-  body.dark button.tektite-default-button {
-    border-color: #5F42A7;
-    background-color: #5F42A7;
-  }
-}
-body.dark button.tektite-icon-button,
-body.dark button.tektite-menu-button {
-  padding: 4px;
-}
-@media (hover: hover) {
-  body.dark button.tektite-icon-button:not(:hover),
-  body.dark button.tektite-menu-button:not(:hover) {
-    background-color: transparent;
-    border-color: transparent;
-  }
-}
-@media (hover: none) {
-  body.dark button.tektite-icon-button,
-  body.dark button.tektite-menu-button {
-    background-color: transparent;
-    border-color: transparent;
-  }
-}
-body.dark button.tektite-icon-button svg,
-body.dark button.tektite-menu-button svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-body.dark button.delete-button {
-  cursor: pointer;
-}
-@media (hover: hover) {
-  body.dark button.delete-button:not(:hover) {
-    color: #831B50;
-    fill: #831B50;
-    border-color: #831B50;
-    background-color: #000022;
-  }
-  body.dark button.delete-button:hover {
-    color: #000022;
-    fill: #000022;
-    border-color: #831B50;
-    background-color: #831B50;
-  }
-}
-@media (hover: none) {
-  body.dark button.delete-button {
-    color: #831B50;
-    fill: #831B50;
-    border-color: #831B50;
-    background-color: #000022;
-  }
-}
 body.dark .tektite-main-button {
   position: relative;
   margin: 0.5rem 1rem;
@@ -4547,31 +4572,6 @@ body.dark .tektite-check-button svg {
 }
 body.dark .tektite-check-button:not(.checked) svg {
   visibility: hidden;
-}
-body.dark .tektite-popup {
-  border-style: solid;
-  border-width: 2px;
-  border-radius: 16px;
-  border-color: #5F42A7;
-  background-color: #000022;
-  overflow: auto;
-  min-width: 240px;
-  max-width: calc(100vw - 16px);
-}
-body.dark .tektite-popup input,
-body.dark .tektite-popup select {
-  width: calc(100% - 8px);
-}
-body.dark .tektite-popup .tektite-popup-operator {
-  width: 100%;
-}
-body.dark .tektite-popup .tektite-popup-operator .tektite-cancel-button {
-  float: left;
-  border-color: transparent;
-}
-body.dark .tektite-popup .tektite-popup-operator .tektite-default-button {
-  float: right;
-  min-width: 120px;
 }
 body.dark .item-title {
   display: inline-flex;
@@ -7665,6 +7665,38 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                         document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", _this.fullscreen.element());
                     }
                 };
+                this.onKeydown = function (event) {
+                    var _a, _b, _c;
+                    if (!_this.key.isComposing(event)) {
+                        switch (event.key) {
+                            case "Enter":
+                                index_js_5.minamo.dom.getElementsByClassName(document, "popup")
+                                    .filter(function (_i, ix, list) { return (ix + 1) === list.length; })
+                                    .forEach(function (popup) { var _a, _b; return (_b = (_a = index_js_5.minamo.dom.getElementsByClassName(popup, "tektite-default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
+                                break;
+                            case "Escape":
+                                if (_this.escape()) {
+                                    event.preventDefault();
+                                }
+                                break;
+                        }
+                        var focusedElementTagName = (_c = (_b = (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.tagName) === null || _b === void 0 ? void 0 : _b.toLowerCase()) !== null && _c !== void 0 ? _c : "";
+                        if (["input", "textarea"].indexOf(focusedElementTagName) < 0) {
+                            switch (event.key.toLowerCase()) {
+                                case "f":
+                                    if (_this.fullscreen.enabled()) {
+                                        if (null === _this.fullscreen.element()) {
+                                            _this.fullscreen.request();
+                                        }
+                                        else {
+                                            _this.fullscreen.exit();
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                };
                 this.reload = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this.params.showPage(location.href)];
@@ -7823,6 +7855,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                     window.addEventListener("mousemove", _this.onMouseMove);
                     window.addEventListener("mousedown", _this.screen.onMouseDown);
                     window.addEventListener("mouseup", _this.screen.onMouseUp);
+                    window.addEventListener("keydown", _this.onKeydown);
                     document.addEventListener("fullscreenchange", _this.onFullscreenChange);
                     document.addEventListener("webkitfullscreenchange", _this.onWebkitFullscreenChange);
                     _this.screen.header.onLoad(_this.screen);
@@ -7840,6 +7873,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                     if (undefined === _this.updateHighResolutionTimer) {
                         _this.updateHighResolutionTimer = setInterval(function () { var _a, _b; return (_b = (_a = _this.screen).update) === null || _b === void 0 ? void 0 : _b.call(_a, "high-resolution-timer"); }, 36);
                     }
+                    window.onpopstate = function () { return _this.params.showPage(location.href); };
                 };
                 window.addEventListener("compositionstart", this.key.onCompositionStart);
                 window.addEventListener("compositionend", this.key.onCompositionEnd);
@@ -13320,38 +13354,6 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             });
         }); };
         Render.setProgress = function (percent, color) { var _a; return __11.tektite.setProgress((_a = storage_13.Storage.Settings.get().progressBarStyle) !== null && _a !== void 0 ? _a : "auto", percent, color); };
-        Render.onKeydown = function (event) {
-            var _a, _b, _c;
-            if (!__11.tektite.key.isComposing(event)) {
-                switch (event.key) {
-                    case "Enter":
-                        minamo_js_12.minamo.dom.getElementsByClassName(document, "popup")
-                            .filter(function (_i, ix, list) { return (ix + 1) === list.length; })
-                            .forEach(function (popup) { var _a, _b; return (_b = (_a = minamo_js_12.minamo.dom.getElementsByClassName(popup, "tektite-default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
-                        break;
-                    case "Escape":
-                        if (__11.tektite.escape()) {
-                            event.preventDefault();
-                        }
-                        break;
-                }
-                var focusedElementTagName = (_c = (_b = (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.tagName) === null || _b === void 0 ? void 0 : _b.toLowerCase()) !== null && _c !== void 0 ? _c : "";
-                if (["input", "textarea"].indexOf(focusedElementTagName) < 0) {
-                    switch (event.key.toLowerCase()) {
-                        case "f":
-                            if (__11.tektite.fullscreen.enabled()) {
-                                if (null === __11.tektite.fullscreen.element()) {
-                                    __11.tektite.fullscreen.request();
-                                }
-                                else {
-                                    __11.tektite.fullscreen.exit();
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-        };
         Render.itemState = function (itemJson, item) {
             if (!itemJson) {
                 return "nothing";
@@ -13667,8 +13669,6 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                         console.log("".concat(JSON.stringify(params)));
                         exports.tektite.locale.setLocale(storage_14.Storage.Settings.get().locale);
                         exports.tektite.onLoad();
-                        window.onpopstate = function () { return render_14.Render.showPage(); };
-                        window.addEventListener("keydown", render_14.Render.onKeydown);
                         window.matchMedia("(prefers-color-scheme: dark)").addListener(render_14.Render.updateStyle);
                         render_14.Render.updateStyle();
                         render_14.Render.updateProgressBarStyle();
@@ -13701,7 +13701,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1641303272176), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1641348009562), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

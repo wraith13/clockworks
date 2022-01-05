@@ -144,6 +144,46 @@ export module Tektite
                 document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", this.fullscreen.element());
             }
         };
+        public onKeydown = (event: KeyboardEvent) =>
+        {
+            if ( ! this.key.isComposing(event))
+            {
+                switch(event.key)
+                {
+                    case "Enter":
+                        minamo.dom.getElementsByClassName<HTMLDivElement>(document, "popup")
+                            .filter((_i, ix, list) => (ix +1) === list.length)
+                            .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "tektite-default-button")?.[0]?.click());
+                        break;
+                    case "Escape":
+                        if (this.escape())
+                        {
+                            event.preventDefault();
+                        }
+                        break;
+                }
+                const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
+                if (["input", "textarea"].indexOf(focusedElementTagName) < 0)
+                {
+                    switch(event.key.toLowerCase())
+                    {
+                        case "f":
+                            if (this.fullscreen.enabled())
+                            {
+                                if(null === this.fullscreen.element())
+                                {
+                                    this.fullscreen.request();
+                                }
+                                else
+                                {
+                                    this.fullscreen.exit();
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+        };
         public reload = async () => await this.params.showPage(location.href);
         public setTitle = (title: string) =>
         {
@@ -328,6 +368,7 @@ export module Tektite
             window.addEventListener("mousemove", this.onMouseMove);
             window.addEventListener("mousedown", this.screen.onMouseDown);
             window.addEventListener("mouseup", this.screen.onMouseUp);
+            window.addEventListener("keydown", this.onKeydown);
             document.addEventListener("fullscreenchange", this.onFullscreenChange);
             document.addEventListener("webkitfullscreenchange", this.onWebkitFullscreenChange);
             this.screen.header.onLoad(this.screen);
@@ -360,6 +401,7 @@ export module Tektite
                     36
                 );
             }
+            window.onpopstate = () => this.params.showPage(location.href);
         };
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>

@@ -772,46 +772,6 @@ export module Render
     };
     export const setProgress = (percent: null | number, color?: string) =>
         tektite.setProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
-    export const onKeydown = (event: KeyboardEvent) =>
-    {
-        if ( ! tektite.key.isComposing(event))
-        {
-            switch(event.key)
-            {
-                case "Enter":
-                    minamo.dom.getElementsByClassName<HTMLDivElement>(document, "popup")
-                        .filter((_i, ix, list) => (ix +1) === list.length)
-                        .forEach(popup => minamo.dom.getElementsByClassName<HTMLButtonElement>(popup, "tektite-default-button")?.[0]?.click());
-                    break;
-                case "Escape":
-                    if (tektite.escape())
-                    {
-                        event.preventDefault();
-                    }
-                    break;
-            }
-            const focusedElementTagName = document.activeElement?.tagName?.toLowerCase() ?? "";
-            if (["input", "textarea"].indexOf(focusedElementTagName) < 0)
-            {
-                switch(event.key.toLowerCase())
-                {
-                    case "f":
-                        if (tektite.fullscreen.enabled())
-                        {
-                            if(null === tektite.fullscreen.element())
-                            {
-                                tektite.fullscreen.request();
-                            }
-                            else
-                            {
-                                tektite.fullscreen.exit();
-                            }
-                        }
-                        break;
-                }
-            }
-        }
-    };
     export type ItemStateType = "nothing" | "regular" | "irregular" | "invalid";
     export const itemState = <T>(itemJson: string, item: T): ItemStateType =>
     {

@@ -50,3 +50,89 @@ ul
     padding-inline-end: 16px;
     padding-inline-start: 40px;
 }
+h2
+{
+    padding: 0.25rem 0.5rem;
+    font-size: 1.0rem;
+}
+h1, h2
+{
+    margin: 0rem;
+    .tektite-negative-foreground-coloring-trait;
+    background-color: @tektite-accent-color;
+    text-decoration: none;
+}
+label
+{
+    cursor: pointer;
+    // position: relative;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: stretch;
+    @media (hover: hover)
+    {
+        &:hover
+        {
+            color: @tektite-active-color;
+        }
+    }
+}
+input,
+select
+{
+    margin: 4px;
+    padding: 4px 16px;
+    border-radius: 32px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #888;
+    font-size: 1.0rem;
+    min-width: 120px;
+}
+button
+{
+    .tektite-secondary-operator-coloring-trait;
+    &.tektite-default-button
+    {
+        .tektite-primary-operator-coloring-trait;
+    }
+    margin: 4px;
+    padding: 4px 12px;
+    border-radius: 32px;
+    border-style: solid;
+    border-width: 1px;
+    font-weight: bold;
+    font-size: 1.0rem;
+    // cursor: pointer;
+    &.tektite-icon-button,
+    &.tektite-menu-button
+    {
+        @media (hover: hover)
+        {
+            &:not(:hover)
+            {
+                background-color: transparent;
+                border-color: transparent;
+            }
+        }
+        @media (hover: none)
+        {
+            &
+            {
+                background-color: transparent;
+                border-color: transparent;
+            }
+        }
+    
+        padding: 4px;
+        svg
+        {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+    &.delete-button
+    {
+        .tektite-delete-operator-coloring-trait;
+    }
+}
