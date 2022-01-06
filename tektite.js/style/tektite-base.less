@@ -136,3 +136,134 @@ button
         .tektite-delete-operator-coloring-trait;
     }
 }
+.tektite-locale-parallel-on
+{
+    .locale-map
+    {
+        display: none;
+    }
+    .locale-parallel
+    {
+        display: initial;
+    }
+}
+.tektite-locale-parallel-off,
+.tektite-menu-popup
+{
+    .locale-map
+    {
+        display: initial;
+    }
+    .locale-parallel
+    {
+        display: none;
+    }
+}
+.tektite-text-button
+{
+    .tektite-link-trait;
+    border-style: none;
+    border-width: 0px;
+    border-radius: 0px;
+    padding: 0px;
+    margin: 0px;
+    background-color: transparent !important;
+    text-decoration: none !important;
+}
+.tektite-main-button
+{
+    position: relative;
+    margin: 0.5rem 1rem;
+    width: calc(100% - (2rem + 2px));
+    max-width: 640px;
+    float: center;
+}
+.tektite-menu-popup
+{
+    &:not(.show)
+    {
+        display: none;
+    }
+    position: absolute;
+    top: calc(10px + 1.5rem);
+    right: 0.0rem;
+    z-index: 99999;
+}
+.tektite-menu-popup,
+.bare-popup
+{
+    max-height: calc(100vh - 15rem);
+    overflow: hidden;
+    overflow-y: auto;
+    &, & > a
+    {
+        display: flex;
+        // flex-wrap: wrap;
+        align-items: stretch;
+        justify-content: stretch;
+        flex-direction: column;
+    }
+    color: @tektite-accent-color;
+    .tektite-alpha-positive-background-coloring-trait;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.5rem;
+    line-height: 1.5rem;
+    font-size: 1.5rem;
+    a, button
+    {
+        border-radius: 0px;
+        margin: 0px !important;
+        border-style: none;
+        border-width: 0px;
+        font-size: 1.2rem;
+        text-align: left;
+        text-decoration: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        svg
+        {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-left: -0.25rem;
+            margin-right: 0.5rem;
+        }
+        &.current-item
+        {
+            .tektite-primary-operator-coloring-trait;
+        }
+        &:not(.current-item)
+        {
+            @media (hover: hover)
+            {
+                &:not(:hover)
+                {
+                    background-color: transparent;
+                }
+            }
+            @media (hover: none)
+            {
+                background-color: transparent;
+            }
+        }
+        & > .label + .value
+        {
+            margin-left: 0.5rem;
+            text-align: right;
+            flex-grow: 1;
+        }
+        &:not(.current-item):not(:hover)
+        {
+            & > .label + .value
+            {
+                color: #888;
+            }
+        }
+    }
+    a button
+    {
+        width: 100%;
+    }
+}
