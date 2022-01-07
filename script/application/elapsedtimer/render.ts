@@ -166,7 +166,6 @@ export module Render
     export const showElapsedTimerScreen = async (item: Type.EventEntry | null) =>
     {
         const applicationTitle = Type.applicationList["ElapsedTimer"].title;
-        document.body.classList.add("tektite-hide-scroll-bar");
         let events = Storage.ElapsedTimer.Events.get();
         const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
