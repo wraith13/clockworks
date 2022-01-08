@@ -433,7 +433,7 @@ export module Render
                 // className: "add-remove-tags-popup",
                 children:
                 [
-                    popupTitle(Tektite.$labelSpan("シェア / Share")),
+                    popupTitle(label("Share")),
                     Tektite.$div("tektite-menu-button-list")
                     ([
                         {
@@ -731,20 +731,20 @@ export module Render
                     {
                         tag: "button",
                         className: "tektite-main-button tektite-main-button",
-                        children: "閉じる / Close",
+                        children: label("Close"),
                     }
                 }),
                 isSaved(item) ?
                     {
                         tag: "button",
                         className: "tektite-main-button tektite-main-button",
-                        children: "シェア / Share",
+                        children: label("Share"),
                         onclick: async () => await sharePopup(getShareTitle(item)),
                     }:
                     {
                         tag: "button",
                         className: "tektite-main-button tektite-main-button",
-                        children: "保存 / Save",
+                        children: label("Save"),
                         onclick: async () => await save(item),
                     }
             ]):
