@@ -146,7 +146,7 @@ export module Render
                 Tektite.$div("tektite-button-list")
                 ({
                     tag: "button",
-                    className: "tektite-default-button tektite-main-button tektite-main-button",
+                    className: "tektite-default-button tektite-main-button tektite-long-button",
                     children: label("Stamp"),
                     onclick: async () => await Operate.stamp(Domain.getTicks())
                 }),

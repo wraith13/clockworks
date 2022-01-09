@@ -357,7 +357,7 @@ export module Render
                 ({
                     tag: "button",
                     id: "done-button",
-                    className: "tektite-default-button tektite-main-button tektite-main-button",
+                    className: "tektite-default-button tektite-main-button tektite-long-button",
                     children: label("Done"),
                     onclick: async () =>
                     {
@@ -392,13 +392,13 @@ export module Render
                 ([
                     {
                         tag: "button",
-                        className: "tektite-main-button tektite-main-button",
+                        className: "tektite-main-button tektite-long-button",
                         children: label("New Timer"),
                         onclick: async () => await newTimerPopup(),
                     },
                     {
                         tag: "button",
-                        className: "tektite-main-button tektite-main-button",
+                        className: "tektite-main-button tektite-long-button",
                         children: label("New Schedule"),
                         onclick: async () =>
                         {

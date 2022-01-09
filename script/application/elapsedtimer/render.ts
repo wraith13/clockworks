@@ -100,7 +100,7 @@ export module Render
                 ([
                     {
                         tag: "button",
-                        className: "tektite-main-button tektite-main-button",
+                        className: "tektite-main-button tektite-long-button",
                         children: label("New Event"),
                         onclick: async () =>
                         {

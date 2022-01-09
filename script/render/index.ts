@@ -668,7 +668,7 @@ export module Render
                             children:
                             {
                                 tag: "button",
-                                className: "tektite-default-button tektite-main-button tektite-main-button",
+                                className: "tektite-default-button tektite-main-button tektite-long-button",
                                 children: Tektite.$labelSpan(Type.applicationList[i].title),
                                 // onclick: async () => await showNeverStopwatchScreen(),
                             }
@@ -730,20 +730,20 @@ export module Render
                     children:
                     {
                         tag: "button",
-                        className: "tektite-main-button tektite-main-button",
+                        className: "tektite-main-button tektite-long-button",
                         children: label("Close"),
                     }
                 }),
                 isSaved(item) ?
                     {
                         tag: "button",
-                        className: "tektite-main-button tektite-main-button",
+                        className: "tektite-main-button tektite-long-button",
                         children: label("Share"),
                         onclick: async () => await sharePopup(getShareTitle(item)),
                     }:
                     {
                         tag: "button",
-                        className: "tektite-main-button tektite-main-button",
+                        className: "tektite-main-button tektite-long-button",
                         children: label("Save"),
                         onclick: async () => await save(item),
                     }
