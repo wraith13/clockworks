@@ -600,28 +600,28 @@ export module Render
         (
             label("Remove all stamps"),
             async () => await Operate.NeverStopwatch.removeAllStamps(),
-            "delete-button"
+            "tektite-delete-button"
         );
     export const resetCountdownTimerMenuItem = async () =>
         tektite.menu.item
         (
             label("Remove all alarms"),
             async () => await Operate.CountdownTimer.removeAllAlarms(),
-            "delete-button"
+            "tektite-delete-button"
         );
     export const resetElapsedTimerMenuItem = async () =>
         tektite.menu.item
         (
             label("Remove all alarms"),
             async () => await Operate.ElapsedTimer.removeAllEvents(),
-            "delete-button"
+            "tektite-delete-button"
         );
     export const resetRainbowClockMenuItem = async () =>
         tektite.menu.item
         (
             label("Initialize timezone list"),
             async () => await Operate.RainbowClock.reset(),
-            "delete-button"
+            "tektite-delete-button"
         );
     export const githubMenuItem = async () =>
         tektite.externalLink

@@ -130,7 +130,7 @@ export module Render
         (
             label("Remove"),
             async () => await Operate.removeAlarm(item),
-            "delete-button"
+            "tektite-delete-button"
         )
     ];
     export const eventItem = async (item: Type.EventEntry) => $div("event-item tektite-flex-item")
@@ -190,7 +190,7 @@ export module Render
         (
             label("Remove"),
             async () => await RenderBase.Operate.ElapsedTimer.remove(item),
-            "delete-button"
+            "tektite-delete-button"
         )
     ];
     export const newTimerPopup = async (): Promise<boolean> =>

@@ -97,7 +97,7 @@ export module Render
         (
             label("Remove"),
             async () => await Operate.removeStamp(tick),
-            "delete-button"
+            "tektite-delete-button"
         )
     ];
     export const neverStopwatchScreenMenu = async () =>

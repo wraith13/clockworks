@@ -136,7 +136,7 @@ export module Render
         (
             label("Remove"),
             async () => await Operate.remove(item),
-            "delete-button"
+            "tektite-delete-button"
         )
     ];
     export const rainbowClockScreenMenu = async () =>
