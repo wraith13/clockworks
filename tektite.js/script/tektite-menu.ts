@@ -57,7 +57,7 @@ export module Menu
         public item = (children: minamo.dom.Source, onclick?: (event: MouseEvent | TouchEvent) => unknown, className?: string): minamo.dom.Source =>
         ({
             tag: "button",
-            className,
+            className: `tektite-menu-item-button ${className ?? ""}`,
             children,
             onclick,
         });
