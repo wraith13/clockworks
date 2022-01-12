@@ -292,3 +292,23 @@
     font-size: 1.0rem;
     // cursor: pointer;
 }
+.tektite-flex-trait
+{
+    display: flex;
+    align-items: center;
+}
+.tektite-straight-trait
+{
+    justify-content: start;
+    flex-wrap: nowrap;
+}
+.tektite-horizontal-flex-trait
+{
+    .tektite-flex-trait;
+    flex-direction: row;
+}
+.tektite-horizontal-straight-trait
+{
+    .tektite-horizontal-flex-trait;
+    .tektite-straight-trait;
+}

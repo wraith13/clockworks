@@ -91,7 +91,6 @@ select
 }
 button
 {
-    .tektite-button-trait;
     &.tektite-main-button,
     &.tektite-default-button,
     &.tektite-icon-button,
@@ -222,6 +221,7 @@ button
     font-size: 1.5rem;
     a, button
     {
+        .tektite-horizontal-straight-trait;
         border-radius: 0px;
         margin: 0px !important;
         border-style: none;
@@ -229,11 +229,6 @@ button
         font-size: 1.2rem;
         text-align: left;
         text-decoration: none;
-        display: flex;
-        flex-direction: row;
-        justify-content: start;
-        align-items: center;
-        flex-wrap: nowrap;
         svg
         {
             width: 1.5rem;
