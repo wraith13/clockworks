@@ -2,23 +2,26 @@
 #tektite-foundation
 {
     .tektite-positive-background-coloring-trait;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-    left: 0px;
+    // position: absolute;
+    // top: 0px;
+    // bottom: 0px;
+    // right: 0px;
+    // left: 0px;
+    .tektite-screen-full-trait;
 }
 #tektite-screen-toast
 {
-    position: fixed;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+    // position: fixed;
+    // left: 0px;
+    // right: 0px;
+    // bottom: 0px;
+    .tektite-screen-bottom-trait;
     filter: drop-shadow(0.0rem -0rem 3rem @tektite-accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     .tektite-alpha-positive-background-coloring-trait;
     .tektite-item
     {
-        .tektite-horizontal-straight-trait;
+        .tektite-horizontal-flex-trait;
+        .tektite-straight-flex-trait;
         border-top-color: @tektite-accent-color;
         border-top-width: 1px;
         border-top-style: solid;
@@ -51,16 +54,19 @@
 }
 .tektite-screen-cover
 {
-    position: fixed;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    display: flex;
-    flex-direction: column;
-    // justify-content: center;
-    justify-content: space-around;
-    align-items: center;
+    .tektite-screen-full-trait;
+    // position: fixed;
+    // top: 0px;
+    // right: 0px;
+    // bottom: 0px;
+    // left: 0px;
+    .tektite-vertical-flex-trait;
+    .tektite-space-around-flex-trait;
+    // display: flex;
+    // flex-direction: column;
+    // // justify-content: center;
+    // justify-content: space-around;
+    // align-items: center;
     background-color: @tektite-screen-cover-color;
     z-index: 88888;
     &.tektite-fade-in
@@ -90,13 +96,14 @@
     .tektite-positive-foreground-coloring-trait;
     display: flex;
     flex-direction: column;
-    position: absolute;
     z-index: 0;
     background-color: transparent;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-    left: 0px;
+    .tektite-screen-full-trait;
+    // position: absolute;
+    // top: 0px;
+    // bottom: 0px;
+    // right: 0px;
+    // left: 0px;
     max-width: 100vw;
     max-height: 100vh;
     & > :not(.tektite-screen-body)
@@ -137,8 +144,9 @@
         }
         .tektite-segment
         {
-            .tektite-horizontal-straight-trait;
-            position: relative;
+            .tektite-horizontal-flex-trait;
+            .tektite-straight-flex-trait;
+                position: relative;
             font-size: 1.2rem;
             padding-right: 1.25rem;
             overflow-x: hidden;
@@ -324,10 +332,12 @@
                 // right: 0px;
                 margin-left: auto;
                 margin-right: auto;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
+                .tektite-horizontal-flex-trait;
+                .tektite-center-flex-trait;
+                // display: flex;
+                // flex-direction: row;
+                // justify-content: center;
+                // align-items: center;
                 opacity: 0.5;
                 @media (hover: hover)
                 {
@@ -496,11 +506,12 @@
         {
             .tektite-screen-bar-flash-layer
             {
-                position: fixed;
-                top: 0px;
-                right: 0px;
-                bottom: 0px;
-                left: 0px;
+                .tektite-screen-full-trait;
+                // position: fixed;
+                // top: 0px;
+                // right: 0px;
+                // bottom: 0px;
+                // left: 0px;
                 animation-name: white-flash;
                 animation-direction: normal;
                 animation-delay: 0s;

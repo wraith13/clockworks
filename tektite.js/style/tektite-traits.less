@@ -9,7 +9,6 @@
 }
 .tektite-light-trait()
 {
-    .tektite-dummy-class-for-avoid-warnings { display: inherit; }
     // ::-webkit-calendar-picker-indicator
     // {
     //     filter: invert(1);
@@ -297,18 +296,54 @@
     display: flex;
     align-items: center;
 }
-.tektite-straight-trait()
-{
-    justify-content: start;
-    flex-wrap: nowrap;
-}
 .tektite-horizontal-flex-trait()
 {
     .tektite-flex-trait;
     flex-direction: row;
 }
-.tektite-horizontal-straight-trait()
+.tektite-vertical-flex-trait()
 {
-    .tektite-horizontal-flex-trait;
-    .tektite-straight-trait;
+    .tektite-flex-trait;
+    flex-direction: column;
+}
+.tektite-straight-flex-trait()
+{
+    // .tektite-flex-trait;
+    justify-content: start;
+    flex-wrap: nowrap;
+}
+.tektite-center-flex-trait()
+{
+    // .tektite-flex-trait;
+    justify-content: center;
+}
+.tektite-space-around-flex-trait()
+{
+    // .tektite-flex-trait;
+    justify-content: space-around;
+}
+// .tektite-horizontal-straight-trait()
+// {
+//     .tektite-horizontal-flex-trait;
+//     .tektite-straight-flex-trait;
+// }
+// .tektite-vertical-space-around-trait()
+// {
+//     .tektite-vertical-flex-trait;
+//     .tektite-space-around-flex-trait;
+// }
+.tektite-screen-full-trait()
+{
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+}
+.tektite-screen-bottom-trait()
+{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
 }
