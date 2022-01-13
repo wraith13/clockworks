@@ -1,13 +1,13 @@
 // out: false
 // @import "params.less";
-.tektite-dark-trait
+.tektite-dark-trait()
 {
     ::-webkit-calendar-picker-indicator
     {
         filter: invert(1);
     }
 }
-.tektite-light-trait
+.tektite-light-trait()
 {
     .tektite-dummy-class-for-avoid-warnings { display: inherit; }
     // ::-webkit-calendar-picker-indicator
@@ -15,11 +15,11 @@
     //     filter: invert(1);
     // }
 }
-.tektite-clickable-trait
+.tektite-clickable-trait()
 {
     cursor: pointer;
 }
-.tektite-link-trait
+.tektite-link-trait()
 {
     .tektite-clickable-trait;
     @media (hover: hover)
@@ -41,29 +41,29 @@
         text-decoration: none;
     }
 }
-.tektite-monospace-trait
+.tektite-monospace-trait()
 {
     font-family: monospace;
 }
-.tektite-positive-foreground-coloring-trait
+.tektite-positive-foreground-coloring-trait()
 {
     color: @tektite-main-color;
     fill: @tektite-main-color;
 }
-.tektite-positive-background-coloring-trait
+.tektite-positive-background-coloring-trait()
 {
     background-color: @tektite-base-color;
 }
-.tektite-alpha-positive-background-coloring-trait
+.tektite-alpha-positive-background-coloring-trait()
 {
     background-color: e(%("%s%s", @tektite-base-color, "DD"));
 }
-.tektite-negative-foreground-coloring-trait
+.tektite-negative-foreground-coloring-trait()
 {
     color: @tektite-base-color;
     fill: @tektite-base-color;
 }
-.tektite-primary-operator-coloring-trait
+.tektite-primary-operator-coloring-trait()
 {
     .tektite-clickable-trait;
     .tektite-negative-foreground-coloring-trait;
@@ -89,7 +89,7 @@
         }
     }
 }
-.tektite-secondary-operator-coloring-trait
+.tektite-secondary-operator-coloring-trait()
 {
     .tektite-clickable-trait;
     @media (hover: hover)
@@ -119,7 +119,7 @@
         }
     }
 }
-.tektite-tertiary-operator-coloring-trait
+.tektite-tertiary-operator-coloring-trait()
 {
     .tektite-clickable-trait;
     @media (hover: hover)
@@ -131,7 +131,7 @@
         }
     }
 }
-.tektite-delete-operator-coloring-trait
+.tektite-delete-operator-coloring-trait()
 {
     .tektite-clickable-trait;
     @media (hover: hover)
@@ -170,11 +170,11 @@
         display: none;
     }
 }
-.tektite-primary-text-font-size-core-trait
+.tektite-primary-text-font-size-core-trait()
 {
     font-size: calc((100vh - 6rem) * 0.2);
 }
-.tektite-primary-text-font-size-trait
+.tektite-primary-text-font-size-trait()
 {
     @media (max-height: 7680px) and (min-width: 11520px)
     {
@@ -225,11 +225,11 @@
         font-size: 2rem;
     }
 }
-.tektite-second-text-font-size-core-trait
+.tektite-second-text-font-size-core-trait()
 {
     font-size: calc((100vh - 6rem) * 0.1);
 }
-.tektite-second-text-font-size-trait
+.tektite-second-text-font-size-trait()
 {
     @media (max-height: 7680px) and (min-width: 11520px)
     {
@@ -280,7 +280,7 @@
         font-size: 1rem;
     }
 }
-.tektite-button-trait
+.tektite-button-trait()
 {
     .tektite-secondary-operator-coloring-trait;
     margin: 4px;
@@ -292,22 +292,22 @@
     font-size: 1.0rem;
     // cursor: pointer;
 }
-.tektite-flex-trait
+.tektite-flex-trait()
 {
     display: flex;
     align-items: center;
 }
-.tektite-straight-trait
+.tektite-straight-trait()
 {
     justify-content: start;
     flex-wrap: nowrap;
 }
-.tektite-horizontal-flex-trait
+.tektite-horizontal-flex-trait()
 {
     .tektite-flex-trait;
     flex-direction: row;
 }
-.tektite-horizontal-straight-trait
+.tektite-horizontal-straight-trait()
 {
     .tektite-horizontal-flex-trait;
     .tektite-straight-trait;
