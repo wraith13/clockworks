@@ -96,15 +96,39 @@ button
     &.tektite-icon-button,
     &.tektite-menu-button,
     &.tektite-menu-item-button,
-    &.tektite-check-button,
     &.tektite-delete-button
     {
         .tektite-button-trait;
+        .tektite-round-border-trait;
         .tektite-secondary-operator-coloring-trait;
+    }
+    &.tektite-check-button
+    {
+        .tektite-button-trait;
+        .tektite-secondary-operator-coloring-trait;
+        .tektite-null-border-trait;
+        .tektite-horizontal-flex-trait;
+        .tektite-stretch-flex-trait;
+        position: relative;
+        flex-wrap: wrap;
+        text-align: left;
+        padding: 4px;
+        margin: 0px;
+        svg
+        {
+            width: 1.5em;
+            height: 1.5em;
+            margin-right: 4px;
+        }
+        &:not(.checked) svg
+        {
+            visibility: hidden;
+        }
     }
     &.tektite-default-button
     {
         .tektite-button-trait;
+        .tektite-round-border-trait;
         .tektite-primary-operator-coloring-trait;
     }
     &.tektite-icon-button,
