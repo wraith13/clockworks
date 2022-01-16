@@ -21,7 +21,7 @@
     .tektite-item
     {
         .tektite-horizontal-flex-trait;
-        .tektite-straight-flex-trait;
+        .tektite-straight-justify-trait;
         border-top-color: @tektite-accent-color;
         border-top-width: 1px;
         border-top-style: solid;
@@ -61,7 +61,7 @@
     // bottom: 0px;
     // left: 0px;
     .tektite-vertical-flex-trait;
-    .tektite-space-around-flex-trait;
+    .tektite-space-around-justify-trait;
     // display: flex;
     // flex-direction: column;
     // // justify-content: center;
@@ -94,8 +94,10 @@
 .tektite-screen
 {
     .tektite-positive-foreground-coloring-trait;
-    display: flex;
-    flex-direction: column;
+    .tektite-vertical-flex-trait;
+    .tektite-stretch-item-trait;
+    // display: flex;
+    // flex-direction: column;
     z-index: 0;
     background-color: transparent;
     .tektite-screen-full-trait;
@@ -122,15 +124,17 @@
         max-width: 100vw;
         overflow-x: hidden;
         position: static;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        .tektite-horizontal-flex-trait;
+        .tektite-space-around-justify-trait;
+        // display: flex;
+        // flex-direction: row;
+        // justify-content: space-between;
+        // align-items: center;
         &.tektite-segmented
         {
             white-space: nowrap;
             justify-content: start;
         }
-        align-items: center;
         .tektite-icon
         {
             display: inline-block;
@@ -145,8 +149,8 @@
         .tektite-segment
         {
             .tektite-horizontal-flex-trait;
-            .tektite-straight-flex-trait;
-                position: relative;
+            .tektite-straight-justify-trait;
+            position: relative;
             font-size: 1.2rem;
             padding-right: 1.25rem;
             overflow-x: hidden;
@@ -247,8 +251,9 @@
         {
             flex-grow: 1;
             margin-right: 5.25rem;
-            display: flex;
-            flex-direction: row;
+            .tektite-horizontal-flex-trait;
+            // display: flex;
+            // flex-direction: row;
             justify-content: flex-end;
             z-index: 1000;
         }
@@ -313,10 +318,13 @@
             height: calc(100vh - 2.5rem);
             max-height: calc(100vh - 2.5rem);
             position: relative;
-            display: flex;
-            align-items: stretch;
-            justify-content: stretch;
-            flex-direction: column;
+            .tektite-vertical-flex-trait;
+            .tektite-stretch-justify-trait;
+            .tektite-stretch-item-trait;
+            // display: flex;
+            // flex-direction: column;
+            // align-items: stretch;
+            // justify-content: stretch;
             // .tektite-negative-foreground-coloring-trait;
             // padding-bottom: 2.5rem;
             // .tektite-default-button
@@ -330,10 +338,9 @@
                 // position: absolute;
                 // top: 0px;
                 // right: 0px;
-                margin-left: auto;
-                margin-right: auto;
+                .tektite-centering-margin-trait;
                 .tektite-horizontal-flex-trait;
-                .tektite-center-flex-trait;
+                .tektite-center-justify-trait;
                 // display: flex;
                 // flex-direction: row;
                 // justify-content: center;
@@ -544,7 +551,7 @@
 .tektite-button-list
 {
     .tektite-horizontal-flex-trait;
-    .tektite-center-flex-trait;
+    .tektite-center-justify-trait;
     padding: 0.25rem;
 }
 .tektite-button-line
