@@ -2,19 +2,10 @@
 #tektite-foundation
 {
     .tektite-positive-background-coloring-trait;
-    // position: absolute;
-    // top: 0px;
-    // bottom: 0px;
-    // right: 0px;
-    // left: 0px;
     .tektite-screen-full-trait;
 }
 #tektite-screen-toast
 {
-    // position: fixed;
-    // left: 0px;
-    // right: 0px;
-    // bottom: 0px;
     .tektite-screen-bottom-trait;
     filter: drop-shadow(0.0rem -0rem 3rem @tektite-accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     .tektite-alpha-positive-background-coloring-trait;
@@ -54,17 +45,7 @@
 .tektite-screen-cover
 {
     .tektite-screen-full-trait;
-    // position: fixed;
-    // top: 0px;
-    // right: 0px;
-    // bottom: 0px;
-    // left: 0px;
     .tektite-center-vertical-flex-trait;
-    // display: flex;
-    // flex-direction: column;
-    // // justify-content: center;
-    // justify-content: space-around;
-    // align-items: center;
     background-color: @tektite-screen-cover-color;
     z-index: 88888;
     &.tektite-fade-in
@@ -93,16 +74,9 @@
 {
     .tektite-positive-foreground-coloring-trait;
     .tektite-vertical-flex-trait;
-    // display: flex;
-    // flex-direction: column;
+    .tektite-screen-full-trait;
     z-index: 0;
     background-color: transparent;
-    .tektite-screen-full-trait;
-    // position: absolute;
-    // top: 0px;
-    // bottom: 0px;
-    // right: 0px;
-    // left: 0px;
     max-width: 100vw;
     max-height: 100vh;
     & > :not(.tektite-screen-body)
@@ -239,7 +213,7 @@
         }
         .tektite-menu-popup:not(.tektite-segment-popup)
         {
-            top: calc(10px + 2.0rem);
+            top: 2.625rem;
             right: 0.5rem;
         }
         .tektite-header-operator
@@ -565,7 +539,7 @@
     {
         .tektite-menu-popup
         {
-            right: calc(50vw - 330px);
+            right: calc(50vw - 20rem);
         }
     }
 }
@@ -715,16 +689,16 @@
 {
     border-style: solid;
     border-width: 2px;
-    border-radius: 16px;
+    border-radius: 1rem;
     border-color: @tektite-accent-color;
     .tektite-positive-background-coloring-trait;
     overflow: auto;
-    min-width: 240px;
-    max-width: calc(100vw - 16px);
+    min-width: 15rem;
+    max-width: calc(100vw - 1rem);
     input,
     select
     {
-        width: calc(100% - 8px);
+        width: calc(100% - 0.5rem);
     }
     .tektite-popup-operator
     {
