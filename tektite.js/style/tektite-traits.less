@@ -351,6 +351,12 @@
     border-style: none;
     border-width: 0px;
 }
+.tektite-x-border-trait(@x, @color)
+{
+    border-@{x}-width: 1px;
+    border-@{x}-style: solid;
+    border-@{x}-color: @color;
+}
 .tektite-screen-full-trait()
 {
     position: fixed;
