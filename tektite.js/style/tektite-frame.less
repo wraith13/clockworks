@@ -375,23 +375,18 @@
     .tektite-screen-bar
     {
         z-index: -10;
-        position: fixed;
         border-width: 0px;
         border-style: solid;
         border-color: #0008;
         box-sizing: border-box;
         &.tektite-horizontal
         {
-            top: 0px;
-            bottom: 0px;
-            left: 0px;
+            .tektite-screen-left-trait;
             border-right-width: 1px;
         }
         &.tektite-vertical
         {
-            top: 0px;
-            left: 0px;
-            right: 0px;
+            .tektite-screen-top-trait;
             border-bottom-width: 1px;
         }
         overflow: hidden;
