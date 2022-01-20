@@ -339,11 +339,19 @@
     line-height: 100%;
     // cursor: pointer;
 }
-.tektite-round-border-trait()
+.tektite-round-border-trait(@radius)
 {
-    border-radius: 2rem;
+    border-radius: 1rem;
     border-style: solid;
     border-width: 1px;
+}
+.tektite-round-border-trait()
+{
+    .tektite-round-border-trait(1rem);
+}
+.tektite-popup-round-border-trait()
+{
+    .tektite-round-border-trait(0.5rem);
 }
 .tektite-null-border-trait()
 {

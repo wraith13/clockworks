@@ -13,11 +13,7 @@ input, select, textarea
 }
 &
 {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-    left: 0px;
+    .tektite-screen-full-trait;
     margin: 0px;
     // margin-bottom: 5rem; // for iOS Safari
     line-height: 100%;
@@ -82,16 +78,14 @@ select
 {
     margin: 0.25rem;
     padding: 0.25rem 1rem;
-    border-radius: 2rem;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #888;
+    .tektite-round-border-trait;
+    border-color: @tektite-weak-color;
     font-size: 1.0rem;
     min-width: 7.5rem;
 }
 button
 {
-    &.tektite-main-button,
+    &.tektite-main-button:not(&.tektite-default-button),
     &.tektite-cancel-button,
     &.tektite-icon-button,
     &.tektite-menu-button,
@@ -129,6 +123,7 @@ button
         .tektite-button-trait;
         .tektite-round-border-trait;
         .tektite-primary-operator-coloring-trait;
+        .tektite-center-horizontal-flex-trait;
     }
     &.tektite-icon-button,
     &.tektite-menu-button
@@ -195,9 +190,7 @@ button
 .tektite-text-button
 {
     .tektite-link-trait;
-    border-style: none;
-    border-width: 0px;
-    border-radius: 0px;
+    .tektite-null-border-trait;
     padding: 0px;
     margin: 0px;
     background-color: transparent !important;
@@ -238,18 +231,14 @@ button
     }
     color: @tektite-accent-color;
     .tektite-alpha-positive-background-coloring-trait;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 0.5rem;
+    .tektite-popup-round-border-trait;
     line-height: 1.5rem;
     font-size: 1.5rem;
     a, button
     {
         .tektite-straight-horizontal-flex-trait;
-        border-radius: 0px;
+        .tektite-null-border-trait;
         margin: 0px !important;
-        border-style: none;
-        border-width: 0px;
         font-size: 1.2rem;
         text-align: left;
         text-decoration: none;
@@ -287,7 +276,7 @@ button
         {
             & > .label + .value
             {
-                color: #888;
+                color: @tektite-weak-color;
             }
         }
     }

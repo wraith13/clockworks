@@ -12,9 +12,7 @@
     .tektite-item
     {
         .tektite-straight-horizontal-flex-trait;
-        border-top-color: @tektite-accent-color;
-        border-top-width: 1px;
-        border-top-style: solid;
+        .tektite-x-border-trait(top, @tektite-accent-color);
         padding: 2rem 1.5rem;
         & > button:first-child,
         & > div:first-child,
@@ -164,9 +162,7 @@
         {
             padding-left: 0.5rem;
             margin-left: 0rem;
-            border-left-style: solid;
-            border-left-width: 1px;
-            border-left-color: @tektite-base-color !important;
+            .tektite-x-border-trait(left, @tektite-base-color);
             .tektite-icon
             {
                 padding: 0.5rem 0.25rem;
@@ -231,11 +227,8 @@
             left: 0px;
             top: 0px;
             height: 2.5rem;
-            border-width: 0px;
-            border-style: solid;
-            border-color: #0005;
             box-sizing: border-box;
-            border-right-width: 1px;
+            .tektite-x-border-trait(right, #0005);
         }
         &.update
         {
@@ -262,7 +255,7 @@
             {
                 left: initial;
                 right: 0px;
-                background-color: #888;
+                background-color: @tektite-weak-color;
                 animation-name: tektite-update-progress;
                 animation-direction: normal;
                 animation-delay: 0s;
@@ -494,12 +487,9 @@
     align-items: stretch;
     justify-content: stretch;
     flex-direction: column;
-
     button
     {
-        border-color: rgba(128,128,128,0.5);
-        border-style: solid;
-        border-width: 0px 0px 1px 0px;
+        .tektite-x-border-trait(bottom, rgba(128,128,128,0.5));
     }
 }
 .tektite-button-list
@@ -544,9 +534,8 @@
     box-sizing: border-box;
     &:not(.empty-list)
     {
-        border-color: rgba(128,128,128,0.5);
-        border-style: solid;
-        border-width: 1px 0px 0px 1px;
+        .tektite-x-border-trait(top, rgba(128,128,128,0.5));
+        .tektite-x-border-trait(left, rgba(128,128,128,0.5));
     }
 }
 .tektite-row-flex-list
@@ -564,9 +553,8 @@
     display: inline-block;
     box-sizing: border-box;
     min-width: calc(100% / 1);
-    border-color: rgba(128,128,128,0.5);
-    border-style: solid;
-    border-width: 0px 1px 1px 0px;
+    .tektite-x-border-trait(right, rgba(128,128,128,0.5));
+    .tektite-x-border-trait(bottom, rgba(128,128,128,0.5));
     margin: 0px;
     @media (min-width:780px)
     {
