@@ -14,6 +14,16 @@
     //     filter: invert(1);
     // }
 }
+.tektite-centering-margin-trait()
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+.tektite-square-size-trait(@size)
+{
+    width: @size;
+    height: @size;
+}
 .tektite-clickable-trait()
 {
     cursor: pointer;
@@ -332,7 +342,7 @@
 .tektite-button-trait()
 {
     margin: 0.25rem;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 0.5rem;
     font-weight: bold;
     font-size: 1.0rem;
     height: 2.0rem;
@@ -400,14 +410,4 @@
     top: 0px;
     bottom: 0px;
     left: 0px;
-}
-.tektite-centering-margin-trait()
-{
-    margin-left: auto;
-    margin-right: auto;
-}
-.tektite-square-size-trait(@size)
-{
-    width: @size;
-    height: @size;
 }
