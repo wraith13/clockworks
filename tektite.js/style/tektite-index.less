@@ -49,17 +49,12 @@
     z-index: 88888;
     &.tektite-fade-in
     {
-        animation-name: tektite-fade-in;
+        .tektite-animation(tektite-fade-in, 0.5s);
     }
     &.tektite-fade-out
     {
-        animation-name: tektite-fade-out;
+        .tektite-animation(tektite-fade-out, 0.5s);
     }
-    animation-direction: normal;
-    animation-delay: 0s;
-    animation-duration: 0.5s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: both;
 }
 &.tektite-fxxking-ipad-fullscreen
 {
@@ -229,12 +224,7 @@
         {
             .tektite-progress-bar
             {
-                animation-name: tektite-update-progress;
-                animation-direction: normal;
-                animation-delay: 0s;
-                animation-duration: 1.0s;
-                animation-timing-function: ease-in-out;
-                animation-fill-mode: both;
+                .tektite-animation(tektite-update-progress, 1.0s);
             }
         }
         &.max-progress
@@ -251,12 +241,7 @@
                 left: initial;
                 right: 0px;
                 background-color: @tektite-weak-color;
-                animation-name: tektite-update-progress;
-                animation-direction: normal;
-                animation-delay: 0s;
-                animation-duration: 3600.0s;
-                animation-timing-function: ease-in-out;
-                animation-fill-mode: both;
+                .tektite-animation(tektite-update-progress, 3600.0s);
             }
         }
     }
@@ -456,17 +441,7 @@
             .tektite-screen-bar-flash-layer
             {
                 .tektite-screen-full-trait;
-                // position: fixed;
-                // top: 0px;
-                // right: 0px;
-                // bottom: 0px;
-                // left: 0px;
-                animation-name: white-flash;
-                animation-direction: normal;
-                animation-delay: 0s;
-                animation-duration: 1.5s;
-                animation-timing-function: ease-in-out;
-                animation-fill-mode: both;
+                .tektite-animation(white-flash, 1.5s);
             }
         }
 
@@ -694,29 +669,18 @@
         cursor: none !important;
     }
 }
-&.tektite-flash
-{
-    .tektite-screen
-    {
-        animation-direction: normal;
-        animation-delay: 0s;
-        animation-duration: 1.5s;
-        animation-timing-function: ease-in-out;
-        animation-fill-mode: both;
-    }
-}
 &.tektite-flash.tektite-style-modern
 {
     .tektite-screen
     {
-        animation-name: tektite-white-flash;
+        .tektite-animation(tektite-white-flash, 1.5s);
     }
 }
 &.tektite-flash.tektite-style-classic
 {
     .tektite-screen
     {
-        animation-name: tektite-accent-flash;
+        .tektite-animation(tektite-accent-flash, 1.5s);
     }
 }
 @keyframes tektite-white-flash
@@ -900,12 +864,7 @@
 }
 .tektite-slide-up-in
 {
-    animation-name: tektite-slide-up-in;
-    animation-direction: normal;
-    animation-delay: 0s;
-    animation-duration: 0.25s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: both;
+    .tektite-animation(tektite-slide-up-in, 0.25s);
 }
 @keyframes tektite-slide-up-in
 {
@@ -926,12 +885,7 @@
 }
 .tektite-slide-down-out
 {
-    animation-name: tektite-slide-down-out;
-    animation-direction: normal;
-    animation-delay: 0s;
-    animation-duration: 0.25s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: both;
+    .tektite-animation(tektite-slide-down-out, 0.25s);
     overflow-y: hidden;
 }
 .tektite-slow-slide-down-out
@@ -956,12 +910,7 @@
 }
 .tektite-fade-and-slide-out
 {
-    animation-name: tektite-fade-and-slide-out;
-    animation-direction: normal;
-    animation-delay: 0s;
-    animation-duration: 0.5s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: both;
+    .tektite-animation(tektite-fade-and-slide-out, 0.5s);
 }
 @keyframes tektite-fade-and-slide-out
 {
