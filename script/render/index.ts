@@ -664,6 +664,7 @@ export module Render
                         (i: Type.ApplicationType) =>
                         tektite.internalLink
                         ({
+                            className: "tektite-link-button",
                             href: { application: i },
                             children:
                             {
@@ -726,6 +727,7 @@ export module Render
             ([
                 tektite.internalLink
                 ({
+                    className: "tektite-link-button",
                     href: { application, },
                     children:
                     {

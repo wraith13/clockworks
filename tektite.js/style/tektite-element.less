@@ -23,8 +23,16 @@ input, select, textarea
 }
 a
 {
-    color: @tektite-accent-color;
-    .tektite-link-trait;
+    &:not(.tektite-link-button)
+    {
+        color: @tektite-accent-color;
+        .tektite-link-trait;
+    }
+    &.tektite-link-button
+    {
+        color: inherit;
+        .tektite-plain-text-trait;
+    }
 }
 ul
 {
@@ -78,6 +86,8 @@ select
 }
 button
 {
+    .tektite-button-trait;
+    .tektite-round-border-trait;
     &.tektite-main-button:not(&.tektite-default-button),
     &.tektite-cancel-button,
     &.tektite-icon-button,
@@ -85,14 +95,11 @@ button
     &.tektite-menu-item-button,
     &.tektite-delete-button
     {
-        .tektite-button-trait;
-        .tektite-round-border-trait;
         .tektite-secondary-operator-coloring-trait;
         .tektite-center-horizontal-flex-trait;
     }
     &.tektite-check-button
     {
-        .tektite-button-trait;
         .tektite-secondary-operator-coloring-trait;
         .tektite-null-border-trait;
         .tektite-stretch-horizontal-flex-trait;
@@ -111,8 +118,6 @@ button
     }
     &.tektite-default-button
     {
-        .tektite-button-trait;
-        .tektite-round-border-trait;
         .tektite-primary-operator-coloring-trait;
         .tektite-center-horizontal-flex-trait;
     }

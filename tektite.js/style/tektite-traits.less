@@ -28,6 +28,10 @@
 {
     cursor: pointer;
 }
+.tektite-plain-text-trait()
+{
+    text-decoration: none;
+}
 .tektite-link-trait()
 {
     .tektite-clickable-trait;
@@ -42,12 +46,12 @@
         }
         &:not(:hover)
         {
-            text-decoration: none;
+            .tektite-plain-text-trait;
         }
     }
     @media (hover: none)
     {
-        text-decoration: none;
+        .tektite-plain-text-trait;
     }
 }
 .tektite-monospace-trait()
