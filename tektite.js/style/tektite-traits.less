@@ -293,13 +293,9 @@
         font-size: 1rem;
     }
 }
-.tektite-flex-trait()
-{
-    display: flex;
-}
 .tektite-horizontal-flex-trait()
 {
-    .tektite-flex-trait;
+    display: inline-flex;
     flex-direction: row;
     align-items: center;
 }
@@ -332,13 +328,13 @@
 }
 .tektite-vertical-flex-trait()
 {
-    .tektite-flex-trait;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
 }
 .tektite-center-vertical-flex-trait()
 {
-    .tektite-flex-trait;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;

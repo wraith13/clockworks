@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Fri Jan 28 2022 09:41:03 GMT+0900 (日本標準時)
+    build at: Fri Jan 28 2022 21:38:58 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -160,7 +160,7 @@ body.light button.tektite-menu-button,
 body.light button.tektite-menu-item-button,
 body.light button.tektite-delete-button {
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -208,7 +208,7 @@ body.light button.tektite-check-button {
   border-radius: 0px;
   border-style: none;
   border-width: 0px;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
@@ -250,7 +250,7 @@ body.light button.tektite-default-button {
   cursor: pointer;
   color: #FFFFFF;
   fill: #FFFFFF;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -894,7 +894,7 @@ body.light #tektite-screen-toast {
   background-color: #FFFFFFDD;
 }
 body.light #tektite-screen-toast .tektite-item {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -931,7 +931,7 @@ body.light .tektite-screen-cover {
   right: 0px;
   bottom: 0px;
   left: 0px;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -981,7 +981,7 @@ body.light .tektite-screen > header {
   max-width: 100vw;
   overflow-x: hidden;
   position: static;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
@@ -999,7 +999,7 @@ body.light .tektite-screen > header .tektite-icon-frame .tektite-icon {
   height: 2rem;
 }
 body.light .tektite-screen > header .tektite-segment {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -1129,7 +1129,7 @@ body.light .tektite-screen > header .tektite-menu-popup:not(.tektite-segment-pop
 body.light .tektite-screen > header .tektite-header-operator {
   flex-grow: 1;
   margin-right: 5.25rem;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: end;
@@ -1192,7 +1192,7 @@ body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -1294,21 +1294,21 @@ body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-pr
   color: #FFFFFF;
   fill: #FFFFFF;
 }
-body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button {
   color: #FFFFFF;
   border-color: #FFFFFF;
   background-color: transparent;
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:hover {
+  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button:hover {
     background-color: #FFFFFF11;
   }
 }
-body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button) {
+body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button:not(.tektite-default-button) {
   border-color: #FFFFFF88;
 }
 @media (hover: hover) {
-  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button):hover {
+  body.light.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button:not(.tektite-default-button):hover {
     border-color: #FFFFFF;
   }
 }
@@ -1344,11 +1344,8 @@ body.light .tektite-check-button-list button {
   border-bottom-color: rgba(128, 128, 128, 0.5);
 }
 body.light .tektite-button-list {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  width: 100%;
+  text-align: center;
   padding: 0.25rem;
 }
 body.light .tektite-button-line {
@@ -1680,7 +1677,7 @@ body.light .tektite-menu-popup a,
 body.light .bare-popup a,
 body.light .tektite-menu-popup button,
 body.light .bare-popup button {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -1771,7 +1768,7 @@ body.light .bare-popup a button {
 }
 body.light .tektite-menu-item-button {
   position: relative;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
@@ -1783,7 +1780,7 @@ body.light .tektite-menu-item-button {
   border-width: 0px;
 }
 body.light .item-title {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -1956,7 +1953,7 @@ body.light .welcome-screen .logo > .logo-text {
   }
 }
 body.light .welcome-screen .tektite-button-list {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -1976,324 +1973,336 @@ body.light.tektite-style-classic .logo > .application-icon .tektite-icon {
 body.light.tektite-style-classic .logo > .logo-text {
   color: #5F42A7;
 }
-body.light .never-stopwatch-screen .tektite-screen-body .current-item,
-body.light .countdown-timer-screen .tektite-screen-body .current-item,
-body.light .elapsed-timer-screen .tektite-screen-body .current-item {
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-item,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-item,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-item {
   align-items: start;
   display: flex;
   flex-direction: column;
 }
-body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
   font-size: 7vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.light .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: 2rem;
   }
 }
-body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp,
-body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp,
-body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp,
-body.light .never-stopwatch-screen .tektite-screen-body .current-title,
-body.light .countdown-timer-screen .tektite-screen-body .current-title,
-body.light .elapsed-timer-screen .tektite-screen-body .current-title,
-body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp,
-body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp,
-body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp,
-body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp,
-body.light .countdown-timer-screen .tektite-screen-body .current-timestamp,
-body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp {
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp,
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp,
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp {
   text-align: center;
   opacity: 0.5;
 }
-body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
   font-size: 4.4vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.light .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.light .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.light .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.light .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.light .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.light .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: 1rem;
   }
+}
+body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 body.light .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
   font-size: 15vw;
@@ -2603,7 +2612,7 @@ body.dark button.tektite-menu-button,
 body.dark button.tektite-menu-item-button,
 body.dark button.tektite-delete-button {
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -2651,7 +2660,7 @@ body.dark button.tektite-check-button {
   border-radius: 0px;
   border-style: none;
   border-width: 0px;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
@@ -2693,7 +2702,7 @@ body.dark button.tektite-default-button {
   cursor: pointer;
   color: #000022;
   fill: #000022;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -3337,7 +3346,7 @@ body.dark #tektite-screen-toast {
   background-color: #000022DD;
 }
 body.dark #tektite-screen-toast .tektite-item {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -3374,7 +3383,7 @@ body.dark .tektite-screen-cover {
   right: 0px;
   bottom: 0px;
   left: 0px;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -3424,7 +3433,7 @@ body.dark .tektite-screen > header {
   max-width: 100vw;
   overflow-x: hidden;
   position: static;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
@@ -3442,7 +3451,7 @@ body.dark .tektite-screen > header .tektite-icon-frame .tektite-icon {
   height: 2rem;
 }
 body.dark .tektite-screen > header .tektite-segment {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -3572,7 +3581,7 @@ body.dark .tektite-screen > header .tektite-menu-popup:not(.tektite-segment-popu
 body.dark .tektite-screen > header .tektite-header-operator {
   flex-grow: 1;
   margin-right: 5.25rem;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: end;
@@ -3635,7 +3644,7 @@ body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-
   cursor: pointer;
   margin-left: auto;
   margin-right: auto;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -3737,21 +3746,21 @@ body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-pri
   color: #000022;
   fill: #000022;
 }
-body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button {
   color: #000022;
   border-color: #000022;
   background-color: transparent;
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:hover {
+  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button:hover {
     background-color: #00002211;
   }
 }
-body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button) {
+body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button:not(.tektite-default-button) {
   border-color: #00002288;
 }
 @media (hover: hover) {
-  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button:not(.tektite-default-button):hover {
+  body.dark.tektite-style-modern .tektite-screen .tektite-screen-body .tektite-primary-page button.tektite-main-button:not(.tektite-default-button):hover {
     border-color: #000022;
   }
 }
@@ -3787,11 +3796,8 @@ body.dark .tektite-check-button-list button {
   border-bottom-color: rgba(128, 128, 128, 0.5);
 }
 body.dark .tektite-button-list {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  width: 100%;
+  text-align: center;
   padding: 0.25rem;
 }
 body.dark .tektite-button-line {
@@ -4123,7 +4129,7 @@ body.dark .tektite-menu-popup a,
 body.dark .bare-popup a,
 body.dark .tektite-menu-popup button,
 body.dark .bare-popup button {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -4214,7 +4220,7 @@ body.dark .bare-popup a button {
 }
 body.dark .tektite-menu-item-button {
   position: relative;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: stretch;
@@ -4226,7 +4232,7 @@ body.dark .tektite-menu-item-button {
   border-width: 0px;
 }
 body.dark .item-title {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
@@ -4399,7 +4405,7 @@ body.dark .welcome-screen .logo > .logo-text {
   }
 }
 body.dark .welcome-screen .tektite-button-list {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -4419,324 +4425,336 @@ body.dark.tektite-style-classic .logo > .application-icon .tektite-icon {
 body.dark.tektite-style-classic .logo > .logo-text {
   color: #5F42A7;
 }
-body.dark .never-stopwatch-screen .tektite-screen-body .current-item,
-body.dark .countdown-timer-screen .tektite-screen-body .current-item,
-body.dark .elapsed-timer-screen .tektite-screen-body .current-item {
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-item,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-item,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-item {
   align-items: start;
   display: flex;
   flex-direction: column;
 }
-body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
   font-size: 7vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: calc((100vh - 6rem) * 0.2);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: 4rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: 3rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .capital-interval .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .capital-interval .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .capital-interval .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .capital-interval .value {
     font-size: 2rem;
   }
 }
-body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp,
-body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp,
-body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp,
-body.dark .never-stopwatch-screen .tektite-screen-body .current-title,
-body.dark .countdown-timer-screen .tektite-screen-body .current-title,
-body.dark .elapsed-timer-screen .tektite-screen-body .current-title,
-body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp,
-body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp,
-body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp,
-body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp,
-body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp,
-body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp {
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp,
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title,
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp,
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp {
   text-align: center;
   opacity: 0.5;
 }
-body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
   font-size: 4.4vw;
   line-height: 100%;
 }
 @media (max-height: 7680px) and (min-width: 11520px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 5760px) and (min-width: 7680px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 3840px) and (min-width: 5760px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 2880px) and (min-width: 3840px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1920px) and (min-width: 2880px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 1440px) and (min-width: 1920px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 960px) and (min-width: 1440px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 720px) and (min-width: 960px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 720px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: calc((100vh - 6rem) * 0.1);
   }
 }
 @media (max-height: 480px) and (min-width: 480px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: 2rem;
   }
 }
 @media (max-height: 360px) and (min-width: 360px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: 1.5rem;
   }
 }
 @media (max-height: 240px) and (min-width: 240px) {
-  body.dark .never-stopwatch-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .previous-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-title .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-title .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-due-timestamp .value,
-  body.dark .never-stopwatch-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .countdown-timer-screen .tektite-screen-body .current-timestamp .value,
-  body.dark .elapsed-timer-screen .tektite-screen-body .current-timestamp .value {
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .previous-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-title .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-due-timestamp .value,
+  body.dark .never-stopwatch-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .countdown-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value,
+  body.dark .elapsed-timer-screen .tektite-screen-body .tektite-main-panel .current-timestamp .value {
     font-size: 1rem;
   }
+}
+body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 body.dark .rainbow-clock-screen .tektite-screen-body .tektite-main-panel .capital-time .value {
   font-size: 15vw;
@@ -13362,7 +13380,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1643330463025), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1643373538665), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

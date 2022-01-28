@@ -250,33 +250,37 @@
 {
     .tektite-screen-body
     {
-        .current-item
+        .tektite-main-panel
         {
-            align-items: start;
-            display: flex;
-            flex-direction: column;
-        }
-        .capital-interval
-        {
-            .value
+            .tektite-vertical-flex-trait;
+            .current-item
             {
-                font-size: 7vw;
-                line-height: 100%;
-                .tektite-primary-text-font-size-trait;
+                align-items: start;
+                display: flex;
+                flex-direction: column;
             }
-        }
-        .previous-timestamp,
-        .current-title,
-        .current-due-timestamp,
-        .current-timestamp
-        {
-            text-align: center;
-            opacity: 0.5;
-            .value
+            .capital-interval
             {
-                font-size: 4.4vw;
-                line-height: 100%;
-                .tektite-second-text-font-size-trait;
+                .value
+                {
+                    font-size: 7vw;
+                    line-height: 100%;
+                    .tektite-primary-text-font-size-trait;
+                }
+            }
+            .previous-timestamp,
+            .current-title,
+            .current-due-timestamp,
+            .current-timestamp
+            {
+                text-align: center;
+                opacity: 0.5;
+                .value
+                {
+                    font-size: 4.4vw;
+                    line-height: 100%;
+                    .tektite-second-text-font-size-trait;
+                }
             }
         }
     }
@@ -292,6 +296,7 @@
     {
         .tektite-main-panel
         {
+            .tektite-vertical-flex-trait;
             // z-index: 100;
             .capital-time
             {
