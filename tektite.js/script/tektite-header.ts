@@ -94,7 +94,7 @@ export module Header
                     className: "tektite-icon-button tektite-close-button",
                     children:
                     [
-                        await this.tektite.loadSvgOrCache("tektite-cross-icon"),
+                        await this.tektite.loadIconOrCache("tektite-cross-icon"),
                     ],
                     onclick: (event: MouseEvent) =>
                     {
@@ -117,7 +117,7 @@ export module Header
         getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "tektite-close-button")[0];
         segmentCore = async (item: SegmentSource<PageParams, IconKeyType>) =>
         [
-            Tektite.$div("tektite-icon")(await this.tektite.params.loadSvgOrCache(item.icon)),
+            Tektite.$div("tektite-icon-frame")(await this.tektite.params.loadIconOrCache(item.icon)),
             Tektite.$div("tektite-segment-title")(item.title),
         ];
         labelSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") =>

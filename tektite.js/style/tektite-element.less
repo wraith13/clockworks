@@ -23,14 +23,13 @@ input, select, textarea
 }
 a
 {
+    color: @tektite-accent-color;
     &:not(.tektite-link-button)
     {
-        color: @tektite-accent-color;
         .tektite-link-trait;
     }
     &.tektite-link-button
     {
-        color: inherit;
         .tektite-plain-text-trait;
     }
 }
@@ -106,12 +105,12 @@ button
         position: relative;
         padding: 0.25rem;
         margin: 0px;
-        svg
+        .tektite-icon
         {
             .tektite-square-size-trait(1.5rem);
             margin-right: 0.25rem;
         }
-        &:not(.checked) svg
+        &:not(.checked) .tektite-icon
         {
             visibility: hidden;
         }
@@ -142,7 +141,7 @@ button
         }
     
         padding: 0.25rem;
-        svg
+        .tektite-icon
         {
             .tektite-square-size-trait(1.5rem);
         }

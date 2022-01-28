@@ -36,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), Tektite.monospace(Domain.dateStringFromTick(i.end)), ],
+                        [ await Resource.loadIconOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), Tektite.monospace(Domain.dateStringFromTick(i.end)), ],
                         Domain.makePageParams("CountdownTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -56,7 +56,7 @@ export module Render
                 href: Domain.makePageParams("CountdownTimer", item),
                 children:
                 [
-                    await Resource.loadSvgOrCache("tektite-tick-icon"),
+                    await Resource.loadIconOrCache("tektite-tick-icon"),
                     Tektite.monospace("tick-elapsed-time", alarmTitle(item)),
                 ]
             }),
@@ -143,7 +143,7 @@ export module Render
                 href: Domain.makePageParams("ElapsedTimer", item),
                 children:
                 [
-                    await Resource.loadSvgOrCache("tektite-tick-icon"),
+                    await Resource.loadIconOrCache("tektite-tick-icon"),
                     Tektite.monospace("tick-elapsed-time", item.title),
                 ]
             }),
@@ -217,7 +217,7 @@ export module Render
                                     className: `tektite-check-button`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("tektite-check-icon"),
+                                        await Resource.loadIconOrCache("tektite-check-icon"),
                                         $span("")(labelSpan(Domain.makeTimerLabel(i))),
                                     ],
                                     onclick: async () =>

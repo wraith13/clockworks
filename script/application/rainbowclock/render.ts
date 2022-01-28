@@ -36,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.monospace(Domain.timezoneOffsetString(i.offset)), ],
+                        [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.monospace(Domain.timezoneOffsetString(i.offset)), ],
                         Domain.makePageParams("RainbowClock", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -53,7 +53,7 @@ export module Render
                 href: Domain.makePageParams("RainbowClock", item),
                 children:
                 [
-                    await Resource.loadSvgOrCache("tektite-pin-icon"),
+                    await Resource.loadIconOrCache("tektite-pin-icon"),
                     Tektite.monospace("tick-elapsed-time", item.title),
                 ]
             }),

@@ -179,7 +179,7 @@ export module Render
                                     className: `tektite-check-button ${key === (settings.theme ?? "auto") ? "checked": ""}`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("tektite-check-icon"),
+                                        await Resource.loadIconOrCache("tektite-check-icon"),
                                         Tektite.$span("")(label(`theme.${key}` as Clockworks.LocaleKeyType)),
                                     ],
                                     onclick: async () =>
@@ -232,7 +232,7 @@ export module Render
                                 className: `tektite-check-button ${key === selected ? "checked": ""}`,
                                 children:
                                 [
-                                    await Resource.loadSvgOrCache("tektite-check-icon"),
+                                    await Resource.loadIconOrCache("tektite-check-icon"),
                                     Tektite.$span("")(label(`progressBarStyle.${key}` as Clockworks.LocaleKeyType)),
                                 ],
                                 onclick: async () =>
@@ -278,7 +278,7 @@ export module Render
                             className: `tektite-check-button ${"@auto" === (settings.locale ?? "@auto") ? "checked": ""}`,
                             children:
                             [
-                                await Resource.loadSvgOrCache("tektite-check-icon"),
+                                await Resource.loadIconOrCache("tektite-check-icon"),
                                 Tektite.$span("")(label("language.auto")),
                             ],
                             onclick: async () =>
@@ -302,7 +302,7 @@ export module Render
                                     className: `tektite-check-button ${key === (settings.locale ?? "@auto") ? "checked": ""}`,
                                     children:
                                     [
-                                        await Resource.loadSvgOrCache("tektite-check-icon"),
+                                        await Resource.loadIconOrCache("tektite-check-icon"),
                                         Tektite.$span("")(Tektite.$labelSpan(tektite.locale.getLocaleName(key))),
                                     ],
                                     onclick: async () =>
@@ -352,7 +352,7 @@ export module Render
                                 className: `tektite-check-button ${key === settings ? "checked": ""}`,
                                 children:
                                 [
-                                    await Resource.loadSvgOrCache("tektite-check-icon"),
+                                    await Resource.loadIconOrCache("tektite-check-icon"),
                                     Tektite.$span("")(label(key)),
                                 ],
                                 onclick: async () =>
@@ -479,7 +479,7 @@ export module Render
             (
                 async (i: Type.ApplicationType) => tektite.menu.linkItem
                 (
-                    [ await Resource.loadSvgOrCache(Type.applicationList[i].icon), Type.applicationList[i].title, ],
+                    [ await Resource.loadIconOrCache(Type.applicationList[i].icon), Type.applicationList[i].title, ],
                     { application: i },
                     applicationType === i ? "current-item": undefined,
                 )
@@ -496,7 +496,7 @@ export module Render
                 tektite.menu.item
                 (
                     [
-                        await Resource.loadSvgOrCache(0 === i ? zeroIcon: "tektite-flash-icon"),
+                        await Resource.loadIconOrCache(0 === i ? zeroIcon: "tektite-flash-icon"),
                         Tektite.$labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(i)}`),
                     ],
                     async () =>
@@ -518,7 +518,7 @@ export module Render
             tektite.menu.item
             (
                 [
-                    await Resource.loadSvgOrCache("tektite-flash-icon"),
+                    await Resource.loadIconOrCache("tektite-flash-icon"),
                     label("input a time"),
                 ],
                 async () =>
@@ -654,7 +654,7 @@ export module Render
             [
                 Tektite.$div("logo")
                 ([
-                    Tektite.$div("application-icon icon")(await Resource.loadSvgOrCache("application-icon")),
+                    Tektite.$div("application-icon icon")(await Resource.loadIconOrCache("application-icon")),
                     Tektite.$span("logo-text")(config.applicationTitle)
                 ]),
                 Tektite.$div("tektite-button-list")
@@ -712,7 +712,7 @@ export module Render
         className: "tektite-flash-interval",
         children:
         [
-            await Resource.loadSvgOrCache(entry.icon),
+            await Resource.loadIconOrCache(entry.icon),
             entry.title,
         ],
         onclick: async () => tektite.screen.popup

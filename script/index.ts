@@ -42,7 +42,7 @@ export const tektite = Tektite.make<Type.PageParams, Resource.KeyType, typeof lo
     makeUrl: Domain.makeUrl,
     showUrl: Render.showUrl,
     showPage: Render.showPage,
-    loadSvgOrCache: Resource.loadSvgOrCache,
+    loadIconOrCache: Resource.loadIconOrCache,
     localeMaster: Clockworks.localeMaster,
     timer:
     {

@@ -94,10 +94,10 @@
             white-space: nowrap;
             justify-content: start;
         }
-        .tektite-icon
+        .tektite-icon-frame
         {
             display: inline-block;
-            svg
+            .tektite-icon
             {
                 .tektite-square-size-trait(2.0rem);
             }
@@ -154,10 +154,10 @@
             padding-left: 0.5rem;
             margin-left: 0rem;
             .tektite-x-border-trait(left, @tektite-base-color);
-            .tektite-icon
+            .tektite-icon-frame
             {
                 padding: 0.5rem 0.25rem;
-                svg
+                .tektite-icon
                 {
                     .tektite-square-size-trait(1.5rem);
                 }
@@ -292,7 +292,7 @@
                     }
                 }
                 font-size: 1.2rem;
-                svg
+                .tektite-icon
                 {
                     .tektite-square-size-trait(1.5rem);
                     margin-right: 0.25rem;
@@ -326,7 +326,7 @@
                     // position: absolute;
                     // left: calc(50vw - 1.25rem);
                     // bottom: 1rem; // コードで調整するのでこの値に意味はない。
-                    &.tektite-icon
+                    &.tektite-icon-frame
                     {
                         opacity: 0.2;
                         .tektite-square-size-trait(2.0rem);
@@ -784,7 +784,7 @@
         font-size: 1.2rem;
         text-align: left;
         text-decoration: none;
-        svg
+        .tektite-icon
         {
             .tektite-square-size-trait(1.5rem);
             margin-left: -0.25rem;

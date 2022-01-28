@@ -36,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadSvgOrCache("tektite-tick-icon"), Tektite.monospace(Domain.dateFullStringFromTick(i)), ],
+                        [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.monospace(Domain.dateFullStringFromTick(i)), ],
                         Domain.makePageParams("NeverStopwatch", i),
                         item === i ? "current-item": undefined,
                     )
@@ -53,7 +53,7 @@ export module Render
                 href: Domain.makePageParams("NeverStopwatch", tick),
                 children:
                 [
-                    await Resource.loadSvgOrCache("tektite-tick-icon"),
+                    await Resource.loadIconOrCache("tektite-tick-icon"),
                     Tektite.monospace("tick-elapsed-time", label("Elapsed time")),
                 ]
             }),

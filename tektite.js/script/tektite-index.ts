@@ -52,7 +52,7 @@ export module Tektite
         makeUrl: (args: PageParams) => string;
         showUrl: (data: PageParams) => Promise<unknown>;
         showPage: (url: string) => Promise<unknown>;
-        loadSvgOrCache: (key: IconKeyType | TektiteIconKeyType) => Promise<SVGElement>;
+        loadIconOrCache: (key: IconKeyType | TektiteIconKeyType) => Promise<SVGElement>;
         localeMaster: LocaleMapType;
         timer?: { resolution?: number, highResolution?: number, };
     }
@@ -76,7 +76,7 @@ export module Tektite
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
-        public loadSvgOrCache = (key: TektiteIconKeyType) => this.params.loadSvgOrCache(key);
+        public loadIconOrCache = (key: TektiteIconKeyType) => this.params.loadIconOrCache(key);
         public fullscreen = FullscreenModule;
         public key = KeyModule;
         public screen = Screen.make(this);

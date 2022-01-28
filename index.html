@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Thu Jan 27 2022 21:17:35 GMT+0900 (日本標準時)
+    build at: Fri Jan 28 2022 09:41:03 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -74,8 +74,10 @@ body.light textarea {
   fill: #000022;
   background-color: #FFFFFF;
 }
-body.light a:not(.tektite-link-button) {
+body.light a {
   color: #5F42A7;
+}
+body.light a:not(.tektite-link-button) {
   cursor: pointer;
 }
 @media (hover: hover) {
@@ -95,7 +97,6 @@ body.light a:not(.tektite-link-button) {
   }
 }
 body.light a.tektite-link-button {
-  color: inherit;
   text-decoration: none;
 }
 body.light ul {
@@ -237,12 +238,12 @@ body.light button.tektite-check-button {
     background-color: #FFFFFF;
   }
 }
-body.light button.tektite-check-button svg {
+body.light button.tektite-check-button .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
 }
-body.light button.tektite-check-button:not(.checked) svg {
+body.light button.tektite-check-button:not(.checked) .tektite-icon {
   visibility: hidden;
 }
 body.light button.tektite-default-button {
@@ -289,8 +290,8 @@ body.light button.tektite-menu-button {
     border-color: transparent;
   }
 }
-body.light button.tektite-icon-button svg,
-body.light button.tektite-menu-button svg {
+body.light button.tektite-icon-button .tektite-icon,
+body.light button.tektite-menu-button .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -989,11 +990,11 @@ body.light .tektite-screen > header.tektite-segmented {
   white-space: nowrap;
   justify-content: start;
 }
-body.light .tektite-screen > header .tektite-icon {
+body.light .tektite-screen > header .tektite-icon-frame {
   display: inline-block;
   padding: 0.25rem;
 }
-body.light .tektite-screen > header .tektite-icon svg {
+body.light .tektite-screen > header .tektite-icon-frame .tektite-icon {
   width: 2rem;
   height: 2rem;
 }
@@ -1064,12 +1065,12 @@ body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .te
   border-left-style: solid;
   border-left-color: #FFFFFF;
 }
-body.light .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon,
-body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon {
+body.light .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon-frame,
+body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon-frame {
   padding: 0.5rem 0.25rem;
 }
-body.light .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon svg,
-body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon svg {
+body.light .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon-frame .tektite-icon,
+body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon-frame .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -1205,7 +1206,7 @@ body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite
     opacity: 1;
   }
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval svg {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
@@ -1229,13 +1230,13 @@ body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite
 body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link {
   cursor: pointer;
 }
-body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon {
+body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon-frame {
   opacity: 0.2;
   width: 2rem;
   height: 2rem;
 }
 @media (hover: hover) {
-  body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon:hover {
+  body.light .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon-frame:hover {
     opacity: 1;
   }
 }
@@ -1692,10 +1693,10 @@ body.light .bare-popup button {
   text-align: left;
   text-decoration: none;
 }
-body.light .tektite-menu-popup a svg,
-body.light .bare-popup a svg,
-body.light .tektite-menu-popup button svg,
-body.light .bare-popup button svg {
+body.light .tektite-menu-popup a .tektite-icon,
+body.light .bare-popup a .tektite-icon,
+body.light .tektite-menu-popup button .tektite-icon,
+body.light .bare-popup button .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
   margin-left: -0.25rem;
@@ -1798,7 +1799,7 @@ body.light .item-title {
   color: #000022;
   fill: #000022;
 }
-body.light .item-title svg {
+body.light .item-title .tektite-icon {
   width: 1.5em;
   min-width: 1.4em;
   height: 1.4em;
@@ -1968,7 +1969,7 @@ body.light .welcome-screen .tektite-button-list a {
 body.light .welcome-screen .tektite-button-list a .tektite-long-button {
   margin: 0px;
 }
-body.light.tektite-style-classic .logo > .application-icon svg {
+body.light.tektite-style-classic .logo > .application-icon .tektite-icon {
   color: #5F42A7;
   fill: #5F42A7;
 }
@@ -2516,8 +2517,10 @@ body.dark textarea {
   fill: #FFFFFF;
   background-color: #000022;
 }
-body.dark a:not(.tektite-link-button) {
+body.dark a {
   color: #5F42A7;
+}
+body.dark a:not(.tektite-link-button) {
   cursor: pointer;
 }
 @media (hover: hover) {
@@ -2537,7 +2540,6 @@ body.dark a:not(.tektite-link-button) {
   }
 }
 body.dark a.tektite-link-button {
-  color: inherit;
   text-decoration: none;
 }
 body.dark ul {
@@ -2679,12 +2681,12 @@ body.dark button.tektite-check-button {
     background-color: #000022;
   }
 }
-body.dark button.tektite-check-button svg {
+body.dark button.tektite-check-button .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
 }
-body.dark button.tektite-check-button:not(.checked) svg {
+body.dark button.tektite-check-button:not(.checked) .tektite-icon {
   visibility: hidden;
 }
 body.dark button.tektite-default-button {
@@ -2731,8 +2733,8 @@ body.dark button.tektite-menu-button {
     border-color: transparent;
   }
 }
-body.dark button.tektite-icon-button svg,
-body.dark button.tektite-menu-button svg {
+body.dark button.tektite-icon-button .tektite-icon,
+body.dark button.tektite-menu-button .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -3431,11 +3433,11 @@ body.dark .tektite-screen > header.tektite-segmented {
   white-space: nowrap;
   justify-content: start;
 }
-body.dark .tektite-screen > header .tektite-icon {
+body.dark .tektite-screen > header .tektite-icon-frame {
   display: inline-block;
   padding: 0.25rem;
 }
-body.dark .tektite-screen > header .tektite-icon svg {
+body.dark .tektite-screen > header .tektite-icon-frame .tektite-icon {
   width: 2rem;
   height: 2rem;
 }
@@ -3506,12 +3508,12 @@ body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tek
   border-left-style: solid;
   border-left-color: #000022;
 }
-body.dark .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon,
-body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon {
+body.dark .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon-frame,
+body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon-frame {
   padding: 0.5rem 0.25rem;
 }
-body.dark .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon svg,
-body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon svg {
+body.dark .tektite-screen > header .tektite-segment + .tektite-segment .tektite-icon-frame .tektite-icon,
+body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup + .tektite-segment .tektite-icon-frame .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -3647,7 +3649,7 @@ body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-
     opacity: 1;
   }
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval svg {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-flash-interval .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.25rem;
@@ -3671,13 +3673,13 @@ body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-
 body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link {
   cursor: pointer;
 }
-body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon {
+body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon-frame {
   opacity: 0.2;
   width: 2rem;
   height: 2rem;
 }
 @media (hover: hover) {
-  body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon:hover {
+  body.dark .tektite-screen > .tektite-screen-body .tektite-primary-page .tektite-page-footer .tektite-down-page-link.tektite-icon-frame:hover {
     opacity: 1;
   }
 }
@@ -4134,10 +4136,10 @@ body.dark .bare-popup button {
   text-align: left;
   text-decoration: none;
 }
-body.dark .tektite-menu-popup a svg,
-body.dark .bare-popup a svg,
-body.dark .tektite-menu-popup button svg,
-body.dark .bare-popup button svg {
+body.dark .tektite-menu-popup a .tektite-icon,
+body.dark .bare-popup a .tektite-icon,
+body.dark .tektite-menu-popup button .tektite-icon,
+body.dark .bare-popup button .tektite-icon {
   width: 1.5rem;
   height: 1.5rem;
   margin-left: -0.25rem;
@@ -4240,7 +4242,7 @@ body.dark .item-title {
   color: #FFFFFF;
   fill: #FFFFFF;
 }
-body.dark .item-title svg {
+body.dark .item-title .tektite-icon {
   width: 1.5em;
   min-width: 1.4em;
   height: 1.4em;
@@ -4410,7 +4412,7 @@ body.dark .welcome-screen .tektite-button-list a {
 body.dark .welcome-screen .tektite-button-list a .tektite-long-button {
   margin: 0px;
 }
-body.dark.tektite-style-classic .logo > .application-icon svg {
+body.dark.tektite-style-classic .logo > .application-icon .tektite-icon {
   color: #5F42A7;
   fill: #5F42A7;
 }
@@ -6376,7 +6378,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                     tag: "button",
                                     className: "tektite-icon-button tektite-close-button"
                                 };
-                                return [4 /*yield*/, this.tektite.loadSvgOrCache("tektite-cross-icon")];
+                                return [4 /*yield*/, this.tektite.loadIconOrCache("tektite-cross-icon")];
                             case 2:
                                 _b = (_d.children = [
                                     _e.sent()
@@ -6423,8 +6425,8 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = tektite_index_1.Tektite.$div("tektite-icon");
-                                return [4 /*yield*/, this.tektite.params.loadSvgOrCache(item.icon)];
+                                _a = tektite_index_1.Tektite.$div("tektite-icon-frame");
+                                return [4 /*yield*/, this.tektite.params.loadIconOrCache(item.icon)];
                             case 1: return [2 /*return*/, [
                                     _a.apply(void 0, [_b.sent()]),
                                     tektite_index_1.Tektite.$div("tektite-segment-title")(item.title)
@@ -6816,9 +6818,9 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                             case 0:
                                 _a = {
                                     tag: "div",
-                                    className: "tektite-down-page-link tektite-icon"
+                                    className: "tektite-down-page-link tektite-icon-frame"
                                 };
-                                return [4 /*yield*/, this.tektite.loadSvgOrCache("tektite-down-triangle-icon")];
+                                return [4 /*yield*/, this.tektite.loadIconOrCache("tektite-down-triangle-icon")];
                             case 1: return [2 /*return*/, (_a.children = _b.sent(),
                                     _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                         return __generator(this, function (_a) {
@@ -7146,7 +7148,7 @@ define("clockworks/tektite.js/script/tektite-menu", ["require", "exports", "cloc
                                     tag: "button",
                                     className: "tektite-menu-button"
                                 };
-                                return [4 /*yield*/, this.tektite.loadSvgOrCache("tektite-ellipsis-icon")];
+                                return [4 /*yield*/, this.tektite.loadIconOrCache("tektite-ellipsis-icon")];
                             case 1:
                                 button = _a.apply(void 0, [(_b.children = [
                                         _c.sent()
@@ -7259,7 +7261,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
             function Tektite(params) {
                 var _this = this;
                 this.params = params;
-                this.loadSvgOrCache = function (key) { return _this.params.loadSvgOrCache(key); };
+                this.loadIconOrCache = function (key) { return _this.params.loadIconOrCache(key); };
                 this.fullscreen = tektite_fullscreen_1.Fullscreen;
                 this.key = tektite_key_1.Key;
                 this.screen = tektite_screen_1.Screen.make(this);
@@ -9291,10 +9293,19 @@ define("clockworks/script/render/resource", ["require", "exports"], function (re
     var Resource;
     (function (Resource) {
         var _this = this;
-        Resource.loadSvgOrCache = function (key) { return __awaiter(_this, void 0, void 0, function () {
+        Resource.loadIconOrCache = function (key) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, Resource.loadSvgOrCache("tektite-icon", key)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); }); };
+        Resource.loadSvgOrCache = function (className, key) { return __awaiter(_this, void 0, void 0, function () {
+            var result;
             return __generator(this, function (_a) {
                 try {
-                    return [2 /*return*/, new DOMParser().parseFromString(document.getElementById(key).innerHTML, "image/svg+xml").documentElement];
+                    result = new DOMParser().parseFromString(document.getElementById(key).innerHTML, "image/svg+xml").documentElement;
+                    result.classList.add(className);
+                    return [2 /*return*/, result];
                 }
                 catch (error) {
                     console.log({ key: key });
@@ -10010,7 +10021,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     switch (_c.label) {
                                         case 0:
                                             _b = (_a = __7.tektite.menu).linkItem;
-                                            return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tektite-tick-icon")];
+                                            return [4 /*yield*/, resource_1.Resource.loadIconOrCache("tektite-tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_8.Tektite.$labelSpan(i.title), tektite_index_8.Tektite.monospace(domain_5.Domain.timezoneOffsetString(i.offset))], domain_5.Domain.makePageParams("RainbowClock", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
@@ -10034,7 +10045,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                             className: "item-title",
                             href: domain_5.Domain.makePageParams("RainbowClock", item)
                         };
-                        return [4 /*yield*/, resource_1.Resource.loadSvgOrCache("tektite-pin-icon")];
+                        return [4 /*yield*/, resource_1.Resource.loadIconOrCache("tektite-pin-icon")];
                     case 1:
                         _e = [
                             _d.apply(_c, [(_j.children = [
@@ -10459,7 +10470,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                     switch (_c.label) {
                                         case 0:
                                             _b = (_a = __8.tektite.menu).linkItem;
-                                            return [4 /*yield*/, resource_2.Resource.loadSvgOrCache("tektite-tick-icon")];
+                                            return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), tektite_index_9.Tektite.monospace(domain_6.Domain.dateStringFromTick(i.end))], domain_6.Domain.makePageParams("CountdownTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
@@ -10486,7 +10497,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                             className: "item-title",
                             href: domain_6.Domain.makePageParams("CountdownTimer", item)
                         };
-                        return [4 /*yield*/, resource_2.Resource.loadSvgOrCache("tektite-tick-icon")];
+                        return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-tick-icon")];
                     case 1:
                         _e = [
                             _d.apply(_c, [(_j.children = [
@@ -10590,7 +10601,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                             className: "item-title",
                             href: domain_6.Domain.makePageParams("ElapsedTimer", item)
                         };
-                        return [4 /*yield*/, resource_2.Resource.loadSvgOrCache("tektite-tick-icon")];
+                        return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-tick-icon")];
                     case 1:
                         _e = [
                             _d.apply(_c, [(_j.children = [
@@ -10687,7 +10698,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                                                                 tag: "button",
                                                                                 className: "tektite-check-button"
                                                                             };
-                                                                            return [4 /*yield*/, resource_2.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                                            return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-check-icon")];
                                                                         case 1: return [2 /*return*/, (_a.children = [
                                                                                 _b.sent(),
                                                                                 Render.$span("")(Render.labelSpan(domain_6.Domain.makeTimerLabel(i)))
@@ -11183,7 +11194,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                     switch (_c.label) {
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
-                                            return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tektite-tick-icon")];
+                                            return [4 /*yield*/, resource_3.Resource.loadIconOrCache("tektite-tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_10.Tektite.monospace(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
                                     }
@@ -11207,7 +11218,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                             className: "item-title",
                             href: domain_7.Domain.makePageParams("NeverStopwatch", tick)
                         };
-                        return [4 /*yield*/, resource_3.Resource.loadSvgOrCache("tektite-tick-icon")];
+                        return [4 /*yield*/, resource_3.Resource.loadIconOrCache("tektite-tick-icon")];
                     case 1:
                         _e = [
                             _d.apply(_c, [(_j.children = [
@@ -11576,7 +11587,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                     switch (_c.label) {
                                         case 0:
                                             _b = (_a = __10.tektite.menu).linkItem;
-                                            return [4 /*yield*/, resource_4.Resource.loadSvgOrCache("tektite-tick-icon")];
+                                            return [4 /*yield*/, resource_4.Resource.loadIconOrCache("tektite-tick-icon")];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_11.Tektite.$labelSpan(i.title), tektite_index_11.Tektite.monospace(domain_8.Domain.dateStringFromTick(i.tick))], domain_8.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
@@ -12075,7 +12086,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                     tag: "button",
                                                                                     className: "tektite-check-button ".concat(key === ((_b = settings.theme) !== null && _b !== void 0 ? _b : "auto") ? "checked" : "")
                                                                                 };
-                                                                                return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                                                return [4 /*yield*/, resource_5.Resource.loadIconOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
                                                                                     tektite_index_12.Tektite.$span("")(Render.label("theme.".concat(key)))
@@ -12162,7 +12173,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                     tag: "button",
                                                                                     className: "tektite-check-button ".concat(key === selected ? "checked" : "")
                                                                                 };
-                                                                                return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                                                return [4 /*yield*/, resource_5.Resource.loadIconOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
                                                                                     tektite_index_12.Tektite.$span("")(Render.label("progressBarStyle.".concat(key)))
@@ -12241,7 +12252,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                 tag: "button",
                                                                 className: "tektite-check-button ".concat("@auto" === ((_f = settings.locale) !== null && _f !== void 0 ? _f : "@auto") ? "checked" : "")
                                                             };
-                                                            return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                            return [4 /*yield*/, resource_5.Resource.loadIconOrCache("tektite-check-icon")];
                                                         case 1:
                                                             _d = [
                                                                 (_e.children = [
@@ -12278,7 +12289,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                     tag: "button",
                                                                                     className: "tektite-check-button ".concat(key === ((_b = settings.locale) !== null && _b !== void 0 ? _b : "@auto") ? "checked" : "")
                                                                                 };
-                                                                                return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                                                return [4 /*yield*/, resource_5.Resource.loadIconOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _c.sent(),
                                                                                     tektite_index_12.Tektite.$span("")(tektite_index_12.Tektite.$labelSpan(__11.tektite.locale.getLocaleName(key)))
@@ -12361,7 +12372,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                                                                     tag: "button",
                                                                                     className: "tektite-check-button ".concat(key === settings ? "checked" : "")
                                                                                 };
-                                                                                return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-check-icon")];
+                                                                                return [4 /*yield*/, resource_5.Resource.loadIconOrCache("tektite-check-icon")];
                                                                             case 1: return [2 /*return*/, (_a.children = [
                                                                                     _b.sent(),
                                                                                     tektite_index_12.Tektite.$span("")(Render.label(key))
@@ -12537,7 +12548,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     switch (_c.label) {
                                         case 0:
                                             _b = (_a = __11.tektite.menu).linkItem;
-                                            return [4 /*yield*/, resource_5.Resource.loadSvgOrCache(type_5.Type.applicationList[i].icon)];
+                                            return [4 /*yield*/, resource_5.Resource.loadIconOrCache(type_5.Type.applicationList[i].icon)];
                                         case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), type_5.Type.applicationList[i].title], { application: i },
                                                 applicationType === i ? "current-item" : undefined])];
                                     }
@@ -12560,7 +12571,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                 switch (_c.label) {
                                     case 0:
                                         _b = (_a = __11.tektite.menu).item;
-                                        return [4 /*yield*/, resource_5.Resource.loadSvgOrCache(0 === i ? zeroIcon : "tektite-flash-icon")];
+                                        return [4 /*yield*/, resource_5.Resource.loadIconOrCache(0 === i ? zeroIcon : "tektite-flash-icon")];
                                     case 1: return [2 /*return*/, _b.apply(_a, [[
                                                 _c.sent(),
                                                 tektite_index_12.Tektite.$labelSpan(0 === i ? __11.Clockworks.localeMap(zeroLabel) : "".concat(__11.Clockworks.localeMap("Interval"), ": ").concat(domain_9.Domain.makeTimerLabel(i)))
@@ -12587,7 +12598,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                             .concat;
                         if (!adder) return [3 /*break*/, 3];
                         _e = (_d = __11.tektite.menu).item;
-                        return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("tektite-flash-icon")];
+                        return [4 /*yield*/, resource_5.Resource.loadIconOrCache("tektite-flash-icon")];
                     case 2:
                         _c = [
                             _e.apply(_d, [[
@@ -12819,7 +12830,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         _e = {};
                         _a = tektite_index_12.Tektite.$div("logo");
                         _b = tektite_index_12.Tektite.$div("application-icon icon");
-                        return [4 /*yield*/, resource_5.Resource.loadSvgOrCache("application-icon")];
+                        return [4 /*yield*/, resource_5.Resource.loadIconOrCache("application-icon")];
                     case 2: return [2 /*return*/, (_c.body = (_e.primary = [
                             _a.apply(void 0, [[
                                     _b.apply(void 0, [_f.sent()]),
@@ -12890,7 +12901,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                             tag: "div",
                             className: "tektite-flash-interval"
                         };
-                        return [4 /*yield*/, resource_5.Resource.loadSvgOrCache(entry.icon)];
+                        return [4 /*yield*/, resource_5.Resource.loadIconOrCache(entry.icon)];
                     case 1: return [2 /*return*/, (_a.children = [
                             _b.sent(),
                             entry.title
@@ -13334,7 +13345,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
         makeUrl: domain_10.Domain.makeUrl,
         showUrl: render_14.Render.showUrl,
         showPage: render_14.Render.showPage,
-        loadSvgOrCache: resource_6.Resource.loadSvgOrCache,
+        loadIconOrCache: resource_6.Resource.loadIconOrCache,
         localeMaster: Clockworks.localeMaster,
         timer: {
             resolution: 360,
@@ -13351,7 +13362,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1643285855202), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1643330463025), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
