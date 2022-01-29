@@ -96,7 +96,7 @@ export module Render
         trail: null !== item ?
             undefined:
             [
-                Tektite.$div("tektite-button-list")
+                Tektite.$div("tektite-horizontal-button-list")
                 ([
                     {
                         tag: "button",

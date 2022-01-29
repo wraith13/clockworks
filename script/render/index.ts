@@ -657,7 +657,7 @@ export module Render
                     Tektite.$div("application-icon icon")(await Resource.loadIconOrCache("application-icon")),
                     Tektite.$span("logo-text")(config.applicationTitle)
                 ]),
-                Tektite.$div("tektite-button-list")
+                Tektite.$div("tektite-vertical-button-list")
                 (
                     Type.applicationIdList.map
                     (
@@ -723,7 +723,7 @@ export module Render
     });
     export const itemFooter = async <T>(item: T, application: Type.ApplicationType, getShareTitle: (item: T) => string, isSaved: (item: T) => boolean, save: (item: T) => Promise<unknown>) =>
         null !== item ?
-            Tektite.$div("tektite-button-list")
+            Tektite.$div("tektite-horizontal-button-list")
             ([
                 tektite.internalLink
                 ({

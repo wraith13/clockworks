@@ -316,7 +316,15 @@ export module Screen
                     minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
                 }
             );
-            minamo.dom.getDivsByClassName(document, "tektite-button-list").forEach
+            minamo.dom.getDivsByClassName(document, "tektite-horizontal-button-list").forEach
+            (
+                header =>
+                {
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-on", true);
+                    minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", false);
+                }
+            );
+            minamo.dom.getDivsByClassName(document, "tektite-vertical-button-list").forEach
             (
                 header =>
                 {

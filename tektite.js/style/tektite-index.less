@@ -16,6 +16,7 @@
         .tektite-straight-horizontal-flex-trait;
         .tektite-x-border-trait(top, @tektite-accent-color);
         padding: 2rem 1.5rem;
+        width: 100%;
         & > button:first-child,
         & > div:first-child,
         & > span:first-child
@@ -463,12 +464,15 @@
         .tektite-x-border-trait(bottom, rgba(128,128,128,0.5));
     }
 }
-.tektite-button-list
+.tektite-horizontal-button-list
 {
-    // .tektite-center-horizontal-flex-trait;
-    width: 100%;
-    text-align: center;
-    padding: 0.25rem;
+    .tektite-center-horizontal-flex-trait;
+    .tektite-button-list-trait;
+}
+.tektite-vertical-button-list
+{
+    .tektite-center-vertical-flex-trait;
+    .tektite-button-list-trait;
 }
 .tektite-button-line
 {
@@ -748,8 +752,7 @@
 {
     position: relative;
     margin: 0.5rem 1rem;
-    width: calc(100% - (2rem + 2px));
-    max-width: 40rem;
+    .tektite-long-button-width-trait;
     float: center;
 }
 .tektite-menu-popup

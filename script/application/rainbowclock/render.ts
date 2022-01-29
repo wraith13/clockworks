@@ -211,7 +211,7 @@ export module Render
         },
         trail:
         [
-            $div("tektite-button-list")
+            $div("tektite-horizontal-button-list")
             ([
                 {
                     tag: "button",

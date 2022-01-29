@@ -353,7 +353,7 @@ export module Render
                         "00:00:00 only"
                     )
                 ),
-                $div("tektite-button-list")
+                $div("tektite-horizontal-button-list")
                 ({
                     tag: "button",
                     id: "done-button",
@@ -388,7 +388,7 @@ export module Render
         trail: null !== item ?
             undefined:
             [
-                $div("tektite-button-list")
+                $div("tektite-horizontal-button-list")
                 ([
                     {
                         tag: "button",

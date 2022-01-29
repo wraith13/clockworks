@@ -420,3 +420,23 @@
     animation-timing-function: ease-in-out;
     animation-fill-mode: both;
 }
+.tektite-long-button-width-trait()
+{
+    width: 100%;
+    max-width: 40rem;
+}
+.tektite-button-list-trait()
+{
+    width: 100%;
+    padding: 0.5rem;
+    & > a,
+    & > button
+    {
+        .tektite-long-button-width-trait;
+        margin: 0.5rem;
+    }
+    & > a > button
+    {
+        margin: 0rem;
+    }
+}

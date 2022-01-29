@@ -143,7 +143,7 @@ export module Render
                         Storage.NeverStopwatch.flashInterval.set
                     )
                 ),
-                Tektite.$div("tektite-button-list")
+                Tektite.$div("tektite-horizontal-button-list")
                 ({
                     tag: "button",
                     className: "tektite-default-button tektite-main-button tektite-long-button",
