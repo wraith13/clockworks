@@ -479,7 +479,10 @@ export module Render
             (
                 async (i: Type.ApplicationType) => tektite.menu.linkItem
                 (
-                    [ await Resource.loadIconOrCache(Type.applicationList[i].icon), Type.applicationList[i].title, ],
+                    [
+                        await Resource.loadIconOrCache(Type.applicationList[i].icon),
+                        Tektite.$span("label")(Type.applicationList[i].title),
+                    ],
                     { application: i },
                     applicationType === i ? "current-item": undefined,
                 )

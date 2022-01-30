@@ -743,15 +743,12 @@
 {
     .tektite-link-trait;
     .tektite-null-border-trait;
-    padding: 0px;
-    margin: 0px;
     background-color: transparent !important;
     text-decoration: none !important;
 }
 .tektite-long-button
 {
     position: relative;
-    margin: 0.5rem 1rem;
     .tektite-long-button-width-trait;
     float: center;
 }
@@ -781,10 +778,11 @@
     .tektite-popup-round-border-trait;
     line-height: 1.5rem;
     font-size: 1.5rem;
-    a, button
+    .tektite-menu-item-button
     {
         .tektite-straight-horizontal-flex-trait;
         .tektite-null-border-trait;
+        min-height: 2.25rem;
         margin: 0px !important;
         font-size: 1.2rem;
         text-align: left;
@@ -792,8 +790,11 @@
         .tektite-icon
         {
             .tektite-square-size-trait(1.5rem);
-            margin-left: -0.25rem;
-            margin-right: 0.5rem;
+            // margin-left: -0.25rem;
+        }
+        & > *:not(:first-child)
+        {
+            margin-left: 0.5rem;
         }
         &.current-item
         {
@@ -815,7 +816,6 @@
         }
         & > .label + .value
         {
-            margin-left: 0.5rem;
             text-align: right;
             flex-grow: 1;
         }
