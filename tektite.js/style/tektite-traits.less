@@ -14,10 +14,39 @@
     //     filter: invert(1);
     // }
 }
+.tektite-surround-margin-trait(@size)
+{
+    margin: @size;
+}
+.tektite-zero-margin-trait()
+{
+    .tektite-surround-margin-trait(0px);
+}
 .tektite-centering-margin-trait()
 {
     margin-left: auto;
     margin-right: auto;
+}
+.tektite-children-horizontal-interval-margin-trait(@size)
+{
+    & > *:not(:first-child)
+    {
+        margin-left: @size;
+    }
+}
+.tektite-children-vertical-interval-margin-trait(@size)
+{
+    & > *:not(:first-child)
+    {
+        margin-top: @size;
+    }
+}
+.tektite-children-surround-margin-trait(@size)
+{
+    & > *
+    {
+        .tektite-surround-margin-trait(@size);
+    }
 }
 .tektite-square-size-trait(@size)
 {
@@ -428,9 +457,9 @@
 {
     width: 100%;
     padding: 0.5rem;
+    .tektite-children-surround-margin-trait(0.5rem);
     & > *
     {
         .tektite-long-button-width-trait;
-        margin: 0.5rem;
     }
 }

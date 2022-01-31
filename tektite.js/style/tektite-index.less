@@ -648,10 +648,12 @@
     overflow: auto;
     min-width: 15rem;
     max-width: calc(100vw - 1rem);
+    .tektite-children-vertical-interval-margin-trait(0.5rem);
+    padding: 0.5rem;
     input,
     select
     {
-        width: calc(100% - 0.5rem);
+        width: 100%;
     }
     .tektite-popup-operator
     {
@@ -787,14 +789,11 @@
         font-size: 1.2rem;
         text-align: left;
         text-decoration: none;
+        .tektite-children-horizontal-interval-margin-trait(0.5rem);
         .tektite-icon
         {
             .tektite-square-size-trait(1.5rem);
             // margin-left: -0.25rem;
-        }
-        & > *:not(:first-child)
-        {
-            margin-left: 0.5rem;
         }
         &.current-item
         {
