@@ -716,7 +716,7 @@ export module Render
         children:
         [
             await Resource.loadIconOrCache(entry.icon),
-            entry.title,
+            Tektite.$span("label")(entry.title),
         ],
         onclick: async () => tektite.screen.popup
         ({

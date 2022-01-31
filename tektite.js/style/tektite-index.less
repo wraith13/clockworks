@@ -272,34 +272,6 @@
             //     border-color: @tektite-base-color;
             //     background-color: transparent;
             // }
-            .tektite-flash-interval
-            {
-                cursor: pointer;
-                // position: absolute;
-                // top: 0px;
-                // right: 0px;
-                .tektite-centering-margin-trait;
-                .tektite-center-horizontal-flex-trait;
-                // display: flex;
-                // flex-direction: row;
-                // justify-content: center;
-                // align-items: center;
-                opacity: 0.5;
-                @media (hover: hover)
-                {
-                    &:hover
-                    {
-                        opacity: 1.0;
-                    }
-                }
-                font-size: 1.2rem;
-                .tektite-icon
-                {
-                    .tektite-square-size-trait(1.5rem);
-                    margin-right: 0.25rem;
-                }
-                padding: 0.5rem;
-            }
             .tektite-page-body
             {
                 position: relative;
@@ -648,16 +620,16 @@
     overflow: auto;
     min-width: 15rem;
     max-width: calc(100vw - 1rem);
-    .tektite-children-vertical-interval-margin-trait(0.5rem);
-    padding: 0.5rem;
     input,
     select
     {
-        width: 100%;
+        width: calc(100% - 0.5rem);
+        .tektite-surround-margin-trait(0.25rem);
     }
     .tektite-popup-operator
     {
         width: 100%;
+        .tektite-children-surround-margin-trait(0.25rem);
         .tektite-cancel-button
         {
             float: left;
@@ -768,7 +740,7 @@
 .tektite-menu-popup,
 .bare-popup
 {
-    max-height: calc(100vh - 15rem);
+    max-height: calc(100vh - 10rem);
     overflow: hidden;
     overflow-y: auto;
     &, & > a
