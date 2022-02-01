@@ -158,6 +158,44 @@ export module Screen
                 };
             }
         );
+        public popupTitle = (title: minamo.dom.Source | undefined) => minamo.core.exists(title) ? Tektite.$tag("h2")("")(title): [];
+        public prompt = async <ResultType>
+        (
+            data:
+            {
+                className?: string;
+                title?: string,
+                content: minamo.dom.Source,
+                onCommit: () => (ResultType | Promise<ResultType>),
+                onCancel?: () => (ResultType | Promise<ResultType>),
+            }
+        ) => await this.popup<ResultType>
+        (
+            async instance =>
+            ({
+                className: data.className,
+                children:
+                [
+                    this.popupTitle(data.title),
+                    Tektite.$div("tektite-form")(data.content),
+                    Tektite.$div("tektite-popup-operator")
+                    ([
+                        {
+                            tag: "button",
+                            className: "tektite-cancel-button",
+                            children: this.tektite.locale.map("Cancel"),
+                            onclick: async () => instance.set((await data.onCancel?.()) ?? null).close(),
+                        },
+                        {
+                            tag: "button",
+                            className: "tektite-default-button",
+                            children: this.tektite.locale.map("OK"),
+                            onclick: async () => instance.set(await data.onCommit()).close(),
+                        },
+                    ])
+                ],
+            })
+        );
         lastMouseDownTarget: EventTarget = null;
         public onMouseDown = (event: MouseEvent) => this.lastMouseDownTarget = event.target;
         public onMouseUp = (_evnet: MouseEvent) => setTimeout(this.clearLastMouseDownTarget, 10);

@@ -100,7 +100,7 @@ export module Render
                     })
                 )
         });
-        return await RenderBase.prompt
+        return await tektite.screen.prompt
         ({
             title: message,
             content:

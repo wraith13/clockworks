@@ -236,7 +236,7 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        RenderBase.popupTitle(label("New Timer")),
+                        tektite.screen.popupTitle(label("New Timer")),
                         checkButtonList,
                         $div("tektite-popup-operator")
                         ([
@@ -284,7 +284,7 @@ export module Render
             value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
             required: "",
         });
-        return await RenderBase.prompt
+        return await tektite.screen.prompt
         ({
             title: message,
             content:

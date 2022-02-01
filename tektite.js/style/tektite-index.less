@@ -620,12 +620,6 @@
     overflow: auto;
     min-width: 15rem;
     max-width: calc(100vw - 1rem);
-    input,
-    select
-    {
-        width: calc(100% - 0.5rem);
-        .tektite-surround-margin-trait(0.25rem);
-    }
     .tektite-popup-operator
     {
         width: 100%;
@@ -640,6 +634,14 @@
             float: right;
             min-width: 120px;
         }
+    }
+}
+.tektite-form
+{
+    & > *
+    {
+        width: calc(100% - 0.5rem);
+        .tektite-surround-margin-trait(0.25rem);
     }
 }
 &.tektite-sleep-mouse

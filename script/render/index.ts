@@ -48,107 +48,7 @@ export module Render
         Tektite.$span("locale-parallel")(Clockworks.localeParallel(label)),
         Tektite.$span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    // export const systemPrompt = async (message?: string, _default?: string): Promise<string | null> =>
-    // {
-    //     await minamo.core.timeout(100); // この wait をかましてないと呼び出し元のポップアップメニューが window.prompt が表示されてる間、ずっと表示される事になる。
-    //     return await new Promise(resolve => resolve(window.prompt(message, _default)?.trim() ?? null));
-    // };
-    // export const customPrompt = async (message?: string, _default?: string): Promise<string | null> =>
-    // {
-    //     const input = Tektite.$make(HTMLInputElement)
-    //     ({
-    //         tag: "input",
-    //         type: "text",
-    //         value: _default,
-    //     });
-    //     return prompt
-    //     ({
-    //         title: message ?? Clockworks.localeMap("please input"),
-    //         content: input,
-    //         onCommit: () => input.value,
-    //     });
-    // };
-    // // export const prompt = systemPrompt;
-    // export const prompt = customPrompt;
-    // // export const alert = (message: string) => window.alert(message);
-    // export const alert = (message: string) => makeToast({ content: message, });
-
     export const systemConfirm = (message: string) => window.confirm(message);
-    // export const confirm = systemConfirm;
-    export const popupTitle = (title: minamo.dom.Source | undefined) => minamo.core.exists(title) ? Tektite.$tag("h2")("")(title): [];
-    export const prompt = async <ResultType>
-    (
-        data:
-        {
-            className?: string;
-            title?: string,
-            content: minamo.dom.Source,
-            onCommit: () => (ResultType | Promise<ResultType>),
-            onCancel?: () => (ResultType | Promise<ResultType>),
-        }
-    ) => await tektite.screen.popup<ResultType>
-    (
-        async instance =>
-        ({
-            className: data.className,
-            children:
-            [
-                popupTitle(data.title),
-                data.content,
-                Tektite.$div("tektite-popup-operator")
-                ([
-                    {
-                        tag: "button",
-                        className: "tektite-cancel-button",
-                        children: Clockworks.localeMap("Cancel"),
-                        onclick: async () => instance.set((await data.onCancel?.()) ?? null).close(),
-                    },
-                    {
-                        tag: "button",
-                        className: "tektite-default-button",
-                        children: Clockworks.localeMap("OK"),
-                        onclick: async () => instance.set(await data.onCommit()).close(),
-                    },
-                ])
-            ],
-        })
-    );
-    // export const prompt = async <ResultType>
-    // (
-    //     data:
-    //     {
-    //         title?: string,
-    //         content: minamo.dom.Source,
-    //         onCommit: () => (ResultType | Promise<ResultType>),
-    //         onCancel?: () => (ResultType | Promise<ResultType>),
-    //     }
-    // ) => await popup3<ResultType>
-    // (
-    //     instance =>
-    //     ({
-    //         children:
-    //         [
-    //             undefined !== data.title ? Tektite.$tag("h2")("")(data.title): [],
-    //             data.content,
-    //             Tektite.$div("tektite-popup-operator")
-    //             ([
-    //                 {
-    //                     tag: "button",
-    //                     className: "tektite-cancel-button",
-    //                     children: Clockworks.localeMap("Cancel"),
-    //                     onclick: async () => instance.close((await data.onCancel?.()) ?? null),
-    //                 },
-    //                 {
-    //                     tag: "button",
-    //                     className: "tektite-default-button",
-    //                     children: Clockworks.localeMap("OK"),
-    //                     onclick: async () => instance.close(await data.onCommit()),
-    //                 },
-    //             ])
-    //         ],
-    //         onClose: async () => instance.close((await data.onCancel?.()) ?? null),
-    //     })
-    // );
     export const closeButton = (onclick?: () => unknown) =>
     ({
         tag: "button",
@@ -204,7 +104,7 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        popupTitle(label("Theme setting")),
+                        tektite.screen.popupTitle(label("Theme setting")),
                         checkButtonList,
                         popupCloseOperator(() => instance.close()),
                     ],
@@ -255,7 +155,7 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        popupTitle(label("Progress Bar Style setting")),
+                        tektite.screen.popupTitle(label("Progress Bar Style setting")),
                         checkButtonList,
                         popupCloseOperator(() => instance.close()),
                     ],
@@ -326,7 +226,7 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        popupTitle(label("Language setting")),
+                        tektite.screen.popupTitle(label("Language setting")),
                         checkButtonList,
                         popupCloseOperator(() => instance.close()),
                     ],
@@ -375,7 +275,7 @@ export module Render
                     // className: "add-remove-tags-popup",
                     children:
                     [
-                        popupTitle(label("Color setting")),
+                        tektite.screen.popupTitle(label("Color setting")),
                         checkButtonList,
                         popupCloseOperator(() => instance.close()),
                     ],
@@ -391,7 +291,7 @@ export module Render
             value: Domain.timeLongCoreStringFromTick(tick),
             required: "",
         });
-        return await prompt
+        return await tektite.screen.prompt
         ({
             title: message,
             content: inputTime,
@@ -414,7 +314,7 @@ export module Render
             value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
             required: "",
         });
-        return await prompt
+        return await tektite.screen.prompt
         ({
             title: message,
             content:
@@ -433,7 +333,7 @@ export module Render
                 // className: "add-remove-tags-popup",
                 children:
                 [
-                    popupTitle(label("Share")),
+                    tektite.screen.popupTitle(label("Share")),
                     Tektite.$div("tektite-menu-button-list")
                     ([
                         {
