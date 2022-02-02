@@ -219,7 +219,6 @@
             left: 0px;
             top: 0px;
             height: 2.5rem;
-            box-sizing: border-box;
             .tektite-x-border-trait(right, #0005);
         }
         &.update
@@ -255,7 +254,6 @@
         .tektite-hide-scroll-bar;
         .tektite-primary-page
         {
-            box-sizing: border-box;
             width: 100%;
             height: calc(100vh - 2.5rem);
             max-height: calc(100vh - 2.5rem);
@@ -322,7 +320,6 @@
     .tektite-screen-bar
     {
         z-index: -10;
-        box-sizing: border-box;
         &.tektite-horizontal
         {
             .tektite-screen-left-trait;
@@ -480,7 +477,6 @@
     align-items: stretch;
     justify-content: stretch;
     width: 100%;
-    box-sizing: border-box;
     &:not(.empty-list)
     {
         .tektite-x-border-trait(top, rgba(128,128,128,0.5));
@@ -500,11 +496,9 @@
 {
     position: relative;
     display: inline-block;
-    box-sizing: border-box;
     min-width: calc(100% / 1);
     .tektite-x-border-trait(right, rgba(128,128,128,0.5));
     .tektite-x-border-trait(bottom, rgba(128,128,128,0.5));
-    margin: 0px;
     @media (min-width:780px)
     {
         min-width: calc((100% - 1px) / 2);
@@ -767,7 +761,6 @@
         .tektite-icon
         {
             .tektite-square-size-trait(1.5rem);
-            // margin-left: -0.25rem;
         }
         &.current-item
         {

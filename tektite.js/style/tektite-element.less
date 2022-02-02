@@ -2,9 +2,7 @@
 @import "tektite-traits.less";
 *
 {
-    font-family: ui-sans-serif, "ヒラギノ角ゴ Pro w4", Roboto, Meiryo;
-    font: -apple-system-body;
-    outline:none;
+    .tektite-basic-trait()
 }
 input, select, textarea
 {
@@ -14,11 +12,9 @@ input, select, textarea
 & // body
 {
     .tektite-screen-full-trait;
-    padding: 0px;
-    .tektite-zero-margin-trait();
-    box-sizing: border-box;
-    // margin-bottom: 5rem; // for iOS Safari
-    line-height: 100%;
+    font-family: ui-sans-serif, "ヒラギノ角ゴ Pro w4", Roboto, Meiryo;
+    font: -apple-system-body;
+    outline:none;
     overflow: hidden;
     .tektite-positive-foreground-coloring-trait;
     background-color: fade(@tektite-accent-color, 95%);
