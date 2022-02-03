@@ -4,9 +4,14 @@
   "description": "Never Stopwatch Static Web Application",
   "scripts": {
     "build all": "node ./nephila/build.js/build.js ../../build.json release",
+    "build new all": "node ./nephila/build.js/build.js ../../build.new.json release",
     "build html": "node ./nephila/build.js/build.js ../../build.json none",
-    "build light style": "lessc --source-map=style/theme.light.css.map --source-map-url=style/theme.light.css.map theme.light.less style/theme.light.css",
-    "build dark style": "lessc --source-map=style/theme.dark.css.map --source-map-url=style/theme.dark.css.map theme.dark.less style/theme.dark.css",
+    "build light style": "sass theme.light.scss style/theme.light.css",
+    "build dark style": "sass theme.dark.scss style/theme.dark.css",
+    "build wip light style": "lessc --source-map=style.wip/theme.light.css.wip.map --source-map-url=style.wip/theme.light.wip.css.map theme.light.wip.less style.wip/theme.light.wip.css",
+    "build wip dark style": "lessc --source-map=style.wip/theme.dark.css.wip.map --source-map-url=style.wip/theme.dark.wip.css.map theme.dark.wip.less style.wip/theme.dark.wip.css",
+    "build old light style": "lessc --source-map=style.old/theme.light.old.css.map --source-map-url=style.old/theme.light.old.css.map theme.light.old.less style.old/theme.light.old.css",
+    "build old dark style": "lessc --source-map=style.old/theme.dark.old.css.map --source-map-url=style.old/theme.dark.old.css.map theme.dark.old.less style.old/theme.dark.old.css",
     "build script": "tsc -p ./script/tsconfig.json",
     "watch script": "tsc --watch -p ./script/tsconfig.json"
   },
@@ -22,6 +27,7 @@
   "homepage": "https://github.com/wraith13/clockworks",
   "devDependencies": {
     "less": "^4.1.2",
+    "sass": "^1.49.7",
     "typescript": "^4.5.4"
   }
 }

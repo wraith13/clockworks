@@ -1,13 +1,15 @@
 {
-    "template": { "path": "./index.template.html" },
-    "output": { "path": "./index.html" },
+    "template": { "path": "./index.template.new.html" },
+    "output": { "path": "./index.new.html" },
     "preprocesses":
     {
         "none": [ ],
         "release":
         [
-            "npm run-script \"build old light style\"",
-            "npm run-script \"build old dark style\"",
+            "npm run-script \"build light style\"",
+            "npm run-script \"build dark style\"",
+            "npm run-script \"build wip light style\"",
+            "npm run-script \"build wip dark style\"",
             "npm run-script \"build script\""
         ]
     },
@@ -19,8 +21,10 @@
         "__BUILD_TIMESTAMP_TICK__": { "call": "timestamp_tick" },
         "__REPOSITORY_URL_": { "json": "./resource/config.json", "key": "repositoryUrl" },
         "__LICENSE__": { "path": "./LICENSE_1_0.txt" },
-        "__LIGHT_STYLE__": { "path": "./style.old/theme.light.old.css" },
-        "__DARK_STYLE__": { "path": "./style.old/theme.dark.old.css" },
+        "__WIP_LIGHT_STYLE__": { "path": "./style.wip/theme.light.wip.css" },
+        "__WIP_DARK_STYLE__": { "path": "./style.wip/theme.dark.wip.css" },
+        "__LIGHT_STYLE__": { "path": "./style/theme.light.css" },
+        "__DARK_STYLE__": { "path": "./style/theme.dark.css" },
         "__EVIL_COMMONJS__": { "path": "./nephila/evil-commonjs/index.js", "replace": { "match": "sourceMappingURL=index.js.map", "text": "sourceMappingURL=nephila/evil-commonjs/index.js.map" } },
         "__SCRIPT__": { "path": "./script/index.js", "replace": { "match": "sourceMappingURL=index.js.map", "text": "sourceMappingURL=script/index.js.map" } },
         "__IMAGES__": { "resource": "./resource/images.json" },

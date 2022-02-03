@@ -5,3 +5,7 @@ script/index.js
 style/index.css
 style/theme.dark.css
 style/theme.light.css
+style.wip/theme.dark.wip.css
+style.wip/theme.light.wip.css
+style.old/theme.dark.old.css
+style.old/theme.light.old.css
