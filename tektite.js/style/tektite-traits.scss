@@ -1,0 +1,472 @@
+// out: false
+// @import "params.less";
+@mixin tektite-dark-trait()
+{
+    ::-webkit-calendar-picker-indicator
+    {
+        filter: invert(1);
+    }
+}
+@mixin tektite-light-trait()
+{
+    // ::-webkit-calendar-picker-indicator
+    // {
+    //     filter: invert(1);
+    // }
+}
+@mixin tektite-basic-trait()
+{
+    @include tektite-zero-margin-trait;
+    padding: 0px;
+    box-sizing: border-box;
+    line-height: 100%;
+}
+@mixin tektite-surround-margin-trait($size)
+{
+    margin: $size;
+}
+@mixin tektite-zero-margin-trait()
+{
+    @include  tektite-surround-margin-trait(0px);
+}
+@mixin tektite-centering-margin-trait()
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+@mixin tektite-children-horizontal-interval-margin-trait($size)
+{
+    & > *:not(:first-child)
+    {
+        margin-left: $size;
+    }
+}
+@mixin tektite-children-vertical-interval-margin-trait($size)
+{
+    & > *:not(:first-child)
+    {
+        margin-top: $size;
+    }
+}
+@mixin tektite-children-surround-margin-trait($size)
+{
+    & > *
+    {
+        @include tektite-surround-margin-trait($size);
+    }
+}
+@mixin tektite-square-size-trait($size)
+{
+    width: $size;
+    height: $size;
+}
+@mixin tektite-clickable-trait()
+{
+    cursor: pointer;
+}
+@mixin tektite-plain-text-trait()
+{
+    text-decoration: none;
+}
+@mixin tektite-link-trait()
+{
+    @include tektite-clickable-trait;
+    @media (hover: hover)
+    {
+        &:hover
+        {
+            opacity: 1.0;
+            color: $tektite-active-color;
+            fill: $tektite-active-color;
+            text-decoration: underline;
+        }
+        &:not(:hover)
+        {
+            @include tektite-plain-text-trait;
+        }
+    }
+    @media (hover: none)
+    {
+        @include tektite-plain-text-trait;
+    }
+}
+@mixin tektite-monospace-trait()
+{
+    font-family: monospace;
+}
+@mixin tektite-positive-foreground-coloring-trait()
+{
+    color: $tektite-main-color;
+    fill: $tektite-main-color;
+}
+@mixin tektite-positive-background-coloring-trait()
+{
+    background-color: $tektite-base-color;
+}
+@mixin tektite-alpha-positive-background-coloring-trait()
+{
+    background-color: rgba($tektite-base-color, DD); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+}
+@mixin tektite-negative-foreground-coloring-trait()
+{
+    color: $tektite-base-color;
+    fill: $tektite-base-color;
+}
+@mixin tektite-primary-operator-coloring-trait()
+{
+    @include tektite-clickable-trait;
+    @include tektite-negative-foreground-coloring-trait;
+    @media (hover: hover)
+    {
+        &:not(:hover)
+        {
+            border-color: $tektite-accent-color;
+            background-color: $tektite-accent-color;
+        }
+        &:hover
+        {
+            border-color: $tektite-active-color;
+            background-color: $tektite-active-color;
+        }
+    }
+    @media (hover: none)
+    {
+        &
+        {
+            border-color: $tektite-accent-color;
+            background-color: $tektite-accent-color;
+        }
+    }
+}
+@mixin tektite-secondary-operator-coloring-trait()
+{
+    @include tektite-clickable-trait;
+    @media (hover: hover)
+    {
+        &:not(:hover)
+        {
+            color: $tektite-accent-color;
+            fill: $tektite-accent-color;
+            border-color: $tektite-accent-color;
+            @include tektite-positive-background-coloring-trait;
+        }
+        &:hover
+        {
+            @include tektite-negative-foreground-coloring-trait;
+            border-color: $tektite-active-color;
+            background-color: $tektite-active-color;
+        }
+    }
+    @media (hover: none)
+    {
+        &
+        {
+            color: $tektite-accent-color;
+            fill: $tektite-accent-color;
+            border-color: $tektite-accent-color;
+            @include tektite-positive-background-coloring-trait;
+        }
+    }
+}
+@mixin tektite-tertiary-operator-coloring-trait()
+{
+    @include tektite-clickable-trait;
+    @media (hover: hover)
+    {
+        &:hover
+        {
+            color: $tektite-active-color;
+            fill: $tektite-active-color;
+        }
+    }
+}
+@mixin tektite-delete-operator-coloring-trait()
+{
+    @include tektite-clickable-trait;
+    @media (hover: hover)
+    {
+        &:not(:hover)
+        {
+            color: $tektite-delete-color;
+            fill: $tektite-delete-color;
+            border-color: $tektite-delete-color;
+            @include tektite-positive-background-coloring-trait;
+        }
+        &:hover
+        {
+            @include tektite-negative-foreground-coloring-trait;
+            border-color: $tektite-delete-color;
+            background-color: $tektite-delete-color;
+        }
+    }
+    @media (hover: none)
+    {
+        &
+        {
+            color: $tektite-delete-color;
+            fill: $tektite-delete-color;
+            border-color: $tektite-delete-color;
+            @include tektite-positive-background-coloring-trait;
+        }
+    }
+}
+@mixin tektite-hide-scroll-bar
+{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar
+    {
+        display: none;
+    }
+}
+@mixin tektite-primary-text-font-size-core-trait()
+{
+    font-size: calc((100vh - 6rem) * 0.2);
+}
+@mixin tektite-primary-text-font-size-trait()
+{
+    @media (max-height: 7680px) and (min-width: 11520px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 5760px) and (min-width: 7680px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 3840px) and (min-width: 5760px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 2880px) and (min-width: 3840px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 1920px) and (min-width: 2880px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 1440px) and (min-width: 1920px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 960px) and (min-width: 1440px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 720px) and (min-width: 960px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 480px) and (min-width: 720px)
+    {
+        @include tektite-primary-text-font-size-core-trait;
+    }
+    @media (max-height: 480px) and (min-width: 480px)
+    {
+        font-size: 4rem;
+    }
+    @media (max-height: 360px) and (min-width: 360px)
+    {
+        font-size: 3rem;
+    }
+    @media (max-height: 240px) and (min-width: 240px)
+    {
+        font-size: 2rem;
+    }
+}
+@mixin tektite-second-text-font-size-core-trait()
+{
+    font-size: calc((100vh - 6rem) * 0.1);
+}
+@mixin tektite-second-text-font-size-trait()
+{
+    @media (max-height: 7680px) and (min-width: 11520px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 5760px) and (min-width: 7680px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 3840px) and (min-width: 5760px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 2880px) and (min-width: 3840px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 1920px) and (min-width: 2880px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 1440px) and (min-width: 1920px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 960px) and (min-width: 1440px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 720px) and (min-width: 960px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 480px) and (min-width: 720px)
+    {
+        @include tektite-second-text-font-size-core-trait;
+    }
+    @media (max-height: 480px) and (min-width: 480px)
+    {
+        font-size: 2rem;
+    }
+    @media (max-height: 360px) and (min-width: 360px)
+    {
+        font-size: 1.5rem;
+    }
+    @media (max-height: 240px) and (min-width: 240px)
+    {
+        font-size: 1rem;
+    }
+}
+@mixin tektite-horizontal-flex-trait()
+{
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+@mixin tektite-straight-horizontal-flex-trait()
+{
+    @include tektite-horizontal-flex-trait;
+    justify-content: start;
+    flex-wrap: nowrap;
+}
+@mixin tektite-center-horizontal-flex-trait()
+{
+    @include tektite-horizontal-flex-trait;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+@mixin tektite-space-around-horizontal-flex-trait()
+{
+    @include tektite-horizontal-flex-trait;
+    justify-content: space-around;
+}
+@mixin tektite-stretch-horizontal-flex-trait()
+{
+    @include tektite-horizontal-flex-trait;
+    justify-content: stretch;
+}
+@mixin tektite-end-horizontal-flex-trait()
+{
+    @include tektite-horizontal-flex-trait;
+    justify-content: end;
+}
+@mixin tektite-vertical-flex-trait()
+{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+@mixin tektite-center-vertical-flex-trait()
+{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+@mixin tektite-button-trait()
+{
+    padding: 0.25rem 0.5rem;
+    font-weight: bold;
+    font-size: 1.0rem;
+    height: 2.0rem;
+    line-height: 100%;
+    // cursor: pointer;
+}
+@mixin tektite-round-border-trait($radius)
+{
+    border-radius: $radius;
+    border-style: solid;
+    border-width: 1px;
+}
+@mixin tektite-round-border-trait()
+{
+    @include tektite-round-border-trait(1rem);
+}
+@mixin tektite-popup-round-border-trait()
+{
+    @include tektite-round-border-trait(0.5rem);
+}
+@mixin tektite-null-border-trait()
+{
+    border-radius: 0px;
+    border-style: none;
+    border-width: 0px;
+}
+@mixin tektite-x-border-trait($x, $color) // 🔥🔥🔥🔥 コンパイル結果を要チェック
+{
+    border-#{$x}-width: 1px;
+    border-#{$x}-style: solid;
+    border-#{$x}-color: $color;
+}
+@mixin tektite-screen-full-trait()
+{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+@mixin tektite-screen-top-trait()
+{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+}
+@mixin tektite-screen-right-trait()
+{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+@mixin tektite-screen-bottom-trait()
+{
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+@mixin tektite-screen-left-trait()
+{
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+@mixin tektite-animation($name, $duration)
+{
+    animation-name: $name;
+    animation-direction: normal;
+    animation-delay: 0s;
+    animation-duration: $duration;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}
+@mixin tektite-long-button-width-trait()
+{
+    width: 100%;
+    max-width: 40rem;
+}
+@mixin tektite-button-list-trait()
+{
+    width: 100%;
+    padding: 0.5rem;
+    @include tektite-children-surround-margin-trait(0.5rem);
+    & > *
+    {
+        @include tektite-long-button-width-trait;
+    }
+}

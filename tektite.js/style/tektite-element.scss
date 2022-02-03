@@ -1,0 +1,147 @@
+// out: false
+@import "tektite-traits.scss";
+*
+{
+    @include tektite-basic-trait;
+}
+input, select, textarea
+{
+    @include tektite-positive-foreground-coloring-trait;
+    @include tektite-positive-background-coloring-trait;
+}
+& // body
+{
+    @include tektite-screen-full-trait;
+    font-family: ui-sans-serif, "ヒラギノ角ゴ Pro w4", Roboto, Meiryo;
+    font: -apple-system-body;
+    outline:none;
+    overflow: hidden;
+    @include tektite-positive-foreground-coloring-trait;
+    background-color: rgba($tektite-accent-color, 95%);
+}
+a
+{
+    color: $tektite-accent-color;
+    &:not(.tektite-link-button)
+    {
+        @include tektite-link-trait;
+    }
+    &.tektite-link-button
+    {
+        @include tektite-plain-text-trait;
+    }
+}
+ul
+{
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-block-start: 1rem;
+    padding-block-end: 1rem;
+    padding-inline-end: 1rem;
+    padding-inline-start: 2.5rem;
+}
+h2
+{
+    padding: 0.25rem 0.5rem;
+    font-size: 1.0rem;
+}
+h1, h2
+{
+    @include tektite-negative-foreground-coloring-trait;
+    @include tektite-zero-margin-trait();
+    background-color: $tektite-accent-color;
+    text-decoration: none;
+}
+label
+{
+    cursor: pointer;
+    // position: relative;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: stretch;
+    @media (hover: hover)
+    {
+        &:hover
+        {
+            color: $tektite-active-color;
+        }
+    }
+}
+input,
+select
+{
+    padding: 0.25rem 1rem;
+    @include tektite-round-border-trait;
+    border-color: $tektite-weak-color;
+    font-size: 1.0rem;
+    min-width: 7.5rem;
+}
+button
+{
+    @include tektite-button-trait;
+    @include tektite-round-border-trait;
+    &.tektite-main-button:not(&.tektite-default-button),
+    &.tektite-cancel-button,
+    &.tektite-icon-button,
+    &.tektite-menu-button,
+    &.tektite-menu-item-button,
+    &.tektite-delete-button
+    {
+        @include tektite-secondary-operator-coloring-trait;
+        @include tektite-center-horizontal-flex-trait;
+    }
+    &.tektite-check-button
+    {
+        @include tektite-secondary-operator-coloring-trait;
+        @include tektite-null-border-trait;
+        @include tektite-stretch-horizontal-flex-trait;
+        position: relative;
+        padding: 0.25rem;
+        .tektite-icon
+        {
+            @include tektite-square-size-trait(1.5rem);
+        }
+        &:not(.checked) .tektite-icon
+        {
+            visibility: hidden;
+        }
+    }
+    &.tektite-default-button
+    {
+        @include tektite-primary-operator-coloring-trait;
+        @include tektite-center-horizontal-flex-trait;
+    }
+    &.tektite-icon-button,
+    &.tektite-menu-button
+    {
+        @media (hover: hover)
+        {
+            &:not(:hover)
+            {
+                background-color: transparent;
+                border-color: transparent;
+            }
+        }
+        @media (hover: none)
+        {
+            &
+            {
+                background-color: transparent;
+                border-color: transparent;
+            }
+        }
+        padding: 0.25rem;
+        .tektite-icon
+        {
+            @include tektite-square-size-trait(1.5rem);
+        }
+    }
+    &.tektite-delete-button
+    {
+        @include tektite-delete-operator-coloring-trait;
+    }
+}
