@@ -1,18 +1,18 @@
 // out: false
-@import "../tektite.js/style.wip/tektite-index.less";
+@import "../tektite.js/style/tektite-index.scss";
 
 .tektite-menu-item-button
 {
     position: relative;
-    .tektite-stretch-horizontal-flex-trait;
+    @include tektite-stretch-horizontal-flex-trait;
     text-align: left;
     padding: 0.25rem 0.5rem;
     margin: 0px;
-    .tektite-null-border-trait;
+    @include tektite-null-border-trait;
 }
 .item-title
 {
-    .tektite-straight-horizontal-flex-trait;
+    @include tektite-straight-horizontal-flex-trait;
     font-size: 1.2rem;
     line-height: 1.4em;
     overflow: hidden;
@@ -28,7 +28,7 @@
         min-height: 1.4em;
         margin-right: 0.25rem;
     }
-    .tektite-positive-foreground-coloring-trait;
+    @include tektite-positive-foreground-coloring-trait;
 }
 .stamp-item,
 .alarm-item,
@@ -58,7 +58,7 @@
     }
     .item-information
     {
-        background-color: e(%("%s%s", @tektite-weak-color, "44"));
+        background-color: #{$tektite-weak-color}44;
         padding: 0.5rem;
         margin: 0px;
         *
@@ -99,7 +99,7 @@
         z-index: 0;
         .item-panel-body
         {
-            .tektite-negative-foreground-coloring-trait;
+            @include tektite-negative-foreground-coloring-trait;
             position: relative;
             z-index: 20;
             padding: 1rem;
@@ -124,11 +124,11 @@
         .item-time-bar
         {
             position: absolute;
-            // background-color: @tektite-progress-bar-color;
+            // background-color: $tektite-progress-bar-color;
             left: 0px;
             top: 0px;
             height: 100%;
-            .tektite-x-border-trait(right, #0005);
+            @include tektite-x-border-trait(right, #0005);
             z-index: 10;
         }
     }
@@ -163,7 +163,7 @@
         justify-content: center;
         & > .application-icon
         {
-            .tektite-square-size-trait(calc(100vw / 6));
+            @include tektite-square-size-trait(calc(100vw / 6));
         }
         & > .application-icon + .logo-text
         {
@@ -180,7 +180,7 @@
             padding-top: 1rem;
             & > .application-icon
             {
-                .tektite-square-size-trait(4.0rem);
+                @include tektite-square-size-trait(4.0rem);
             }
             & > .application-icon + .logo-text
             {
@@ -206,13 +206,13 @@
         {
             .tektite-icon
             {
-                color: @tektite-accent-color;
-                fill: @tektite-accent-color;
+                color: $tektite-accent-color;
+                fill: $tektite-accent-color;
             }
         }
         & > .logo-text
         {
-            color: @tektite-accent-color;
+            color: $tektite-accent-color;
             // グラデーション
             // background: -webkit-linear-gradient(top, #28D928, #136E13);
             // background-clip: text;
@@ -230,7 +230,7 @@
     {
         .tektite-main-panel
         {
-            .tektite-vertical-flex-trait;
+            @include tektite-vertical-flex-trait;
             .current-item
             {
                 align-items: start;
@@ -243,7 +243,7 @@
                 {
                     font-size: 7vw;
                     line-height: 100%;
-                    .tektite-primary-text-font-size-trait;
+                    @include tektite-primary-text-font-size-trait;
                 }
             }
             .previous-timestamp,
@@ -257,7 +257,7 @@
                 {
                     font-size: 4.4vw;
                     line-height: 100%;
-                    .tektite-second-text-font-size-trait;
+                    @include tektite-second-text-font-size-trait;
                 }
             }
         }
@@ -274,7 +274,7 @@
     {
         .tektite-main-panel
         {
-            .tektite-vertical-flex-trait;
+            @include tektite-vertical-flex-trait;
             // z-index: 100;
             .capital-time
             {
@@ -282,7 +282,7 @@
                 {
                     font-size: 15vw;
                     line-height: 100%;
-                    .tektite-primary-text-font-size-trait;
+                    @include tektite-primary-text-font-size-trait;
                 }
             }
             .current-title,
@@ -294,7 +294,7 @@
                 {
                     font-size: 6vw;
                     line-height: 120%; // 本当は 100% にしておきたいが 100% だと Safari で日本語文字上部が表示されない。
-                    .tektite-second-text-font-size-trait;
+                    @include tektite-second-text-font-size-trait;
                 }
             }
         }
@@ -312,8 +312,8 @@
                 // position: absolute;
                 // top: 0px;
                 // right: 0px;
-                .tektite-centering-margin-trait;
-                .tektite-center-horizontal-flex-trait;
+                @include tektite-centering-margin-trait;
+                @include tektite-center-horizontal-flex-trait;
                 // display: flex;
                 // flex-direction: row;
                 // justify-content: center;
@@ -327,10 +327,10 @@
                     }
                 }
                 font-size: 1.2rem;
-                .tektite-children-horizontal-interval-margin-trait(0.5rem);
+                @include tektite-children-horizontal-interval-margin-trait(0.5rem);
                 .tektite-icon
                 {
-                    .tektite-square-size-trait(1.5rem);
+                    @include tektite-square-size-trait(1.5rem);
                 }
                 padding: 0.5rem;
             }
@@ -363,7 +363,7 @@
 }
 .loading-spinner
 {
-    .tektite-animation(loading-spinner, 0.3s);
+    @include tektite-animation(loading-spinner, 0.3s);
 }
 @keyframes loading-spinner
 {

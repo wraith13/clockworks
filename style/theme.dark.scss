@@ -1,0 +1,9 @@
+// out: style/theme.dark.css, sourceMap: style/theme.dark.css.map
+@import "params.scss";
+$tektite-main-color: #FFFFFF;
+$tektite-base-color: #000022;
+body.dark
+{
+    @import "index.scss";
+    @include tektite-dark-trait;
+}

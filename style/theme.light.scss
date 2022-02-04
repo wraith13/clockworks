@@ -1,0 +1,9 @@
+// out: style/theme.light.css, sourceMap: style/theme.light.css.map
+@import "params.scss";
+$tektite-main-color: #000022;
+$tektite-base-color: #FFFFFF;
+body.light
+{
+    @import "index.scss";
+    @include tektite-light-trait;
+}

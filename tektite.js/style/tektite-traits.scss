@@ -105,7 +105,7 @@
 }
 @mixin tektite-alpha-positive-background-coloring-trait()
 {
-    background-color: rgba($tektite-base-color, DD); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+    background-color: #{$tektite-base-color}DD;
 }
 @mixin tektite-negative-foreground-coloring-trait()
 {
@@ -384,15 +384,11 @@
     line-height: 100%;
     // cursor: pointer;
 }
-@mixin tektite-round-border-trait($radius)
+@mixin tektite-round-border-trait($radius: 1rem)
 {
     border-radius: $radius;
     border-style: solid;
     border-width: 1px;
-}
-@mixin tektite-round-border-trait()
-{
-    @include tektite-round-border-trait(1rem);
 }
 @mixin tektite-popup-round-border-trait()
 {

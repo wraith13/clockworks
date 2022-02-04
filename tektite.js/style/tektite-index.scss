@@ -339,21 +339,21 @@
     {
         header
         {
-            background-color: rgba($tektite-main-color, "11"); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+            background-color: #{$tektite-main-color}11;
             .tektite-segment:not(.tektite-label-segment)
             {
                 @media (hover: hover)
                 {
                     &:hover
                     {
-                        background-color: rgba($tektite-base-color, "11"); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+                        background-color: #{$tektite-base-color}11;
                     }
                 }
             }
             .tektite-segment + .tektite-segment,
             .tektite-segment +.tektite-menu-popup + .tektite-segment
             {
-                border-left-color: rgba($tektite-base-color, "44") !important; // 🔥🔥🔥🔥 コンパイル結果を要チェック
+                border-left-color: #{$tektite-base-color}44 !important;
             }
             & > button
             {
@@ -361,7 +361,7 @@
                 {
                     &:hover
                     {
-                        background-color: rgba($tektite-base-color, "22"); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+                        background-color: #{$tektite-base-color}22;
                     }
                 }
             }
@@ -381,12 +381,12 @@
                     {
                         &:hover
                         {
-                            background-color: rgba($tektite-base-color, "11"); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+                            background-color: #{$tektite-base-color}11;
                         }
                     }
                     &:not(.tektite-default-button)
                     {
-                        border-color: rgba($tektite-base-color, "88"); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+                        border-color: #{$tektite-base-color}88;
                         // opacity: 0.5;
                         @media (hover: hover)
                         {
@@ -401,7 +401,7 @@
             }
             .tektite-trail-page
             {
-                background-color: rgba($tektite-base-color, "BB"); // 🔥🔥🔥🔥 コンパイル結果を要チェック
+                background-color: #{$tektite-base-color}BB;
             }
         }
     }
@@ -671,7 +671,8 @@
 }
 .tektite-slow-slide-down-out
 {
-    @include tektite-slide-down-out;
+    @include tektite-animation(tektite-slide-down-out, 0.25s);
+    overflow-y: hidden;
     animation-duration: 0.5s;
 }
 .tektite-fade-and-slide-out
