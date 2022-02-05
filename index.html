@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Fri Feb 04 2022 20:09:22 GMT+0900 (日本標準時)
+    build at: Sat Feb 05 2022 10:58:10 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -1046,14 +1046,10 @@ body.light .tektite-screen > header .tektite-segment + .tektite-menu-popup {
 }
 body.light .tektite-screen > header button.tektite-icon-button,
 body.light .tektite-screen > header button.tektite-menu-button {
-  margin: 0px;
-  margin-right: 0.25rem;
   cursor: pointer;
   color: #FFFFFF;
   fill: #FFFFFF;
   border-color: transparent !important;
-  right: 0.25rem;
-  position: absolute;
 }
 @media (hover: hover) {
   body.light .tektite-screen > header button.tektite-icon-button:not(:hover),
@@ -1078,21 +1074,18 @@ body.light .tektite-screen > header button.tektite-icon-button:not(:hover),
 body.light .tektite-screen > header button.tektite-menu-button:not(:hover) {
   background-color: transparent !important;
 }
-body.light .tektite-screen > header button.tektite-icon-button + button.tektite-menu-button {
-  right: 2.5rem;
-}
 body.light .tektite-screen > header .tektite-menu-popup:not(.tektite-segment-popup) {
   top: 2.625rem;
   right: 0.5rem;
 }
 body.light .tektite-screen > header .tektite-header-operator {
   flex-grow: 1;
-  margin-right: 5.25rem;
   display: inline-flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
-  justify-content: end;
-  z-index: 1000;
+}
+body.light .tektite-screen > header .tektite-header-operator > * {
+  margin-right: 0.25rem;
 }
 body.light .tektite-screen > header .tektite-progress-bar {
   position: absolute;
@@ -3447,14 +3440,10 @@ body.dark .tektite-screen > header .tektite-segment + .tektite-menu-popup {
 }
 body.dark .tektite-screen > header button.tektite-icon-button,
 body.dark .tektite-screen > header button.tektite-menu-button {
-  margin: 0px;
-  margin-right: 0.25rem;
   cursor: pointer;
   color: #000022;
   fill: #000022;
   border-color: transparent !important;
-  right: 0.25rem;
-  position: absolute;
 }
 @media (hover: hover) {
   body.dark .tektite-screen > header button.tektite-icon-button:not(:hover),
@@ -3479,21 +3468,18 @@ body.dark .tektite-screen > header button.tektite-icon-button:not(:hover),
 body.dark .tektite-screen > header button.tektite-menu-button:not(:hover) {
   background-color: transparent !important;
 }
-body.dark .tektite-screen > header button.tektite-icon-button + button.tektite-menu-button {
-  right: 2.5rem;
-}
 body.dark .tektite-screen > header .tektite-menu-popup:not(.tektite-segment-popup) {
   top: 2.625rem;
   right: 0.5rem;
 }
 body.dark .tektite-screen > header .tektite-header-operator {
   flex-grow: 1;
-  margin-right: 5.25rem;
   display: inline-flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
-  justify-content: end;
-  z-index: 1000;
+}
+body.dark .tektite-screen > header .tektite-header-operator > * {
+  margin-right: 0.25rem;
 }
 body.dark .tektite-screen > header .tektite-progress-bar {
   position: absolute;
@@ -6269,11 +6255,12 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                         .join(" ");
                 };
                 this.segmented = function (data) { return __awaiter(_this, void 0, void 0, function () {
-                    var _a, _b, _c;
-                    var _d;
+                    var _a, _b, _c, _d, _e;
+                    var _f;
                     var _this = this;
-                    return __generator(this, function (_e) {
-                        switch (_e.label) {
+                    var _g;
+                    return __generator(this, function (_h) {
+                        switch (_h.label) {
                             case 0:
                                 _a = [tektite_index_1.Tektite.$div(Header_1.progressBarClassName)([])];
                                 return [4 /*yield*/, Promise.all(data.items
@@ -6287,19 +6274,20 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                     }); }))];
                             case 1:
                                 _a = _a.concat([
-                                    (_e.sent()).reduce(function (a, b) { return a.concat(b); }, [])
+                                    (_h.sent()).reduce(function (a, b) { return a.concat(b); }, [])
                                 ]);
+                                _b = tektite_index_1.Tektite.$div("tektite-header-operator");
                                 if (!data.parent) return [3 /*break*/, 3];
-                                _d = {
+                                _f = {
                                     tag: "button",
                                     className: "tektite-icon-button tektite-close-button"
                                 };
                                 return [4 /*yield*/, this.tektite.loadIconOrCache("tektite-cross-icon")];
                             case 2:
-                                _b = (_d.children = [
-                                    _e.sent()
+                                _c = (_f.children = [
+                                    _h.sent()
                                 ],
-                                    _d.onclick = function (event) {
+                                    _f.onclick = function (event) {
                                         event.stopPropagation();
                                         // if ("" !== getFilterText() || getHeaderElement().classList.contains("tektite-header-operator-has-focus"))
                                         // {
@@ -6311,26 +6299,28 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                         _this.tektite.params.showUrl(data.parent);
                                         // }
                                     },
-                                    _d);
+                                    _f);
                                 return [3 /*break*/, 4];
                             case 3:
-                                _b = [];
-                                _e.label = 4;
+                                _c = [];
+                                _h.label = 4;
                             case 4:
-                                _a = _a.concat([
-                                    _b
-                                ]);
+                                _d = [
+                                    _c
+                                ];
                                 if (!data.menu) return [3 /*break*/, 6];
                                 return [4 /*yield*/, this.tektite.menu.button(data.menu)];
                             case 5:
-                                _c = _e.sent();
+                                _e = _h.sent();
                                 return [3 /*break*/, 7];
                             case 6:
-                                _c = [];
-                                _e.label = 7;
+                                _e = [];
+                                _h.label = 7;
                             case 7: return [2 /*return*/, _a.concat([
-                                    _c,
-                                    data.operator ? tektite_index_1.Tektite.$div("tektite-header-operator")(data.operator) : []
+                                    _b.apply(void 0, [_d.concat([
+                                            _e,
+                                            (_g = data.operator) !== null && _g !== void 0 ? _g : []
+                                        ])])
                                 ])];
                         }
                     });
@@ -13224,7 +13214,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1643972962640), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1644026290508), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

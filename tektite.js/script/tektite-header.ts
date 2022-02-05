@@ -88,7 +88,9 @@ export module Header
                     )
                 )
             ).reduce((a, b) => (a as any[]).concat(b), []),
-            data.parent ?
+            Tektite.$div("tektite-header-operator")
+            ([
+                data.parent ?
                 {
                     tag: "button",
                     className: "tektite-icon-button tektite-close-button",
@@ -111,8 +113,9 @@ export module Header
                     },
                 }:
                 [],
-            data.menu ? await this.tektite.menu.button(data.menu): [],
-            data.operator ? Tektite.$div("tektite-header-operator")(data.operator): [],
+                data.menu ? await this.tektite.menu.button(data.menu): [],
+                data.operator ?? []
+            ]),
         ];
         getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "tektite-close-button")[0];
         segmentCore = async (item: SegmentSource<PageParams, IconKeyType>) =>
