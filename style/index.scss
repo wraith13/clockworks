@@ -195,13 +195,12 @@
         {
             .tektite-icon
             {
-                color: $tektite-accent-color;
-                fill: $tektite-accent-color;
+                @include tektite-accent-foreground-coloring-trait();
             }
         }
         & > .logo-text
         {
-            color: $tektite-accent-color;
+            @include tektite-accent-foreground-coloring-trait();
             // グラデーション
             // background: -webkit-linear-gradient(top, #28D928, #136E13);
             // background-clip: text;

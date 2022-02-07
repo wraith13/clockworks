@@ -20,7 +20,7 @@ input, select, textarea
 }
 a
 {
-    color: $tektite-accent-color;
+    @include tektite-accent-foreground-coloring-trait();
     &:not(.tektite-link-button)
     {
         @include tektite-link-trait;
@@ -66,7 +66,7 @@ label
     {
         &:hover
         {
-            color: $tektite-active-color;
+            @include tektite-active-foreground-coloring-trait();
         }
     }
 }
@@ -142,5 +142,18 @@ button
     &.tektite-delete-button
     {
         @include tektite-delete-operator-coloring-trait;
+    }
+    &.tektite-text-button
+    {
+        @include tektite-null-border-trait;
+        @include tektite-tertiary-operator-coloring-trait;
+        background-color: transparent !important;
+        text-decoration: none !important;
+    }
+    &.tektite-long-button
+    {
+        position: relative;
+        @include tektite-long-button-width-trait;
+        float: center;
     }
 }

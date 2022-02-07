@@ -702,19 +702,6 @@
         display: none;
     }
 }
-.tektite-text-button
-{
-    @include tektite-link-trait;
-    @include tektite-null-border-trait;
-    background-color: transparent !important;
-    text-decoration: none !important;
-}
-.tektite-long-button
-{
-    position: relative;
-    @include tektite-long-button-width-trait;
-    float: center;
-}
 .tektite-menu-popup
 {
     &:not(.show)
@@ -736,7 +723,7 @@
     {
         @include tektite-vertical-flex-trait;
     }
-    color: $tektite-accent-color;
+    @include tektite-accent-foreground-coloring-trait();
     @include tektite-alpha-positive-background-coloring-trait;
     @include tektite-popup-round-border-trait;
     line-height: 1.5rem;
