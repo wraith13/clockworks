@@ -48,6 +48,7 @@ export module Menu
                     popup.classList.add("show");
                     cover = this.tektite.screen.cover
                     ({
+                        parent: popup.parentElement,
                         onclick: close,
                     });
                 },

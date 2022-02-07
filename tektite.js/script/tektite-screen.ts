@@ -12,7 +12,7 @@ export module Screen
         public header = Header.make(this.tektite);
         getElement = () => document.getElementById("tektite-screen") as HTMLDivElement;
         update: (event: Tektite.UpdateScreenEventEype) => unknown;
-        public cover = (data: { children?: minamo.dom.Source, onclick: () => unknown, }) =>
+        public cover = (data: { parent?: HTMLElement, children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
             const onclick = async () =>
             {
@@ -26,6 +26,7 @@ export module Screen
             };
             const dom = $make(HTMLDivElement)
             ({
+                parent: data.parent ?? this.getElement(),
                 tag: "div",
                 className: "tektite-screen-cover tektite-fade-in",
                 children: data.children,
@@ -39,7 +40,6 @@ export module Screen
                 await minamo.core.timeout(500);
                 minamo.dom.remove(dom);
             };
-            minamo.dom.appendChildren(this.getElement(), dom);
             const result =
             {
                 dom,

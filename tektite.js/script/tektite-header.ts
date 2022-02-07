@@ -172,6 +172,7 @@ export module Header
                     popup.style.left = `${Math.max(segment.offsetLeft, 4)}px`;
                     cover = this.tektite.screen.cover
                     ({
+                        parent: popup.parentElement,
                         onclick: close,
                     });
                 },
