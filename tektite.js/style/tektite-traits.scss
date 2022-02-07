@@ -91,25 +91,26 @@
 {
     font-family: monospace;
 }
+@mixin tektite-foreground-coloring-trait($color)
+{
+    color: $color;
+    fill: $color;
+}
 @mixin tektite-positive-foreground-coloring-trait()
 {
-    color: $tektite-main-color;
-    fill: $tektite-main-color;
+    @include tektite-foreground-coloring-trait($tektite-main-color);
 }
 @mixin tektite-negative-foreground-coloring-trait()
 {
-    color: $tektite-base-color;
-    fill: $tektite-base-color;
+    @include tektite-foreground-coloring-trait($tektite-base-color);
 }
 @mixin tektite-active-foreground-coloring-trait()
 {
-    color: $tektite-active-color;
-    fill: $tektite-active-color;
+    @include tektite-foreground-coloring-trait($tektite-active-color);
 }
 @mixin tektite-accent-foreground-coloring-trait()
 {
-    color: $tektite-accent-color;
-    fill: $tektite-accent-color;
+    @include tektite-foreground-coloring-trait($tektite-accent-color);
 }
 @mixin tektite-positive-background-coloring-trait()
 {
@@ -202,8 +203,7 @@
     {
         &:not(:hover)
         {
-            color: $tektite-delete-color;
-            fill: $tektite-delete-color;
+            @include tektite-foreground-coloring-trait($tektite-delete-color);
             border-color: $tektite-delete-color;
             @include tektite-positive-background-coloring-trait;
         }
@@ -218,8 +218,7 @@
     {
         &
         {
-            color: $tektite-delete-color;
-            fill: $tektite-delete-color;
+            @include tektite-foreground-coloring-trait($tektite-delete-color);
             border-color: $tektite-delete-color;
             @include tektite-positive-background-coloring-trait;
         }

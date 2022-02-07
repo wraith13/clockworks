@@ -366,7 +366,7 @@
                 @include tektite-negative-foreground-coloring-trait;
                 button.tektite-main-button
                 {
-                    color: $tektite-base-color;
+                    @include tektite-foreground-coloring-trait($tektite-base-color);
                     border-color: $tektite-base-color;
                     background-color: transparent;
                     @media (hover: hover)
@@ -769,7 +769,7 @@
         {
             & > .label + .value
             {
-                color: $tektite-weak-color;
+                @include tektite-foreground-coloring-trait($tektite-weak-color);
             }
         }
     }
