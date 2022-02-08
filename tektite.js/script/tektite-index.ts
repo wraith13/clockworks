@@ -204,8 +204,10 @@ export module Tektite
             minamo.dom.setStyleProperty(document.body, "backgroundColor", `${color}E8`);
             minamo.dom.setProperty("#tektite-theme-color", "content", color);
         };
+
+        foundation: HTMLDivElement;
         public setFoundationColor = (color: string | null) =>
-            minamo.dom.setStyleProperty("#tektite-foundation", "backgroundColor", color ?? "");
+            minamo.dom.setStyleProperty(this.foundation, "backgroundColor", color ?? "");
         latestColor: string | null;
         public setBackgroundColor = (color: string | null) =>
         {
@@ -327,11 +329,10 @@ export module Tektite
         };
         public onLoad = () =>
         {
-            minamo.dom.make
+            this.foundation = minamo.dom.make(HTMLDivElement)
             ({
                 parent: document.body,
-                tag: "div",
-                id: "tektite-foundation",
+                className: "tektite-foundation",
                 children:
                 {
                     tag: "div",
