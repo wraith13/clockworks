@@ -327,87 +327,75 @@
 }
 &.tektite-style-modern
 {
-    .tektite-screen
+    #tektite-screen-header
     {
-        header
+        background-color: #{$tektite-main-color}11;
+        & > button
         {
-            background-color: #{$tektite-main-color}11;
-            .tektite-segment:not(.tektite-label-segment)
+            @media (hover: hover)
             {
-                @media (hover: hover)
+                &:hover
                 {
-                    &:hover
-                    {
-                        background-color: #{$tektite-base-color}11;
-                    }
+                    background-color: #{$tektite-base-color}22;
                 }
-            }
-            .tektite-segment + .tektite-segment,
-            .tektite-segment +.tektite-menu-popup + .tektite-segment
-            {
-                border-left-color: #{$tektite-base-color}44 !important;
-            }
-            & > button
-            {
-                @media (hover: hover)
-                {
-                    &:hover
-                    {
-                        background-color: #{$tektite-base-color}22;
-                    }
-                }
-            }
-        }
-        .tektite-screen-body
-        {
-            @include tektite-hide-scroll-bar;
-            .tektite-primary-page
-            {
-                @include tektite-negative-foreground-coloring-trait;
-                button.tektite-main-button
-                {
-                    @include tektite-foreground-coloring-trait($tektite-base-color);
-                    border-color: $tektite-base-color;
-                    background-color: transparent;
-                    @media (hover: hover)
-                    {
-                        &:hover
-                        {
-                            background-color: #{$tektite-base-color}11;
-                        }
-                    }
-                    &:not(.tektite-default-button)
-                    {
-                        border-color: #{$tektite-base-color}88;
-                        // opacity: 0.5;
-                        @media (hover: hover)
-                        {
-                            &:hover
-                            {
-                                border-color: $tektite-base-color;
-                                // opacity: 1.0;
-                            }
-                        }
-                    }
-                }
-            }
-            .tektite-trail-page
-            {
-                background-color: #{$tektite-base-color}BB;
             }
         }
     }
-    &.tektite-flash
+    .tektite-segment:not(.tektite-label-segment)
     {
-        .tektite-screen-bar
+        @media (hover: hover)
         {
-            .tektite-screen-bar-flash-layer
+            &:hover
             {
-                @include tektite-screen-full-trait;
-                @include tektite-animation(white-flash, 1.5s);
+                background-color: #{$tektite-base-color}11;
             }
         }
-
+    }
+    .tektite-segment + .tektite-segment,
+    .tektite-segment +.tektite-menu-popup + .tektite-segment
+    {
+        border-left-color: #{$tektite-base-color}44 !important;
+    }
+    .tektite-screen-body
+    {
+        @include tektite-hide-scroll-bar;
+    }
+    .tektite-primary-page
+    {
+        @include tektite-negative-foreground-coloring-trait;
+        button.tektite-main-button
+        {
+            @include tektite-foreground-coloring-trait($tektite-base-color);
+            border-color: $tektite-base-color;
+            background-color: transparent;
+            @media (hover: hover)
+            {
+                &:hover
+                {
+                    background-color: #{$tektite-base-color}11;
+                }
+            }
+            &:not(.tektite-default-button)
+            {
+                border-color: #{$tektite-base-color}88;
+                @media (hover: hover)
+                {
+                    &:hover
+                    {
+                        border-color: $tektite-base-color;
+                    }
+                }
+            }
+        }
+    }
+    .tektite-trail-page
+    {
+        background-color: #{$tektite-base-color}BB;
+    }
+    .tektite-screen-bar-flash-layer
+    {
+        @include tektite-screen-full-trait;
+        @include tektite-animation(white-flash, 1.5s);
     }
 }
 .tektite-menu-button-list,
