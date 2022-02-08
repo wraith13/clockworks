@@ -24,17 +24,8 @@
 .timezone-item
 {
     position: relative;
-    // padding: 0.5rem;
-    //min-width: calc((100vw / 8) + 1px);
-    //width: 480px;
-    //max-width: 100vw;
-
     .item-header
     {
-        // position: sticky;
-        // top: 0px;
-        // z-index: 100;
-        // .tektite-positive-background-coloring-trait;
         display: flex;
         padding: 0.5rem;
         flex-direction: row;
@@ -113,7 +104,6 @@
         .item-time-bar
         {
             position: absolute;
-            // background-color: $tektite-progress-bar-color;
             left: 0px;
             top: 0px;
             height: 100%;
@@ -201,12 +191,6 @@
         & > .logo-text
         {
             @include tektite-accent-foreground-coloring-trait();
-            // グラデーション
-            // background: -webkit-linear-gradient(top, #28D928, #136E13);
-            // background-clip: text;
-            // -webkit-background-clip: text;
-            // -webkit-text-fill-color: transparent;
-            // line-height: 1.4em;
         }
     }
 }
@@ -214,76 +198,65 @@
 .countdown-timer-screen,
 .elapsed-timer-screen
 {
-    .tektite-screen-body
+    .tektite-main-panel
     {
-        .tektite-main-panel
+        @include tektite-vertical-flex-trait;
+        .current-item
         {
-            @include tektite-vertical-flex-trait;
-            .current-item
+            align-items: start;
+            display: flex;
+            flex-direction: column;
+        }
+        .capital-interval
+        {
+            .value
             {
-                align-items: start;
-                display: flex;
-                flex-direction: column;
+                font-size: 7vw;
+                line-height: 100%;
+                @include tektite-primary-text-font-size-trait;
             }
-            .capital-interval
+        }
+        .previous-timestamp,
+        .current-title,
+        .current-due-timestamp,
+        .current-timestamp
+        {
+            text-align: center;
+            opacity: 0.5;
+            .value
             {
-                .value
-                {
-                    font-size: 7vw;
-                    line-height: 100%;
-                    @include tektite-primary-text-font-size-trait;
-                }
-            }
-            .previous-timestamp,
-            .current-title,
-            .current-due-timestamp,
-            .current-timestamp
-            {
-                text-align: center;
-                opacity: 0.5;
-                .value
-                {
-                    font-size: 4.4vw;
-                    line-height: 100%;
-                    @include tektite-second-text-font-size-trait;
-                }
+                font-size: 4.4vw;
+                line-height: 100%;
+                @include tektite-second-text-font-size-trait;
             }
         }
     }
 }
 .rainbow-clock-screen
 {
-    // header
-    // {
-    //     // z-index: 300;
-    //     background-color: transparent;
-    // }
-    .tektite-screen-body
+    .tektite-main-panel
     {
-        .tektite-main-panel
+        @include tektite-vertical-flex-trait;
+        // z-index: 100;
+        .capital-time
         {
-            @include tektite-vertical-flex-trait;
-            // z-index: 100;
-            .capital-time
+            .value
             {
-                .value
-                {
-                    font-size: 15vw;
-                    line-height: 100%;
-                    @include tektite-primary-text-font-size-trait;
-                }
+                font-size: 15vw;
+                line-height: 100%;
+                @include tektite-primary-text-font-size-trait;
             }
-            .current-title,
-            .current-utc-offset,
-            .current-date
+        }
+        .current-title,
+        .current-utc-offset,
+        .current-date
+        {
+            opacity: 0.333;
+            .value
             {
-                opacity: 0.333;
-                .value
-                {
-                    font-size: 6vw;
-                    line-height: 120%; // 本当は 100% にしておきたいが 100% だと Safari で日本語文字上部が表示されない。
-                    @include tektite-second-text-font-size-trait;
-                }
+                font-size: 6vw;
+                line-height: 120%; // 本当は 100% にしておきたいが 100% だと Safari で日本語文字上部が表示されない。
+                @include tektite-second-text-font-size-trait;
             }
         }
     }
@@ -343,10 +316,6 @@
     {
         transform: rotate(0deg);
     }
-    // 10%
-    // {
-    //     transform: rotate(360deg);
-    // }
     100%
     {
         transform: rotate(360deg);
