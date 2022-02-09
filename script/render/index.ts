@@ -36,7 +36,7 @@ export module Render
         onclick: async () =>
         {
             onCanceled();
-            tektite.toast.make
+            tektite.screen.toast.make
             ({
                 content: Tektite.$span("")(label("roll-backed")),
                 wait: 3000,

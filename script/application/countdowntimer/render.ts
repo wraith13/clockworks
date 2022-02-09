@@ -91,7 +91,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    tektite.toast.make
+                                    tektite.screen.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -115,7 +115,7 @@ export module Render
                             }
                             else
                             {
-                                tektite.toast.make
+                                tektite.screen.toast.make
                                 ({
                                     content: label("A date and time outside the valid range was specified."),
                                     isWideContent: true,
@@ -176,7 +176,7 @@ export module Render
                         }
                         else
                         {
-                            tektite.toast.make
+                            tektite.screen.toast.make
                             ({
                                 content: label("A date and time outside the valid range was specified."),
                                 isWideContent: true,
@@ -411,7 +411,7 @@ export module Render
                                 }
                                 else
                                 {
-                                    tektite.toast.make
+                                    tektite.screen.toast.make
                                     ({
                                         content: label("A date and time outside the valid range was specified."),
                                         isWideContent: true,
@@ -469,7 +469,7 @@ export module Render
         let lashFlashAt = 0;
         const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
-            const screen = document.getElementById("tektite-screen") as HTMLDivElement;
+            const screen = tektite.screen.getElement();
             const now = new Date();
             const tick = Domain.getTicks(now);
             const current = item ?? alarms[0] ?? null;

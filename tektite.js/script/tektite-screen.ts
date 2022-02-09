@@ -1,6 +1,7 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
 import { Header } from "./tektite-header";
+import { Toast } from "./tektite-toast";
 export module Screen
 {
     const $make = minamo.dom.make;
@@ -10,7 +11,9 @@ export module Screen
         {
         }
         public header = Header.make(this.tektite);
-        getElement = () => document.getElementById("tektite-screen") as HTMLDivElement;
+        public toast = Toast.make(this.tektite);
+        element: HTMLDivElement;
+        getElement = () => this.element;
         update: (event: Tektite.UpdateScreenEventEype) => unknown;
         public cover = (data: { parent?: HTMLElement, children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
@@ -352,7 +355,7 @@ export module Screen
                     minamo.dom.toggleCSSClass(header, "tektite-locale-parallel-off", minColumns < 2);
                 }
             );
-            [document.getElementById("tektite-screen-toast") as HTMLDivElement].forEach
+            minamo.dom.getDivsByClassName(document, "tektite-screen-toast").forEach
             (
                 header =>
                 {
@@ -462,6 +465,34 @@ export module Screen
                 },
                 100,
             );
+        };
+        public onLoad = () =>
+        {
+            this.toast.onLoad(),
+            this.element = minamo.dom.make(HTMLDivElement)
+            ({
+                tag: "div",
+                className: "tektite-screen",
+                children:
+                [
+                    Header.domSource,
+                    {
+                        tag: "div",
+                        id: "tektite-screen-body",
+                        className: "tektite-screen-body",
+                    },
+                    {
+                        tag: "div",
+                        className: "tektite-screen-bar",
+                        childNodes:
+                        {
+                            tag: "div",
+                            className: "tektite-screen-bar-flash-layer",
+                        },
+                    },
+                    this.toast.element,
+                ]
+            });
         };
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>

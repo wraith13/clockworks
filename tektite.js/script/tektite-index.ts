@@ -2,7 +2,6 @@ import { minamo } from "../../nephila/minamo.js/index.js";
 import { Locale } from "./tektite-locale";
 import { Fullscreen as FullscreenModule } from "./tektite-fullscreen";
 import { Screen } from "./tektite-screen";
-import { Toast as ToastModule } from "./tektite-toast";
 import { Header } from "./tektite-header";
 import { Menu } from "./tektite-menu";
 import { Key as KeyModule } from "./tektite-key";
@@ -82,7 +81,6 @@ export module Tektite
         public screen = Screen.make(this);
         public menu = Menu.make(this);
         public locale = Locale.make(this);
-        public toast = ToastModule;
         public internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}): minamo.dom.Source =>
         ({
             tag: "a",
@@ -329,38 +327,12 @@ export module Tektite
         };
         public onLoad = () =>
         {
+            this.screen.onLoad();
             this.foundation = minamo.dom.make(HTMLDivElement)
             ({
                 parent: document.body,
                 className: "tektite-foundation",
-                children:
-                {
-                    tag: "div",
-                    id: "tektite-screen",
-                    className: "tektite-screen",
-                    children:
-                    [
-                        Header.domSource,
-                        {
-                            tag: "div",
-                            id: "tektite-screen-body",
-                            className: "tektite-screen-body",
-                        },
-                        {
-                            tag: "div",
-                            className: "tektite-screen-bar",
-                            childNodes:
-                            {
-                                tag: "div",
-                                className: "tektite-screen-bar-flash-layer",
-                            },
-                        },
-                        {
-                            tag: "div",
-                            id: "tektite-screen-toast",
-                        },
-                    ]
-                }
+                children: this.screen.element,
             });
             window.addEventListener("focus", this.onWindowFocus);
             window.addEventListener("blur", this.onWindowBlur);
@@ -372,7 +344,6 @@ export module Tektite
             window.addEventListener("keydown", this.onKeydown);
             document.addEventListener("fullscreenchange", this.onFullscreenChange);
             document.addEventListener("webkitfullscreenchange", this.onWebkitFullscreenChange);
-            this.screen.header.onLoad(this.screen);
             document.getElementById("tektite-screen-body").addEventListener
             (
                 "scroll",
@@ -386,6 +357,7 @@ export module Tektite
                     }
                 }
             );
+            this.screen.header.onLoad(this.screen);
             if (undefined === this.updateTimer)
             {
                 this.updateTimer = setInterval

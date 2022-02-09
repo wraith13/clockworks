@@ -5,10 +5,10 @@
     @include tektite-positive-background-coloring-trait;
     @include tektite-screen-full-trait;
 }
-#tektite-screen-toast
+.tektite-screen-toast
 {
     @include tektite-screen-bottom-trait;
-    filter: drop-shadow(0.0rem -0rem 3rem $tektite-accent-color); // #tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
+    filter: drop-shadow(0.0rem -0rem 3rem $tektite-accent-color); // .tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     @include tektite-alpha-positive-background-coloring-trait;
     .tektite-item
     {

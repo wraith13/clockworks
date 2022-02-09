@@ -272,7 +272,7 @@ export module Render
         let timezones = Storage.RainbowClock.Timezone.get();
         const updateScreen = async (event: Tektite.UpdateScreenEventEype) =>
         {
-            const screen = document.getElementById("tektite-screen") as HTMLDivElement;
+            const screen = tektite.screen.getElement();
             const now = new Date();
             const tick = null !== item ?
                 (Domain.getUTCTicks(now) -(item.offset *Domain.utcOffsetRate)):

@@ -12,7 +12,7 @@ export module Operate
         Storage.NeverStopwatch.Stamps.add(tick);
         tektite.screen.update("operate");
         tektite.flash();
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Stamped!")}`),
             backwardOperator: Render.cancelTextButton
@@ -32,7 +32,7 @@ export module Operate
         const backup = Storage.NeverStopwatch.Stamps.get();
         Storage.NeverStopwatch.Stamps.add(tick);
         tektite.screen.update("operate");
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -53,7 +53,7 @@ export module Operate
         Storage.NeverStopwatch.Stamps.remove(oldTick);
         Storage.NeverStopwatch.Stamps.add(newTick);
         tektite.screen.update("operate");
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Updated.")}`),
             backwardOperator: Render.cancelTextButton
@@ -82,7 +82,7 @@ export module Operate
         {
             tektite.screen.update("operate");
         }
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Removed.")}`),
             backwardOperator: Render.cancelTextButton
@@ -110,7 +110,7 @@ export module Operate
         {
             Storage.NeverStopwatch.Stamps.removeKey();
             tektite.screen.update("operate");
-            tektite.toast.make({ content: Tektite.$span("")(`${Clockworks.localeMap("Removed all stamps!")}`), });
+            tektite.screen.toast.make({ content: Tektite.$span("")(`${Clockworks.localeMap("Removed all stamps!")}`), });
         }
     };
 }

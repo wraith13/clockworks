@@ -16,7 +16,7 @@ export module Operate
         };
         Storage.ElapsedTimer.Events.add(event);
         tektite.screen.update("operate");
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -35,7 +35,7 @@ export module Operate
     {
         Storage.ElapsedTimer.Events.add(item);
         tektite.screen.update("operate");
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -61,7 +61,7 @@ export module Operate
         Storage.ElapsedTimer.Events.remove(oldSchedule);
         Storage.ElapsedTimer.Events.add(newSchedule);
         tektite.screen.update("operate");
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -90,7 +90,7 @@ export module Operate
         {
             tektite.screen.update("operate");
         }
-        const toast = tektite.toast.make
+        const toast = tektite.screen.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Removed.")}`),
             backwardOperator: Render.cancelTextButton
@@ -118,7 +118,7 @@ export module Operate
         {
             Storage.ElapsedTimer.Events.removeKey();
             tektite.screen.update("operate");
-            tektite.toast.make({ content: Tektite.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
+            tektite.screen.toast.make({ content: Tektite.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
         }
     };
 }

@@ -16,7 +16,7 @@ export module Operate
         document.getSelection().selectAllChildren(pre);
         document.execCommand("copy");
         document.body.removeChild(pre);
-        tektite.toast.make({ content: `Copied ${displayText} to the clipboard.`,});
+        tektite.screen.toast.make({ content: `Copied ${displayText} to the clipboard.`,});
     };
     export const RainbowClock = RainbowClockOperate;
     export const CountdownTimer = CountdownTimerOperate;
