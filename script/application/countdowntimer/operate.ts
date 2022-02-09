@@ -19,7 +19,7 @@ export module Operate
         };
         Storage.CountdownTimer.Alarms.add(alarm);
         tektite.screen.update("operate");
-        const toast = tektite.toast.makePrimary
+        const toast = tektite.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -45,7 +45,7 @@ export module Operate
         };
         Storage.CountdownTimer.Alarms.add(alarm);
         tektite.screen.update("operate");
-        const toast = tektite.toast.makePrimary
+        const toast = tektite.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -64,7 +64,7 @@ export module Operate
     {
         Storage.CountdownTimer.Alarms.add(item);
         tektite.screen.update("operate");
-        const toast = tektite.toast.makePrimary
+        const toast = tektite.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -92,7 +92,7 @@ export module Operate
         Storage.CountdownTimer.Alarms.remove(oldSchedule);
         Storage.CountdownTimer.Alarms.add(newSchedule);
         tektite.screen.update("operate");
-        const toast = tektite.toast.makePrimary
+        const toast = tektite.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Saved!")}`),
             backwardOperator: Render.cancelTextButton
@@ -118,7 +118,7 @@ export module Operate
         const color = Storage.CountdownTimer.ColorIndex.get();
         Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
         tektite.screen.update("operate");
-        const toast = tektite.toast.makePrimary
+        const toast = tektite.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Done!")}`),
             backwardOperator: Render.cancelTextButton
@@ -143,7 +143,7 @@ export module Operate
         const color = Storage.CountdownTimer.ColorIndex.get();
         Storage.CountdownTimer.ColorIndex.set((color +1) % config.rainbowColorSet.length);
         Render.showUrl({ application: "CountdownTimer", });
-        const toast = tektite.toast.makePrimary
+        const toast = tektite.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Done!")}`),
             backwardOperator: Render.cancelTextButton
@@ -171,7 +171,7 @@ export module Operate
         {
             tektite.screen.update("operate");
         }
-        const toast = tektite.toast.makePrimary
+        const toast = tektite.toast.make
         ({
             content: Tektite.$span("")(`${Clockworks.localeMap("Removed.")}`),
             backwardOperator: Render.cancelTextButton
@@ -199,7 +199,7 @@ export module Operate
         {
             Storage.CountdownTimer.Alarms.removeKey();
             tektite.screen.update("operate");
-            tektite.toast.makePrimary({ content: Tektite.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
+            tektite.toast.make({ content: Tektite.$span("")(`${Clockworks.localeMap("Removed all alarms!")}`), });
         }
     };
 }

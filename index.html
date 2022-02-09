@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Wed Feb 09 2022 07:59:18 GMT+0900 (日本標準時)
+    build at: Wed Feb 09 2022 17:27:24 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -6516,13 +6516,17 @@ define("clockworks/tektite.js/script/tektite-screen", ["require", "exports", "cl
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
+                                    if (!dom.parentElement) return [3 /*break*/, 2];
                                     dom.classList.remove("tektite-fade-in");
                                     dom.classList.add("tektite-fade-out");
                                     return [4 /*yield*/, index_js_2.minamo.core.timeout(500)];
                                 case 1:
                                     _a.sent();
-                                    index_js_2.minamo.dom.remove(dom);
-                                    return [2 /*return*/];
+                                    if (dom.parentElement) {
+                                        index_js_2.minamo.dom.remove(dom);
+                                    }
+                                    _a.label = 2;
+                                case 2: return [2 /*return*/];
                             }
                         });
                     }); };
@@ -7074,13 +7078,6 @@ define("clockworks/tektite.js/script/tektite-toast", ["require", "exports", "clo
             document.getElementById("tektite-screen-toast").appendChild(dom);
             setTimeout(function () { return dom.classList.remove("tektite-slide-up-in"); }, 250);
             return result;
-        };
-        var latestPrimaryToast;
-        Toast.makePrimary = function (data) {
-            if (latestPrimaryToast) {
-                latestPrimaryToast.hide();
-            }
-            return latestPrimaryToast = Toast.make(data);
         };
     })(Toast = exports.Toast || (exports.Toast = {}));
 });
@@ -9306,7 +9303,7 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
             return __generator(this, function (_a) {
                 storage_5.Storage.RainbowClock.Timezone.add(item);
                 __2.tektite.screen.update("operate");
-                toast = __2.tektite.toast.makePrimary({
+                toast = __2.tektite.toast.make({
                     content: tektite_index_4.Tektite.$span("")("".concat(__2.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9339,7 +9336,7 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
                 storage_5.Storage.RainbowClock.Timezone.remove(oldTimezone);
                 storage_5.Storage.RainbowClock.Timezone.add(newTimezone);
                 __2.tektite.screen.update("operate");
-                toast = __2.tektite.toast.makePrimary({
+                toast = __2.tektite.toast.make({
                     content: tektite_index_4.Tektite.$span("")("".concat(__2.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9372,7 +9369,7 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
                 else {
                     __2.tektite.screen.update("operate");
                 }
-                toast = __2.tektite.toast.makePrimary({
+                toast = __2.tektite.toast.make({
                     content: tektite_index_4.Tektite.$span("")("".concat(__2.Clockworks.localeMap("Removed."))),
                     backwardOperator: render_1.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9402,7 +9399,7 @@ define("clockworks/script/application/rainbowclock/operate", ["require", "export
                 if (render_1.Render.systemConfirm(__2.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_5.Storage.RainbowClock.Timezone.removeKey();
                     __2.tektite.screen.update("operate");
-                    __2.tektite.toast.makePrimary({ content: tektite_index_4.Tektite.$span("")("".concat(__2.Clockworks.localeMap("Initialized timezone list!"))), });
+                    __2.tektite.toast.make({ content: tektite_index_4.Tektite.$span("")("".concat(__2.Clockworks.localeMap("Initialized timezone list!"))), });
                 }
                 return [2 /*return*/];
             });
@@ -9429,7 +9426,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 };
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 __3.tektite.screen.update("operate");
-                toast = __3.tektite.toast.makePrimary({
+                toast = __3.tektite.toast.make({
                     content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9461,7 +9458,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 };
                 storage_6.Storage.CountdownTimer.Alarms.add(alarm);
                 __3.tektite.screen.update("operate");
-                toast = __3.tektite.toast.makePrimary({
+                toast = __3.tektite.toast.make({
                     content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9487,7 +9484,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
             return __generator(this, function (_a) {
                 storage_6.Storage.CountdownTimer.Alarms.add(item);
                 __3.tektite.screen.update("operate");
-                toast = __3.tektite.toast.makePrimary({
+                toast = __3.tektite.toast.make({
                     content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9521,7 +9518,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 storage_6.Storage.CountdownTimer.Alarms.remove(oldSchedule);
                 storage_6.Storage.CountdownTimer.Alarms.add(newSchedule);
                 __3.tektite.screen.update("operate");
-                toast = __3.tektite.toast.makePrimary({
+                toast = __3.tektite.toast.make({
                     content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9553,7 +9550,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 color = storage_6.Storage.CountdownTimer.ColorIndex.get();
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 __3.tektite.screen.update("operate");
-                toast = __3.tektite.toast.makePrimary({
+                toast = __3.tektite.toast.make({
                     content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Done!"))),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9584,7 +9581,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 color = storage_6.Storage.CountdownTimer.ColorIndex.get();
                 storage_6.Storage.CountdownTimer.ColorIndex.set((color + 1) % config_json_8.default.rainbowColorSet.length);
                 render_2.Render.showUrl({ application: "CountdownTimer", });
-                toast = __3.tektite.toast.makePrimary({
+                toast = __3.tektite.toast.make({
                     content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Done!"))),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9616,7 +9613,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 else {
                     __3.tektite.screen.update("operate");
                 }
-                toast = __3.tektite.toast.makePrimary({
+                toast = __3.tektite.toast.make({
                     content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Removed."))),
                     backwardOperator: render_2.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9646,7 +9643,7 @@ define("clockworks/script/application/countdowntimer/operate", ["require", "expo
                 if (render_2.Render.systemConfirm(__3.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_6.Storage.CountdownTimer.Alarms.removeKey();
                     __3.tektite.screen.update("operate");
-                    __3.tektite.toast.makePrimary({ content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Removed all alarms!"))), });
+                    __3.tektite.toast.make({ content: tektite_index_5.Tektite.$span("")("".concat(__3.Clockworks.localeMap("Removed all alarms!"))), });
                 }
                 return [2 /*return*/];
             });
@@ -9670,7 +9667,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 };
                 storage_7.Storage.ElapsedTimer.Events.add(event);
                 __4.tektite.screen.update("operate");
-                toast = __4.tektite.toast.makePrimary({
+                toast = __4.tektite.toast.make({
                     content: tektite_index_6.Tektite.$span("")("".concat(__4.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9696,7 +9693,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
             return __generator(this, function (_a) {
                 storage_7.Storage.ElapsedTimer.Events.add(item);
                 __4.tektite.screen.update("operate");
-                toast = __4.tektite.toast.makePrimary({
+                toast = __4.tektite.toast.make({
                     content: tektite_index_6.Tektite.$span("")("".concat(__4.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9728,7 +9725,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 storage_7.Storage.ElapsedTimer.Events.remove(oldSchedule);
                 storage_7.Storage.ElapsedTimer.Events.add(newSchedule);
                 __4.tektite.screen.update("operate");
-                toast = __4.tektite.toast.makePrimary({
+                toast = __4.tektite.toast.make({
                     content: tektite_index_6.Tektite.$span("")("".concat(__4.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9761,7 +9758,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 else {
                     __4.tektite.screen.update("operate");
                 }
-                toast = __4.tektite.toast.makePrimary({
+                toast = __4.tektite.toast.make({
                     content: tektite_index_6.Tektite.$span("")("".concat(__4.Clockworks.localeMap("Removed."))),
                     backwardOperator: render_3.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9791,7 +9788,7 @@ define("clockworks/script/application/elapsedtimer/operate", ["require", "export
                 if (render_3.Render.systemConfirm(__4.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_7.Storage.ElapsedTimer.Events.removeKey();
                     __4.tektite.screen.update("operate");
-                    __4.tektite.toast.makePrimary({ content: tektite_index_6.Tektite.$span("")("".concat(__4.Clockworks.localeMap("Removed all alarms!"))), });
+                    __4.tektite.toast.make({ content: tektite_index_6.Tektite.$span("")("".concat(__4.Clockworks.localeMap("Removed all alarms!"))), });
                 }
                 return [2 /*return*/];
             });
@@ -9813,7 +9810,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 storage_8.Storage.NeverStopwatch.Stamps.add(tick);
                 __5.tektite.screen.update("operate");
                 __5.tektite.flash();
-                toast = __5.tektite.toast.makePrimary({
+                toast = __5.tektite.toast.make({
                     content: tektite_index_7.Tektite.$span("")("".concat(__5.Clockworks.localeMap("Stamped!"))),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9840,7 +9837,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 backup = storage_8.Storage.NeverStopwatch.Stamps.get();
                 storage_8.Storage.NeverStopwatch.Stamps.add(tick);
                 __5.tektite.screen.update("operate");
-                toast = __5.tektite.toast.makePrimary({
+                toast = __5.tektite.toast.make({
                     content: tektite_index_7.Tektite.$span("")("".concat(__5.Clockworks.localeMap("Saved!"))),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9868,7 +9865,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 storage_8.Storage.NeverStopwatch.Stamps.remove(oldTick);
                 storage_8.Storage.NeverStopwatch.Stamps.add(newTick);
                 __5.tektite.screen.update("operate");
-                toast = __5.tektite.toast.makePrimary({
+                toast = __5.tektite.toast.make({
                     content: tektite_index_7.Tektite.$span("")("".concat(__5.Clockworks.localeMap("Updated."))),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9901,7 +9898,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 else {
                     __5.tektite.screen.update("operate");
                 }
-                toast = __5.tektite.toast.makePrimary({
+                toast = __5.tektite.toast.make({
                     content: tektite_index_7.Tektite.$span("")("".concat(__5.Clockworks.localeMap("Removed."))),
                     backwardOperator: render_4.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
@@ -9931,7 +9928,7 @@ define("clockworks/script/application/neverstopwatch/operate", ["require", "expo
                 if (render_4.Render.systemConfirm(__5.Clockworks.localeMap("This action cannot be undone. Do you want to continue?"))) {
                     storage_8.Storage.NeverStopwatch.Stamps.removeKey();
                     __5.tektite.screen.update("operate");
-                    __5.tektite.toast.makePrimary({ content: tektite_index_7.Tektite.$span("")("".concat(__5.Clockworks.localeMap("Removed all stamps!"))), });
+                    __5.tektite.toast.make({ content: tektite_index_7.Tektite.$span("")("".concat(__5.Clockworks.localeMap("Removed all stamps!"))), });
                 }
                 return [2 /*return*/];
             });
@@ -13232,7 +13229,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1644361158974), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1644395244506), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

@@ -68,22 +68,4 @@ export module Toast
         setTimeout(() => dom.classList.remove("tektite-slide-up-in"), 250);
         return result;
     };
-    let latestPrimaryToast: Type;
-    export const makePrimary =
-    (
-        data:
-        {
-            content: minamo.dom.Source,
-            backwardOperator?: minamo.dom.Source,
-            forwardOperator?: minamo.dom.Source,
-            wait?: number,
-        }
-    ): Type =>
-    {
-        if (latestPrimaryToast)
-        {
-            latestPrimaryToast.hide();
-        }
-        return latestPrimaryToast = make(data);
-    };
 }

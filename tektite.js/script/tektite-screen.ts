@@ -35,10 +35,16 @@ export module Screen
             // dom.addEventListener("mousedown", onclick);
             const close = async () =>
             {
-                dom.classList.remove("tektite-fade-in");
-                dom.classList.add("tektite-fade-out");
-                await minamo.core.timeout(500);
-                minamo.dom.remove(dom);
+                if (dom.parentElement)
+                {
+                    dom.classList.remove("tektite-fade-in");
+                    dom.classList.add("tektite-fade-out");
+                    await minamo.core.timeout(500);
+                    if (dom.parentElement)
+                    {
+                        minamo.dom.remove(dom);
+                    }
+                }
             };
             const result =
             {
