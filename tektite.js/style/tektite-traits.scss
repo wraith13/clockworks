@@ -15,9 +15,18 @@
 @mixin tektite-basic-trait()
 {
     @include tektite-zero-margin-trait;
+    @include tektite-zero-padding-trait;
     padding: 0px;
     box-sizing: border-box;
     line-height: 100%;
+}
+@mixin tektite-surround-padding-trait($size)
+{
+    padding: $size;
+}
+@mixin tektite-zero-padding-trait()
+{
+    @include tektite-surround-padding-trait(0px);
 }
 @mixin tektite-surround-margin-trait($size)
 {
@@ -53,6 +62,18 @@
         @include tektite-surround-margin-trait($size);
     }
 }
+@mixin tektite-vertical-children-surround-margin-trait($size)
+{
+    & > *
+    {
+        @include tektite-surround-margin-trait($size);
+        &:not(:first-child)
+        {
+            margin-top: 0px;
+        }
+    }
+}
+
 @mixin tektite-square-size-trait($size)
 {
     width: $size;
@@ -118,7 +139,7 @@
 }
 @mixin tektite-alpha-positive-background-coloring-trait()
 {
-    background-color: #{$tektite-base-color}DD;
+    background-color: #{$tektite-base-color}EE;
 }
 @mixin tektite-primary-operator-coloring-trait()
 {

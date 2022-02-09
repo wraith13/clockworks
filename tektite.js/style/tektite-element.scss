@@ -145,10 +145,13 @@ button
     }
     &.tektite-text-button
     {
+        @include tektite-zero-margin-trait;
         @include tektite-null-border-trait;
+        @include tektite-zero-padding-trait;
         @include tektite-tertiary-operator-coloring-trait;
         background-color: transparent !important;
         text-decoration: none !important;
+        height: inherit;
     }
     &.tektite-long-button
     {
