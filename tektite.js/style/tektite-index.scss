@@ -9,8 +9,9 @@
 {
     @include tektite-screen-bottom-trait;
     // filter: drop-shadow(0.0rem -0rem 3rem $tektite-accent-color); // .tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
-    @include tektite-vertical-children-surround-margin-trait(0.5rem);
     @include tektite-center-vertical-flex-trait;
+    @include tektite-surround-padding-trait(0.5rem);
+    @include tektite-children-vertical-interval-margin-trait(0.5rem);
     .tektite-item
     {
         @include tektite-straight-horizontal-flex-trait;
