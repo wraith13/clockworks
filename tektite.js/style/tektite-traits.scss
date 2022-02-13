@@ -489,3 +489,19 @@
         @include tektite-long-button-width-trait;
     }
 }
+@mixin tektite-drop-shadow-filter-trait($color, $size)
+{
+    filter: drop-shadow(0.0rem 0.0rem $size $color);
+}
+@mixin tektite-none-display-when-empty-trait()
+{
+    &:empty
+    {
+        display: none;
+    }
+    pointer-events: none;
+    & > *
+    {
+        pointer-events: all;
+    }
+}

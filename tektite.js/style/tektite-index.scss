@@ -8,19 +8,22 @@
 .tektite-screen-toast
 {
     @include tektite-screen-bottom-trait;
-    // filter: drop-shadow(0.0rem -0rem 3rem $tektite-accent-color); // .tektite-screen-toast 自体の大きさに依存するので、意識的に表示やアニメーションを施す必要がない。
     @include tektite-center-vertical-flex-trait;
     @include tektite-surround-padding-trait(0.5rem);
+    padding-bottom: 0.5rem;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
     @include tektite-children-vertical-interval-margin-trait(0.5rem);
+    @include tektite-none-display-when-empty-trait;
+    @include tektite-drop-shadow-filter-trait($tektite-accent-color, 1rem);
     .tektite-item
     {
+        @include tektite-drop-shadow-filter-trait($tektite-accent-color, 0.3rem);
         @include tektite-straight-horizontal-flex-trait;
-        // @include tektite-x-border-trait(top, $tektite-accent-color);
         @include tektite-popup-round-border-trait;
         border-color: $tektite-accent-color;
         @include tektite-alpha-positive-background-coloring-trait;
         padding: 0.75rem 1rem;
-        width: calc(100% - 1rem);
+        width: 100%;
         max-width: 64rem;
         & > button:first-child,
         & > div:first-child,
