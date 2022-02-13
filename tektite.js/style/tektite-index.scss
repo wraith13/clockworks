@@ -112,7 +112,6 @@
                 @include tektite-square-size-trait(2.0rem);
             }
             padding: 0.25rem;
-            // margin-right: 0.25rem;
         }
         .tektite-segment
         {
@@ -730,7 +729,6 @@
         @include tektite-straight-horizontal-flex-trait;
         @include tektite-null-border-trait;
         min-height: 2.25rem;
-        margin: 0px !important;
         font-size: 1.2rem;
         text-align: left;
         text-decoration: none;
@@ -781,6 +779,5 @@
     @include tektite-stretch-horizontal-flex-trait;
     text-align: left;
     padding: 0.25rem 0.5rem;
-    margin: 0px;
     @include tektite-null-border-trait;
 }
