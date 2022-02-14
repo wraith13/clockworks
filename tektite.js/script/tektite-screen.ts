@@ -264,7 +264,7 @@ export module Screen
                 const body = document.getElementById("tektite-screen-body");
                 const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +this.getBodyScrollTop()), 0);
                 minamo.dom.getDivsByClassName(document, "tektite-page-footer")
-                    .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(1rem + ${delta}px)`));
+                    .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(${Tektite.isAppleMobileWebApp() ? 1.25: 1}rem + ${delta}px)`));
                 // minamo.dom.getDivsByClassName(document, "tektite-down-page-link")
                 //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
             }

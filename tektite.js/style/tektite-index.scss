@@ -51,6 +51,10 @@
         }
     }
 }
+&.tektite-apple-mobile-web-app .tektite-screen-toast
+{
+    padding-bottom: 1.25rem;
+}
 .tektite-screen-cover
 {
     @include tektite-screen-full-trait;
@@ -286,7 +290,7 @@
                 // left: 0px;
                 // right: 0px;
                 // bottom: 0px;
-                padding-bottom: 0.5rem; // コードで調整するのでこの値に意味はない。
+                padding-bottom: 1rem; // コードで調整するのでこの値に意味はない。
                 display: flex;
                 align-items: center;
                 justify-content: center;

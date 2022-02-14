@@ -21,6 +21,7 @@ export module Tektite
                 undefined !== valueOrNothing ? labelOrValue: [],
                 $span("value tektite-monospace")(valueOrNothing ?? labelOrValue),
             ]);
+    export const isAppleMobileWebApp = () => !! (<any>navigator).standalone;
     export interface LocaleEntry
     {
         [key : string] : string;
@@ -334,6 +335,10 @@ export module Tektite
                 className: "tektite-foundation",
                 children: this.screen.element,
             });
+            if (isAppleMobileWebApp())
+            {
+                document.body.classList.add("tektite-apple-mobile-web-app");
+            }
             window.addEventListener("focus", this.onWindowFocus);
             window.addEventListener("blur", this.onWindowBlur);
             window.addEventListener("storage", this.onUpdateStorage);

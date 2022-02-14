@@ -34,10 +34,7 @@ ul
 {
     display: block;
     list-style-type: disc;
-    margin-block-start: 0px;
-    margin-block-end: 0px;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
+    @include tektite-zero-margin-trait;
     padding-block-start: 1rem;
     padding-block-end: 1rem;
     padding-inline-end: 1rem;
