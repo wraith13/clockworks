@@ -377,27 +377,79 @@
         @include tektite-negative-foreground-coloring-trait;
         button.tektite-main-button
         {
-            @include tektite-foreground-coloring-trait($tektite-base-color);
-            border-color: $tektite-base-color;
-            background-color: transparent;
+            // 🔥 後で、清書、、、
             @media (hover: hover)
             {
+                &:not(:hover)
+                {
+                    @include tektite-foreground-coloring-trait($tektite-base-color);
+                    border-color: $tektite-base-color;
+                    background-color: transparent;
+                }
                 &:hover
                 {
+                    @include tektite-foreground-coloring-trait($tektite-base-color);
+                    border-color: $tektite-base-color;
                     background-color: #{$tektite-base-color}11;
+                }
+            }
+            @media (hover: none)
+            {
+                &
+                {
+                    @include tektite-foreground-coloring-trait($tektite-base-color);
+                    border-color: $tektite-base-color;
+                    background-color: transparent;
                 }
             }
             &:not(.tektite-default-button)
             {
-                border-color: #{$tektite-base-color}88;
                 @media (hover: hover)
                 {
+                    &:not(:hover)
+                    {
+                        @include tektite-foreground-coloring-trait($tektite-base-color);
+                        border-color: #{$tektite-base-color}44;
+                        background-color: transparent;
+                    }
                     &:hover
                     {
+                        @include tektite-foreground-coloring-trait($tektite-base-color);
                         border-color: $tektite-base-color;
+                        background-color: #{$tektite-base-color}11;
+                    }
+                }
+                @media (hover: none)
+                {
+                    &
+                    {
+                        @include tektite-foreground-coloring-trait($tektite-base-color);
+                        border-color: #{$tektite-base-color}44;
+                        background-color: transparent;
                     }
                 }
             }
+            // @include tektite-foreground-coloring-trait($tektite-base-color);
+            // border-color: $tektite-base-color;
+            // background-color: transparent;
+            // @media (hover: hover)
+            // {
+            //     &:hover
+            //     {
+            //         background-color: #{$tektite-base-color}11;
+            //     }
+            // }
+            // &:not(.tektite-default-button)
+            // {
+            //     border-color: #{$tektite-base-color}88;
+            //     @media (hover: hover)
+            //     {
+            //         &:hover
+            //         {
+            //             border-color: $tektite-base-color;
+            //         }
+            //     }
+            // }
         }
     }
     .tektite-trail-page
