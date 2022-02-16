@@ -74,25 +74,45 @@
 {
     text-decoration: none;
 }
-@mixin tektite-link-trait()
+@mixin tektite-hover-default-trait()
 {
-    @include tektite-clickable-trait;
     @media (hover: hover)
     {
-        &:hover
-        {
-            opacity: 1.0;
-            @include tektite-active-foreground-coloring-trait();
-            text-decoration: underline;
-        }
         &:not(:hover)
         {
-            @include tektite-plain-text-trait;
+            @content;
         }
     }
     @media (hover: none)
     {
+        &
+        {
+            @content;
+        }
+    }
+}
+@mixin tektite-hover-hover-trait()
+{
+    @media (hover: hover)
+    {
+        &:hover
+        {
+            @content;
+        }
+    }
+}
+@mixin tektite-link-trait()
+{
+    @include tektite-clickable-trait;
+    @include tektite-hover-default-trait()
+    {
         @include tektite-plain-text-trait;
+    }
+    @include tektite-hover-hover-trait()
+    {
+        opacity: 1.0;
+        @include tektite-active-foreground-coloring-trait();
+        text-decoration: underline;
     }
 }
 @mixin tektite-monospace-trait()
@@ -112,6 +132,10 @@
 {
     @include tektite-foreground-coloring-trait($tektite-base-color);
 }
+@mixin tektite-alpha-negative-foreground-coloring-trait()
+{
+    @include tektite-foreground-coloring-trait(#{$tektite-base-color}EE);
+}
 @mixin tektite-active-foreground-coloring-trait()
 {
     @include tektite-foreground-coloring-trait($tektite-active-color);
@@ -128,108 +152,71 @@
 {
     background-color: #{$tektite-base-color}EE;
 }
+// @mixin tektite-slightly-positive-background-coloring-trait()
+// {
+//     background-color: #{$tektite-base-color}22;
+// }
+@mixin tektite-slightly-negative-background-coloring-trait()
+{
+    background-color: #{$tektite-main-color}22;
+}
 @mixin tektite-primary-operator-coloring-trait()
 {
     @include tektite-clickable-trait;
     @include tektite-negative-foreground-coloring-trait;
-    @media (hover: hover)
+    @include tektite-hover-default-trait()
     {
-        &:not(:hover)
-        {
-            border-color: $tektite-accent-color;
-            background-color: $tektite-accent-color;
-        }
-        &:hover
-        {
-            border-color: $tektite-active-color;
-            background-color: $tektite-active-color;
-        }
+        border-color: $tektite-accent-color;
+        background-color: $tektite-accent-color;
     }
-    @media (hover: none)
+    @include tektite-hover-hover-trait()
     {
-        &
-        {
-            border-color: $tektite-accent-color;
-            background-color: $tektite-accent-color;
-        }
+        border-color: $tektite-active-color;
+        background-color: $tektite-active-color;
     }
 }
 @mixin tektite-secondary-operator-coloring-trait()
 {
     @include tektite-clickable-trait;
-    @media (hover: hover)
+    @include tektite-hover-default-trait()
     {
-        &:not(:hover)
-        {
-            @include tektite-accent-foreground-coloring-trait();
-            border-color: $tektite-accent-color;
-            @include tektite-positive-background-coloring-trait;
-        }
-        &:hover
-        {
-            @include tektite-negative-foreground-coloring-trait;
-            border-color: $tektite-active-color;
-            background-color: $tektite-active-color;
-        }
+        @include tektite-accent-foreground-coloring-trait();
+        border-color: $tektite-accent-color;
+        @include tektite-positive-background-coloring-trait;
     }
-    @media (hover: none)
+    @include tektite-hover-hover-trait()
     {
-        &
-        {
-            @include tektite-accent-foreground-coloring-trait();
-            border-color: $tektite-accent-color;
-            @include tektite-positive-background-coloring-trait;
-        }
+        @include tektite-negative-foreground-coloring-trait;
+        border-color: $tektite-active-color;
+        background-color: $tektite-active-color;
     }
 }
 @mixin tektite-tertiary-operator-coloring-trait()
 {
     @include tektite-clickable-trait;
-    @media (hover: hover)
+    @include tektite-hover-default-trait()
     {
-        &:not(:hover)
-        {
-            @include tektite-accent-foreground-coloring-trait();
-        }
-        &:hover
-        {
-            @include tektite-active-foreground-coloring-trait();
-        }
+        @include tektite-accent-foreground-coloring-trait();
     }
-    @media (hover: none)
+    @include tektite-hover-hover-trait()
     {
-        &
-        {
-            @include tektite-accent-foreground-coloring-trait();
-        }
+        @include tektite-active-foreground-coloring-trait();
     }
 }
 @mixin tektite-delete-operator-coloring-trait()
 {
     @include tektite-clickable-trait;
-    @media (hover: hover)
+    @include tektite-hover-default-trait()
     {
-        &:not(:hover)
-        {
-            @include tektite-foreground-coloring-trait($tektite-delete-color);
-            border-color: $tektite-delete-color;
-            @include tektite-positive-background-coloring-trait;
-        }
-        &:hover
-        {
-            @include tektite-negative-foreground-coloring-trait;
-            border-color: $tektite-delete-color;
-            background-color: $tektite-delete-color;
-        }
+        @include tektite-foreground-coloring-trait($tektite-delete-color);
+        border-color: $tektite-delete-color;
+        @include tektite-positive-background-coloring-trait;
     }
-    @media (hover: none)
+    @include tektite-hover-hover-trait()
     {
-        &
-        {
-            @include tektite-foreground-coloring-trait($tektite-delete-color);
-            border-color: $tektite-delete-color;
-            @include tektite-positive-background-coloring-trait;
-        }
+        @include tektite-negative-foreground-coloring-trait;
+        border-color: $tektite-delete-color;
+        background-color: $tektite-delete-color;
     }
 }
 @mixin tektite-hide-scroll-bar
@@ -406,6 +393,47 @@
     height: 2.0rem;
     line-height: 100%;
     // cursor: pointer;
+}
+@mixin tektite-button-trait()
+{
+    padding: 0.25rem 1rem;
+    font-weight: bold;
+    font-size: 1.0rem;
+    height: 2.0rem;
+    line-height: 100%;
+    // cursor: pointer;
+}
+@mixin tektite-modern-button-trait
+{
+    &.tektite-default-button
+    {
+        @include tektite-hover-default-trait()
+        {
+            @include tektite-negative-foreground-coloring-trait;
+            border-color: $tektite-base-color;
+            background-color: transparent;
+        }
+    }
+    &:not(.tektite-default-button)
+    {
+        font-weight: normal;
+        @include tektite-hover-default-trait()
+        {
+            @include tektite-alpha-negative-foreground-coloring-trait;
+            border-color: #{$tektite-base-color}88;
+            background-color: transparent;
+        }
+    }
+    &.tektite-default-button,
+    &:not(.tektite-default-button)
+    {
+        @include tektite-hover-hover-trait()
+        {
+            @include tektite-negative-foreground-coloring-trait;
+            border-color: $tektite-base-color;
+            @include tektite-slightly-negative-background-coloring-trait;
+        }
+    }
 }
 @mixin tektite-round-border-trait($radius: 1rem)
 {

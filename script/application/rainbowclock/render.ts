@@ -57,7 +57,7 @@ export module Render
                     Tektite.monospace("tick-elapsed-time", item.title),
                 ]
             }),
-            $div("item-operator")
+            $div("tektite-item-operator")
             ([
                 await tektite.menu.button(await timezoneItemMenu(item)),
             ]),

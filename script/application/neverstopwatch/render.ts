@@ -57,7 +57,7 @@ export module Render
                     Tektite.monospace("tick-elapsed-time", label("Elapsed time")),
                 ]
             }),
-            Tektite.$div("item-operator")
+            Tektite.$div("tektite-item-operator")
             ([
                 await tektite.menu.button(await stampItemMenu(tick)),
             ]),

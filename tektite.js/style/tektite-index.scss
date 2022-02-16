@@ -5,56 +5,7 @@
     @include tektite-positive-background-coloring-trait;
     @include tektite-screen-full-trait;
 }
-.tektite-screen-toast
-{
-    @include tektite-screen-bottom-trait;
-    @include tektite-center-vertical-flex-trait;
-    @include tektite-surround-padding-trait(0.5rem);
-    padding-bottom: 0.5rem;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
-    @include tektite-children-vertical-interval-margin-trait(0.5rem);
-    @include tektite-none-display-when-empty-trait;
-    @include tektite-drop-shadow-filter-trait($tektite-accent-color, 1rem);
-    .tektite-item
-    {
-        @include tektite-drop-shadow-filter-trait($tektite-accent-color, 0.3rem);
-        @include tektite-straight-horizontal-flex-trait;
-        @include tektite-popup-round-border-trait;
-        border-color: $tektite-accent-color;
-        @include tektite-alpha-positive-background-coloring-trait;
-        padding: 0.75rem 1rem;
-        width: 100%;
-        max-width: 64rem;
-        & > button:first-child,
-        & > div:first-child,
-        & > span:first-child
-        {
-            min-width: calc(100% / 4);
-            max-width: calc(100% / 4);
-            text-align: left;
-        }
-        & > button:not(:first-child):not(:last-child),
-        & > div:not(:first-child):not(:last-child),
-        & > span:not(:first-child):not(:last-child)
-        {
-            min-width: calc(100% / 2);
-            max-width: calc(100% / 2);
-            text-align: center;
-        }
-        & > button:last-child,
-        & > div:last-child,
-        & > span:last-child
-        {
-            min-width: calc(100% / 4);
-            max-width: calc(100% / 4);
-            text-align: right;
-        }
-    }
-}
-&.tektite-apple-mobile-web-app .tektite-screen-toast
-{
-    padding-bottom: 1.25rem;
-}
+
 .tektite-screen-cover
 {
     @include tektite-screen-full-trait;
@@ -337,6 +288,56 @@
         overflow: hidden;
     }
 }
+.tektite-screen-toast
+{
+    @include tektite-screen-bottom-trait;
+    @include tektite-center-vertical-flex-trait;
+    @include tektite-surround-padding-trait(0.5rem);
+    padding-bottom: 0.5rem;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+    @include tektite-children-vertical-interval-margin-trait(0.5rem);
+    @include tektite-none-display-when-empty-trait;
+    @include tektite-drop-shadow-filter-trait($tektite-accent-color, 1rem);
+    .tektite-item
+    {
+        @include tektite-drop-shadow-filter-trait($tektite-accent-color, 0.3rem);
+        @include tektite-straight-horizontal-flex-trait;
+        @include tektite-popup-round-border-trait;
+        border-color: $tektite-accent-color;
+        @include tektite-alpha-positive-background-coloring-trait;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        max-width: 64rem;
+        & > button:first-child,
+        & > div:first-child,
+        & > span:first-child
+        {
+            min-width: calc(100% / 4);
+            max-width: calc(100% / 4);
+            text-align: left;
+        }
+        & > button:not(:first-child):not(:last-child),
+        & > div:not(:first-child):not(:last-child),
+        & > span:not(:first-child):not(:last-child)
+        {
+            min-width: calc(100% / 2);
+            max-width: calc(100% / 2);
+            text-align: center;
+        }
+        & > button:last-child,
+        & > div:last-child,
+        & > span:last-child
+        {
+            min-width: calc(100% / 4);
+            max-width: calc(100% / 4);
+            text-align: right;
+        }
+    }
+}
+&.tektite-apple-mobile-web-app .tektite-screen-toast
+{
+    padding-bottom: 1.25rem;
+}
 &.tektite-style-modern
 {
     #tektite-screen-header
@@ -378,57 +379,7 @@
         button.tektite-main-button
         {
             // 🔥 後で、清書、、、
-            @media (hover: hover)
-            {
-                &:not(:hover)
-                {
-                    @include tektite-foreground-coloring-trait($tektite-base-color);
-                    border-color: $tektite-base-color;
-                    background-color: transparent;
-                }
-                &:hover
-                {
-                    @include tektite-foreground-coloring-trait($tektite-base-color);
-                    border-color: $tektite-base-color;
-                    background-color: #{$tektite-base-color}11;
-                }
-            }
-            @media (hover: none)
-            {
-                &
-                {
-                    @include tektite-foreground-coloring-trait($tektite-base-color);
-                    border-color: $tektite-base-color;
-                    background-color: transparent;
-                }
-            }
-            &:not(.tektite-default-button)
-            {
-                @media (hover: hover)
-                {
-                    &:not(:hover)
-                    {
-                        @include tektite-foreground-coloring-trait($tektite-base-color);
-                        border-color: #{$tektite-base-color}44;
-                        background-color: transparent;
-                    }
-                    &:hover
-                    {
-                        @include tektite-foreground-coloring-trait($tektite-base-color);
-                        border-color: $tektite-base-color;
-                        background-color: #{$tektite-base-color}11;
-                    }
-                }
-                @media (hover: none)
-                {
-                    &
-                    {
-                        @include tektite-foreground-coloring-trait($tektite-base-color);
-                        border-color: #{$tektite-base-color}44;
-                        background-color: transparent;
-                    }
-                }
-            }
+            @include tektite-modern-button-trait;
             // @include tektite-foreground-coloring-trait($tektite-base-color);
             // border-color: $tektite-base-color;
             // background-color: transparent;
@@ -647,6 +598,27 @@
 {
     min-width: calc((100% - 1px) / 12);
     max-width: calc((100% - 1px) / 12);
+}
+.tektite-title-item
+{
+    position: relative;
+}
+.tektite-item-operator
+{
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    white-space: nowrap;
+    & > button
+    {
+        display: inline-block;
+        margin: 0px;
+    }
+    & > button+button
+    {
+        margin-left: 0.25rem;
+    }
 }
 .tektite-popup
 {
