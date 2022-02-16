@@ -19,6 +19,12 @@
     box-sizing: border-box;
     line-height: 100%;
 }
+@mixin tektite-glass-trait($color: transparent)
+{
+    background-color: $color;
+    backdrop-filter: blur(1rem);
+    -webkit-backdrop-filter: blur(1rem);
+}
 @mixin tektite-surround-padding-trait($size)
 {
     padding: $size;
@@ -151,14 +157,6 @@
 @mixin tektite-alpha-positive-background-coloring-trait()
 {
     background-color: #{$tektite-base-color}EE;
-}
-// @mixin tektite-slightly-positive-background-coloring-trait()
-// {
-//     background-color: #{$tektite-base-color}22;
-// }
-@mixin tektite-slightly-negative-background-coloring-trait()
-{
-    background-color: #{$tektite-main-color}22;
 }
 @mixin tektite-primary-operator-coloring-trait()
 {
@@ -410,8 +408,8 @@
         @include tektite-hover-default-trait()
         {
             @include tektite-negative-foreground-coloring-trait;
+            @include tektite-glass-trait;
             border-color: $tektite-base-color;
-            background-color: transparent;
         }
     }
     &:not(.tektite-default-button)
@@ -420,8 +418,8 @@
         @include tektite-hover-default-trait()
         {
             @include tektite-alpha-negative-foreground-coloring-trait;
+            @include tektite-glass-trait;
             border-color: #{$tektite-base-color}88;
-            background-color: transparent;
         }
     }
     &.tektite-default-button,
@@ -430,8 +428,8 @@
         @include tektite-hover-hover-trait()
         {
             @include tektite-negative-foreground-coloring-trait;
+            @include tektite-glass-trait(#{$tektite-main-color}22);
             border-color: $tektite-base-color;
-            @include tektite-slightly-negative-background-coloring-trait;
         }
     }
 }

@@ -345,23 +345,17 @@
         background-color: #{$tektite-main-color}11;
         & > button
         {
-            @media (hover: hover)
+            @include tektite-hover-hover-trait
             {
-                &:hover
-                {
-                    background-color: #{$tektite-base-color}22;
-                }
+                background-color: #{$tektite-base-color}22;
             }
         }
     }
     .tektite-segment:not(.tektite-label-segment)
     {
-        @media (hover: hover)
+        @include tektite-hover-hover-trait
         {
-            &:hover
-            {
-                background-color: #{$tektite-base-color}11;
-            }
+            background-color: #{$tektite-base-color}11;
         }
     }
     .tektite-segment + .tektite-segment,
@@ -748,7 +742,7 @@
         @include tektite-vertical-flex-trait;
     }
     @include tektite-accent-foreground-coloring-trait();
-    @include tektite-alpha-positive-background-coloring-trait;
+    @include tektite-glass-trait(#{$tektite-base-color}44);
     @include tektite-popup-round-border-trait;
     line-height: 1.5rem;
     font-size: 1.5rem;
