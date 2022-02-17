@@ -1,6 +1,9 @@
 @import "params.scss";
 $tektite-main-color: #000022;
 $tektite-base-color: #FFFFFF;
+$tektite-popup-background-alpha:88;
+$tektite-popup-background-contrast:0.8;
+$tektite-popup-background-brightness:5.0;
 body.light
 {
     @import "index.scss";

@@ -42,6 +42,7 @@
     }
     & > header
     {
+        -webkit-backdrop-filter: blur(1rem);
         // &.with-screen-prgress
         // {
         //     background-color: e(%("%s%s", $tektite-main-color, "11"));
@@ -742,7 +743,7 @@
         @include tektite-vertical-flex-trait;
     }
     @include tektite-accent-foreground-coloring-trait();
-    @include tektite-glass-trait(#{$tektite-base-color}44);
+    @include tektite-popup-glass-trait(#{$tektite-base-color}#{$tektite-popup-background-alpha});
     @include tektite-popup-round-border-trait;
     line-height: 1.5rem;
     font-size: 1.5rem;

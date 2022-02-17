@@ -4,6 +4,7 @@
     {
         filter: invert(1);
     }
+    @content;
 }
 @mixin tektite-light-trait()
 {
@@ -11,6 +12,7 @@
     // {
     //     filter: invert(1);
     // }
+    @content;
 }
 @mixin tektite-basic-trait()
 {
@@ -24,6 +26,12 @@
     background-color: $color;
     backdrop-filter: blur(1rem);
     -webkit-backdrop-filter: blur(1rem);
+}
+@mixin tektite-popup-glass-trait($color: transparent)
+{
+    background-color: $color;
+    backdrop-filter: blur(1rem) contrast($tektite-popup-background-contrast) brightness($tektite-popup-background-brightness);
+    -webkit-backdrop-filter: blur(1rem) contrast($tektite-popup-background-contrast) brightness($tektite-popup-background-brightness);
 }
 @mixin tektite-surround-padding-trait($size)
 {
@@ -462,6 +470,7 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
+    margin: 0px !important;
 }
 @mixin tektite-screen-top-trait()
 {
@@ -469,6 +478,7 @@
     top: 0px;
     right: 0px;
     left: 0px;
+    margin: 0px !important;
 }
 @mixin tektite-screen-right-trait()
 {
@@ -476,6 +486,7 @@
     top: 0px;
     right: 0px;
     bottom: 0px;
+    margin: 0px !important;
 }
 @mixin tektite-screen-bottom-trait()
 {
@@ -483,6 +494,7 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
+    margin: 0px !important;
 }
 @mixin tektite-screen-left-trait()
 {
@@ -490,6 +502,7 @@
     top: 0px;
     bottom: 0px;
     left: 0px;
+    margin: 0px !important;
 }
 @mixin tektite-animation($name, $duration)
 {
