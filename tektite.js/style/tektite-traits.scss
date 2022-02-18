@@ -21,17 +21,20 @@
     box-sizing: border-box;
     line-height: 100%;
 }
+@mixin tektite-backdrop-filter-trait($filter: blur(1rem))
+{
+    backdrop-filter: $filter;
+    -webkit-backdrop-filter: $filter;
+}
 @mixin tektite-glass-trait($color: transparent)
 {
     background-color: $color;
-    backdrop-filter: blur(1rem);
-    -webkit-backdrop-filter: blur(1rem);
+    @include tektite-backdrop-filter-trait;
 }
 @mixin tektite-popup-glass-trait($color: transparent)
 {
     background-color: $color;
-    backdrop-filter: blur(1rem) contrast($tektite-popup-background-contrast) brightness($tektite-popup-background-brightness);
-    -webkit-backdrop-filter: blur(1rem) contrast($tektite-popup-background-contrast) brightness($tektite-popup-background-brightness);
+    @include tektite-backdrop-filter-trait(blur(1rem) contrast($tektite-popup-background-contrast) brightness($tektite-popup-background-brightness));
 }
 @mixin tektite-surround-padding-trait($size)
 {

@@ -24,8 +24,7 @@
 .timezone-item
 {
     position: relative;
-    backdrop-filter: blur(1rem);
-    -webkit-backdrop-filter: blur(1rem);
+    @include tektite-backdrop-filter-trait;
     .item-header
     {
         display: flex;

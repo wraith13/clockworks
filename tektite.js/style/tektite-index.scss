@@ -42,7 +42,7 @@
     }
     & > header
     {
-        -webkit-backdrop-filter: blur(1rem);
+        -webkit-backdrop-filter: blur(1rem); // ここで backdrop-filter を指定すると Chrome で表示レイアウトが崩れるので、 Safari のみに適用する
         // &.with-screen-prgress
         // {
         //     background-color: e(%("%s%s", $tektite-main-color, "11"));
