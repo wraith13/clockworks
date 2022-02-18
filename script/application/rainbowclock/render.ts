@@ -43,13 +43,13 @@ export module Render
                 )
         )
     });
-    export const timezoneItem = async (item: Type.TimezoneEntry) => $div("timezone-item tektite-flex-item")
+    export const timezoneItem = async (item: Type.TimezoneEntry) => $div("timezone-item tektite-title-item tektite-flex-item")
     ([
-        $div("item-header")
+        $div("tektite-item-header")
         ([
             tektite.internalLink
             ({
-                className: "item-title",
+                className: "tektite-item-title",
                 href: Domain.makePageParams("RainbowClock", item),
                 children:
                 [
@@ -62,7 +62,7 @@ export module Render
                 await tektite.menu.button(await timezoneItemMenu(item)),
             ]),
         ]),
-        $div("item-panel")
+        $div("tektite-item-panel")
         ([
             $div("item-panel-body")
             ([
@@ -309,7 +309,7 @@ export module Render
                                 {
                                     const getRainbowColor = Type.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
                                     const currentTick = utc -(timezones[index].offset *Domain.utcOffsetRate);
-                                    const panel = minamo.dom.getDivsByClassName(dom, "item-panel")[0];
+                                    const panel = minamo.dom.getDivsByClassName(dom, "tektite-item-panel")[0];
                                     const timeBar = minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
                                     const currentHours = new Date(currentTick).getHours();
                                     const currentColor = getRainbowColor(currentHours);

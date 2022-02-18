@@ -43,13 +43,13 @@ export module Render
                 )
         )
     });
-    export const stampItem = async (tick: number, interval: number | null) => Tektite.$div("stamp-item tektite-flex-item")
+    export const stampItem = async (tick: number, interval: number | null) => Tektite.$div("stamp-item tektite-title-item tektite-flex-item")
     ([
-        Tektite.$div("item-header")
+        Tektite.$div("tektite-item-header")
         ([
             tektite.internalLink
             ({
-                className: "item-title",
+                className: "tektite-item-title",
                 href: Domain.makePageParams("NeverStopwatch", tick),
                 children:
                 [
@@ -62,7 +62,7 @@ export module Render
                 await tektite.menu.button(await stampItemMenu(tick)),
             ]),
         ]),
-        Tektite.$div("item-information")
+        Tektite.$div("tektite-item-information")
         ([
             Tektite.monospace("tick-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(tick)),
             Tektite.monospace("tick-interval", label("Interval"), Domain.timeLongStringFromTick(interval)),

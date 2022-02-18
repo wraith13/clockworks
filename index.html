@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Fri Feb 18 2022 09:40:44 GMT+0900 (日本標準時)
+    build at: Fri Feb 18 2022 22:48:39 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -1579,6 +1579,40 @@ body.light .tektite-max-column-12 .tektite-flex-item {
 }
 body.light .tektite-title-item {
   position: relative;
+  -webkit-backdrop-filter: blur(1rem);
+}
+body.light .tektite-item-header {
+  display: flex;
+  padding: 0.5rem;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+body.light .tektite-item-header .item-title {
+  max-width: calc(100% - 180px);
+}
+body.light .tektite-item-title {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: nowrap;
+  font-size: 1.2rem;
+  line-height: 1.4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 1.4em;
+  margin-right: -7.5rem;
+  color: #000022;
+  fill: #000022;
+}
+body.light .tektite-item-title .tektite-icon {
+  width: 1.5em;
+  min-width: 1.4em;
+  height: 1.4em;
+  min-height: 1.4em;
+  margin-right: 0.25rem;
 }
 body.light .tektite-item-operator {
   position: relative;
@@ -1593,6 +1627,70 @@ body.light .tektite-item-operator > button {
 }
 body.light .tektite-item-operator > button + button {
   margin-left: 0.25rem;
+}
+body.light .tektite-item-information {
+  background-color: #88888844;
+  padding: 0.5rem;
+  margin: 0px;
+}
+body.light .tektite-item-information * {
+  line-height: 1.4em;
+}
+body.light .tektite-item-information .label {
+  font-size: 1rem;
+  opacity: 0.4;
+  margin-right: -50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 180px);
+}
+body.light .tektite-item-information .label::after {
+  content: ":";
+}
+body.light .tektite-item-information .value {
+  font-size: 1rem;
+  opacity: 0.4;
+  float: right;
+}
+body.light .tektite-item-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 0;
+}
+body.light .tektite-item-panel .item-panel-body {
+  color: #FFFFFF;
+  fill: #FFFFFF;
+  position: relative;
+  z-index: 20;
+  padding: 1rem;
+}
+body.light .tektite-item-panel .item-panel-body .item-utc-offset .value {
+  opacity: 0.666;
+  font-size: 1rem;
+  line-height: 140%;
+}
+body.light .tektite-item-panel .item-panel-body .item-date .value {
+  opacity: 0.666;
+  font-size: 1rem;
+  line-height: 140%;
+}
+body.light .tektite-item-panel .item-panel-body .item-time .value {
+  font-size: 2rem;
+  line-height: 140%;
+}
+body.light .tektite-item-panel .item-time-bar {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #0005;
+  z-index: 10;
 }
 body.light .tektite-popup {
   border-style: solid;
@@ -1819,124 +1917,6 @@ body.light .tektite-menu-item-button {
   border-radius: 0px;
   border-style: none;
   border-width: 0px;
-}
-body.light .item-title {
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: start;
-  flex-wrap: nowrap;
-  font-size: 1.2rem;
-  line-height: 1.4em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  height: 1.4em;
-  margin-right: -7.5rem;
-  color: #000022;
-  fill: #000022;
-}
-body.light .item-title .tektite-icon {
-  width: 1.5em;
-  min-width: 1.4em;
-  height: 1.4em;
-  min-height: 1.4em;
-  margin-right: 0.25rem;
-}
-body.light .stamp-item,
-body.light .alarm-item,
-body.light .timezone-item {
-  position: relative;
-  backdrop-filter: blur(1rem);
-  -webkit-backdrop-filter: blur(1rem);
-}
-body.light .stamp-item .item-header,
-body.light .alarm-item .item-header,
-body.light .timezone-item .item-header {
-  display: flex;
-  padding: 0.5rem;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-body.light .stamp-item .item-header .item-title,
-body.light .alarm-item .item-header .item-title,
-body.light .timezone-item .item-header .item-title {
-  max-width: calc(100% - 180px);
-}
-body.light .stamp-item .item-information,
-body.light .alarm-item .item-information,
-body.light .timezone-item .item-information {
-  background-color: #88888844;
-  padding: 0.5rem;
-  margin: 0px;
-}
-body.light .stamp-item .item-information *,
-body.light .alarm-item .item-information *,
-body.light .timezone-item .item-information * {
-  line-height: 1.4em;
-}
-body.light .stamp-item .item-information .label,
-body.light .alarm-item .item-information .label,
-body.light .timezone-item .item-information .label {
-  font-size: 1rem;
-  opacity: 0.4;
-  margin-right: -50%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: calc(100% - 180px);
-}
-body.light .stamp-item .item-information .label::after,
-body.light .alarm-item .item-information .label::after,
-body.light .timezone-item .item-information .label::after {
-  content: ":";
-}
-body.light .stamp-item .item-information .value,
-body.light .alarm-item .item-information .value,
-body.light .timezone-item .item-information .value {
-  font-size: 1rem;
-  opacity: 0.4;
-  float: right;
-}
-body.light .timezone-item .item-panel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 0;
-}
-body.light .timezone-item .item-panel .item-panel-body {
-  color: #FFFFFF;
-  fill: #FFFFFF;
-  position: relative;
-  z-index: 20;
-  padding: 1rem;
-}
-body.light .timezone-item .item-panel .item-panel-body .item-utc-offset .value {
-  opacity: 0.666;
-  font-size: 1rem;
-  line-height: 140%;
-}
-body.light .timezone-item .item-panel .item-panel-body .item-date .value {
-  opacity: 0.666;
-  font-size: 1rem;
-  line-height: 140%;
-}
-body.light .timezone-item .item-panel .item-panel-body .item-time .value {
-  font-size: 2rem;
-  line-height: 140%;
-}
-body.light .timezone-item .item-panel .item-time-bar {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  height: 100%;
-  border-right-width: 1px;
-  border-right-style: solid;
-  border-right-color: #0005;
-  z-index: 10;
 }
 body.light .welcome-screen .logo {
   height: calc(50vh - 5rem);
@@ -2529,6 +2509,14 @@ body.light .loading-spinner {
   100% {
     transform: rotate(360deg);
   }
+}
+
+_::-webkit-full-page-media, _:future, :root .tektite-screen > header {
+  margin-bottom: -2.5rem;
+}
+
+_::-webkit-full-page-media, _:future, :root .tektite-screen > .tektite-screen-body {
+  padding-top: 2.5rem;
 }
 
 /*# sourceMappingURL=style/theme.light.css.map */
@@ -4072,6 +4060,40 @@ body.dark .tektite-max-column-12 .tektite-flex-item {
 }
 body.dark .tektite-title-item {
   position: relative;
+  -webkit-backdrop-filter: blur(1rem);
+}
+body.dark .tektite-item-header {
+  display: flex;
+  padding: 0.5rem;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+body.dark .tektite-item-header .item-title {
+  max-width: calc(100% - 180px);
+}
+body.dark .tektite-item-title {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: nowrap;
+  font-size: 1.2rem;
+  line-height: 1.4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 1.4em;
+  margin-right: -7.5rem;
+  color: #FFFFFF;
+  fill: #FFFFFF;
+}
+body.dark .tektite-item-title .tektite-icon {
+  width: 1.5em;
+  min-width: 1.4em;
+  height: 1.4em;
+  min-height: 1.4em;
+  margin-right: 0.25rem;
 }
 body.dark .tektite-item-operator {
   position: relative;
@@ -4086,6 +4108,70 @@ body.dark .tektite-item-operator > button {
 }
 body.dark .tektite-item-operator > button + button {
   margin-left: 0.25rem;
+}
+body.dark .tektite-item-information {
+  background-color: #88888844;
+  padding: 0.5rem;
+  margin: 0px;
+}
+body.dark .tektite-item-information * {
+  line-height: 1.4em;
+}
+body.dark .tektite-item-information .label {
+  font-size: 1rem;
+  opacity: 0.4;
+  margin-right: -50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 180px);
+}
+body.dark .tektite-item-information .label::after {
+  content: ":";
+}
+body.dark .tektite-item-information .value {
+  font-size: 1rem;
+  opacity: 0.4;
+  float: right;
+}
+body.dark .tektite-item-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 0;
+}
+body.dark .tektite-item-panel .item-panel-body {
+  color: #000022;
+  fill: #000022;
+  position: relative;
+  z-index: 20;
+  padding: 1rem;
+}
+body.dark .tektite-item-panel .item-panel-body .item-utc-offset .value {
+  opacity: 0.666;
+  font-size: 1rem;
+  line-height: 140%;
+}
+body.dark .tektite-item-panel .item-panel-body .item-date .value {
+  opacity: 0.666;
+  font-size: 1rem;
+  line-height: 140%;
+}
+body.dark .tektite-item-panel .item-panel-body .item-time .value {
+  font-size: 2rem;
+  line-height: 140%;
+}
+body.dark .tektite-item-panel .item-time-bar {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #0005;
+  z-index: 10;
 }
 body.dark .tektite-popup {
   border-style: solid;
@@ -4312,124 +4398,6 @@ body.dark .tektite-menu-item-button {
   border-radius: 0px;
   border-style: none;
   border-width: 0px;
-}
-body.dark .item-title {
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: start;
-  flex-wrap: nowrap;
-  font-size: 1.2rem;
-  line-height: 1.4em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  height: 1.4em;
-  margin-right: -7.5rem;
-  color: #FFFFFF;
-  fill: #FFFFFF;
-}
-body.dark .item-title .tektite-icon {
-  width: 1.5em;
-  min-width: 1.4em;
-  height: 1.4em;
-  min-height: 1.4em;
-  margin-right: 0.25rem;
-}
-body.dark .stamp-item,
-body.dark .alarm-item,
-body.dark .timezone-item {
-  position: relative;
-  backdrop-filter: blur(1rem);
-  -webkit-backdrop-filter: blur(1rem);
-}
-body.dark .stamp-item .item-header,
-body.dark .alarm-item .item-header,
-body.dark .timezone-item .item-header {
-  display: flex;
-  padding: 0.5rem;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-body.dark .stamp-item .item-header .item-title,
-body.dark .alarm-item .item-header .item-title,
-body.dark .timezone-item .item-header .item-title {
-  max-width: calc(100% - 180px);
-}
-body.dark .stamp-item .item-information,
-body.dark .alarm-item .item-information,
-body.dark .timezone-item .item-information {
-  background-color: #88888844;
-  padding: 0.5rem;
-  margin: 0px;
-}
-body.dark .stamp-item .item-information *,
-body.dark .alarm-item .item-information *,
-body.dark .timezone-item .item-information * {
-  line-height: 1.4em;
-}
-body.dark .stamp-item .item-information .label,
-body.dark .alarm-item .item-information .label,
-body.dark .timezone-item .item-information .label {
-  font-size: 1rem;
-  opacity: 0.4;
-  margin-right: -50%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: calc(100% - 180px);
-}
-body.dark .stamp-item .item-information .label::after,
-body.dark .alarm-item .item-information .label::after,
-body.dark .timezone-item .item-information .label::after {
-  content: ":";
-}
-body.dark .stamp-item .item-information .value,
-body.dark .alarm-item .item-information .value,
-body.dark .timezone-item .item-information .value {
-  font-size: 1rem;
-  opacity: 0.4;
-  float: right;
-}
-body.dark .timezone-item .item-panel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 0;
-}
-body.dark .timezone-item .item-panel .item-panel-body {
-  color: #000022;
-  fill: #000022;
-  position: relative;
-  z-index: 20;
-  padding: 1rem;
-}
-body.dark .timezone-item .item-panel .item-panel-body .item-utc-offset .value {
-  opacity: 0.666;
-  font-size: 1rem;
-  line-height: 140%;
-}
-body.dark .timezone-item .item-panel .item-panel-body .item-date .value {
-  opacity: 0.666;
-  font-size: 1rem;
-  line-height: 140%;
-}
-body.dark .timezone-item .item-panel .item-panel-body .item-time .value {
-  font-size: 2rem;
-  line-height: 140%;
-}
-body.dark .timezone-item .item-panel .item-time-bar {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  height: 100%;
-  border-right-width: 1px;
-  border-right-style: solid;
-  border-right-color: #0005;
-  z-index: 10;
 }
 body.dark .welcome-screen .logo {
   height: calc(50vh - 5rem);
@@ -10400,11 +10368,11 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
-                        _a = Render.$div("timezone-item tektite-flex-item");
-                        _b = Render.$div("item-header");
+                        _a = Render.$div("timezone-item tektite-title-item tektite-flex-item");
+                        _b = Render.$div("tektite-item-header");
                         _d = (_c = __7.tektite).internalLink;
                         _j = {
-                            className: "item-title",
+                            className: "tektite-item-title",
                             href: domain_5.Domain.makePageParams("RainbowClock", item)
                         };
                         return [4 /*yield*/, resource_1.Resource.loadIconOrCache("tektite-pin-icon")];
@@ -10426,7 +10394,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                                 _k.sent()
                                             ]])
                                     ])]),
-                                Render.$div("item-panel")([
+                                Render.$div("tektite-item-panel")([
                                     Render.$div("item-panel-body")([
                                         tektite_index_8.Tektite.monospace("item-utc-offset", domain_5.Domain.timezoneOffsetString(item.offset)),
                                         tektite_index_8.Tektite.monospace("item-date", domain_5.Domain.dateCoreStringFromTick(domain_5.Domain.getUTCTicks() - item.offset)),
@@ -10727,7 +10695,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                                     .forEach(function (dom, index) {
                                                     var getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_9.Storage.RainbowClock.colorPattern.get()];
                                                     var currentTick = utc_1 - (timezones[index].offset * domain_5.Domain.utcOffsetRate);
-                                                    var panel = minamo_js_8.minamo.dom.getDivsByClassName(dom, "item-panel")[0];
+                                                    var panel = minamo_js_8.minamo.dom.getDivsByClassName(dom, "tektite-item-panel")[0];
                                                     var timeBar = minamo_js_8.minamo.dom.getDivsByClassName(dom, "item-time-bar")[0];
                                                     var currentHours = new Date(currentTick).getHours();
                                                     var currentColor = getRainbowColor(currentHours);
@@ -10852,11 +10820,11 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
-                        _a = Render.$div("alarm-item tektite-flex-item");
-                        _b = Render.$div("item-header");
+                        _a = Render.$div("alarm-item tektite-title-item tektite-flex-item");
+                        _b = Render.$div("tektite-item-header");
                         _d = (_c = __8.tektite).internalLink;
                         _j = {
-                            className: "item-title",
+                            className: "tektite-item-title",
                             href: domain_6.Domain.makePageParams("CountdownTimer", item)
                         };
                         return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-tick-icon")];
@@ -10878,7 +10846,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                                 _k.sent()
                                             ]])
                                     ])]),
-                                Render.$div("item-information")([
+                                Render.$div("tektite-item-information")([
                                     tektite_index_9.Tektite.monospace("alarm-due-timestamp", Render.label("Due timestamp"), domain_6.Domain.dateFullStringFromTick(item.end)),
                                     tektite_index_9.Tektite.monospace("alarm-due-rest", Render.label("Rest"), domain_6.Domain.timeLongStringFromTick(item.end - domain_6.Domain.getTicks())),
                                 ])
@@ -10956,11 +10924,11 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
-                        _a = Render.$div("event-item tektite-flex-item");
-                        _b = Render.$div("item-header");
+                        _a = Render.$div("event-item tektite-title-item tektite-flex-item");
+                        _b = Render.$div("tektite-item-header");
                         _d = (_c = __8.tektite).internalLink;
                         _j = {
-                            className: "item-title",
+                            className: "tektite-item-title",
                             href: domain_6.Domain.makePageParams("ElapsedTimer", item)
                         };
                         return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-tick-icon")];
@@ -10982,7 +10950,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                                 _k.sent()
                                             ]])
                                     ])]),
-                                Render.$div("item-information")([
+                                Render.$div("tektite-item-information")([
                                     tektite_index_9.Tektite.monospace("event-timestamp", Render.label("Timestamp"), domain_6.Domain.dateFullStringFromTick(item.tick)),
                                     tektite_index_9.Tektite.monospace("event-elapsed-time", Render.label("Elapsed time"), domain_6.Domain.timeLongStringFromTick(domain_6.Domain.getTicks() - item.tick)),
                                 ])
@@ -11573,11 +11541,11 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
             return __generator(this, function (_k) {
                 switch (_k.label) {
                     case 0:
-                        _a = tektite_index_10.Tektite.$div("stamp-item tektite-flex-item");
-                        _b = tektite_index_10.Tektite.$div("item-header");
+                        _a = tektite_index_10.Tektite.$div("stamp-item tektite-title-item tektite-flex-item");
+                        _b = tektite_index_10.Tektite.$div("tektite-item-header");
                         _d = (_c = __9.tektite).internalLink;
                         _j = {
-                            className: "item-title",
+                            className: "tektite-item-title",
                             href: domain_7.Domain.makePageParams("NeverStopwatch", tick)
                         };
                         return [4 /*yield*/, resource_3.Resource.loadIconOrCache("tektite-tick-icon")];
@@ -11599,7 +11567,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                                 _k.sent()
                                             ]])
                                     ])]),
-                                tektite_index_10.Tektite.$div("item-information")([
+                                tektite_index_10.Tektite.$div("tektite-item-information")([
                                     tektite_index_10.Tektite.monospace("tick-timestamp", Render.label("Timestamp"), domain_7.Domain.dateFullStringFromTick(tick)),
                                     tektite_index_10.Tektite.monospace("tick-interval", Render.label("Interval"), domain_7.Domain.timeLongStringFromTick(interval)),
                                 ])
@@ -13617,7 +13585,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645144844583), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645192119588), })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

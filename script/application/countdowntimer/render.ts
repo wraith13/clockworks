@@ -46,13 +46,13 @@ export module Render
     export const alarmTitle = (item: Type.AlarmEntry) => "timer" === item.type ?
         `${Domain.makeTimerLabel(item.end -item.start)} ${Clockworks.localeMap("Timer")}`:
         item.title;
-    export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item tektite-flex-item")
+    export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item tektite-title-item tektite-flex-item")
     ([
-        $div("item-header")
+        $div("tektite-item-header")
         ([
             tektite.internalLink
             ({
-                className: "item-title",
+                className: "tektite-item-title",
                 href: Domain.makePageParams("CountdownTimer", item),
                 children:
                 [
@@ -65,7 +65,7 @@ export module Render
                 await tektite.menu.button(await alarmItemMenu(item)),
             ]),
         ]),
-        $div("item-information")
+        $div("tektite-item-information")
         ([
             Tektite.monospace("alarm-due-timestamp", label("Due timestamp"), Domain.dateFullStringFromTick(item.end)),
             Tektite.monospace("alarm-due-rest", label("Rest"), Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
@@ -133,13 +133,13 @@ export module Render
             "tektite-delete-button"
         )
     ];
-    export const eventItem = async (item: Type.EventEntry) => $div("event-item tektite-flex-item")
+    export const eventItem = async (item: Type.EventEntry) => $div("event-item tektite-title-item tektite-flex-item")
     ([
-        $div("item-header")
+        $div("tektite-item-header")
         ([
             tektite.internalLink
             ({
-                className: "item-title",
+                className: "tektite-item-title",
                 href: Domain.makePageParams("ElapsedTimer", item),
                 children:
                 [
@@ -152,7 +152,7 @@ export module Render
                 await tektite.menu.button(await eventItemMenu(item)),
             ]),
         ]),
-        $div("item-information")
+        $div("tektite-item-information")
         ([
             Tektite.monospace("event-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(item.tick)),
             Tektite.monospace("event-elapsed-time", label("Elapsed time"), Domain.timeLongStringFromTick(Domain.getTicks() - item.tick)),

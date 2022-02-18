@@ -9,3 +9,4 @@ body.light
     @import "index.scss";
     @include tektite-light-trait;
 }
+@import "../tektite.js/style/tektite-root.scss";
