@@ -20,6 +20,8 @@
     {
         @include tektite-animation(tektite-fade-out, 0.5s);
     }
+    height: 100vh;
+    width: 100vw;
 }
 &.tektite-fxxking-ipad-fullscreen
 {
@@ -42,8 +44,11 @@
     }
     & > header
     {
-        //@include tektite-backdrop-filter-trait;
-        -webkit-backdrop-filter: blur(1rem); // ここで backdrop-filter を指定すると Chrome で表示レイアウトが崩れるので、 Safari のみに適用する
+        @include tektite-support-backdrop-filter-trait
+        {
+            margin-bottom: -2.5rem;
+        }
+        @include tektite-backdrop-filter-trait;
         // &.with-screen-prgress
         // {
         //     background-color: e(%("%s%s", $tektite-main-color, "11"));
@@ -53,7 +58,7 @@
         font-size: 1.2rem;
         font-weight: normal;
         max-width: 100vw;
-        overflow-x: hidden;
+        overflow: visible;
         position: static;
         @include tektite-space-around-horizontal-flex-trait;
         &.tektite-segmented
@@ -205,6 +210,10 @@
     }
     & > .tektite-screen-body
     {
+        @include tektite-support-backdrop-filter-trait
+        {
+            padding-top: 2.5rem;
+        }
         overflow-x: hidden;
         overflow-y: auto;
         flex-grow: 1;
@@ -598,8 +607,8 @@
 .tektite-title-item
 {
     position: relative;
-    //@include tektite-backdrop-filter-trait;
-    -webkit-backdrop-filter: blur(1rem); // ここで backdrop-filter を指定すると Chrome で表示レイアウトが崩れるので、 Safari のみに適用する
+    // @include tektite-backdrop-filter-trait;
+    // -webkit-backdrop-filter: blur(1rem); // ここで backdrop-filter を指定すると Chrome で表示レイアウトが崩れるので、 Safari のみに適用する
 }
 .tektite-item-header
 {

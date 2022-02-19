@@ -21,6 +21,20 @@
     box-sizing: border-box;
     line-height: 100%;
 }
+@mixin tektite-support-backdrop-filter-trait($filter: blur(1rem))
+{
+    @supports (backdrop-filter: $filter)
+    {
+        @content;
+    }
+}
+@mixin tektite-not-support-backdrop-filter-trait($filter: blur(1rem))
+{
+    @supports not (backdrop-filter: $filter)
+    {
+        @content;
+    }
+}
 @mixin tektite-backdrop-filter-trait($filter: blur(1rem))
 {
     backdrop-filter: $filter;
