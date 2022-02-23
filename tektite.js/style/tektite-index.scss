@@ -44,11 +44,6 @@
     }
     & > header
     {
-        @include tektite-support-backdrop-filter-trait
-        {
-            margin-bottom: -2.5rem;
-        }
-        @include tektite-backdrop-filter-trait;
         // &.with-screen-prgress
         // {
         //     background-color: e(%("%s%s", $tektite-main-color, "11"));
@@ -210,10 +205,6 @@
     }
     & > .tektite-screen-body
     {
-        @include tektite-support-backdrop-filter-trait
-        {
-            padding-top: 2.5rem;
-        }
         overflow-x: hidden;
         overflow-y: auto;
         flex-grow: 1;
@@ -353,6 +344,11 @@
 {
     #tektite-screen-header
     {
+        @include tektite-support-backdrop-filter-trait
+        {
+            margin-bottom: -2.5rem;
+        }
+        @include tektite-backdrop-filter-trait;
         background-color: #{$tektite-main-color}11;
         & > button
         {
@@ -376,6 +372,10 @@
     }
     .tektite-screen-body
     {
+        @include tektite-support-backdrop-filter-trait
+        {
+            padding-top: 2.5rem;
+        }
         @include tektite-hide-scroll-bar;
     }
     .tektite-primary-page
@@ -416,6 +416,11 @@
     {
         @include tektite-screen-full-trait;
         @include tektite-animation(white-flash, 1.5s);
+    }
+    .tektite-menu-popup,
+    .bare-popup
+    {
+        @include tektite-popup-glass-trait(#{$tektite-base-color}#{$tektite-popup-background-alpha});
     }
 }
 .tektite-menu-button-list,
@@ -858,8 +863,8 @@
     {
         @include tektite-vertical-flex-trait;
     }
-    @include tektite-accent-foreground-coloring-trait();
-    @include tektite-popup-glass-trait(#{$tektite-base-color}#{$tektite-popup-background-alpha});
+    @include tektite-accent-foreground-coloring-trait;
+    @include tektite-positive-background-coloring-trait;
     @include tektite-popup-round-border-trait;
     line-height: 1.5rem;
     font-size: 1.5rem;

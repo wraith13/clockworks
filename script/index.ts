@@ -36,7 +36,6 @@ export module Clockworks
         await Render.showPage();
     };
 }
-
 export const tektite = Tektite.make<Type.PageParams, Resource.KeyType, typeof localeEn | typeof localeJa, typeof Clockworks.localeMaster>
 ({
     makeUrl: Domain.makeUrl,

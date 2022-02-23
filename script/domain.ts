@@ -503,8 +503,6 @@ export module Domain
         return null;
     };
     export const parseEvent = (json: string): Type.EventEntry | null => parseEventCore(parseOrNull(json));
-
-
     export const parseTimezoneCore = (item: any): Type.TimezoneEntry | null =>
     {
         if (null !== item && undefined !== item && "object" === typeof item)
