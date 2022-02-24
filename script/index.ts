@@ -23,7 +23,7 @@ export module Clockworks
     export type LocaleType = keyof typeof localeMaster;
     export const localeMap = (key: LocaleKeyType) => tektite.locale.map(key);
     export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
-    export const start = async (params:{ buildTimestamp: string, }) =>
+    export const start = async (params:{ buildTimestamp: string, buildTimestampTick:number, }) =>
     {
         console.log(`start timestamp: ${new Date()}`);
         console.log(`buildTimestamp: ${params.buildTimestamp}`);
@@ -34,6 +34,10 @@ export module Clockworks
         Render.updateStyle();
         Render.updateProgressBarStyle();
         await Render.showPage();
+        if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
+        {
+            tektite.screen.toast.make({ content: Tektite.$span("")(`ビルドタイムスタンプ: ${Domain.dateStringFromTick(params.buildTimestampTick)} ( ${Domain.makeTimerLabel(new Date().getTime() - params.buildTimestampTick)} 前 )`), });
+        }
     };
 }
 export const tektite = Tektite.make<Type.PageParams, Resource.KeyType, typeof localeEn | typeof localeJa, typeof Clockworks.localeMaster>

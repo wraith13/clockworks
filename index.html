@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Wed Feb 23 2022 09:50:51 GMT+0900 (日本標準時)
+    build at: Thu Feb 24 2022 10:58:13 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -5291,45 +5291,205 @@ var _this = this;
 //# sourceMappingURL=nephila/evil-commonjs/index.js.map
 </script>
 <script type="text/javascript">
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var EvilTimer;
 (function (EvilTimer) {
-    var _a;
+    var _a, _b, _c, _d, _e;
     var gThis = ((_a = self !== null && self !== void 0 ? self : window) !== null && _a !== void 0 ? _a : global);
-    var originalSetTimeout = setTimeout;
-    var originalSetInteral = setInterval;
-    var styleReplaceMode = "auto";
+    var VanillaDate = Date;
+    var vanillaSetTimeout = setTimeout;
+    var vanillaSetInteral = setInterval;
+    var dateMode = "evil";
+    EvilTimer.setDateMode = function (mode) {
+        switch (mode) {
+            case "vanilla":
+            case "evil":
+                dateMode = mode;
+                break;
+            default:
+                console.error("setDateMode(".concat(JSON.stringify(mode), " as \"vanilla\" | \"evil\");"));
+                break;
+        }
+    };
+    var styleReplaceMode = "disabled";
     var originalEmbeddedStyles = null;
     var originalStyleRules = null;
     // let originalStyleSheets:string[] = null;
-    var speedRate = 1.0;
+    var speed = 1;
     var isPaused = false;
     var susppendedTasks = [];
+    var ankerAt = {
+        vanilla: 0,
+        evil: 0,
+    };
+    EvilTimer.getVanillaNow = function () { return new VanillaDate().getTime(); };
+    EvilTimer.getEvilNow = function () {
+        return !isAnkered() ?
+            EvilTimer.getVanillaNow() :
+            ankerAt.evil + (isPaused ? 0 : (speed * (EvilTimer.getVanillaNow() - ankerAt.vanilla)));
+    };
+    var isAnkered = function () { return 0 !== ankerAt.vanilla; };
+    var setAnkerAt = function (evil) { return ankerAt =
+        {
+            vanilla: EvilTimer.getVanillaNow(),
+            evil: evil !== null && evil !== void 0 ? evil : EvilTimer.getEvilNow(),
+        }; };
+    var resetAnkerAt = function () { return ankerAt =
+        {
+            vanilla: 0,
+            evil: 0,
+        }; };
+    /*
+    remain for support to timezone and locale.
+    class EvilDateBody
+    {
+        vanilla: Date;
+        constructor();
+        constructor(value: number | string);
+        constructor(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number);
+        constructor(year?: number | string, month?: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number)
+        {
+            if (undefined !== year)
+            {
+                if ("number" === typeof year && undefined !== month)
+                {
+                    this.vanilla = new VanillaDate(year, month, date, hours, minutes, seconds, ms);
+                }
+                else
+                {
+                    this.vanilla = new VanillaDate(year);
+                }
+            }
+            else
+            {
+                this.vanilla = new VanillaDate(getEvilNow());
+            }
+        }
+        toString = () => this.vanilla.toString();
+        toDateString = () => this.vanilla.toDateString();
+        toTimeString = () => this.vanilla.toTimeString();
+        toLocaleString = () => this.vanilla.toLocaleString();
+        toLocaleDateString = () => this.vanilla.toLocaleDateString();
+        toLocaleTimeString = () => this.vanilla.toLocaleTimeString();
+        valueOf = () => this.vanilla.valueOf();
+        getTime = () => this.vanilla.getTime();
+        getFullYear = () => this.vanilla.getFullYear();
+        getUTCFullYear = () => this.vanilla.getUTCFullYear();
+        getMonth = () => this.vanilla.getMonth();
+        getUTCMonth = () => this.vanilla.getUTCMonth();
+        getDate = () => this.vanilla.getDate();
+        getUTCDate = () => this.vanilla.getUTCDate();
+        getDay = () => this.vanilla.getDay();
+        getUTCDay = () => this.vanilla.getUTCDay();
+        getHours = () => this.vanilla.getHours();
+        getUTCHours = () => this.vanilla.getUTCHours();
+        getMinutes = () => this.vanilla.getMinutes();
+        getUTCMinutes = () => this.vanilla.getUTCMinutes();
+        getSeconds = () => this.vanilla.getSeconds();
+        getUTCSeconds = () => this.vanilla.getUTCSeconds();
+        getMilliseconds = () => this.vanilla.getMilliseconds();
+        getUTCMilliseconds = () => this.vanilla.getUTCMilliseconds();
+        getTimezoneOffset = () => this.vanilla.getTimezoneOffset();
+        setTime = (time: number) => this.vanilla.setTime(time);
+        setMilliseconds = (ms: number) => this.vanilla.setMilliseconds(ms);
+        setUTCMilliseconds = (ms: number) => this.vanilla.setUTCMilliseconds(ms);
+        setSeconds = (sec: number, ms?: number) => this.vanilla.setSeconds(sec, ms);
+        setUTCSeconds = (sec: number, ms?: number) => this.vanilla.setUTCSeconds(sec, ms);
+        setMinutes = (min: number, sec?: number, ms?: number) => this.vanilla.setMinutes(min, sec, ms);
+        setUTCMinutes = (min: number, sec?: number, ms?: number) => this.vanilla.setUTCMinutes(min, sec, ms);
+        setHours = (hours: number, min?: number, sec?: number, ms?: number) => this.vanilla.setHours(hours, min, sec, ms);
+        setUTCHours = (hours: number, min?: number, sec?: number, ms?: number) => this.vanilla.setUTCHours(hours, min, sec, ms);
+        setDate = (date: number) => this.vanilla.setDate(date);
+        setUTCDate = (date: number) => this.vanilla.setUTCDate(date);
+        setMonth = (month: number, date?: number) => this.vanilla.setMonth(month, date);
+        setUTCMonth = (month: number, date?: number) => this.vanilla.setUTCMonth(month, date);
+        setFullYear = (year: number, month?: number, date?: number) => this.vanilla.setFullYear(year, month, date);
+        setUTCFullYear = (year: number, month?: number, date?: number) => this.vanilla.setUTCFullYear(year, month, date);
+        toUTCString = () => this.vanilla.toUTCString();
+        toISOString = () => this.vanilla.toISOString();
+        toJSON = (key?: any) => this.vanilla.toJSON(key);
+        static parse = (s: string) => VanillaDate.parse(s);
+        static UTC = (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number) => VanillaDate.UTC(year, month, date, hours, minutes, seconds, ms);
+        static now = () => new EvilDateBody().getTime();
+    }
+    */
+    EvilTimer.EvilDate = function _f() {
+        var _newTarget = this && this instanceof _f ? this.constructor : void 0;
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        if ("evil" === dateMode && isAnkered() && 0 === args.length) {
+            return _newTarget ?
+                new VanillaDate(EvilTimer.getEvilNow()) :
+                new VanillaDate(EvilTimer.getEvilNow()).toString();
+        }
+        else {
+            return _newTarget ? new (VanillaDate.bind.apply(VanillaDate, __spreadArray([void 0], args, false)))() : VanillaDate.apply(void 0, args);
+        }
+    };
+    EvilTimer.EvilDate.parse = VanillaDate.parse;
+    EvilTimer.EvilDate.UTC = VanillaDate.UTC;
+    EvilTimer.EvilDate.now = EvilTimer.getEvilNow;
+    EvilTimer.setDate = function (date) {
+        if ("boolean" === typeof date) {
+            EvilTimer.setDateMode(date ? "evil" : "vanilla");
+        }
+        else {
+            EvilTimer.setDateMode("evil");
+            setAnkerAt("number" === typeof date ? date :
+                "string" === typeof date ? VanillaDate.parse(date) :
+                    date.getTime());
+        }
+    };
+    EvilTimer.resetDate = function () { return setAnkerAt(EvilTimer.getVanillaNow()); };
     EvilTimer.restore = function () {
+        EvilTimer.setSpeed(1.0);
+        EvilTimer.unpause();
+        resetAnkerAt();
+    };
+    EvilTimer.pause = function () {
+        setAnkerAt();
+        isPaused = true;
+    };
+    EvilTimer.unpause = function () {
+        setAnkerAt();
         isPaused = false;
         susppendedTasks.forEach(function (i) { return i(); });
         susppendedTasks = [];
     };
-    EvilTimer.pause = function () { return isPaused = true; };
-    var replaceAnimationDuration = function (css) { return css.replace(/(animation-duration:\s*)([0-9.]+)([a-z]*\s*;)/gmu, function (_m, p1, p2, p3) { return "".concat(p1).concat(parseFloat(p2) / speedRate).concat(p3); }); };
-    var updateEmbeddedStyle = function () {
+    var styleTimerRegExp = /((?:animation|transition)(?:-duration|-delay)?\s*:)([\+\-0-9A-Za-z.\s]+);/gmu;
+    var hasTimer = function (css) { return styleTimerRegExp.test(css); };
+    var replaceTimer = function (rate, css) { return css.replace(styleTimerRegExp, function (_m, p1, p2) { return "".concat(p1).concat(p2.replace(/([\+\-]?[0-9.]+)(m?s)/gmu, function (_m, p1, p2) { return (parseFloat(p1) / Math.abs(rate)).toLocaleString("en") + p2; }), ";"); }); };
+    var updateEmbeddedStyle = function (rate) {
+        if (rate === void 0) { rate = speed; }
         var styles = Array.from(document.getElementsByTagName("style"));
         if (null === originalEmbeddedStyles) {
             originalEmbeddedStyles = styles.map(function (i) { return i.innerHTML; });
         }
         styles.forEach(function (i, ix) {
             var _a;
-            if (0 <= ((_a = originalEmbeddedStyles[ix]) !== null && _a !== void 0 ? _a : "").indexOf("animation-duration")) {
-                i.innerHTML = replaceAnimationDuration(originalEmbeddedStyles[ix]);
+            if (hasTimer((_a = originalEmbeddedStyles[ix]) !== null && _a !== void 0 ? _a : "")) {
+                i.innerHTML = replaceTimer(rate, originalEmbeddedStyles[ix]);
             }
         });
     };
-    var updateStyleRules = function () {
+    var updateStyleRules = function (rate) {
+        if (rate === void 0) { rate = speed; }
         var styles = Array.from(document.styleSheets);
         if (null === originalStyleRules) {
             originalStyleRules = styles.map(function (stylesheet) {
                 try {
                     var rules = Array.from(stylesheet.cssRules).map(function (rule) { return rule.cssText; });
-                    if (0 < rules.filter(function (rule) { return 0 <= (rule !== null && rule !== void 0 ? rule : "").indexOf("animation-duration"); }).length) {
+                    if (0 < rules.filter(function (rule) { return hasTimer(rule !== null && rule !== void 0 ? rule : ""); }).length) {
                         return rules;
                     }
                 }
@@ -5344,7 +5504,7 @@ var EvilTimer;
                 while (0 < stylesheet.cssRules.length) {
                     stylesheet.deleteRule(0);
                 }
-                originalStyleRules[ix].forEach(function (rule) { return stylesheet.insertRule(replaceAnimationDuration(rule)); });
+                originalStyleRules[ix].forEach(function (rule) { return stylesheet.insertRule(replaceTimer(rate, rule)); });
             }
         });
     };
@@ -5404,6 +5564,20 @@ var EvilTimer;
                 return styleReplaceMode;
         }
     };
+    var updateStyle = function (rate) {
+        if (rate === void 0) { rate = speed; }
+        switch (EvilTimer.getStyleReplaceMode()) {
+            case "embedded":
+                updateEmbeddedStyle(rate);
+                break;
+            case "rules":
+                updateStyleRules(rate);
+                break;
+            // case "sheets":
+            //     updateStyleSheets();
+            //     break;
+        }
+    };
     EvilTimer.setStyleReplaceMode = function (mode) {
         switch (mode) {
             case "auto":
@@ -5411,48 +5585,47 @@ var EvilTimer;
             case "embedded":
             case "rules":
                 // case "sheets":
-                styleReplaceMode = mode;
+                if (styleReplaceMode !== mode) {
+                    if ("disabled" !== styleReplaceMode && 1 !== speed) {
+                        updateStyle(1);
+                    }
+                    styleReplaceMode = mode;
+                    if ("disabled" !== styleReplaceMode && 1 !== speed) {
+                        updateStyle();
+                    }
+                }
                 break;
             default:
-                styleReplaceMode = "auto";
+                console.error("setStyleReplaceMode(".concat(JSON.stringify(mode), " as \"auto\" | \"disabled\" | \"embedded\" | \"rules\");"));
                 break;
         }
     };
-    EvilTimer.setSpeedRate = function (rate) {
-        speedRate = Math.max(Math.min(rate, 1000), 0.001);
-        switch (EvilTimer.getStyleReplaceMode()) {
-            case "embedded":
-                updateEmbeddedStyle();
-                break;
-            case "rules":
-                updateStyleRules();
-                break;
-            // case "sheets":
-            //     updateStyleSheets();
-            //     break;
-        }
+    EvilTimer.setSpeed = function (rate) {
+        setAnkerAt();
+        speed = rate;
+        updateStyle();
     };
-    EvilTimer.setTimeoutEx = function (callback, wait) {
+    EvilTimer.evilSetTimeout = function (callback, wait) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];
         }
-        return originalSetTimeout(function () {
+        return vanillaSetTimeout(function () {
             if (isPaused) {
                 susppendedTasks.push(function () { return callback.apply(void 0, args); });
             }
             else {
                 callback.apply(void 0, args);
             }
-        }, wait / speedRate);
+        }, wait / Math.abs(speed));
     };
-    EvilTimer.setIntervalEx = function (callback, wait) {
+    EvilTimer.evilSetInterval = function (callback, wait) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];
         }
         var pushed = false;
-        return originalSetInteral(function () {
+        return vanillaSetInteral(function () {
             if (isPaused) {
                 if (!pushed) {
                     susppendedTasks.push(function () { return callback.apply(void 0, args); });
@@ -5463,14 +5636,88 @@ var EvilTimer;
                 pushed = false;
                 callback.apply(void 0, args);
             }
-        }, wait);
+        }, wait / Math.abs(speed));
     };
-    EvilTimer.timeout = function (wait) { return new Promise(function (resolve) { return EvilTimer.setTimeoutEx(resolve, wait); }); };
-    gThis.EvilTimer = EvilTimer;
-    gThis.setInterval = EvilTimer.setIntervalEx;
-    gThis.setTimeout = EvilTimer.setTimeoutEx;
-    if (!gThis.disabledEvilTimerLoadMessage) {
-        console.log("evil-timer.js is loaded. You can use EvilTimer commands. see: https://github.com/wraith13/evil-timer.js");
+    var Vanilla;
+    (function (Vanilla) {
+        Vanilla.Date = function _a() {
+            var _newTarget = this && this instanceof _a ? this.constructor : void 0;
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return _newTarget ? new (VanillaDate.bind.apply(VanillaDate, __spreadArray([void 0], args, false)))() : VanillaDate.apply(void 0, args);
+        };
+        Vanilla.Date.parse = VanillaDate.parse;
+        Vanilla.Date.UTC = VanillaDate.UTC;
+        Vanilla.Date.now = VanillaDate.now;
+        Vanilla.setTimeout = function (callback, wait) {
+            var args = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                args[_i - 2] = arguments[_i];
+            }
+            return vanillaSetTimeout.apply(void 0, __spreadArray([callback,
+                wait], args, false));
+        };
+        Vanilla.setInterval = function (callback, wait) {
+            var args = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                args[_i - 2] = arguments[_i];
+            }
+            return vanillaSetInteral.apply(void 0, __spreadArray([callback,
+                wait], args, false));
+        };
+    })(Vanilla = EvilTimer.Vanilla || (EvilTimer.Vanilla = {}));
+    EvilTimer.set = function (config) {
+        if ("boolean" === typeof config) {
+            if (config) {
+                gThis.EvilTimer = EvilTimer;
+                gThis.Date = EvilTimer.EvilDate;
+                gThis.setTimeout = EvilTimer.evilSetTimeout;
+                gThis.setInterval = EvilTimer.evilSetInterval;
+            }
+            else {
+                // delete gThis.EvilTimer;
+                gThis.Date = VanillaDate;
+                gThis.setTimeout = vanillaSetTimeout;
+                gThis.setInterval = vanillaSetInteral;
+            }
+        }
+        else {
+            if (undefined !== config.disabled && "boolean" === typeof config.disabled) {
+                EvilTimer.set(!config.disabled);
+            }
+            if (undefined !== config.styleReplaceMode) {
+                EvilTimer.setStyleReplaceMode(config.styleReplaceMode);
+            }
+            if (undefined !== config.date) {
+                EvilTimer.setDate(config.date);
+            }
+            if (undefined !== config.speed) {
+                EvilTimer.setSpeed(config.speed);
+            }
+            if (undefined !== config.pause) {
+                if (config.pause) {
+                    EvilTimer.pause();
+                }
+                else {
+                    EvilTimer.unpause();
+                }
+            }
+        }
+    };
+    var configFromUrl = (_e = (_d = (_c = (_b = location.href
+        .split("#")[0]
+        .split("?")[1]) === null || _b === void 0 ? void 0 : _b.split("&")) === null || _c === void 0 ? void 0 : _c.filter(function (i) { return i.startsWith("evil-timer="); })) === null || _d === void 0 ? void 0 : _d.map(function (i) { return JSON.parse(decodeURIComponent(i.substr("evil-timer=".length))); })) === null || _e === void 0 ? void 0 : _e[0];
+    var evilTimerConfig = (configFromUrl !== null && configFromUrl !== void 0 ? configFromUrl : gThis.evilTimerConfig);
+    if (false !== evilTimerConfig && !(evilTimerConfig === null || evilTimerConfig === void 0 ? void 0 : evilTimerConfig.disabled)) {
+        EvilTimer.set(true);
+        if (!(evilTimerConfig === null || evilTimerConfig === void 0 ? void 0 : evilTimerConfig.disabledLoadMessage)) {
+            console.log("evil-timer.js is loaded. You can use EvilTimer commands with your own risk. see: https://github.com/wraith13/evil-timer.js");
+        }
+        if (evilTimerConfig) {
+            EvilTimer.set(evilTimerConfig);
+        }
     }
 })(EvilTimer || (EvilTimer = {}));
 //# sourceMappingURL=nephila/evil-timer.js/index.js.map
@@ -13577,8 +13824,9 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
         Clockworks.localeMap = function (key) { return exports.tektite.locale.map(key); };
         Clockworks.localeParallel = function (key) { return exports.tektite.locale.parallel(key); };
         Clockworks.start = function (params) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         console.log("start timestamp: ".concat(new Date()));
                         console.log("buildTimestamp: ".concat(params.buildTimestamp));
@@ -13590,7 +13838,10 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                         render_14.Render.updateProgressBarStyle();
                         return [4 /*yield*/, render_14.Render.showPage()];
                     case 1:
-                        _a.sent();
+                        _c.sent();
+                        if ("reload" === ((_b = (_a = performance.getEntriesByType("navigation")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.type)) {
+                            exports.tektite.screen.toast.make({ content: tektite_index_13.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(domain_10.Domain.dateStringFromTick(params.buildTimestampTick), " ( ").concat(domain_10.Domain.makeTimerLabel(new Date().getTime() - params.buildTimestampTick), " \u524D )")), });
+                        }
                         return [2 /*return*/];
                 }
             });
@@ -13617,7 +13868,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645577451874), })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645667893971), buildTimestampTick: 1645667893971, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
