@@ -36,7 +36,11 @@ export module Clockworks
         await Render.showPage();
         if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
         {
-            tektite.screen.toast.make({ content: Tektite.$span("")(`ビルドタイムスタンプ: ${Domain.dateStringFromTick(params.buildTimestampTick)} ( ${Domain.makeTimerLabel(new Date().getTime() - params.buildTimestampTick)} 前 )`), });
+            tektite.screen.toast.make
+            ({
+                content: Tektite.$span("")(`ビルドタイムスタンプ: ${Domain.dateStringFromTick(params.buildTimestampTick)} ( ${Domain.makeTimerLabel(new Date().getTime() - params.buildTimestampTick)} 前 )`),
+                isWideContent: true,
+            });
         }
     };
 }
