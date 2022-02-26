@@ -38,7 +38,7 @@ export module Clockworks
         {
             tektite.screen.toast.make
             ({
-                content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.dateStringFromTick(params.buildTimestampTick)} ( ${tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick)} 前 )`),
+                content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM:SS", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick)} 前 )`),
                 isWideContent: true,
             });
         }

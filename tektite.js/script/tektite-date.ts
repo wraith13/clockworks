@@ -1,14 +1,25 @@
 import { Tektite } from "./tektite-index.js";
 export module TektiteDate
 {
-    export type DateFormatType = "formal-time" | "smart-time";
+    export type DateFormatType =
+        "formal-time" | "long-time" | "short-time" |
+        "HH:MM:SS.mmm" | "HH:MM:SS" | "HH:MM" |
+        "www" |
+        "YYYY-MM-DD" | "YYYY-MM-DD www" |
+        "YYYY-MM-DD HH:MM:SS.mmm" | "YYYY-MM-DD HH:MM:SS" | "YYYY-MM-DD HH:MM";
     export class TektiteDate<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
-        public getDate = (date: Date | number = new Date()): Date => "number" === typeof date ? new Date(date): date;
-        public getTicks = (date: Date | number = new Date()): number => "number" === typeof date ? date: date.getTime();
+        public getDate = (date: Date | number | string = new Date()): Date =>
+            "number" === typeof date ? new Date(date):
+            "string" === typeof date ? this.parseDate(date):
+            date;
+        public getTicks = (date: Date | number | string = new Date()): number =>
+            "number" === typeof date ? date:
+            "string" === typeof date ? this.parseDate(date).getTime():
+            date.getTime();
         public utcOffsetRate: number = 60 *1000;
         public getUTCTicks = (date: Date = new Date()): number => this.getTicks(date) +(date.getTimezoneOffset() *this.utcOffsetRate);
         public weekday = (tick: number) =>
@@ -82,18 +93,8 @@ export module TektiteDate
             // console.log({ timer, result, });
             return result;
         };
-        public dateCoreStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            {
-                const date = new Date(tick);
-                return `${date.getFullYear()}-${("0" +(date.getMonth() +1)).substr(-2)}-${("0" +date.getDate()).substr(-2)}`;
-            }
-        };
+        private makeYYYYMMDD = (date: Date): string =>
+            `${date.getFullYear()}-${("0" +(date.getMonth() +1)).substr(-2)}-${("0" +date.getDate()).substr(-2)}`;
         public getTime = (tick: null | number): null | number =>
         {
             if (null === tick)
@@ -120,38 +121,11 @@ export module TektiteDate
                 return tick -this.getTicks(date);
             }
         };
-        public dateStringFromTick = (tick: null | number): string =>
+        private makeHHMM = (tick: number): string =>
         {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            {
-                return `${this.dateCoreStringFromTick(tick)} ${this.timeLongCoreStringFromTick(this.getTime(tick))}`;
-            }
-        };
-        public dateFullStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
-            {
-                return `${this.dateCoreStringFromTick(tick)} ${this.timeFullCoreStringFromTick(this.getTime(tick))}`;
-            }
-        };
-        public timeShortCoreStringFromTick = (tick: null | number): string =>
-        {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
             if (tick < 0)
             {
-                return `-${this.timeShortCoreStringFromTick(-tick)}`;
+                return `-${this.makeHHMM(-tick)}`;
             }
             else
             {
@@ -160,16 +134,11 @@ export module TektiteDate
                 return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}`;
             }
         };
-        public timeLongCoreStringFromTick = (tick: null | number): string =>
+        private makeHHMMSS = (tick: number): string =>
         {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
             if (tick < 0)
             {
-                return `-${this.timeLongCoreStringFromTick(-tick)}`;
+                return `-${this.makeHHMMSS(-tick)}`;
             }
             else
             {
@@ -179,16 +148,11 @@ export module TektiteDate
                 return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}`;
             }
         };
-        public timeFullCoreStringFromTick = (tick: null | number): string =>
+        private makeHHMMSSmmm = (tick: number): string =>
         {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
             if (tick < 0)
             {
-                return `-${this.timeFullCoreStringFromTick(-tick)}`;
+                return `-${this.makeHHMMSSmmm(-tick)}`;
             }
             else
             {
@@ -199,53 +163,43 @@ export module TektiteDate
                 return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}.${("000" +milliseconds).slice(-3)}`;
             }
         };
-        public timeShortStringFromTick = (tick: null | number): string =>
+        private makeShortTimeText = (tick: number): string =>
         {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
             if (tick < 0)
             {
-                return `-${this.timeShortStringFromTick(-tick)}`;
+                return `-${this.makeShortTimeText(-tick)}`;
             }
             else
             {
                 // if (tick < 60 *1000)
                 // {
-                //     return timeFullCoreStringFromTick(tick);
+                //     return makeHHMMSSmmm(tick);
                 // }
                 if (tick < 60 *60 *1000)
                 {
-                    return this.timeLongCoreStringFromTick(tick);
+                    return this.makeHHMMSS(tick);
                 }
                 const days = Math.floor(tick / (24 *60 *60 *1000));
                 if (days < 1)
                 {
-                    return this.timeLongCoreStringFromTick(tick);
+                    return this.makeHHMMSS(tick);
                 }
-                return `${days.toLocaleString()} ${this.tektite.locale.map("days")} ${this.timeLongCoreStringFromTick(tick)}`;
+                return `${days.toLocaleString()} ${this.tektite.locale.map("days")} ${this.makeHHMMSS(tick)}`;
             }
         };
     
-        private makeSmartTimeText = (tick: null | number): string =>
+        private makeLongTimeText = (tick: number): string =>
         {
-            if (null === tick)
-            {
-                return "N/A";
-            }
-            else
             if (tick < 0)
             {
-                return `-${this.makeSmartTimeText(-tick)}`;
+                return `-${this.makeLongTimeText(-tick)}`;
             }
             else
             {
                 const days = Math.floor(tick / (24 *60 *60 *1000));
                 return 0 < days ?
-                    `${days.toLocaleString()} ${this.tektite.locale.map("days")} ${10 < days ? this.timeShortCoreStringFromTick(tick): this.timeLongCoreStringFromTick(tick)}`:
-                    this.timeFullCoreStringFromTick(tick);
+                    `${days.toLocaleString()} ${this.tektite.locale.map("days")} ${10 < days ? this.makeHHMM(tick): this.makeHHMMSS(tick)}`:
+                    this.makeHHMMSSmmm(tick);
             }
         };
         public parseDate = (date: string | null): Date | null =>
@@ -278,11 +232,11 @@ export module TektiteDate
             }
             return null;
         };
-        public format = (format :DateFormatType, date: Date | number | null) =>
+        public format = (format :DateFormatType, date: Date | number | string | null) =>
         {
             if (null === date)
             {
-                return null;
+                return "N/A";
             }
             else
             {
@@ -290,9 +244,30 @@ export module TektiteDate
                 {
                 case "formal-time":
                     return this.makeFormalTimeText(this.getTicks(date));
-                case "smart-time":
-                    return this.makeSmartTimeText(this.getTicks(date));
+                case "long-time":
+                    return this.makeLongTimeText(this.getTicks(date));
+                case "short-time":
+                    return this.makeShortTimeText(this.getTicks(date));
+                case "HH:MM:SS.mmm":
+                    return this.makeHHMMSSmmm(this.getTicks(date));
+                case "HH:MM:SS":
+                    return this.makeHHMMSS(this.getTicks(date));
+                case "HH:MM":
+                    return this.makeHHMM(this.getTicks(date));
+                case "www":
+                    return this.weekday(this.getTicks(date));
+                case "YYYY-MM-DD":
+                    return this.makeYYYYMMDD(this.getDate(date));
+                case "YYYY-MM-DD www":
+                    return `${this.format("YYYY-MM-DD", date)} ${this.format("www", date)}`;
+                case "YYYY-MM-DD HH:MM:SS.mmm":
+                    return `${this.format("YYYY-MM-DD", date)} ${this.format("HH:MM:SS.mmm", date)}`;
+                case "YYYY-MM-DD HH:MM:SS":
+                    return `${this.format("YYYY-MM-DD", date)} ${this.format("HH:MM:SS", date)}`;
+                case "YYYY-MM-DD HH:MM":
+                    return `${this.format("YYYY-MM-DD", date)} ${this.format("HH:MM", date)}`;
                 }
+                console.error(`tektite-date:unknown-date-format: ${JSON.stringify(format)}`);
                 return `${date}`;
             }
         };

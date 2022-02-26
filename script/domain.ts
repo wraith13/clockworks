@@ -41,8 +41,8 @@ export module Domain
         FloorHour.setMilliseconds(0);
         return FloorHour.getTime() +(60 *60 *1000);
     };
-    export const weekday = (tick: number) =>
-        new Intl.DateTimeFormat(tektite.locale.get(), { weekday: 'long'}).format(tick);
+    // export const weekday = (tick: number) =>
+    //     new Intl.DateTimeFormat(tektite.locale.get(), { weekday: 'long'}).format(tick);
     const timezoneOffsetSignString = (offset: number): string => 0 === offset ? "±": (0 < offset ? "-": "+"); // ※ JavaScript 上のタイムゾーンオフセットとUTC表記は + / - が逆転する
     const timezoneOffsetTimeString = (offset: number): string =>
     {

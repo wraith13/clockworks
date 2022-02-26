@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Sat Feb 26 2022 15:43:55 GMT+0900 (日本標準時)
+    build at: Sun Feb 27 2022 05:29:16 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -6787,11 +6787,15 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                 this.tektite = tektite;
                 this.getDate = function (date) {
                     if (date === void 0) { date = new Date(); }
-                    return "number" === typeof date ? new Date(date) : date;
+                    return "number" === typeof date ? new Date(date) :
+                        "string" === typeof date ? _this.parseDate(date) :
+                            date;
                 };
                 this.getTicks = function (date) {
                     if (date === void 0) { date = new Date(); }
-                    return "number" === typeof date ? date : date.getTime();
+                    return "number" === typeof date ? date :
+                        "string" === typeof date ? _this.parseDate(date).getTime() :
+                            date.getTime();
                 };
                 this.utcOffsetRate = 60 * 1000;
                 this.getUTCTicks = function (date) {
@@ -6854,14 +6858,8 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                     // console.log({ timer, result, });
                     return result;
                 };
-                this.dateCoreStringFromTick = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else {
-                        var date = new Date(tick);
-                        return "".concat(date.getFullYear(), "-").concat(("0" + (date.getMonth() + 1)).substr(-2), "-").concat(("0" + date.getDate()).substr(-2));
-                    }
+                this.makeYYYYMMDD = function (date) {
+                    return "".concat(date.getFullYear(), "-").concat(("0" + (date.getMonth() + 1)).substr(-2), "-").concat(("0" + date.getDate()).substr(-2));
                 };
                 this.getTime = function (tick) {
                     if (null === tick) {
@@ -6882,28 +6880,9 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                         return tick - _this.getTicks(date);
                     }
                 };
-                this.dateStringFromTick = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else {
-                        return "".concat(_this.dateCoreStringFromTick(tick), " ").concat(_this.timeLongCoreStringFromTick(_this.getTime(tick)));
-                    }
-                };
-                this.dateFullStringFromTick = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else {
-                        return "".concat(_this.dateCoreStringFromTick(tick), " ").concat(_this.timeFullCoreStringFromTick(_this.getTime(tick)));
-                    }
-                };
-                this.timeShortCoreStringFromTick = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else if (tick < 0) {
-                        return "-".concat(_this.timeShortCoreStringFromTick(-tick));
+                this.makeHHMM = function (tick) {
+                    if (tick < 0) {
+                        return "-".concat(_this.makeHHMM(-tick));
                     }
                     else {
                         var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
@@ -6911,12 +6890,9 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                         return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2));
                     }
                 };
-                this.timeLongCoreStringFromTick = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else if (tick < 0) {
-                        return "-".concat(_this.timeLongCoreStringFromTick(-tick));
+                this.makeHHMMSS = function (tick) {
+                    if (tick < 0) {
+                        return "-".concat(_this.makeHHMMSS(-tick));
                     }
                     else {
                         var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
@@ -6925,12 +6901,9 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                         return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2), ":").concat(("00" + second).slice(-2));
                     }
                 };
-                this.timeFullCoreStringFromTick = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else if (tick < 0) {
-                        return "-".concat(_this.timeFullCoreStringFromTick(-tick));
+                this.makeHHMMSSmmm = function (tick) {
+                    if (tick < 0) {
+                        return "-".concat(_this.makeHHMMSSmmm(-tick));
                     }
                     else {
                         var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
@@ -6940,40 +6913,34 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                         return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2), ":").concat(("00" + second).slice(-2), ".").concat(("000" + milliseconds).slice(-3));
                     }
                 };
-                this.timeShortStringFromTick = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else if (tick < 0) {
-                        return "-".concat(_this.timeShortStringFromTick(-tick));
+                this.makeShortTimeText = function (tick) {
+                    if (tick < 0) {
+                        return "-".concat(_this.makeShortTimeText(-tick));
                     }
                     else {
                         // if (tick < 60 *1000)
                         // {
-                        //     return timeFullCoreStringFromTick(tick);
+                        //     return makeHHMMSSmmm(tick);
                         // }
                         if (tick < 60 * 60 * 1000) {
-                            return _this.timeLongCoreStringFromTick(tick);
+                            return _this.makeHHMMSS(tick);
                         }
                         var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                         if (days < 1) {
-                            return _this.timeLongCoreStringFromTick(tick);
+                            return _this.makeHHMMSS(tick);
                         }
-                        return "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(_this.timeLongCoreStringFromTick(tick));
+                        return "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(_this.makeHHMMSS(tick));
                     }
                 };
-                this.makeSmartTimeText = function (tick) {
-                    if (null === tick) {
-                        return "N/A";
-                    }
-                    else if (tick < 0) {
-                        return "-".concat(_this.makeSmartTimeText(-tick));
+                this.makeLongTimeText = function (tick) {
+                    if (tick < 0) {
+                        return "-".concat(_this.makeLongTimeText(-tick));
                     }
                     else {
                         var days = Math.floor(tick / (24 * 60 * 60 * 1000));
                         return 0 < days ?
-                            "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(10 < days ? _this.timeShortCoreStringFromTick(tick) : _this.timeLongCoreStringFromTick(tick)) :
-                            _this.timeFullCoreStringFromTick(tick);
+                            "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(10 < days ? _this.makeHHMM(tick) : _this.makeHHMMSS(tick)) :
+                            _this.makeHHMMSSmmm(tick);
                     }
                 };
                 this.parseDate = function (date) {
@@ -7000,15 +6967,36 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                 };
                 this.format = function (format, date) {
                     if (null === date) {
-                        return null;
+                        return "N/A";
                     }
                     else {
                         switch (format) {
                             case "formal-time":
                                 return _this.makeFormalTimeText(_this.getTicks(date));
-                            case "smart-time":
-                                return _this.makeSmartTimeText(_this.getTicks(date));
+                            case "long-time":
+                                return _this.makeLongTimeText(_this.getTicks(date));
+                            case "short-time":
+                                return _this.makeShortTimeText(_this.getTicks(date));
+                            case "HH:MM:SS.mmm":
+                                return _this.makeHHMMSSmmm(_this.getTicks(date));
+                            case "HH:MM:SS":
+                                return _this.makeHHMMSS(_this.getTicks(date));
+                            case "HH:MM":
+                                return _this.makeHHMM(_this.getTicks(date));
+                            case "www":
+                                return _this.weekday(_this.getTicks(date));
+                            case "YYYY-MM-DD":
+                                return _this.makeYYYYMMDD(_this.getDate(date));
+                            case "YYYY-MM-DD www":
+                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("www", date));
+                            case "YYYY-MM-DD HH:MM:SS.mmm":
+                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("HH:MM:SS.mmm", date));
+                            case "YYYY-MM-DD HH:MM:SS":
+                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("HH:MM:SS", date));
+                            case "YYYY-MM-DD HH:MM":
+                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("HH:MM", date));
                         }
+                        console.error("tektite-date:unknown-date-format: ".concat(JSON.stringify(format)));
                         return "".concat(date);
                     }
                 };
@@ -9795,9 +9783,8 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
             FloorHour.setMilliseconds(0);
             return FloorHour.getTime() + (60 * 60 * 1000);
         };
-        Domain.weekday = function (tick) {
-            return new Intl.DateTimeFormat(_1.tektite.locale.get(), { weekday: 'long' }).format(tick);
-        };
+        // export const weekday = (tick: number) =>
+        //     new Intl.DateTimeFormat(tektite.locale.get(), { weekday: 'long'}).format(tick);
         var timezoneOffsetSignString = function (offset) { return 0 === offset ? "±" : (0 < offset ? "-" : "+"); }; // ※ JavaScript 上のタイムゾーンオフセットとUTC表記は + / - が逆転する
         var timezoneOffsetTimeString = function (offset) {
             if (offset < 0) {
@@ -10734,8 +10721,8 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                 Render.$div("tektite-item-panel")([
                                     Render.$div("item-panel-body")([
                                         tektite_index_8.Tektite.monospace("item-utc-offset", domain_5.Domain.timezoneOffsetString(item.offset)),
-                                        tektite_index_8.Tektite.monospace("item-date", __7.tektite.date.dateCoreStringFromTick(domain_5.Domain.getUTCTicks() - item.offset)),
-                                        tektite_index_8.Tektite.monospace("item-time", __7.tektite.date.timeFullCoreStringFromTick(__7.tektite.date.getTime(domain_5.Domain.getUTCTicks() - item.offset))),
+                                        tektite_index_8.Tektite.monospace("item-date", __7.tektite.date.format("YYYY-MM-DD", domain_5.Domain.getUTCTicks() - item.offset)),
+                                        tektite_index_8.Tektite.monospace("item-time", __7.tektite.date.format("HH:MM:SS.mmm", __7.tektite.date.getTime(domain_5.Domain.getUTCTicks() - item.offset))),
                                     ]),
                                     Render.$div("item-time-bar")([]),
                                 ])
@@ -10871,10 +10858,10 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     Render.$span("value")(item.title),
                                 ]) :
                                 [],
-                            tektite_index_8.Tektite.monospace("current-date", __7.tektite.date.dateCoreStringFromTick(null !== item ?
+                            tektite_index_8.Tektite.monospace("current-date", __7.tektite.date.format("YYYY-MM-DD", null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks())),
-                            tektite_index_8.Tektite.monospace("capital-time", __7.tektite.date.timeFullCoreStringFromTick(__7.tektite.date.getTime(null !== item ?
+                            tektite_index_8.Tektite.monospace("capital-time", __7.tektite.date.format("HH:MM:SS.mmm", __7.tektite.date.getTime(null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks()))),
                             null !== item ?
@@ -11013,7 +11000,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                         }
                                         return [3 /*break*/, 10];
                                     case 1:
-                                        capitalTime = __7.tektite.date.timeLongCoreStringFromTick(__7.tektite.date.getTime(tick));
+                                        capitalTime = __7.tektite.date.format("HH:MM:SS", __7.tektite.date.getTime(tick));
                                         capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0];
                                         if (minamo_js_8.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate) {
                                             __7.tektite.setTitle(capitalTime + " - " + applicationTitle);
@@ -11043,14 +11030,14 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                                     minamo_js_8.minamo.dom.setStyleProperty(timeBar, "backgroundColor", nextColor);
                                                     var percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                                                     minamo_js_8.minamo.dom.setStyleProperty(timeBar, "width", percentString);
-                                                    minamo_js_8.minamo.dom.setProperty(minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", __7.tektite.date.dateCoreStringFromTick(currentTick) + " " + domain_5.Domain.weekday(currentTick));
-                                                    minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = __7.tektite.date.timeLongCoreStringFromTick(__7.tektite.date.getTime(currentTick));
+                                                    minamo_js_8.minamo.dom.setProperty(minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", __7.tektite.date.format("YYYY-MM-DD www", currentTick));
+                                                    minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = __7.tektite.date.format("HH:MM:SS", __7.tektite.date.getTime(currentTick));
                                                 });
                                             }
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
-                                        dateString = __7.tektite.date.dateCoreStringFromTick(tick) + " " + domain_5.Domain.weekday(tick);
+                                        dateString = __7.tektite.date.format("YYYY-MM-DD www", tick);
                                         currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0];
                                         minamo_js_8.minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                                         getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_9.Storage.RainbowClock.colorPattern.get()];
@@ -11138,7 +11125,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         case 0:
                                             _b = (_a = __8.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), tektite_index_9.Tektite.monospace(__8.tektite.date.dateStringFromTick(i.end))], domain_6.Domain.makePageParams("CountdownTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), tektite_index_9.Tektite.monospace(__8.tektite.date.format("YYYY-MM-DD HH:MM:SS", i.end))], domain_6.Domain.makePageParams("CountdownTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -11184,8 +11171,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             ]])
                                     ])]),
                                 Render.$div("tektite-item-information")([
-                                    tektite_index_9.Tektite.monospace("alarm-due-timestamp", Render.label("Due timestamp"), __8.tektite.date.dateFullStringFromTick(item.end)),
-                                    tektite_index_9.Tektite.monospace("alarm-due-rest", Render.label("Rest"), __8.tektite.date.format("smart-time", item.end - domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("alarm-due-timestamp", Render.label("Due timestamp"), __8.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", item.end)),
+                                    tektite_index_9.Tektite.monospace("alarm-due-rest", Render.label("Rest"), __8.tektite.date.format("long-time", item.end - domain_6.Domain.getTicks())),
                                 ])
                             ]])];
                 }
@@ -11288,8 +11275,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             ]])
                                     ])]),
                                 Render.$div("tektite-item-information")([
-                                    tektite_index_9.Tektite.monospace("event-timestamp", Render.label("Timestamp"), __8.tektite.date.dateFullStringFromTick(item.tick)),
-                                    tektite_index_9.Tektite.monospace("event-elapsed-time", Render.label("Elapsed time"), __8.tektite.date.format("smart-time", domain_6.Domain.getTicks() - item.tick)),
+                                    tektite_index_9.Tektite.monospace("event-timestamp", Render.label("Timestamp"), __8.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", item.tick)),
+                                    tektite_index_9.Tektite.monospace("event-elapsed-time", Render.label("Elapsed time"), __8.tektite.date.format("long-time", domain_6.Domain.getTicks() - item.tick)),
                                 ])
                             ]])];
                 }
@@ -11449,13 +11436,13 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                         inputDate = Render.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
-                            value: __8.tektite.date.dateCoreStringFromTick(tick),
+                            value: __8.tektite.date.format("YYYY-MM-DD", tick),
                             required: "",
                         });
                         inputTime = Render.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
-                            value: __8.tektite.date.timeShortCoreStringFromTick(__8.tektite.date.getTime(tick)),
+                            value: __8.tektite.date.format("HH:MM", __8.tektite.date.getTime(tick)),
                             required: "",
                         });
                         return [4 /*yield*/, __8.tektite.screen.prompt({
@@ -11530,15 +11517,15 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         [
                                             tektite_index_9.Tektite.monospace("current-title", Render.alarmTitle(item !== null && item !== void 0 ? item : alarms[0])),
                                             "timer" === (item !== null && item !== void 0 ? item : alarms[0]).type ?
-                                                tektite_index_9.Tektite.monospace("current-due-timestamp", __8.tektite.date.dateFullStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)) :
-                                                tektite_index_9.Tektite.monospace("current-due-timestamp", __8.tektite.date.dateStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)),
+                                                tektite_index_9.Tektite.monospace("current-due-timestamp", __8.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", (item !== null && item !== void 0 ? item : alarms[0]).end)) :
+                                                tektite_index_9.Tektite.monospace("current-due-timestamp", __8.tektite.date.format("YYYY-MM-DD HH:MM:SS", (item !== null && item !== void 0 ? item : alarms[0]).end)),
                                         ] : [],
-                                    tektite_index_9.Tektite.monospace("capital-interval", __8.tektite.date.format("smart-time", 0)),
-                                    tektite_index_9.Tektite.monospace("current-timestamp", __8.tektite.date.dateStringFromTick(domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("capital-interval", __8.tektite.date.format("long-time", 0)),
+                                    tektite_index_9.Tektite.monospace("current-timestamp", __8.tektite.date.format("YYYY-MM-DD HH:MM:SS", domain_6.Domain.getTicks())),
                                 ]) :
                                 Render.$div("current-item")([
-                                    tektite_index_9.Tektite.monospace("capital-interval", __8.tektite.date.format("smart-time", 0)),
-                                    tektite_index_9.Tektite.monospace("current-timestamp", __8.tektite.date.dateStringFromTick(domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("capital-interval", __8.tektite.date.format("long-time", 0)),
+                                    tektite_index_9.Tektite.monospace("current-timestamp", __8.tektite.date.format("YYYY-MM-DD HH:MM:SS", domain_6.Domain.getTicks())),
                                 ])];
                         _c = (_b = render_6.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_6.Render.screenHeaderFlashSegment(storage_10.Storage.CountdownTimer.recentlyFlashInterval.add, domain_6.Domain.getFlashIntervalPreset()
@@ -11726,8 +11713,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         return [3 /*break*/, 10];
                                     case 1:
                                         screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText =
-                                            __8.tektite.date.format("smart-time", current ? Math.max(current.end - tick, 0) : 0);
-                                        capitalTime = __8.tektite.date.dateStringFromTick(tick);
+                                            __8.tektite.date.format("long-time", current ? Math.max(current.end - tick, 0) : 0);
+                                        capitalTime = __8.tektite.date.format("YYYY-MM-DD HH:MM:SS", tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                         minamo_js_9.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         flashInterval = storage_10.Storage.CountdownTimer.flashInterval.get();
@@ -11762,13 +11749,13 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
-                                        __8.tektite.setTitle(current ? __8.tektite.date.timeShortStringFromTick(Math.max(current.end - tick, 0)) + " - " + applicationTitle : applicationTitle);
+                                        __8.tektite.setTitle(current ? __8.tektite.date.format("short-time", Math.max(current.end - tick, 0)) + " - " + applicationTitle : applicationTitle);
                                         alarmListDiv = minamo_js_9.minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
                                         if (alarmListDiv) {
                                             minamo_js_9.minamo.dom.getChildNodes(alarmListDiv)
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText =
-                                                    __8.tektite.date.timeShortStringFromTick(Math.max(alarms[index].end - tick, 0));
+                                                    __8.tektite.date.format("short-time", Math.max(alarms[index].end - tick, 0));
                                             });
                                         }
                                         if (0 < flashInterval && 0 < alarms.length) {
@@ -11849,7 +11836,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                     case 0:
                         _a = {
                             icon: "tektite-tick-icon",
-                            title: __9.tektite.date.dateFullStringFromTick(item)
+                            title: __9.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", item)
                         };
                         return [4 /*yield*/, Promise.all(ticks
                                 .concat([item])
@@ -11862,7 +11849,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadIconOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_10.Tektite.monospace(__9.tektite.date.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_10.Tektite.monospace(__9.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
                                     }
                                 });
@@ -11905,8 +11892,8 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                             ]])
                                     ])]),
                                 tektite_index_10.Tektite.$div("tektite-item-information")([
-                                    tektite_index_10.Tektite.monospace("tick-timestamp", Render.label("Timestamp"), __9.tektite.date.dateFullStringFromTick(tick)),
-                                    tektite_index_10.Tektite.monospace("tick-interval", Render.label("Interval"), __9.tektite.date.format("smart-time", interval)),
+                                    tektite_index_10.Tektite.monospace("tick-timestamp", Render.label("Timestamp"), __9.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", tick)),
+                                    tektite_index_10.Tektite.monospace("tick-interval", Render.label("Interval"), __9.tektite.date.format("long-time", interval)),
                                 ])
                             ]])];
                 }
@@ -11995,12 +11982,12 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                         _g = {};
                         _a = [tektite_index_10.Tektite.$div("current-item")([
                                 tektite_index_10.Tektite.monospace("previous-timestamp", null !== item ?
-                                    __9.tektite.date.dateFullStringFromTick(item) :
+                                    __9.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", item) :
                                     (0 < ticks.length ?
-                                        __9.tektite.date.dateFullStringFromTick(ticks[0]) :
+                                        __9.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", ticks[0]) :
                                         "")),
-                                tektite_index_10.Tektite.monospace("capital-interval", __9.tektite.date.format("smart-time", 0)),
-                                tektite_index_10.Tektite.monospace("current-timestamp", __9.tektite.date.dateFullStringFromTick(domain_7.Domain.getTicks())),
+                                tektite_index_10.Tektite.monospace("capital-interval", __9.tektite.date.format("long-time", 0)),
+                                tektite_index_10.Tektite.monospace("current-timestamp", __9.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", domain_7.Domain.getTicks())),
                             ])];
                         _c = (_b = render_7.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_7.Render.screenHeaderFlashSegment(storage_11.Storage.NeverStopwatch.recentlyFlashInterval.add, domain_7.Domain.getFlashIntervalPreset()
@@ -12133,8 +12120,8 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         }
                                         return [3 /*break*/, 9];
                                     case 1:
-                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = __9.tektite.date.format("smart-time", tick - (current !== null && current !== void 0 ? current : tick));
-                                        capitalTime = __9.tektite.date.dateStringFromTick(tick);
+                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = __9.tektite.date.format("long-time", tick - (current !== null && current !== void 0 ? current : tick));
+                                        capitalTime = __9.tektite.date.format("YYYY-MM-DD HH:MM:SS", tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                         minamo_js_10.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         if (0 < flashInterval && null !== current) {
@@ -12159,12 +12146,12 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         }
                                         return [3 /*break*/, 9];
                                     case 2:
-                                        __9.tektite.setTitle(__9.tektite.date.timeShortStringFromTick(tick - (current !== null && current !== void 0 ? current : tick)) + " - " + applicationTitle);
+                                        __9.tektite.setTitle(__9.tektite.date.format("short-time", tick - (current !== null && current !== void 0 ? current : tick)) + " - " + applicationTitle);
                                         stampListDiv = minamo_js_10.minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
                                         if (stampListDiv) {
                                             minamo_js_10.minamo.dom.getChildNodes(stampListDiv)
                                                 .forEach(function (dom, index) {
-                                                dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = __9.tektite.date.timeShortStringFromTick(domain_7.Domain.getTicks() - ticks[index]);
+                                                dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = __9.tektite.date.format("short-time", domain_7.Domain.getTicks() - ticks[index]);
                                             });
                                         }
                                         if (0 < flashInterval && 0 < ticks.length) {
@@ -12255,7 +12242,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         case 0:
                                             _b = (_a = __10.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_4.Resource.loadIconOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_11.Tektite.$labelSpan(i.title), tektite_index_11.Tektite.monospace(__10.tektite.date.dateStringFromTick(i.tick))], domain_8.Domain.makePageParams("ElapsedTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_11.Tektite.$labelSpan(i.title), tektite_index_11.Tektite.monospace(__10.tektite.date.format("YYYY-MM-DD HH:MM:SS", i.tick))], domain_8.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -12315,14 +12302,14 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                     (item !== null && item !== void 0 ? item : events[0]) ?
                                         [
                                             tektite_index_11.Tektite.monospace("current-title", (item !== null && item !== void 0 ? item : events[0]).title),
-                                            tektite_index_11.Tektite.monospace("current-due-timestamp", __10.tektite.date.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
+                                            tektite_index_11.Tektite.monospace("current-due-timestamp", __10.tektite.date.format("YYYY-MM-DD HH:MM:SS", (item !== null && item !== void 0 ? item : events[0]).tick)),
                                         ] : [],
-                                    tektite_index_11.Tektite.monospace("capital-interval", __10.tektite.date.format("smart-time", 0)),
-                                    tektite_index_11.Tektite.monospace("current-timestamp", __10.tektite.date.dateStringFromTick(domain_8.Domain.getTicks())),
+                                    tektite_index_11.Tektite.monospace("capital-interval", __10.tektite.date.format("long-time", 0)),
+                                    tektite_index_11.Tektite.monospace("current-timestamp", __10.tektite.date.format("YYYY-MM-DD HH:MM:SS", domain_8.Domain.getTicks())),
                                 ]) :
                                 tektite_index_11.Tektite.$div("current-item")([
-                                    tektite_index_11.Tektite.monospace("capital-interval", __10.tektite.date.format("smart-time", 0)),
-                                    tektite_index_11.Tektite.monospace("current-timestamp", __10.tektite.date.dateStringFromTick(domain_8.Domain.getTicks())),
+                                    tektite_index_11.Tektite.monospace("capital-interval", __10.tektite.date.format("long-time", 0)),
+                                    tektite_index_11.Tektite.monospace("current-timestamp", __10.tektite.date.format("YYYY-MM-DD HH:MM:SS", domain_8.Domain.getTicks())),
                                 ])];
                         _c = (_b = render_8.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_8.Render.screenHeaderFlashSegment(storage_12.Storage.ElapsedTimer.recentlyFlashInterval.add, domain_8.Domain.getFlashIntervalPreset()
@@ -12471,8 +12458,8 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         }
                                         return [3 /*break*/, 10];
                                     case 1:
-                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = __10.tektite.date.format("smart-time", tick - ((_e = current === null || current === void 0 ? void 0 : current.tick) !== null && _e !== void 0 ? _e : tick));
-                                        capitalTime = __10.tektite.date.dateStringFromTick(tick);
+                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = __10.tektite.date.format("long-time", tick - ((_e = current === null || current === void 0 ? void 0 : current.tick) !== null && _e !== void 0 ? _e : tick));
+                                        capitalTime = __10.tektite.date.format("YYYY-MM-DD HH:MM:SS", tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                         minamo_js_11.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         if (0 < flashInterval && null !== current) {
@@ -12497,13 +12484,13 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
-                                        __10.tektite.setTitle(__10.tektite.date.timeShortStringFromTick(tick - ((_f = current === null || current === void 0 ? void 0 : current.tick) !== null && _f !== void 0 ? _f : tick)) + " - " + applicationTitle);
+                                        __10.tektite.setTitle(__10.tektite.date.format("short-time", tick - ((_f = current === null || current === void 0 ? void 0 : current.tick) !== null && _f !== void 0 ? _f : tick)) + " - " + applicationTitle);
                                         eventListDiv = minamo_js_11.minamo.dom.getDivsByClassName(screen, "event-list")[0];
                                         if (eventListDiv) {
                                             minamo_js_11.minamo.dom.getChildNodes(eventListDiv)
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("event-elapsed-time")[0].getElementsByClassName("value")[0].innerText =
-                                                    __10.tektite.date.timeShortStringFromTick(tick - events[index].tick);
+                                                    __10.tektite.date.format("short-time", tick - events[index].tick);
                                             });
                                         }
                                         if (0 < flashInterval && 0 < events.length) {
@@ -12989,7 +12976,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                             inputTime = tektite_index_12.Tektite.$make(HTMLInputElement)({
                                 tag: "input",
                                 type: "time",
-                                value: __11.tektite.date.timeLongCoreStringFromTick(tick),
+                                value: __11.tektite.date.format("HH:MM:SS", tick),
                                 required: "",
                             });
                             return [4 /*yield*/, __11.tektite.screen.prompt({
@@ -13010,13 +12997,13 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         inputDate = tektite_index_12.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
-                            value: __11.tektite.date.dateCoreStringFromTick(tick),
+                            value: __11.tektite.date.format("YYYY-MM-DD", tick),
                             required: "",
                         });
                         inputTime = tektite_index_12.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
-                            value: __11.tektite.date.timeShortCoreStringFromTick(__11.tektite.date.getTime(tick)),
+                            value: __11.tektite.date.format("HH:MM", __11.tektite.date.getTime(tick)),
                             required: "",
                         });
                         return [4 /*yield*/, __11.tektite.screen.prompt({
@@ -13899,7 +13886,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                         _c.sent();
                         if ("reload" === ((_b = (_a = performance.getEntriesByType("navigation")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.type)) {
                             exports.tektite.screen.toast.make({
-                                content: tektite_index_13.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.dateStringFromTick(params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick), " \u524D )")),
+                                content: tektite_index_13.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick), " \u524D )")),
                                 isWideContent: true,
                             });
                         }
@@ -13929,7 +13916,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645857835868), buildTimestampTick: 1645857835868, })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645907356521), buildTimestampTick: 1645907356521, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

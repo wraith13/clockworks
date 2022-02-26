@@ -288,7 +288,7 @@ export module Render
         ({
             tag: "input",
             type: "time",
-            value: tektite.date.timeLongCoreStringFromTick(tick),
+            value: tektite.date.format("HH:MM:SS", tick),
             required: "",
         });
         return await tektite.screen.prompt
@@ -304,14 +304,14 @@ export module Render
         ({
             tag: "input",
             type: "date",
-            value: tektite.date.dateCoreStringFromTick(tick),
+            value: tektite.date.format("YYYY-MM-DD", tick),
             required: "",
         });
         const inputTime = Tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
-            value: tektite.date.timeShortCoreStringFromTick(tektite.date.getTime(tick)),
+            value: tektite.date.format("HH:MM", tektite.date.getTime(tick)),
             required: "",
         });
         return await tektite.screen.prompt
