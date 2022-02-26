@@ -26,7 +26,7 @@ export module Clockworks
     export const start = async (params:{ buildTimestamp: string, buildTimestampTick:number, }) =>
     {
         console.log(`start timestamp: ${new Date()}`);
-        console.log(`buildTimestamp: ${params.buildTimestamp}`);
+        console.log(`buildTimestamp: ${params.buildTimestamp} ( ${tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick)} 前 )`);
         console.log(`${JSON.stringify(params)}`);
         tektite.locale.setLocale(Storage.Settings.get().locale);
         tektite.onLoad();
@@ -38,7 +38,7 @@ export module Clockworks
         {
             tektite.screen.toast.make
             ({
-                content: Tektite.$span("")(`ビルドタイムスタンプ: ${Domain.dateStringFromTick(params.buildTimestampTick)} ( ${Domain.makeTimerLabel(new Date().getTime() - params.buildTimestampTick)} 前 )`),
+                content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.dateStringFromTick(params.buildTimestampTick)} ( ${tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick)} 前 )`),
                 isWideContent: true,
             });
         }

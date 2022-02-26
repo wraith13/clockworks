@@ -36,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadIconOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), Tektite.monospace(Domain.dateStringFromTick(i.end)), ],
+                        [ await Resource.loadIconOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), Tektite.monospace(tektite.date.dateStringFromTick(i.end)), ],
                         Domain.makePageParams("CountdownTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -44,7 +44,7 @@ export module Render
         )
     });
     export const alarmTitle = (item: Type.AlarmEntry) => "timer" === item.type ?
-        `${Domain.makeTimerLabel(item.end -item.start)} ${Clockworks.localeMap("Timer")}`:
+        `${tektite.date.format("formal-time", item.end -item.start)} ${Clockworks.localeMap("Timer")}`:
         item.title;
     export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item tektite-title-item tektite-flex-item")
     ([
@@ -67,8 +67,8 @@ export module Render
         ]),
         $div("tektite-item-information")
         ([
-            Tektite.monospace("alarm-due-timestamp", label("Due timestamp"), Domain.dateFullStringFromTick(item.end)),
-            Tektite.monospace("alarm-due-rest", label("Rest"), Domain.timeLongStringFromTick(item.end -Domain.getTicks())),
+            Tektite.monospace("alarm-due-timestamp", label("Due timestamp"), tektite.date.dateFullStringFromTick(item.end)),
+            Tektite.monospace("alarm-due-rest", label("Rest"), tektite.date.format("smart-time", item.end -Domain.getTicks())),
         ]),
     ]);
     export const alarmItemMenu = async (item: Type.AlarmEntry) =>
@@ -154,8 +154,8 @@ export module Render
         ]),
         $div("tektite-item-information")
         ([
-            Tektite.monospace("event-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(item.tick)),
-            Tektite.monospace("event-elapsed-time", label("Elapsed time"), Domain.timeLongStringFromTick(Domain.getTicks() - item.tick)),
+            Tektite.monospace("event-timestamp", label("Timestamp"), tektite.date.dateFullStringFromTick(item.tick)),
+            Tektite.monospace("event-elapsed-time", label("Elapsed time"), tektite.date.format("smart-time", Domain.getTicks() - item.tick)),
         ]),
     ]);
     export const eventItemMenu = async (item: Type.EventEntry) =>
@@ -218,7 +218,7 @@ export module Render
                                     children:
                                     [
                                         await Resource.loadIconOrCache("tektite-check-icon"),
-                                        $span("")(labelSpan(Domain.makeTimerLabel(i))),
+                                        $span("")(labelSpan(tektite.date.format("formal-time", i))),
                                     ],
                                     onclick: async () =>
                                     {
@@ -274,14 +274,14 @@ export module Render
         ({
             tag: "input",
             type: "date",
-            value: Domain.dateCoreStringFromTick(tick),
+            value: tektite.date.dateCoreStringFromTick(tick),
             required: "",
         });
         const inputTime = $make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
-            value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
+            value: tektite.date.timeShortCoreStringFromTick(tektite.date.getTime(tick)),
             required: "",
         });
         return await tektite.screen.prompt
@@ -296,7 +296,7 @@ export module Render
             onCommit: () =>
             ({
                 title: inputTitle.value,
-                tick: Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
+                tick: tektite.date.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
             }),
         });
     };
@@ -327,16 +327,16 @@ export module Render
                         [
                             Tektite.monospace("current-title", alarmTitle(item ?? alarms[0])),
                             "timer" === (item ?? alarms[0]).type ?
-                                Tektite.monospace("current-due-timestamp", Domain.dateFullStringFromTick((item ?? alarms[0]).end)):
-                                Tektite.monospace("current-due-timestamp", Domain.dateStringFromTick((item ?? alarms[0]).end)),
+                                Tektite.monospace("current-due-timestamp", tektite.date.dateFullStringFromTick((item ?? alarms[0]).end)):
+                                Tektite.monospace("current-due-timestamp", tektite.date.dateStringFromTick((item ?? alarms[0]).end)),
                         ]: [],
-                        Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                        Tektite.monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
+                        Tektite.monospace("capital-interval", tektite.date.format("smart-time", 0)),
+                        Tektite.monospace("current-timestamp", tektite.date.dateStringFromTick(Domain.getTicks())),
                     ]):
                     $div("current-item")
                     ([
-                        Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                        Tektite.monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
+                        Tektite.monospace("capital-interval", tektite.date.format("smart-time", 0)),
+                        Tektite.monospace("current-timestamp", tektite.date.dateStringFromTick(Domain.getTicks())),
                     ]),
                 await RenderBase.flashIntervalLabel
                 (
@@ -431,7 +431,7 @@ export module Render
                     ([
                         $tag("li")("")(label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                         $tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                        $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${Domain.makeTimerLabel(Domain.parseTimer(i))} ${Clockworks.localeMap("Timer")}`, }))]),
+                        $tag("li")("")([label("You can use links like these too:"), [ "1500ms", "90s", "3m", "1h", "1d" ].map(i => ({ tag: "a", style: "margin-inline-start:0.5em;", href: Domain.makeNewTimerUrl(i), children: `${tektite.date.format("formal-time", Domain.parseTimer(i))} ${Clockworks.localeMap("Timer")}`, }))]),
                     ])
                 ),
             ]
@@ -477,8 +477,8 @@ export module Render
             {
                 case "high-resolution-timer":
                     (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
-                        Domain.timeLongStringFromTick(current ? Math.max(current.end -tick, 0): 0);
-                    const capitalTime = Domain.dateStringFromTick(tick);
+                        tektite.date.format("smart-time", current ? Math.max(current.end -tick, 0): 0);
+                    const capitalTime = tektite.date.dateStringFromTick(tick);
                     const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                     const flashInterval = Storage.CountdownTimer.flashInterval.get();
@@ -518,7 +518,7 @@ export module Render
                     }
                     break;
                 case "timer":
-                    tektite.setTitle(current ? Domain.timeShortStringFromTick(Math.max(current.end -tick, 0)) +" - " +applicationTitle: applicationTitle);
+                    tektite.setTitle(current ? tektite.date.timeShortStringFromTick(Math.max(current.end -tick, 0)) +" - " +applicationTitle: applicationTitle);
                     const alarmListDiv = minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
                     if (alarmListDiv)
                     {
@@ -528,7 +528,7 @@ export module Render
                             (dom, index) =>
                             {
                                 (dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
-                                    Domain.timeShortStringFromTick(Math.max(alarms[index].end -tick, 0));
+                                    tektite.date.timeShortStringFromTick(Math.max(alarms[index].end -tick, 0));
                             }
                         );
                     }

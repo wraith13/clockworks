@@ -288,14 +288,14 @@ export module Render
         ({
             tag: "input",
             type: "time",
-            value: Domain.timeLongCoreStringFromTick(tick),
+            value: tektite.date.timeLongCoreStringFromTick(tick),
             required: "",
         });
         return await tektite.screen.prompt
         ({
             title: message,
             content: inputTime,
-            onCommit: () => Domain.parseTime(inputTime.value) ?? tick,
+            onCommit: () => tektite.date.parseTime(inputTime.value) ?? tick,
         });
     };
     export const dateTimeTickPrompt = async (message: string, tick: number): Promise<number | null> =>
@@ -304,14 +304,14 @@ export module Render
         ({
             tag: "input",
             type: "date",
-            value: Domain.dateCoreStringFromTick(tick),
+            value: tektite.date.dateCoreStringFromTick(tick),
             required: "",
         });
         const inputTime = Tektite.$make(HTMLInputElement)
         ({
             tag: "input",
             type: "time",
-            value: Domain.timeShortCoreStringFromTick(Domain.getTime(tick)),
+            value: tektite.date.timeShortCoreStringFromTick(tektite.date.getTime(tick)),
             required: "",
         });
         return await tektite.screen.prompt
@@ -322,7 +322,7 @@ export module Render
                 inputDate,
                 inputTime,
             ],
-            onCommit: () => Domain.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
+            onCommit: () => tektite.date.parseDate(`${inputDate.value}T${inputTime.value}`)?.getTime() ?? tick,
         });
     };
     export const sharePopup = async (title: string, url: string = location.href) =>
@@ -400,7 +400,7 @@ export module Render
                 (
                     [
                         await Resource.loadIconOrCache(0 === i ? zeroIcon: "tektite-flash-icon"),
-                        Tektite.$labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(i)}`),
+                        Tektite.$labelSpan(0 === i ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${tektite.date.format("formal-time", i)}`),
                     ],
                     async () =>
                     {
@@ -443,7 +443,7 @@ export module Render
     export const screenHeaderFlashSegment = async (adder: (i: number) => unknown, flashIntervalPreset: number[], flashInterval: number, setter: (i: number) => unknown, zeroIcon: Resource.KeyType = "tektite-sleep-icon", zeroLabel: Clockworks.LocaleKeyType = "No Flash"): Promise<HeaderSegmentSource> =>
     ({
         icon: 0 === flashInterval ? zeroIcon: "tektite-flash-icon",
-        title: 0 === flashInterval ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${Domain.makeTimerLabel(flashInterval)}`,
+        title: 0 === flashInterval ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${tektite.date.format("formal-time", flashInterval)}`,
         menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
     });
     export const fullscreenMenuItem = async () => tektite.fullscreen.enabled() ?

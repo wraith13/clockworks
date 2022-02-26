@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Fri Feb 25 2022 08:59:31 GMT+0900 (日本標準時)
+    build at: Sat Feb 26 2022 15:43:55 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -6775,6 +6775,252 @@ define("clockworks/tektite.js/script/tektite-locale", ["require", "exports"], fu
         };
     })(Locale = exports.Locale || (exports.Locale = {}));
 });
+define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TektiteDate = void 0;
+    var TektiteDate;
+    (function (TektiteDate_1) {
+        var TektiteDate = /** @class */ (function () {
+            function TektiteDate(tektite) {
+                var _this = this;
+                this.tektite = tektite;
+                this.getDate = function (date) {
+                    if (date === void 0) { date = new Date(); }
+                    return "number" === typeof date ? new Date(date) : date;
+                };
+                this.getTicks = function (date) {
+                    if (date === void 0) { date = new Date(); }
+                    return "number" === typeof date ? date : date.getTime();
+                };
+                this.utcOffsetRate = 60 * 1000;
+                this.getUTCTicks = function (date) {
+                    if (date === void 0) { date = new Date(); }
+                    return _this.getTicks(date) + (date.getTimezoneOffset() * _this.utcOffsetRate);
+                };
+                this.weekday = function (tick) {
+                    return new Intl.DateTimeFormat(_this.tektite.locale.get(), { weekday: 'long' }).format(tick);
+                };
+                this.makeFormalTimeText = function (timer) {
+                    if (timer < 0) {
+                        return "-".concat(_this.makeFormalTimeText(-timer));
+                    }
+                    var days = Math.floor(timer / (24 * 60 * 60 * 1000));
+                    var hours = Math.floor(timer / (60 * 60 * 1000)) % 24;
+                    var minutes = Math.floor(timer / (60 * 1000)) % 60;
+                    var seconds = Math.floor(timer / 1000) % 60;
+                    var milliseconds = Math.floor(timer) % 1000;
+                    var result = "";
+                    if ("" !== result || 0 < days) {
+                        if ("" === result) {
+                            result = "".concat(days, " ") + _this.tektite.locale.map("days");
+                        }
+                        else {
+                            result += " ".concat(days, " ") + _this.tektite.locale.map("days");
+                        }
+                    }
+                    if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
+                        if ("" === result) {
+                            result = "".concat(hours, " ") + _this.tektite.locale.map("hours");
+                        }
+                        else {
+                            result += " " + "0".concat(hours).substr(-2) + " " + _this.tektite.locale.map("hours");
+                        }
+                    }
+                    if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
+                        if ("" === result) {
+                            result = "".concat(minutes, " ") + _this.tektite.locale.map("minutes");
+                        }
+                        else {
+                            result += " " + "0".concat(minutes).substr(-2) + " " + _this.tektite.locale.map("minutes");
+                        }
+                    }
+                    if (0 < seconds || 0 < milliseconds) {
+                        var trail = "";
+                        if (0 < milliseconds) {
+                            trail = "." + "00".concat(milliseconds).substr(-3);
+                            trail = trail.replace(/0+$/, "");
+                        }
+                        if ("" === result) {
+                            result = "".concat(seconds).concat(trail, " ") + _this.tektite.locale.map("seconds");
+                        }
+                        else {
+                            result += " " + "0".concat(seconds).substr(-2) + trail + " " + _this.tektite.locale.map("seconds");
+                        }
+                    }
+                    if ("" === result) {
+                        result = "".concat(minutes, " ").concat(_this.tektite.locale.map("m(minutes)"));
+                    }
+                    // console.log({ timer, result, });
+                    return result;
+                };
+                this.dateCoreStringFromTick = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else {
+                        var date = new Date(tick);
+                        return "".concat(date.getFullYear(), "-").concat(("0" + (date.getMonth() + 1)).substr(-2), "-").concat(("0" + date.getDate()).substr(-2));
+                    }
+                };
+                this.getTime = function (tick) {
+                    if (null === tick) {
+                        return null;
+                    }
+                    else if (tick < 0) {
+                        return -_this.getTime(tick);
+                    }
+                    else if (tick < 24 * 60 * 60 * 1000) {
+                        return tick;
+                    }
+                    else {
+                        var date = new Date(tick);
+                        date.setHours(0);
+                        date.setMinutes(0);
+                        date.setSeconds(0);
+                        date.setMilliseconds(0);
+                        return tick - _this.getTicks(date);
+                    }
+                };
+                this.dateStringFromTick = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else {
+                        return "".concat(_this.dateCoreStringFromTick(tick), " ").concat(_this.timeLongCoreStringFromTick(_this.getTime(tick)));
+                    }
+                };
+                this.dateFullStringFromTick = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else {
+                        return "".concat(_this.dateCoreStringFromTick(tick), " ").concat(_this.timeFullCoreStringFromTick(_this.getTime(tick)));
+                    }
+                };
+                this.timeShortCoreStringFromTick = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else if (tick < 0) {
+                        return "-".concat(_this.timeShortCoreStringFromTick(-tick));
+                    }
+                    else {
+                        var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
+                        var minute = Math.floor(tick / (60 * 1000)) % 60;
+                        return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2));
+                    }
+                };
+                this.timeLongCoreStringFromTick = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else if (tick < 0) {
+                        return "-".concat(_this.timeLongCoreStringFromTick(-tick));
+                    }
+                    else {
+                        var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
+                        var minute = Math.floor(tick / (60 * 1000)) % 60;
+                        var second = Math.floor(tick / (1000)) % 60;
+                        return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2), ":").concat(("00" + second).slice(-2));
+                    }
+                };
+                this.timeFullCoreStringFromTick = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else if (tick < 0) {
+                        return "-".concat(_this.timeFullCoreStringFromTick(-tick));
+                    }
+                    else {
+                        var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
+                        var minute = Math.floor(tick / (60 * 1000)) % 60;
+                        var second = Math.floor(tick / (1000)) % 60;
+                        var milliseconds = tick % 1000;
+                        return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2), ":").concat(("00" + second).slice(-2), ".").concat(("000" + milliseconds).slice(-3));
+                    }
+                };
+                this.timeShortStringFromTick = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else if (tick < 0) {
+                        return "-".concat(_this.timeShortStringFromTick(-tick));
+                    }
+                    else {
+                        // if (tick < 60 *1000)
+                        // {
+                        //     return timeFullCoreStringFromTick(tick);
+                        // }
+                        if (tick < 60 * 60 * 1000) {
+                            return _this.timeLongCoreStringFromTick(tick);
+                        }
+                        var days = Math.floor(tick / (24 * 60 * 60 * 1000));
+                        if (days < 1) {
+                            return _this.timeLongCoreStringFromTick(tick);
+                        }
+                        return "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(_this.timeLongCoreStringFromTick(tick));
+                    }
+                };
+                this.makeSmartTimeText = function (tick) {
+                    if (null === tick) {
+                        return "N/A";
+                    }
+                    else if (tick < 0) {
+                        return "-".concat(_this.makeSmartTimeText(-tick));
+                    }
+                    else {
+                        var days = Math.floor(tick / (24 * 60 * 60 * 1000));
+                        return 0 < days ?
+                            "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(10 < days ? _this.timeShortCoreStringFromTick(tick) : _this.timeLongCoreStringFromTick(tick)) :
+                            _this.timeFullCoreStringFromTick(tick);
+                    }
+                };
+                this.parseDate = function (date) {
+                    if (null !== date) {
+                        try {
+                            return new Date(Date.parse(date));
+                        }
+                        catch (_a) {
+                            return null;
+                        }
+                    }
+                    return null;
+                };
+                this.parseTime = function (time) {
+                    if (null !== time) {
+                        try {
+                            return _this.parseDate("2020-01-01T".concat(time)).getTime() - _this.parseDate("2020-01-01T00:00:00").getTime();
+                        }
+                        catch (_a) {
+                            return null;
+                        }
+                    }
+                    return null;
+                };
+                this.format = function (format, date) {
+                    if (null === date) {
+                        return null;
+                    }
+                    else {
+                        switch (format) {
+                            case "formal-time":
+                                return _this.makeFormalTimeText(_this.getTicks(date));
+                            case "smart-time":
+                                return _this.makeSmartTimeText(_this.getTicks(date));
+                        }
+                        return "".concat(date);
+                    }
+                };
+            }
+            return TektiteDate;
+        }());
+        TektiteDate_1.TektiteDate = TektiteDate;
+        TektiteDate_1.make = function (tektite) {
+            return new TektiteDate(tektite);
+        };
+    })(TektiteDate = exports.TektiteDate || (exports.TektiteDate = {}));
+});
 define("clockworks/tektite.js/script/tektite-fullscreen", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7869,7 +8115,7 @@ define("clockworks/tektite.js/images", [], {
     "tektite-pin-icon": "./image/pin.1024.svg",
     "tektite-down-triangle-icon": "./image/down-triangle.1024.svg"
 });
-define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-locale", "clockworks/tektite.js/script/tektite-fullscreen", "clockworks/tektite.js/script/tektite-screen", "clockworks/tektite.js/script/tektite-menu", "clockworks/tektite.js/script/tektite-key"], function (require, exports, index_js_5, tektite_locale_1, tektite_fullscreen_1, tektite_screen_1, tektite_menu_1, tektite_key_1) {
+define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-locale", "clockworks/tektite.js/script/tektite-date", "clockworks/tektite.js/script/tektite-fullscreen", "clockworks/tektite.js/script/tektite-screen", "clockworks/tektite.js/script/tektite-menu", "clockworks/tektite.js/script/tektite-key"], function (require, exports, index_js_5, tektite_locale_1, tektite_date_1, tektite_fullscreen_1, tektite_screen_1, tektite_menu_1, tektite_key_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Tektite = void 0;
@@ -7906,6 +8152,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                 this.screen = tektite_screen_1.Screen.make(this);
                 this.menu = tektite_menu_1.Menu.make(this);
                 this.locale = tektite_locale_1.Locale.make(this);
+                this.date = tektite_date_1.TektiteDate.make(this);
                 this.internalLink = function (data) {
                     return ({
                         tag: "a",
@@ -9530,60 +9777,7 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
         Domain.getFlashIntervalPreset = function () { return config_json_7.default.flashIntervalPreset.map(function (i) { return Domain.parseTimer(i); }); };
         Domain.getTimerPreset = function () { return config_json_7.default.timerPreset.map(function (i) { return Domain.parseTimer(i); }); };
         Domain.utcOffsetRate = 60 * 1000;
-        // export const makeMinutesTimerLabel = (minutes: number) => makeTimerLabel(minutes *60 *1000);
-        Domain.makeTimerLabel = function (timer) {
-            if (timer < 0) {
-                return "-".concat(Domain.makeTimerLabel(-timer));
-            }
-            var days = Math.floor(timer / (24 * 60 * 60 * 1000));
-            var hours = Math.floor(timer / (60 * 60 * 1000)) % 24;
-            var minutes = Math.floor(timer / (60 * 1000)) % 60;
-            var seconds = Math.floor(timer / 1000) % 60;
-            var milliseconds = Math.floor(timer) % 1000;
-            var result = "";
-            if ("" !== result || 0 < days) {
-                if ("" === result) {
-                    result = "".concat(days, " ") + _1.Clockworks.localeMap("days");
-                }
-                else {
-                    result += " ".concat(days, " ") + _1.Clockworks.localeMap("days");
-                }
-            }
-            if (("" !== result && (0 < minutes || 0 < seconds || 0 < milliseconds)) || 0 < hours) {
-                if ("" === result) {
-                    result = "".concat(hours, " ") + _1.Clockworks.localeMap("hours");
-                }
-                else {
-                    result += " " + "0".concat(hours).substr(-2) + " " + _1.Clockworks.localeMap("hours");
-                }
-            }
-            if (("" !== result && (0 < seconds || 0 < milliseconds)) || 0 < minutes) {
-                if ("" === result) {
-                    result = "".concat(minutes, " ") + _1.Clockworks.localeMap("minutes");
-                }
-                else {
-                    result += " " + "0".concat(minutes).substr(-2) + " " + _1.Clockworks.localeMap("minutes");
-                }
-            }
-            if (0 < seconds || 0 < milliseconds) {
-                var trail = "";
-                if (0 < milliseconds) {
-                    trail = "." + "00".concat(milliseconds).substr(-3);
-                    trail = trail.replace(/0+$/, "");
-                }
-                if ("" === result) {
-                    result = "".concat(seconds).concat(trail, " ") + _1.Clockworks.localeMap("seconds");
-                }
-                else {
-                    result += " " + "0".concat(seconds).substr(-2) + trail + " " + _1.Clockworks.localeMap("seconds");
-                }
-            }
-            if ("" === result) {
-                result = "".concat(minutes, " ").concat(_1.Clockworks.localeMap("m(minutes)"));
-            }
-            // console.log({ timer, result, });
-            return result;
-        };
+        Domain.makeMinutesTimerLabel = function (minutes) { return _1.tektite.date.format("formal-time", minutes * 60 * 1000); };
         Domain.getTicks = function (date) {
             if (date === void 0) { date = new Date(); }
             return date.getTime();
@@ -9603,150 +9797,6 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/script/bas
         };
         Domain.weekday = function (tick) {
             return new Intl.DateTimeFormat(_1.tektite.locale.get(), { weekday: 'long' }).format(tick);
-        };
-        Domain.dateCoreStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else {
-                var date = new Date(tick);
-                return "".concat(date.getFullYear(), "-").concat(("0" + (date.getMonth() + 1)).substr(-2), "-").concat(("0" + date.getDate()).substr(-2));
-            }
-        };
-        Domain.getTime = function (tick) {
-            if (null === tick) {
-                return null;
-            }
-            else if (tick < 0) {
-                return -Domain.getTime(tick);
-            }
-            else if (tick < 24 * 60 * 60 * 1000) {
-                return tick;
-            }
-            else {
-                var date = new Date(tick);
-                date.setHours(0);
-                date.setMinutes(0);
-                date.setSeconds(0);
-                date.setMilliseconds(0);
-                return tick - Domain.getTicks(date);
-            }
-        };
-        Domain.dateStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else {
-                return "".concat(Domain.dateCoreStringFromTick(tick), " ").concat(Domain.timeLongCoreStringFromTick(Domain.getTime(tick)));
-            }
-        };
-        Domain.dateFullStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else {
-                return "".concat(Domain.dateCoreStringFromTick(tick), " ").concat(Domain.timeFullCoreStringFromTick(Domain.getTime(tick)));
-            }
-        };
-        Domain.timeShortCoreStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else if (tick < 0) {
-                return "-".concat(Domain.timeShortCoreStringFromTick(-tick));
-            }
-            else {
-                var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
-                var minute = Math.floor(tick / (60 * 1000)) % 60;
-                return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2));
-            }
-        };
-        Domain.timeLongCoreStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else if (tick < 0) {
-                return "-".concat(Domain.timeLongCoreStringFromTick(-tick));
-            }
-            else {
-                var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
-                var minute = Math.floor(tick / (60 * 1000)) % 60;
-                var second = Math.floor(tick / (1000)) % 60;
-                return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2), ":").concat(("00" + second).slice(-2));
-            }
-        };
-        Domain.timeFullCoreStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else if (tick < 0) {
-                return "-".concat(Domain.timeFullCoreStringFromTick(-tick));
-            }
-            else {
-                var hour = Math.floor(tick / (60 * 60 * 1000)) % 24;
-                var minute = Math.floor(tick / (60 * 1000)) % 60;
-                var second = Math.floor(tick / (1000)) % 60;
-                var milliseconds = tick % 1000;
-                return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2), ":").concat(("00" + second).slice(-2), ".").concat(("000" + milliseconds).slice(-3));
-            }
-        };
-        Domain.timeShortStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else if (tick < 0) {
-                return "-".concat(Domain.timeShortStringFromTick(-tick));
-            }
-            else {
-                // if (tick < 60 *1000)
-                // {
-                //     return timeFullCoreStringFromTick(tick);
-                // }
-                if (tick < 60 * 60 * 1000) {
-                    return Domain.timeLongCoreStringFromTick(tick);
-                }
-                var days = Math.floor(tick / (24 * 60 * 60 * 1000));
-                if (days < 1) {
-                    return Domain.timeLongCoreStringFromTick(tick);
-                }
-                return "".concat(days.toLocaleString(), " ").concat(_1.Clockworks.localeMap("days"), " ").concat(Domain.timeLongCoreStringFromTick(tick));
-            }
-        };
-        Domain.timeLongStringFromTick = function (tick) {
-            if (null === tick) {
-                return "N/A";
-            }
-            else if (tick < 0) {
-                return "-".concat(Domain.timeLongStringFromTick(-tick));
-            }
-            else {
-                var days = Math.floor(tick / (24 * 60 * 60 * 1000));
-                return 0 < days ?
-                    "".concat(days.toLocaleString(), " ").concat(_1.Clockworks.localeMap("days"), " ").concat(10 < days ? Domain.timeShortCoreStringFromTick(tick) : Domain.timeLongCoreStringFromTick(tick)) :
-                    Domain.timeFullCoreStringFromTick(tick);
-            }
-        };
-        Domain.parseDate = function (date) {
-            if (null !== date) {
-                try {
-                    return new Date(Date.parse(date));
-                }
-                catch (_a) {
-                    return null;
-                }
-            }
-            return null;
-        };
-        Domain.parseTime = function (time) {
-            if (null !== time) {
-                try {
-                    return Domain.parseDate("2020-01-01T".concat(time)).getTime() - Domain.parseDate("2020-01-01T00:00:00").getTime();
-                }
-                catch (_a) {
-                    return null;
-                }
-            }
-            return null;
         };
         var timezoneOffsetSignString = function (offset) { return 0 === offset ? "±" : (0 < offset ? "-" : "+"); }; // ※ JavaScript 上のタイムゾーンオフセットとUTC表記は + / - が逆転する
         var timezoneOffsetTimeString = function (offset) {
@@ -10684,8 +10734,8 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                 Render.$div("tektite-item-panel")([
                                     Render.$div("item-panel-body")([
                                         tektite_index_8.Tektite.monospace("item-utc-offset", domain_5.Domain.timezoneOffsetString(item.offset)),
-                                        tektite_index_8.Tektite.monospace("item-date", domain_5.Domain.dateCoreStringFromTick(domain_5.Domain.getUTCTicks() - item.offset)),
-                                        tektite_index_8.Tektite.monospace("item-time", domain_5.Domain.timeFullCoreStringFromTick(domain_5.Domain.getTime(domain_5.Domain.getUTCTicks() - item.offset))),
+                                        tektite_index_8.Tektite.monospace("item-date", __7.tektite.date.dateCoreStringFromTick(domain_5.Domain.getUTCTicks() - item.offset)),
+                                        tektite_index_8.Tektite.monospace("item-time", __7.tektite.date.timeFullCoreStringFromTick(__7.tektite.date.getTime(domain_5.Domain.getUTCTicks() - item.offset))),
                                     ]),
                                     Render.$div("item-time-bar")([]),
                                 ])
@@ -10821,10 +10871,10 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     Render.$span("value")(item.title),
                                 ]) :
                                 [],
-                            tektite_index_8.Tektite.monospace("current-date", domain_5.Domain.dateCoreStringFromTick(null !== item ?
+                            tektite_index_8.Tektite.monospace("current-date", __7.tektite.date.dateCoreStringFromTick(null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks())),
-                            tektite_index_8.Tektite.monospace("capital-time", domain_5.Domain.timeFullCoreStringFromTick(domain_5.Domain.getTime(null !== item ?
+                            tektite_index_8.Tektite.monospace("capital-time", __7.tektite.date.timeFullCoreStringFromTick(__7.tektite.date.getTime(null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks()))),
                             null !== item ?
@@ -10963,7 +11013,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                         }
                                         return [3 /*break*/, 10];
                                     case 1:
-                                        capitalTime = domain_5.Domain.timeLongCoreStringFromTick(domain_5.Domain.getTime(tick));
+                                        capitalTime = __7.tektite.date.timeLongCoreStringFromTick(__7.tektite.date.getTime(tick));
                                         capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0];
                                         if (minamo_js_8.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate) {
                                             __7.tektite.setTitle(capitalTime + " - " + applicationTitle);
@@ -10993,14 +11043,14 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                                     minamo_js_8.minamo.dom.setStyleProperty(timeBar, "backgroundColor", nextColor);
                                                     var percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                                                     minamo_js_8.minamo.dom.setStyleProperty(timeBar, "width", percentString);
-                                                    minamo_js_8.minamo.dom.setProperty(minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", domain_5.Domain.dateCoreStringFromTick(currentTick) + " " + domain_5.Domain.weekday(currentTick));
-                                                    minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = domain_5.Domain.timeLongCoreStringFromTick(domain_5.Domain.getTime(currentTick));
+                                                    minamo_js_8.minamo.dom.setProperty(minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", __7.tektite.date.dateCoreStringFromTick(currentTick) + " " + domain_5.Domain.weekday(currentTick));
+                                                    minamo_js_8.minamo.dom.getDivsByClassName(minamo_js_8.minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = __7.tektite.date.timeLongCoreStringFromTick(__7.tektite.date.getTime(currentTick));
                                                 });
                                             }
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
-                                        dateString = domain_5.Domain.dateCoreStringFromTick(tick) + " " + domain_5.Domain.weekday(tick);
+                                        dateString = __7.tektite.date.dateCoreStringFromTick(tick) + " " + domain_5.Domain.weekday(tick);
                                         currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0];
                                         minamo_js_8.minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                                         getRainbowColor = type_1.Type.rainbowClockColorPatternMap[storage_9.Storage.RainbowClock.colorPattern.get()];
@@ -11088,7 +11138,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         case 0:
                                             _b = (_a = __8.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), tektite_index_9.Tektite.monospace(domain_6.Domain.dateStringFromTick(i.end))], domain_6.Domain.makePageParams("CountdownTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), Render.labelSpan(Render.alarmTitle(i)), tektite_index_9.Tektite.monospace(__8.tektite.date.dateStringFromTick(i.end))], domain_6.Domain.makePageParams("CountdownTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -11099,7 +11149,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
             });
         }); };
         Render.alarmTitle = function (item) { return "timer" === item.type ?
-            "".concat(domain_6.Domain.makeTimerLabel(item.end - item.start), " ").concat(__8.Clockworks.localeMap("Timer")) :
+            "".concat(__8.tektite.date.format("formal-time", item.end - item.start), " ").concat(__8.Clockworks.localeMap("Timer")) :
             item.title; };
         Render.alarmItem = function (item) { return __awaiter(_this, void 0, void 0, function () {
             var _a, _b, _c, _d, _e, _f, _g, _h;
@@ -11134,8 +11184,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             ]])
                                     ])]),
                                 Render.$div("tektite-item-information")([
-                                    tektite_index_9.Tektite.monospace("alarm-due-timestamp", Render.label("Due timestamp"), domain_6.Domain.dateFullStringFromTick(item.end)),
-                                    tektite_index_9.Tektite.monospace("alarm-due-rest", Render.label("Rest"), domain_6.Domain.timeLongStringFromTick(item.end - domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("alarm-due-timestamp", Render.label("Due timestamp"), __8.tektite.date.dateFullStringFromTick(item.end)),
+                                    tektite_index_9.Tektite.monospace("alarm-due-rest", Render.label("Rest"), __8.tektite.date.format("smart-time", item.end - domain_6.Domain.getTicks())),
                                 ])
                             ]])];
                 }
@@ -11238,8 +11288,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             ]])
                                     ])]),
                                 Render.$div("tektite-item-information")([
-                                    tektite_index_9.Tektite.monospace("event-timestamp", Render.label("Timestamp"), domain_6.Domain.dateFullStringFromTick(item.tick)),
-                                    tektite_index_9.Tektite.monospace("event-elapsed-time", Render.label("Elapsed time"), domain_6.Domain.timeLongStringFromTick(domain_6.Domain.getTicks() - item.tick)),
+                                    tektite_index_9.Tektite.monospace("event-timestamp", Render.label("Timestamp"), __8.tektite.date.dateFullStringFromTick(item.tick)),
+                                    tektite_index_9.Tektite.monospace("event-elapsed-time", Render.label("Elapsed time"), __8.tektite.date.format("smart-time", domain_6.Domain.getTicks() - item.tick)),
                                 ])
                             ]])];
                 }
@@ -11318,7 +11368,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                                                             return [4 /*yield*/, resource_2.Resource.loadIconOrCache("tektite-check-icon")];
                                                                         case 1: return [2 /*return*/, (_a.children = [
                                                                                 _b.sent(),
-                                                                                Render.$span("")(Render.labelSpan(domain_6.Domain.makeTimerLabel(i)))
+                                                                                Render.$span("")(Render.labelSpan(__8.tektite.date.format("formal-time", i)))
                                                                             ],
                                                                                 _a.onclick = function () { return __awaiter(_this, void 0, void 0, function () {
                                                                                     return __generator(this, function (_a) {
@@ -11399,13 +11449,13 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                         inputDate = Render.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
-                            value: domain_6.Domain.dateCoreStringFromTick(tick),
+                            value: __8.tektite.date.dateCoreStringFromTick(tick),
                             required: "",
                         });
                         inputTime = Render.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
-                            value: domain_6.Domain.timeShortCoreStringFromTick(domain_6.Domain.getTime(tick)),
+                            value: __8.tektite.date.timeShortCoreStringFromTick(__8.tektite.date.getTime(tick)),
                             required: "",
                         });
                         return [4 /*yield*/, __8.tektite.screen.prompt({
@@ -11419,7 +11469,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                     var _a, _b;
                                     return ({
                                         title: inputTitle.value,
-                                        tick: (_b = (_a = domain_6.Domain.parseDate("".concat(inputDate.value, "T").concat(inputTime.value))) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick,
+                                        tick: (_b = (_a = __8.tektite.date.parseDate("".concat(inputDate.value, "T").concat(inputTime.value))) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick,
                                     });
                                 },
                             })];
@@ -11480,15 +11530,15 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         [
                                             tektite_index_9.Tektite.monospace("current-title", Render.alarmTitle(item !== null && item !== void 0 ? item : alarms[0])),
                                             "timer" === (item !== null && item !== void 0 ? item : alarms[0]).type ?
-                                                tektite_index_9.Tektite.monospace("current-due-timestamp", domain_6.Domain.dateFullStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)) :
-                                                tektite_index_9.Tektite.monospace("current-due-timestamp", domain_6.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)),
+                                                tektite_index_9.Tektite.monospace("current-due-timestamp", __8.tektite.date.dateFullStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)) :
+                                                tektite_index_9.Tektite.monospace("current-due-timestamp", __8.tektite.date.dateStringFromTick((item !== null && item !== void 0 ? item : alarms[0]).end)),
                                         ] : [],
-                                    tektite_index_9.Tektite.monospace("capital-interval", domain_6.Domain.timeLongStringFromTick(0)),
-                                    tektite_index_9.Tektite.monospace("current-timestamp", domain_6.Domain.dateStringFromTick(domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("capital-interval", __8.tektite.date.format("smart-time", 0)),
+                                    tektite_index_9.Tektite.monospace("current-timestamp", __8.tektite.date.dateStringFromTick(domain_6.Domain.getTicks())),
                                 ]) :
                                 Render.$div("current-item")([
-                                    tektite_index_9.Tektite.monospace("capital-interval", domain_6.Domain.timeLongStringFromTick(0)),
-                                    tektite_index_9.Tektite.monospace("current-timestamp", domain_6.Domain.dateStringFromTick(domain_6.Domain.getTicks())),
+                                    tektite_index_9.Tektite.monospace("capital-interval", __8.tektite.date.format("smart-time", 0)),
+                                    tektite_index_9.Tektite.monospace("current-timestamp", __8.tektite.date.dateStringFromTick(domain_6.Domain.getTicks())),
                                 ])];
                         _c = (_b = render_6.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_6.Render.screenHeaderFlashSegment(storage_10.Storage.CountdownTimer.recentlyFlashInterval.add, domain_6.Domain.getFlashIntervalPreset()
@@ -11583,7 +11633,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                             Render.$div("description")(Render.$tag("ul")("tektite-locale-parallel-off")([
                                 Render.$tag("li")("")(Render.label("Up to 100 time stamps are retained, and if it exceeds 100, the oldest time stamps are discarded first.")),
                                 Render.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                Render.$tag("li")("")([Render.label("You can use links like these too:"), ["1500ms", "90s", "3m", "1h", "1d"].map(function (i) { return ({ tag: "a", style: "margin-inline-start:0.5em;", href: domain_6.Domain.makeNewTimerUrl(i), children: "".concat(domain_6.Domain.makeTimerLabel(domain_6.Domain.parseTimer(i)), " ").concat(__8.Clockworks.localeMap("Timer")), }); })]),
+                                Render.$tag("li")("")([Render.label("You can use links like these too:"), ["1500ms", "90s", "3m", "1h", "1d"].map(function (i) { return ({ tag: "a", style: "margin-inline-start:0.5em;", href: domain_6.Domain.makeNewTimerUrl(i), children: "".concat(__8.tektite.date.format("formal-time", domain_6.Domain.parseTimer(i)), " ").concat(__8.Clockworks.localeMap("Timer")), }); })]),
                             ]))
                         ]);
                         _j.label = 6;
@@ -11676,8 +11726,8 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         return [3 /*break*/, 10];
                                     case 1:
                                         screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText =
-                                            domain_6.Domain.timeLongStringFromTick(current ? Math.max(current.end - tick, 0) : 0);
-                                        capitalTime = domain_6.Domain.dateStringFromTick(tick);
+                                            __8.tektite.date.format("smart-time", current ? Math.max(current.end - tick, 0) : 0);
+                                        capitalTime = __8.tektite.date.dateStringFromTick(tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                         minamo_js_9.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         flashInterval = storage_10.Storage.CountdownTimer.flashInterval.get();
@@ -11712,13 +11762,13 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
-                                        __8.tektite.setTitle(current ? domain_6.Domain.timeShortStringFromTick(Math.max(current.end - tick, 0)) + " - " + applicationTitle : applicationTitle);
+                                        __8.tektite.setTitle(current ? __8.tektite.date.timeShortStringFromTick(Math.max(current.end - tick, 0)) + " - " + applicationTitle : applicationTitle);
                                         alarmListDiv = minamo_js_9.minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
                                         if (alarmListDiv) {
                                             minamo_js_9.minamo.dom.getChildNodes(alarmListDiv)
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0].innerText =
-                                                    domain_6.Domain.timeShortStringFromTick(Math.max(alarms[index].end - tick, 0));
+                                                    __8.tektite.date.timeShortStringFromTick(Math.max(alarms[index].end - tick, 0));
                                             });
                                         }
                                         if (0 < flashInterval && 0 < alarms.length) {
@@ -11799,7 +11849,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                     case 0:
                         _a = {
                             icon: "tektite-tick-icon",
-                            title: domain_7.Domain.dateFullStringFromTick(item)
+                            title: __9.tektite.date.dateFullStringFromTick(item)
                         };
                         return [4 /*yield*/, Promise.all(ticks
                                 .concat([item])
@@ -11812,7 +11862,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         case 0:
                                             _b = (_a = __9.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_3.Resource.loadIconOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_10.Tektite.monospace(domain_7.Domain.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_10.Tektite.monospace(__9.tektite.date.dateFullStringFromTick(i))], domain_7.Domain.makePageParams("NeverStopwatch", i),
                                                 item === i ? "current-item" : undefined])];
                                     }
                                 });
@@ -11855,8 +11905,8 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                             ]])
                                     ])]),
                                 tektite_index_10.Tektite.$div("tektite-item-information")([
-                                    tektite_index_10.Tektite.monospace("tick-timestamp", Render.label("Timestamp"), domain_7.Domain.dateFullStringFromTick(tick)),
-                                    tektite_index_10.Tektite.monospace("tick-interval", Render.label("Interval"), domain_7.Domain.timeLongStringFromTick(interval)),
+                                    tektite_index_10.Tektite.monospace("tick-timestamp", Render.label("Timestamp"), __9.tektite.date.dateFullStringFromTick(tick)),
+                                    tektite_index_10.Tektite.monospace("tick-interval", Render.label("Interval"), __9.tektite.date.format("smart-time", interval)),
                                 ])
                             ]])];
                 }
@@ -11945,12 +11995,12 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                         _g = {};
                         _a = [tektite_index_10.Tektite.$div("current-item")([
                                 tektite_index_10.Tektite.monospace("previous-timestamp", null !== item ?
-                                    domain_7.Domain.dateFullStringFromTick(item) :
+                                    __9.tektite.date.dateFullStringFromTick(item) :
                                     (0 < ticks.length ?
-                                        domain_7.Domain.dateFullStringFromTick(ticks[0]) :
+                                        __9.tektite.date.dateFullStringFromTick(ticks[0]) :
                                         "")),
-                                tektite_index_10.Tektite.monospace("capital-interval", domain_7.Domain.timeLongStringFromTick(0)),
-                                tektite_index_10.Tektite.monospace("current-timestamp", domain_7.Domain.dateFullStringFromTick(domain_7.Domain.getTicks())),
+                                tektite_index_10.Tektite.monospace("capital-interval", __9.tektite.date.format("smart-time", 0)),
+                                tektite_index_10.Tektite.monospace("current-timestamp", __9.tektite.date.dateFullStringFromTick(domain_7.Domain.getTicks())),
                             ])];
                         _c = (_b = render_7.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_7.Render.screenHeaderFlashSegment(storage_11.Storage.NeverStopwatch.recentlyFlashInterval.add, domain_7.Domain.getFlashIntervalPreset()
@@ -12083,8 +12133,8 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         }
                                         return [3 /*break*/, 9];
                                     case 1:
-                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = domain_7.Domain.timeLongStringFromTick(tick - (current !== null && current !== void 0 ? current : tick));
-                                        capitalTime = domain_7.Domain.dateStringFromTick(tick);
+                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = __9.tektite.date.format("smart-time", tick - (current !== null && current !== void 0 ? current : tick));
+                                        capitalTime = __9.tektite.date.dateStringFromTick(tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                         minamo_js_10.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         if (0 < flashInterval && null !== current) {
@@ -12109,12 +12159,12 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         }
                                         return [3 /*break*/, 9];
                                     case 2:
-                                        __9.tektite.setTitle(domain_7.Domain.timeShortStringFromTick(tick - (current !== null && current !== void 0 ? current : tick)) + " - " + applicationTitle);
+                                        __9.tektite.setTitle(__9.tektite.date.timeShortStringFromTick(tick - (current !== null && current !== void 0 ? current : tick)) + " - " + applicationTitle);
                                         stampListDiv = minamo_js_10.minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
                                         if (stampListDiv) {
                                             minamo_js_10.minamo.dom.getChildNodes(stampListDiv)
                                                 .forEach(function (dom, index) {
-                                                dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = domain_7.Domain.timeShortStringFromTick(domain_7.Domain.getTicks() - ticks[index]);
+                                                dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0].innerText = __9.tektite.date.timeShortStringFromTick(domain_7.Domain.getTicks() - ticks[index]);
                                             });
                                         }
                                         if (0 < flashInterval && 0 < ticks.length) {
@@ -12205,7 +12255,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         case 0:
                                             _b = (_a = __10.tektite.menu).linkItem;
                                             return [4 /*yield*/, resource_4.Resource.loadIconOrCache("tektite-tick-icon")];
-                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_11.Tektite.$labelSpan(i.title), tektite_index_11.Tektite.monospace(domain_8.Domain.dateStringFromTick(i.tick))], domain_8.Domain.makePageParams("ElapsedTimer", i),
+                                        case 1: return [2 /*return*/, _b.apply(_a, [[_c.sent(), tektite_index_11.Tektite.$labelSpan(i.title), tektite_index_11.Tektite.monospace(__10.tektite.date.dateStringFromTick(i.tick))], domain_8.Domain.makePageParams("ElapsedTimer", i),
                                                 JSON.stringify(item) === JSON.stringify(i) ? "current-item" : undefined])];
                                     }
                                 });
@@ -12265,14 +12315,14 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                     (item !== null && item !== void 0 ? item : events[0]) ?
                                         [
                                             tektite_index_11.Tektite.monospace("current-title", (item !== null && item !== void 0 ? item : events[0]).title),
-                                            tektite_index_11.Tektite.monospace("current-due-timestamp", domain_8.Domain.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
+                                            tektite_index_11.Tektite.monospace("current-due-timestamp", __10.tektite.date.dateStringFromTick((item !== null && item !== void 0 ? item : events[0]).tick)),
                                         ] : [],
-                                    tektite_index_11.Tektite.monospace("capital-interval", domain_8.Domain.timeLongStringFromTick(0)),
-                                    tektite_index_11.Tektite.monospace("current-timestamp", domain_8.Domain.dateStringFromTick(domain_8.Domain.getTicks())),
+                                    tektite_index_11.Tektite.monospace("capital-interval", __10.tektite.date.format("smart-time", 0)),
+                                    tektite_index_11.Tektite.monospace("current-timestamp", __10.tektite.date.dateStringFromTick(domain_8.Domain.getTicks())),
                                 ]) :
                                 tektite_index_11.Tektite.$div("current-item")([
-                                    tektite_index_11.Tektite.monospace("capital-interval", domain_8.Domain.timeLongStringFromTick(0)),
-                                    tektite_index_11.Tektite.monospace("current-timestamp", domain_8.Domain.dateStringFromTick(domain_8.Domain.getTicks())),
+                                    tektite_index_11.Tektite.monospace("capital-interval", __10.tektite.date.format("smart-time", 0)),
+                                    tektite_index_11.Tektite.monospace("current-timestamp", __10.tektite.date.dateStringFromTick(domain_8.Domain.getTicks())),
                                 ])];
                         _c = (_b = render_8.Render).flashIntervalLabel;
                         return [4 /*yield*/, render_8.Render.screenHeaderFlashSegment(storage_12.Storage.ElapsedTimer.recentlyFlashInterval.add, domain_8.Domain.getFlashIntervalPreset()
@@ -12421,8 +12471,8 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         }
                                         return [3 /*break*/, 10];
                                     case 1:
-                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = domain_8.Domain.timeLongStringFromTick(tick - ((_e = current === null || current === void 0 ? void 0 : current.tick) !== null && _e !== void 0 ? _e : tick));
-                                        capitalTime = domain_8.Domain.dateStringFromTick(tick);
+                                        screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText = __10.tektite.date.format("smart-time", tick - ((_e = current === null || current === void 0 ? void 0 : current.tick) !== null && _e !== void 0 ? _e : tick));
+                                        capitalTime = __10.tektite.date.dateStringFromTick(tick);
                                         capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0];
                                         minamo_js_11.minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                                         if (0 < flashInterval && null !== current) {
@@ -12447,13 +12497,13 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                         }
                                         return [3 /*break*/, 10];
                                     case 2:
-                                        __10.tektite.setTitle(domain_8.Domain.timeShortStringFromTick(tick - ((_f = current === null || current === void 0 ? void 0 : current.tick) !== null && _f !== void 0 ? _f : tick)) + " - " + applicationTitle);
+                                        __10.tektite.setTitle(__10.tektite.date.timeShortStringFromTick(tick - ((_f = current === null || current === void 0 ? void 0 : current.tick) !== null && _f !== void 0 ? _f : tick)) + " - " + applicationTitle);
                                         eventListDiv = minamo_js_11.minamo.dom.getDivsByClassName(screen, "event-list")[0];
                                         if (eventListDiv) {
                                             minamo_js_11.minamo.dom.getChildNodes(eventListDiv)
                                                 .forEach(function (dom, index) {
                                                 dom.getElementsByClassName("event-elapsed-time")[0].getElementsByClassName("value")[0].innerText =
-                                                    domain_8.Domain.timeShortStringFromTick(tick - events[index].tick);
+                                                    __10.tektite.date.timeShortStringFromTick(tick - events[index].tick);
                                             });
                                         }
                                         if (0 < flashInterval && 0 < events.length) {
@@ -12939,13 +12989,13 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                             inputTime = tektite_index_12.Tektite.$make(HTMLInputElement)({
                                 tag: "input",
                                 type: "time",
-                                value: domain_9.Domain.timeLongCoreStringFromTick(tick),
+                                value: __11.tektite.date.timeLongCoreStringFromTick(tick),
                                 required: "",
                             });
                             return [4 /*yield*/, __11.tektite.screen.prompt({
                                     title: message,
                                     content: inputTime,
-                                    onCommit: function () { var _a; return (_a = domain_9.Domain.parseTime(inputTime.value)) !== null && _a !== void 0 ? _a : tick; },
+                                    onCommit: function () { var _a; return (_a = __11.tektite.date.parseTime(inputTime.value)) !== null && _a !== void 0 ? _a : tick; },
                                 })];
                         case 1: return [2 /*return*/, _a.sent()];
                     }
@@ -12960,13 +13010,13 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         inputDate = tektite_index_12.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "date",
-                            value: domain_9.Domain.dateCoreStringFromTick(tick),
+                            value: __11.tektite.date.dateCoreStringFromTick(tick),
                             required: "",
                         });
                         inputTime = tektite_index_12.Tektite.$make(HTMLInputElement)({
                             tag: "input",
                             type: "time",
-                            value: domain_9.Domain.timeShortCoreStringFromTick(domain_9.Domain.getTime(tick)),
+                            value: __11.tektite.date.timeShortCoreStringFromTick(__11.tektite.date.getTime(tick)),
                             required: "",
                         });
                         return [4 /*yield*/, __11.tektite.screen.prompt({
@@ -12975,7 +13025,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     inputDate,
                                     inputTime,
                                 ],
-                                onCommit: function () { var _a, _b; return (_b = (_a = domain_9.Domain.parseDate("".concat(inputDate.value, "T").concat(inputTime.value))) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick; },
+                                onCommit: function () { var _a, _b; return (_b = (_a = __11.tektite.date.parseDate("".concat(inputDate.value, "T").concat(inputTime.value))) === null || _a === void 0 ? void 0 : _a.getTime()) !== null && _b !== void 0 ? _b : tick; },
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -13084,7 +13134,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                         return [4 /*yield*/, resource_5.Resource.loadIconOrCache(0 === i ? zeroIcon : "tektite-flash-icon")];
                                     case 1: return [2 /*return*/, _b.apply(_a, [[
                                                 _c.sent(),
-                                                tektite_index_12.Tektite.$labelSpan(0 === i ? __11.Clockworks.localeMap(zeroLabel) : "".concat(__11.Clockworks.localeMap("Interval"), ": ").concat(domain_9.Domain.makeTimerLabel(i)))
+                                                tektite_index_12.Tektite.$labelSpan(0 === i ? __11.Clockworks.localeMap(zeroLabel) : "".concat(__11.Clockworks.localeMap("Interval"), ": ").concat(__11.tektite.date.format("formal-time", i)))
                                             ], function () { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
@@ -13154,7 +13204,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         case 0:
                             _a = {
                                 icon: 0 === flashInterval ? zeroIcon : "tektite-flash-icon",
-                                title: 0 === flashInterval ? __11.Clockworks.localeMap(zeroLabel) : "".concat(__11.Clockworks.localeMap("Interval"), ": ").concat(domain_9.Domain.makeTimerLabel(flashInterval))
+                                title: 0 === flashInterval ? __11.Clockworks.localeMap(zeroLabel) : "".concat(__11.Clockworks.localeMap("Interval"), ": ").concat(__11.tektite.date.format("formal-time", flashInterval))
                             };
                             return [4 /*yield*/, Render.screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel)];
                         case 1: return [2 /*return*/, (_a.menu = _b.sent(),
@@ -13837,7 +13887,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                 switch (_c.label) {
                     case 0:
                         console.log("start timestamp: ".concat(new Date()));
-                        console.log("buildTimestamp: ".concat(params.buildTimestamp));
+                        console.log("buildTimestamp: ".concat(params.buildTimestamp, " ( ").concat(exports.tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick), " \u524D )"));
                         console.log("".concat(JSON.stringify(params)));
                         exports.tektite.locale.setLocale(storage_14.Storage.Settings.get().locale);
                         exports.tektite.onLoad();
@@ -13849,7 +13899,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                         _c.sent();
                         if ("reload" === ((_b = (_a = performance.getEntriesByType("navigation")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.type)) {
                             exports.tektite.screen.toast.make({
-                                content: tektite_index_13.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(domain_10.Domain.dateStringFromTick(params.buildTimestampTick), " ( ").concat(domain_10.Domain.makeTimerLabel(new Date().getTime() - params.buildTimestampTick), " \u524D )")),
+                                content: tektite_index_13.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.dateStringFromTick(params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick), " \u524D )")),
                                 isWideContent: true,
                             });
                         }
@@ -13879,7 +13929,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645747171259), buildTimestampTick: 1645747171259, })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645857835868), buildTimestampTick: 1645857835868, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

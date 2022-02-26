@@ -1,5 +1,6 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Locale } from "./tektite-locale";
+import { TektiteDate } from "./tektite-date";
 import { Fullscreen as FullscreenModule } from "./tektite-fullscreen";
 import { Screen } from "./tektite-screen";
 import { Header } from "./tektite-header";
@@ -82,6 +83,7 @@ export module Tektite
         public screen = Screen.make(this);
         public menu = Menu.make(this);
         public locale = Locale.make(this);
+        public date = TektiteDate.make(this);
         public internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}): minamo.dom.Source =>
         ({
             tag: "a",

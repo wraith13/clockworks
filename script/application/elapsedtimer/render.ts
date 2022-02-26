@@ -37,7 +37,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.monospace(Domain.dateStringFromTick(i.tick)), ],
+                        [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.monospace(tektite.date.dateStringFromTick(i.tick)), ],
                         Domain.makePageParams("ElapsedTimer", i),
                         JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
                     )
@@ -65,15 +65,15 @@ export module Render
                         (item ?? events[0]) ?
                         [
                             Tektite.monospace("current-title", (item ?? events[0]).title),
-                            Tektite.monospace("current-due-timestamp", Domain.dateStringFromTick((item ?? events[0]).tick)),
+                            Tektite.monospace("current-due-timestamp", tektite.date.dateStringFromTick((item ?? events[0]).tick)),
                         ]: [],
-                        Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                        Tektite.monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
+                        Tektite.monospace("capital-interval", tektite.date.format("smart-time", 0)),
+                        Tektite.monospace("current-timestamp", tektite.date.dateStringFromTick(Domain.getTicks())),
                     ]):
                     Tektite.$div("current-item")
                     ([
-                        Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                        Tektite.monospace("current-timestamp", Domain.dateStringFromTick(Domain.getTicks())),
+                        Tektite.monospace("capital-interval", tektite.date.format("smart-time", 0)),
+                        Tektite.monospace("current-timestamp", tektite.date.dateStringFromTick(Domain.getTicks())),
                     ]),
                 await RenderBase.flashIntervalLabel
                 (
@@ -177,8 +177,8 @@ export module Render
             switch(event)
             {
                 case "high-resolution-timer":
-                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(tick -(current?.tick ?? tick));
-                    const capitalTime = Domain.dateStringFromTick(tick);
+                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = tektite.date.format("smart-time", tick -(current?.tick ?? tick));
+                    const capitalTime = tektite.date.dateStringFromTick(tick);
                     const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                     if (0 < flashInterval && null !== current)
@@ -206,7 +206,7 @@ export module Render
                     }
                     break;
                 case "timer":
-                    tektite.setTitle(Domain.timeShortStringFromTick(tick -(current?.tick ?? tick)) +" - " +applicationTitle);
+                    tektite.setTitle(tektite.date.timeShortStringFromTick(tick -(current?.tick ?? tick)) +" - " +applicationTitle);
                     const eventListDiv = minamo.dom.getDivsByClassName(screen, "event-list")[0];
                     if (eventListDiv)
                     {
@@ -216,7 +216,7 @@ export module Render
                             (dom, index) =>
                             {
                                 (dom.getElementsByClassName("event-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
-                                    Domain.timeShortStringFromTick(tick -events[index].tick);
+                                    tektite.date.timeShortStringFromTick(tick -events[index].tick);
                             }
                         );
                     }

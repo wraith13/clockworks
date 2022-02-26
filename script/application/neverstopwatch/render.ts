@@ -25,7 +25,7 @@ export module Render
     export const screenHeaderStampSegment = async (item: number | null, ticks: number[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-tick-icon",
-        title: Domain.dateFullStringFromTick(item),
+        title: tektite.date.dateFullStringFromTick(item),
         menu: await Promise.all
         (
             ticks
@@ -36,7 +36,7 @@ export module Render
                 (
                     async i => tektite.menu.linkItem
                     (
-                        [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.monospace(Domain.dateFullStringFromTick(i)), ],
+                        [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.monospace(tektite.date.dateFullStringFromTick(i)), ],
                         Domain.makePageParams("NeverStopwatch", i),
                         item === i ? "current-item": undefined,
                     )
@@ -64,8 +64,8 @@ export module Render
         ]),
         Tektite.$div("tektite-item-information")
         ([
-            Tektite.monospace("tick-timestamp", label("Timestamp"), Domain.dateFullStringFromTick(tick)),
-            Tektite.monospace("tick-interval", label("Interval"), Domain.timeLongStringFromTick(interval)),
+            Tektite.monospace("tick-timestamp", label("Timestamp"), tektite.date.dateFullStringFromTick(tick)),
+            Tektite.monospace("tick-interval", label("Interval"), tektite.date.format("smart-time", interval)),
         ]),
     ]);
     export const stampItemMenu = async (tick: number) =>
@@ -120,15 +120,15 @@ export module Render
                     Tektite.monospace
                     (   "previous-timestamp",
                         null !== item ?
-                            Domain.dateFullStringFromTick(item):
+                            tektite.date.dateFullStringFromTick(item):
                             (
                                 0 < ticks.length ?
-                                Domain.dateFullStringFromTick(ticks[0]):
+                                tektite.date.dateFullStringFromTick(ticks[0]):
                                 ""
                             )
                     ),
-                    Tektite.monospace("capital-interval", Domain.timeLongStringFromTick(0)),
-                    Tektite.monospace("current-timestamp", Domain.dateFullStringFromTick(Domain.getTicks())),
+                    Tektite.monospace("capital-interval", tektite.date.format("smart-time", 0)),
+                    Tektite.monospace("current-timestamp", tektite.date.dateFullStringFromTick(Domain.getTicks())),
                 ]),
                 await RenderBase.flashIntervalLabel
                 (
@@ -223,8 +223,8 @@ export module Render
             switch(event)
             {
                 case "high-resolution-timer":
-                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeLongStringFromTick(tick -(current ?? tick));
-                    const capitalTime = Domain.dateStringFromTick(tick);
+                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = tektite.date.format("smart-time", tick -(current ?? tick));
+                    const capitalTime = tektite.date.dateStringFromTick(tick);
                     const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
                     if (0 < flashInterval && null !== current)
@@ -252,7 +252,7 @@ export module Render
                     }
                     break;
                 case "timer":
-                    tektite.setTitle(Domain.timeShortStringFromTick(tick -(current ?? tick)) +" - " +applicationTitle);
+                    tektite.setTitle(tektite.date.timeShortStringFromTick(tick -(current ?? tick)) +" - " +applicationTitle);
                     const stampListDiv = minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
                     if (stampListDiv)
                     {
@@ -261,7 +261,7 @@ export module Render
                         (
                             (dom, index) =>
                             {
-                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = Domain.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
+                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = tektite.date.timeShortStringFromTick(Domain.getTicks() -ticks[index]);
                             }
                         );
                     }

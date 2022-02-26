@@ -67,8 +67,8 @@ export module Render
             $div("item-panel-body")
             ([
                 Tektite.monospace("item-utc-offset", Domain.timezoneOffsetString(item.offset)),
-                Tektite.monospace("item-date", Domain.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
-                Tektite.monospace("item-time", Domain.timeFullCoreStringFromTick(Domain.getTime(Domain.getUTCTicks() -item.offset))),
+                Tektite.monospace("item-date", tektite.date.dateCoreStringFromTick(Domain.getUTCTicks() -item.offset)),
+                Tektite.monospace("item-time", tektite.date.timeFullCoreStringFromTick(tektite.date.getTime(Domain.getUTCTicks() -item.offset))),
             ]),
             $div("item-time-bar")([]),
         ])
@@ -163,7 +163,7 @@ export module Render
                 Tektite.monospace
                 (
                     "current-date",
-                    Domain.dateCoreStringFromTick
+                    tektite.date.dateCoreStringFromTick
                     (
                         null !== item ?
                             Domain.getUTCTicks() -item.offset:
@@ -173,9 +173,9 @@ export module Render
                 Tektite.monospace
                 (
                     "capital-time",
-                    Domain.timeFullCoreStringFromTick
+                    tektite.date.timeFullCoreStringFromTick
                     (
-                        Domain.getTime
+                        tektite.date.getTime
                         (
                             null !== item ?
                                 Domain.getUTCTicks() -item.offset:
@@ -281,7 +281,7 @@ export module Render
             switch(event)
             {
                 case "high-resolution-timer":
-                    const capitalTime = Domain.timeLongCoreStringFromTick(Domain.getTime(tick));
+                    const capitalTime = tektite.date.timeLongCoreStringFromTick(tektite.date.getTime(tick));
                     const capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     if (minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime).isUpdate)
                     {
@@ -320,15 +320,15 @@ export module Render
                                     minamo.dom.setStyleProperty(timeBar, "backgroundColor", nextColor);
                                     const percentString = minutes.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
                                     minamo.dom.setStyleProperty(timeBar, "width", percentString);
-                                    minamo.dom.setProperty(minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", Domain.dateCoreStringFromTick(currentTick) +" " +Domain.weekday(currentTick));
-                                    minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = Domain.timeLongCoreStringFromTick(Domain.getTime(currentTick));
+                                    minamo.dom.setProperty(minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-date")[0], "value")[0], "innerText", tektite.date.dateCoreStringFromTick(currentTick) +" " +Domain.weekday(currentTick));
+                                    minamo.dom.getDivsByClassName(minamo.dom.getDivsByClassName(panel, "item-time")[0], "value")[0].innerText = tektite.date.timeLongCoreStringFromTick(tektite.date.getTime(currentTick));
                                 }
                             );
                         }
                     }
                     break;
                 case "timer":
-                    const dateString = Domain.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
+                    const dateString = tektite.date.dateCoreStringFromTick(tick) +" " +Domain.weekday(tick);
                     const currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(currentDateSpan, "innerText", dateString);
                     const getRainbowColor = Type.rainbowClockColorPatternMap[Storage.RainbowClock.colorPattern.get()];
