@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json release
-    build at: Sun Feb 27 2022 05:29:16 GMT+0900 (日本標準時)
+    build at: Sun Feb 27 2022 13:56:07 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -6791,12 +6791,16 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                         "string" === typeof date ? _this.parseDate(date) :
                             date;
                 };
-                this.getTicks = function (date) {
+                this.getTicks = function (date, option) {
                     if (date === void 0) { date = new Date(); }
-                    return "number" === typeof date ? date :
-                        "string" === typeof date ? _this.parseDate(date).getTime() :
-                            date.getTime();
-                };
+                    return null === (option !== null && option !== void 0 ? option : null) ?
+                        "number" === typeof date ? date : // timespan or date
+                            "string" === typeof date ? _this.parseDate(date).getTime() : // date
+                                date.getTime() : // date
+                        "elapsed" === option ? _this.getTicks() - _this.getTicks(date) : // timespan
+                            "rest" === option ? _this.getTicks(date) - _this.getTicks() : // timespan
+                                _this.getTicks(date) - _this.getTicks(option);
+                }; // timespan
                 this.utcOffsetRate = 60 * 1000;
                 this.getUTCTicks = function (date) {
                     if (date === void 0) { date = new Date(); }
@@ -6865,6 +6869,9 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                     if (null === tick) {
                         return null;
                     }
+                    else if (tick instanceof Date || "string" === typeof tick) {
+                        return _this.getTime(_this.getTicks(tick));
+                    }
                     else if (tick < 0) {
                         return -_this.getTime(tick);
                     }
@@ -6913,36 +6920,26 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                         return "".concat(("00" + hour).slice(-2), ":").concat(("00" + minute).slice(-2), ":").concat(("00" + second).slice(-2), ".").concat(("000" + milliseconds).slice(-3));
                     }
                 };
-                this.makeShortTimeText = function (tick) {
+                this.makeDaysText = function (days) { return "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days")); };
+                this.makeTimeTextBase = function (tick, defaultFormat) {
                     if (tick < 0) {
-                        return "-".concat(_this.makeShortTimeText(-tick));
-                    }
-                    else {
-                        // if (tick < 60 *1000)
-                        // {
-                        //     return makeHHMMSSmmm(tick);
-                        // }
-                        if (tick < 60 * 60 * 1000) {
-                            return _this.makeHHMMSS(tick);
-                        }
-                        var days = Math.floor(tick / (24 * 60 * 60 * 1000));
-                        if (days < 1) {
-                            return _this.makeHHMMSS(tick);
-                        }
-                        return "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(_this.makeHHMMSS(tick));
-                    }
-                };
-                this.makeLongTimeText = function (tick) {
-                    if (tick < 0) {
-                        return "-".concat(_this.makeLongTimeText(-tick));
+                        return "-".concat(_this.makeTimeTextBase(-tick, defaultFormat));
                     }
                     else {
                         var days = Math.floor(tick / (24 * 60 * 60 * 1000));
-                        return 0 < days ?
-                            "".concat(days.toLocaleString(), " ").concat(_this.tektite.locale.map("days"), " ").concat(10 < days ? _this.makeHHMM(tick) : _this.makeHHMMSS(tick)) :
-                            _this.makeHHMMSSmmm(tick);
+                        if (days <= 0) {
+                            return _this.format(defaultFormat, tick);
+                        }
+                        else if (days < 10) {
+                            return "".concat(_this.format("days", days), " ").concat(_this.format("HH:MM:SS", tick));
+                        }
+                        else {
+                            return "".concat(_this.format("days", days), " ").concat(_this.format("HH:MM", tick));
+                        }
                     }
                 };
+                this.makeShortTimeText = function (tick) { return _this.makeTimeTextBase(tick, "HH:MM:SS"); };
+                this.makeLongTimeText = function (tick) { return _this.makeTimeTextBase(tick, "HH:MM:SS.mmm"); };
                 this.parseDate = function (date) {
                     if (null !== date) {
                         try {
@@ -6965,42 +6962,45 @@ define("clockworks/tektite.js/script/tektite-date", ["require", "exports"], func
                     }
                     return null;
                 };
-                this.format = function (format, date) {
-                    if (null === date) {
-                        return "N/A";
-                    }
-                    else {
-                        switch (format) {
-                            case "formal-time":
-                                return _this.makeFormalTimeText(_this.getTicks(date));
-                            case "long-time":
-                                return _this.makeLongTimeText(_this.getTicks(date));
-                            case "short-time":
-                                return _this.makeShortTimeText(_this.getTicks(date));
-                            case "HH:MM:SS.mmm":
-                                return _this.makeHHMMSSmmm(_this.getTicks(date));
-                            case "HH:MM:SS":
-                                return _this.makeHHMMSS(_this.getTicks(date));
-                            case "HH:MM":
-                                return _this.makeHHMM(_this.getTicks(date));
-                            case "www":
-                                return _this.weekday(_this.getTicks(date));
-                            case "YYYY-MM-DD":
-                                return _this.makeYYYYMMDD(_this.getDate(date));
-                            case "YYYY-MM-DD www":
-                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("www", date));
-                            case "YYYY-MM-DD HH:MM:SS.mmm":
-                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("HH:MM:SS.mmm", date));
-                            case "YYYY-MM-DD HH:MM:SS":
-                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("HH:MM:SS", date));
-                            case "YYYY-MM-DD HH:MM":
-                                return "".concat(_this.format("YYYY-MM-DD", date), " ").concat(_this.format("HH:MM", date));
-                        }
-                        console.error("tektite-date:unknown-date-format: ".concat(JSON.stringify(format)));
-                        return "".concat(date);
-                    }
-                };
             }
+            TektiteDate.prototype.format = function (format, date, option) {
+                if (null === date) {
+                    return "N/A";
+                }
+                else {
+                    switch (format) {
+                        case "formal-time":
+                            return this.makeFormalTimeText(this.getTicks(date, option));
+                        case "long-time":
+                            return this.makeLongTimeText(this.getTicks(date, option));
+                        case "short-time":
+                            return this.makeShortTimeText(this.getTicks(date, option));
+                        case "HH:MM:SS.mmm":
+                            return this.makeHHMMSSmmm(this.getTicks(date));
+                        case "HH:MM:SS":
+                            return this.makeHHMMSS(this.getTicks(date));
+                        case "HH:MM":
+                            return this.makeHHMM(this.getTicks(date));
+                        case "days":
+                            return this.makeDaysText(date);
+                        case "www":
+                            return this.weekday(this.getTicks(date));
+                        case "YYYY-MM-DD":
+                            return this.makeYYYYMMDD(this.getDate(date));
+                        case "YYYY-MM-DD www":
+                            return "".concat(this.format("YYYY-MM-DD", date), " ").concat(this.format("www", date));
+                        case "YYYY-MM-DD HH:MM:SS.mmm":
+                            return "".concat(this.format("YYYY-MM-DD", date), " ").concat(this.format("HH:MM:SS.mmm", this.getTime(date)));
+                        case "YYYY-MM-DD HH:MM:SS":
+                            return "".concat(this.format("YYYY-MM-DD", date), " ").concat(this.format("HH:MM:SS", this.getTime(date)));
+                        case "YYYY-MM-DD HH:MM":
+                            return "".concat(this.format("YYYY-MM-DD", date), " ").concat(this.format("HH:MM", this.getTime(date)));
+                    }
+                    console.error("tektite-date:unknown-date-format: ".concat(JSON.stringify(format)));
+                    return "".concat(date);
+                }
+            };
+            ;
             return TektiteDate;
         }());
         TektiteDate_1.TektiteDate = TektiteDate;
@@ -13874,7 +13874,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                 switch (_c.label) {
                     case 0:
                         console.log("start timestamp: ".concat(new Date()));
-                        console.log("buildTimestamp: ".concat(params.buildTimestamp, " ( ").concat(exports.tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick), " \u524D )"));
+                        console.log("buildTimestamp: ".concat(params.buildTimestamp, " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )"));
                         console.log("".concat(JSON.stringify(params)));
                         exports.tektite.locale.setLocale(storage_14.Storage.Settings.get().locale);
                         exports.tektite.onLoad();
@@ -13886,7 +13886,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                         _c.sent();
                         if ("reload" === ((_b = (_a = performance.getEntriesByType("navigation")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.type)) {
                             exports.tektite.screen.toast.make({
-                                content: tektite_index_13.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", new Date().getTime() - params.buildTimestampTick), " \u524D )")),
+                                content: tektite_index_13.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )")),
                                 isWideContent: true,
                             });
                         }
@@ -13916,7 +13916,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645907356521), buildTimestampTick: 1645907356521, })">
+<body onload="require('clockworks/script/index').Clockworks.start({ buildTimestamp: new Date(1645937767180), buildTimestampTick: 1645937767180, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
