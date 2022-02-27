@@ -177,7 +177,8 @@ export module Render
             switch(event)
             {
                 case "high-resolution-timer":
-                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = tektite.date.format("long-time", tick -(current?.tick ?? tick));
+                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
+                        tektite.date.format("long-time", current?.tick, "clip-elapsed", tick);
                     const capitalTime = tektite.date.format("YYYY-MM-DD HH:MM:SS", tick);
                     const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
@@ -206,7 +207,7 @@ export module Render
                     }
                     break;
                 case "timer":
-                    tektite.setTitle(tektite.date.format("short-time", tick -(current?.tick ?? tick)) +" - " +applicationTitle);
+                    tektite.setTitle(tektite.date.format("short-time", current?.tick, "clip-elapsed", tick) +" - " +applicationTitle);
                     const eventListDiv = minamo.dom.getDivsByClassName(screen, "event-list")[0];
                     if (eventListDiv)
                     {
@@ -216,7 +217,7 @@ export module Render
                             (dom, index) =>
                             {
                                 (dom.getElementsByClassName("event-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
-                                    tektite.date.format("short-time", tick -events[index].tick);
+                                    tektite.date.format("short-time", events[index].tick, "elapsed", tick);
                             }
                         );
                     }

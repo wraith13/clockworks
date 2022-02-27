@@ -44,7 +44,7 @@ export module Render
         )
     });
     export const alarmTitle = (item: Type.AlarmEntry) => "timer" === item.type ?
-        `${tektite.date.format("formal-time", item.end -item.start)} ${Clockworks.localeMap("Timer")}`:
+        `${tektite.date.format("formal-time", item.end, item.start)} ${Clockworks.localeMap("Timer")}`:
         item.title;
     export const alarmItem = async (item: Type.AlarmEntry) => $div("alarm-item tektite-title-item tektite-flex-item")
     ([
@@ -68,7 +68,7 @@ export module Render
         $div("tektite-item-information")
         ([
             Tektite.monospace("alarm-due-timestamp", label("Due timestamp"), tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", item.end)),
-            Tektite.monospace("alarm-due-rest", label("Rest"), tektite.date.format("long-time", item.end -Domain.getTicks())),
+            Tektite.monospace("alarm-due-rest", label("Rest"), tektite.date.format("long-time", item.end, "rest")),
         ]),
     ]);
     export const alarmItemMenu = async (item: Type.AlarmEntry) =>
@@ -155,7 +155,7 @@ export module Render
         $div("tektite-item-information")
         ([
             Tektite.monospace("event-timestamp", label("Timestamp"), tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", item.tick)),
-            Tektite.monospace("event-elapsed-time", label("Elapsed time"), tektite.date.format("long-time", Domain.getTicks() - item.tick)),
+            Tektite.monospace("event-elapsed-time", label("Elapsed time"), tektite.date.format("long-time", item.tick, "elapsed")),
         ]),
     ]);
     export const eventItemMenu = async (item: Type.EventEntry) =>
@@ -477,7 +477,7 @@ export module Render
             {
                 case "high-resolution-timer":
                     (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
-                        tektite.date.format("long-time", current ? Math.max(current.end -tick, 0): 0);
+                        tektite.date.format("long-time", current?.end, "clip-rest", tick);
                     const capitalTime = tektite.date.format("YYYY-MM-DD HH:MM:SS", tick);
                     const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
@@ -518,7 +518,7 @@ export module Render
                     }
                     break;
                 case "timer":
-                    tektite.setTitle(current ? tektite.date.format("short-time", Math.max(current.end -tick, 0)) +" - " +applicationTitle: applicationTitle);
+                    tektite.setTitle(current ? tektite.date.format("short-time", current.end, "clip-rest", tick) +" - " +applicationTitle: applicationTitle);
                     const alarmListDiv = minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
                     if (alarmListDiv)
                     {
@@ -528,7 +528,7 @@ export module Render
                             (dom, index) =>
                             {
                                 (dom.getElementsByClassName("alarm-due-rest")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
-                                    tektite.date.format("short-time", Math.max(alarms[index].end -tick, 0));
+                                    tektite.date.format("short-time", alarms[index].end, "clip-rest", tick);
                             }
                         );
                     }

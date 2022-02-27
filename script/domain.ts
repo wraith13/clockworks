@@ -1,6 +1,5 @@
 import { Type } from "./type";
 import { Base } from "./base";
-import { tektite } from ".";
 import config from "../resource/config.json";
 export module Domain
 {
@@ -29,7 +28,6 @@ export module Domain
     export const getFlashIntervalPreset = () => config.flashIntervalPreset.map(i => parseTimer(i));
     export const getTimerPreset = () => config.timerPreset.map(i => parseTimer(i));
     export const utcOffsetRate = 60 *1000;
-    export const makeMinutesTimerLabel = (minutes: number) => tektite.date.format("formal-time", minutes *60 *1000);
     export const getTicks = (date: Date = new Date()) => date.getTime();
     export const getUTCTicks = (date: Date = new Date()) => getTicks(date) +(date.getTimezoneOffset() *utcOffsetRate);
     export const getAppropriateTicks = (date: Date = new Date()) =>
@@ -41,8 +39,6 @@ export module Domain
         FloorHour.setMilliseconds(0);
         return FloorHour.getTime() +(60 *60 *1000);
     };
-    // export const weekday = (tick: number) =>
-    //     new Intl.DateTimeFormat(tektite.locale.get(), { weekday: 'long'}).format(tick);
     const timezoneOffsetSignString = (offset: number): string => 0 === offset ? "±": (0 < offset ? "-": "+"); // ※ JavaScript 上のタイムゾーンオフセットとUTC表記は + / - が逆転する
     const timezoneOffsetTimeString = (offset: number): string =>
     {

@@ -223,7 +223,8 @@ export module Render
             switch(event)
             {
                 case "high-resolution-timer":
-                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = tektite.date.format("long-time", tick -(current ?? tick));
+                    (screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText =
+                        tektite.date.format("long-time", current, "clip-elapsed", tick);
                     const capitalTime = tektite.date.format("YYYY-MM-DD HH:MM:SS", tick);
                     const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
@@ -252,7 +253,7 @@ export module Render
                     }
                     break;
                 case "timer":
-                    tektite.setTitle(tektite.date.format("short-time", tick -(current ?? tick)) +" - " +applicationTitle);
+                    tektite.setTitle(tektite.date.format("short-time", current, "clip-elapsed", tick) +" - " +applicationTitle);
                     const stampListDiv = minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
                     if (stampListDiv)
                     {
@@ -261,7 +262,7 @@ export module Render
                         (
                             (dom, index) =>
                             {
-                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = tektite.date.format("short-time", Domain.getTicks() -ticks[index]);
+                                (dom.getElementsByClassName("tick-elapsed-time")[0].getElementsByClassName("value")[0] as HTMLSpanElement).innerText = tektite.date.format("short-time", ticks[index], "elapsed");
                             }
                         );
                     }

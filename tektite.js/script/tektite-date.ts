@@ -1,8 +1,8 @@
 import { Tektite } from "./tektite-index.js";
 export module TektiteDate
 {
-    export type GetTicksOptionType = "elapsed" | "rest" | Date | number;
-    export type TimeFormatType =
+    export type GetTicksOptionType = "elapsed" | "clip-elapsed" | "rest" | "clip-rest" | Date | number;
+    export type TimespanFormatType =
         "formal-time" | "long-time" | "short-time" |
         "HH:MM:SS.mmm" | "HH:MM:SS" | "HH:MM";
     export type DateFormatType =
@@ -18,14 +18,16 @@ export module TektiteDate
             "number" === typeof date ? new Date(date):
             "string" === typeof date ? this.parseDate(date):
             date;
-        public getTicks = (date: Date | number | string = new Date(), option?: GetTicksOptionType): number =>
+        public getTicks = (date?: Date | number | string | null, option?: GetTicksOptionType, now?: Date | number | string): number =>
             null === (option ?? null) ?
                 "number" === typeof date ? date: // timespan or date
                 "string" === typeof date ? this.parseDate(date).getTime(): // date
-                date.getTime(): // date
-            "elapsed" === option ? this.getTicks() -this.getTicks(date): // timespan
-            "rest" === option ? this.getTicks(date) -this.getTicks(): // timespan
-            this.getTicks(date) -this.getTicks(option); // timespan
+                (date ?? new Date()).getTime(): // date
+            "elapsed" === option ? this.getTicks(now ?? new Date()) -this.getTicks(date ?? Date()): // timespan
+            "clip-elapsed" === option ? Math.max(this.getTicks(now ?? new Date()) -this.getTicks(date ?? Date()), 0): // timespan
+            "rest" === option ? this.getTicks(date ?? Date()) -this.getTicks(now ?? new Date()): // timespan
+            "clip-rest" === option ? Math.max(this.getTicks(date ?? Date()) -this.getTicks(now ?? new Date()), 0): // timespan
+            this.getTicks(date ?? Date()) -this.getTicks(option); // timespan
         public utcOffsetRate: number = 60 *1000;
         public getUTCTicks = (date: Date = new Date()): number => this.getTicks(date) +(date.getTimezoneOffset() *this.utcOffsetRate);
         public weekday = (tick: number) =>
@@ -175,7 +177,7 @@ export module TektiteDate
             }
         };
         private makeDaysText = (days: number) => `${days.toLocaleString()} ${this.tektite.locale.map("days")}`;
-        private makeTimeTextBase = (tick: number, defaultFormat: TimeFormatType): string =>
+        private makeTimeTextBase = (tick: number, defaultFormat: TimespanFormatType): string =>
         {
             if (tick < 0)
             {
@@ -231,14 +233,22 @@ export module TektiteDate
             }
             return null;
         };
-        public format(format :TimeFormatType, timespan: number | null): string
-        public format(format :TimeFormatType, date: Date | number | string | null, option: GetTicksOptionType): string
+        public format(format :TimespanFormatType, timespan: number | null): string
+        public format(format :"formal-time" | "long-time" | "short-time", date: Date | number | string | null, option: GetTicksOptionType, now?: Date | number | string): string
         public format(format :"days", days: number | null): string
         public format(format :DateFormatType, date: Date | number | string | null): string
-        public format(format :TimeFormatType | "days" | DateFormatType, date: Date | number | string | null, option?: GetTicksOptionType): string
+        public format(format :TimespanFormatType | "days" | DateFormatType, date: Date | number | string | null, option?: GetTicksOptionType, now?: Date | number | string): string
         {
-            if (null === date)
+            if (null === (date ?? null))
             {
+                if
+                (
+                    ("formal-time" === format || "long-time" === format || "short-time" === format) &&
+                    ("clip-elapsed" === option || "clip-rest" === option)
+                )
+                {
+                    return this.format(format, 0, option, 0);
+                }
                 return "N/A";
             }
             else
@@ -246,11 +256,11 @@ export module TektiteDate
                 switch(format)
                 {
                 case "formal-time":
-                    return this.makeFormalTimeText(this.getTicks(date, option));
+                    return this.makeFormalTimeText(this.getTicks(date, option, now));
                 case "long-time":
-                    return this.makeLongTimeText(this.getTicks(date, option));
+                    return this.makeLongTimeText(this.getTicks(date, option, now));
                 case "short-time":
-                    return this.makeShortTimeText(this.getTicks(date, option));
+                    return this.makeShortTimeText(this.getTicks(date, option, now));
                 case "HH:MM:SS.mmm":
                     return this.makeHHMMSSmmm(this.getTicks(date));
                 case "HH:MM:SS":
