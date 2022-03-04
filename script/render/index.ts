@@ -660,14 +660,14 @@ export module Render
             label("Color setting"),
             async () => await colorSettingsPopup(),
         );
-    export const updateTitle = () =>
-    {
-        document.title = minamo.dom.getDivsByClassName(tektite.screen.header.getElement(), "tektite-segment-title")
+    export const updateTitle = () => tektite.setTitle
+    (
+        minamo.dom.getDivsByClassName(tektite.screen.header.getElement(), "tektite-segment-title")
             ?.map(div => div.innerText)
             // ?.reverse()
             ?.join(" / ")
-            ?? config.applicationTitle;
-    };
+            ?? config.applicationTitle
+    );
     export const showScreen = async (screen: ScreenSource, updateScreen?: (event: Tektite.UpdateScreenEventEype) => unknown) =>
     {
         await tektite.screen.show(screen, updateScreen);

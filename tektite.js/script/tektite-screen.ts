@@ -303,7 +303,7 @@ export module Screen
             }
             this.tektite.resetProgress();
             this.setClass(screen.className);
-            this.header.replace(screen.header);
+            await this.header.replace(screen.header);
             await this.replaceBody(screen.body);
             this.adjustPageFooterPosition();
             this.adjustDownPageLinkDirection();
