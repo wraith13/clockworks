@@ -427,7 +427,25 @@
     .tektite-menu-popup,
     .bare-popup
     {
-        @include tektite-popup-glass-trait(#{$tektite-base-color}#{$tektite-popup-background-alpha});
+        // @include tektite-popup-glass-trait(#{$tektite-base-color}#{$tektite-popup-background-alpha});
+        @include tektite-backdrop-filter-trait;
+        background-color: #{$tektite-main-color}11;
+        & > a,
+        & > a > button,
+        & > button
+        {
+            &:not(.tektite-delete-button):not(.current-item)
+            {
+                @include tektite-foreground-coloring-trait($tektite-glass-foreground-color);
+            }
+            &:not(.tektite-delete-button)
+            {
+                @include tektite-hover-hover-trait
+                {
+                    background-color: #{$tektite-active-color}88;
+                }
+            }
+        }
     }
 }
 .tektite-menu-button-list,
