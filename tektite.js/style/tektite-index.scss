@@ -424,25 +424,40 @@
         @include tektite-screen-full-trait;
         @include tektite-animation(white-flash, 1.5s);
     }
-    .tektite-menu-popup,
-    .bare-popup
+    .bare-popup,
+    .tektite-popup,
+    .tektite-menu-popup
     {
         // @include tektite-popup-glass-trait(#{$tektite-base-color}#{$tektite-popup-background-alpha});
         @include tektite-backdrop-filter-trait;
         background-color: #{$tektite-main-color}11;
-        & > a,
-        & > a > button,
-        & > button
+        button
         {
-            &:not(.tektite-delete-button):not(.current-item)
-            {
-                @include tektite-foreground-coloring-trait($tektite-glass-foreground-color);
-            }
+            opacity: 0.7;
             &:not(.tektite-delete-button)
             {
+                @include tektite-foreground-coloring-trait($tektite-glass-foreground-color);
                 @include tektite-hover-hover-trait
                 {
-                    background-color: #{$tektite-active-color}88;
+                    background-color: #{$tektite-active-color};
+                }
+            }
+            &.tektite-delete-button
+            {
+                @include tektite-custom-operator-coloring-trait($tektite-glass-delete-color);
+            }
+            &:not(.tektite-current-item):not(.tektite-default-button)
+            {
+                @media (hover: hover)
+                {
+                    &:not(:hover)
+                    {
+                        background-color: transparent;
+                    }
+                }
+                @media (hover: none)
+                {
+                    background-color: transparent;
                 }
             }
         }
@@ -906,30 +921,30 @@
         {
             @include tektite-square-size-trait(1.5rem);
         }
-        &.current-item
+        &.tektite-current-item
         {
             @include tektite-primary-operator-coloring-trait;
         }
-        &:not(.current-item)
-        {
-            @media (hover: hover)
-            {
-                &:not(:hover)
-                {
-                    background-color: transparent;
-                }
-            }
-            @media (hover: none)
-            {
-                background-color: transparent;
-            }
-        }
+        // &:not(.tektite-current-item)
+        // {
+        //     @media (hover: hover)
+        //     {
+        //         &:not(:hover)
+        //         {
+        //             background-color: transparent;
+        //         }
+        //     }
+        //     @media (hover: none)
+        //     {
+        //         background-color: transparent;
+        //     }
+        // }
         & > .label + .value
         {
             text-align: right;
             flex-grow: 1;
         }
-        &:not(.current-item):not(:hover)
+        &:not(.tektite-current-item):not(:hover)
         {
             & > .label + .value
             {

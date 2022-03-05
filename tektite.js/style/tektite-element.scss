@@ -138,7 +138,7 @@ button
     }
     &.tektite-delete-button
     {
-        @include tektite-delete-operator-coloring-trait;
+        @include tektite-custom-operator-coloring-trait($tektite-delete-color);
     }
     &.tektite-text-button
     {

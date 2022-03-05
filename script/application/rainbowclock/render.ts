@@ -38,7 +38,7 @@ export module Render
                     (
                         [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.monospace(Domain.timezoneOffsetString(i.offset)), ],
                         Domain.makePageParams("RainbowClock", i),
-                        JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
+                        JSON.stringify(item) === JSON.stringify(i) ? "tektite-current-item": undefined,
                     )
                 )
         )

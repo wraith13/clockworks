@@ -71,7 +71,7 @@
     .tektite-main-panel
     {
         @include tektite-vertical-flex-trait;
-        .current-item
+        .tektite-current-item
         {
             align-items: start;
             display: flex;

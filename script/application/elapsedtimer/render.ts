@@ -39,7 +39,7 @@ export module Render
                     (
                         [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.$labelSpan(i.title), Tektite.monospace(tektite.date.format("YYYY-MM-DD HH:MM:SS", i.tick)), ],
                         Domain.makePageParams("ElapsedTimer", i),
-                        JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
+                        JSON.stringify(item) === JSON.stringify(i) ? "tektite-current-item": undefined,
                     )
                 )
         )
@@ -60,7 +60,7 @@ export module Render
             body:
             [
                 (item ?? events[0]) ?
-                Tektite.$div("current-item event-item")
+                Tektite.$div("tektite-current-item event-item")
                     ([
                         (item ?? events[0]) ?
                         [
@@ -70,7 +70,7 @@ export module Render
                         Tektite.monospace("capital-interval", tektite.date.format("long-time", 0)),
                         Tektite.monospace("current-timestamp", tektite.date.format("YYYY-MM-DD HH:MM:SS", Domain.getTicks())),
                     ]):
-                    Tektite.$div("current-item")
+                    Tektite.$div("tektite-current-item")
                     ([
                         Tektite.monospace("capital-interval", tektite.date.format("long-time", 0)),
                         Tektite.monospace("current-timestamp", tektite.date.format("YYYY-MM-DD HH:MM:SS", Domain.getTicks())),

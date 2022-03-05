@@ -384,7 +384,7 @@ export module Render
                         Tektite.$span("label")(Type.applicationList[i].title),
                     ],
                     { application: i },
-                    applicationType === i ? "current-item": undefined,
+                    applicationType === i ? "tektite-current-item": undefined,
                 )
             )
         )
@@ -409,7 +409,7 @@ export module Render
                         tektite.screen.getScreenCoverList().forEach(i => i.click());
                         await reload();
                     },
-                    flashInterval === i ? "current-item": undefined
+                    flashInterval === i ? "tektite-current-item": undefined
                 )
             )
         )

@@ -38,7 +38,7 @@ export module Render
                     (
                         [ await Resource.loadIconOrCache("tektite-tick-icon"), Tektite.monospace(tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", i)), ],
                         Domain.makePageParams("NeverStopwatch", i),
-                        item === i ? "current-item": undefined,
+                        item === i ? "tektite-current-item": undefined,
                     )
                 )
         )
@@ -115,7 +115,7 @@ export module Render
         {
             body:
             [
-                Tektite.$div("current-item")
+                Tektite.$div("tektite-current-item")
                 ([
                     Tektite.monospace
                     (   "previous-timestamp",

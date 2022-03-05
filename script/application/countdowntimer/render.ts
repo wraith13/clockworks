@@ -38,7 +38,7 @@ export module Render
                     (
                         [ await Resource.loadIconOrCache("tektite-tick-icon"), labelSpan(alarmTitle(i)), Tektite.monospace(tektite.date.format("YYYY-MM-DD HH:MM:SS", i.end)), ],
                         Domain.makePageParams("CountdownTimer", i),
-                        JSON.stringify(item) === JSON.stringify(i) ? "current-item": undefined,
+                        JSON.stringify(item) === JSON.stringify(i) ? "tektite-current-item": undefined,
                     )
                 )
         )
@@ -319,8 +319,8 @@ export module Render
                     $div
                     (
                         "timer" === (item ?? alarms[0]).type ?
-                            "current-item timer-item":
-                            "current-item schedule-item"
+                            "tektite-current-item timer-item":
+                            "tektite-current-item schedule-item"
                     )
                     ([
                         (item ?? alarms[0]) ?
@@ -333,7 +333,7 @@ export module Render
                         Tektite.monospace("capital-interval", tektite.date.format("long-time", 0)),
                         Tektite.monospace("current-timestamp", tektite.date.format("YYYY-MM-DD HH:MM:SS", Domain.getTicks())),
                     ]):
-                    $div("current-item")
+                    $div("tektite-current-item")
                     ([
                         Tektite.monospace("capital-interval", tektite.date.format("long-time", 0)),
                         Tektite.monospace("current-timestamp", tektite.date.format("YYYY-MM-DD HH:MM:SS", Domain.getTicks())),

@@ -226,20 +226,20 @@
         @include tektite-active-foreground-coloring-trait();
     }
 }
-@mixin tektite-delete-operator-coloring-trait()
+@mixin tektite-custom-operator-coloring-trait($custom-color)
 {
     @include tektite-clickable-trait;
     @include tektite-hover-default-trait()
     {
-        @include tektite-foreground-coloring-trait($tektite-delete-color);
-        border-color: $tektite-delete-color;
-        @include tektite-positive-background-coloring-trait;
+        @include tektite-foreground-coloring-trait($custom-color);
+        border-color: $custom-color;
+        // @include tektite-positive-background-coloring-trait;
     }
     @include tektite-hover-hover-trait()
     {
-        @include tektite-negative-foreground-coloring-trait;
-        border-color: $tektite-delete-color;
-        background-color: $tektite-delete-color;
+        // @include tektite-negative-foreground-coloring-trait;
+        border-color: $custom-color;
+        background-color: $custom-color;
     }
 }
 @mixin tektite-hide-scroll-bar
