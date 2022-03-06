@@ -4,14 +4,15 @@ export module Locale
     export class Locale<LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(private master: LocaleMapType) { }
-        public locales = Object.keys(this.master) as (keyof LocaleMapType)[];
-        private masterKey: keyof LocaleMapType = 0 <= this.locales.indexOf(navigator.language as keyof LocaleMapType) ?
-            navigator.language as keyof LocaleMapType:
-            this.locales[0];
-        public getLocaleName = (locale: keyof LocaleMapType & string) => this.master[locale].$name ?? locale;
-        public setLocale = (locale: keyof LocaleMapType | null) =>
+        public locales = Object.keys(this.master) as (string & keyof LocaleMapType)[];
+        private masterKey: keyof LocaleMapType & string =
+            0 <= this.locales.indexOf(navigator.language as (string & keyof LocaleMapType)) ?
+                navigator.language as (string & keyof LocaleMapType):
+                this.locales[0] as (string & keyof LocaleMapType);
+        public getLocaleName = (locale: string & keyof LocaleMapType) => this.master[locale].$name ?? locale;
+        public setLocale = (locale: (string & keyof LocaleMapType) | null) =>
         {
-            const key = locale ?? navigator.language as keyof LocaleMapType;
+            const key = (locale ?? navigator.language) as (string & keyof LocaleMapType);
             if (0 <= this.locales.indexOf(key))
             {
                 this.masterKey = key;
