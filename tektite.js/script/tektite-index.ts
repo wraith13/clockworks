@@ -70,6 +70,13 @@ export module Tektite
         children: minamo.dom.Source;
         onClose?: () => Promise<unknown>;
     }
+    export interface ViewModelBase<ViewModelTypeName>
+    {
+        type: ViewModelTypeName;
+        key?: string;
+        data: unknown;
+        children: ViewModelBase<unknown>[];
+    }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
