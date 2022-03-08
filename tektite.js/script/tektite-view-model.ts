@@ -5,7 +5,7 @@ export module ViewModel
     const $make = minamo.dom.make;
     export interface DomCache<ViewModelTypeName>
     {
-        dom: Node;
+        dom: Element;
         lastAccess: number;
         type: ViewModelTypeName;
         data: string;
@@ -32,7 +32,26 @@ export module ViewModel
             const json = JSON.stringify(this.data);
             if (this.previousData !== json && ! result)
             {
+                const oldCache: { [key: string]:DomCache<unknown> } = { };
+                Object.keys(this.domCache).forEach
+                (
+                    key =>
+                    {
+                        const cache = this.domCache[key];
+                        oldCache[key] =
+                        {
+                            dom: cache.dom,
+                            lastAccess: cache.lastAccess,
+                            type: cache.type,
+                            data: cache.data,
+                        };
+                    }
+                );
                 result = this.renderOrCache(now, "/", JSON.parse(json));
+                Object.keys(oldCache)
+                    .filter(key => oldCache[key].dom !== this.domCache[key]?.dom)
+                    .map(key => oldCache[key].dom)
+                    .forEach(dom => dom.parentElement.removeChild(dom));
                 this.previousData = json;
             }
             return result;
@@ -50,7 +69,7 @@ export module ViewModel
         public getChildren = (key: string) => Object.keys(this.domCache)
             .filter(i => i.startsWith(key) && 2 === i.substring(i.length).split["/"].length)
             .map(i => this.domCache[i]);
-        public setCache = (now: number, key: string, dom: Node, type: ViewModelTypeName, data: string) =>
+        public setCache = (now: number, key: string, dom: Element, type: ViewModelTypeName, data: string) =>
             this.domCache[key] =
             {
                 dom,
@@ -58,32 +77,23 @@ export module ViewModel
                 type,
                 data,
             };
-        public renderOrCache = (now: number, key: string, data: Tektite.ViewModelBase<unknown>): Node =>
+        public renderOrCache = (now: number, key: string, data: Tektite.ViewModelBase<unknown>): Element =>
         {
-            let result: Node;
+            let result: Element;
             const cache = this.getCache(now, key);
             const json = JSON.stringify(data.data);
-            if (cache)
+            if (cache?.data !== json)
             {
-                if (cache.data === json)
+                if ( ! cache)
                 {
-                    result = cache.dom;
+                    newRender();
                 }
-                else
-                {
-                    // update
-                    // ...
-                    updateRender();
-                    result = this.setCache(now, key, dom, data.type, json).dom;
-                }
+                updateRender();
+                result = this.setCache(now, key, dom, data.type, json).dom;
             }
             else
             {
-                //  new
-                // ...
-                newRender();
-                updateRender();
-                result = this.setCache(now, key, dom, data.type, json).dom;
+                result = cache.dom;
             }
             return result;
         };

@@ -7,6 +7,7 @@ import { Header } from "./tektite-header";
 import { Menu } from "./tektite-menu";
 import { Key as KeyModule } from "./tektite-key";
 import tektiteResource from "../images.json";
+import { ViewModel } from "./tektite-view-model.js";
 export module Tektite
 {
     export const $make = minamo.dom.make;
@@ -75,7 +76,13 @@ export module Tektite
         type: ViewModelTypeName;
         key?: string;
         data: unknown;
-        children: ViewModelBase<unknown>[];
+        children: ViewModelBase<ViewModelTypeName>[];
+    }
+    export interface ViewRenderer<ViewModelTypeName>
+    {
+        make: () => Element;
+        update: (cache: ViewModel.DomCache<ViewModelTypeName>, model: ViewModelBase<ViewModelTypeName>) => Element;
+        getChildModelContainer: (key: ViewModelTypeName) => Element;
     }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
