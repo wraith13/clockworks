@@ -97,17 +97,16 @@ export module ViewModel
                 dom = renderer.update(cache, data);
                 cache = this.setCache(now, path, dom, data.type, json, childrenKeys);
             }
-            const children = data.children.map
+            data.children.forEach
             (
                 i =>
                 {
                     const c = this.renderOrCache(now, `${path}/${i.key}`, i);
-                    const container = renderer.getChildModelContainer(i.key);
+                    const container = renderer.getChildModelContainer(cache.dom, i.key);
                     if (forceAppend || container !== c.dom.parentElement)
                     {
                         container.appendChild(c.dom)
                     }
-                    return c;
                 }
             );
             return cache;

@@ -78,11 +78,12 @@ export module Tektite
         data: unknown;
         children: ViewModelBase<ViewModelTypeName>[];
     }
-    export interface ViewRenderer<ViewModelTypeName>
+    export interface ViewRenderer<ViewModelTypeName, Model extends ViewModelBase<ViewModelTypeName>>
     {
         make: () => Element;
-        update: <Model extends ViewModelBase<ViewModelTypeName>>(cache: ViewModel.DomCache<ViewModelTypeName>, model: Model) => Element;
-        getChildModelContainer: (key: ViewModelTypeName) => Element;
+        update: (cache: ViewModel.DomCache<ViewModelTypeName>, model: Model) => Element;
+        getChildModelContainer: (dom: Element, key: ViewModelTypeName) => Element;
+        isListContainer?: boolean;
     }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
