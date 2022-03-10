@@ -73,7 +73,7 @@ export module Tektite
     }
     export interface ViewModelBase<ViewModelTypeName>
     {
-        type: ViewModelTypeName;
+        type: ViewModelTypeName & string;
         key: string;
         data: unknown;
         children: ViewModelBase<ViewModelTypeName>[];

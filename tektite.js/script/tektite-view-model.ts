@@ -52,7 +52,8 @@ export module ViewModel
                         };
                     }
                 );
-                result = this.renderOrCache(now, "/", JSON.parse(json)).dom;
+                const data = JSON.parse(json) as Tektite.ViewModelBase<unknown>;
+                result = this.renderOrCache(now, `/${data?.key}`, data).dom;
                 Object.keys(oldCache)
                     .filter(path => oldCache[path].dom !== this.domCache[path]?.dom)
                     .map(path => oldCache[path].dom)
@@ -87,28 +88,45 @@ export module ViewModel
         {
             let cache = this.getCache(now, path);
             const oldChildrenKeys = cache?.childrenKeys ?? [];
-            const childrenKeys = data.children.map(i => i.key);
-            const renderer = this.renderer[data.type];
+            const childrenKeys = data?.children?.map(i => i.key) ?? [];
+            const renderer = this.renderer[data?.type];
             const forceAppend = renderer.isListContainer && this.isSameOrder(oldChildrenKeys, childrenKeys);
-            const json = JSON.stringify(data.data);
-            if (cache?.data !== json)
+            const json = JSON.stringify(data?.data);
+            if ( ! data?.key)
             {
-                let dom = cache.dom ?? renderer.make();
-                dom = renderer.update(cache, data);
-                cache = this.setCache(now, path, dom, data.type, json, childrenKeys);
+                console.error(`tektite-view-model(${path}): It has not 'key' : ${JSON.stringify(data)}`);
             }
-            data.children.forEach
-            (
-                i =>
+            else
+            if ( ! data?.type)
+            {
+                console.error(`tektite-view-model(${path}): It has not 'type' : ${JSON.stringify(data)}`);
+            }
+            else
+            if ( ! renderer)
+            {
+                console.error(`tektite-view-model(${path}): Unknown type '${data?.type}' : ${JSON.stringify(data)}`);
+            }
+            else
+            {
+                if (cache?.data !== json)
                 {
-                    const c = this.renderOrCache(now, `${path}/${i.key}`, i);
-                    const container = renderer.getChildModelContainer(cache.dom, i.key);
-                    if (forceAppend || container !== c.dom.parentElement)
-                    {
-                        container.appendChild(c.dom)
-                    }
+                    let dom = cache.dom ?? renderer.make();
+                    dom = renderer.update(cache, data);
+                    cache = this.setCache(now, path, dom, data.type, json, childrenKeys);
                 }
-            );
+                data.children.forEach
+                (
+                    i =>
+                    {
+                        const c = this.renderOrCache(now, `${path}/${i.key}`, i);
+                        const container = renderer.getChildModelContainer(cache.dom, i.key);
+                        if (forceAppend || container !== c.dom.parentElement)
+                        {
+                            container.appendChild(c.dom)
+                        }
+                    }
+                );
+            }
             return cache;
         };
         public isSameOrder = (old: string[], now: string[]) =>
