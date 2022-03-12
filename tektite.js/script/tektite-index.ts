@@ -80,10 +80,22 @@ export module Tektite
     }
     export interface ViewRenderer<ViewModelTypeName, Model extends ViewModelBase<ViewModelTypeName>>
     {
-        make: () => Element;
-        update: (cache: ViewModel.DomCache<ViewModelTypeName>, model: Model) => Element;
+        make: () => Promise<Element>;
+        update: (path: string, cache: ViewModel.DomCache<ViewModelTypeName>, model: Model) => Promise<Element>;
         getChildModelContainer: (dom: Element, key: ViewModelTypeName) => Element;
         isListContainer?: boolean;
+    }
+    ;
+    export type ViewEventHandler<Model extends ViewModelBase<ViewModelTypeName>, EventType = UpdateScreenEventEype> = (event: EventType, path: string, cache: ViewModel.DomCache<ViewModelTypeName>, model: Model) => Promise<Element>;
+    export interface ViewEventHandlers<ViewModelTypeName, Model extends ViewModelBase<ViewModelTypeName>>
+    {
+        highResolutionTimer?: ViewEventHandler<Model, "high-resolution-timer">;
+        timer?: ViewEventHandler<Model, "timer">;
+        scroll?: ViewEventHandler<Model, "scroll">;
+        storage?: ViewEventHandler<Model, "storage">;
+        focus?: ViewEventHandler<Model, "focus">;
+        blur?: ViewEventHandler<Model, "blur">;
+        operate?: ViewEventHandler<Model, "operate">;
     }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {

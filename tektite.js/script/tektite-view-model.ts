@@ -2,13 +2,11 @@ import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
 export module ViewModel
 {
-    const $make = minamo.dom.make;
     export interface DomCache<ViewModelTypeName>
     {
         dom: Element;
         lastAccess: number;
-        type: ViewModelTypeName;
-        data: string;
+        json: string;
         childrenKeys: string[];
     }
     export class ViewModel<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
@@ -16,6 +14,7 @@ export module ViewModel
         private previousData: string;
         private data: Tektite.ViewModelBase<unknown>;
         private renderer: { [type: string ]: Tektite.ViewRenderer<unknown, Tektite.ViewModelBase<unknown>>};
+        private eventHandler: { [type: string ]: Tektite.ViewEventHandlers<unknown, Tektite.ViewModelBase<unknown>>};
         private unknownRenderer: Tektite.ViewRenderer<unknown, Tektite.ViewModelBase<unknown>>;
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
@@ -89,8 +88,8 @@ export module ViewModel
                         {
                             dom: cache.dom,
                             lastAccess: cache.lastAccess,
-                            type: cache.type,
-                            data: cache.data,
+                            json: cache.json,
+                            childrenKeys: minamo.core.simpleDeepCopy(cache.childrenKeys),
                         };
                     }
                 );
@@ -124,13 +123,12 @@ export module ViewModel
         public getChildren = (key: string) => Object.keys(this.domCache)
             .filter(i => i.startsWith(key) && 2 === i.substring(i.length).split["/"].length)
             .map(i => this.domCache[i]);
-        public setCache = (now: number, key: string, dom: Element, type: ViewModelTypeName, data: string, childrenKeys: string[]) =>
+        public setCache = (now: number, key: string, dom: Element, data: string, childrenKeys: string[]) =>
             this.domCache[key] =
             {
                 dom,
                 lastAccess: now,
-                type,
-                data,
+                json: data,
                 childrenKeys
             };
         public renderOrCache = async (now: number, path: string, data: Tektite.ViewModelBase<unknown>): Promise<DomCache<unknown>> =>
@@ -139,8 +137,6 @@ export module ViewModel
             const oldChildrenKeys = cache?.childrenKeys ?? [];
             const childrenKeys = data?.children?.map(i => i.key) ?? [];
             const renderer = this.renderer[data?.type] ?? this.unknownRenderer;
-            const forceAppend = renderer.isListContainer && this.isSameOrder(oldChildrenKeys, childrenKeys);
-            const json = JSON.stringify(data?.data);
             const outputError = (message: string) => console.error(`tektite-view-model: ${message} - path:${path}, data:${JSON.stringify(data)}`);
             if ( ! data?.key || "" === data.key)
             {
@@ -158,11 +154,18 @@ export module ViewModel
             }
             else
             {
-                if (cache?.data !== json)
+                const forceAppend = renderer.isListContainer && this.isSameOrder(oldChildrenKeys, childrenKeys);
+                const json = JSON.stringify
+                ({
+                    type: data?.type,
+                    key: data?.key,
+                    data: data?.data
+                });
+                if (cache?.json !== json)
                 {
                     let dom = cache.dom ?? await renderer.make();
-                    dom = await renderer.update(cache, data);
-                    cache = this.setCache(now, path, dom, data.type, json, childrenKeys);
+                    dom = await renderer.update(path, cache, data);
+                    cache = this.setCache(now, path, dom, json, childrenKeys);
                 }
                 await Promise.all
                 (
