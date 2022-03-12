@@ -71,32 +71,23 @@ export module Tektite
         children: minamo.dom.Source;
         onClose?: () => Promise<unknown>;
     }
-    export interface ViewModelBase<ViewModelTypeName>
+    export interface ViewModelBase
     {
-        type: ViewModelTypeName & string;
+        type: string;
         key: string;
         data: unknown;
-        children: ViewModelBase<ViewModelTypeName>[];
+        children: ViewModelBase[];
     }
-    export interface ViewRenderer<ViewModelTypeName, Model extends ViewModelBase<ViewModelTypeName>>
+    export interface ViewRenderer
     {
         make: () => Promise<Element>;
-        update: (path: string, cache: ViewModel.DomCache<ViewModelTypeName>, model: Model) => Promise<Element>;
-        getChildModelContainer: (dom: Element, key: ViewModelTypeName) => Element;
+        update: (path: ViewModel.PathType, dom: Element, model: ViewModelBase) => Promise<Element>;
+        getChildModelContainer: (dom: Element, key: string) => Element;
         isListContainer?: boolean;
-    }
-    ;
-    export type ViewEventHandler<Model extends ViewModelBase<ViewModelTypeName>, EventType = UpdateScreenEventEype> = (event: EventType, path: string, cache: ViewModel.DomCache<ViewModelTypeName>, model: Model) => Promise<Element>;
-    export interface ViewEventHandlers<ViewModelTypeName, Model extends ViewModelBase<ViewModelTypeName>>
-    {
-        highResolutionTimer?: ViewEventHandler<Model, "high-resolution-timer">;
-        timer?: ViewEventHandler<Model, "timer">;
-        scroll?: ViewEventHandler<Model, "scroll">;
-        storage?: ViewEventHandler<Model, "storage">;
-        focus?: ViewEventHandler<Model, "focus">;
-        blur?: ViewEventHandler<Model, "blur">;
-        operate?: ViewEventHandler<Model, "operate">;
-    }
+        eventHandlers?: ViewEventHandlers;
+    };
+    export type ViewEventHandler<EventType = UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
+    export type ViewEventHandlers = { [Property in UpdateScreenEventEype]?: ViewEventHandler<Property>; }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
