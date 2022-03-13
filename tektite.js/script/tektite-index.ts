@@ -8,6 +8,7 @@ import { Menu } from "./tektite-menu";
 import { Key as KeyModule } from "./tektite-key";
 import tektiteResource from "../images.json";
 import { ViewModel } from "./tektite-view-model.js";
+import { ViewRenderer } from "./tektite-view-renderer";
 export module Tektite
 {
     export const $make = minamo.dom.make;
@@ -71,23 +72,6 @@ export module Tektite
         children: minamo.dom.Source;
         onClose?: () => Promise<unknown>;
     }
-    export interface ViewModelBase
-    {
-        type: string;
-        key: string;
-        data: unknown;
-        children: ViewModelBase[];
-    }
-    export interface ViewRenderer
-    {
-        make: () => Promise<Element>;
-        update: (path: ViewModel.PathType, dom: Element, model: ViewModelBase) => Promise<Element>;
-        getChildModelContainer: (dom: Element, key: string) => Element;
-        isListContainer?: boolean;
-        eventHandlers?: ViewEventHandlers;
-    };
-    export type ViewEventHandler<EventType = UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
-    export type ViewEventHandlers = { [Property in UpdateScreenEventEype]?: ViewEventHandler<Property>; }
     export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -102,6 +86,8 @@ export module Tektite
         public menu = Menu.make(this);
         public locale = Locale.make(this);
         public date = TektiteDate.make(this);
+        public viewModel = ViewModel.make(this);
+        public viewRenderer = ViewRenderer.make(this);
         public internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}): minamo.dom.Source =>
         ({
             tag: "a",
