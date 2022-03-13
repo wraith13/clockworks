@@ -17,6 +17,26 @@ export module ViewModel
         type: "path",
         path: `${"/" === parent ? "": parent.path}/${key}`,
     });
+    export interface RootViewModel extends Tektite.ViewModelBase
+    {
+        type: "tektite-root-view-model";
+        key: "root";
+        data: unknown;
+        children: Tektite.ViewModelBase[];
+    }
+    export class RootViewRenderer implements Tektite.ViewRenderer
+    {
+        make = async () => null;
+        update = async  (path: ViewModel.PathType, dom: Element, model: RootViewModel)
+        {
+            return null;
+        }
+        getChildModelContainer: (dom: Element, key: string) => Element;
+        eventHandlers:
+        {
+
+        }
+    };
     export class ViewModel<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         private previousData: string;
@@ -196,6 +216,11 @@ export module ViewModel
                     console.error(`tektite-view-model: Duplicated keys - data:${JSON.stringify(data)}`);
                 }
                 else
+                if ("root" !== data.key)
+                {
+                    console.error(`tektite-view-model: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
+                }
+                else
                 {
                     result = (await this.renderOrCache(now, makePath("/", data?.key), data)).dom;
                     Object.keys(this.domCache)
@@ -259,20 +284,27 @@ export module ViewModel
                 }
                 Object.keys(renderer.eventHandlers ?? { })
                     .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
-                await Promise.all
+                const childrenCache = await Promise.all(data.children.map(async i => await this.renderOrCache(now, makePath(path, i.key), i)));
+                childrenCache.forEach
                 (
-                    data.children.map
-                    (
-                        async i =>
+                    (c, ix) =>
+                    {
+                        if (c.dom)
                         {
-                            const c = await this.renderOrCache(now, makePath(path, i.key), i);
-                            const container = renderer.getChildModelContainer(cache.dom, i.key);
-                            if (forceAppend || container !== c.dom.parentElement)
+                            const container = renderer.getChildModelContainer(cache.dom, data.children[ix].key);
+                            if (container)
                             {
-                                container.appendChild(c.dom)
+                                if (forceAppend || container !== c.dom.parentElement)
+                                {
+                                    container.appendChild(c.dom)
+                                }
+                            }
+                            else
+                            {
+                                console.error(`tektite-view-model: Dom mapping not found - parent.path:${path.path}, key:${data.children[ix].key}`);
                             }
                         }
-                    )
+                    }
                 );
             }
             return cache;
