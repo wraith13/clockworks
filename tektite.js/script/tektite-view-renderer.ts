@@ -73,21 +73,7 @@ export module ViewRenderer
             if (this.previousData !== json)
             {
                 const data = JSON.parse(json) as ViewModel.ViewModelBase;
-                if (ViewModel.hasInvalidViewModel(data))
-                {
-                    console.error(`tektite-view-renderer: Invalid view model - data:${data}`);
-                }
-                else
-                if (ViewModel.hasDuplicatedKeys(data))
-                {
-                    console.error(`tektite-view-renderer: Duplicated keys - data:${JSON.stringify(data)}`);
-                }
-                else
-                if ("root" !== data.key)
-                {
-                    console.error(`tektite-view-renderer: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
-                }
-                else
+                if ( ! ViewModel.hasError(ViewModel.makeRootPath(), data))
                 {
                     //  pre-process
                     this.activePathList = [ ];
@@ -107,7 +93,7 @@ export module ViewRenderer
                         }
                     );
                     //  present-process
-                    result = (await this.renderOrCache(now, ViewModel.makePath("/", data?.key), data)).dom;
+                    result = (await this.renderOrCache(now, ViewModel.makeRootPath(), data)).dom;
                     //  post-process
                     Object.keys(this.domCache)
                         .filter(path => this.activePathList.indexOf(path) <= 0)

@@ -10,6 +10,11 @@ export module ViewModel
         type: "path",
         path: `${"/" === parent ? "": parent.path}/${key}`,
     });
+    export const makeRootPath = (): PathType =>
+    ({
+        type: "path",
+        path: "/root",
+    });
     export interface ViewModelBase
     {
         type: string;
@@ -31,6 +36,39 @@ export module ViewModel
     export const hasDuplicatedKeys = (data: ViewModelBase) =>
         0 < (data?.children ?? []).map(i => i.key).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
         0 < (data?.children ?? []).filter(i => hasDuplicatedKeys(i)).length;
+    export const isValidPath = (path: PathType) =>
+        isPathType(path) &&
+        ("/root" === path.path || path.path.startsWith("/root/"));
+    export const hasError = (path: PathType, data: ViewModelBase) =>
+    {
+        if (hasInvalidViewModel(data))
+        {
+            console.error(`tektite-view-model: Invalid view model - data:${data}`);
+            return true;
+        }
+        else
+        if (hasDuplicatedKeys(data))
+        {
+            console.error(`tektite-view-model: Duplicated keys - data:${JSON.stringify(data)}`);
+            return true;
+        }
+        else
+        if ( ! isValidPath(path))
+        {
+            console.error(`tektite-view-model: Invalid path - path:${path.path}`);
+            return true;
+        }
+        else
+        if ("/root" === path.path && "root" !== data.key)
+        {
+            console.error(`tektite-view-model: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    };
     export class ViewModel<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         private data: ViewModelBase;
@@ -47,26 +85,7 @@ export module ViewModel
             if (isPathType(pathOrdata))
             {
                 const path = pathOrdata;
-                if (hasInvalidViewModel(data))
-                {
-                    console.error(`tektite-view-model: Invalid view model - data:${data}`);
-                }
-                else
-                if (hasDuplicatedKeys(data))
-                {
-                    console.error(`tektite-view-model: Duplicated keys - data:${JSON.stringify(data)}`);
-                }
-                else
-                if ("/root" !== path.path && path.path.startsWith("/root/"))
-                {
-                    console.error(`tektite-view-model: Invalid path - path:${path.path}`);
-                }
-                else
-                if ("/root" === path.path && "root" !== data.key)
-                {
-                    console.error(`tektite-view-model: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
-                }
-                else
+                if ( ! hasError(path, data))
                 {
                     const keys = path.path.split("/").filter(i => 0 < i.length);
                     if ("" !== keys[0])
@@ -115,21 +134,7 @@ export module ViewModel
             else
             {
                 const data = pathOrdata;
-                if (hasInvalidViewModel(data))
-                {
-                    console.error(`tektite-view-model: Invalid view model - data:${data}`);
-                }
-                else
-                if (hasDuplicatedKeys(data))
-                {
-                    console.error(`tektite-view-model: Duplicated keys - data:${data}`);
-                }
-                else
-                if ("root" !== data.key)
-                {
-                    console.error(`tektite-view-model: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
-                }
-                else
+                if ( ! hasError(makeRootPath(), data))
                 {
                     this.data = data;
                 }
@@ -145,7 +150,7 @@ export module ViewModel
             {
                 let current: ViewModelBase;
                 const keys = path.path.split("/").filter(i => 0 < i.length);
-                if ("" !== keys[0])
+                if ("" !== keys[0] || ! isValidPath(path))
                 {
                     console.error(`tektite-view-model: Invalid path - path:${path.path}`);
                 }
