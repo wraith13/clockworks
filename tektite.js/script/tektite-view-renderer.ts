@@ -3,22 +3,35 @@ import { Tektite } from "./tektite-index";
 import { ViewModel } from "./tektite-view-model";
 export module ViewRenderer
 {
-    export interface ViewRendererBase
+    export interface Entry
     {
-        make: () => Promise<Element>;
-        update: (path: ViewModel.PathType, dom: Element, model: ViewModel.ViewModelBase) => Promise<Element>;
+        make: () => Promise<Element | minamo.dom.Source>;
+        update: (path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
         getChildModelContainer: (dom: Element, key: string) => Element;
         isListContainer?: boolean;
-        eventHandlers?: ViewEventHandlers;
+        eventHandlers?: EventHandlers;
     };
-    export type ViewEventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
-    export type ViewEventHandlers = { [Property in Tektite.UpdateScreenEventEype]?: ViewEventHandler<Property>; }
-    export class RootViewRenderer implements ViewRendererBase
+    export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
+    export type EventHandlers = { [Property in Tektite.UpdateScreenEventEype]?: EventHandler<Property>; }
+    export class RootRenderer implements Entry
     {
         make = async () => null;
-        update = async (_path: ViewModel.PathType, _dom: Element, _model: ViewModel.ViewModelBase) =>
+        update = async (_path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
         {
-            return null;
+            const rootEntry = model as ViewModel.RootEntry;
+            if ("string" === typeof rootEntry.data.title)
+            {
+                if (document.title !== rootEntry.data.title)
+                {
+                    document.title = rootEntry.data.title;
+                }
+            }
+            if ("string" === typeof rootEntry.data.windowColor)
+            {
+                minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
+                minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
+            }
+            return dom;
         }
         getChildModelContainer: (dom: Element, key: string) => Element;
         eventHandlers:
@@ -35,25 +48,25 @@ export module ViewRenderer
     export class ViewRenderer<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
         private previousData: string;
-        private renderer: { [type: string ]: ViewRendererBase};
+        private renderer: { [type: string ]: Entry};
         private eventHandlers:
         {
             [Property in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
         };
-        private unknownRenderer: ViewRendererBase;
+        private unknownRenderer: Entry;
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
         update = (event: Tektite.UpdateScreenEventEype) =>
         {
-            this.renderDom(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
+            this.renderRoot(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
             this.eventHandlers?.[event]?.forEach
             (
                 path =>
-                    (this.renderer[this.tektite.viewModel.get(path)?.type]?.eventHandlers?.[event] as ViewEventHandler<unknown>)
+                    (this.renderer[this.tektite.viewModel.get(path)?.type]?.eventHandlers?.[event] as EventHandler<unknown>)
                     ?.(event, path)
             );
-            this.renderDom(); // this.eventHandlers によって更新された model を rendering する為
+            this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
         };
         pushEventHandler = (event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
         {
@@ -66,13 +79,13 @@ export module ViewRenderer
         public onLoad = () =>
         {
         };
-        public renderDom = async (data: ViewModel.ViewModelBase = this.tektite.viewModel.get(), now: number = new Date().getTime()) =>
+        public renderRoot = async (data: ViewModel.Entry = this.tektite.viewModel.get(), now: number = new Date().getTime()) =>
         {
             let result: Element;
             const json = JSON.stringify(data);
             if (this.previousData !== json)
             {
-                const data = JSON.parse(json) as ViewModel.ViewModelBase;
+                const data = JSON.parse(json) as ViewModel.Entry;
                 if ( ! ViewModel.hasError(ViewModel.makeRootPath(), data))
                 {
                     //  pre-process
@@ -117,7 +130,11 @@ export module ViewRenderer
                 json: data,
                 childrenKeys
             };
-        public renderOrCache = async (now: number, path: ViewModel.PathType, data: ViewModel.ViewModelBase): Promise<DomCache> =>
+        public makeOrNull = (dom: Element | minamo.dom.Source): Element | null =>
+            null === dom ? dom as null:
+            dom instanceof Element ? dom:
+                (minamo.dom.make(dom) as Element);
+        public renderOrCache = async (now: number, path: ViewModel.PathType, data: ViewModel.Entry): Promise<DomCache> =>
         {
             this.activePathList.push(path?.path);
             let cache = this.getCache(path);
@@ -150,7 +167,7 @@ export module ViewRenderer
                 });
                 if (cache?.json !== json)
                 {
-                    let dom = cache.dom ?? await renderer.make();
+                    let dom = cache.dom ?? this.makeOrNull(await renderer.make());
                     dom = await renderer.update(path, cache.dom, data);
                     cache = this.setCache(path, dom, json, childrenKeys);
                 }

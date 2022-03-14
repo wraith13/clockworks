@@ -15,31 +15,35 @@ export module ViewModel
         type: "path",
         path: "/root",
     });
-    export interface ViewModelBase
+    export interface Entry
     {
         type: string;
         key: string;
         data: unknown;
-        children: ViewModelBase[];
+        children: Entry[];
     }
-    export interface RootViewModel extends ViewModelBase
+    export interface RootEntry extends Entry
     {
         type: "tektite-root-view-model";
         key: "root";
-        data: unknown;
-        children: ViewModelBase[];
+        data:
+        {
+            title?: string;
+            windowColor?: string;
+        };
+        children: Entry[];
     }
-    export const hasInvalidViewModel = (data: ViewModelBase) =>
+    export const hasInvalidViewModel = (data: Entry) =>
         "" === (data?.key ?? "") ||
         "" === (data?.type ?? "") ||
         0 < (data?.children ?? []).filter(i => hasInvalidViewModel(i)).length;
-    export const hasDuplicatedKeys = (data: ViewModelBase) =>
+    export const hasDuplicatedKeys = (data: Entry) =>
         0 < (data?.children ?? []).map(i => i.key).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
         0 < (data?.children ?? []).filter(i => hasDuplicatedKeys(i)).length;
     export const isValidPath = (path: PathType) =>
         isPathType(path) &&
         ("/root" === path.path || path.path.startsWith("/root/"));
-    export const hasError = (path: PathType, data: ViewModelBase) =>
+    export const hasError = (path: PathType, data: Entry) =>
     {
         if (hasInvalidViewModel(data))
         {
@@ -71,16 +75,16 @@ export module ViewModel
     };
     export class ViewModel<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     {
-        private data: ViewModelBase;
+        private data: Entry;
         constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         {
         }
         public onLoad = () =>
         {
         };
-        public set(data: ViewModelBase);
-        public set(path: PathType, data: ViewModelBase);
-        public set(pathOrdata: PathType | ViewModelBase, data?: ViewModelBase)
+        public set(data: Entry);
+        public set(path: PathType, data: Entry);
+        public set(pathOrdata: PathType | Entry, data?: Entry)
         {
             if (isPathType(pathOrdata))
             {
@@ -99,10 +103,10 @@ export module ViewModel
                         {
                             console.error(`tektite-view-model: Unmatch path and key - path:${path.path}, data:${JSON.stringify(data)}`);
                         }
-                        let current: ViewModelBase;
+                        let current: Entry;
                         if (1 < keys.length)
                         {
-                            current = { children: [ this.data ] } as ViewModelBase;
+                            current = { children: [ this.data ] } as Entry;
                             while(1 < keys.length)
                             {
                                 current = (current.children ?? []).filter(i => i.key === keys[0])[0];
@@ -148,7 +152,7 @@ export module ViewModel
             }
             else
             {
-                let current: ViewModelBase;
+                let current: Entry;
                 const keys = path.path.split("/").filter(i => 0 < i.length);
                 if ("" !== keys[0] || ! isValidPath(path))
                 {
@@ -159,7 +163,7 @@ export module ViewModel
                     keys.shift();
                     if (0 < keys.length)
                     {
-                        current = { children: [ this.data ] } as ViewModelBase;
+                        current = { children: [ this.data ] } as Entry;
                         while(0 < keys.length)
                         {
                             current = (current.children ?? []).filter(i => i.key === keys[0])[0];
