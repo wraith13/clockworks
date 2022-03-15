@@ -5,7 +5,7 @@ export module ViewRenderer
 {
     export interface Entry
     {
-        make: () => Promise<Element | minamo.dom.Source>;
+        make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
         update: (path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
         getChildModelContainer: (dom: Element, key: string) => Element;
         isListContainer?: boolean;
@@ -13,31 +13,138 @@ export module ViewRenderer
     };
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Property in Tektite.UpdateScreenEventEype]?: EventHandler<Property>; }
-    export class RootRenderer implements Entry
+    export const renderer: { [type: string ]: Entry} =
     {
-        make = async () => null;
-        update = async (_path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
+        "tektite-screen-root":
         {
-            const rootEntry = model as ViewModel.RootEntry;
-            if ("string" === typeof rootEntry.data.title)
+            make:
             {
-                if (document.title !== rootEntry.data.title)
+                parent: document.body,
+                tag: "div",
+                className: "tektite-foundation",
+                children:
                 {
-                    document.title = rootEntry.data.title;
+                    tag: "div",
+                    className: "tektite-screen",
                 }
-            }
-            if ("string" === typeof rootEntry.data.windowColor)
+            },
+            update: async (_path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
             {
-                minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
-                minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
+                const rootEntry = model as ViewModel.RootEntry;
+                if ("string" === typeof rootEntry.data.title)
+                {
+                    if (document.title !== rootEntry.data.title)
+                    {
+                        document.title = rootEntry.data.title;
+                    }
+                }
+                if ("string" === typeof rootEntry.data.windowColor)
+                {
+                    minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
+                    minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
+                }
+                return dom;
+            },
+            getChildModelContainer: (dom: Element, key: string) =>
+            {
+                switch(key)
+                {
+                case "screen-header":
+                case "screen-body":
+                case "screen-bar":
+                case "screen-toast":
+                    return dom.getElementsByClassName("tektite-screen")[0];
+                }
+                return null;
+            },
+            eventHandlers:
+            {
             }
-            return dom;
-        }
-        getChildModelContainer: (dom: Element, key: string) => Element;
-        eventHandlers:
+        },
+        "tektite-screen-header":
         {
+            make:
+            {
+                tag: "header",
+                id: "tektite-screen-header",
+                className: "tektite-segmented",
+            },
+            update: async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            {
+                return dom;
+            },
+            getChildModelContainer: (dom: Element, key: string) =>
+            {
 
-        }
+            },
+            eventHandlers:
+            {
+    
+            }
+        },
+        "tektite-screen-body":
+        {
+            make:
+            {
+                tag: "div",
+                id: "tektite-screen-body",
+                className: "tektite-screen-body",
+            },
+            update: async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            {
+                return dom;
+            },
+            getChildModelContainer: (dom: Element, key: string) =>
+            {
+
+            },
+            eventHandlers:
+            {
+    
+            }
+        },
+        "tektite-screen-bar":
+        {
+            make:
+            {
+                tag: "div",
+                className: "tektite-screen-bar",
+                childNodes:
+                {
+                    tag: "div",
+                    className: "tektite-screen-bar-flash-layer",
+                },
+            },
+            update = async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            {
+                return dom;
+            },
+            getChildModelContainer: (dom: Element, key: string) =>
+            {
+                
+            },
+            eventHandlers:
+            {
+    
+            }
+        },
+        "tektite-screen-toast":
+        {
+            make:
+            {
+                tag: "div",
+                className: "tektite-screen-toast",
+            },
+            update = async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            {
+                return dom;
+            }
+            getChildModelContainer: (dom: Element, key: string) => Element;
+            eventHandlers:
+            {
+    
+            }
+        },
     };
     interface DomCache
     {
@@ -130,10 +237,13 @@ export module ViewRenderer
                 json: data,
                 childrenKeys
             };
-        public makeOrNull = (dom: Element | minamo.dom.Source): Element | null =>
-            null === dom ? dom as null:
-            dom instanceof Element ? dom:
-                (minamo.dom.make(dom) as Element);
+        public makeOrNull = async (maker: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source): Promise<Element | null> =>
+        {
+            const source = "function" === typeof maker ? await maker(): maker;
+            return null === source ? source as null:
+                source instanceof Element ? source:
+                (minamo.dom.make(source) as Element);
+        };
         public renderOrCache = async (now: number, path: ViewModel.PathType, data: ViewModel.Entry): Promise<DomCache> =>
         {
             this.activePathList.push(path?.path);
@@ -167,7 +277,7 @@ export module ViewRenderer
                 });
                 if (cache?.json !== json)
                 {
-                    let dom = cache.dom ?? this.makeOrNull(await renderer.make());
+                    let dom = cache.dom ?? await this.makeOrNull(renderer.make);
                     dom = await renderer.update(path, cache.dom, data);
                     cache = this.setCache(path, dom, json, childrenKeys);
                 }
