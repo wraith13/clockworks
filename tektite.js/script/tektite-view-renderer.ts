@@ -8,7 +8,6 @@ export module ViewRenderer
         make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
         update: (path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
         getChildModelContainer: (dom: Element, key: string) => Element;
-        isListContainer?: boolean;
         eventHandlers?: EventHandlers;
     };
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
@@ -267,8 +266,8 @@ export module ViewRenderer
             else
             {
                 const oldChildrenKeys = cache?.childrenKeys ?? [];
-                const childrenKeys = data?.children?.map(i => i.key) ?? [];
-                const forceAppend = renderer.isListContainer && this.isSameOrder(oldChildrenKeys, childrenKeys);
+                const childrenKeys = ViewModel.getChildrenModelKeys(data);
+                const forceAppend = Array.isArray(data.children ?? []) && this.isSameOrder(oldChildrenKeys, childrenKeys);
                 const json = JSON.stringify
                 ({
                     type: data?.type,
@@ -283,14 +282,14 @@ export module ViewRenderer
                 }
                 Object.keys(renderer.eventHandlers ?? { })
                     .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
-                const childrenCache = await Promise.all(data.children.map(async i => await this.renderOrCache(now, ViewModel.makePath(path, i.key), i)));
+                const childrenCache = await Promise.all(childrenKeys.map(async key => await this.renderOrCache(now, ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))));
                 childrenCache.forEach
                 (
                     (c, ix) =>
                     {
                         if (c.dom)
                         {
-                            const container = renderer.getChildModelContainer(cache.dom, data.children[ix].key);
+                            const container = renderer.getChildModelContainer(cache.dom, ViewModel.getLeafKey(path));
                             if (container)
                             {
                                 if (forceAppend || container !== c.dom.parentElement)

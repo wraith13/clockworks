@@ -15,31 +15,49 @@ export module ViewModel
         type: "path",
         path: "/root",
     });
+    export const getLeafKey = (path: PathType) => path.path.split("/").pop();
     export interface Entry
     {
         type: string;
-        key: string;
-        data: unknown;
-        children: Entry[];
+        key?: string; // for list item
+        data?: unknown;
+        children?: Entry[] | { [key: string]: Entry };
     }
     export interface RootEntry extends Entry
     {
         type: "tektite-root-view-model";
-        key: "root";
         data:
         {
             title?: string;
             windowColor?: string;
         };
-        children: Entry[];
+        children:
+        {
+            "screen-header": Entry,
+            "screen-body": Entry,
+            "screen-bar": Entry,
+            "screen-toast": Entry,
+        };
     }
+    export const getChildrenKeys = (data: Entry): number[] | string[] =>
+        ! data?.children ? []:
+            Array.isArray(data.children) ?
+                data.children.map((_, ix) => ix):
+                Object.keys(data.children);
+    export const getChildrenModelKeys = (data: Entry): string[] =>
+        getChildrenKeys(data).map(key => "string" === typeof key ? key: data.children[key].key);
+    export const getChildFromModelKey = (data: Entry, key: string): Entry =>
+        Array.isArray(data?.children) ?
+            data?.children?.filter(i => key === i.key)?.[0]:
+            data?.children?.[key];
+    export const getChildrenValues = (data: Entry): Entry[] =>
+        getChildrenKeys(data).map(key => data.children[key]);
     export const hasInvalidViewModel = (data: Entry) =>
-        "" === (data?.key ?? "") ||
         "" === (data?.type ?? "") ||
-        0 < (data?.children ?? []).filter(i => hasInvalidViewModel(i)).length;
+        0 < getChildrenModelKeys(data).filter(key => "" === (key ?? "") || getChildFromModelKey(data, key)).length;
     export const hasDuplicatedKeys = (data: Entry) =>
-        0 < (data?.children ?? []).map(i => i.key).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
-        0 < (data?.children ?? []).filter(i => hasDuplicatedKeys(i)).length;
+        0 < getChildrenModelKeys(data).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
+        0 < getChildrenValues(data).filter(i => hasDuplicatedKeys(i)).length;
     export const isValidPath = (path: PathType) =>
         isPathType(path) &&
         ("/root" === path.path || path.path.startsWith("/root/"));
@@ -109,7 +127,7 @@ export module ViewModel
                             current = { children: [ this.data ] } as Entry;
                             while(1 < keys.length)
                             {
-                                current = (current.children ?? []).filter(i => i.key === keys[0])[0];
+                                current = getChildFromModelKey(current, keys[0]);
                                 if ( ! current)
                                 {
                                     console.error(`tektite-view-model: Path not found - path:${path.path}`);
@@ -119,8 +137,26 @@ export module ViewModel
                             }
                             if (current)
                             {
-                                current.children = current.children?.filter(i => i.key !== keys[0]) ?? [];
-                                current.children.push(data);
+                                if ( ! current.children)
+                                {
+                                    current.children = "" === (data.key ?? "") ? { }: [ ];
+                                }
+                                if (Array.isArray(current.children))
+                                {
+                                    const ix = current.children.findIndex(i => i.key === keys[0]);
+                                    if (0 <= ix)
+                                    {
+                                        current.children[ix] = data;
+                                    }
+                                    else
+                                    {
+                                        current.children.push(data);
+                                    }
+                                }
+                                else
+                                {
+                                    current.children[keys[0]] = data;
+                                }
                             }
                         }
                         else
@@ -163,10 +199,10 @@ export module ViewModel
                     keys.shift();
                     if (0 < keys.length)
                     {
-                        current = { children: [ this.data ] } as Entry;
+                        current = { type: "ground", children: { root: this.data } } as Entry;
                         while(0 < keys.length)
                         {
-                            current = (current.children ?? []).filter(i => i.key === keys[0])[0];
+                            current = getChildFromModelKey(current, keys[0]);
                             if ( ! current)
                             {
                                 console.error(`tektite-view-model: Path not found - path:${path.path}`);
