@@ -1,3 +1,4 @@
+import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
 export module ViewModel
 {
@@ -67,9 +68,19 @@ export module ViewModel
     export interface ScreenToastEntry extends Entry
     {
         type: "tektite-screen-toast";
-        children:
+        children: ToastItemEntry[];
+    }
+    export interface ToastItemEntry extends ListEntry
+    {
+        type: "tektite-toast-item";
+        data:
         {
-        };
+            content: minamo.dom.Source,
+            backwardOperator?: minamo.dom.Source,
+            forwardOperator?: minamo.dom.Source,
+            isWideContent?: boolean,
+            wait?: number,
+        }
     }
     export const getChildrenKeys = (data: Entry): number[] | string[] =>
         ! data?.children ? []:
