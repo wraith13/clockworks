@@ -19,10 +19,14 @@ export module ViewModel
     export interface Entry
     {
         type: string;
-        key?: string; // for list item
         data?: unknown;
-        children?: Entry[] | { [key: string]: Entry };
+        children?: ListEntry[] | { [key: string]: Entry };
     }
+    export interface ListEntry extends Entry
+    {
+        key: string;
+    }
+    export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
     export interface RootEntry extends Entry
     {
         type: "tektite-root-view-model";
@@ -54,7 +58,13 @@ export module ViewModel
         getChildrenKeys(data).map(key => data.children[key]);
     export const hasInvalidViewModel = (data: Entry) =>
         "" === (data?.type ?? "") ||
-        0 < getChildrenModelKeys(data).filter(key => "" === (key ?? "") || getChildFromModelKey(data, key)).length;
+        0 < getChildrenModelKeys(data).filter
+            (
+                key =>
+                    "" === (key ?? "") ||
+                    ( ! Array.isArray(data.children) && "" !== ((data.children[key] as ListEntry).key ?? "")) ||
+                    hasInvalidViewModel(getChildFromModelKey(data, key))
+            ).length;
     export const hasDuplicatedKeys = (data: Entry) =>
         0 < getChildrenModelKeys(data).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
         0 < getChildrenValues(data).filter(i => hasDuplicatedKeys(i)).length;
@@ -80,12 +90,12 @@ export module ViewModel
             console.error(`tektite-view-model: Invalid path - path:${path.path}`);
             return true;
         }
-        else
-        if ("/root" === path.path && "root" !== data.key)
-        {
-            console.error(`tektite-view-model: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
-            return true;
-        }
+        // else
+        // if ("/root" === path.path && "root" !== data.key)
+        // {
+        //     console.error(`tektite-view-model: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
+        //     return true;
+        // }
         else
         {
             return false;
@@ -117,10 +127,6 @@ export module ViewModel
                     else
                     {
                         keys.shift();
-                        if (data?.key !== keys[keys.length -1])
-                        {
-                            console.error(`tektite-view-model: Unmatch path and key - path:${path.path}, data:${JSON.stringify(data)}`);
-                        }
                         let current: Entry;
                         if (1 < keys.length)
                         {
@@ -139,23 +145,42 @@ export module ViewModel
                             {
                                 if ( ! current.children)
                                 {
-                                    current.children = "" === (data.key ?? "") ? { }: [ ];
+                                    current.children = isListEntry(data) ? [ ]: { };
                                 }
                                 if (Array.isArray(current.children))
                                 {
-                                    const ix = current.children.findIndex(i => i.key === keys[0]);
-                                    if (0 <= ix)
+                                    if (isListEntry(data))
                                     {
-                                        current.children[ix] = data;
+                                        if (data.key !== keys[0])
+                                        {
+                                            console.error(`tektite-view-model: Unmatch path and key - path:${path.path}, data:${JSON.stringify(data)}`);
+                                        }
+                                        else
+                                        {
+                                            const ix = current.children.findIndex(i => i.key === keys[0]);
+                                            if (0 <= ix)
+                                            {
+                                                current.children[ix] = data;
+                                            }
+                                            else
+                                            {
+                                                current.children.push(data);
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        current.children.push(data);
+                                        console.error(`tektite-view-model: Entry and ListEntry are mixed - path:${path.path}, data:${JSON.stringify(data)}`);
                                     }
                                 }
                                 else
+                                if ( ! isListEntry(data))
                                 {
                                     current.children[keys[0]] = data;
+                                }
+                                else
+                                {
+                                    console.error(`tektite-view-model: Entry and ListEntry are mixed - path:${path.path}, data:${JSON.stringify(data)}`);
                                 }
                             }
                         }

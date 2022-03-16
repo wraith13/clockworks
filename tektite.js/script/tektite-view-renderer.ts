@@ -7,7 +7,7 @@ export module ViewRenderer
     {
         make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
         update: (path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
-        getChildModelContainer: (dom: Element, key: string) => Element;
+        getChildModelContainer?: (dom: Element, key: string) => Element;
         eventHandlers?: EventHandlers;
     };
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
