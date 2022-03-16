@@ -29,7 +29,7 @@ export module ViewModel
     export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
     export interface RootEntry extends Entry
     {
-        type: "tektite-root-view-model";
+        type: "tektite-root";
         data:
         {
             title?: string;
@@ -37,10 +37,38 @@ export module ViewModel
         };
         children:
         {
-            "screen-header": Entry,
-            "screen-body": Entry,
-            "screen-bar": Entry,
-            "screen-toast": Entry,
+            "screen-header": ScreenHeaderEntry,
+            "screen-body": ScreenBodyEntry,
+            "screen-bar": ScreenBarEntry,
+            "screen-toast": ScreenToastEntry,
+        };
+    }
+    export interface ScreenHeaderEntry extends Entry
+    {
+        type: "tektite-screen-header";
+        children:
+        {
+        };
+    }
+    export interface ScreenBodyEntry extends Entry
+    {
+        type: "tektite-screen-body";
+        children:
+        {
+        };
+    }
+    export interface ScreenBarEntry extends Entry
+    {
+        type: "tektite-screen-bar";
+        children:
+        {
+        };
+    }
+    export interface ScreenToastEntry extends Entry
+    {
+        type: "tektite-screen-toast";
+        children:
+        {
         };
     }
     export const getChildrenKeys = (data: Entry): number[] | string[] =>

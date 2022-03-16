@@ -249,11 +249,11 @@ export module ViewRenderer
             let cache = this.getCache(path);
             const renderer = this.renderer[data?.type] ?? this.unknownRenderer;
             const outputError = (message: string) => console.error(`tektite-view-renderer: ${message} - path:${path.path}, data:${JSON.stringify(data)}`);
-            if ( ! data?.key || "" === data.key)
-            {
-                outputError("It has not 'key'");
-            }
-            else
+            // if ( ! data?.key || "" === data.key)
+            // {
+            //     outputError("It has not 'key'");
+            // }
+            // else
             if ( ! data?.type)
             {
                 outputError("It has not 'type'");
@@ -271,7 +271,6 @@ export module ViewRenderer
                 const json = JSON.stringify
                 ({
                     type: data?.type,
-                    key: data?.key,
                     data: data?.data
                 });
                 if (cache?.json !== json)
