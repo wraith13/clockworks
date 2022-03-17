@@ -25,14 +25,16 @@ export module Header
         operator?: minamo.dom.Source;
         parent?: PageParams;
     }
-    export class Header<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    // export class Header<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export class Header<T extends Tektite.ParamTypes>
     {
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        constructor(public tektite: Tektite.Tektite<T>)
         {
         }
         getElement = () => document.getElementById(elementId) as HTMLDivElement;
         getProgressBarElement = () => this.getElement().getElementsByClassName(progressBarClassName)[0] as HTMLDivElement;
-        public onLoad = (screen: Screen.Screen<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+        public onLoad = (screen: Screen.Screen<T>) =>
             this.getElement().addEventListener
             (
                 'click',
@@ -64,14 +66,14 @@ export module Header
                 this.resetProgress();
             }
         };
-        getLastSegmentClass = (ix: number, items: SegmentSource<PageParams, IconKeyType>[]) =>
+        getLastSegmentClass = (ix: number, items: SegmentSource<T["PageParams"], T["IconKeyType"]>[]) =>
             [
                 ix === 0 ? "tektite-first-segment": undefined,
                 ix === items.length -1 ? "tektite-last-segment": undefined,
             ]
             .filter(i => undefined !== i)
             .join(" ");
-        segmented = async (data: Source<PageParams, IconKeyType>) =>
+        segmented = async (data: Source<T["PageParams"], T["IconKeyType"]>) =>
         [
             Tektite.$div(progressBarClassName)([]),
             (
@@ -118,20 +120,20 @@ export module Header
             ]),
         ];
         getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "tektite-close-button")[0];
-        segmentCore = async (item: SegmentSource<PageParams, IconKeyType>) =>
+        segmentCore = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>) =>
         [
             Tektite.$div("tektite-icon-frame")(await this.tektite.params.loadIconOrCache(item.icon)),
             Tektite.$div("tektite-segment-title")(item.title),
         ];
-        labelSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") =>
+        labelSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") =>
         Tektite.$div(`tektite-segment label-tektite-segment ${className}`)(await this.segmentCore(item));
-        linkSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") => this.tektite.internalLink
+        linkSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") => this.tektite.internalLink
         ({
             className: `tektite-segment ${className}`,
             href: item.href,
             children: await this.segmentCore(item),
         });
-        popupSegment = async (item: SegmentSource<PageParams, IconKeyType>, className: string = "") =>
+        popupSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") =>
         {
             let cover: { dom: HTMLDivElement, close: () => Promise<unknown> };
             const close = () =>
@@ -179,12 +181,14 @@ export module Header
             });
             return [ segment, popup, ];
         };
-        public replace = async (header: Tektite.HeaderSource<PageParams, IconKeyType>) => minamo.dom.replaceChildren
+        public replace = async (header: Tektite.HeaderSource<T["PageParams"], T["IconKeyType"]>) => minamo.dom.replaceChildren
         (
             this.getElement(),
             await this.segmented(header)
         );
     }
-    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    //     new Header(tektite);
+    export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new Header(tektite);
 }

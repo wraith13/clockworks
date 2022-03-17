@@ -8,9 +8,10 @@ export module Toast
         timer: number | null;
         hide: ()  => Promise<unknown>;
     }
-    export class Toast<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    // export class Toast<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export class Toast<T extends Tektite.ParamTypes>
     {
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        constructor(public tektite: Tektite.Tektite<T>)
         {
         }
         element: HTMLDivElement;
@@ -83,6 +84,8 @@ export module Toast
             });
         };
     }
-    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    //     new Toast(tektite);
+    export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new Toast(tektite);
 }

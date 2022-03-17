@@ -5,9 +5,11 @@ import { Toast } from "./tektite-toast";
 export module Screen
 {
     const $make = minamo.dom.make;
-    export class Screen<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    // export class Screen<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export class Screen<T extends Tektite.ParamTypes>
     {
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        constructor(public tektite: Tektite.Tektite<T>)
         {
         }
         public header = Header.make(this.tektite);
@@ -285,7 +287,7 @@ export module Screen
             }
             this.lastScreenName = className;
         }
-        public show = async (screen: Tektite.ScreenSource<PageParams, IconKeyType>, updateScreen?: (event: Tektite.UpdateScreenEventEype) => unknown) =>
+        public show = async (screen: Tektite.ScreenSource<T["PageParams"], T["IconKeyType"]>, updateScreen?: (event: Tektite.UpdateScreenEventEype) => unknown) =>
         {
             if (undefined !== updateScreen)
             {
@@ -495,6 +497,8 @@ export module Screen
             });
         };
     }
-    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    //     new Screen(tektite);
+    export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new Screen(tektite);
 }

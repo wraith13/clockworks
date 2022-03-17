@@ -3,7 +3,8 @@ import { Tektite } from "./tektite-index";
 import { ViewModel } from "./tektite-view-model";
 export module ViewRenderer
 {
-    export type UnknownViewModel = ViewModel.ViewModel<unknown, unknown, Tektite.LocaleEntry, { [language: string]: Tektite.LocaleEntry }>;
+    // export type UnknownViewModel = ViewModel.ViewModel<Tektite.ParamTypes>;
+    export type UnknownViewModel = ViewModel.ViewModel;
     export interface Entry
     {
         make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
@@ -73,10 +74,10 @@ export module ViewRenderer
             {
                 return dom;
             },
-            getChildModelContainer: (dom: Element, key: string) =>
-            {
+            // getChildModelContainer: (dom: Element, key: string) =>
+            // {
 
-            },
+            // },
             eventHandlers:
             {
     
@@ -94,10 +95,10 @@ export module ViewRenderer
             {
                 return dom;
             },
-            getChildModelContainer: (dom: Element, key: string) =>
-            {
+            // getChildModelContainer: (dom: Element, key: string) =>
+            // {
 
-            },
+            // },
             eventHandlers:
             {
     
@@ -115,14 +116,14 @@ export module ViewRenderer
                     className: "tektite-screen-bar-flash-layer",
                 },
             },
-            update = async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
-            getChildModelContainer: (dom: Element, key: string) =>
-            {
+            // getChildModelContainer: (dom: Element, key: string) =>
+            // {
                 
-            },
+            // },
             eventHandlers:
             {
     
@@ -135,11 +136,11 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-screen-toast",
             },
-            update = async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
-            getChildModelContainer: (dom: Element, key: string) => Element;
+            // getChildModelContainer: (dom: Element, key: string) => Element;
             eventHandlers:
             {
     
@@ -152,7 +153,7 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-item tektite-slide-up-in",
             },
-            update = async (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
+            update: async (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
             {
                 const data = (model as ViewModel.ToastItemEntry).data;
                 minamo.dom.replaceChildren
@@ -213,7 +214,8 @@ export module ViewRenderer
         json: string;
         childrenKeys: string[];
     }
-    export class ViewRenderer<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    // export class ViewRenderer<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export class ViewRenderer<T extends Tektite.ParamTypes>
     {
         private previousData: string;
         private renderer: { [type: string ]: Entry};
@@ -222,7 +224,8 @@ export module ViewRenderer
             [Property in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
         };
         private unknownRenderer: Entry;
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        constructor(public tektite: Tektite.Tektite<T>)
         {
         }
         update = (event: Tektite.UpdateScreenEventEype) =>
@@ -374,6 +377,8 @@ export module ViewRenderer
             return filteredOld.filter((i,ix) => i !== now[ix]).length <= 0;
         }
     }
-    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    //     new ViewRenderer(tektite);
+    export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new ViewRenderer(tektite);
 }

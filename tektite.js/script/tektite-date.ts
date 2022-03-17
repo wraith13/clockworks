@@ -12,9 +12,10 @@ export module TektiteDate
         "www" |
         "YYYY-MM-DD" | "YYYY-MM-DD www" |
         "YYYY-MM-DD HH:MM:SS.mmm" | "YYYY-MM-DD HH:MM:SS" | "YYYY-MM-DD HH:MM";
-    export class TektiteDate<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    // export class TektiteDate<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export class TektiteDate<T extends Tektite.ParamTypes>
     {
-        constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        constructor(public tektite: Tektite.Tektite<T>)
         {
         }
         public getDate = (date: DateSourceType = new Date()): Date =>
@@ -310,7 +311,9 @@ export module TektiteDate
             }
         };
     }
-    export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
-        (tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    //     (tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
+    //     new TektiteDate(tektite);
+    export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new TektiteDate(tektite);
 }

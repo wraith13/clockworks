@@ -50,13 +50,29 @@ export module Tektite
     }
     export type TektiteIconKeyType = keyof typeof tektiteResource;
     export type UpdateScreenEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
-    export interface TektiteParams<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export interface ParamTypes<PageParams = unknown, IconKeyType = unknown, LocaleEntryType extends LocaleEntry = LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType } = { [language: string]: LocaleEntryType }>
     {
-        makeUrl: (args: PageParams) => string;
-        showUrl: (data: PageParams) => Promise<unknown>;
+        PageParams: PageParams;
+        IconKeyType: IconKeyType;
+        LocaleEntryType: LocaleEntryType;
+        LocaleMapType: LocaleMapType;
+    };
+    // export interface TektiteParams<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    // {
+    //     makeUrl: (args: PageParams) => string;
+    //     showUrl: (data: PageParams) => Promise<unknown>;
+    //     showPage: (url: string) => Promise<unknown>;
+    //     loadIconOrCache: (key: IconKeyType | TektiteIconKeyType) => Promise<SVGElement>;
+    //     localeMaster: LocaleMapType;
+    //     timer?: { resolution?: number, highResolution?: number, };
+    // }
+    export interface TektiteParams<T extends ParamTypes>
+    {
+        makeUrl: (args: T["PageParams"]) => string;
+        showUrl: (data: T["PageParams"]) => Promise<unknown>;
         showPage: (url: string) => Promise<unknown>;
-        loadIconOrCache: (key: IconKeyType | TektiteIconKeyType) => Promise<SVGElement>;
-        localeMaster: LocaleMapType;
+        loadIconOrCache: (key: T["IconKeyType"] | TektiteIconKeyType) => Promise<SVGElement>;
+        localeMaster: T["LocaleMapType"];
         timer?: { resolution?: number, highResolution?: number, };
     }
     export interface PopupInstance<ResultType>
@@ -72,23 +88,25 @@ export module Tektite
         children: minamo.dom.Source;
         onClose?: () => Promise<unknown>;
     }
-    export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    // export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export class Tektite<T extends ParamTypes>
     {
-        constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        // constructor(public params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
+        constructor(public params: TektiteParams<T>)
         {
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
-        public loadIconOrCache = (key: TektiteIconKeyType) => this.params.loadIconOrCache(key);
+        public loadIconOrCache = (key: T["IconKeyType"] | TektiteIconKeyType) => this.params.loadIconOrCache(key);
         public fullscreen = FullscreenModule;
         public key = KeyModule;
-        public screen = Screen.make(this);
-        public menu = Menu.make(this);
-        public locale = Locale.make(this);
-        public date = TektiteDate.make(this);
-        public viewModel = ViewModel.make(this);
-        public viewRenderer = ViewRenderer.make(this);
-        public internalLink = (data: { className?: string, href: PageParams, children: minamo.dom.Source}): minamo.dom.Source =>
+        public screen = Screen.make<T>(this);
+        public menu = Menu.make<T>(this);
+        public locale = Locale.make<T>(this);
+        public date = TektiteDate.make<T>(this);
+        public viewModel = ViewModel.make<T>(this);
+        public viewRenderer = ViewRenderer.make<T>(this);
+        public internalLink = (data: { className?: string, href: T["PageParams"], children: minamo.dom.Source}): minamo.dom.Source =>
         ({
             tag: "a",
             className: data.className,
@@ -388,8 +406,8 @@ export module Tektite
             window.onpopstate = () => this.params.showPage(location.href);
         };
     }
-    export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
-        new Tektite(params);
+    export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<ParamTypes<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>>) =>
+        new Tektite<ParamTypes<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>>(params);
     export const makePercentString = (percent: number) =>
         percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
 }
