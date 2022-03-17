@@ -124,9 +124,9 @@ export module ViewModel
             return true;
         }
         else
-        if ( ! isValidPath(path))
+        if (hasErrorPath(path))
         {
-            console.error(`tektite-view-model: Invalid path - path:${path.path}`);
+            // console.error(`tektite-view-model: Invalid path - path:${path.path}`);
             return true;
         }
         // else
@@ -135,6 +135,18 @@ export module ViewModel
         //     console.error(`tektite-view-model: root mode key must be "root" - data.key:${JSON.stringify(data.key)}`);
         //     return true;
         // }
+        else
+        {
+            return false;
+        }
+    };
+    export const hasErrorPath = (path: PathType) =>
+    {
+        if ( ! isValidPath(path))
+        {
+            console.error(`tektite-view-model: Invalid path - path:${path.path}`);
+            return true;
+        }
         else
         {
             return false;
@@ -230,7 +242,7 @@ export module ViewModel
                         }
                         else
                         {
-                            console.error(`tektite-view-model: Path not found - path:${pathOrdata}`);
+                            console.error(`tektite-view-model: Path not found - path:${path.path}`);
                         }
                     }
                 }
@@ -244,6 +256,60 @@ export module ViewModel
                 }
             }
         }
+        public remove = (path: PathType) =>
+        {
+            if ( ! hasErrorPath(path))
+            {
+                const keys = path.path.split("/").filter(i => 0 < i.length);
+                if ("" !== keys[0])
+                {
+                    console.error(`tektite-view-model: Invalid path - path:${path.path}`);
+                }
+                else
+                {
+                    keys.shift();
+                    let current: Entry;
+                    if (1 < keys.length)
+                    {
+                        current = { children: [ this.data ] } as Entry;
+                        while(1 < keys.length)
+                        {
+                            current = getChildFromModelKey(current, keys[0]);
+                            if ( ! current)
+                            {
+                                console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                                break;
+                            }
+                            keys.shift();
+                        }
+                        if (current && current.children)
+                        {
+                            if (Array.isArray(current.children))
+                            {
+                                const ix = current.children.findIndex(i => i.key === keys[0]);
+                                if (0 <= ix)
+                                {
+                                    current.children.splice(ix, 1);
+                                }
+                            }
+                            else
+                            {
+                                delete current.children[keys[0]];
+                            }
+                        }
+                    }
+                    else
+                    if (0 < keys.length)
+                    {
+                        this.data = null;
+                    }
+                    else
+                    {
+                        console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                    }
+                }
+            }
+        };
         public get = (path: PathType = null) =>
         {
             if ( ! path)

@@ -3,10 +3,11 @@ import { Tektite } from "./tektite-index";
 import { ViewModel } from "./tektite-view-model";
 export module ViewRenderer
 {
+    export type UnknownViewModel = ViewModel.ViewModel<unknown, unknown, Tektite.LocaleEntry, { [language: string]: Tektite.LocaleEntry }>;
     export interface Entry
     {
         make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
-        update: (path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
+        update: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
         getChildModelContainer?: (dom: Element, key: string) => Element;
         eventHandlers?: EventHandlers;
     };
@@ -27,7 +28,7 @@ export module ViewRenderer
                     className: "tektite-screen",
                 }
             },
-            update: async (_path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
             {
                 const rootEntry = model as ViewModel.RootEntry;
                 if ("string" === typeof rootEntry.data.title)
@@ -68,7 +69,7 @@ export module ViewRenderer
                 id: "tektite-screen-header",
                 className: "tektite-segmented",
             },
-            update: async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -89,7 +90,7 @@ export module ViewRenderer
                 id: "tektite-screen-body",
                 className: "tektite-screen-body",
             },
-            update: async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -114,7 +115,7 @@ export module ViewRenderer
                     className: "tektite-screen-bar-flash-layer",
                 },
             },
-            update = async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update = async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -134,7 +135,7 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-screen-toast",
             },
-            update = async (_path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update = async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -151,7 +152,7 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-item tektite-slide-up-in",
             },
-            update = async (path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
+            update = async (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
             {
                 const data = (model as ViewModel.ToastItemEntry).data;
                 minamo.dom.replaceChildren
@@ -181,7 +182,7 @@ export module ViewRenderer
                         dom.classList.remove("tektite-slide-up-in");
                         dom.classList.add(className);
                         await minamo.core.timeout(wait);
-                        ViewModel.remove(path);
+                        viewModel.remove(path);
                         // // 以下は Safari での CSS バグをクリアする為の細工。本質的には必要の無い呼び出し。
                         // if (this.element.getElementsByClassName("item").length <= 0)
                         // {
@@ -337,7 +338,7 @@ export module ViewRenderer
                 if (cache?.json !== json)
                 {
                     let dom = cache.dom ?? await this.makeOrNull(renderer.make);
-                    dom = await renderer.update(path, cache.dom, data);
+                    dom = await renderer.update(this.tektite.viewModel, path, cache.dom, data);
                     cache = this.setCache(path, dom, json, childrenKeys);
                 }
                 Object.keys(renderer.eventHandlers ?? { })
