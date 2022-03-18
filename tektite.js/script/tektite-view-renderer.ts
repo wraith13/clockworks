@@ -347,27 +347,7 @@ export module ViewRenderer
                 Object.keys(renderer.eventHandlers ?? { })
                     .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
                 const childrenCache = await Promise.all(childrenKeys.map(async key => await this.renderOrCache(now, ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))));
-                childrenCache.forEach
-                (
-                    (c, ix) =>
-                    {
-                        if (c.dom)
-                        {
-                            const container = renderer.getChildModelContainer(cache.dom, ViewModel.getLeafKey(path));
-                            if (container)
-                            {
-                                if (forceAppend || container !== c.dom.parentElement)
-                                {
-                                    container.appendChild(c.dom)
-                                }
-                            }
-                            else
-                            {
-                                console.error(`tektite-view-renderer: Dom mapping not found - parent.path:${path.path}, key:${data.children[ix].key}`);
-                            }
-                        }
-                    }
-                );
+                this.appendChildren(renderer, path, cache, childrenCache, forceAppend);
             }
             return cache;
         };
@@ -376,6 +356,27 @@ export module ViewRenderer
             const filteredOld = old.filter(i => 0 <= now.indexOf(i));
             return filteredOld.filter((i,ix) => i !== now[ix]).length <= 0;
         }
+        public appendChildren = (renderer: Entry, path: ViewModel.PathType, cache: DomCache, childrenCache: DomCache[], forceAppend: boolean) => childrenCache.forEach
+        (
+            (c, ix) =>
+            {
+                if (c.dom)
+                {
+                    const container = renderer.getChildModelContainer(cache.dom, cache.childrenKeys[ix]);
+                    if (container)
+                    {
+                        if (forceAppend || container !== c.dom.parentElement)
+                        {
+                            container.appendChild(c.dom)
+                        }
+                    }
+                    else
+                    {
+                        console.error(`tektite-view-renderer: Dom mapping not found - parent.path:${path.path}, key:${cache.childrenKeys[ix]}`);
+                    }
+                }
+            }
+        );
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewRenderer(tektite);
