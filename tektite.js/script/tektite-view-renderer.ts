@@ -9,11 +9,12 @@ export module ViewRenderer
     {
         make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
         update: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
-        getChildModelContainer?: (dom: Element, key: string) => Element;
+        updateChildren?: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry, children: { [Key: string]: Element }) => Promise<unknown>;
+        // getChildModelContainer?: (dom: Element, key: string) => Element;
         eventHandlers?: EventHandlers;
     };
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
-    export type EventHandlers = { [Property in Tektite.UpdateScreenEventEype]?: EventHandler<Property>; }
+    export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
     export const renderer: { [type: string ]: Entry} =
     {
         "tektite-screen-root":
@@ -46,18 +47,29 @@ export module ViewRenderer
                 }
                 return dom;
             },
-            getChildModelContainer: (dom: Element, key: string) =>
-            {
-                switch(key)
-                {
-                case "screen-header":
-                case "screen-body":
-                case "screen-bar":
-                case "screen-toast":
-                    return dom.getElementsByClassName("tektite-screen")[0];
-                }
-                return null;
-            },
+            updateChildren: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, model: ViewModel.Entry, children: { [Key: string]: Element }) =>
+                minamo.dom.replaceChildren
+                (
+                    dom.getElementsByClassName("tektite-screen")[0],
+                    [
+                        children["screen-header"],
+                        children["screen-body"],
+                        children["screen-bar"],
+                        children["screen-toast"],
+                    ]
+                ),
+            // getChildModelContainer: (dom: Element, key: string) =>
+            // {
+            //     switch(key)
+            //     {
+            //     case "screen-header":
+            //     case "screen-body":
+            //     case "screen-bar":
+            //     case "screen-toast":
+            //         return dom.getElementsByClassName("tektite-screen")[0];
+            //     }
+            //     return null;
+            // },
             eventHandlers:
             {
             }
@@ -221,7 +233,7 @@ export module ViewRenderer
         private renderer: { [type: string ]: Entry};
         private eventHandlers:
         {
-            [Property in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
+            [Key in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
         };
         private unknownRenderer: Entry;
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
