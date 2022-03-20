@@ -9,7 +9,7 @@ export module ViewRenderer
     {
         make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
         update: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
-        updateChildren?: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry, children: { [Key: string]: Element }) => Promise<unknown>;
+        updateChildren?: (dom: Element, children: { [Key: string]: Element }, forceAppend: boolean) => Promise<unknown>;
         // getChildModelContainer?: (dom: Element, key: string) => Element;
         eventHandlers?: EventHandlers;
     };
@@ -47,17 +47,22 @@ export module ViewRenderer
                 }
                 return dom;
             },
-            updateChildren: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, model: ViewModel.Entry, children: { [Key: string]: Element }) =>
-                minamo.dom.replaceChildren
-                (
-                    dom.getElementsByClassName("tektite-screen")[0],
-                    [
-                        children["screen-header"],
-                        children["screen-body"],
-                        children["screen-bar"],
-                        children["screen-toast"],
-                    ]
-                ),
+            updateChildren: async (dom: Element, children: { [Key: string]: Element ,}, forceAppend: boolean) =>
+            {
+                if (0 < Object.keys(children).filter(key => null === children[key].parentElement).length && forceAppend)
+                {
+                    minamo.dom.replaceChildren
+                    (
+                        dom.getElementsByClassName("tektite-screen")[0],
+                        [
+                            children["screen-header"],
+                            children["screen-body"],
+                            children["screen-bar"],
+                            children["screen-toast"],
+                        ]
+                    );
+                }
+            },
             // getChildModelContainer: (dom: Element, key: string) =>
             // {
             //     switch(key)
@@ -359,7 +364,9 @@ export module ViewRenderer
                 Object.keys(renderer.eventHandlers ?? { })
                     .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
                 const childrenCache = await Promise.all(childrenKeys.map(async key => await this.renderOrCache(now, ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))));
-                this.appendChildren(renderer, path, cache, childrenCache, forceAppend);
+                const childrenKeyDomMap: { [key:string]: Element } = { };
+                childrenKeys.forEach((key, ix) => childrenKeyDomMap[key] = childrenCache[ix].dom);
+                renderer.updateChildren(cache.dom, childrenKeyDomMap, forceAppend);
             }
             return cache;
         };
@@ -368,23 +375,15 @@ export module ViewRenderer
             const filteredOld = old.filter(i => 0 <= now.indexOf(i));
             return filteredOld.filter((i,ix) => i !== now[ix]).length <= 0;
         }
-        public appendChildren = (renderer: Entry, path: ViewModel.PathType, cache: DomCache, childrenCache: DomCache[], forceAppend: boolean) => childrenCache.forEach
+        public appendChildren = (container: Element, childrenCache: DomCache[], forceAppend: boolean) => childrenCache.forEach
         (
-            (c, ix) =>
+            c =>
             {
                 if (c.dom)
                 {
-                    const container = renderer.getChildModelContainer(cache.dom, cache.childrenKeys[ix]);
-                    if (container)
+                    if (forceAppend || container !== c.dom.parentElement)
                     {
-                        if (forceAppend || container !== c.dom.parentElement)
-                        {
-                            container.appendChild(c.dom)
-                        }
-                    }
-                    else
-                    {
-                        console.error(`tektite-view-renderer: Dom mapping not found - parent.path:${path.path}, key:${cache.childrenKeys[ix]}`);
+                        container.appendChild(c.dom)
                     }
                 }
             }
