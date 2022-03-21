@@ -5,18 +5,21 @@ export module ViewRenderer
 {
     // export type UnknownViewModel = ViewModel.ViewModel<Tektite.ParamTypes>;
     export type UnknownViewModel = ViewModel.ViewModel;
+    export type DomType = Element | Element[];
+    export const getPrimaryElement = (dom: DomType): Element => Array.isArray(dom) ? dom[0]: dom;
+    export const getElementList = (dom: DomType): Element[] => Array.isArray(dom) ? dom: [dom];
     export interface Entry
     {
-        make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
-        update: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
+        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source;
+        update: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) => Promise<DomType>;
         updateChildren?:
             //  simple list
             "append" |
             //  regular list
             string[] |
             //  custom
-            ((dom: Element, children: { [Key: string]: Element }, forceAppend: boolean) => Promise<unknown>);
-        getChildModelContainer?: (dom: Element) => Element;
+            ((dom: DomType, children: { [Key: string]: DomType }, forceAppend: boolean) => Promise<unknown>);
+        getChildModelContainer?: (dom: DomType) => Element;
         eventHandlers?: EventHandlers;
     };
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
@@ -36,7 +39,7 @@ export module ViewRenderer
                     className: "tektite-screen",
                 }
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) =>
             {
                 const rootEntry = model as ViewModel.RootEntry;
                 if ("string" === typeof rootEntry.data.title)
@@ -54,7 +57,7 @@ export module ViewRenderer
                 return dom;
             },
             updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
-            getChildModelContainer: (dom: Element) => dom.getElementsByClassName("tektite-screen")[0],
+            getChildModelContainer: (dom: DomType) => getPrimaryElement(dom).getElementsByClassName("tektite-screen")[0],
             eventHandlers:
             {
             }
@@ -67,7 +70,7 @@ export module ViewRenderer
                 id: "tektite-screen-header",
                 className: "tektite-segmented",
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -88,7 +91,7 @@ export module ViewRenderer
                 id: "tektite-screen-body",
                 className: "tektite-screen-body",
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -113,7 +116,7 @@ export module ViewRenderer
                     className: "tektite-screen-bar-flash-layer",
                 },
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -133,7 +136,7 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-screen-toast",
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: Element, _model: ViewModel.Entry) =>
+            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -150,12 +153,13 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-item tektite-slide-up-in",
             },
-            update: async (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) =>
+            update: async (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) =>
             {
+                const element = getPrimaryElement(dom);
                 const data = (model as ViewModel.ToastItemEntry).data;
                 minamo.dom.replaceChildren
                 (
-                    dom,
+                    element,
                     data.isWideContent ?
                     [
                         data.backwardOperator,
@@ -175,10 +179,10 @@ export module ViewRenderer
                         clearTimeout(result.timer);
                         result.timer = null;
                     }
-                    if (dom.parentElement)
+                    if (element.parentElement)
                     {
-                        dom.classList.remove("tektite-slide-up-in");
-                        dom.classList.add(className);
+                        element.classList.remove("tektite-slide-up-in");
+                        element.classList.add(className);
                         await minamo.core.timeout(wait);
                         viewModel.remove(path);
                         // // 以下は Safari での CSS バグをクリアする為の細工。本質的には必要の無い呼び出し。
@@ -196,7 +200,7 @@ export module ViewRenderer
                     timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
                     // hide: async () => await hideRaw("tektite-slide-down-out", 250),
                 };
-                setTimeout(() => dom.classList.remove("tektite-slide-up-in"), 250);
+                setTimeout(() => element.classList.remove("tektite-slide-up-in"), 250);
                 return dom;
             },
             eventHandlers:
@@ -207,7 +211,7 @@ export module ViewRenderer
     };
     interface DomCache
     {
-        dom: Element;
+        dom: DomType;
         json: string;
         childrenKeys: string[];
     }
@@ -249,7 +253,7 @@ export module ViewRenderer
         };
         public renderRoot = async (data: ViewModel.Entry = this.tektite.viewModel.get(), now: number = new Date().getTime()) =>
         {
-            let result: Element;
+            let result: DomType;
             const json = JSON.stringify(data);
             if (this.previousData !== json)
             {
@@ -282,7 +286,7 @@ export module ViewRenderer
                     Object.keys(oldCache)
                         .filter(path => oldCache[path].dom !== this.domCache[path]?.dom)
                         .map(path => oldCache[path].dom)
-                        .forEach(dom => dom.parentElement.removeChild(dom));
+                        .forEach(dom => getElementList(dom).forEach(element => element.parentElement.removeChild(element)));
                     this.previousData = json;
                 }
             }
@@ -291,14 +295,14 @@ export module ViewRenderer
         private activePathList: string[] = [];
         private domCache: { [path: string]:DomCache } = { };
         public getCache = (path: ViewModel.PathType) => this.domCache[path.path];
-        public setCache = (path: ViewModel.PathType, dom: Element, data: string, childrenKeys: string[]) =>
+        public setCache = (path: ViewModel.PathType, dom: DomType, data: string, childrenKeys: string[]) =>
             this.domCache[path.path] =
             {
                 dom,
                 json: data,
                 childrenKeys
             };
-        public makeOrNull = async (maker: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source): Promise<Element | null> =>
+        public makeOrNull = async (maker: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source): Promise<DomType | null> =>
         {
             const source = "function" === typeof maker ? await maker(): maker;
             return null === source ? source as null:
@@ -352,11 +356,11 @@ export module ViewRenderer
                             async key => await this.renderOrCache(now, ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
                         )
                     );
-                    const childrenKeyDomMap: { [key:string]: Element } = { };
+                    const childrenKeyDomMap: { [key:string]: DomType } = { };
                     childrenKeys.forEach((key, ix) => childrenKeyDomMap[key] = childrenCache[ix].dom);
                     if (renderer.updateChildren)
                     {
-                        const container = renderer.getChildModelContainer?.(cache.dom) ?? cache.dom;
+                        const container = renderer.getChildModelContainer?.(cache.dom) ?? getPrimaryElement(cache.dom);
                         if ("append" === renderer.updateChildren)
                         {
                             this.appendChildren(container, childrenKeyDomMap, forceAppend);
@@ -375,7 +379,7 @@ export module ViewRenderer
                     (
                         (key, ix) =>
                         {
-                            if (null === childrenCache[ix].dom.parentElement)
+                            if (this.hasLeakChildren(childrenCache[ix].dom))
                             {
                                 outputError(`Not allocate dom ${key}`);
                             }
@@ -390,21 +394,29 @@ export module ViewRenderer
             const filteredOld = old.filter(i => 0 <= now.indexOf(i));
             return filteredOld.filter((i,ix) => i !== now[ix]).length <= 0;
         }
-        public appendChildren = (container: Element, children: { [Key: string]: Element ,}, forceAppend: boolean) => Object.keys(children).forEach
+        public hasLeakChildren = (children: DomType) =>
+            0 < getElementList(children).filter(element => null === element.parentElement).length;
+        public isAlreadySet = (container: Element, children: DomType) =>
+            0 < getElementList(children).filter(element => container !== element.parentElement).length;
+        public appendChildren = (container: Element, children: { [Key: string]: DomType }, forceAppend: boolean) => Object.keys(children).forEach
         (
             key =>
             {
                 const child = children[key];
-                if (child && (forceAppend || container !== child.parentElement))
+                if (child && (forceAppend || ! this.isAlreadySet(container, child)))
                 {
-                    container.appendChild(child)
+                    minamo.dom.appendChildren
+                    (
+                        container,
+                        child
+                    );
                 }
             }
         );
-        public replaceChildren = (container: Element, children: { [Key: string]: Element ,}, keys: string[]) =>
+        public replaceChildren = (container: Element, children: { [Key: string]: DomType }, keys: string[]) =>
         {
             const regulars = keys.map(key => children[key]).filter(i => i);
-            if (0 < regulars.filter(d => container === d.parentElement).length)
+            if (0 < regulars.filter(dom => ! this.isAlreadySet(container, dom)).length)
             {
                 minamo.dom.replaceChildren
                 (
