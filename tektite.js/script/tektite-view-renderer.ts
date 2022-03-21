@@ -9,8 +9,14 @@ export module ViewRenderer
     {
         make: (() => Promise<Element | minamo.dom.Source>) | minamo.dom.Source;
         update: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: Element, model: ViewModel.Entry) => Promise<Element>;
-        updateChildren?: (dom: Element, children: { [Key: string]: Element }, forceAppend: boolean) => Promise<unknown>;
-        // getChildModelContainer?: (dom: Element, key: string) => Element;
+        updateChildren?:
+            //  simple list
+            "append" |
+            //  regular list
+            string[] |
+            //  custom
+            ((dom: Element, children: { [Key: string]: Element }, forceAppend: boolean) => Promise<unknown>);
+        getChildModelContainer?: (dom: Element) => Element;
         eventHandlers?: EventHandlers;
     };
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
@@ -47,34 +53,8 @@ export module ViewRenderer
                 }
                 return dom;
             },
-            updateChildren: async (dom: Element, children: { [Key: string]: Element ,}, forceAppend: boolean) =>
-            {
-                if (0 < Object.keys(children).filter(key => null === children[key].parentElement).length && forceAppend)
-                {
-                    minamo.dom.replaceChildren
-                    (
-                        dom.getElementsByClassName("tektite-screen")[0],
-                        [
-                            children["screen-header"],
-                            children["screen-body"],
-                            children["screen-bar"],
-                            children["screen-toast"],
-                        ]
-                    );
-                }
-            },
-            // getChildModelContainer: (dom: Element, key: string) =>
-            // {
-            //     switch(key)
-            //     {
-            //     case "screen-header":
-            //     case "screen-body":
-            //     case "screen-bar":
-            //     case "screen-toast":
-            //         return dom.getElementsByClassName("tektite-screen")[0];
-            //     }
-            //     return null;
-            // },
+            updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
+            getChildModelContainer: (dom: Element) => dom.getElementsByClassName("tektite-screen")[0],
             eventHandlers:
             {
             }
@@ -363,10 +343,45 @@ export module ViewRenderer
                 }
                 Object.keys(renderer.eventHandlers ?? { })
                     .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
-                const childrenCache = await Promise.all(childrenKeys.map(async key => await this.renderOrCache(now, ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))));
-                const childrenKeyDomMap: { [key:string]: Element } = { };
-                childrenKeys.forEach((key, ix) => childrenKeyDomMap[key] = childrenCache[ix].dom);
-                renderer.updateChildren(cache.dom, childrenKeyDomMap, forceAppend);
+                if (0 < childrenKeys.length)
+                {
+                    const childrenCache = await Promise.all
+                    (
+                        childrenKeys.map
+                        (
+                            async key => await this.renderOrCache(now, ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
+                        )
+                    );
+                    const childrenKeyDomMap: { [key:string]: Element } = { };
+                    childrenKeys.forEach((key, ix) => childrenKeyDomMap[key] = childrenCache[ix].dom);
+                    if (renderer.updateChildren)
+                    {
+                        const container = renderer.getChildModelContainer?.(cache.dom) ?? cache.dom;
+                        if ("append" === renderer.updateChildren)
+                        {
+                            this.appendChildren(container, childrenKeyDomMap, forceAppend);
+                        }
+                        else
+                        if (Array.isArray(renderer.updateChildren))
+                        {
+                            this.replaceChildren(container, childrenKeyDomMap, renderer.updateChildren);
+                        }
+                        else
+                        {
+                            await renderer.updateChildren(container, childrenKeyDomMap, forceAppend);
+                        }
+                    }
+                    childrenKeys.forEach
+                    (
+                        (key, ix) =>
+                        {
+                            if (null === childrenCache[ix].dom.parentElement)
+                            {
+                                outputError(`Not allocate dom ${key}`);
+                            }
+                        }
+                    );
+                }
             }
             return cache;
         };
@@ -375,19 +390,29 @@ export module ViewRenderer
             const filteredOld = old.filter(i => 0 <= now.indexOf(i));
             return filteredOld.filter((i,ix) => i !== now[ix]).length <= 0;
         }
-        public appendChildren = (container: Element, childrenCache: DomCache[], forceAppend: boolean) => childrenCache.forEach
+        public appendChildren = (container: Element, children: { [Key: string]: Element ,}, forceAppend: boolean) => Object.keys(children).forEach
         (
-            c =>
+            key =>
             {
-                if (c.dom)
+                const child = children[key];
+                if (child && (forceAppend || container !== child.parentElement))
                 {
-                    if (forceAppend || container !== c.dom.parentElement)
-                    {
-                        container.appendChild(c.dom)
-                    }
+                    container.appendChild(child)
                 }
             }
         );
+        public replaceChildren = (container: Element, children: { [Key: string]: Element ,}, keys: string[]) =>
+        {
+            const regulars = keys.map(key => children[key]).filter(i => i);
+            if (0 < regulars.filter(d => container === d.parentElement).length)
+            {
+                minamo.dom.replaceChildren
+                (
+                    container,
+                    regulars
+                );
+            }
+        };
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewRenderer(tektite);
