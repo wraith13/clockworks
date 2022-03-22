@@ -9,7 +9,7 @@
             "dom",
             "scripthost"
         ],
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strictNullChecks": false,
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": true,

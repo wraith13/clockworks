@@ -87,5 +87,5 @@ export module Toast
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new Toast(tektite);
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
-        new Toast(tektite);
+        new Toast<T>(tektite);
 }

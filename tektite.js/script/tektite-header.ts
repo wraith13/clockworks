@@ -190,5 +190,5 @@ export module Header
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new Header(tektite);
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
-        new Header(tektite);
+        new Header<T>(tektite);
 }

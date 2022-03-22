@@ -75,5 +75,5 @@ export module Menu
     //     (tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new Menu(tektite);
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
-        new Menu(tektite);
+        new Menu<T>(tektite);
 }

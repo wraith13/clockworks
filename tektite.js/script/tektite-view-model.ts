@@ -4,8 +4,8 @@ export module ViewModel
 {
     export type PathType = { type: "path", path: string, };
     export const isPathType = (data: unknown): data is PathType =>
-        "path" === data?.["type"] &&
-        "string" === typeof data?.["path"];
+        "path" === (<PathType>data)?.type &&
+        "string" === typeof (<PathType>data)?.path;
     export const makePath = (parent: "/" | PathType, key: string): PathType =>
     ({
         type: "path",
@@ -106,14 +106,20 @@ export module ViewModel
                 data.children.map((_, ix) => ix):
                 Object.keys(data.children);
     export const getChildrenModelKeys = (data: Entry): string[] =>
-        getChildrenKeys(data).map(key => "string" === typeof key ? key: data.children[key].key);
+        ! data?.children ? []:
+        Array.isArray(data.children) ?
+            data.children.map(i => i.key):
+            Object.keys(data.children);
     export const getChildFromModelKey = (data: Entry, key: string): Entry =>
         Array.isArray(data?.children) ?
             data?.children?.filter(i => key === i.key)?.[0]:
             data?.children?.[key];
     export const getChildrenValues = (data: Entry): Entry[] =>
-        getChildrenKeys(data).map(key => data.children[key]);
-    export const hasInvalidViewModel = (data: Entry) =>
+        ! data?.children ? []:
+        Array.isArray(data.children) ?
+            data.children:
+            minamo.core.objectToArray(data.children, (_k, v, _o) => v);
+    export const hasInvalidViewModel = (data: Entry): boolean =>
         "" === (data?.type ?? "") ||
         0 < getChildrenModelKeys(data).filter
             (
@@ -122,7 +128,7 @@ export module ViewModel
                     ( ! Array.isArray(data.children) && "" !== ((data.children[key] as ListEntry).key ?? "")) ||
                     hasInvalidViewModel(getChildFromModelKey(data, key))
             ).length;
-    export const hasDuplicatedKeys = (data: Entry) =>
+    export const hasDuplicatedKeys = (data: Entry): boolean =>
         0 < getChildrenModelKeys(data).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
         0 < getChildrenValues(data).filter(i => hasDuplicatedKeys(i)).length;
     export const isValidPath = (path: PathType) =>
@@ -181,9 +187,9 @@ export module ViewModel
         public onLoad = () =>
         {
         };
-        public set(data: Entry);
-        public set(path: PathType, data: Entry);
-        public set(pathOrdata: PathType | Entry, data?: Entry)
+        public set(data: Entry): void;
+        public set(path: PathType, data: Entry): void;
+        public set(pathOrdata: PathType | Entry, data?: Entry): void
         {
             if (isPathType(pathOrdata))
             {

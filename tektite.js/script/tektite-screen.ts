@@ -12,8 +12,8 @@ export module Screen
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public header = Header.make(this.tektite);
-        public toast = Toast.make(this.tektite);
+        public header = Header.make<T>(this.tektite);
+        public toast = Toast.make<T>(this.tektite);
         element: HTMLDivElement;
         getElement = () => this.element;
         update: (event: Tektite.UpdateScreenEventEype) => unknown;
@@ -169,7 +169,7 @@ export module Screen
                 };
             }
         );
-        public popupTitle = (title: minamo.dom.Source | undefined) => minamo.core.exists(title) ? Tektite.$tag("h2")("")(title): [];
+        public popupTitle = (title: minamo.dom.Source | undefined): minamo.dom.Source => minamo.core.exists(title) ? Tektite.$tag("h2")("")(title): [];
         public prompt = async <ResultType>
         (
             data:
@@ -210,7 +210,7 @@ export module Screen
         lastMouseDownTarget: EventTarget = null;
         public onMouseDown = (event: MouseEvent) => this.lastMouseDownTarget = event.target;
         public onMouseUp = (_evnet: MouseEvent) => setTimeout(this.clearLastMouseDownTarget, 10);
-        public clearLastMouseDownTarget = () => this.lastMouseDownTarget = null;
+        public clearLastMouseDownTarget = (): void => this.lastMouseDownTarget = null;
         replaceBody = async (body: Tektite.PageSource | minamo.dom.Source) => minamo.dom.replaceChildren
         (
             document.getElementById("tektite-screen-body"),
@@ -500,5 +500,5 @@ export module Screen
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new Screen(tektite);
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
-        new Screen(tektite);
+        new Screen<T>(tektite);
 }

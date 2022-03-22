@@ -31,10 +31,10 @@ export module Tektite
     }
     export const progressBarStyleObject =
     {
-        "header": null,
-        "auto": null,
-        "horizontal": null,
-        "vertical": null,
+        "header": null as null,
+        "auto": null as null,
+        "horizontal": null as null,
+        "vertical": null as null,
     };
     export type ProgressBarStyleType = keyof typeof progressBarStyleObject;
     export const ProgressBarStyleList = Object.keys(progressBarStyleObject);
@@ -324,8 +324,8 @@ export module Tektite
             document.body.classList.add("tektite-flash");
             setTimeout(() => document.body.classList.remove("tektite-flash"), 1500);
         };
-        private updateTimer = undefined;
-        private updateHighResolutionTimer = undefined;
+        private updateTimer: number = undefined;
+        private updateHighResolutionTimer: number = undefined;
         onWindowFocus = () =>
         {
             this.screen.update?.("focus");
