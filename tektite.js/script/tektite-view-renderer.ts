@@ -8,10 +8,14 @@ export module ViewRenderer
     export type DomType = Element | Element[];
     export const getPrimaryElement = (dom: DomType): Element => Array.isArray(dom) ? dom[0]: dom;
     export const getElementList = (dom: DomType): Element[] => Array.isArray(dom) ? dom: [dom];
-    export interface Entry
+    export interface ContainerEntry
+    {
+        make: "container";
+    };
+    export interface DomEntry
     {
         make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source;
-        update: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) => Promise<DomType>;
+        update?: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) => Promise<DomType>;
         updateChildren?:
             //  simple list
             "append" |
@@ -22,6 +26,8 @@ export module ViewRenderer
         getChildModelContainer?: (dom: DomType) => Element;
         eventHandlers?: EventHandlers;
     };
+    export type Entry = DomEntry | ContainerEntry;
+    export const isContainerEntry = (entry: Entry): entry is ContainerEntry => "container" === entry.make;
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
     export const renderer: { [type: string ]: Entry} =
@@ -235,7 +241,7 @@ export module ViewRenderer
             this.eventHandlers?.[event]?.forEach
             (
                 path =>
-                    (this.renderer[this.tektite.viewModel.get(path)?.type]?.eventHandlers?.[event] as EventHandler<unknown>)
+                    ((<DomEntry>this.renderer[this.tektite.viewModel.get(path)?.type])?.eventHandlers?.[event] as EventHandler<unknown>)
                     ?.(event, path)
             );
             this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
@@ -251,7 +257,7 @@ export module ViewRenderer
         public onLoad = () =>
         {
         };
-        public renderRoot = async (data: ViewModel.Entry = this.tektite.viewModel.get(), now: number = new Date().getTime()) =>
+        public renderRoot = async (data: ViewModel.Entry = this.tektite.viewModel.get()) =>
         {
             let result: DomType;
             const json = JSON.stringify(data);
@@ -278,7 +284,7 @@ export module ViewRenderer
                         }
                     );
                     //  present-process
-                    result = (await this.renderOrCache(now, ViewModel.makeRootPath(), data)).dom;
+                    result = (await this.renderOrCache(ViewModel.makeRootPath(), data))?.dom;
                     //  post-process
                     Object.keys(this.domCache)
                         .filter(path => this.activePathList.indexOf(path) <= 0)
@@ -309,7 +315,7 @@ export module ViewRenderer
                 source instanceof Element ? source:
                 (minamo.dom.make(source) as Element);
         };
-        public renderOrCache = async (now: number, path: ViewModel.PathType, data: ViewModel.Entry): Promise<DomCache> =>
+        public renderOrCache = async (path: ViewModel.PathType, data: ViewModel.Entry): Promise<DomCache | undefined> =>
         {
             this.activePathList.push(path?.path);
             let cache = this.getCache(path);
@@ -333,58 +339,66 @@ export module ViewRenderer
             {
                 const oldChildrenKeys = cache?.childrenKeys ?? [];
                 const childrenKeys = ViewModel.getChildrenModelKeys(data);
-                const forceAppend = Array.isArray(data.children ?? []) && this.isSameOrder(oldChildrenKeys, childrenKeys);
-                const json = JSON.stringify
-                ({
-                    type: data?.type,
-                    data: data?.data
-                });
-                if (cache?.json !== json)
-                {
-                    let dom = cache.dom ?? await this.makeOrNull(renderer.make);
-                    dom = await renderer.update(this.tektite.viewModel, path, cache.dom, data);
-                    cache = this.setCache(path, dom, json, childrenKeys);
-                }
-                Object.keys(renderer.eventHandlers ?? { })
-                    .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
-                if (0 < childrenKeys.length)
-                {
-                    const childrenCache = await Promise.all
+                const childrenCache = await Promise.all
+                (
+                    childrenKeys.map
                     (
-                        childrenKeys.map
-                        (
-                            async key => await this.renderOrCache(now, ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
-                        )
-                    );
-                    const childrenKeyDomMap: { [key:string]: DomType } = { };
-                    childrenKeys.forEach((key, ix) => childrenKeyDomMap[key] = childrenCache[ix].dom);
-                    if (renderer.updateChildren)
+                        async key => await this.renderOrCache(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
+                    )
+                );
+                if ( ! isContainerEntry(renderer))
+                {
+                    const json = JSON.stringify
+                    ({
+                        type: data?.type,
+                        data: data?.data
+                    });
+                    if (cache?.json !== json)
                     {
-                        const container = renderer.getChildModelContainer?.(cache.dom) ?? getPrimaryElement(cache.dom);
-                        if ("append" === renderer.updateChildren)
+                        let dom = cache.dom ?? await this.makeOrNull(renderer.make);
+                        dom = await renderer?.update(this.tektite.viewModel, path, cache.dom, data) ?? dom;
+                        cache = this.setCache(path, dom, json, childrenKeys);
+                    }
+                    Object.keys(renderer.eventHandlers ?? { })
+                        .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
+                    if (0 < childrenKeys.length)
+                    {
+                        if (renderer.updateChildren)
                         {
-                            this.appendChildren(container, childrenKeyDomMap, forceAppend);
-                        }
-                        else
-                        if (Array.isArray(renderer.updateChildren))
-                        {
-                            this.replaceChildren(container, childrenKeyDomMap, renderer.updateChildren);
-                        }
-                        else
-                        {
-                            await renderer.updateChildren(container, childrenKeyDomMap, forceAppend);
+                            const forceAppend = Array.isArray(data.children ?? []) && this.isSameOrder(oldChildrenKeys, childrenKeys);
+                            const childrenKeyDomMap: { [key:string]: DomType } = { };
+                            childrenKeys.forEach
+                            (
+                                (key, ix) => childrenKeyDomMap[key] = childrenCache[ix] ?
+                                    childrenCache[ix].dom:
+                                    this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
+                            );
+                            const container = renderer.getChildModelContainer?.(cache.dom) ?? getPrimaryElement(cache.dom);
+                            if ("append" === renderer.updateChildren)
+                            {
+                                this.appendChildren(container, childrenKeyDomMap, forceAppend);
+                            }
+                            else
+                            if (Array.isArray(renderer.updateChildren))
+                            {
+                                this.replaceChildren(container, childrenKeyDomMap, renderer.updateChildren);
+                            }
+                            else
+                            {
+                                await renderer.updateChildren(container, childrenKeyDomMap, forceAppend);
+                            }
+                            childrenKeys.forEach
+                            (
+                                (key, ix) =>
+                                {
+                                    if (this.hasLeakChildren(childrenCache[ix].dom))
+                                    {
+                                        outputError(`Not allocate dom ${key}`);
+                                    }
+                                }
+                            );
                         }
                     }
-                    childrenKeys.forEach
-                    (
-                        (key, ix) =>
-                        {
-                            if (this.hasLeakChildren(childrenCache[ix].dom))
-                            {
-                                outputError(`Not allocate dom ${key}`);
-                            }
-                        }
-                    );
                 }
             }
             return cache;
@@ -425,6 +439,11 @@ export module ViewRenderer
                 );
             }
         };
+        public aggregateChildren = (path: ViewModel.PathType, data: ViewModel.Entry): DomType =>
+            ViewModel.getChildrenModelKeys(data)
+                .map(key => this.getCache(ViewModel.makePath(path, key)) ?? { dom: this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))})
+                .map(i => getElementList(i.dom))
+                .reduce((a, b) => a.concat(b), []);
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewRenderer(tektite);

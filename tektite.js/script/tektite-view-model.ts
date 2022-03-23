@@ -47,7 +47,12 @@ export module ViewModel
     export interface ScreenHeaderEntry extends Entry
     {
         type: "tektite-screen-header";
-        children: (ScreenHeaderProgressBarEntry | ScreenHeaderSegmentEntry | ScreenHeaderOperatorEntry)[];
+        children:
+        {
+            "screen-header-progress-bar": ScreenHeaderProgressBarEntry,
+            "screen-header-segment": ScreenHeaderSegmentEntry,
+            "screen-header-operator": ScreenHeaderOperatorEntry,
+        };
     }
     export interface ScreenHeaderProgressBarEntry extends ListEntry
     {
