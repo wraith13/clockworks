@@ -3,30 +3,32 @@ import { Tektite } from "./tektite-index";
 import { ViewModel } from "./tektite-view-model";
 export module ViewRenderer
 {
-    // export type UnknownViewModel = ViewModel.ViewModel<Tektite.ParamTypes>;
-    export type UnknownViewModel = ViewModel.ViewModel;
     export type DomType = Element | Element[];
     export const getPrimaryElement = (dom: DomType): Element => Array.isArray(dom) ? dom[0]: dom;
     export const getElementList = (dom: DomType): Element[] => Array.isArray(dom) ? dom: [dom];
     export interface ContainerEntry
     {
-        make: "container";
+        make: "container",
     };
-    export interface DomEntry
+    export interface DomEntry<ViewModelEntry> // ViewModelEntry extends ViewModel.Entry
     {
-        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source;
-        update?: (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) => Promise<DomType>;
+        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
+        update?: (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModelEntry) => Promise<DomType>,
         updateChildren?:
             //  simple list
             "append" |
             //  regular list
             string[] |
             //  custom
-            ((dom: DomType, children: { [Key: string]: DomType }, forceAppend: boolean) => Promise<unknown>);
-        getChildModelContainer?: (dom: DomType) => Element;
-        eventHandlers?: EventHandlers;
+            ((dom: DomType, children: { [Key: string]: DomType }, forceAppend: boolean) => Promise<unknown>),
+        getChildModelContainer?: (dom: DomType) => Element,
+        eventHandlers?: EventHandlers,
     };
-    export type Entry = DomEntry | ContainerEntry;
+    export const containerEntry: ContainerEntry =
+    {
+        make: "container",
+    };
+    export type Entry = DomEntry<unknown> | ContainerEntry;
     export const isContainerEntry = (entry: Entry): entry is ContainerEntry => "container" === entry.make;
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
@@ -45,9 +47,9 @@ export module ViewRenderer
                     className: "tektite-screen",
                 }
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) =>
+            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.Entry) =>
             {
-                const rootEntry = model as ViewModel.RootEntry;
+                const rootEntry = modelEntry as ViewModel.RootEntry;
                 if ("string" === typeof rootEntry.data.title)
                 {
                     if (document.title !== rootEntry.data.title)
@@ -76,7 +78,53 @@ export module ViewRenderer
                 id: "tektite-screen-header",
                 className: "tektite-segmented",
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
+            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+            {
+                return dom;
+            },
+            // getChildModelContainer: (dom: Element, key: string) =>
+            // {
+
+            // },
+            eventHandlers:
+            {
+    
+            }
+        },
+        "tektite-screen-header-progress-bar":
+        {
+            make: { tag: "div", className: "tektite-progress-bar", },
+            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.ScreenHeaderProgressBarEntry) =>
+            {
+                const element = getPrimaryElement(dom) as HTMLDivElement;
+                if (modelEntry.data?.percent || modelEntry.data.percent <= 0)
+                {
+                    minamo.dom.setStyleProperty(element, "width", "0%");
+                    minamo.dom.setStyleProperty(element, "borderRightWidth", "0px");
+                }
+                else
+                {
+                    if (modelEntry.data?.color)
+                    {
+                        minamo.dom.setStyleProperty(element, "backgroundColor", modelEntry.data.color);
+                    }
+                    const percentString = Tektite.makePercentString(modelEntry.data.percent);
+                    minamo.dom.setStyleProperty(element, "width", percentString);
+                    minamo.dom.setStyleProperty(element, "borderRightWidth", "1px");
+                }
+                return dom;
+            },
+        },
+        "tektite-screen-header-segment": containerEntry,
+        "tektite-screen-operator":
+        {
+            make:
+            {
+                tag: "header",
+                id: "tektite-screen-header",
+                className: "tektite-segmented",
+            },
+            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -97,7 +145,7 @@ export module ViewRenderer
                 id: "tektite-screen-body",
                 className: "tektite-screen-body",
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
+            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -122,7 +170,7 @@ export module ViewRenderer
                     className: "tektite-screen-bar-flash-layer",
                 },
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
+            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -142,7 +190,7 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-screen-toast",
             },
-            update: async (_viewModel: UnknownViewModel, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
+            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
             {
                 return dom;
             },
@@ -159,10 +207,10 @@ export module ViewRenderer
                 tag: "div",
                 className: "tektite-item tektite-slide-up-in",
             },
-            update: async (viewModel: UnknownViewModel, path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) =>
+            update: async (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.Entry) =>
             {
                 const element = getPrimaryElement(dom);
-                const data = (model as ViewModel.ToastItemEntry).data;
+                const data = (modelEntry as ViewModel.ToastItemEntry).data;
                 minamo.dom.replaceChildren
                 (
                     element,
@@ -241,7 +289,7 @@ export module ViewRenderer
             this.eventHandlers?.[event]?.forEach
             (
                 path =>
-                    ((<DomEntry>this.renderer[this.tektite.viewModel.get(path)?.type])?.eventHandlers?.[event] as EventHandler<unknown>)
+                    ((<DomEntry<unknown>>this.renderer[this.tektite.viewModel.get(path)?.type])?.eventHandlers?.[event] as EventHandler<unknown>)
                     ?.(event, path)
             );
             this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
