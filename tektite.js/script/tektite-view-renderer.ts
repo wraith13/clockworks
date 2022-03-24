@@ -10,10 +10,12 @@ export module ViewRenderer
     {
         make: "container",
     };
-    export interface DomEntry<ViewModelEntry> // ViewModelEntry extends ViewModel.Entry
+    export const containerEntry: ContainerEntry =
     {
-        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
-        update?: (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModelEntry) => Promise<DomType>,
+        make: "container",
+    };
+    export interface DomEntryBase
+    {
         updateChildren?:
             //  simple list
             "append" |
@@ -24,12 +26,19 @@ export module ViewRenderer
         getChildModelContainer?: (dom: DomType) => Element,
         eventHandlers?: EventHandlers,
     };
-    export const containerEntry: ContainerEntry =
+    export interface VolatileDomEntry<ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
     {
-        make: "container",
+        make: "volatile",
+        update: (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, modelEntry: ViewModelEntry) => Promise<DomType>,
     };
-    export type Entry = DomEntry<unknown> | ContainerEntry;
+    export interface DomEntry<ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
+    {
+        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
+        update?: (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModelEntry) => Promise<DomType>,
+    };
+    export type Entry = VolatileDomEntry<unknown> | DomEntry<unknown> | ContainerEntry;
     export const isContainerEntry = (entry: Entry): entry is ContainerEntry => "container" === entry.make;
+    export const isVolatileDomEntry = (entry: Entry): entry is VolatileDomEntry<unknown> => "volatile" === entry.make;
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
     export const renderer: { [type: string ]: Entry} =
@@ -403,8 +412,16 @@ export module ViewRenderer
                     });
                     if (cache?.json !== json)
                     {
-                        let dom = cache.dom ?? await this.makeOrNull(renderer.make);
-                        dom = await renderer?.update(this.tektite.viewModel, path, cache.dom, data) ?? dom;
+                        let dom: DomType;
+                        if (isVolatileDomEntry(renderer))
+                        {
+                            dom = await renderer.update(this.tektite.viewModel, path, data);
+                        }
+                        else
+                        {
+                            dom = cache.dom ?? await this.makeOrNull(renderer.make);
+                            dom = await renderer?.update(this.tektite.viewModel, path, dom, data) ?? dom;
+                        }
                         cache = this.setCache(path, dom, json, childrenKeys);
                     }
                     Object.keys(renderer.eventHandlers ?? { })

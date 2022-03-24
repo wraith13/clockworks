@@ -54,19 +54,29 @@ export module ViewModel
             "screen-header-operator": ScreenHeaderOperatorEntry,
         };
     }
-    export interface ScreenHeaderProgressBarEntry extends ListEntry
+    export interface ScreenHeaderProgressBarEntry extends Entry
     {
         type: "tektite-screen-header-progress-bar";
         key: "progress-bar";
+        data:
+        {
+            color?: string;
+            percent: null | number;
+        };
     }
-    export interface ScreenHeaderSegmentEntry extends ListEntry
+    export interface ScreenHeaderSegmentEntry extends Entry
     {
         type: "tektite-screen-header-segment";
+        children: ScreenHeaderSegmentItemEntry[];
+    }
+    export interface ScreenHeaderSegmentItemEntry extends ListEntry
+    {
+        type: "tektite-screen-header-segment-item";
         children:
         {
         };
     }
-    export interface ScreenHeaderOperatorEntry extends ListEntry
+    export interface ScreenHeaderOperatorEntry extends Entry
     {
         type: "tektite-screen-header-operator";
         key: "operator";
