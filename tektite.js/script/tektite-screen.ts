@@ -315,7 +315,7 @@ export module Screen
             undefined === (body as Tektite.PageSource).primary ?
                 body as minamo.dom.Source:
                 await this.makePage((body as Tektite.PageSource).primary, (body as Tektite.PageSource).trail);
-        public makePage = async (primary: Tektite.PrimaryPageSource | minamo.dom.Source, trail?: minamo.dom.Source) =>
+        public makePage = async (primary: Tektite.PrimaryPageSource | minamo.dom.Source, trail?: minamo.dom.Source): Promise<minamo.dom.Source> =>
         [
             Tektite.$div("tektite-primary-page")
             ([

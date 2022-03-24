@@ -26,252 +26,21 @@ export module ViewRenderer
         getChildModelContainer?: (dom: DomType) => Element,
         eventHandlers?: EventHandlers,
     };
-    export interface VolatileDomEntry<ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
+    export interface VolatileDomEntry<T extends Tektite.ParamTypes, ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
     {
         make: "volatile",
-        update: (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, modelEntry: ViewModelEntry) => Promise<DomType>,
+        update: (tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => Promise<DomType>,
     };
-    export interface DomEntry<ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
+    export interface DomEntry<T extends Tektite.ParamTypes, ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
     {
         make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
-        update?: (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModelEntry) => Promise<DomType>,
+        update?: (tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, model: ViewModelEntry) => Promise<DomType>,
     };
-    export type Entry = VolatileDomEntry<unknown> | DomEntry<unknown> | ContainerEntry;
-    export const isContainerEntry = (entry: Entry): entry is ContainerEntry => "container" === entry.make;
-    export const isVolatileDomEntry = (entry: Entry): entry is VolatileDomEntry<unknown> => "volatile" === entry.make;
+    export type Entry<T extends Tektite.ParamTypes> = VolatileDomEntry<T, unknown> | DomEntry<T, unknown> | ContainerEntry;
+    export const isContainerEntry = <T extends Tektite.ParamTypes>(entry: Entry<T>): entry is ContainerEntry => "container" === entry.make;
+    export const isVolatileDomEntry = <T extends Tektite.ParamTypes>(entry: Entry<T>): entry is VolatileDomEntry<T, unknown> => "volatile" === entry.make;
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
-    export const renderer: { [type: string ]: Entry} =
-    {
-        "tektite-screen-root":
-        {
-            make:
-            {
-                parent: document.body,
-                tag: "div",
-                className: "tektite-foundation",
-                children:
-                {
-                    tag: "div",
-                    className: "tektite-screen",
-                }
-            },
-            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.Entry) =>
-            {
-                const rootEntry = modelEntry as ViewModel.RootEntry;
-                if ("string" === typeof rootEntry.data.title)
-                {
-                    if (document.title !== rootEntry.data.title)
-                    {
-                        document.title = rootEntry.data.title;
-                    }
-                }
-                if ("string" === typeof rootEntry.data.windowColor)
-                {
-                    minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
-                    minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
-                }
-                return dom;
-            },
-            updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
-            getChildModelContainer: (dom: DomType) => getPrimaryElement(dom).getElementsByClassName("tektite-screen")[0],
-            eventHandlers:
-            {
-            }
-        },
-        "tektite-screen-header":
-        {
-            make:
-            {
-                tag: "header",
-                id: "tektite-screen-header",
-                className: "tektite-segmented",
-            },
-            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
-            {
-                return dom;
-            },
-            // getChildModelContainer: (dom: Element, key: string) =>
-            // {
-
-            // },
-            eventHandlers:
-            {
-    
-            }
-        },
-        "tektite-screen-header-progress-bar":
-        {
-            make: { tag: "div", className: "tektite-progress-bar", },
-            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.ScreenHeaderProgressBarEntry) =>
-            {
-                const element = getPrimaryElement(dom) as HTMLDivElement;
-                if (modelEntry.data?.percent || modelEntry.data.percent <= 0)
-                {
-                    minamo.dom.setStyleProperty(element, "width", "0%");
-                    minamo.dom.setStyleProperty(element, "borderRightWidth", "0px");
-                }
-                else
-                {
-                    if (modelEntry.data?.color)
-                    {
-                        minamo.dom.setStyleProperty(element, "backgroundColor", modelEntry.data.color);
-                    }
-                    const percentString = Tektite.makePercentString(modelEntry.data.percent);
-                    minamo.dom.setStyleProperty(element, "width", percentString);
-                    minamo.dom.setStyleProperty(element, "borderRightWidth", "1px");
-                }
-                return dom;
-            },
-        },
-        "tektite-screen-header-segment": containerEntry,
-        "tektite-screen-operator":
-        {
-            make:
-            {
-                tag: "header",
-                id: "tektite-screen-header",
-                className: "tektite-segmented",
-            },
-            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
-            {
-                return dom;
-            },
-            // getChildModelContainer: (dom: Element, key: string) =>
-            // {
-
-            // },
-            eventHandlers:
-            {
-    
-            }
-        },
-        "tektite-screen-body":
-        {
-            make:
-            {
-                tag: "div",
-                id: "tektite-screen-body",
-                className: "tektite-screen-body",
-            },
-            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
-            {
-                return dom;
-            },
-            // getChildModelContainer: (dom: Element, key: string) =>
-            // {
-
-            // },
-            eventHandlers:
-            {
-    
-            }
-        },
-        "tektite-screen-bar":
-        {
-            make:
-            {
-                tag: "div",
-                className: "tektite-screen-bar",
-                childNodes:
-                {
-                    tag: "div",
-                    className: "tektite-screen-bar-flash-layer",
-                },
-            },
-            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
-            {
-                return dom;
-            },
-            // getChildModelContainer: (dom: Element, key: string) =>
-            // {
-                
-            // },
-            eventHandlers:
-            {
-    
-            }
-        },
-        "tektite-screen-toast":
-        {
-            make:
-            {
-                tag: "div",
-                className: "tektite-screen-toast",
-            },
-            update: async (_viewModel: ViewModel.ViewModel, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
-            {
-                return dom;
-            },
-            // getChildModelContainer: (dom: Element, key: string) => Element;
-            eventHandlers:
-            {
-    
-            }
-        },
-        "tektite-toast-item":
-        {
-            make:
-            {
-                tag: "div",
-                className: "tektite-item tektite-slide-up-in",
-            },
-            update: async (viewModel: ViewModel.ViewModel, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.Entry) =>
-            {
-                const element = getPrimaryElement(dom);
-                const data = (modelEntry as ViewModel.ToastItemEntry).data;
-                minamo.dom.replaceChildren
-                (
-                    element,
-                    data.isWideContent ?
-                    [
-                        data.backwardOperator,
-                        data.content,
-                        data.forwardOperator,
-                    ].filter(i => undefined !== i):
-                    [
-                        data.backwardOperator ?? Tektite.$span("tektite-dummy")([]),
-                        data.content,
-                        data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
-                    ]
-                );
-                const hideRaw = async (className: string, wait: number) =>
-                {
-                    if (null !== result.timer)
-                    {
-                        clearTimeout(result.timer);
-                        result.timer = null;
-                    }
-                    if (element.parentElement)
-                    {
-                        element.classList.remove("tektite-slide-up-in");
-                        element.classList.add(className);
-                        await minamo.core.timeout(wait);
-                        viewModel.remove(path);
-                        // // 以下は Safari での CSS バグをクリアする為の細工。本質的には必要の無い呼び出し。
-                        // if (this.element.getElementsByClassName("item").length <= 0)
-                        // {
-                        //     await minamo.core.timeout(10);
-                        //     tektite.screen.update("operate");
-                        // }
-                    }
-                };
-                const wait = data.wait ?? 5000;
-                const result =
-                {
-                    // dom,
-                    timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
-                    // hide: async () => await hideRaw("tektite-slide-down-out", 250),
-                };
-                setTimeout(() => element.classList.remove("tektite-slide-up-in"), 250);
-                return dom;
-            },
-            eventHandlers:
-            {
-    
-            }
-        },
-    };
     interface DomCache
     {
         dom: DomType;
@@ -282,12 +51,11 @@ export module ViewRenderer
     export class ViewRenderer<T extends Tektite.ParamTypes>
     {
         private previousData: string;
-        private renderer: { [type: string ]: Entry};
         private eventHandlers:
         {
             [Key in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
         };
-        private unknownRenderer: Entry;
+        private unknownRenderer: Entry<T>;
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
         {
@@ -298,7 +66,7 @@ export module ViewRenderer
             this.eventHandlers?.[event]?.forEach
             (
                 path =>
-                    ((<DomEntry<unknown>>this.renderer[this.tektite.viewModel.get(path)?.type])?.eventHandlers?.[event] as EventHandler<unknown>)
+                    ((<DomEntry<T, unknown>>this.renderer[this.tektite.viewModel.get(path)?.type])?.eventHandlers?.[event] as EventHandler<unknown>)
                     ?.(event, path)
             );
             this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
@@ -415,12 +183,12 @@ export module ViewRenderer
                         let dom: DomType;
                         if (isVolatileDomEntry(renderer))
                         {
-                            dom = await renderer.update(this.tektite.viewModel, path, data);
+                            dom = await renderer.update(this.tektite, path, data);
                         }
                         else
                         {
                             dom = cache.dom ?? await this.makeOrNull(renderer.make);
-                            dom = await renderer?.update(this.tektite.viewModel, path, dom, data) ?? dom;
+                            dom = await renderer?.update(this.tektite, path, dom, data) ?? dom;
                         }
                         cache = this.setCache(path, dom, json, childrenKeys);
                     }
@@ -509,6 +277,288 @@ export module ViewRenderer
                 .map(key => this.getCache(ViewModel.makePath(path, key)) ?? { dom: this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))})
                 .map(i => getElementList(i.dom))
                 .reduce((a, b) => a.concat(b), []);
+        public readonly renderer: { [type: string ]: Entry<T>} =
+        {
+            "tektite-screen-root":
+            {
+                make:
+                {
+                    parent: document.body,
+                    tag: "div",
+                    className: "tektite-foundation",
+                    children:
+                    {
+                        tag: "div",
+                        className: "tektite-screen",
+                    }
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) =>
+                {
+                    const rootEntry = model as ViewModel.RootEntry;
+                    if ("string" === typeof rootEntry.data.title)
+                    {
+                        if (document.title !== rootEntry.data.title)
+                        {
+                            document.title = rootEntry.data.title;
+                        }
+                    }
+                    if ("string" === typeof rootEntry.data.windowColor)
+                    {
+                        minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
+                        minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
+                    }
+                    return dom;
+                },
+                updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
+                getChildModelContainer: (dom: DomType) => getPrimaryElement(dom).getElementsByClassName("tektite-screen")[0],
+            },
+            "tektite-screen-header":
+            {
+                make:
+                {
+                    tag: "header",
+                    id: "tektite-screen-header",
+                    className: "tektite-segmented",
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
+                {
+                    return dom;
+                },
+                updateChildren: [ "screen-header-progress-bar", "screen-header-segment", "screen-header-operator", ],
+            },
+            "tektite-screen-header-progress-bar":
+            {
+                make: { tag: "div", className: "tektite-progress-bar", },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenHeaderProgressBarEntry) =>
+                {
+                    const element = getPrimaryElement(dom) as HTMLDivElement;
+                    if (model.data?.percent || model.data.percent <= 0)
+                    {
+                        minamo.dom.setStyleProperty(element, "width", "0%");
+                        minamo.dom.setStyleProperty(element, "borderRightWidth", "0px");
+                    }
+                    else
+                    {
+                        if (model.data?.color)
+                        {
+                            minamo.dom.setStyleProperty(element, "backgroundColor", model.data.color);
+                        }
+                        const percentString = Tektite.makePercentString(model.data.percent);
+                        minamo.dom.setStyleProperty(element, "width", percentString);
+                        minamo.dom.setStyleProperty(element, "borderRightWidth", "1px");
+                    }
+                    return dom;
+                },
+            },
+            "tektite-screen-header-segment-list": containerEntry,
+            "tektite-screen-header-segment-core":
+            {
+                make:
+                [
+                    Tektite.$div("tektite-icon-frame")([]),
+                    Tektite.$div("tektite-segment-title")([]),
+                ],
+                update: async (tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenHeaderSegmentCoreEntry) =>
+                {
+                    const list = getElementList(dom);
+                    minamo.dom.replaceChildren(list[0], await tektite.params.loadIconOrCache(model.data.icon));
+                    minamo.dom.replaceChildren(list[1], model.data.title);
+                    return dom;
+                },
+            },
+            "tektite-screen-header-label-segment":
+            {
+                make: Tektite.$div(`tektite-segment label-tektite-segment`)([]),
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenHeaderLabelSegmentEntry) =>
+                {
+                    getPrimaryElement(dom).className = `tektite-segment label-tektite-segment ${model.data?.className ?? ""}`;
+                    return dom;
+                },
+                updateChildren: "append",
+            },
+            "tektite-screen-header-link-segment":
+            {
+                make:
+                {
+                    tag: "header",
+                    id: "tektite-screen-header",
+                    className: "tektite-segmented",
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                {
+                    return dom;
+                },
+                updateChildren: "append",
+                eventHandlers:
+                {
+        
+                }
+            },
+            "tektite-screen-header-popup-segment":
+            {
+                make:
+                {
+                    tag: "header",
+                    id: "tektite-screen-header",
+                    className: "tektite-segmented",
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                {
+                    return dom;
+                },
+                updateChildren: "append",
+                eventHandlers:
+                {
+        
+                }
+            },
+            "tektite-screen-operator":
+            {
+                make:
+                {
+                    tag: "header",
+                    id: "tektite-screen-header",
+                    className: "tektite-segmented",
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                {
+                    return dom;
+                },
+                // getChildModelContainer: (dom: Element, key: string) =>
+                // {
+    
+                // },
+                eventHandlers:
+                {
+        
+                }
+            },
+            "tektite-screen-body":
+            {
+                make:
+                {
+                    tag: "div",
+                    id: "tektite-screen-body",
+                    className: "tektite-screen-body",
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                {
+                    return dom;
+                },
+                // getChildModelContainer: (dom: Element, key: string) =>
+                // {
+    
+                // },
+                eventHandlers:
+                {
+        
+                }
+            },
+            "tektite-screen-bar":
+            {
+                make:
+                {
+                    tag: "div",
+                    className: "tektite-screen-bar",
+                    childNodes:
+                    {
+                        tag: "div",
+                        className: "tektite-screen-bar-flash-layer",
+                    },
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                {
+                    return dom;
+                },
+                // getChildModelContainer: (dom: Element, key: string) =>
+                // {
+                    
+                // },
+                eventHandlers:
+                {
+        
+                }
+            },
+            "tektite-screen-toast":
+            {
+                make:
+                {
+                    tag: "div",
+                    className: "tektite-screen-toast",
+                },
+                update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                {
+                    return dom;
+                },
+                // getChildModelContainer: (dom: Element, key: string) => Element;
+                eventHandlers:
+                {
+        
+                }
+            },
+            "tektite-toast-item":
+            {
+                make:
+                {
+                    tag: "div",
+                    className: "tektite-item tektite-slide-up-in",
+                },
+                update: async (tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.Entry) =>
+                {
+                    const element = getPrimaryElement(dom);
+                    const data = (modelEntry as ViewModel.ToastItemEntry).data;
+                    minamo.dom.replaceChildren
+                    (
+                        element,
+                        data.isWideContent ?
+                        [
+                            data.backwardOperator,
+                            data.content,
+                            data.forwardOperator,
+                        ].filter(i => undefined !== i):
+                        [
+                            data.backwardOperator ?? Tektite.$span("tektite-dummy")([]),
+                            data.content,
+                            data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
+                        ]
+                    );
+                    const hideRaw = async (className: string, wait: number) =>
+                    {
+                        if (null !== result.timer)
+                        {
+                            clearTimeout(result.timer);
+                            result.timer = null;
+                        }
+                        if (element.parentElement)
+                        {
+                            element.classList.remove("tektite-slide-up-in");
+                            element.classList.add(className);
+                            await minamo.core.timeout(wait);
+                            tektite.viewModel.remove(path);
+                            // // 以下は Safari での CSS バグをクリアする為の細工。本質的には必要の無い呼び出し。
+                            // if (this.element.getElementsByClassName("item").length <= 0)
+                            // {
+                            //     await minamo.core.timeout(10);
+                            //     tektite.screen.update("operate");
+                            // }
+                        }
+                    };
+                    const wait = data.wait ?? 5000;
+                    const result =
+                    {
+                        // dom,
+                        timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
+                        // hide: async () => await hideRaw("tektite-slide-down-out", 250),
+                    };
+                    setTimeout(() => element.classList.remove("tektite-slide-up-in"), 250);
+                    return dom;
+                },
+                eventHandlers:
+                {
+        
+                }
+            },
+        };
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewRenderer(tektite);

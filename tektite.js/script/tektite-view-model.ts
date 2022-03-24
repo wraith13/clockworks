@@ -50,7 +50,7 @@ export module ViewModel
         children:
         {
             "screen-header-progress-bar": ScreenHeaderProgressBarEntry,
-            "screen-header-segment": ScreenHeaderSegmentEntry,
+            "screen-header-segment": ScreenHeaderSegmentListEntry,
             "screen-header-operator": ScreenHeaderOperatorEntry,
         };
     }
@@ -64,14 +64,29 @@ export module ViewModel
             percent: null | number;
         };
     }
-    export interface ScreenHeaderSegmentEntry extends Entry
+    export interface ScreenHeaderSegmentListEntry extends Entry
     {
-        type: "tektite-screen-header-segment";
-        children: ScreenHeaderSegmentItemEntry[];
+        type: "tektite-screen-header-segment-list";
+        children: ScreenHeaderSegmentEntry[];
     }
-    export interface ScreenHeaderSegmentItemEntry extends ListEntry
+    export type ScreenHeaderSegmentEntry = ScreenHeaderLabelSegmentEntry | ScreenHeaderLinkSegmentEntry | ScreenHeaderPopupSegmentEntry;
+    export interface ScreenHeaderLabelSegmentEntry extends ListEntry
     {
-        type: "tektite-screen-header-segment-item";
+        type: "tektite-screen-header-label-segment";
+        children:
+        {
+        };
+    }
+    export interface ScreenHeaderLinkSegmentEntry extends ListEntry
+    {
+        type: "tektite-screen-header-link-segment";
+        children:
+        {
+        };
+    }
+    export interface ScreenHeaderPopupSegmentEntry extends ListEntry
+    {
+        type: "tektite-screen-header-popup-segment";
         children:
         {
         };
