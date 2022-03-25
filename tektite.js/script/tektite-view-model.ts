@@ -70,11 +70,25 @@ export module ViewModel
         children: ScreenHeaderSegmentEntry[];
     }
     export type ScreenHeaderSegmentEntry = ScreenHeaderLabelSegmentEntry | ScreenHeaderLinkSegmentEntry | ScreenHeaderPopupSegmentEntry;
+    export interface ScreenHeaderSegmentCoreEntry extends ListEntry
+    {
+        type: "tektite-screen-header-segment-core";
+        data:
+        {
+            icon: Tektite.ParamTypes<unknown>["IconKeyType"];
+            title: string;
+        };
+    }
     export interface ScreenHeaderLabelSegmentEntry extends ListEntry
     {
         type: "tektite-screen-header-label-segment";
+        data:
+        {
+            className?: string;
+        }
         children:
         {
+            core: ScreenHeaderSegmentCoreEntry;
         };
     }
     export interface ScreenHeaderLinkSegmentEntry extends ListEntry
@@ -82,6 +96,7 @@ export module ViewModel
         type: "tektite-screen-header-link-segment";
         children:
         {
+            core: ScreenHeaderSegmentCoreEntry;
         };
     }
     export interface ScreenHeaderPopupSegmentEntry extends ListEntry
@@ -89,6 +104,7 @@ export module ViewModel
         type: "tektite-screen-header-popup-segment";
         children:
         {
+            core: ScreenHeaderSegmentCoreEntry;
         };
     }
     export interface ScreenHeaderOperatorEntry extends Entry
@@ -207,11 +223,11 @@ export module ViewModel
         }
     };
     // export class ViewModel<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
-    export class ViewModel
+    export class ViewModel<T extends Tektite.ParamTypes>
     {
         private data: Entry;
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
-        constructor(public tektite: unknown)
+        constructor(public tektite: Tektite.Tektite<T>)
         {
         }
         public onLoad = () =>
