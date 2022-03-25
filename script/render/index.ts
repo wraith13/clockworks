@@ -728,23 +728,23 @@ export module Render
         {
             "RainbowClock":
             {
-                show: async item => await RainbowClockRender.showRainbowClockScreen(item),
-                parseItem: json => Domain.parseTimezone(json),
+                show: async (item: Type.TimezoneEntry) => await RainbowClockRender.showRainbowClockScreen(item),
+                parseItem: (json: string) => Domain.parseTimezone(json),
             },
             "CountdownTimer":
             {
-                show: async item => await CountdownTimerRender.showCountdownTimerScreen(item),
-                parseItem: json => Domain.parseAlarm(json),
+                show: async (item: Type.AlarmEntry) => await CountdownTimerRender.showCountdownTimerScreen(item),
+                parseItem: (json: string) => Domain.parseAlarm(json),
             },
             "ElapsedTimer":
             {
-                show: async item => await ElapsedTimerRender.showElapsedTimerScreen(item),
-                parseItem: json => Domain.parseEvent(json),
+                show: async (item: Type.EventEntry) => await ElapsedTimerRender.showElapsedTimerScreen(item),
+                parseItem: (json: string) => Domain.parseEvent(json),
             },
             "NeverStopwatch":
             {
-                show: async item => await NeverStopwatchRender.showNeverStopwatchScreen(item),
-                parseItem: json => Domain.parseStamp(json),
+                show: async (item: number) => await NeverStopwatchRender.showNeverStopwatchScreen(item),
+                parseItem: (json: string) => Domain.parseStamp(json),
             },
         }[applicationType] ??
         {
