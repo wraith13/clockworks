@@ -31,8 +31,8 @@ export module Base
             +Object.keys(args)
                 .filter(i => undefined !== i)
                 .filter(i => "hash" !== i)
-                .map(i => `${i}=${encodeURIComponent(args[i])}`)
+                .map(i => `${i}=${encodeURIComponent((args as {[key: string]: string})[i])}`)
                 .join("&")
-            +`#${args["hash"] ?? ""}`
+            +`#${(args as {[key: string]: string})["hash"] ?? ""}`
     );
 }

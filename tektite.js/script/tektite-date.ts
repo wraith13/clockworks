@@ -40,7 +40,7 @@ export module TektiteDate
         public getUTCTicks = (date: Date = new Date()): number => this.getTicks(date) +(date.getTimezoneOffset() *this.utcOffsetRate);
         public weekday = (tick: number) =>
             new Intl.DateTimeFormat(this.tektite.locale.get(), { weekday: 'long'}).format(tick);
-        private makeFormalTimeText = (timer: number) =>
+        private makeFormalTimeText = (timer: number): string =>
         {
             if (timer < 0)
             {

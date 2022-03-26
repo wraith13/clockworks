@@ -153,7 +153,8 @@ export module Render
     ({
         primary:
         {
-            body:[
+            body: <minamo.dom.Source>
+            [
                 null !== item ?
                     $div("current-title")
                     ([

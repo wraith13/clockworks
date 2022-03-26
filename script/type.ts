@@ -40,9 +40,9 @@ export module Type
     }
     export const themeObject =
     {
-        "auto": null,
-        "light": null,
-        "dark": null,
+        "auto": null as null,
+        "light": null as null,
+        "dark": null as null,
     };
     export type ThemeType = keyof typeof themeObject;
     export const ThemeList = Object.keys(themeObject);
