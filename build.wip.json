@@ -1,6 +1,6 @@
 {
     "template": { "path": "./index.template.html" },
-    "output": { "path": "./index.html" },
+    "output": { "path": "./index.wip.html" },
     "preprocesses":
     {
         "none": [ ],

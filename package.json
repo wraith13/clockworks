@@ -4,6 +4,7 @@
   "description": "Never Stopwatch Static Web Application",
   "scripts": {
     "build all": "node ./nephila/build.js/build.js ../../build.json release",
+    "build wip all": "node ./nephila/build.js/build.js ../../build.wip.json release",
     "build html": "node ./nephila/build.js/build.js ../../build.json none",
     "build light style": "sass --no-charset style/theme.light.scss style/theme.light.css",
     "build dark style": "sass --no-charset style/theme.dark.scss style/theme.dark.css",
