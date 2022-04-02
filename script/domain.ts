@@ -25,7 +25,8 @@ export module Domain
         },
         href
     );
-    export const getFlashIntervalPreset = () => config.flashIntervalPreset.map(i => parseTimer(i));
+    export const getFlashIntervalPreset = () =>
+        config.flashIntervalPreset.map(i => parseTimer(i)).filter(i => null !== i) as number[];
     export const getTimerPreset = () => config.timerPreset.map(i => parseTimer(i));
     export const utcOffsetRate = 60 *1000;
     export const getTicks = (date: Date = new Date()) => date.getTime();

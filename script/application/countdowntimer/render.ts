@@ -22,7 +22,7 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    export const screenHeaderAlarmSegment = async (item: Type.AlarmEntry | null, alarms: Type.AlarmEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
+    export const screenHeaderAlarmSegment = async (item: Type.AlarmEntry, alarms: Type.AlarmEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-tick-icon",
         title: alarmTitle(item),
@@ -361,17 +361,14 @@ export module Render
                     children: label("Done"),
                     onclick: async () =>
                     {
-                        const current = item ?? alarms[0];
-                        if (current)
+                        if (item && Storage.CountdownTimer.Alarms.isSaved(item))
                         {
-                            if (Storage.CountdownTimer.Alarms.isSaved(item))
-                            {
-                                await Operate.done(current);
-                            }
-                            else
-                            {
-                                await Operate.doneTemprary(current);
-                            }
+                            await Operate.done(item);
+                        }
+                        else
+                        if (alarms[0])
+                        {
+                            await Operate.doneTemprary(alarms[0]);
                         }
                     }
                 }),
@@ -473,6 +470,7 @@ export module Render
             const now = new Date();
             const tick = Domain.getTicks(now);
             const current = item ?? alarms[0] ?? null;
+            const flashInterval = Storage.CountdownTimer.flashInterval.get();
             switch(event)
             {
                 case "high-resolution-timer":
@@ -481,7 +479,6 @@ export module Render
                     const capitalTime = tektite.date.format("YYYY-MM-DD HH:MM:SS", tick);
                     const capitalTimeSpan = screen.getElementsByClassName("current-timestamp")[0].getElementsByClassName("value")[0] as HTMLSpanElement;
                     minamo.dom.setProperty(capitalTimeSpan, "innerText", capitalTime);
-                    const flashInterval = Storage.CountdownTimer.flashInterval.get();
                     if (current)
                     {
                         const rest = current.end - tick;

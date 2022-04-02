@@ -49,7 +49,7 @@ export module Render
         Tektite.$span("locale-map")(Clockworks.localeMap(label)),
     ]);
     export const systemConfirm = (message: string) => window.confirm(message);
-    export const closeButton = (onclick?: () => unknown) =>
+    export const closeButton = (onclick?: (event: MouseEvent) => unknown): minamo.dom.Source =>
     ({
         tag: "button",
         className: "tektite-default-button",
