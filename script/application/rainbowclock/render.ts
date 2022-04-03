@@ -22,7 +22,7 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    export const screenHeaderTimezoneSegment = async (item: Type.TimezoneEntry | null, timezones: Type.TimezoneEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
+    export const screenHeaderTimezoneSegment = async (item: Type.TimezoneEntry, timezones: Type.TimezoneEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-pin-icon",
         title: item.title,

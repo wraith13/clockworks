@@ -22,7 +22,7 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    export const screenHeaderStampSegment = async (item: number | null, ticks: number[]): Promise<RenderBase.HeaderSegmentSource> =>
+    export const screenHeaderStampSegment = async (item: number, ticks: number[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-tick-icon",
         title: tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", item),

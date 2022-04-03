@@ -18,10 +18,21 @@ export module TektiteDate
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public getDate = (date: DateSourceType = new Date()): Date =>
-            "number" === typeof date ? new Date(date):
-            "string" === typeof date ? this.parseDate(date):
-            date;
+        public getDate(): Date;
+        public getDate(date: Date | number): Date;
+        public getDate(date: string): Date | null;
+        public getDate(date: DateSourceType = new Date()): Date | null
+        {
+            switch(typeof date)
+            {
+            case "number":
+                return new Date(date);
+            case "string":
+                return this.parseDate(date);
+            default:
+                return date;
+            }
+        }
         public getTicks(date?: DateSourceType | null, option?: GetTicksOperandOptionType): number;
         public getTicks(date: DateSourceType | null, option: GetTicksDirectionOptionType, now?: DateSourceType): number;
         public getTicks(date?: DateSourceType | null, option?: GetTicksOptionType, now?: DateSourceType): number

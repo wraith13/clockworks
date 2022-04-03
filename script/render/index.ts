@@ -493,7 +493,7 @@ export module Render
             {
                 if (await localeSettingsPopup())
                 {
-                    tektite.locale.setLocale(Storage.Settings.get().locale);
+                    tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
                     await reload();
                 }
             }
