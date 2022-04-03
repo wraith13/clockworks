@@ -28,7 +28,27 @@ export module Clockworks
         console.log(`start timestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())}`);
         console.log(`buildTimestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`);
         console.log(`${JSON.stringify(params)}`);
-        tektite.locale.setLocale(Storage.Settings.get().locale);
+        tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
+        tektite.onLoad();
+        window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
+        Render.updateStyle();
+        Render.updateProgressBarStyle();
+        await Render.showPage();
+        if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
+        {
+            tektite.screen.toast.make
+            ({
+                content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
+                isWideContent: true,
+            });
+        }
+    };
+    export const startWIP = async (params:{ buildTimestampTick:number, }) =>
+    {
+        console.log(`start timestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())}`);
+        console.log(`buildTimestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`);
+        console.log(`${JSON.stringify(params)}`);
+        tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
         tektite.onLoad();
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
         Render.updateStyle();

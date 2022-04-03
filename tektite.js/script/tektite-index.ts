@@ -324,8 +324,8 @@ export module Tektite
             document.body.classList.add("tektite-flash");
             setTimeout(() => document.body.classList.remove("tektite-flash"), 1500);
         };
-        private updateTimer: number = undefined;
-        private updateHighResolutionTimer: number = undefined;
+        private updateTimer: number | undefined = undefined;
+        private updateHighResolutionTimer: number | undefined = undefined;
         onWindowFocus = () =>
         {
             this.screen.update?.("focus");
@@ -373,14 +373,14 @@ export module Tektite
             window.addEventListener("keydown", this.onKeydown);
             document.addEventListener("fullscreenchange", this.onFullscreenChange);
             document.addEventListener("webkitfullscreenchange", this.onWebkitFullscreenChange);
-            document.getElementById("tektite-screen-body").addEventListener
+            document.getElementById("tektite-screen-body")?.addEventListener
             (
                 "scroll",
                 () =>
                 {
                     this.screen.adjustPageFooterPosition();
                     this.screen.adjustDownPageLinkDirection();
-                    if (document.getElementById("tektite-screen-body").scrollTop <= 0)
+                    if ((document.getElementById("tektite-screen-body")?.scrollTop ?? 0) <= 0)
                     {
                         this.screen.update?.("scroll");
                     }

@@ -26,6 +26,6 @@
         "__SCRIPT__": { "path": "./script/index.js", "replace": { "match": "sourceMappingURL=index.js.map", "text": "sourceMappingURL=script/index.js.map" } },
         "__IMAGES__": { "resource": "./resource/images.json" },
         "__TEKTITE_IMAGES__": { "resource": "./tektite.js/images.json", "base": "./tektite.js/" },
-        "__STARTUP__": "start"
+        "__STARTUP__": "startWIP"
     }
 }
