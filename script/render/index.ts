@@ -624,7 +624,7 @@ export module Render
             children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
         }),
     });
-    export const itemFooter = async <T>(item: T, application: Type.ApplicationType, getShareTitle: (item: T) => string, isSaved: (item: T) => boolean, save: (item: T) => Promise<unknown>) =>
+    export const itemFooter = async <T>(item: T | null, application: Type.ApplicationType, getShareTitle: (item: T) => string, isSaved: (item: T) => boolean, save: (item: T) => Promise<unknown>) =>
         null !== item ?
             Tektite.$div("tektite-horizontal-button-list")
             ([

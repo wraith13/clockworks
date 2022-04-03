@@ -554,7 +554,7 @@ export module Render
                     await tektite.screen.replaceBody(await countdownTimerScreenBody(item, alarms));
                     tektite.screen.resizeFlexList();
                     await updateScreen("timer");
-                    await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
+                    await tektite.screen.scrollToOffset(minamo.core.existsOrThrow(document.getElementById("tektite-screen-body")), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }

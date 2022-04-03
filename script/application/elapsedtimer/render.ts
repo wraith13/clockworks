@@ -23,7 +23,7 @@ export module Render
         $span("locale-parallel")(Clockworks.localeParallel(label)),
         $span("locale-map")(Clockworks.localeMap(label)),
     ]);
-    export const screenHeaderEventSegment = async (item: Type.EventEntry | null, alarms: Type.EventEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
+    export const screenHeaderEventSegment = async (item: Type.EventEntry, alarms: Type.EventEntry[]): Promise<RenderBase.HeaderSegmentSource> =>
     ({
         icon: "tektite-tick-icon",
         title: item.title,
@@ -246,7 +246,7 @@ export module Render
                     await tektite.screen.replaceBody(await elapsedTimerScreenBody(item, events));
                     tektite.screen.resizeFlexList();
                     await updateScreen("timer");
-                    await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
+                    await tektite.screen.scrollToOffset(minamo.core.existsOrThrow(document.getElementById("tektite-screen-body")), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }
