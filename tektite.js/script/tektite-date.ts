@@ -33,19 +33,55 @@ export module TektiteDate
                 return date;
             }
         }
-        public getTicks(date?: DateSourceType | null, option?: GetTicksOperandOptionType): number;
-        public getTicks(date: DateSourceType | null, option: GetTicksDirectionOptionType, now?: DateSourceType): number;
-        public getTicks(date?: DateSourceType | null, option?: GetTicksOptionType, now?: DateSourceType): number
+        public getTicks(date: string, option?: GetTicksOperandOptionType): number | null;
+        public getTicks(date?: Date | number | null, option?: GetTicksOperandOptionType): number;
+        public getTicks(date: string, option: GetTicksDirectionOptionType, now?: Date | number): number | null;
+        public getTicks(date: Date | number | null, option: GetTicksDirectionOptionType, now?: Date | number): number;
+        public getTicks(date?: DateSourceType | null, option?: GetTicksOptionType, now?: Date | number): number | null
         {
-            return null === (option ?? null) ?
-                "number" === typeof date ? date: // timespan or date
-                "string" === typeof date ? this.parseDate(date).getTime(): // date
-                (date ?? new Date()).getTime(): // date
-            "elapsed" === option ? this.getTicks(now ?? new Date()) -this.getTicks(date ?? Date()): // timespan
-            "clip-elapsed" === option ? Math.max(this.getTicks(now ?? new Date()) -this.getTicks(date ?? Date()), 0): // timespan
-            "rest" === option ? this.getTicks(date ?? Date()) -this.getTicks(now ?? new Date()): // timespan
-            "clip-rest" === option ? Math.max(this.getTicks(date ?? Date()) -this.getTicks(now ?? new Date()), 0): // timespan
-            this.getTicks(date ?? Date()) -this.getTicks(option); // timespan
+            if (null === (option ?? null))
+            {
+                switch(typeof date)
+                {
+                case "number":
+                    return date; // timespan or date
+                case "string":
+                    return this.parseDate(date)?.getTime() ?? null; // date
+                default:
+                    return (date ?? new Date()).getTime() // date;
+                }
+            }
+            else
+            {
+                const getNowTicks = () => this.getTicks(now ?? new Date());
+                const targetTicks = this.getTicks((date ?? Date()) as DateFormatType);
+                if (null === targetTicks)
+                {
+                    return null;
+                }
+                switch(option)
+                {
+                case "elapsed":
+                    return getNowTicks() -targetTicks; // timespan
+                case "clip-elapsed":
+                    return Math.max(getNowTicks() -targetTicks, 0); // timespan
+                case "rest":
+                    return targetTicks -getNowTicks(); // timespan
+                case "clip-rest":
+                    return Math.max(targetTicks -getNowTicks(), 0); // timespan
+                default:
+                    return targetTicks -this.getTicks(option); // timespan
+                }
+            }
+            // return null === (option ?? null) ?
+            //     "number" === typeof date ? date: // timespan or date
+            //     "string" === typeof date ? this.parseDate(date)?.getTime() ?? null: // date
+            //     (date ?? new Date()).getTime(): // date
+            // "elapsed" === option ? this.getTicks(now ?? new Date()) -this.getTicks(date ?? Date()): // timespan
+            // "clip-elapsed" === option ? Math.max(this.getTicks(now ?? new Date()) -this.getTicks(date ?? Date()), 0): // timespan
+            // "rest" === option ? this.getTicks(date ?? Date()) -this.getTicks(now ?? new Date()): // timespan
+            // "clip-rest" === option ? Math.max(this.getTicks(date ?? Date()) -this.getTicks(now ?? new Date()), 0): // timespan
+            // this.getTicks(date ?? Date()) -this.getTicks(option); // timespan
         }
         public utcOffsetRate: number = 60 *1000;
         public getUTCTicks = (date: Date = new Date()): number => this.getTicks(date) +(date.getTimezoneOffset() *this.utcOffsetRate);
@@ -129,7 +165,12 @@ export module TektiteDate
                 return null;
             }
             else
-            if (tick instanceof Date || "string" === typeof tick)
+            if (tick instanceof Date)
+            {
+                return this.getTime(this.getTicks(tick));
+            }
+            else
+            if ("string" === typeof tick)
             {
                 return this.getTime(this.getTicks(tick));
             }
