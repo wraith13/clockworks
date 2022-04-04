@@ -37,6 +37,7 @@ export module TektiteDate
         public getTicks(date?: Date | number | null, option?: GetTicksOperandOptionType): number;
         public getTicks(date: string, option: GetTicksDirectionOptionType, now?: Date | number): number | null;
         public getTicks(date: Date | number | null, option: GetTicksDirectionOptionType, now?: Date | number): number;
+        public getTicks(date?: DateSourceType | null, option?: GetTicksOptionType, now?: Date | number): number | null;
         public getTicks(date?: DateSourceType | null, option?: GetTicksOptionType, now?: Date | number): number | null
         {
             if (null === (option ?? null))
@@ -54,7 +55,7 @@ export module TektiteDate
             else
             {
                 const getNowTicks = () => this.getTicks(now ?? new Date());
-                const targetTicks = this.getTicks((date ?? Date()) as DateFormatType);
+                const targetTicks = this.getTicks(date ?? Date());
                 if (null === targetTicks)
                 {
                     return null;
@@ -87,8 +88,15 @@ export module TektiteDate
         public getUTCTicks = (date: Date = new Date()): number => this.getTicks(date) +(date.getTimezoneOffset() *this.utcOffsetRate);
         public weekday = (tick: number) =>
             new Intl.DateTimeFormat(this.tektite.locale.get(), { weekday: 'long'}).format(tick);
-        private makeFormalTimeText = (timer: number): string =>
+        private makeFormalTimeText(timer: null): null;
+        private makeFormalTimeText(timer: number): string;
+        private makeFormalTimeText(timer: number | null): string | null;
+        private makeFormalTimeText(timer: number | null): string | null
         {
+            if (null === timer)
+            {
+                return null;
+            }
             if (timer < 0)
             {
                 return `-${this.makeFormalTimeText(-timer)}`;
@@ -158,7 +166,11 @@ export module TektiteDate
         };
         private makeYYYYMMDD = (date: Date): string =>
             `${date.getFullYear()}-${("0" +(date.getMonth() +1)).substr(-2)}-${("0" +date.getDate()).substr(-2)}`;
-        public getTime = (tick: null | number | Date | string): null | number =>
+        public getTime(tick: null): null;
+        public getTime(tick: string): null | number;
+        public getTime(tick: number | Date): number;
+        public getTime(tick: null | number | Date | string): null | number;
+        public getTime(tick: null | number | Date | string): null | number
         {
             if (null === tick)
             {
@@ -284,7 +296,9 @@ export module TektiteDate
             {
                 try
                 {
-                    return this.parseDate(`2020-01-01T${time}`).getTime() -this.parseDate(`2020-01-01T00:00:00`).getTime();
+                    const target = this.parseDate(`2020-01-01T${time}`)?.getTime();
+                    const base = this.parseDate(`2020-01-01T00:00:00`)?.getTime();
+                    return undefined !== target && undefined !== base ? target -base: null;
                 }
                 catch
                 {
