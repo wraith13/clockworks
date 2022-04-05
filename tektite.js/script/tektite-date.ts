@@ -1,3 +1,4 @@
+import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index.js";
 export module TektiteDate
 {
@@ -20,24 +21,30 @@ export module TektiteDate
         }
         public getDate(): Date;
         public getDate(date: Date | number): Date;
-        public getDate(date: string): Date | null;
-        public getDate(date: DateSourceType = new Date()): Date | null
+        public getDate(date: DateSourceType | null): Date | null;
+        public getDate(date?: DateSourceType | null): Date | null
         {
-            switch(typeof date)
+            if (minamo.core.exists(date))
             {
-            case "number":
-                return new Date(date);
-            case "string":
-                return this.parseDate(date);
-            default:
-                return date;
+                switch(typeof date)
+                {
+                case "number":
+                    return new Date(date);
+                case "string":
+                    return this.parseDate(date);
+                default:
+                    return date;
+                }
+            }
+            else
+            {
+                return new Date();
             }
         }
-        public getTicks(date: string, option?: GetTicksOperandOptionType): number | null;
         public getTicks(date?: Date | number | null, option?: GetTicksOperandOptionType): number;
-        public getTicks(date: string, option: GetTicksDirectionOptionType, now?: Date | number): number | null;
+        public getTicks(date?: DateSourceType | null, option?: GetTicksOperandOptionType): number | null;
         public getTicks(date: Date | number | null, option: GetTicksDirectionOptionType, now?: Date | number): number;
-        public getTicks(date?: DateSourceType | null, option?: GetTicksOptionType, now?: Date | number): number | null;
+        public getTicks(date: DateSourceType | null, option: GetTicksDirectionOptionType, now?: Date | number): number | null;
         public getTicks(date?: DateSourceType | null, option?: GetTicksOptionType, now?: Date | number): number | null
         {
             if (null === (option ?? null))
@@ -86,8 +93,19 @@ export module TektiteDate
         }
         public utcOffsetRate: number = 60 *1000;
         public getUTCTicks = (date: Date = new Date()): number => this.getTicks(date) +(date.getTimezoneOffset() *this.utcOffsetRate);
-        public weekday = (tick: number) =>
-            new Intl.DateTimeFormat(this.tektite.locale.get(), { weekday: 'long'}).format(tick);
+        public weekday(tick: number): string
+        public weekday(tick: number | null): string | null;
+        public weekday(tick: number | null): string | null
+        {
+            if (null === tick)
+            {
+                return null;
+            }
+            else
+            {
+                return new Intl.DateTimeFormat(this.tektite.locale.get(), { weekday: 'long'}).format(tick);
+            }
+        }
         private makeFormalTimeText(timer: null): null;
         private makeFormalTimeText(timer: number): string;
         private makeFormalTimeText(timer: number | null): string | null;
@@ -164,8 +182,19 @@ export module TektiteDate
             // console.log({ timer, result, });
             return result;
         };
-        private makeYYYYMMDD = (date: Date): string =>
-            `${date.getFullYear()}-${("0" +(date.getMonth() +1)).substr(-2)}-${("0" +date.getDate()).substr(-2)}`;
+        private makeYYYYMMDD(date: Date): string;
+        private makeYYYYMMDD(date: Date | null): string | null;
+        private makeYYYYMMDD(date: Date | null): string | null
+        {
+            if (null === date)
+            {
+                return null;
+            }
+            else
+            {
+                return `${date.getFullYear()}-${("0" +(date.getMonth() +1)).substr(-2)}-${("0" +date.getDate()).substr(-2)}`;
+            }
+        }
         public getTime(tick: null): null;
         public getTime(tick: string): null | number;
         public getTime(tick: number | Date): number;
@@ -206,8 +235,14 @@ export module TektiteDate
                 return tick -this.getTicks(date);
             }
         };
-        private makeHHMM = (tick: number): string =>
+        private makeHHMM(tick: number): string;
+        private makeHHMM(tick: number | null): string | null;
+        private makeHHMM(tick: number | null): string | null
         {
+            if (null === tick)
+            {
+                return null;
+            }
             if (tick < 0)
             {
                 return `-${this.makeHHMM(-tick)}`;
@@ -219,8 +254,14 @@ export module TektiteDate
                 return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}`;
             }
         };
-        private makeHHMMSS = (tick: number): string =>
+        private makeHHMMSS(tick: number): string;
+        private makeHHMMSS(tick: number | null): string | null;
+        private makeHHMMSS(tick: number | null): string | null
         {
+            if (null === tick)
+            {
+                return null;
+            }
             if (tick < 0)
             {
                 return `-${this.makeHHMMSS(-tick)}`;
@@ -233,8 +274,14 @@ export module TektiteDate
                 return `${("00" +hour).slice(-2)}:${("00" +minute).slice(-2)}:${("00" +second).slice(-2)}`;
             }
         };
-        private makeHHMMSSmmm = (tick: number): string =>
+        private makeHHMMSSmmm(tick: number): string;
+        private makeHHMMSSmmm(tick: number | null): string | null;
+        private makeHHMMSSmmm(tick: number): string | null
         {
+            if (null === tick)
+            {
+                return null;
+            }
             if (tick < 0)
             {
                 return `-${this.makeHHMMSSmmm(-tick)}`;
@@ -308,11 +355,13 @@ export module TektiteDate
             return null;
         };
         public format(format :TimespanFormatType, timespan: number | null): string
-        public format(format :VariableTimespanFormatType, dateOrTimespan: DateSourceType | null, option: GetTicksOperandOptionType): string
-        public format(format :VariableTimespanFormatType, dateOrTimespan: DateSourceType | null, option: GetTicksDirectionOptionType, now?: DateSourceType): string
+        public format(format :VariableTimespanFormatType, dateOrTimespan: Date | number | null, option: GetTicksOperandOptionType): string
+        public format(format :VariableTimespanFormatType, dateOrTimespan: DateSourceType | null, option: GetTicksOperandOptionType): string | null
+        public format(format :VariableTimespanFormatType, dateOrTimespan: Date | number | null, option: GetTicksDirectionOptionType, now?: DateSourceType): string
+        public format(format :VariableTimespanFormatType, dateOrTimespan: DateSourceType | null, option: GetTicksDirectionOptionType, now?: DateSourceType): string | null
         public format(format :"days", days: number | null): string
         public format(format :DateFormatType, date: DateSourceType | null): string
-        public format(format :TimespanFormatType | "days" | DateFormatType, date: DateSourceType | null, option?: GetTicksOptionType, now?: DateSourceType): string
+        public format(format :TimespanFormatType | "days" | DateFormatType, date: DateSourceType | null, option?: GetTicksOptionType, now?: DateSourceType): string | null
         {
             if (null === (date ?? null))
             {
