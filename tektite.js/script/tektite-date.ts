@@ -320,8 +320,26 @@ export module TektiteDate
                 }
             }
         };
-        private makeShortTimeText = (tick: number): string => this.makeTimeTextBase(tick, "HH:MM:SS");
-        private makeLongTimeText = (tick: number): string => this.makeTimeTextBase(tick, "HH:MM:SS.mmm");
+        private makeShortTimeText(tick: number): string;
+        private makeShortTimeText(tick: number | null): string | null;
+        private makeShortTimeText(tick: number | null): string | null
+        {
+            if (null === tick)
+            {
+                return null;
+            }
+            return this.makeTimeTextBase(tick, "HH:MM:SS");
+        }
+        private makeLongTimeText(tick: number): string;
+        private makeLongTimeText(tick: number | null): string | null;
+        private makeLongTimeText(tick: number | null): string | null
+        {
+            if (null === tick)
+            {
+                return null;
+            }
+            return this.makeTimeTextBase(tick, "HH:MM:SS.mmm");
+        }
         public parseDate = (date: string | null): Date | null =>
         {
             if (null !== date)
@@ -357,11 +375,11 @@ export module TektiteDate
         public format(format :TimespanFormatType, timespan: number | null): string
         public format(format :VariableTimespanFormatType, dateOrTimespan: Date | number | null, option: GetTicksOperandOptionType): string
         public format(format :VariableTimespanFormatType, dateOrTimespan: DateSourceType | null, option: GetTicksOperandOptionType): string | null
-        public format(format :VariableTimespanFormatType, dateOrTimespan: Date | number | null, option: GetTicksDirectionOptionType, now?: DateSourceType): string
-        public format(format :VariableTimespanFormatType, dateOrTimespan: DateSourceType | null, option: GetTicksDirectionOptionType, now?: DateSourceType): string | null
+        public format(format :VariableTimespanFormatType, dateOrTimespan: Date | number | null, option: GetTicksDirectionOptionType, now?: Date | number): string
+        public format(format :VariableTimespanFormatType, dateOrTimespan: DateSourceType | null, option: GetTicksDirectionOptionType, now?: Date | number): string | null
         public format(format :"days", days: number | null): string
         public format(format :DateFormatType, date: DateSourceType | null): string
-        public format(format :TimespanFormatType | "days" | DateFormatType, date: DateSourceType | null, option?: GetTicksOptionType, now?: DateSourceType): string | null
+        public format(format :TimespanFormatType | "days" | DateFormatType, date: DateSourceType | null, option?: GetTicksOptionType, now?: Date | number): string | null
         {
             if (null === (date ?? null))
             {
