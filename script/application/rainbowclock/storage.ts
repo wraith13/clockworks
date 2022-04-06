@@ -19,6 +19,18 @@ export module Storage
         export const get = () => minamo.localStorage.getOrNull<number>(makeKey()) ?? (60 * 60 * 1000);
         export const set = (value: number) => minamo.localStorage.set(makeKey(), value);
     }
+    export module recentlyFlashInterval
+    {
+        export const makeKey = () => `${config.localDbPrefix}:${applicationName}:recentlyFlashInterval`;
+        export const get = () => minamo.localStorage.getOrNull<number[]>(makeKey()) ?? [];
+        export const set = (list: number[]) => minamo.localStorage.set(makeKey(), list);
+        export const add = (value: number) => set
+        (
+            [value].concat(get())
+                .filter((i, ix, list) => ix === list.indexOf(i))
+                .filter((_i, ix) => ix < config.recentlyFlashIntervalMaxHistory)
+        );
+    }
     export module Timezone
     {
         export const makeKey = () => `${config.localDbPrefix}:${applicationName}:timezones`;

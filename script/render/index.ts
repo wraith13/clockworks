@@ -185,7 +185,7 @@ export module Render
                             {
                                 if (null !== (settings.locale ?? null))
                                 {
-                                    settings.locale = null;
+                                    settings.locale = undefined;
                                     Storage.Settings.set(settings);
                                     instance.set(true);
                                     await checkButtonListUpdate();

@@ -193,7 +193,7 @@ export module Render
                 (
                     await RenderBase.screenHeaderFlashSegment
                     (
-                        null,
+                        Storage.RainbowClock.recentlyFlashInterval.add,
                         Domain.getFlashIntervalPreset(),
                             // .concat(Storage.RainbowClock.recentlyFlashInterval.get())
                             // .sort(minamo.core.comparer.make([i => i]))
@@ -351,7 +351,7 @@ export module Render
                     await tektite.screen.replaceBody(await rainbowClockScreenBody(item, timezones));
                     tektite.screen.resizeFlexList();
                     await updateScreen("timer");
-                    await tektite.screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0);
+                    await tektite.screen.scrollToOffset(minamo.core.existsOrThrow(document.getElementById("tektite-screen-body")), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
             }
