@@ -13,7 +13,7 @@ export module Operate
             children: text,
         });
         document.body.appendChild(pre);
-        document.getSelection().selectAllChildren(pre);
+        document.getSelection()?.selectAllChildren(pre);
         document.execCommand("copy");
         document.body.removeChild(pre);
         tektite.screen.toast.make({ content: `Copied ${displayText} to the clipboard.`,});

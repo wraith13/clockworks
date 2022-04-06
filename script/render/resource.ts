@@ -8,7 +8,7 @@ export module Resource
     {
         try
         {
-            const result: SVGElement = new DOMParser().parseFromString(document.getElementById(key).innerHTML, "image/svg+xml").documentElement as any;
+            const result: SVGElement = new DOMParser().parseFromString(document.getElementById(key)?.innerHTML ?? "", "image/svg+xml").documentElement as any;
             result.classList.add(className);
             return result;
         }

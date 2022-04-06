@@ -621,7 +621,7 @@ export module Render
         onclick: async () => tektite.screen.popup
         ({
             className: "bare-popup",
-            children: "function" === typeof entry.menu ? await entry.menu(): entry.menu,
+            children: "function" === typeof entry.menu ? await entry.menu(): (entry.menu ?? []),
         }),
     });
     export const itemFooter = async <T>(item: T | null, application: Type.ApplicationType, getShareTitle: (item: T) => string, isSaved: (item: T) => boolean, save: (item: T) => Promise<unknown>) =>
@@ -677,7 +677,7 @@ export module Render
     export const setProgress = (percent: null | number, color?: string) =>
         tektite.setProgress(Storage.Settings.get().progressBarStyle ?? "auto", percent, color);
     export type ItemStateType = "nothing" | "regular" | "irregular" | "invalid";
-    export const itemState = <T>(itemJson: string, item: T): ItemStateType =>
+    export const itemState = <T>(itemJson: string, item: T | null): ItemStateType =>
     {
         if ( ! itemJson)
         {
@@ -698,7 +698,7 @@ export module Render
             return "regular";
         }
     };
-    export const regulateLocation = <T extends Type.PageItemType>(application: Type.ApplicationType, itemJson: string, item: T) =>
+    export const regulateLocation = <T extends Type.PageItemType>(application: Type.ApplicationType, itemJson: string, item: T | null) =>
     {
         switch(itemState(itemJson, item))
         {
@@ -707,7 +707,7 @@ export module Render
         case "regular":
             return true;
         case "irregular":
-            Render.rewriteShowUrl(Domain.makePageParams(application, item));
+            Render.rewriteShowUrl(Domain.makePageParams(application, <T>item));
             return false;
         case "invalid":
             Render.rewriteShowUrl({ application, });
@@ -719,7 +719,7 @@ export module Render
     {
         tektite.screen.getScreenCover()?.click();
         window.scrollTo(0,0);
-        document.getElementById("tektite-screen-body").scrollTo(0,0);
+        document.getElementById("tektite-screen-body")?.scrollTo(0,0);
         // const urlParams = getUrlParams(url);
         const hash = Base.getUrlHash(url).split("/");
         const applicationType = hash[0] as Type.ApplicationType;
@@ -754,7 +754,7 @@ export module Render
         const item = application.parseItem(itemJson);
         if (regulateLocation(applicationType, itemJson, item))
         {
-            await application.show(item);
+            await application.show(item as any);
         }
         else
         {
@@ -762,12 +762,17 @@ export module Render
         }
         return true;
     };
+    export const getTitle = (data: Type.PageParams) =>
+    (
+        data.application ? Type.applicationList[data.application]?.title:
+        null
+    ) ?? config.applicationTitle;
     export const showUrl = async (data: Type.PageParams) =>
     {
         const url = Domain.makeUrl(data);
         if (await showPage(url))
         {
-            history.pushState(null, Type.applicationList[data.application]?.title ?? config.applicationTitle, url);
+            history.pushState(null, getTitle(data), url);
         }
     };
     export const rewriteShowUrl = async (data: Type.PageParams) =>
@@ -775,7 +780,7 @@ export module Render
         const url = Domain.makeUrl(data);
         if (await showPage(url))
         {
-            history.replaceState(null, Type.applicationList[data.application]?.title ?? config.applicationTitle, url);
+            history.replaceState(null, getTitle(data), url);
         }
     };
     export const reload = async () => await showPage();
