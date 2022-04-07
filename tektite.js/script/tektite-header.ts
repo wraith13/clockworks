@@ -38,7 +38,7 @@ export module Header
             this.getElement().addEventListener
             (
                 'click',
-                async () => await screen.scrollToOffset(document.getElementById("tektite-screen-body"), 0)
+                async () => await screen.scrollToOffset(minamo.core.existsOrThrow(document.getElementById("tektite-screen-body")), 0)
             );
         public setColor = (color: string | null) =>
             minamo.dom.setStyleProperty(this.getElement(), "backgroundColor", color ?? "");
@@ -135,7 +135,7 @@ export module Header
         });
         popupSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") =>
         {
-            let cover: { dom: HTMLDivElement, close: () => Promise<unknown> };
+            let cover: { dom: HTMLDivElement, close: () => Promise<unknown> } | null;
             const close = () =>
             {
                 popup.classList.remove("show");

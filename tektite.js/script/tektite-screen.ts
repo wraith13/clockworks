@@ -17,14 +17,14 @@ export module Screen
         element: HTMLDivElement;
         getElement = () => this.element;
         update: (event: Tektite.UpdateScreenEventEype) => unknown;
-        public cover = (data: { parent?: HTMLElement, children?: minamo.dom.Source, onclick: () => unknown, }) =>
+        public cover = (data: { parent?: HTMLElement | null, children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
             const onclick = async () =>
             {
                 if (dom === (this.lastMouseDownTarget ?? dom))
                 {
                     console.log("tektite-screen-cover.click!");
-                    dom.onclick = undefined;
+                    dom.onclick = null;
                     data.onclick();
                     close();
                 }
@@ -109,7 +109,7 @@ export module Screen
         //     };
         //     return result;
         // };
-        public popup = async <ResultType>(builder: Tektite.PopupArguments<ResultType> | ((instance: Tektite.PopupInstance<ResultType>) => Promise<Tektite.PopupArguments<ResultType>>)) => await new Promise<ResultType>
+        public popup = async <ResultType>(builder: Tektite.PopupArguments<ResultType> | ((instance: Tektite.PopupInstance<ResultType>) => Promise<Tektite.PopupArguments<ResultType>>)) => await new Promise<ResultType | null>
         (
             async resolve =>
             {

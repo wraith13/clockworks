@@ -12,7 +12,7 @@ export module Menu
         }
         public button = async (menu: minamo.dom.Source | (() => Promise<minamo.dom.Source>)) =>
         {
-            let cover: { dom: HTMLDivElement, close: () => Promise<unknown> };
+            let cover: { dom: HTMLDivElement, close: () => Promise<unknown> } | null;
             const close = () =>
             {
                 popup.classList.remove("show");

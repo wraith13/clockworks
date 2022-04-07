@@ -193,7 +193,7 @@ export module Render
             "tektite-delete-button"
         )
     ];
-    export const newTimerPopup = async (): Promise<boolean> =>
+    export const newTimerPopup = async (): Promise<boolean | null> =>
         await tektite.screen.popup<boolean>
         (
             async (instance: Tektite.PopupInstance<boolean>) =>

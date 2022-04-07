@@ -58,7 +58,7 @@ export module Render
     });
     export const popupCloseOperator = (onclick?: () => unknown) =>
         Tektite.$div("tektite-popup-operator")(closeButton(onclick));
-    export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
+    export const themeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean | null> =>
         await tektite.screen.popup<boolean>
         (
             async (instance: Tektite.PopupInstance<boolean>) =>
