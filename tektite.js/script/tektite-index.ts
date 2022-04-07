@@ -77,8 +77,8 @@ export module Tektite
     }
     export interface PopupInstance<ResultType>
     {
-        set: (result: ResultType) => PopupInstance<ResultType>;
-        close: () => PopupInstance<ResultType>;
+        set: (result: ResultType | null) => PopupInstance<ResultType | null>;
+        close: () => PopupInstance<ResultType | null>;
         getDom: () => HTMLDivElement;
     }
     export interface PopupArguments<ResultType>

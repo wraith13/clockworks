@@ -207,13 +207,13 @@ export module Screen
                 ],
             })
         );
-        lastMouseDownTarget: EventTarget = null;
+        lastMouseDownTarget: EventTarget | null = null;
         public onMouseDown = (event: MouseEvent) => this.lastMouseDownTarget = event.target;
         public onMouseUp = (_evnet: MouseEvent) => setTimeout(this.clearLastMouseDownTarget, 10);
-        public clearLastMouseDownTarget = (): void => this.lastMouseDownTarget = null;
+        public clearLastMouseDownTarget = (): unknown => this.lastMouseDownTarget = null;
         replaceBody = async (body: Tektite.PageSource | minamo.dom.Source) => minamo.dom.replaceChildren
         (
-            document.getElementById("tektite-screen-body"),
+            minamo.core.existsOrThrow(document.getElementById("tektite-screen-body")),
             await this.makeBody(body)
         );
         scrollToOffset = async (target: HTMLElement, offset: number) =>
@@ -231,14 +231,24 @@ export module Screen
         scrollToElement = async (target: HTMLElement) =>
         {
             const parent = target.parentElement;
-            const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
-            await this.scrollToOffset(parent, targetOffsetTop);
+            if (parent)
+            {
+                const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
+                await this.scrollToOffset(parent, targetOffsetTop);
+            }
         };
         getBodyScrollTop = (topChild = minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]) =>
         {
             const body = document.getElementById("tektite-screen-body");
-            const primaryPageOffsetTop = Math.min(topChild.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
-            return body.scrollTop -primaryPageOffsetTop;
+            if (body)
+            {
+                const primaryPageOffsetTop = Math.min(topChild.offsetTop -body.offsetTop, body.scrollHeight -body.clientHeight);
+                return body.scrollTop -primaryPageOffsetTop;
+            }
+            else
+            {
+                return 0;
+            }
         };
         isStrictShowPrimaryPage = () => 0 === this.getBodyScrollTop();
         downPageLink = async () =>
@@ -264,11 +274,14 @@ export module Screen
             if (primaryPage)
             {
                 const body = document.getElementById("tektite-screen-body");
-                const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +this.getBodyScrollTop()), 0);
-                minamo.dom.getDivsByClassName(document, "tektite-page-footer")
-                    .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(${Tektite.isAppleMobileWebApp() ? 1.25: 1}rem + ${delta}px)`));
-                // minamo.dom.getDivsByClassName(document, "tektite-down-page-link")
-                //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
+                if (body)
+                {
+                    const delta = Math.max(primaryPage.clientHeight -(body.clientHeight +this.getBodyScrollTop()), 0);
+                    minamo.dom.getDivsByClassName(document, "tektite-page-footer")
+                        .forEach(i => minamo.dom.setStyleProperty(i, "paddingBottom", `calc(${Tektite.isAppleMobileWebApp() ? 1.25: 1}rem + ${delta}px)`));
+                    // minamo.dom.getDivsByClassName(document, "tektite-down-page-link")
+                    //     .forEach(i => minamo.dom.setStyleProperty(i, "bottom", `calc(1rem + ${delta}px)`));
+                }
             }
         };
         adjustDownPageLinkDirection = () =>
@@ -334,8 +347,8 @@ export module Screen
                         (primary as Tektite.PrimaryPageSource).footer:
                         (
                             undefined !== trail ?
-                            await this.downPageLink():
-                            []
+                                await this.downPageLink():
+                                []
                         )
                 ),
             ]),

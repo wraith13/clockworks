@@ -111,7 +111,7 @@ export module Render
                 };
             }
         );
-    export const progressBarStyleSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
+    export const progressBarStyleSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean | null> =>
         await tektite.screen.popup<boolean>
         (
             async (instance: Tektite.PopupInstance<boolean>) =>
@@ -163,7 +163,7 @@ export module Render
                 };
             }
         );
-    export const localeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean> =>
+    export const localeSettingsPopup = async (settings: Type.Settings = Storage.Settings.get()): Promise<boolean | null> =>
         await tektite.screen.popup<boolean>
         (
             async (instance: Tektite.PopupInstance<boolean>) =>
@@ -233,7 +233,7 @@ export module Render
                 };
             }
         );
-    export const colorSettingsPopup = async (settings = Storage.RainbowClock.colorPattern.get()): Promise<boolean> =>
+    export const colorSettingsPopup = async (settings = Storage.RainbowClock.colorPattern.get()): Promise<boolean | null> =>
         await tektite.screen.popup<boolean>
         (
             async (instance: Tektite.PopupInstance<boolean>) =>

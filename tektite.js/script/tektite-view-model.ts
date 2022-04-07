@@ -156,10 +156,10 @@ export module ViewModel
         Array.isArray(data.children) ?
             data.children.map(i => i.key):
             Object.keys(data.children);
-    export const getChildFromModelKey = (data: Entry, key: string): Entry =>
+    export const getChildFromModelKey = (data: Entry, key: string): Entry | null =>
         Array.isArray(data?.children) ?
-            data?.children?.filter(i => key === i.key)?.[0]:
-            data?.children?.[key];
+            (data?.children?.filter(i => key === i.key)?.[0] ?? null):
+            (data?.children?.[key] ?? null);
     export const getChildrenValues = (data: Entry): Entry[] =>
         ! data?.children ? []:
         Array.isArray(data.children) ?
