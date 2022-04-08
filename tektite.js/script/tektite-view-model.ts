@@ -171,8 +171,8 @@ export module ViewModel
             (
                 key =>
                     "" === (key ?? "") ||
-                    ( ! Array.isArray(data.children) && "" !== ((data.children[key] as ListEntry).key ?? "")) ||
-                    hasInvalidViewModel(getChildFromModelKey(data, key))
+                    ( ! Array.isArray(data.children) && "" !== ((data.children?.[key] as ListEntry)?.key ?? "")) ||
+                    hasInvalidViewModel(getChildFromModelKey(data, key) as Entry)
             ).length;
     export const hasDuplicatedKeys = (data: Entry): boolean =>
         0 < getChildrenModelKeys(data).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
@@ -180,8 +180,20 @@ export module ViewModel
     export const isValidPath = (path: PathType) =>
         isPathType(path) &&
         ("/root" === path.path || path.path.startsWith("/root/"));
-    export const hasError = (path: PathType, data: Entry) =>
+    export const hasError = (path: PathType, data: Entry | null | undefined) =>
     {
+        if (undefined === data)
+        {
+            console.error(`tektite-view-model: undefined data - path:${path}`);
+            return true;
+        }
+        else
+        if (null === data)
+        {
+            console.error(`tektite-view-model: null data - path:${path}`);
+            return true;
+        }
+        else
         if (hasInvalidViewModel(data))
         {
             console.error(`tektite-view-model: Invalid view model - data:${data}`);
@@ -240,7 +252,7 @@ export module ViewModel
             if (isPathType(pathOrdata))
             {
                 const path = pathOrdata;
-                if ( ! hasError(path, data))
+                if (( ! hasError(path, data)) && data)
                 {
                     const keys = path.path.split("/").filter(i => 0 < i.length);
                     if ("" !== keys[0])
@@ -250,7 +262,7 @@ export module ViewModel
                     else
                     {
                         keys.shift();
-                        let current: Entry;
+                        let current: Entry | null;
                         if (1 < keys.length)
                         {
                             current = { children: [ this.data ] } as Entry;
@@ -340,7 +352,7 @@ export module ViewModel
                 else
                 {
                     keys.shift();
-                    let current: Entry;
+                    let current: Entry | null;
                     if (1 < keys.length)
                     {
                         current = { children: [ this.data ] } as Entry;
@@ -373,7 +385,7 @@ export module ViewModel
                     else
                     if (0 < keys.length)
                     {
-                        this.data = null;
+                        this.data = undefined;
                     }
                     else
                     {
@@ -382,7 +394,7 @@ export module ViewModel
                 }
             }
         };
-        public get = (path: PathType = null) =>
+        public get = (path: PathType | null = null) =>
         {
             if ( ! path)
             {
@@ -390,7 +402,7 @@ export module ViewModel
             }
             else
             {
-                let current: Entry;
+                let current: Entry | null = null;
                 const keys = path.path.split("/").filter(i => 0 < i.length);
                 if ("" !== keys[0] || ! isValidPath(path))
                 {

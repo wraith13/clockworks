@@ -343,13 +343,12 @@ export module Screen
                 ),
                 Tektite.$div("tektite-page-footer")
                 (
-                    undefined !== (primary as Tektite.PrimaryPageSource).footer ?
-                        (primary as Tektite.PrimaryPageSource).footer:
-                        (
-                            undefined !== trail ?
-                                await this.downPageLink():
-                                []
-                        )
+                    (primary as Tektite.PrimaryPageSource).footer ??
+                    (
+                        undefined !== trail ?
+                            await this.downPageLink():
+                            []
+                    )
                 ),
             ]),
             undefined !== trail ?
