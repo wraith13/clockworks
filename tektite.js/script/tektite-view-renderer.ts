@@ -66,8 +66,14 @@ export module ViewRenderer
             this.eventHandlers?.[event]?.forEach
             (
                 path =>
-                    ((<DomEntry<T, unknown>>this.renderer[this.tektite.viewModel.get(path)?.type])?.eventHandlers?.[event] as EventHandler<unknown>)
-                    ?.(event, path)
+                {
+                    const type = this.tektite.viewModel.get(path)?.type;
+                    if (type)
+                    {
+                        ((<DomEntry<T, unknown>>this.renderer[type])?.eventHandlers?.[event] as EventHandler<unknown>)
+                            ?.(event, path)
+                    }
+                }
             );
             this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
         };
@@ -77,12 +83,12 @@ export module ViewRenderer
             {
                 this.eventHandlers[event] = [];
             }
-            this.eventHandlers[event].push(path);
+            this.eventHandlers[event]?.push(path);
         };
         public onLoad = () =>
         {
         };
-        public renderRoot = async (data: ViewModel.Entry = this.tektite.viewModel.get()) =>
+        public renderRoot = async (data: ViewModel.Entry | null = this.tektite.viewModel.get()) =>
         {
             let result: DomType;
             const json = JSON.stringify(data);
@@ -120,6 +126,14 @@ export module ViewRenderer
                         .forEach(dom => getElementList(dom).forEach(element => element.parentElement.removeChild(element)));
                     this.previousData = json;
                 }
+                else
+                {
+                    result = ............;
+                }
+            }
+            else
+            {
+                result = this.getCache(ViewModel.makeRootPath()).dom;
             }
             return result;
         };
