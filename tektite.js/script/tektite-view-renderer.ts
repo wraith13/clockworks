@@ -90,7 +90,7 @@ export module ViewRenderer
         };
         public renderRoot = async (data: ViewModel.Entry | null = this.tektite.viewModel.get()) =>
         {
-            let result: DomType;
+            let result: DomType | null = null;
             const json = JSON.stringify(data);
             if (this.previousData !== json)
             {
@@ -115,7 +115,7 @@ export module ViewRenderer
                         }
                     );
                     //  present-process
-                    result = (await this.renderOrCache(ViewModel.makeRootPath(), data))?.dom;
+                    result = (await this.renderOrCache(ViewModel.makeRootPath(), data))?.dom ?? null;
                     //  post-process
                     Object.keys(this.domCache)
                         .filter(path => this.activePathList.indexOf(path) <= 0)
@@ -123,12 +123,8 @@ export module ViewRenderer
                     Object.keys(oldCache)
                         .filter(path => oldCache[path].dom !== this.domCache[path]?.dom)
                         .map(path => oldCache[path].dom)
-                        .forEach(dom => getElementList(dom).forEach(element => element.parentElement.removeChild(element)));
+                        .forEach(dom => getElementList(dom).forEach(element => element.parentElement?.removeChild(element)));
                     this.previousData = json;
-                }
-                else
-                {
-                    result = ............;
                 }
             }
             else
@@ -165,6 +161,11 @@ export module ViewRenderer
             //     outputError("It has not 'key'");
             // }
             // else
+            if ( ! data)
+            {
+                outputError("No data");
+            }
+            else
             if ( ! data?.type)
             {
                 outputError("It has not 'type'");
@@ -182,7 +183,7 @@ export module ViewRenderer
                 (
                     childrenKeys.map
                     (
-                        async key => await this.renderOrCache(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
+                        async key => await this.renderOrCache(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key) as ViewModel.Entry)
                     )
                 );
                 if ( ! isContainerEntry(renderer))
@@ -202,7 +203,7 @@ export module ViewRenderer
                         else
                         {
                             dom = cache.dom ?? await this.makeOrNull(renderer.make);
-                            dom = await renderer?.update(this.tektite, path, dom, data) ?? dom;
+                            dom = await renderer?.update?.(this.tektite, path, dom, data) ?? dom;
                         }
                         cache = this.setCache(path, dom, json, childrenKeys);
                     }
