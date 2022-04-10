@@ -150,11 +150,10 @@ export module ViewRenderer
                 source instanceof Element ? source:
                 (minamo.dom.make(source) as Element);
         };
-        public renderOrCache = async (path: ViewModel.PathType, data: ViewModel.Entry): Promise<DomCache | undefined> =>
+        public renderOrCache = async (path: ViewModel.PathType, data: ViewModel.Entry | null): Promise<DomCache | undefined> =>
         {
             this.activePathList.push(path?.path);
             let cache = this.getCache(path);
-            const renderer = this.renderer[data?.type] ?? this.unknownRenderer;
             const outputError = (message: string) => console.error(`tektite-view-renderer: ${message} - path:${path.path}, data:${JSON.stringify(data)}`);
             // if ( ! data?.key || "" === data.key)
             // {
@@ -166,85 +165,89 @@ export module ViewRenderer
                 outputError("No data");
             }
             else
-            if ( ! data?.type)
             {
-                outputError("It has not 'type'");
-            }
-            else
-            if ( ! renderer)
-            {
-                outputError(`Unknown type ${JSON.stringify(data?.type)}`);
-            }
-            else
-            {
-                const oldChildrenKeys = cache?.childrenKeys ?? [];
-                const childrenKeys = ViewModel.getChildrenModelKeys(data);
-                const childrenCache = await Promise.all
-                (
-                    childrenKeys.map
-                    (
-                        async key => await this.renderOrCache(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key) as ViewModel.Entry)
-                    )
-                );
-                if ( ! isContainerEntry(renderer))
+                const renderer = this.renderer[data?.type] ?? this.unknownRenderer;
+                if ( ! data?.type)
                 {
-                    const json = JSON.stringify
-                    ({
-                        type: data?.type,
-                        data: data?.data
-                    });
-                    if (cache?.json !== json)
+                    outputError("It has not 'type'");
+                }
+                else
+                if ( ! renderer)
+                {
+                    outputError(`Unknown type ${JSON.stringify(data?.type)}`);
+                }
+                else
+                {
+                    const oldChildrenKeys = cache?.childrenKeys ?? [];
+                    const childrenKeys = ViewModel.getChildrenModelKeys(data);
+                    const childrenCache = await Promise.all
+                    (
+                        childrenKeys.map
+                        (
+                            async key => await this.renderOrCache(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
+                        )
+                    );
+                    if ( ! isContainerEntry(renderer))
                     {
-                        let dom: DomType;
-                        if (isVolatileDomEntry(renderer))
+                        const json = JSON.stringify
+                        ({
+                            type: data?.type,
+                            data: data?.data
+                        });
+                        if (cache?.json !== json)
                         {
-                            dom = await renderer.update(this.tektite, path, data);
-                        }
-                        else
-                        {
-                            dom = cache.dom ?? await this.makeOrNull(renderer.make);
-                            dom = await renderer?.update?.(this.tektite, path, dom, data) ?? dom;
-                        }
-                        cache = this.setCache(path, dom, json, childrenKeys);
-                    }
-                    Object.keys(renderer.eventHandlers ?? { })
-                        .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
-                    if (0 < childrenKeys.length)
-                    {
-                        if (renderer.updateChildren)
-                        {
-                            const forceAppend = Array.isArray(data.children ?? []) && this.isSameOrder(oldChildrenKeys, childrenKeys);
-                            const childrenKeyDomMap: { [key:string]: DomType } = { };
-                            childrenKeys.forEach
-                            (
-                                (key, ix) => childrenKeyDomMap[key] = childrenCache[ix] ?
-                                    childrenCache[ix].dom:
-                                    this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
-                            );
-                            const container = renderer.getChildModelContainer?.(cache.dom) ?? getPrimaryElement(cache.dom);
-                            if ("append" === renderer.updateChildren)
+                            let dom: DomType;
+                            if (isVolatileDomEntry(renderer))
                             {
-                                this.appendChildren(container, childrenKeyDomMap, forceAppend);
-                            }
-                            else
-                            if (Array.isArray(renderer.updateChildren))
-                            {
-                                this.replaceChildren(container, childrenKeyDomMap, renderer.updateChildren);
+                                dom = await renderer.update(this.tektite, path, data);
                             }
                             else
                             {
-                                await renderer.updateChildren(container, childrenKeyDomMap, forceAppend);
+                                dom = cache.dom ?? await this.makeOrNull(renderer.make);
+                                dom = await renderer?.update?.(this.tektite, path, dom, data) ?? dom;
                             }
-                            childrenKeys.forEach
-                            (
-                                (key, ix) =>
+                            cache = this.setCache(path, dom, json, childrenKeys);
+                        }
+                        Object.keys(renderer.eventHandlers ?? { })
+                            .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
+                        if (0 < childrenKeys.length)
+                        {
+                            if (renderer.updateChildren)
+                            {
+                                const forceAppend = Array.isArray(data.children ?? []) && this.isSameOrder(oldChildrenKeys, childrenKeys);
+                                const childrenKeyDomMap: { [key:string]: DomType } = { };
+                                childrenKeys.forEach
+                                (
+                                    (key, ix) => childrenKeyDomMap[key] =
+                                        childrenCache[ix]?.dom ??
+                                        this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
+                                );
+                                const container = renderer.getChildModelContainer?.(cache.dom) ?? getPrimaryElement(cache.dom);
+                                if ("append" === renderer.updateChildren)
                                 {
-                                    if (this.hasLeakChildren(childrenCache[ix].dom))
-                                    {
-                                        outputError(`Not allocate dom ${key}`);
-                                    }
+                                    this.appendChildren(container, childrenKeyDomMap, forceAppend);
                                 }
-                            );
+                                else
+                                if (Array.isArray(renderer.updateChildren))
+                                {
+                                    this.replaceChildren(container, childrenKeyDomMap, renderer.updateChildren);
+                                }
+                                else
+                                {
+                                    await renderer.updateChildren(container, childrenKeyDomMap, forceAppend);
+                                }
+                                childrenKeys.forEach
+                                (
+                                    (key, ix) =>
+                                    {
+                                        const dom = childrenCache[ix]?.dom;
+                                        if (minamo.core.exists(dom) && this.hasLeakChildren(dom))
+                                        {
+                                            outputError(`Not allocate dom ${key}`);
+                                        }
+                                    }
+                                );
+                            }
                         }
                     }
                 }
@@ -287,7 +290,7 @@ export module ViewRenderer
                 );
             }
         };
-        public aggregateChildren = (path: ViewModel.PathType, data: ViewModel.Entry): DomType =>
+        public aggregateChildren = (path: ViewModel.PathType, data: ViewModel.Entry | null): DomType =>
             ViewModel.getChildrenModelKeys(data)
                 .map(key => this.getCache(ViewModel.makePath(path, key)) ?? { dom: this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))})
                 .map(i => getElementList(i.dom))
@@ -347,12 +350,7 @@ export module ViewRenderer
                 update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenHeaderProgressBarEntry) =>
                 {
                     const element = getPrimaryElement(dom) as HTMLDivElement;
-                    if (model.data?.percent || model.data.percent <= 0)
-                    {
-                        minamo.dom.setStyleProperty(element, "width", "0%");
-                        minamo.dom.setStyleProperty(element, "borderRightWidth", "0px");
-                    }
-                    else
+                    if (model.data?.percent && 0 < model.data.percent)
                     {
                         if (model.data?.color)
                         {
@@ -361,6 +359,11 @@ export module ViewRenderer
                         const percentString = Tektite.makePercentString(model.data.percent);
                         minamo.dom.setStyleProperty(element, "width", percentString);
                         minamo.dom.setStyleProperty(element, "borderRightWidth", "1px");
+                    }
+                    else
+                    {
+                        minamo.dom.setStyleProperty(element, "width", "0%");
+                        minamo.dom.setStyleProperty(element, "borderRightWidth", "0px");
                     }
                     return dom;
                 },
