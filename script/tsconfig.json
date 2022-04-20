@@ -10,7 +10,7 @@
             "scripthost"
         ],
         "noImplicitAny": true,
-        "strictNullChecks": false,
+        "strictNullChecks": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,

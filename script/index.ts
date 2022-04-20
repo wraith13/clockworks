@@ -1,5 +1,7 @@
 // import { minamo } from "./minamo.js";
 import { Tektite } from "../tektite.js/script/tektite-index";
+import { ViewModel } from "../tektite.js/script/tektite-view-model.js";
+import { ViewRenderer } from "../tektite.js/script/tektite-view-renderer";
 import { Type } from "./type";
 import { Render } from "./render";
 import { Resource } from "./render/resource";
@@ -51,6 +53,21 @@ export module Clockworks
         tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
         tektite.onLoad();
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
+        const model: ViewModel.RootEntry =
+        {
+            type: "tektite-root",
+            data:
+            {
+            },
+            children:
+            {
+                "screen-header":
+                {
+                    type: "tektite-screen-header",
+                }
+            }
+        };
+        tektite.viewModel.set(model);
         Render.updateStyle();
         Render.updateProgressBarStyle();
         await Render.showPage();
