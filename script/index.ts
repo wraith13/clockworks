@@ -9,7 +9,7 @@ import { Storage } from "./storage";
 import { Domain } from "./domain";
 import localeEn from "../resource/lang.en.json";
 import localeJa from "../resource/lang.ja.json";
-// import config from "../resource/config.json";
+import config from "../resource/config.json";
 export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
@@ -58,12 +58,43 @@ export module Clockworks
             type: "tektite-root",
             data:
             {
+                title: config.applicationTitle,
             },
             children:
             {
                 "screen-header":
                 {
                     type: "tektite-screen-header",
+                    children:
+                    {
+                        "screen-header-progress-bar":
+                        {
+                            type: "tektite-screen-header-progress-bar",
+                        },
+                        "screen-header-segment":
+                        {
+                            type: "tektite-screen-header-segment-list",
+                            children:
+                            [
+                                {
+                                    type: "tektite-screen-header-label-segment",
+                                    key: "0001",
+                                    children:
+                                    {
+                                        core:
+                                        {
+                                            type: "tektite-screen-header-segment-core",
+                                            data:
+                                            {
+                                                icon: "application-icon",
+                                                title: config.applicationTitle,
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
                 }
             }
         };

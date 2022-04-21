@@ -31,7 +31,7 @@ export module ViewModel
     export interface RootEntry extends Entry
     {
         type: "tektite-root";
-        data:
+        data?:
         {
             title?: string;
             windowColor?: string;
@@ -57,8 +57,7 @@ export module ViewModel
     export interface ScreenHeaderProgressBarEntry extends Entry
     {
         type: "tektite-screen-header-progress-bar";
-        key: "progress-bar";
-        data:
+        data?:
         {
             color?: string;
             percent: null | number;
@@ -67,10 +66,10 @@ export module ViewModel
     export interface ScreenHeaderSegmentListEntry extends Entry
     {
         type: "tektite-screen-header-segment-list";
-        children: ScreenHeaderSegmentEntry[];
+        children: [ScreenHeaderSegmentEntry, ...ScreenHeaderSegmentEntry[]];
     }
     export type ScreenHeaderSegmentEntry = ScreenHeaderLabelSegmentEntry | ScreenHeaderLinkSegmentEntry | ScreenHeaderPopupSegmentEntry;
-    export interface ScreenHeaderSegmentCoreEntry extends ListEntry
+    export interface ScreenHeaderSegmentCoreEntry extends Entry
     {
         type: "tektite-screen-header-segment-core";
         data:
@@ -82,7 +81,7 @@ export module ViewModel
     export interface ScreenHeaderLabelSegmentEntry extends ListEntry
     {
         type: "tektite-screen-header-label-segment";
-        data:
+        data?:
         {
             className?: string;
         }
