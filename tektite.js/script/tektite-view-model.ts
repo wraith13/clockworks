@@ -109,7 +109,6 @@ export module ViewModel
     export interface ScreenHeaderOperatorEntry extends Entry
     {
         type: "tektite-screen-header-operator";
-        key: "operator";
         children:
         {
         };

@@ -78,7 +78,7 @@ export module Clockworks
                             [
                                 {
                                     type: "tektite-screen-header-label-segment",
-                                    key: "0001",
+                                    key: "application-segment",
                                     children:
                                     {
                                         core:
@@ -88,13 +88,39 @@ export module Clockworks
                                             {
                                                 icon: "application-icon",
                                                 title: config.applicationTitle,
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
+                                            },
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        "screen-header-operator":
+                        {
+                            "type": "tektite-screen-header-operator",
+                            children:
+                            {
+                            },
+                        },
                     }
+                },
+                "screen-body":
+                {
+                    type: "tektite-screen-body",
+                    children:
+                    {
+                    },
+                },
+                "screen-bar":
+                {
+                    type: "tektite-screen-bar",
+                    children:
+                    {
+                    },
+                },
+                "screen-toast":
+                {
+                    type: "tektite-screen-toast",
+                    children: [],
                 }
             }
         };
