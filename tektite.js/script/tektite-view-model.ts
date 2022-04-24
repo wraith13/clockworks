@@ -235,7 +235,7 @@ export module ViewModel
     // export class ViewModel<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     export class ViewModel<T extends Tektite.ParamTypes>
     {
-        private data: Entry | null;
+        private data: Entry | null = null;
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
         {

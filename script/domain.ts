@@ -1,3 +1,4 @@
+import { minamo } from "../nephila/minamo.js";
 import { Type } from "./type";
 import { Base } from "./base";
 import config from "../resource/config.json";
@@ -27,7 +28,7 @@ export module Domain
     );
     export const getFlashIntervalPreset = () =>
         config.flashIntervalPreset.map(i => parseTimer(i)).filter(i => null !== i) as number[];
-    export const getTimerPreset = () => config.timerPreset.map(i => parseTimer(i));
+    export const getTimerPreset = () => minamo.core.existFilter(config.timerPreset.map(i => parseTimer(i)));
     export const utcOffsetRate = 60 *1000;
     export const getTicks = (date: Date = new Date()) => date.getTime();
     export const getUTCTicks = (date: Date = new Date()) => getTicks(date) +(date.getTimezoneOffset() *utcOffsetRate);

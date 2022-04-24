@@ -50,11 +50,11 @@ export module ViewRenderer
     // export class ViewRenderer<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     export class ViewRenderer<T extends Tektite.ParamTypes>
     {
-        private previousData: string;
+        private previousData: string = "";
         private eventHandlers:
         {
             [Key in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
-        };
+        } = { };
         private unknownRenderer: Entry<T>;
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
@@ -63,7 +63,7 @@ export module ViewRenderer
         update = (event: Tektite.UpdateScreenEventEype) =>
         {
             this.renderRoot(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
-            this.eventHandlers?.[event]?.forEach
+            this.eventHandlers[event]?.forEach
             (
                 path =>
                 {
@@ -313,14 +313,14 @@ export module ViewRenderer
                 update: async (_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) =>
                 {
                     const rootEntry = model as ViewModel.RootEntry;
-                    if ("string" === typeof rootEntry.data.title)
+                    if ("string" === typeof rootEntry.data?.title)
                     {
                         if (document.title !== rootEntry.data.title)
                         {
                             document.title = rootEntry.data.title;
                         }
                     }
-                    if ("string" === typeof rootEntry.data.windowColor)
+                    if ("string" === typeof rootEntry.data?.windowColor)
                     {
                         minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
                         minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
