@@ -148,12 +148,12 @@ export module ViewModel
         ! data?.children ? []:
             Array.isArray(data.children) ?
                 data.children.map((_, ix) => ix):
-                Object.keys(data.children);
+                minamo.core.objectKeys(data.children);
     export const getChildrenModelKeys = (data: Entry | null): string[] =>
         ! data?.children ? []:
         Array.isArray(data.children) ?
             data.children.map(i => i.key):
-            Object.keys(data.children);
+            minamo.core.objectKeys(data.children);
     export const getChildFromModelKey = (data: Entry | null, key: string): Entry | null =>
         Array.isArray(data?.children) ?
             (data?.children?.filter(i => key === i.key)?.[0] ?? null):

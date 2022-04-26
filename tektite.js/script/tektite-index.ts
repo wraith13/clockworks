@@ -37,7 +37,7 @@ export module Tektite
         "vertical": null as null,
     };
     export type ProgressBarStyleType = keyof typeof progressBarStyleObject;
-    export const ProgressBarStyleList = Object.keys(progressBarStyleObject);
+    export const ProgressBarStyleList = minamo.core.objectKeys(progressBarStyleObject);
     export type HeaderSegmentSource<PageParams, IconKeyType> = Header.SegmentSource<PageParams, IconKeyType>;
     export type HeaderSource<PageParams, IconKeyType> = Header.Source<PageParams, IconKeyType>;
     export type PrimaryPageSource = { body: minamo.dom.Source, footer?: minamo.dom.Source, };

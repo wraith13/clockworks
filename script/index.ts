@@ -10,10 +10,11 @@ import { Domain } from "./domain";
 import localeEn from "../resource/lang.en.json";
 import localeJa from "../resource/lang.ja.json";
 import config from "../resource/config.json";
+import { minamo } from "../nephila/minamo.js";
 export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
-    // export const applicationIdList = Object.keys(applicationList);
+    // export const applicationIdList = minamo.core.objectKeys(applicationList);
     export const localeMaster =
     {
         en: localeEn,

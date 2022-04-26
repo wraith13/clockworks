@@ -26,19 +26,19 @@ export module ViewRenderer
         getChildModelContainer?: (dom: DomType) => Element,
         eventHandlers?: EventHandlers,
     };
-    export interface VolatileDomEntry<T extends Tektite.ParamTypes, ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
+    export interface VolatileDomEntry<T extends Tektite.ParamTypes, ViewModelEntry extends ViewModel.Entry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
     {
         make: "volatile",
         update: (tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => Promise<DomType>,
     };
-    export interface DomEntry<T extends Tektite.ParamTypes, ViewModelEntry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
+    export interface DomEntry<T extends Tektite.ParamTypes, ViewModelEntry extends ViewModel.Entry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
     {
         make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
         update?: (tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, model: ViewModelEntry) => Promise<DomType>,
     };
-    export type Entry<T extends Tektite.ParamTypes> = VolatileDomEntry<T, unknown> | DomEntry<T, unknown> | ContainerEntry;
-    export const isContainerEntry = <T extends Tektite.ParamTypes>(entry: Entry<T>): entry is ContainerEntry => "container" === entry.make;
-    export const isVolatileDomEntry = <T extends Tektite.ParamTypes>(entry: Entry<T>): entry is VolatileDomEntry<T, unknown> => "volatile" === entry.make;
+    export type Entry<T extends Tektite.ParamTypes, ViewModelEntry extends ViewModel.Entry> = VolatileDomEntry<T, ViewModelEntry> | DomEntry<T, ViewModelEntry> | ContainerEntry;
+    export const isContainerEntry = <T extends Tektite.ParamTypes, ViewModelEntry extends ViewModel.Entry>(entry: Entry<T, ViewModelEntry>): entry is ContainerEntry => "container" === entry.make;
+    export const isVolatileDomEntry = <T extends Tektite.ParamTypes, ViewModelEntry extends ViewModel.Entry>(entry: Entry<T, ViewModelEntry>): entry is VolatileDomEntry<T, ViewModelEntry> => "volatile" === entry.make;
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
     interface DomCache
@@ -55,7 +55,7 @@ export module ViewRenderer
         {
             [Key in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
         } = { };
-        private unknownRenderer: Entry<T>;
+        private unknownRenderer: Entry<T, any> | null = null;
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
         {
@@ -70,7 +70,7 @@ export module ViewRenderer
                     const type = this.tektite.viewModel.get(path)?.type;
                     if (type)
                     {
-                        ((<DomEntry<T, unknown>>this.renderer[type])?.eventHandlers?.[event] as EventHandler<unknown>)
+                        ((<DomEntry<T, any>>this.renderer[type])?.eventHandlers?.[event] as EventHandler<unknown>)
                             ?.(event, path)
                     }
                 }
@@ -101,7 +101,7 @@ export module ViewRenderer
                     this.activePathList = [ ];
                     this.eventHandlers = { };
                     const oldCache: { [path: string]:DomCache } = { };
-                    Object.keys(this.domCache).forEach
+                    minamo.core.objectKeys(this.domCache).forEach
                     (
                         path =>
                         {
@@ -117,10 +117,10 @@ export module ViewRenderer
                     //  present-process
                     result = (await this.renderOrCache(ViewModel.makeRootPath(), data))?.dom ?? null;
                     //  post-process
-                    Object.keys(this.domCache)
+                    minamo.core.objectKeys(this.domCache)
                         .filter(path => this.activePathList.indexOf(path) <= 0)
                         .forEach(path => delete this.domCache[path]);
-                    Object.keys(oldCache)
+                    minamo.core.objectKeys(oldCache)
                         .filter(path => oldCache[path].dom !== this.domCache[path]?.dom)
                         .map(path => oldCache[path].dom)
                         .forEach(dom => getElementList(dom).forEach(element => element.parentElement?.removeChild(element)));
@@ -208,7 +208,7 @@ export module ViewRenderer
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
                         }
-                        Object.keys(renderer.eventHandlers ?? { })
+                        minamo.core.objectKeys(renderer.eventHandlers ?? { })
                             .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
                         if (0 < childrenKeys.length)
                         {
@@ -263,7 +263,7 @@ export module ViewRenderer
             0 < getElementList(children).filter(element => null === element.parentElement).length;
         public isAlreadySet = (container: Element, children: DomType) =>
             0 < getElementList(children).filter(element => container !== element.parentElement).length;
-        public appendChildren = (container: Element, children: { [Key: string]: DomType }, forceAppend: boolean) => Object.keys(children).forEach
+        public appendChildren = (container: Element, children: { [Key: string]: DomType }, forceAppend: boolean) => minamo.core.objectKeys(children).forEach
         (
             key =>
             {
@@ -295,7 +295,7 @@ export module ViewRenderer
                 .map(key => this.getCache(ViewModel.makePath(path, key)) ?? { dom: this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))})
                 .map(i => getElementList(i.dom))
                 .reduce((a, b) => a.concat(b), []);
-        public readonly renderer: { [type: string ]: Entry<T>} =
+        public readonly renderer: { [type: string ]: Entry<T, any>} =
         {
             "tektite-screen-root":
             {

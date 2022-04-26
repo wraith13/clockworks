@@ -1,3 +1,4 @@
+import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index.js";
 export module Locale
 {
@@ -5,7 +6,7 @@ export module Locale
     export class Locale<T extends Tektite.ParamTypes>
     {
         constructor(private master: T["LocaleMapType"]) { }
-        public locales = Object.keys(this.master) as (string & keyof T["LocaleMapType"])[];
+        public locales = minamo.core.objectKeys(this.master);// as (string & keyof T["LocaleMapType"])[];
         private masterKey: keyof T["LocaleMapType"] & string =
             0 <= this.locales.indexOf(navigator.language as (string & keyof T["LocaleMapType"])) ?
                 navigator.language as (string & keyof T["LocaleMapType"]):

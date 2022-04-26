@@ -244,7 +244,7 @@ export module Render
                     checkButtonList,
                     await Promise.all
                     (
-                        Object.keys(Type.rainbowClockColorPatternMap).map
+                        minamo.core.objectKeys(Type.rainbowClockColorPatternMap).map
                         (
                             async (key: Type.rainbowClockColorPatternType) =>
                             ({

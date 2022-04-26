@@ -20,7 +20,7 @@ export module Base
     export const regulateUrl = (url: string) => url.replace(/\?#/, "#").replace(/#$/, "").replace(/\?$/, "");
     export const makeUrlRaw =
     (
-        args: {[key: string]: string} | Type.PageParams,
+        args: Type.PageParams,
         href: string = location.href
     ) => regulateUrl
     (
@@ -28,11 +28,10 @@ export module Base
             .replace(/\?.*/, "")
             .replace(/#.*/, "")
             +"?"
-            +Object.keys(args)
-                .filter(i => undefined !== i)
+            +minamo.core.objectKeys(args)
                 .filter(i => "hash" !== i)
-                .map(i => `${i}=${encodeURIComponent((args as {[key: string]: string})[i])}`)
+                .map(i => `${i}=${encodeURIComponent(args[i]?.toString() ?? "")}`)
                 .join("&")
-            +`#${(args as {[key: string]: string})["hash"] ?? ""}`
+            +`#${args["hash"] ?? ""}`
     );
 }

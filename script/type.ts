@@ -3,6 +3,7 @@ import resource from "../resource/images.json";
 import tektiteResource from "../tektite.js/images.json";
 import { Clockworks } from ".";
 import { Tektite } from "../tektite.js/script/tektite-index";
+import { minamo } from "../nephila/minamo.js";
 export module Type
 {
     export const applicationList =
@@ -29,7 +30,7 @@ export module Type
         },
     };
     export type ApplicationType = keyof typeof applicationList;
-    export const applicationIdList = Object.freeze(Object.keys(applicationList));
+    export const applicationIdList = Object.freeze(minamo.core.objectKeys(applicationList));
 
     export interface ApplicationEntry//<ItemType>
     {
@@ -45,7 +46,7 @@ export module Type
         "dark": null as null,
     };
     export type ThemeType = keyof typeof themeObject;
-    export const ThemeList = Object.keys(themeObject);
+    export const ThemeList = minamo.core.objectKeys(themeObject);
 
     export interface Settings
     {
@@ -94,5 +95,6 @@ export module Type
     {
         application?: Type.ApplicationType;
         item?: Type.PageItemType;
+        hash?: string;
     }
 }
