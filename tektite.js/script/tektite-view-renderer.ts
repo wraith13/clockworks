@@ -301,7 +301,6 @@ export module ViewRenderer
             {
                 make:
                 {
-                    parent: document.body,
                     tag: "div",
                     className: "tektite-foundation",
                     children:
