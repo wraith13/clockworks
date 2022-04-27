@@ -14,7 +14,7 @@ export module Toast
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        element: HTMLDivElement;
+        element: HTMLDivElement | null = null;
         public make =
         (
             data:
@@ -71,7 +71,7 @@ export module Toast
                 timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
                 hide: async () => await hideRaw("tektite-slide-down-out", 250),
             };
-            this.element.appendChild(dom);
+            minamo.core.existsOrThrow(this.element).appendChild(dom);
             setTimeout(() => dom.classList.remove("tektite-slide-up-in"), 250);
             return result;
         };

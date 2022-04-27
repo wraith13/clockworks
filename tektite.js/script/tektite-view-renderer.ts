@@ -129,13 +129,13 @@ export module ViewRenderer
             }
             else
             {
-                result = this.getCache(ViewModel.makeRootPath()).dom;
+                result = this.getCache(ViewModel.makeRootPath())?.dom ?? null;
             }
             return result;
         };
         private activePathList: string[] = [];
         private domCache: { [path: string]:DomCache } = { };
-        public getCache = (path: ViewModel.PathType) => this.domCache[path.path];
+        public getCache = (path: ViewModel.PathType): DomCache | undefined => this.domCache[path.path];
         public setCache = (path: ViewModel.PathType, dom: DomType, data: string, childrenKeys: string[]) =>
             this.domCache[path.path] =
             {
@@ -196,14 +196,14 @@ export module ViewRenderer
                         });
                         if (cache?.json !== json)
                         {
-                            let dom: DomType;
+                            let dom: DomType | null;
                             if (isVolatileDomEntry(renderer))
                             {
                                 dom = await renderer.update(this.tektite, path, data);
                             }
                             else
                             {
-                                dom = cache.dom ?? await this.makeOrNull(renderer.make);
+                                dom = cache?.dom ?? await this.makeOrNull(renderer.make);
                                 dom = await renderer?.update?.(this.tektite, path, dom, data) ?? dom;
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
@@ -430,7 +430,7 @@ export module ViewRenderer
         
                 }
             },
-            "tektite-screen-operator":
+            "tektite-screen-header-operator":
             {
                 make:
                 {

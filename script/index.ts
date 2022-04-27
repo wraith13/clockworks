@@ -1,7 +1,6 @@
 // import { minamo } from "./minamo.js";
 import { Tektite } from "../tektite.js/script/tektite-index";
 import { ViewModel } from "../tektite.js/script/tektite-view-model.js";
-import { ViewRenderer } from "../tektite.js/script/tektite-view-renderer";
 import { Type } from "./type";
 import { Render } from "./render";
 import { Resource } from "./render/resource";
@@ -56,7 +55,7 @@ export module Clockworks
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
         const model: ViewModel.RootEntry =
         {
-            type: "tektite-root",
+            type: "tektite-screen-root",
             data:
             {
                 title: config.applicationTitle,
@@ -126,9 +125,15 @@ export module Clockworks
             }
         };
         tektite.viewModel.set(model);
-        Render.updateStyle();
-        Render.updateProgressBarStyle();
-        await Render.showPage();
+        minamo.dom.replaceChildren
+        (
+            document.body,
+            await tektite.viewRenderer.renderRoot(),
+            dom => "tektite-foundation" === (<Element>dom).className
+        );
+        // Render.updateStyle();
+        // Render.updateProgressBarStyle();
+        // await Render.showPage();
         if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
         {
             tektite.screen.toast.make

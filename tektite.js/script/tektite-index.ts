@@ -77,8 +77,8 @@ export module Tektite
     }
     export interface PopupInstance<ResultType>
     {
-        set: (result: ResultType | null) => PopupInstance<ResultType | null>;
-        close: () => PopupInstance<ResultType | null>;
+        set: (result: ResultType | null) => PopupInstance<ResultType>;
+        close: () => PopupInstance<ResultType>;
         getDom: () => HTMLDivElement;
     }
     export interface PopupArguments<ResultType>
@@ -228,10 +228,10 @@ export module Tektite
             minamo.dom.setProperty("#tektite-theme-color", "content", color);
         };
 
-        foundation: HTMLDivElement;
+        foundation: HTMLDivElement | null = null;
         public setFoundationColor = (color: string | null) =>
-            minamo.dom.setStyleProperty(this.foundation, "backgroundColor", color ?? "");
-        latestColor: string | null;
+            minamo.dom.setStyleProperty(minamo.core.existsOrThrow(this.foundation), "backgroundColor", color ?? "");
+        latestColor: string | null = null;
         public setBackgroundColor = (color: string | null) =>
         {
             this.latestColor = color;

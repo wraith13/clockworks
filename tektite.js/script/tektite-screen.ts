@@ -14,9 +14,9 @@ export module Screen
         }
         public header = Header.make<T>(this.tektite);
         public toast = Toast.make<T>(this.tektite);
-        element: HTMLDivElement;
-        getElement = () => this.element;
-        update: (event: Tektite.UpdateScreenEventEype) => unknown;
+        element: HTMLDivElement | null = null;
+        getElement = () => minamo.core.existsOrThrow(this.element);
+        update: ((event: Tektite.UpdateScreenEventEype) => unknown) = () => { };
         public cover = (data: { parent?: HTMLElement | null, children?: minamo.dom.Source, onclick: () => unknown, }) =>
         {
             const onclick = async () =>
@@ -113,9 +113,9 @@ export module Screen
         (
             async resolve =>
             {
-                const instance =
+                const instance: Tektite.PopupInstance<ResultType> =
                 {
-                    set: (value: ResultType) =>
+                    set: (value: ResultType | null) =>
                     {
                         result = value;
                         return instance;

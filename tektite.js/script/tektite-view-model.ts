@@ -30,7 +30,7 @@ export module ViewModel
     export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
     export interface RootEntry extends Entry
     {
-        type: "tektite-root";
+        type: "tektite-screen-root";
         data?:
         {
             title?: string;
