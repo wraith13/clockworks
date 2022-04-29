@@ -2,6 +2,7 @@
 import { Tektite } from "../tektite.js/script/tektite-index";
 import { ViewModel } from "../tektite.js/script/tektite-view-model.js";
 import { Type } from "./type";
+import { Color } from "./color";
 import { Render } from "./render";
 import { Resource } from "./render/resource";
 import { Storage } from "./storage";
@@ -59,6 +60,9 @@ export module Clockworks
             data:
             {
                 title: config.applicationTitle,
+                theme: Storage.Settings.get().theme ?? "auto",
+                progressBarStyle: Storage.Settings.get().progressBarStyle ?? "auto",
+                windowColor: Color.getSolidRainbowColor(0),
             },
             children:
             {

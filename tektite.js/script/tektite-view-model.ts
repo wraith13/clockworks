@@ -34,7 +34,9 @@ export module ViewModel
         data?:
         {
             title?: string;
+            theme?: "auto" | "light" | "dark";
             windowColor?: string;
+            progressBarStyle?: Tektite.ProgressBarStyleType;
         };
         children:
         {

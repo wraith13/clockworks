@@ -275,7 +275,7 @@ export module ViewRenderer
         public hasLeakChildren = (children: DomType) =>
             0 < getElementList(children).filter(element => null === element.parentElement).length;
         public isAlreadySet = (container: Element, children: DomType) =>
-            0 < getElementList(children).filter(element => container !== element.parentElement).length;
+            getElementList(children).filter(element => container !== element.parentElement).length <= 0;
         public appendChildren = (container: Element, children: { [Key: string]: DomType }, forceAppend: boolean) => minamo.core.objectKeys(children).forEach
         (
             key =>
@@ -314,6 +314,7 @@ export module ViewRenderer
             {
                 make:
                 {
+                    // parent: document.body,
                     tag: "div",
                     className: "tektite-foundation",
                     children:
@@ -332,10 +333,25 @@ export module ViewRenderer
                             document.title = rootEntry.data.title;
                         }
                     }
+                    if ("string" === typeof rootEntry.data?.theme)
+                    {
+                        const setting = rootEntry.data?.theme;
+                        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
+                        const theme = "auto" === setting ? system: setting;
+                        [ "light", "dark", ].forEach
+                        (
+                            i => document.body.classList.toggle(i, i === theme)
+                        );
+                    }
+                    if ("string" === typeof rootEntry.data?.progressBarStyle)
+                    {
+                        this.tektite.setStyle("header" !== rootEntry.data?.progressBarStyle ? "modern": "classic");
+                    }
                     if ("string" === typeof rootEntry.data?.windowColor)
                     {
                         minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
                         minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
+                        minamo.dom.setStyleProperty(dom as HTMLDivElement, "backgroundColor", rootEntry.data.windowColor ?? "");
                     }
                     return dom;
                 },
