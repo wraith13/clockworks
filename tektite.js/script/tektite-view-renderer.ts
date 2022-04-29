@@ -143,12 +143,25 @@ export module ViewRenderer
                 json: data,
                 childrenKeys
             };
-        public makeOrNull = async (maker: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source): Promise<DomType | null> =>
+        public make = async (maker: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source): Promise<DomType> =>
         {
             const source = "function" === typeof maker ? await maker(): maker;
-            return null === source ? source as null:
-                source instanceof Element ? source:
-                (minamo.dom.make(source) as Element);
+            try
+            {
+                return source instanceof Element ? source:
+                    ! Array.isArray(source) ? (minamo.dom.make(source) as Element):
+                    source.map
+                    (
+                        i =>
+                            i instanceof Element ? i:
+                            (minamo.dom.make(i) as Element)
+                    );
+            }
+            catch(err)
+            {
+                console.log(JSON.stringify(source));
+                throw err;
+            }
         };
         public renderOrCache = async (path: ViewModel.PathType, data: ViewModel.Entry | null): Promise<DomCache | undefined> =>
         {
@@ -203,7 +216,7 @@ export module ViewRenderer
                             }
                             else
                             {
-                                dom = cache?.dom ?? await this.makeOrNull(renderer.make);
+                                dom = cache?.dom ?? await this.make(renderer.make);
                                 dom = await renderer?.update?.(this.tektite, path, dom, data) ?? dom;
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
