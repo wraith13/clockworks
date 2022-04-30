@@ -63,6 +63,7 @@ export module Clockworks
                 theme: Storage.Settings.get().theme ?? "auto",
                 progressBarStyle: Storage.Settings.get().progressBarStyle ?? "auto",
                 windowColor: Color.getSolidRainbowColor(0),
+                className: "welcome-screen",
             },
             children:
             {

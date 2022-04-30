@@ -37,6 +37,7 @@ export module ViewModel
             theme?: "auto" | "light" | "dark";
             windowColor?: string;
             progressBarStyle?: Tektite.ProgressBarStyleType;
+            className?: string;
         };
         children:
         {
