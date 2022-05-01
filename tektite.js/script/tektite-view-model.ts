@@ -23,6 +23,8 @@ export module ViewModel
         data?: unknown;
         children?: ListEntry[] | { [key: string]: Entry };
     }
+    export const isEntry = <Model extends Entry>(type: Model["type"]) =>
+        (model: Entry | null): model is Model => type === model?.type;
     export interface ListEntry extends Entry
     {
         key: string;
@@ -434,6 +436,15 @@ export module ViewModel
                 return current;
             }
         };
+        public getWithType = <Model extends Entry>(type: Model["type"], path: PathType | null = null): Model | null =>
+        {
+            const model = this.get(path);
+            if (isEntry(type)(model))
+            {
+                return model;
+            }
+            return null;
+        }
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);

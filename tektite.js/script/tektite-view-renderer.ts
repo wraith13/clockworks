@@ -54,42 +54,48 @@ export module ViewRenderer
                 className: "tektite-screen",
             }
         },
-        update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.Entry) =>
+        update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.RootEntry) =>
         {
-            const rootEntry = model as ViewModel.RootEntry;
-            if ("string" === typeof rootEntry.data?.title)
+            const div = dom as HTMLDivElement;
+            if ("string" === typeof model.data?.title)
             {
-                if (document.title !== rootEntry.data.title)
-                {
-                    document.title = rootEntry.data.title;
-                }
+                minamo.dom.setProperty(document, "title", model.data.title);
             }
             // if ("string" === typeof rootEntry.data?.theme)
             {
-                const setting = rootEntry.data?.theme ?? "auto";
+                const setting = model.data?.theme ?? "auto";
                 const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
                 const theme = "auto" === setting ? system: setting;
                 [ "light", "dark", ].forEach
                 (
-                    i => document.body.classList.toggle(i, i === theme)
+                    i => minamo.dom.toggleCSSClass(document.body, i, i === theme)
                 );
             }
             // if ("string" === typeof rootEntry.data?.progressBarStyle)
             {
-                tektite.setStyle("header" !== rootEntry.data?.progressBarStyle ? "modern": "classic");
+                const style = "header" !== model.data?.progressBarStyle ? "modern": "classic";
+                if
+                (
+                    [
+                        { className: "tektite-style-modern", tottle: "modern" === style, },
+                        { className: "tektite-style-classic", tottle: "classic" === style, },
+                    ]
+                    .map(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate)
+                    .reduce((a, b) => a || b, false)
+                )
+                {
+                    minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": model.data?.windowColor ?? "");
+                }
             }
-            if ("string" === typeof rootEntry.data?.windowColor)
+            if ("string" === typeof model.data?.windowColor)
             {
-                minamo.dom.setStyleProperty(document.body, "backgroundColor", `${rootEntry.data.windowColor}E8`);
-                minamo.dom.setProperty("#tektite-theme-color", "content", rootEntry.data.windowColor);
-                minamo.dom.setStyleProperty(dom as HTMLDivElement, "backgroundColor", rootEntry.data.windowColor ?? "");
+                minamo.dom.setStyleProperty(document.body, "backgroundColor", `${model.data.windowColor}E8`);
+                minamo.dom.setProperty("#tektite-theme-color", "content", model.data.windowColor);
+                minamo.dom.setStyleProperty(div, "backgroundColor", model.data.windowColor ?? "");
             }
             // if ("string" === typeof rootEntry.data?.className)
             {
-                // const screenDiv = (dom as HTMLDivElement).getElementsByClassName("tektite-screen")[0] as HTMLDivElement;
-                // const screenDiv = (<DomEntry<T, ViewModel.RootEntry>>this.renderer["tektite-screen-root"])?.getChildModelContainer?.(dom) as HTMLDivElement;
-                const screenDiv = screenRootEntry.getChildModelContainer(dom);
-                minamo.dom.setProperty(screenDiv, "className", `tektite-screen ${rootEntry.data?.className ?? ""}`);
+                minamo.dom.setProperty(screenRootEntry.getChildModelContainer(dom), "className", `tektite-screen ${model.data?.className ?? ""}`);
             }
             return dom;
         },
@@ -374,8 +380,15 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.ScreenHeaderEntry) =>
                 {
+                    const div = dom as HTMLDivElement;
+                    const rootEntry = tektite.viewModel.getWithType<ViewModel.RootEntry>("tektite-screen-root");
+                    if (rootEntry)
+                    {
+                        const style = "header" !== rootEntry.data?.progressBarStyle ? "modern": "classic";
+                        minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? rootEntry.data?.windowColor ?? "": "");
+                    }
                     return dom;
                 },
                 updateChildren: [ "screen-header-progress-bar", "screen-header-segment", "screen-header-operator", ],
@@ -438,7 +451,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenHeaderLinkSegmentEntry) =>
                 {
                     return dom;
                 },
@@ -456,7 +469,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenHeaderPopupSegmentEntry) =>
                 {
                     return dom;
                 },
@@ -474,7 +487,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenHeaderOperatorEntry) =>
                 {
                     return dom;
                 },
@@ -495,7 +508,7 @@ export module ViewRenderer
                     id: "tektite-screen-body",
                     className: "tektite-screen-body",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenBodyEntry) =>
                 {
                     return dom;
                 },
@@ -520,7 +533,7 @@ export module ViewRenderer
                         className: "tektite-screen-bar-flash-layer",
                     },
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenBarEntry) =>
                 {
                     return dom;
                 },
@@ -540,7 +553,7 @@ export module ViewRenderer
                     tag: "div",
                     className: "tektite-screen-toast",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenToastEntry) =>
                 {
                     return dom;
                 },
@@ -557,7 +570,7 @@ export module ViewRenderer
                     tag: "div",
                     className: "tektite-item tektite-slide-up-in",
                 },
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.Entry) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.ToastItemEntry) =>
                 {
                     const element = getPrimaryElement(dom);
                     const data = (modelEntry as ViewModel.ToastItemEntry).data;
