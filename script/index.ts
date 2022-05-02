@@ -112,8 +112,29 @@ export module Clockworks
                 {
                     type: "tektite-screen-body",
                     children:
-                    {
-                    },
+                    [
+                        <ViewModel.PrimaryPageEntry & ViewModel.ListEntry>
+                        {
+                            key: "primary",
+                            type: "tektite-primary-page",
+                            children:
+                            {
+                                body:
+                                {
+                                    type: "tektite-primary-page-body",
+                                    children: { },
+                                },
+                            },
+                        },
+                        <ViewModel.TrailPageEntry & ViewModel.ListEntry>
+                        {
+                            key: "trail",
+                            type: "tektite-trail-page",
+                            children:
+                            {
+                            },
+                        },
+                    ]
                 },
                 "screen-bar":
                 {

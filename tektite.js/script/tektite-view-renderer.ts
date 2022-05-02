@@ -508,18 +508,32 @@ export module ViewRenderer
                     id: "tektite-screen-body",
                     className: "tektite-screen-body",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenBodyEntry) =>
-                {
-                    return dom;
-                },
-                // getChildModelContainer: (dom: Element, key: string) =>
-                // {
-    
-                // },
-                eventHandlers:
-                {
-        
-                }
+                updateChildren: "append",
+            },
+            "tektite-primary-page":
+            {
+                make: Tektite.$div("tektite-primary-page")([]),
+                updateChildren: [ "body", "footer" ],
+            },
+            "tektite-primary-page-body":
+            {
+                make: Tektite.$div("tektite-page-body")
+                (
+                    Tektite.$div("tektite-main-panel")([])
+                ),
+                updateChildren: "append",
+                getChildModelContainer: (dom: DomType) => getPrimaryElement(dom).getElementsByClassName("tektite-main-panel")[0],
+            },
+            "tektite-primary-page-footer":
+            {
+                make: Tektite.$div("tektite-page-footer")([]),
+                updateChildren: "append",
+            },
+            "tektite-trail-page":
+            {
+                make:
+                Tektite.$div("tektite-trail-page")([]),
+                updateChildren: "append",
             },
             "tektite-screen-bar":
             {

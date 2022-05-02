@@ -121,6 +121,34 @@ export module ViewModel
     export interface ScreenBodyEntry extends Entry
     {
         type: "tektite-screen-body";
+        children: ListEntry[];
+    }
+    export interface PrimaryPageEntry extends Entry
+    {
+        type: "tektite-primary-page";
+        children:
+        {
+            "body": PrimaryPageBodyEntry,
+            "footer"?: PrimaryPageFooterEntry,
+        };
+    }
+    export interface PrimaryPageBodyEntry extends Entry
+    {
+        type: "tektite-primary-page-body";
+        children:
+        {
+        };
+    }
+    export interface PrimaryPageFooterEntry extends Entry
+    {
+        type: "tektite-primary-page-footer";
+        children:
+        {
+        };
+    }
+    export interface TrailPageEntry extends Entry
+    {
+        type: "tektite-trail-page";
         children:
         {
         };
