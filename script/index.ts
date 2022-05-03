@@ -11,6 +11,7 @@ import localeEn from "../resource/lang.en.json";
 import localeJa from "../resource/lang.ja.json";
 import config from "../resource/config.json";
 import { minamo } from "../nephila/minamo.js";
+import { ViewRenderer } from "../tektite.js/script/tektite-view-renderer";
 export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
@@ -54,6 +55,43 @@ export module Clockworks
         tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
         tektite.onLoad();
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
+        const renders: { [type: string ]: ViewRenderer.Entry<any>} =
+        {
+            "welcome-board":
+            {
+                make: Tektite.$div("logo")
+                ([
+                    Tektite.$div("application-icon icon")(await Resource.loadIconOrCache("application-icon")),
+                    Tektite.$span("logo-text")(config.applicationTitle)
+                ]),
+            },
+            "welcome-operators":
+            {
+                make: Tektite.$div("tektite-vertical-button-list")
+                (
+                    Type.applicationIdList.map
+                    (
+                        (i: Type.ApplicationType) =>
+                        tektite.internalLink
+                        ({
+                            className: "tektite-link-button",
+                            href: { application: i },
+                            children:
+                            {
+                                tag: "button",
+                                className: "tektite-default-button tektite-main-button tektite-long-button",
+                                children: Tektite.$labelSpan(Type.applicationList[i].title),
+                                // onclick: async () => await showNeverStopwatchScreen(),
+                            }
+                        }),
+                    )
+                ),
+            }
+        };
+        minamo.core.objectKeys(renders).forEach
+        (
+            key => tektite.viewRenderer.renderer[key] = renders[key]
+        );
         const model: ViewModel.RootEntry =
         {
             type: "tektite-screen-root",
@@ -122,7 +160,11 @@ export module Clockworks
                                 body:
                                 {
                                     type: "tektite-primary-page-body",
-                                    children: { },
+                                    children:
+                                    {
+                                        board: { type: "welcome-board", },
+                                        operators: { type: "welcome-operators", },
+                                    },
                                 },
                             },
                         },
