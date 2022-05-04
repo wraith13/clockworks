@@ -1,6 +1,7 @@
 // import { minamo } from "./minamo.js";
 import { Tektite } from "../tektite.js/script/tektite-index";
 import { ViewModel } from "../tektite.js/script/tektite-view-model.js";
+import { ViewRenderer } from "../tektite.js/script/tektite-view-renderer";
 import { Type } from "./type";
 import { Color } from "./color";
 import { Render } from "./render";
@@ -11,7 +12,6 @@ import localeEn from "../resource/lang.en.json";
 import localeJa from "../resource/lang.ja.json";
 import config from "../resource/config.json";
 import { minamo } from "../nephila/minamo.js";
-import { ViewRenderer } from "../tektite.js/script/tektite-view-renderer";
 export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
@@ -86,7 +86,17 @@ export module Clockworks
                         }),
                     )
                 ),
-            }
+            },
+            "welcome-footer":
+            {
+                make: Tektite.$div("description")
+                (
+                    Tektite.$tag("ul")("tektite-locale-parallel-off")
+                    ([
+                        Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                    ])
+                ),
+            },
         };
         minamo.core.objectKeys(renders).forEach
         (
@@ -122,16 +132,13 @@ export module Clockworks
                                 {
                                     type: "tektite-screen-header-label-segment",
                                     key: "application-segment",
-                                    children:
+                                    child:
                                     {
-                                        core:
+                                        type: "tektite-screen-header-segment-core",
+                                        data:
                                         {
-                                            type: "tektite-screen-header-segment-core",
-                                            data:
-                                            {
-                                                icon: "application-icon",
-                                                title: config.applicationTitle,
-                                            },
+                                            icon: "application-icon",
+                                            title: config.applicationTitle,
                                         },
                                     },
                                 },
@@ -162,8 +169,8 @@ export module Clockworks
                                     type: "tektite-primary-page-body",
                                     children:
                                     {
-                                        board: { type: "welcome-board", },
-                                        operators: { type: "welcome-operators", },
+                                        board: "welcome-board",
+                                        operators: "welcome-operators",
                                     },
                                 },
                             },
@@ -172,24 +179,12 @@ export module Clockworks
                         {
                             key: "trail",
                             type: "tektite-trail-page",
-                            children:
-                            {
-                            },
+                            child: "welcome-footer",
                         },
                     ]
                 },
-                "screen-bar":
-                {
-                    type: "tektite-screen-bar",
-                    children:
-                    {
-                    },
-                },
-                "screen-toast":
-                {
-                    type: "tektite-screen-toast",
-                    children: [],
-                }
+                "screen-bar": "tektite-screen-bar",
+                "screen-toast": "tektite-screen-toast",
             }
         };
         tektite.viewModel.set(model);
@@ -197,7 +192,7 @@ export module Clockworks
         (
             document.body,
             await tektite.viewRenderer.renderRoot(),
-            dom => "tektite-foundation" === (<Element>dom).className
+            dom => (<Element>dom)?.classList?.contains?.("tektite-foundation")
         );
         // Render.updateStyle();
         // Render.updateProgressBarStyle();

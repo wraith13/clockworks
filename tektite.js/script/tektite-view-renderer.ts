@@ -149,13 +149,13 @@ export module ViewRenderer
         public onLoad = () =>
         {
         };
-        public renderRoot = async (data: ViewModel.Entry | null = this.tektite.viewModel.get()) =>
+        public renderRoot = async (data: ViewModel.StrictEntry | null = this.tektite.viewModel.get()) =>
         {
             let result: DomType | null = null;
             const json = JSON.stringify(data);
             if (this.previousData !== json)
             {
-                const data = JSON.parse(json) as ViewModel.Entry;
+                const data = JSON.parse(json) as ViewModel.StrictEntry;
                 if ( ! ViewModel.hasError(ViewModel.makeRootPath(), data))
                 {
                     //  pre-process
@@ -224,7 +224,7 @@ export module ViewRenderer
                 throw err;
             }
         };
-        public renderOrCache = async (path: ViewModel.PathType, data: ViewModel.Entry | null): Promise<DomCache | undefined> =>
+        public renderOrCache = async (path: ViewModel.PathType, data: ViewModel.StrictEntry | null): Promise<DomCache | undefined> =>
         {
             this.activePathList.push(path?.path);
             let cache = this.getCache(path);
@@ -364,7 +364,7 @@ export module ViewRenderer
                 );
             }
         };
-        public aggregateChildren = (path: ViewModel.PathType, data: ViewModel.Entry | null): DomType =>
+        public aggregateChildren = (path: ViewModel.PathType, data: ViewModel.StrictEntry | null): DomType =>
             ViewModel.getChildrenModelKeys(data)
                 .map(key => this.getCache(ViewModel.makePath(path, key)) ?? { dom: this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))})
                 .map(i => getElementList(i.dom))

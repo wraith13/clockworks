@@ -17,20 +17,82 @@ export module ViewModel
         path: "/root",
     });
     export const getLeafKey = (path: PathType) => path.path.split("/").pop();
-    export interface Entry
+    export interface StrictEntry
     {
         type: string;
         data?: unknown;
+        children?: StrictListEntry[] | { [key: string]: StrictEntry };
+    }
+    export interface EntryBase
+    {
+        type: string;
+        data?: unknown;
+        child?: Entry;
         children?: ListEntry[] | { [key: string]: Entry };
     }
-    export const isEntry = <Model extends Entry>(type: Model["type"]) =>
-        (model: Entry | null): model is Model => type === model?.type;
-    export interface ListEntry extends Entry
+    export type Entry = EntryBase | string;
+    export function makeSureStrictEntry(path: PathType, entry: Entry): StrictEntry;
+    export function makeSureStrictEntry(path: PathType, entry: null): null;
+    export function makeSureStrictEntry(path: PathType, entry: undefined): undefined;
+    export function makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null;
+    export function makeSureStrictEntry(path: PathType, entry: Entry | undefined): StrictEntry | undefined;
+    export function makeSureStrictEntry(path: PathType, entry: Entry | null | undefined): StrictEntry | null | undefined;
+    export function makeSureStrictEntry(path: PathType, entry: Entry | null | undefined): StrictEntry | null | undefined
+    {
+        if ("string" === typeof entry)
+        {
+            return { type: entry, };
+        }
+        else
+        {
+            if (entry)
+            {
+                const children = entry.children;
+                if (children)
+                {
+                    if (Array.isArray(children))
+                    {
+                        children.forEach(i => makeSureStrictEntry(makePath(path, i.key), i));
+                    }
+                    else
+                    {
+                        minamo.core.objectKeys(children)
+                            .forEach(key => children[key] = makeSureStrictEntry(makePath(path, key), children[key]));
+                    }
+                    if (entry.child)
+                    {
+                        console.error(`tektite-view-model: Duplicated child and children - path:${path.path}, data:${JSON.stringify(entry)}`);
+                    }
+                }
+                else
+                {
+                    const child = entry.child;
+                    if (child)
+                    {
+                        entry.children =
+                        {
+                            single: makeSureStrictEntry(makePath(path, "single"), child),
+                        }
+                        delete entry.child;
+                    }
+                }
+            }
+            return entry as StrictEntry | null | undefined;
+        }
+    }
+    export const isEntry = <Model extends (StrictEntry | EntryBase)>(type: Model["type"]) =>
+        (model: StrictEntry | EntryBase | null): model is Model => type === model?.type;
+    export interface StrictListEntry extends StrictEntry
+    {
+        key: string;
+    }
+    export interface ListEntry extends EntryBase
     {
         key: string;
     }
     export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
-    export interface RootEntry extends Entry
+    export type EntryOrType<Model extends EntryBase> = Model | Model["type"];
+    export interface RootEntry extends EntryBase
     {
         type: "tektite-screen-root";
         data?:
@@ -43,23 +105,23 @@ export module ViewModel
         };
         children:
         {
-            "screen-header": ScreenHeaderEntry,
-            "screen-body": ScreenBodyEntry,
-            "screen-bar": ScreenBarEntry,
-            "screen-toast": ScreenToastEntry,
+            "screen-header": EntryOrType<ScreenHeaderEntry>,
+            "screen-body": EntryOrType<ScreenBodyEntry>,
+            "screen-bar": EntryOrType<ScreenBarEntry>,
+            "screen-toast": EntryOrType<ScreenToastEntry>,
         };
     }
-    export interface ScreenHeaderEntry extends Entry
+    export interface ScreenHeaderEntry extends EntryBase
     {
         type: "tektite-screen-header";
         children:
         {
-            "screen-header-progress-bar": ScreenHeaderProgressBarEntry,
-            "screen-header-segment": ScreenHeaderSegmentListEntry,
-            "screen-header-operator": ScreenHeaderOperatorEntry,
+            "screen-header-progress-bar": EntryOrType<ScreenHeaderProgressBarEntry>,
+            "screen-header-segment": EntryOrType<ScreenHeaderSegmentListEntry>,
+            "screen-header-operator": EntryOrType<ScreenHeaderOperatorEntry>,
         };
     }
-    export interface ScreenHeaderProgressBarEntry extends Entry
+    export interface ScreenHeaderProgressBarEntry extends EntryBase
     {
         type: "tektite-screen-header-progress-bar";
         data?:
@@ -68,13 +130,13 @@ export module ViewModel
             percent: null | number;
         };
     }
-    export interface ScreenHeaderSegmentListEntry extends Entry
+    export interface ScreenHeaderSegmentListEntry extends EntryBase
     {
         type: "tektite-screen-header-segment-list";
-        children: [ScreenHeaderSegmentEntry, ...ScreenHeaderSegmentEntry[]];
+        children: [ ScreenHeaderSegmentEntry, ...ScreenHeaderSegmentEntry[]];
     }
     export type ScreenHeaderSegmentEntry = ScreenHeaderLabelSegmentEntry | ScreenHeaderLinkSegmentEntry | ScreenHeaderPopupSegmentEntry;
-    export interface ScreenHeaderSegmentCoreEntry extends Entry
+    export interface ScreenHeaderSegmentCoreEntry extends EntryBase
     {
         type: "tektite-screen-header-segment-core";
         data:
@@ -90,40 +152,31 @@ export module ViewModel
         {
             className?: string;
         }
-        children:
-        {
-            core: ScreenHeaderSegmentCoreEntry;
-        };
+        child: ScreenHeaderSegmentCoreEntry;
     }
     export interface ScreenHeaderLinkSegmentEntry extends ListEntry
     {
         type: "tektite-screen-header-link-segment";
-        children:
-        {
-            core: ScreenHeaderSegmentCoreEntry;
-        };
+        child: ScreenHeaderSegmentCoreEntry;
     }
     export interface ScreenHeaderPopupSegmentEntry extends ListEntry
     {
         type: "tektite-screen-header-popup-segment";
-        children:
-        {
-            core: ScreenHeaderSegmentCoreEntry;
-        };
+        child: ScreenHeaderSegmentCoreEntry;
     }
-    export interface ScreenHeaderOperatorEntry extends Entry
+    export interface ScreenHeaderOperatorEntry extends EntryBase
     {
         type: "tektite-screen-header-operator";
         children:
         {
         };
     }
-    export interface ScreenBodyEntry extends Entry
+    export interface ScreenBodyEntry extends EntryBase
     {
         type: "tektite-screen-body";
         children: ListEntry[];
     }
-    export interface PrimaryPageEntry extends Entry
+    export interface PrimaryPageEntry extends EntryBase
     {
         type: "tektite-primary-page";
         children:
@@ -132,35 +185,35 @@ export module ViewModel
             "footer"?: PrimaryPageFooterEntry,
         };
     }
-    export interface PrimaryPageBodyEntry extends Entry
+    export interface PrimaryPageBodyEntry extends EntryBase
     {
         type: "tektite-primary-page-body";
         children:
         {
         };
     }
-    export interface PrimaryPageFooterEntry extends Entry
+    export interface PrimaryPageFooterEntry extends EntryBase
     {
         type: "tektite-primary-page-footer";
         children:
         {
         };
     }
-    export interface TrailPageEntry extends Entry
+    export interface TrailPageEntry extends EntryBase
     {
         type: "tektite-trail-page";
         children:
         {
         };
     }
-    export interface ScreenBarEntry extends Entry
+    export interface ScreenBarEntry extends EntryBase
     {
         type: "tektite-screen-bar";
         children:
         {
         };
     }
-    export interface ScreenToastEntry extends Entry
+    export interface ScreenToastEntry extends EntryBase
     {
         type: "tektite-screen-toast";
         children: ToastItemEntry[];
@@ -177,63 +230,63 @@ export module ViewModel
             wait?: number,
         }
     }
-    export const getChildrenKeys = (data: Entry): number[] | string[] =>
+    export const getChildrenKeys = (data: StrictEntry): number[] | string[] =>
         ! data?.children ? []:
             Array.isArray(data.children) ?
                 data.children.map((_, ix) => ix):
                 minamo.core.objectKeys(data.children);
-    export const getChildrenModelKeys = (data: Entry | null): string[] =>
+    export const getChildrenModelKeys = (data: StrictEntry | null): string[] =>
         ! data?.children ? []:
         Array.isArray(data.children) ?
             data.children.map(i => i.key):
             minamo.core.objectKeys(data.children);
-    export const getChildFromModelKey = (data: Entry | null, key: string): Entry | null =>
+    export const getChildFromModelKey = (data: StrictEntry | null, key: string): StrictEntry | null =>
         Array.isArray(data?.children) ?
             (data?.children?.filter(i => key === i.key)?.[0] ?? null):
             (data?.children?.[key] ?? null);
-    export const getChildrenValues = (data: Entry): Entry[] =>
+    export const getChildrenValues = (data: StrictEntry): StrictEntry[] =>
         ! data?.children ? []:
         Array.isArray(data.children) ?
             data.children:
             minamo.core.objectToArray(data.children, (_k, v, _o) => v);
-    export const hasInvalidViewModel = (data: Entry): boolean =>
+    export const hasInvalidViewModel = (data: StrictEntry): boolean =>
         "" === (data?.type ?? "") ||
         0 < getChildrenModelKeys(data).filter
             (
                 key =>
                     "" === (key ?? "") ||
                     ( ! Array.isArray(data.children) && "" !== ((data.children?.[key] as ListEntry)?.key ?? "")) ||
-                    hasInvalidViewModel(getChildFromModelKey(data, key) as Entry)
+                    hasInvalidViewModel(getChildFromModelKey(data, key) as StrictEntry)
             ).length;
-    export const hasDuplicatedKeys = (data: Entry): boolean =>
+    export const hasDuplicatedKeys = (data: StrictEntry): boolean =>
         0 < getChildrenModelKeys(data).filter((i, ix, list) => 0 <= list.indexOf(i, ix +1)).length ||
         0 < getChildrenValues(data).filter(i => hasDuplicatedKeys(i)).length;
     export const isValidPath = (path: PathType) =>
         isPathType(path) &&
         ("/root" === path.path || path.path.startsWith("/root/"));
-    export const hasError = (path: PathType, data: Entry | null | undefined) =>
+    export const hasError = (path: PathType, data: StrictEntry | null | undefined) =>
     {
         if (undefined === data)
         {
-            console.error(`tektite-view-model: undefined data - path:${path}`);
+            console.error(`tektite-view-model: undefined data - path:${path.path}`);
             return true;
         }
         else
         if (null === data)
         {
-            console.error(`tektite-view-model: null data - path:${path}`);
+            console.error(`tektite-view-model: null data - path:${path.path}`);
             return true;
         }
         else
         if (hasInvalidViewModel(data))
         {
-            console.error(`tektite-view-model: Invalid view model - data:${data}`);
+            console.error(`tektite-view-model: Invalid view model - path:${path.path}, data:${JSON.stringify(data)}`);
             return true;
         }
         else
         if (hasDuplicatedKeys(data))
         {
-            console.error(`tektite-view-model: Duplicated keys - data:${JSON.stringify(data)}`);
+            console.error(`tektite-view-model: Duplicated keys - path:${path.path}, data:${JSON.stringify(data)}`);
             return true;
         }
         else
@@ -268,7 +321,7 @@ export module ViewModel
     // export class ViewModel<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
     export class ViewModel<T extends Tektite.ParamTypes>
     {
-        private data: Entry | null = null;
+        private data: StrictEntry | null = null;
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
         {
@@ -276,13 +329,14 @@ export module ViewModel
         public onLoad = () =>
         {
         };
-        public set(data: Entry): void;
-        public set(path: PathType, data: Entry): void;
-        public set(pathOrdata: PathType | Entry, data?: Entry): void
+        public set(dataOrType: Entry): void;
+        public set(path: PathType, dataOrType: Entry): void;
+        public set(pathOrdata: PathType | Entry, dataOrType?: Entry): void
         {
             if (isPathType(pathOrdata))
             {
                 const path = pathOrdata;
+                const data = makeSureStrictEntry(path, dataOrType);
                 if (( ! hasError(path, data)) && data)
                 {
                     const keys = path.path.split("/").filter(i => 0 < i.length);
@@ -293,10 +347,10 @@ export module ViewModel
                     else
                     {
                         keys.shift();
-                        let current: Entry | null;
+                        let current: StrictEntry | null;
                         if (1 < keys.length)
                         {
-                            current = { children: [ this.data ] } as Entry;
+                            current = { children: [ this.data ] } as StrictEntry;
                             while(1 < keys.length)
                             {
                                 current = getChildFromModelKey(current, keys[0]);
@@ -364,8 +418,9 @@ export module ViewModel
             }
             else
             {
-                const data = pathOrdata;
-                if ( ! hasError(makeRootPath(), data))
+                const path = makeRootPath();
+                const data = makeSureStrictEntry(path, pathOrdata);
+                if ( ! hasError(path, data))
                 {
                     this.data = data;
                 }
@@ -383,10 +438,10 @@ export module ViewModel
                 else
                 {
                     keys.shift();
-                    let current: Entry | null;
+                    let current: StrictEntry | null;
                     if (1 < keys.length)
                     {
-                        current = { children: [ this.data ] } as Entry;
+                        current = { children: [ this.data ] } as StrictEntry;
                         while(1 < keys.length)
                         {
                             current = getChildFromModelKey(current, keys[0]);
@@ -433,7 +488,7 @@ export module ViewModel
             }
             else
             {
-                let current: Entry | null = null;
+                let current: StrictEntry | null = null;
                 const keys = path.path.split("/").filter(i => 0 < i.length);
                 if ("" !== keys[0] || ! isValidPath(path))
                 {
@@ -444,7 +499,7 @@ export module ViewModel
                     keys.shift();
                     if (0 < keys.length)
                     {
-                        current = { type: "ground", children: { root: this.data } } as Entry;
+                        current = { type: "ground", children: { root: this.data } } as StrictEntry;
                         while(0 < keys.length)
                         {
                             current = getChildFromModelKey(current, keys[0]);
@@ -464,7 +519,7 @@ export module ViewModel
                 return current;
             }
         };
-        public getWithType = <Model extends Entry>(type: Model["type"], path: PathType | null = null): Model | null =>
+        public getWithType = <Model extends EntryBase>(type: Model["type"], path: PathType | null = null): Model | null =>
         {
             const model = this.get(path);
             if (isEntry(type)(model))
