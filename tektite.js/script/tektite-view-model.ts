@@ -188,30 +188,18 @@ export module ViewModel
     export interface PrimaryPageBodyEntry extends EntryBase
     {
         type: "tektite-primary-page-body";
-        children:
-        {
-        };
     }
     export interface PrimaryPageFooterEntry extends EntryBase
     {
         type: "tektite-primary-page-footer";
-        children:
-        {
-        };
     }
     export interface TrailPageEntry extends EntryBase
     {
         type: "tektite-trail-page";
-        children:
-        {
-        };
     }
     export interface ScreenBarEntry extends EntryBase
     {
         type: "tektite-screen-bar";
-        children:
-        {
-        };
     }
     export interface ScreenToastEntry extends EntryBase
     {
@@ -229,6 +217,38 @@ export module ViewModel
             isWideContent?: boolean,
             wait?: number,
         }
+    }
+    export interface VerticalButtonListEntry extends EntryBase
+    {
+        type: "tektite-vertical-button-list";
+        children: ((ButtonEntry | LinkButtonEntry) & ListEntry)[] | { [key: string]: (ButtonEntry | LinkButtonEntry) };
+    };
+    export interface ButtonEntry extends EntryBase
+    {
+        type: "tektite-button";
+        data:
+        {
+            className?: string;
+            onclick?: (event: MouseEvent) => unknown;
+        };
+    }
+    export interface LinkButtonEntry extends EntryBase
+    {
+        type: "tektite-link-button";
+        data:
+        {
+            className?: string;
+            href: string;
+        };
+        child: ButtonEntry;
+    }
+    export interface LabelSpanEntry extends EntryBase
+    {
+        type: "tektite-label-span";
+        data:
+        {
+            text: string;
+        };
     }
     export const getChildrenKeys = (data: StrictEntry): number[] | string[] =>
         ! data?.children ? []:

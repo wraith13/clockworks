@@ -639,6 +639,42 @@ export module ViewRenderer
         
                 }
             },
+            "tektite-vertical-button-list":
+            {
+                make:
+                Tektite.$div("tektite-vertical-button-list")([]),
+                updateChildren: "append",
+            },
+            "tektite-button":
+            {
+                make: Tektite.$make({ tag: "button", }),
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.ButtonEntry) =>
+                {
+                    minamo.dom.setProperties(dom as HTMLButtonElement, modelEntry.data);
+                    return dom;
+                },
+                updateChildren: "append",
+            },
+            "tektite-link-button":
+            {
+                make: Tektite.$make({ tag: "a", }),
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.LinkButtonEntry) =>
+                {
+                    minamo.dom.setProperties(dom as HTMLButtonElement, modelEntry.data);
+                    return dom;
+                },
+                updateChildren: "append",
+            },
+            "tektite-label-span":
+            {
+                make: Tektite.$labelSpan([]),
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.LabelSpanEntry) =>
+                {
+                    minamo.dom.setProperty(dom as HTMLSpanElement, "innerText", modelEntry.data.text);
+                    return dom;
+                },
+                updateChildren: "append",
+            },
         };
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>

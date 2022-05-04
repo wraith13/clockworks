@@ -164,18 +164,50 @@ export module Clockworks
                             type: "tektite-primary-page",
                             children:
                             {
-                                body:
+                                body: <ViewModel.PrimaryPageBodyEntry>
                                 {
                                     type: "tektite-primary-page-body",
                                     children:
                                     {
                                         board: "welcome-board",
-                                        operators: "welcome-operators",
+                                        // operators: "welcome-operators",
+                                        operators: <ViewModel.VerticalButtonListEntry>
+                                        {
+                                            type: "tektite-vertical-button-list",
+                                            children: Type.applicationIdList.map
+                                            (
+                                                (i: Type.ApplicationType) => <ViewModel.LinkButtonEntry & ViewModel.ListEntry>
+                                                ({
+                                                    key: i,
+                                                    type: "tektite-link-button",
+                                                    data:
+                                                    {
+                                                        className: "tektite-link-button",
+                                                        href: tektite.params.makeUrl({ application: i }),
+                                                    },
+                                                    child: <ViewModel.ButtonEntry>
+                                                    {
+                                                        type: "tektite-button",
+                                                        data:
+                                                        {
+                                                            className: "tektite-default-button tektite-main-button tektite-long-button",
+                                                        },
+                                                        child: <ViewModel.LabelSpanEntry>
+                                                        {
+                                                            type: "tektite-label-span",
+                                                            data:
+                                                            {
+                                                                text: Type.applicationList[i].title,
+                                                            }
+                                                        },
+                                                    },
+                                                }),
+                                            )
+                                        }
                                     },
                                 },
                             },
                         },
-                        <ViewModel.TrailPageEntry & ViewModel.ListEntry>
                         {
                             key: "trail",
                             type: "tektite-trail-page",
