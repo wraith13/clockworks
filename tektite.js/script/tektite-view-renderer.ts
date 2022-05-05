@@ -647,7 +647,7 @@ export module ViewRenderer
             },
             "tektite-button":
             {
-                make: Tektite.$make({ tag: "button", }),
+                make: { tag: "button", },
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.ButtonEntry) =>
                 {
                     minamo.dom.setProperties(dom as HTMLButtonElement, modelEntry.data);
@@ -657,7 +657,7 @@ export module ViewRenderer
             },
             "tektite-link-button":
             {
-                make: Tektite.$make({ tag: "a", }),
+                make: { tag: "a", },
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.LinkButtonEntry) =>
                 {
                     minamo.dom.setProperties(dom as HTMLButtonElement, modelEntry.data);
@@ -667,7 +667,7 @@ export module ViewRenderer
             },
             "tektite-label-span":
             {
-                make: Tektite.$labelSpan([]),
+                make: { tag: "span", className: "label" },
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.LabelSpanEntry) =>
                 {
                     minamo.dom.setProperty(dom as HTMLSpanElement, "innerText", modelEntry.data.text);
