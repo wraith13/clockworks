@@ -111,7 +111,6 @@ export module Clockworks
                 theme: Storage.Settings.get().theme ?? "auto",
                 progressBarStyle: Storage.Settings.get().progressBarStyle ?? "auto",
                 windowColor: Color.getSolidRainbowColor(0),
-                className: "welcome-screen",
             },
             children:
             {
@@ -156,6 +155,10 @@ export module Clockworks
                 "screen-body":
                 {
                     type: "tektite-screen-body",
+                    data:
+                    {
+                        className: "welcome-screen",
+                    },
                     children:
                     [
                         <ViewModel.PrimaryPageEntry & ViewModel.ListEntry>

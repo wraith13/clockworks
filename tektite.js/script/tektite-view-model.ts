@@ -174,6 +174,10 @@ export module ViewModel
     export interface ScreenBodyEntry extends EntryBase
     {
         type: "tektite-screen-body";
+        data?:
+        {
+            className?: string;
+        };
         children: ListEntry[];
     }
     export interface PrimaryPageEntry extends EntryBase
@@ -509,7 +513,7 @@ export module ViewModel
             else
             {
                 let current: StrictEntry | null = null;
-                const keys = path.path.split("/").filter(i => 0 < i.length);
+                const keys = path.path.split("/");//.filter(i => 0 < i.length);
                 if ("" !== keys[0] || ! isValidPath(path))
                 {
                     console.error(`tektite-view-model: Invalid path - path:${path.path}`);
@@ -517,23 +521,16 @@ export module ViewModel
                 else
                 {
                     keys.shift();
-                    if (0 < keys.length)
+                    current = { type: "ground", children: { root: this.data } } as StrictEntry;
+                    while(0 < keys.length)
                     {
-                        current = { type: "ground", children: { root: this.data } } as StrictEntry;
-                        while(0 < keys.length)
+                        current = getChildFromModelKey(current, keys[0]);
+                        if ( ! current)
                         {
-                            current = getChildFromModelKey(current, keys[0]);
-                            if ( ! current)
-                            {
-                                console.error(`tektite-view-model: Path not found - path:${path.path}`);
-                                break;
-                            }
-                            keys.shift();
+                            console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                            break;
                         }
-                    }
-                    else
-                    {
-                        console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                        keys.shift();
                     }
                 }
                 return current;
