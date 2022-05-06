@@ -26,21 +26,21 @@ export module ViewRenderer
         getChildModelContainer?: (dom: DomType) => Element,
         eventHandlers?: EventHandlers,
     };
-    export interface VolatileDomEntry<ViewModelEntry extends ViewModel.Entry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
+    export interface VolatileDomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBase
     {
         make: "volatile",
         getExternalDataPath?: (ViewModel.PathType[]) | (<T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModel.PathType[]),
-        update: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry, externalModels: { [path: string]:any }) => Promise<DomType>,
+        update: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
-    export interface DomEntry<ViewModelEntry extends ViewModel.Entry> extends DomEntryBase // ViewModelEntry extends ViewModel.Entry
+    export interface DomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBase
     {
         make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
         getExternalDataPath?: (ViewModel.PathType[]) | (<T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModel.PathType[]),
-        update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, model: ViewModelEntry, externalModels: { [path: string]:any }) => Promise<DomType>,
+        update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
-    export type Entry<ViewModelEntry extends ViewModel.Entry> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
-    export const isContainerEntry = <ViewModelEntry extends ViewModel.Entry>(entry: Entry<ViewModelEntry>): entry is ContainerEntry => "container" === entry.make;
-    export const isVolatileDomEntry = <ViewModelEntry extends ViewModel.Entry>(entry: Entry<ViewModelEntry>): entry is VolatileDomEntry<ViewModelEntry> => "volatile" === entry.make;
+    export type Entry<ViewModelEntry extends ViewModel.EntryBase> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
+    export const isContainerEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is ContainerEntry => "container" === entry.make;
+    export const isVolatileDomEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is VolatileDomEntry<ViewModelEntry> => "volatile" === entry.make;
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
     export const screenRootEntry =
@@ -56,16 +56,16 @@ export module ViewRenderer
                 className: "tektite-screen",
             }
         },
-        update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.RootEntry, _externalModels: { [path: string]:any }) =>
+        update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.RootEntry["data"], _externalModels: { [path: string]:any }) =>
         {
             const div = dom as HTMLDivElement;
-            if ("string" === typeof model.data?.title)
+            if ("string" === typeof data?.title)
             {
-                minamo.dom.setProperty(document, "title", model.data.title);
+                minamo.dom.setProperty(document, "title", data.title);
             }
             // if ("string" === typeof rootEntry.data?.theme)
             {
-                const setting = model.data?.theme ?? "auto";
+                const setting = data?.theme ?? "auto";
                 const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
                 const theme = "auto" === setting ? system: setting;
                 [ "light", "dark", ].forEach
@@ -75,7 +75,7 @@ export module ViewRenderer
             }
             // if ("string" === typeof rootEntry.data?.progressBarStyle)
             {
-                const style = "header" !== model.data?.progressBarStyle ? "modern": "classic";
+                const style = "header" !== data?.progressBarStyle ? "modern": "classic";
                 if
                 (
                     [
@@ -86,18 +86,18 @@ export module ViewRenderer
                     .reduce((a, b) => a || b, false)
                 )
                 {
-                    minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": model.data?.windowColor ?? "");
+                    minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": data?.windowColor ?? "");
                 }
             }
-            if ("string" === typeof model.data?.windowColor)
+            if ("string" === typeof data?.windowColor)
             {
-                minamo.dom.setStyleProperty(document.body, "backgroundColor", `${model.data.windowColor}E8`);
-                minamo.dom.setProperty("#tektite-theme-color", "content", model.data.windowColor);
-                minamo.dom.setStyleProperty(div, "backgroundColor", model.data.windowColor ?? "");
+                minamo.dom.setStyleProperty(document.body, "backgroundColor", `${data.windowColor}E8`);
+                minamo.dom.setProperty("#tektite-theme-color", "content", data.windowColor);
+                minamo.dom.setStyleProperty(div, "backgroundColor", data.windowColor ?? "");
             }
             // if ("string" === typeof rootEntry.data?.className)
             {
-                minamo.dom.setProperty(screenRootEntry.getChildModelContainer(dom), "className", `tektite-screen ${model.data?.className ?? ""}`);
+                minamo.dom.setProperty(screenRootEntry.getChildModelContainer(dom), "className", `tektite-screen ${data?.className ?? ""}`);
             }
             return dom;
         },
@@ -292,12 +292,12 @@ export module ViewRenderer
                             let dom: DomType | null;
                             if (isVolatileDomEntry(renderer))
                             {
-                                dom = await renderer.update(this.tektite, path, data, externalData);
+                                dom = await renderer.update(this.tektite, path, data?.data, externalData);
                             }
                             else
                             {
                                 dom = cache?.dom ?? await this.make(renderer.make);
-                                dom = await renderer?.update?.(this.tektite, path, dom, data, externalData) ?? dom;
+                                dom = await renderer?.update?.(this.tektite, path, dom, data?.data, externalData) ?? dom;
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
                         }
@@ -400,7 +400,7 @@ export module ViewRenderer
                     className: "tektite-segmented",
                 },
                 getExternalDataPath: [ ViewModel.makeRootPath("tektite-screen-root") ],
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.ScreenHeaderEntry, externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderEntry["data"], externalModels: { [path: string]:any }) =>
                 {
                     const div = dom as HTMLDivElement;
                     const rootEntryData = <ViewModel.RootEntry["data"]>(externalModels[ViewModel.makeRootPath().path]);
@@ -416,16 +416,16 @@ export module ViewRenderer
             "tektite-screen-header-progress-bar":
             {
                 make: { tag: "div", className: "tektite-progress-bar", },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenHeaderProgressBarEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenHeaderProgressBarEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom) as HTMLDivElement;
-                    if (model.data?.percent && 0 < model.data.percent)
+                    if (data?.percent && 0 < data.percent)
                     {
-                        if (model.data?.color)
+                        if (data?.color)
                         {
-                            minamo.dom.setStyleProperty(element, "backgroundColor", model.data.color);
+                            minamo.dom.setStyleProperty(element, "backgroundColor", data.color);
                         }
-                        const percentString = Tektite.makePercentString(model.data.percent);
+                        const percentString = Tektite.makePercentString(data.percent);
                         minamo.dom.setStyleProperty(element, "width", percentString);
                         minamo.dom.setStyleProperty(element, "borderRightWidth", "1px");
                     }
@@ -445,20 +445,20 @@ export module ViewRenderer
                     Tektite.$div("tektite-icon-frame")([]),
                     Tektite.$div("tektite-segment-title")([]),
                 ],
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenHeaderSegmentCoreEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenHeaderSegmentCoreEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const list = getElementList(dom);
-                    minamo.dom.replaceChildren(list[0], await tektite.params.loadIconOrCache(model.data.icon));
-                    minamo.dom.replaceChildren(list[1], model.data.title);
+                    minamo.dom.replaceChildren(list[0], await tektite.params.loadIconOrCache(data.icon));
+                    minamo.dom.replaceChildren(list[1], data.title);
                     return dom;
                 },
             },
             "tektite-screen-header-label-segment":
             {
                 make: Tektite.$div(`tektite-segment label-tektite-segment`)([]),
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenHeaderLabelSegmentEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenHeaderLabelSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    getPrimaryElement(dom).className = `tektite-segment label-tektite-segment ${model.data?.className ?? ""}`;
+                    getPrimaryElement(dom).className = `tektite-segment label-tektite-segment ${data?.className ?? ""}`;
                     return dom;
                 },
                 updateChildren: "append",
@@ -471,7 +471,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenHeaderLinkSegmentEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderLinkSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     return dom;
                 },
@@ -489,7 +489,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenHeaderPopupSegmentEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderPopupSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     return dom;
                 },
@@ -507,7 +507,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenHeaderOperatorEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderOperatorEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     return dom;
                 },
@@ -528,9 +528,9 @@ export module ViewRenderer
                     id: "tektite-screen-body",
                     className: "tektite-screen-body",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, model: ViewModel.ScreenBodyEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenBodyEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperty(dom as HTMLDivElement, "className", `tektite-screen-body ${model.data?.className ?? ""}`);
+                    minamo.dom.setProperty(dom as HTMLDivElement, "className", `tektite-screen-body ${data?.className ?? ""}`);
                     return dom;
                 },
                 updateChildren: "append",
@@ -572,7 +572,7 @@ export module ViewRenderer
                         className: "tektite-screen-bar-flash-layer",
                     },
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenBarEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenBarEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     return dom;
                 },
@@ -592,7 +592,7 @@ export module ViewRenderer
                     tag: "div",
                     className: "tektite-screen-toast",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _modelEntry: ViewModel.ScreenToastEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenToastEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     return dom;
                 },
@@ -609,10 +609,9 @@ export module ViewRenderer
                     tag: "div",
                     className: "tektite-item tektite-slide-up-in",
                 },
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.ToastItemEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModel.ToastItemEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom);
-                    const data = (modelEntry as ViewModel.ToastItemEntry).data;
                     minamo.dom.replaceChildren
                     (
                         element,
@@ -673,9 +672,9 @@ export module ViewRenderer
             "tektite-button":
             {
                 make: { tag: "button", },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.ButtonEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperties(dom as HTMLButtonElement, modelEntry.data);
+                    minamo.dom.setProperties(dom as HTMLButtonElement, data);
                     return dom;
                 },
                 updateChildren: "append",
@@ -683,9 +682,9 @@ export module ViewRenderer
             "tektite-link-button":
             {
                 make: { tag: "a", },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.LinkButtonEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperties(dom as HTMLButtonElement, modelEntry.data);
+                    minamo.dom.setProperties(dom as HTMLButtonElement, data);
                     return dom;
                 },
                 updateChildren: "append",
@@ -693,9 +692,9 @@ export module ViewRenderer
             "tektite-label-span":
             {
                 make: { tag: "span", className: "label" },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, modelEntry: ViewModel.LabelSpanEntry, _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LabelSpanEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperty(dom as HTMLSpanElement, "innerText", modelEntry.data.text);
+                    minamo.dom.setProperty(dom as HTMLSpanElement, "innerText", data.text);
                     return dom;
                 },
                 updateChildren: "append",
