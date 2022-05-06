@@ -2,19 +2,21 @@ import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
 export module ViewModel
 {
-    export type PathType = { type: "path", path: string, };
+    export type PathType = { type: "path", path: string, entryType?: string, };
     export const isPathType = (data: unknown): data is PathType =>
         "path" === (<PathType>data)?.type &&
         "string" === typeof (<PathType>data)?.path;
-    export const makePath = (parent: "/" | PathType, key: string): PathType =>
+    export const makePath = (parent: "/" | PathType, key: string, entryType?: string): PathType =>
     ({
         type: "path",
         path: `${"/" === parent ? "": parent.path}/${key}`,
+        entryType,
     });
-    export const makeRootPath = (): PathType =>
+    export const makeRootPath = (entryType?: string): PathType =>
     ({
         type: "path",
         path: "/root",
+        entryType,
     });
     export const getLeafKey = (path: PathType) => path.path.split("/").pop();
     export interface StrictEntry
@@ -533,13 +535,13 @@ export module ViewModel
                         keys.shift();
                     }
                 }
-                return current;
+                return current?.type === (path.entryType ?? current?.type) ? current: null;
             }
         };
-        public getWithType = <Model extends EntryBase>(type: Model["type"], path: PathType | null = null): Model | null =>
+        public getWithType = <Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model | null =>
         {
             const model = this.get(path);
-            if (isEntry(type)(model))
+            if (isEntry(<Model["type"]>(path.entryType))(model))
             {
                 return model;
             }

@@ -399,7 +399,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                getExternalDataPath: [ ViewModel.makeRootPath() ],
+                getExternalDataPath: [ ViewModel.makeRootPath("tektite-screen-root") ],
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _model: ViewModel.ScreenHeaderEntry, externalModels: { [path: string]:any }) =>
                 {
                     const div = dom as HTMLDivElement;
