@@ -63,43 +63,26 @@ export module ViewRenderer
             {
                 minamo.dom.setProperty(document, "title", data.title);
             }
-            // if ("string" === typeof rootEntry.data?.theme)
-            {
-                const setting = data?.theme ?? "auto";
-                const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
-                const theme = "auto" === setting ? system: setting;
-                [ "light", "dark", ].forEach
-                (
-                    i => minamo.dom.toggleCSSClass(document.body, i, i === theme)
-                );
-            }
+            const setting = data?.theme ?? "auto";
+            const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
+            const theme = "auto" === setting ? system: setting;
+            [ "light", "dark", ].forEach
+            (
+                i => minamo.dom.toggleCSSClass(document.body, i, i === theme)
+            );
             const style = "header" !== data?.progressBarStyle ? "modern": "classic";
-            // if ("string" === typeof rootEntry.data?.progressBarStyle)
-            {
-                if
-                (
-                    [
-                        { className: "tektite-style-modern", tottle: "modern" === style, },
-                        { className: "tektite-style-classic", tottle: "classic" === style, },
-                    ]
-                    .map(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate)
-                    .reduce((a, b) => a || b, false) ||
-                    "string" === typeof data?.windowColor
-                )
-                {
-                    minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": (data?.windowColor ?? ""));
-                }
-            }
+            [
+                { className: "tektite-style-modern", tottle: "modern" === style, },
+                { className: "tektite-style-classic", tottle: "classic" === style, },
+            ]
+            .forEach(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate);
             if ("string" === typeof data?.windowColor)
             {
                 minamo.dom.setStyleProperty(document.body, "backgroundColor", `${data.windowColor}E8`);
                 minamo.dom.setProperty("#tektite-theme-color", "content", data.windowColor);
-                // minamo.dom.setStyleProperty(div, "backgroundColor", data.windowColor ?? "");
             }
-            // if ("string" === typeof rootEntry.data?.className)
-            {
-                minamo.dom.setProperty(screenRootEntry.getChildModelContainer(dom), "className", `tektite-screen ${data?.className ?? ""}`);
-            }
+            minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": (data?.windowColor ?? ""));
+            minamo.dom.setProperty(screenRootEntry.getChildModelContainer(dom), "className", `tektite-screen ${data?.className ?? ""}`);
             return dom;
         },
         updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
