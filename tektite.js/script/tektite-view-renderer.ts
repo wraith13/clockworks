@@ -73,9 +73,9 @@ export module ViewRenderer
                     i => minamo.dom.toggleCSSClass(document.body, i, i === theme)
                 );
             }
+            const style = "header" !== data?.progressBarStyle ? "modern": "classic";
             // if ("string" === typeof rootEntry.data?.progressBarStyle)
             {
-                const style = "header" !== data?.progressBarStyle ? "modern": "classic";
                 if
                 (
                     [
@@ -83,17 +83,18 @@ export module ViewRenderer
                         { className: "tektite-style-classic", tottle: "classic" === style, },
                     ]
                     .map(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate)
-                    .reduce((a, b) => a || b, false)
+                    .reduce((a, b) => a || b, false) ||
+                    "string" === typeof data?.windowColor
                 )
                 {
-                    minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": data?.windowColor ?? "");
+                    minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": (data?.windowColor ?? ""));
                 }
             }
             if ("string" === typeof data?.windowColor)
             {
                 minamo.dom.setStyleProperty(document.body, "backgroundColor", `${data.windowColor}E8`);
                 minamo.dom.setProperty("#tektite-theme-color", "content", data.windowColor);
-                minamo.dom.setStyleProperty(div, "backgroundColor", data.windowColor ?? "");
+                // minamo.dom.setStyleProperty(div, "backgroundColor", data.windowColor ?? "");
             }
             // if ("string" === typeof rootEntry.data?.className)
             {
