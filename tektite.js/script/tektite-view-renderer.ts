@@ -43,22 +43,11 @@ export module ViewRenderer
     export const isVolatileDomEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is VolatileDomEntry<ViewModelEntry> => "volatile" === entry.make;
     export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
     export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
-    export const screenRootEntry =
+    export const rootEntry = <DomEntry<ViewModel.RootEntry>>
     {
-        make:
-        {
-            // parent: document.body,
-            tag: "div",
-            className: "tektite-foundation",
-            children:
-            {
-                tag: "div",
-                className: "tektite-screen",
-            }
-        },
+        make: async () => document.body,
         update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.RootEntry["data"], _externalModels: { [path: string]:any }) =>
         {
-            const div = dom as HTMLDivElement;
             if ("string" === typeof data?.title)
             {
                 minamo.dom.setProperty(document, "title", data.title);
@@ -81,8 +70,35 @@ export module ViewRenderer
                 minamo.dom.setStyleProperty(document.body, "backgroundColor", `${data.windowColor}E8`);
                 minamo.dom.setProperty("#tektite-theme-color", "content", data.windowColor);
             }
-            minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": (data?.windowColor ?? ""));
-            minamo.dom.setProperty(screenRootEntry.getChildModelContainer(dom), "className", `tektite-screen ${data?.className ?? ""}`);
+            return dom;
+        },
+        updateChildren: "append",
+        getChildModelContainer: (_dom: DomType) => document.body,
+    }
+    export const screenEntry =
+    {
+        make:
+        {
+            // parent: document.body,
+            tag: "div",
+            className: "tektite-foundation",
+            children:
+            {
+                tag: "div",
+                className: "tektite-screen",
+            }
+        },
+        getExternalDataPath: [ ViewModel.makeRootPath("tektite-root") ],
+        update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.RootEntry["data"], externalModels: { [path: string]:any }) =>
+        {
+            const div = dom as HTMLDivElement;
+            const rootEntryData = <ViewModel.RootEntry["data"]>(externalModels[ViewModel.makeRootPath().path]);
+            if (rootEntryData)
+            {
+                const style = "header" !== rootEntryData.progressBarStyle ? "modern": "classic";
+                minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": (rootEntryData.windowColor ?? ""));
+                minamo.dom.setProperty(screenEntry.getChildModelContainer(dom), "className", `tektite-screen ${rootEntryData.className ?? ""}`);
+            }
             return dom;
         },
         updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
@@ -374,7 +390,8 @@ export module ViewRenderer
                 .reduce((a, b) => a.concat(b), []);
         public readonly renderer: { [type: string ]: Entry<any>} =
         {
-            "tektite-screen-root": screenRootEntry,
+            "tektite-root": rootEntry,
+            "tektite-screen": screenEntry,
             "tektite-screen-header":
             {
                 make:
@@ -383,7 +400,7 @@ export module ViewRenderer
                     id: "tektite-screen-header",
                     className: "tektite-segmented",
                 },
-                getExternalDataPath: [ ViewModel.makeRootPath("tektite-screen-root") ],
+                getExternalDataPath: [ ViewModel.makeRootPath("tektite-root") ],
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderEntry["data"], externalModels: { [path: string]:any }) =>
                 {
                     const div = dom as HTMLDivElement;

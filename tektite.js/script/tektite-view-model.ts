@@ -96,7 +96,7 @@ export module ViewModel
     export type EntryOrType<Model extends EntryBase> = Model | Model["type"];
     export interface RootEntry extends EntryBase
     {
-        type: "tektite-screen-root";
+        type: "tektite-root";
         data?:
         {
             title?: string;
@@ -105,6 +105,14 @@ export module ViewModel
             progressBarStyle?: Tektite.ProgressBarStyleType;
             className?: string;
         };
+        children:
+        {
+            "screen": ScreenEntry,
+        };
+    }
+    export interface ScreenEntry extends EntryBase
+    {
+        type: "tektite-screen";
         children:
         {
             "screen-header": EntryOrType<ScreenHeaderEntry>,

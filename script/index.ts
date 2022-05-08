@@ -102,9 +102,9 @@ export module Clockworks
         (
             key => tektite.viewRenderer.renderer[key] = renders[key]
         );
-        const model: ViewModel.RootEntry =
+        const model = <ViewModel.RootEntry>
         {
-            type: "tektite-screen-root",
+            type: "tektite-root",
             data:
             {
                 title: config.applicationTitle,
@@ -114,124 +114,123 @@ export module Clockworks
             },
             children:
             {
-                "screen-header":
+                "screen": <ViewModel.ScreenEntry>
                 {
-                    type: "tektite-screen-header",
+                    type: "tektite-screen",
                     children:
                     {
-                        "screen-header-progress-bar":
+                        "screen-header": <ViewModel.ScreenHeaderEntry>
                         {
-                            type: "tektite-screen-header-progress-bar",
+                            type: "tektite-screen-header",
+                            children:
+                            {
+                                "screen-header-progress-bar": <ViewModel.ScreenHeaderProgressBarEntry>
+                                {
+                                    type: "tektite-screen-header-progress-bar",
+                                },
+                                "screen-header-segment":
+                                {
+                                    type: "tektite-screen-header-segment-list",
+                                    children:
+                                    [
+                                        {
+                                            type: "tektite-screen-header-label-segment",
+                                            key: "application-segment",
+                                            child:
+                                            {
+                                                type: "tektite-screen-header-segment-core",
+                                                data:
+                                                {
+                                                    icon: "application-icon",
+                                                    title: config.applicationTitle,
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                                "screen-header-operator":
+                                {
+                                    "type": "tektite-screen-header-operator",
+                                    children:
+                                    {
+                                    },
+                                },
+                            }
                         },
-                        "screen-header-segment":
+                        "screen-body":
                         {
-                            type: "tektite-screen-header-segment-list",
+                            type: "tektite-screen-body",
+                            data:
+                            {
+                                className: "welcome-screen",
+                            },
                             children:
                             [
+                                <ViewModel.PrimaryPageEntry & ViewModel.ListEntry>
                                 {
-                                    type: "tektite-screen-header-label-segment",
-                                    key: "application-segment",
-                                    child:
+                                    key: "primary",
+                                    type: "tektite-primary-page",
+                                    children:
                                     {
-                                        type: "tektite-screen-header-segment-core",
-                                        data:
+                                        body: <ViewModel.PrimaryPageBodyEntry>
                                         {
-                                            icon: "application-icon",
-                                            title: config.applicationTitle,
+                                            type: "tektite-primary-page-body",
+                                            children:
+                                            {
+                                                board: "welcome-board",
+                                                // operators: "welcome-operators",
+                                                operators: <ViewModel.VerticalButtonListEntry>
+                                                {
+                                                    type: "tektite-vertical-button-list",
+                                                    children: Type.applicationIdList.map
+                                                    (
+                                                        (i: Type.ApplicationType) => <ViewModel.LinkButtonEntry & ViewModel.ListEntry>
+                                                        ({
+                                                            key: i,
+                                                            type: "tektite-link-button",
+                                                            data:
+                                                            {
+                                                                className: "tektite-link-button",
+                                                                href: tektite.params.makeUrl({ application: i }),
+                                                            },
+                                                            child: <ViewModel.ButtonEntry>
+                                                            {
+                                                                type: "tektite-button",
+                                                                data:
+                                                                {
+                                                                    className: "tektite-default-button tektite-main-button tektite-long-button",
+                                                                },
+                                                                child: <ViewModel.LabelSpanEntry>
+                                                                {
+                                                                    type: "tektite-label-span",
+                                                                    data:
+                                                                    {
+                                                                        text: Type.applicationList[i].title,
+                                                                    }
+                                                                },
+                                                            },
+                                                        }),
+                                                    )
+                                                }
+                                            },
                                         },
                                     },
                                 },
-                            ],
-                        },
-                        "screen-header-operator":
-                        {
-                            "type": "tektite-screen-header-operator",
-                            children:
-                            {
-                            },
-                        },
-                    }
-                },
-                "screen-body":
-                {
-                    type: "tektite-screen-body",
-                    data:
-                    {
-                        className: "welcome-screen",
-                    },
-                    children:
-                    [
-                        <ViewModel.PrimaryPageEntry & ViewModel.ListEntry>
-                        {
-                            key: "primary",
-                            type: "tektite-primary-page",
-                            children:
-                            {
-                                body: <ViewModel.PrimaryPageBodyEntry>
                                 {
-                                    type: "tektite-primary-page-body",
-                                    children:
-                                    {
-                                        board: "welcome-board",
-                                        // operators: "welcome-operators",
-                                        operators: <ViewModel.VerticalButtonListEntry>
-                                        {
-                                            type: "tektite-vertical-button-list",
-                                            children: Type.applicationIdList.map
-                                            (
-                                                (i: Type.ApplicationType) => <ViewModel.LinkButtonEntry & ViewModel.ListEntry>
-                                                ({
-                                                    key: i,
-                                                    type: "tektite-link-button",
-                                                    data:
-                                                    {
-                                                        className: "tektite-link-button",
-                                                        href: tektite.params.makeUrl({ application: i }),
-                                                    },
-                                                    child: <ViewModel.ButtonEntry>
-                                                    {
-                                                        type: "tektite-button",
-                                                        data:
-                                                        {
-                                                            className: "tektite-default-button tektite-main-button tektite-long-button",
-                                                        },
-                                                        child: <ViewModel.LabelSpanEntry>
-                                                        {
-                                                            type: "tektite-label-span",
-                                                            data:
-                                                            {
-                                                                text: Type.applicationList[i].title,
-                                                            }
-                                                        },
-                                                    },
-                                                }),
-                                            )
-                                        }
-                                    },
+                                    key: "trail",
+                                    type: "tektite-trail-page",
+                                    child: "welcome-footer",
                                 },
-                            },
+                            ]
                         },
-                        {
-                            key: "trail",
-                            type: "tektite-trail-page",
-                            child: "welcome-footer",
-                        },
-                    ]
-                },
-                "screen-bar": "tektite-screen-bar",
-                "screen-toast": "tektite-screen-toast",
+                        "screen-bar": "tektite-screen-bar",
+                        "screen-toast": "tektite-screen-toast",
+                    }
+                }
             }
         };
         tektite.viewModel.set(model);
-        minamo.dom.replaceChildren
-        (
-            document.body,
-            await tektite.viewRenderer.renderRoot(),
-            dom => (<Element>dom)?.classList?.contains?.("tektite-foundation")
-        );
-        // Render.updateStyle();
-        // Render.updateProgressBarStyle();
-        // await Render.showPage();
+        await tektite.viewRenderer.update("storage");
         if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
         {
             tektite.screen.toast.make
