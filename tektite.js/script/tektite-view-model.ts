@@ -18,7 +18,9 @@ export module ViewModel
         path: "/root",
         entryType,
     });
-    export const getLeafKey = (path: PathType) => path.path.split("/").pop();
+    export const getPathLeaf = (path: PathType) => path.path.split("/").pop();
+    let uniqueKeySource = 0;
+    export const makeUniqueKey = () => `unique:${uniqueKeySource++}`;
     export interface StrictEntry
     {
         type: string;
@@ -373,24 +375,25 @@ export module ViewModel
                 const data = makeSureStrictEntry(path, dataOrType);
                 if (( ! hasError(path, data)) && data)
                 {
-                    const keys = path.path.split("/").filter(i => 0 < i.length);
-                    if ("" !== keys[0])
+                    const keys = path.path.split("/");
+                    if ("" !== keys[0] || "root" !== keys[1])
                     {
                         console.error(`tektite-view-model: Invalid path - path:${path.path}`);
                     }
                     else
                     {
                         keys.shift();
+                        keys.shift();
                         let current: StrictEntry | null;
                         if (1 < keys.length)
                         {
-                            current = { children: [ this.data ] } as StrictEntry;
+                            current = this.data as StrictEntry;
                             while(1 < keys.length)
                             {
                                 current = getChildFromModelKey(current, keys[0]);
                                 if ( ! current)
                                 {
-                                    console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                                    console.error(`tektite-view-model: Path not found - path:${path.path}, part:${keys[0]}`);
                                     break;
                                 }
                                 keys.shift();

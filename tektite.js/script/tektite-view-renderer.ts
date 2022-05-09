@@ -123,9 +123,9 @@ export module ViewRenderer
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        update = (event: Tektite.UpdateScreenEventEype) =>
+        update = async (event: Tektite.UpdateScreenEventEype) =>
         {
-            this.renderRoot(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
+            await this.renderRoot(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
             this.eventHandlers[event]?.forEach
             (
                 path =>
@@ -138,7 +138,7 @@ export module ViewRenderer
                     }
                 }
             );
-            this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
+            await this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
         };
         pushEventHandler = (event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
         {
@@ -151,48 +151,63 @@ export module ViewRenderer
         public onLoad = () =>
         {
         };
+        private isRendering = false;
         public renderRoot = async (data: ViewModel.StrictEntry | null = this.tektite.viewModel.get()) =>
         {
-            let result: DomType | null = null;
+            let result: DomType | "rendering" | null = null;
             const json = JSON.stringify(data);
-            if (this.previousData !== json)
+            if (this.previousData === json)
             {
-                const data = JSON.parse(json) as ViewModel.StrictEntry;
-                if ( ! ViewModel.hasError(ViewModel.makeRootPath(), data))
-                {
-                    //  pre-process
-                    this.activePathList = [ ];
-                    this.eventHandlers = { };
-                    const oldCache: { [path: string]:DomCache } = { };
-                    minamo.core.objectKeys(this.domCache).forEach
-                    (
-                        path =>
-                        {
-                            const cache = this.domCache[path];
-                            oldCache[path] =
-                            {
-                                dom: cache.dom,
-                                json: cache.json,
-                                childrenKeys: minamo.core.simpleDeepCopy(cache.childrenKeys),
-                            };
-                        }
-                    );
-                    //  present-process
-                    result = (await this.renderOrCache(ViewModel.makeRootPath(), data))?.dom ?? null;
-                    //  post-process
-                    minamo.core.objectKeys(this.domCache)
-                        .filter(path => this.activePathList.indexOf(path) <= 0)
-                        .forEach(path => delete this.domCache[path]);
-                    minamo.core.objectKeys(oldCache)
-                        .filter(path => oldCache[path].dom !== this.domCache[path]?.dom)
-                        .map(path => oldCache[path].dom)
-                        .forEach(dom => getElementList(dom).forEach(element => element.parentElement?.removeChild(element)));
-                    this.previousData = json;
-                }
+                result = this.getCache(ViewModel.makeRootPath())?.dom ?? null;
+            }
+            else
+            if (this.isRendering)
+            {
+                setTimeout(() => this.update("storage"), 10);
+                result = "rendering";
             }
             else
             {
-                result = this.getCache(ViewModel.makeRootPath())?.dom ?? null;
+                try
+                {
+                    this.isRendering = true;
+                    const data = JSON.parse(json) as ViewModel.StrictEntry;
+                    if ( ! ViewModel.hasError(ViewModel.makeRootPath(), data))
+                    {
+                        //  pre-process
+                        this.activePathList = [ ];
+                        this.eventHandlers = { };
+                        const oldCache: { [path: string]:DomCache } = { };
+                        minamo.core.objectKeys(this.domCache).forEach
+                        (
+                            path =>
+                            {
+                                const cache = this.domCache[path];
+                                oldCache[path] =
+                                {
+                                    dom: cache.dom,
+                                    json: cache.json,
+                                    childrenKeys: minamo.core.simpleDeepCopy(cache.childrenKeys),
+                                };
+                            }
+                        );
+                        //  present-process
+                        result = (await this.renderOrCache(ViewModel.makeRootPath(), data))?.dom ?? null;
+                        //  post-process
+                        minamo.core.objectKeys(this.domCache)
+                            .filter(path => this.activePathList.indexOf(path) <= 0)
+                            .forEach(path => delete this.domCache[path]);
+                        minamo.core.objectKeys(oldCache)
+                            .filter(path => oldCache[path].dom !== this.domCache[path]?.dom)
+                            .map(path => oldCache[path].dom)
+                            .forEach(dom => getElementList(dom).forEach(element => element.parentElement?.removeChild(element)));
+                        this.previousData = json;
+                    }
+                }
+                finally
+                {
+                    this.isRendering = false;
+                }
             }
             return result;
         };
@@ -297,7 +312,7 @@ export module ViewRenderer
                             else
                             {
                                 dom = cache?.dom ?? await this.make(renderer.make);
-                                dom = await renderer?.update?.(this.tektite, path, dom, data?.data, externalData) ?? dom;
+                                dom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
                         }
