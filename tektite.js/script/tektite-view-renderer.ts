@@ -17,7 +17,7 @@ export module ViewRenderer
     export interface DomEntryBase
     {
         updateChildren?:
-            //  simple list
+            //  simple list ( default )
             "append" |
             //  regular list
             string[] |
@@ -163,7 +163,7 @@ export module ViewRenderer
             else
             if (this.isRendering)
             {
-                setTimeout(() => this.update("storage"), 10);
+                setTimeout(() => this.renderRoot(), 10);
                 result = "rendering";
             }
             else
@@ -320,7 +320,7 @@ export module ViewRenderer
                             .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
                         if (0 < childrenKeys.length)
                         {
-                            if (renderer.updateChildren)
+                            if ( ! isContainerEntry(renderer))
                             {
                                 const forceAppend = Array.isArray(data.children ?? []) && this.isSameOrder(oldChildrenKeys, childrenKeys);
                                 const childrenKeyDomMap: { [key:string]: DomType } = { };
@@ -331,7 +331,7 @@ export module ViewRenderer
                                         this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))
                                 );
                                 const container = renderer.getChildModelContainer?.(cache.dom) ?? getPrimaryElement(cache.dom);
-                                if ("append" === renderer.updateChildren)
+                                if (undefined === renderer.updateChildren || "append" === renderer.updateChildren)
                                 {
                                     this.appendChildren(container, childrenKeyDomMap, forceAppend);
                                 }
@@ -656,6 +656,7 @@ export module ViewRenderer
                             element.classList.add(className);
                             await minamo.core.timeout(wait);
                             tektite.viewModel.remove(path);
+                            await this.renderRoot();
                             // // 以下は Safari での CSS バグをクリアする為の細工。本質的には必要の無い呼び出し。
                             // if (this.element.getElementsByClassName("item").length <= 0)
                             // {

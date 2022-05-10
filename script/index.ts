@@ -53,7 +53,7 @@ export module Clockworks
         console.log(`buildTimestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`);
         console.log(`${JSON.stringify(params)}`);
         tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
-        tektite.onLoad();
+        // tektite.onLoad();
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
         const renders: { [type: string ]: ViewRenderer.Entry<any>} =
         {
@@ -230,7 +230,7 @@ export module Clockworks
             }
         };
         tektite.viewModel.set(model);
-        await tektite.viewRenderer.update("storage");
+        await tektite.viewRenderer.renderRoot();
         if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
         {
             tektite.screen.toast.make
