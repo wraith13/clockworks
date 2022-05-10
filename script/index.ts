@@ -233,11 +233,28 @@ export module Clockworks
         await tektite.viewRenderer.renderRoot();
         if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
         {
-            tektite.screen.toast.make
-            ({
-                content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
-                isWideContent: true,
-            });
+            const key = ViewModel.makeUniqueKey();
+            tektite.viewModel.set
+            (
+                { type: "path", path: `/root/screen/screen-toast/${key}`, },
+                <ViewModel.ToastItemEntry>
+                {
+                    type: "tektite-toast-item",
+                    key,
+                    data:
+                    {
+                        content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
+                        isWideContent: true,
+                    }
+                }
+            );
+            await tektite.viewRenderer.renderRoot();
+
+            // tektite.screen.toast.make
+            // ({
+            //     content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
+            //     isWideContent: true,
+            // });
         }
     };
 }

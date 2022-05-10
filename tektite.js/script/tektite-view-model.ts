@@ -463,6 +463,31 @@ export module ViewModel
                 }
             }
         }
+        public setListEntry(path: PathType, data: Entry): void;
+        public setListEntry(path: PathType, key: string, data: Entry): void;
+        public setListEntry(path: PathType, keyOrdata: Entry | string, dataOrNothing?: Entry): void
+        {
+            if (dataOrNothing)
+            {
+                if ("string" === typeof keyOrdata)
+                {
+                    const key = keyOrdata;
+                    const data = dataOrNothing as ListEntry;
+                    data.key = key;
+                    this.set(makePath(path, key), data);
+                }
+                else
+                {
+                    console.error(`tektite-view-model: Mismatch setListEntry() arguments - path:${path.path}, keyOrdata:${JSON.stringify(keyOrdata)}, dataOrNothing:${JSON.stringify(dataOrNothing)}`);
+                }
+            }
+            else
+            {
+                const key = makeUniqueKey();
+                const data = keyOrdata as ListEntry;
+                this.setListEntry(path, key, data);
+            }
+        }
         public remove = (path: PathType) =>
         {
             if ( ! hasErrorPath(path))
