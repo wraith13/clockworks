@@ -405,6 +405,75 @@ export module Tektite
             }
             window.onpopstate = () => this.params.showPage(location.href);
         };
+        public makeToast =
+        (
+            data:
+            {
+                content: minamo.dom.Source,
+                backwardOperator?: minamo.dom.Source,
+                forwardOperator?: minamo.dom.Source,
+                isWideContent?: boolean,
+                wait?: number,
+            }
+        ) =>
+        {
+            const toastPath = <ViewModel.PathType>{ type: "path", path: `/root/screen/screen-toast`, };
+            const { path, model } = this.viewModel.setListEntry
+            (
+                toastPath,
+                <ViewModel.ToastItemEntry>
+                {
+                    type: "tektite-toast-item",
+                    data:
+                    {
+                        className: "tektite-slide-up-in",
+                        content: data.content,
+                        backwardOperator: data.backwardOperator,
+                        forwardOperator: data.forwardOperator,
+                        isWideContent: data.isWideContent,
+                        wait: data.wait,
+                    }
+                }
+            );
+            const hideRaw = async (className: string, wait: number) =>
+            {
+                if (null !== result.timer)
+                {
+                    clearTimeout(result.timer);
+                    result.timer = null;
+                }
+                if (this.viewModel.exists(path))
+                {
+                    model.data.className = className;
+                    this.viewRenderer.renderRoot();
+                    await minamo.core.timeout(wait);
+                    if (this.viewModel.exists(path))
+                    {
+                        this.viewModel.remove(path);
+                    }
+                }
+            };
+            const wait = data.wait ?? 5000;
+            const result =
+            {
+                model,
+                timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
+                hide: async () => await hideRaw("tektite-slide-down-out", 250),
+            };
+            setTimeout
+            (
+                () =>
+                {
+                    if ("tektite-slide-up-in" === model.data.className)
+                    {
+                        model.data.className = "";
+                        this.viewRenderer.renderRoot();
+                    }
+                },
+                250
+            );
+            return result;
+        }
     }
     export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<ParamTypes<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>>) =>
         new Tektite<ParamTypes<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>>(params);

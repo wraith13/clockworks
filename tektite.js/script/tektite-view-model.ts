@@ -227,6 +227,7 @@ export module ViewModel
         type: "tektite-toast-item";
         data:
         {
+            className: string,
             content: minamo.dom.Source,
             backwardOperator?: minamo.dom.Source,
             forwardOperator?: minamo.dom.Source,
