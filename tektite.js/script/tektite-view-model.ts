@@ -463,29 +463,32 @@ export module ViewModel
                 }
             }
         }
-        public setListEntry(path: PathType, data: Entry): void;
-        public setListEntry(path: PathType, key: string, data: Entry): void;
-        public setListEntry(path: PathType, keyOrdata: Entry | string, dataOrNothing?: Entry): void
+        public setListEntry<Model extends Entry>(path: PathType, data: Model): { path: PathType, model: Model & ListEntry };
+        public setListEntry<Model extends Entry>(path: PathType, key: string, data: Model): { path: PathType, model: Model & ListEntry };
+        public setListEntry<Model extends Entry>(path: PathType, keyOrdata: Model | string, dataOrNothing?: Model): { path: PathType, model: Model & ListEntry }
         {
             if (dataOrNothing)
             {
                 if ("string" === typeof keyOrdata)
                 {
                     const key = keyOrdata;
-                    const data = dataOrNothing as ListEntry;
+                    const data = dataOrNothing as Model & ListEntry;
                     data.key = key;
-                    this.set(makePath(path, key), data);
+                    const result = { path: makePath(path, key), model: data, };
+                    this.set(result.path, result.model);
+                    return result;
                 }
                 else
                 {
                     console.error(`tektite-view-model: Mismatch setListEntry() arguments - path:${path.path}, keyOrdata:${JSON.stringify(keyOrdata)}, dataOrNothing:${JSON.stringify(dataOrNothing)}`);
+                    return null as unknown as { path: PathType, model: Model & ListEntry }; // ここに到達することは基本的にあり得ないので null を { path: PathType, model: Model & ListEntry } として返してしまう。
                 }
             }
             else
             {
                 const key = makeUniqueKey();
-                const data = keyOrdata as ListEntry;
-                this.setListEntry(path, key, data);
+                const data = keyOrdata as Model;
+                return this.setListEntry(path, key, data);
             }
         }
         public remove = (path: PathType) =>
@@ -542,6 +545,31 @@ export module ViewModel
                     }
                 }
             }
+        };
+        public exists = (path: PathType): boolean =>
+        {
+            let current: StrictEntry | null = null;
+            const keys = path.path.split("/");//.filter(i => 0 < i.length);
+            if ("" !== keys[0] || ! isValidPath(path))
+            {
+                console.error(`tektite-view-model: Invalid path - path:${path.path}`);
+            }
+            else
+            {
+                keys.shift();
+                current = { type: "ground", children: { root: this.data } } as StrictEntry;
+                while(0 < keys.length)
+                {
+                    current = getChildFromModelKey(current, keys[0]);
+                    if ( ! current)
+                    {
+                        // console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                        break;
+                    }
+                    keys.shift();
+                }
+            }
+            return current?.type === (path.entryType ?? current?.type);
         };
         public get = (path: PathType | null = null) =>
         {
