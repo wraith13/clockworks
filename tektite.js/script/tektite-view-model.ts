@@ -608,9 +608,16 @@ export module ViewModel
         public getWithType = <Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model | null =>
         {
             const model = this.get(path);
-            if (isEntry(<Model["type"]>(path.entryType))(model))
+            if (model)
             {
-                return model;
+                if (isEntry(<Model["type"]>(path.entryType))(model))
+                {
+                    return model;
+                }
+                else
+                {
+                    console.error(`tektite-view-model: Unmatch type - path:${path.path}, entryType:${path.entryType}, model:${JSON.stringify(model)}`);
+                }
             }
             return null;
         }
