@@ -426,7 +426,7 @@ export module Tektite
                     type: "tektite-toast-item",
                     data:
                     {
-                        className: "tektite-slide-up-in",
+                        state: "slide-in",
                         content: data.content,
                         backwardOperator: data.backwardOperator,
                         forwardOperator: data.forwardOperator,
@@ -435,43 +435,24 @@ export module Tektite
                     }
                 }
             );
-            const hideRaw = async (className: string, wait: number) =>
-            {
-                if (null !== result.timer)
-                {
-                    clearTimeout(result.timer);
-                    result.timer = null;
-                }
-                if (this.viewModel.exists(path))
-                {
-                    model.data.className = className;
-                    this.viewRenderer.renderRoot();
-                    await minamo.core.timeout(wait);
-                    if (this.viewModel.exists(path))
-                    {
-                        this.viewModel.remove(path);
-                    }
-                }
-            };
-            const wait = data.wait ?? 5000;
             const result =
             {
+                path,
                 model,
-                timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
-                hide: async () => await hideRaw("tektite-slide-down-out", 250),
-            };
-            setTimeout
-            (
-                () =>
+                hide: async () =>
                 {
-                    if ("tektite-slide-up-in" === model.data.className)
+                    if (this.viewModel.exists(path))
                     {
-                        model.data.className = "";
-                        this.viewRenderer.renderRoot();
+                        const current = this.viewModel.get(path);
+                        if (ViewModel.isEntry<ViewModel.ToastItemEntry>("tektite-toast-item")(current))
+                        {
+                            current.data.state = "slide-out";
+                            this.viewModel.set(path, current);
+                            await this.viewRenderer.renderRoot();
+                        }
                     }
                 },
-                250
-            );
+            }
             return result;
         }
     }

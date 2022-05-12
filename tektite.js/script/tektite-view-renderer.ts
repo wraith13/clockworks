@@ -623,12 +623,40 @@ export module ViewRenderer
                 make:
                 {
                     tag: "div",
-                    className: "tektite-item tektite-slide-up-in",
+                    className: "tektite-item",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ToastItemEntry["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModel.ToastItemEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom);
-                    minamo.dom.setProperty(element, "className", `tektite-item ${data.className}`);
+                    const stateMap =
+                    {
+                        "slide-in":
+                        {
+                            className: "tektite-slide-up-in",
+                            wait: 250,
+                            next: <ViewModel.ToastStateType>"show",
+                        },
+                        "show":
+                        {
+                            className: "",
+                            wait: data.wait ?? 5000,
+                            next: <ViewModel.ToastStateType>"slow-slide-out",
+                        },
+                        "slow-slide-out":
+                        {
+                            className: "tektite-slow-slide-down-out",
+                            wait: 500,
+                            next: null,
+                        },
+                        "slide-out":
+                        {
+                            className: "tektite-slide-down-out",
+                            wait: 250,
+                            next: null,
+                        },
+                    };
+                    const stateData = stateMap[data.state];
+                    minamo.dom.setProperty(element, "className", `tektite-item ${stateData.className}`);
                     minamo.dom.replaceChildren
                     (
                         element,
@@ -644,36 +672,38 @@ export module ViewRenderer
                             data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
                         ]
                     );
-                    // const hideRaw = async (className: string, wait: number) =>
-                    // {
-                    //     if (null !== result.timer)
-                    //     {
-                    //         clearTimeout(result.timer);
-                    //         result.timer = null;
-                    //     }
-                    //     if (element.parentElement)
-                    //     {
-                    //         element.classList.remove("tektite-slide-up-in");
-                    //         element.classList.add(className);
-                    //         await minamo.core.timeout(wait);
-                    //         tektite.viewModel.remove(path);
-                    //         await this.renderRoot();
-                    //         // // 以下は Safari での CSS バグをクリアする為の細工。本質的には必要の無い呼び出し。
-                    //         // if (this.element.getElementsByClassName("item").length <= 0)
-                    //         // {
-                    //         //     await minamo.core.timeout(10);
-                    //         //     tektite.screen.update("operate");
-                    //         // }
-                    //     }
-                    // };
-                    // const wait = data.wait ?? 5000;
-                    // const result =
-                    // {
-                    //     // dom,
-                    //     timer: 0 < wait ? setTimeout(() => hideRaw("tektite-slow-slide-down-out", 500), wait): null,
-                    //     // hide: async () => await hideRaw("tektite-slide-down-out", 250),
-                    // };
-                    // setTimeout(() => element.classList.remove("tektite-slide-up-in"), 250);
+                    if (0 < stateData.wait)
+                    {
+                        setTimeout
+                        (
+                            async () =>
+                            {
+                                if (tektite.viewModel.exists(path))
+                                {
+                                    if (null === stateData.next)
+                                    {
+                                        tektite.viewModel.remove(path);
+                                        await this.renderRoot();
+                                    }
+                                    else
+                                    {
+                                        const current = tektite.viewModel.get(path);
+                                        if
+                                        (
+                                            ViewModel.isEntry<ViewModel.ToastItemEntry>("tektite-toast-item")(current) &&
+                                            current.data.state === data.state
+                                        )
+                                        {
+                                            current.data.state = stateData.next;
+                                            tektite.viewModel.set(path, current);
+                                            await this.renderRoot();
+                                        }
+                                    }
+                                }
+                            },
+                            stateData.wait
+                        );
+                    }
                     return dom;
                 },
                 eventHandlers:

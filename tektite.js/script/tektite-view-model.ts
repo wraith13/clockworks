@@ -222,12 +222,13 @@ export module ViewModel
         type: "tektite-screen-toast";
         children: ToastItemEntry[];
     }
+    export type ToastStateType = "slide-in" | "show" | "slow-slide-out" | "slide-out";
     export interface ToastItemEntry extends ListEntry
     {
         type: "tektite-toast-item";
         data:
         {
-            className: string,
+            state: ToastStateType,
             content: minamo.dom.Source,
             backwardOperator?: minamo.dom.Source,
             forwardOperator?: minamo.dom.Source,
