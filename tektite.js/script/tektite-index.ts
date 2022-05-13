@@ -441,15 +441,12 @@ export module Tektite
                 model,
                 hide: async () =>
                 {
-                    if (this.viewModel.exists(path))
+                    const current = this.viewModel.getOrNullWithType<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
+                    if (current)
                     {
-                        const current = this.viewModel.get(path);
-                        if (ViewModel.isEntry<ViewModel.ToastItemEntry>("tektite-toast-item")(current))
-                        {
-                            current.data.state = "slide-out";
-                            this.viewModel.set(path, current);
-                            await this.viewRenderer.renderRoot();
-                        }
+                        current.data.state = "slide-out";
+                        this.viewModel.set(path, current);
+                        await this.viewRenderer.renderRoot();
                     }
                 },
             }

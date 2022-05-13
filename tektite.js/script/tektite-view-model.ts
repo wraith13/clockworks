@@ -234,7 +234,7 @@ export module ViewModel
             forwardOperator?: minamo.dom.Source,
             isWideContent?: boolean,
             wait?: number,
-        }
+        };
     }
     export interface VerticalButtonListEntry extends EntryBase
     {
@@ -573,7 +573,7 @@ export module ViewModel
             }
             return current?.type === (path.entryType ?? current?.type);
         };
-        public get = (path: PathType | null = null) =>
+        private getRaw = (path: PathType | null = null, isOrNull: boolean): StrictEntry | null =>
         {
             if ( ! path)
             {
@@ -596,7 +596,10 @@ export module ViewModel
                         current = getChildFromModelKey(current, keys[0]);
                         if ( ! current)
                         {
-                            console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                            if (isOrNull)
+                            {
+                                console.error(`tektite-view-model: Path not found - path:${path.path}`);
+                            }
                             break;
                         }
                         keys.shift();
@@ -605,12 +608,34 @@ export module ViewModel
                 return current?.type === (path.entryType ?? current?.type) ? current: null;
             }
         };
-        public getWithType = <Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model | null =>
+        public get = (path: PathType | null = null): StrictEntry | null => this.getRaw(path, false);
+        public getWithType<Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model & StrictEntry | null;
+        public getWithType<Model extends EntryBase>(path: PathType, type: Model["type"]): Model & StrictEntry | null;
+        public getWithType<Model extends EntryBase>(path: PathType, type?: Model["type"]): Model & StrictEntry | null
         {
             const model = this.get(path);
             if (model)
             {
-                if (isEntry(<Model["type"]>(path.entryType))(model))
+                if (isEntry(<Model["type"]>(type ?? path.entryType))(model))
+                {
+                    return model;
+                }
+                else
+                {
+                    console.error(`tektite-view-model: Unmatch type - path:${path.path}, entryType:${path.entryType}, model:${JSON.stringify(model)}`);
+                }
+            }
+            return null;
+        }
+        public getOrNull = (path: PathType | null = null): StrictEntry | null => this.getRaw(path, true);
+        public getOrNullWithType<Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model & StrictEntry | null;
+        public getOrNullWithType<Model extends EntryBase>(path: PathType, type: Model["type"]): Model & StrictEntry | null;
+        public getOrNullWithType<Model extends EntryBase>(path: PathType, type?: Model["type"]): Model & StrictEntry | null
+        {
+            const model = this.getOrNull(path);
+            if (model)
+            {
+                if (isEntry(<Model["type"]>(type ?? path.entryType))(model))
                 {
                     return model;
                 }

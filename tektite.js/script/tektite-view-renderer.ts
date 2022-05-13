@@ -678,7 +678,8 @@ export module ViewRenderer
                         (
                             async () =>
                             {
-                                if (tektite.viewModel.exists(path))
+                                const current = tektite.viewModel.getOrNullWithType<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
+                                if (current)
                                 {
                                     if (null === stateData.next)
                                     {
@@ -686,18 +687,11 @@ export module ViewRenderer
                                         await this.renderRoot();
                                     }
                                     else
+                                    if (current.data.state === data.state)
                                     {
-                                        const current = tektite.viewModel.get(path);
-                                        if
-                                        (
-                                            ViewModel.isEntry<ViewModel.ToastItemEntry>("tektite-toast-item")(current) &&
-                                            current.data.state === data.state
-                                        )
-                                        {
-                                            current.data.state = stateData.next;
-                                            tektite.viewModel.set(path, current);
-                                            await this.renderRoot();
-                                        }
+                                        current.data.state = stateData.next;
+                                        tektite.viewModel.set(path, current);
+                                        await this.renderRoot();
                                     }
                                 }
                             },
