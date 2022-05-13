@@ -130,7 +130,7 @@ export module ViewRenderer
             (
                 path =>
                 {
-                    const type = this.tektite.viewModel.get(path)?.type;
+                    const type = this.tektite.viewModel.getUnknown(path)?.type;
                     if (type)
                     {
                         ((<DomEntry<any>>this.renderer[type])?.eventHandlers?.[event] as EventHandler<unknown>)
@@ -152,7 +152,7 @@ export module ViewRenderer
         {
         };
         private isRendering = false;
-        public renderRoot = async (data: ViewModel.StrictEntry | null = this.tektite.viewModel.get()) =>
+        public renderRoot = async (data: ViewModel.StrictEntry | null = this.tektite.viewModel.getUnknown()) =>
         {
             let result: DomType | "rendering" | null = null;
             const json = JSON.stringify(data);
@@ -251,7 +251,7 @@ export module ViewRenderer
                     getExternalDataPath;
                 pathList.forEach
                 (
-                    path => result[path.path] = this.tektite.viewModel.get(path)?.data
+                    path => result[path.path] = this.tektite.viewModel.getUnknown(path)?.data
                 )
             }
             return result;
@@ -678,7 +678,7 @@ export module ViewRenderer
                         (
                             async () =>
                             {
-                                const current = tektite.viewModel.getOrNullWithType<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
+                                const current = tektite.viewModel.getOrNull<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
                                 if (current)
                                 {
                                     if (null === stateData.next)

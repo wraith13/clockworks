@@ -608,12 +608,12 @@ export module ViewModel
                 return current?.type === (path.entryType ?? current?.type) ? current: null;
             }
         };
-        public get = (path: PathType | null = null): StrictEntry | null => this.getRaw(path, false);
-        public getWithType<Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model & StrictEntry | null;
-        public getWithType<Model extends EntryBase>(path: PathType, type: Model["type"]): Model & StrictEntry | null;
-        public getWithType<Model extends EntryBase>(path: PathType, type?: Model["type"]): Model & StrictEntry | null
+        public getUnknown = (path: PathType | null = null): StrictEntry | null => this.getRaw(path, false);
+        public get<Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model & StrictEntry | null;
+        public get<Model extends EntryBase>(path: PathType, type: Model["type"]): Model & StrictEntry | null;
+        public get<Model extends EntryBase>(path: PathType, type?: Model["type"]): Model & StrictEntry | null
         {
-            const model = this.get(path);
+            const model = this.getUnknown(path);
             if (model)
             {
                 if (isEntry(<Model["type"]>(type ?? path.entryType))(model))
@@ -627,12 +627,12 @@ export module ViewModel
             }
             return null;
         }
-        public getOrNull = (path: PathType | null = null): StrictEntry | null => this.getRaw(path, true);
-        public getOrNullWithType<Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model & StrictEntry | null;
-        public getOrNullWithType<Model extends EntryBase>(path: PathType, type: Model["type"]): Model & StrictEntry | null;
-        public getOrNullWithType<Model extends EntryBase>(path: PathType, type?: Model["type"]): Model & StrictEntry | null
+        public getUnknownOrNull = (path: PathType | null = null): StrictEntry | null => this.getRaw(path, true);
+        public getOrNull<Model extends EntryBase>(path: PathType & { entryType: Model["type"] }): Model & StrictEntry | null;
+        public getOrNull<Model extends EntryBase>(path: PathType, type: Model["type"]): Model & StrictEntry | null;
+        public getOrNull<Model extends EntryBase>(path: PathType, type?: Model["type"]): Model & StrictEntry | null
         {
-            const model = this.getOrNull(path);
+            const model = this.getUnknownOrNull(path);
             if (model)
             {
                 if (isEntry(<Model["type"]>(type ?? path.entryType))(model))

@@ -441,7 +441,7 @@ export module Tektite
                 model,
                 hide: async () =>
                 {
-                    const current = this.viewModel.getOrNullWithType<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
+                    const current = this.viewModel.getOrNull<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
                     if (current)
                     {
                         current.data.state = "slide-out";
