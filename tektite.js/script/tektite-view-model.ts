@@ -37,11 +37,8 @@ export module ViewModel
     export type Entry = EntryBase | string;
     export function makeSureStrictEntry(path: PathType, entry: Entry): StrictEntry;
     export function makeSureStrictEntry(path: PathType, entry: null): null;
-    export function makeSureStrictEntry(path: PathType, entry: undefined): undefined;
     export function makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null;
-    export function makeSureStrictEntry(path: PathType, entry: Entry | undefined): StrictEntry | undefined;
-    export function makeSureStrictEntry(path: PathType, entry: Entry | null | undefined): StrictEntry | null | undefined;
-    export function makeSureStrictEntry(path: PathType, entry: Entry | null | undefined): StrictEntry | null | undefined
+    export function makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null
     {
         if ("string" === typeof entry)
         {
@@ -81,7 +78,7 @@ export module ViewModel
                     }
                 }
             }
-            return entry as StrictEntry | null | undefined;
+            return entry as StrictEntry | null;
         }
     }
     export const isEntry = <Model extends (StrictEntry | EntryBase)>(type: Model["type"]) =>
@@ -229,12 +226,14 @@ export module ViewModel
         data:
         {
             state: ToastStateType,
-            content: minamo.dom.Source,
-            backwardOperator?: minamo.dom.Source,
-            forwardOperator?: minamo.dom.Source,
-            isWideContent?: boolean,
             wait?: number,
         };
+        children:
+        {
+            content: EntryOrType<EntryBase>,
+            backwardOperator?: EntryOrType<EntryBase>,
+            forwardOperator?: EntryOrType<EntryBase>,
+        }
     }
     export interface VerticalButtonListEntry extends EntryBase
     {
@@ -371,10 +370,10 @@ export module ViewModel
         public set(path: PathType, dataOrType: Entry): void;
         public set(pathOrdata: PathType | Entry, dataOrType?: Entry): void
         {
-            if (isPathType(pathOrdata))
+            if (isPathType(pathOrdata) && undefined !== dataOrType)
             {
                 const path = pathOrdata;
-                const data = makeSureStrictEntry(path, dataOrType);
+                const data = minamo.core.simpleDeepCopy(makeSureStrictEntry(path, dataOrType));
                 if (( ! hasError(path, data)) && data)
                 {
                     const keys = path.path.split("/");
@@ -458,7 +457,7 @@ export module ViewModel
             else
             {
                 const path = makeRootPath();
-                const data = makeSureStrictEntry(path, pathOrdata);
+                const data = minamo.core.simpleDeepCopy(makeSureStrictEntry(path, pathOrdata));
                 if ( ! hasError(path, data))
                 {
                     this.data = data;
@@ -605,7 +604,7 @@ export module ViewModel
                         keys.shift();
                     }
                 }
-                return current?.type === (path.entryType ?? current?.type) ? current: null;
+                return minamo.core.simpleDeepCopy(current?.type === (path.entryType ?? current?.type) ? current: null);
             }
         };
         public getUnknown = (path: PathType | null = null): StrictEntry | null => this.getRaw(path, false);

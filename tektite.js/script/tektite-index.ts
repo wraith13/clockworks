@@ -409,9 +409,9 @@ export module Tektite
         (
             data:
             {
-                content: minamo.dom.Source,
-                backwardOperator?: minamo.dom.Source,
-                forwardOperator?: minamo.dom.Source,
+                content: ViewModel.EntryOrType<ViewModel.EntryBase>,
+                backwardOperator?: ViewModel.EntryOrType<ViewModel.EntryBase>,
+                forwardOperator?: ViewModel.EntryOrType<ViewModel.EntryBase>,
                 isWideContent?: boolean,
                 wait?: number,
             }
@@ -427,11 +427,18 @@ export module Tektite
                     data:
                     {
                         state: "slide-in",
+                        wait: data.wait,
+                    },
+                    children: data.isWideContent ?
+                    {
                         content: data.content,
                         backwardOperator: data.backwardOperator,
                         forwardOperator: data.forwardOperator,
-                        isWideContent: data.isWideContent,
-                        wait: data.wait,
+                    }:
+                    {
+                        content: data.content,
+                        backwardOperator: data.backwardOperator ?? Tektite.$span("tektite-dummy")([]),
+                        forwardOperator: data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
                     }
                 }
             );

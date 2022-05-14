@@ -657,21 +657,21 @@ export module ViewRenderer
                     };
                     const stateData = stateMap[data.state];
                     minamo.dom.setProperty(element, "className", `tektite-item ${stateData.className}`);
-                    minamo.dom.replaceChildren
-                    (
-                        element,
-                        data.isWideContent ?
-                        [
-                            data.backwardOperator,
-                            data.content,
-                            data.forwardOperator,
-                        ].filter(i => undefined !== i):
-                        [
-                            data.backwardOperator ?? Tektite.$span("tektite-dummy")([]),
-                            data.content,
-                            data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
-                        ]
-                    );
+                    // minamo.dom.replaceChildren
+                    // (
+                    //     element,
+                    //     data.isWideContent ?
+                    //     [
+                    //         data.backwardOperator,
+                    //         data.content,
+                    //         data.forwardOperator,
+                    //     ].filter(i => undefined !== i):
+                    //     [
+                    //         data.backwardOperator ?? Tektite.$span("tektite-dummy")([]),
+                    //         data.content,
+                    //         data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
+                    //     ]
+                    // );
                     if (0 < stateData.wait)
                     {
                         setTimeout
@@ -700,6 +700,7 @@ export module ViewRenderer
                     }
                     return dom;
                 },
+                updateChildren: [ "backwardOperator", "content", "forwardOperator" ],
                 eventHandlers:
                 {
         
