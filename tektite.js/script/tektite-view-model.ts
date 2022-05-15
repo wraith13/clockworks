@@ -206,6 +206,14 @@ export module ViewModel
     {
         type: "tektite-primary-page-footer";
     }
+    export interface PrimaryPageFooterDownPageLinkEntry extends EntryBase
+    {
+        type: "tektite-primary-page-footer-down-page-link";
+        data?:
+        {
+            isStrictShowPrimaryPage: boolean;
+        }
+    }
     export interface TrailPageEntry extends EntryBase
     {
         type: "tektite-trail-page";
@@ -246,7 +254,7 @@ export module ViewModel
         data:
         {
             className?: string;
-            onclick?: (event: MouseEvent) => unknown;
+            // onclick?: (event: MouseEvent) => unknown;
         };
     }
     export interface LinkButtonEntry extends EntryBase

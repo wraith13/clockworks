@@ -570,6 +570,31 @@ export module ViewRenderer
                 make: Tektite.$div("tektite-page-footer")([]),
                 updateChildren: "append",
             },
+            "tektite-primary-page-footer-down-page-link":
+            {
+                make: async () => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    const element = getPrimaryElement(dom);
+                    minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", ! (data?.isStrictShowPrimaryPage ?? true));
+                    return dom;
+                },
+                // eventHandlers:
+                // {
+                //     "scroll": () => { },
+                //     "click": () =>
+                //     {
+                //         if (this.isStrictShowPrimaryPage())
+                //         {
+                //             await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
+                //         }
+                //         else
+                //         {
+                //             await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
+                //         }
+                //     },
+                // },
+            },
             "tektite-trail-page":
             {
                 make:

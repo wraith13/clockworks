@@ -214,6 +214,11 @@ export module Clockworks
                                                 }
                                             },
                                         },
+                                        footer: <ViewModel.PrimaryPageFooterEntry>
+                                        {
+                                            type: "tektite-primary-page-footer",
+                                            child: "tektite-primary-page-footer-down-page-link",
+                                        },
                                     },
                                 },
                                 {
