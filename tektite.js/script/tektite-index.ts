@@ -409,7 +409,7 @@ export module Tektite
         (
             data:
             {
-                content: ViewModel.EntryOrType<ViewModel.EntryBase>,
+                content: ViewModel.EntryBase | string,
                 backwardOperator?: ViewModel.EntryOrType<ViewModel.EntryBase>,
                 forwardOperator?: ViewModel.EntryOrType<ViewModel.EntryBase>,
                 isWideContent?: boolean,
@@ -418,6 +418,9 @@ export module Tektite
         ) =>
         {
             const toastPath = <ViewModel.PathType>{ type: "path", path: `/root/screen/screen-toast`, };
+            const content = "string" === typeof data.content ?
+                <ViewModel.VanillaSpanEntry>{ type: "tektite-vanilla-span", data: { innerText: data.content, }, }:
+                data.content;
             const { path, model } = this.viewModel.setListEntry
             (
                 toastPath,
@@ -431,14 +434,14 @@ export module Tektite
                     },
                     children: data.isWideContent ?
                     {
-                        content: data.content,
+                        content,
                         backwardOperator: data.backwardOperator,
                         forwardOperator: data.forwardOperator,
                     }:
                     {
-                        content: data.content,
-                        backwardOperator: data.backwardOperator ?? Tektite.$span("tektite-dummy")([]),
-                        forwardOperator: data.forwardOperator ?? Tektite.$span("tektite-dummy")([]),
+                        content,
+                        backwardOperator: data.backwardOperator ?? "tektite-dummy-span",
+                        forwardOperator: data.forwardOperator ?? "tektite-dummy-span",
                     }
                 }
             );

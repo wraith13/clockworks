@@ -259,6 +259,15 @@ export module ViewModel
         };
         child: ButtonEntry;
     }
+    export interface VanillaSpanEntry extends EntryBase
+    {
+        type: "tektite-vanilla-span";
+        data:
+        {
+            className?: string;
+            innerText: string;
+        };
+    }
     export interface LabelSpanEntry extends EntryBase
     {
         type: "tektite-label-span";

@@ -235,31 +235,10 @@ export module Clockworks
         {
             tektite.makeToast
             ({
-                content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
+                content: `ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`,
                 isWideContent: true,
             });
             await tektite.viewRenderer.renderRoot();
-
-            // tektite.viewModel.setListEntry
-            // (
-            //     { type: "path", path: `/root/screen/screen-toast`, },
-            //     <ViewModel.ToastItemEntry>
-            //     {
-            //         type: "tektite-toast-item",
-            //         data:
-            //         {
-            //             content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
-            //             isWideContent: true,
-            //         }
-            //     }
-            // );
-            // await tektite.viewRenderer.renderRoot();
-
-            // tektite.screen.toast.make
-            // ({
-            //     content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
-            //     isWideContent: true,
-            // });
         }
     };
 }
