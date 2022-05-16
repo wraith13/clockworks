@@ -24,7 +24,7 @@ export module ViewRenderer
             //  custom
             ((dom: DomType, children: { [Key: string]: DomType }, forceAppend: boolean) => Promise<unknown>),
         getChildModelContainer?: (dom: DomType) => Element,
-        eventHandlers?: EventHandlers,
+        eventHandlers?: EventHandlers<any>,
     };
     export interface VolatileDomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBase
     {
@@ -41,8 +41,8 @@ export module ViewRenderer
     export type Entry<ViewModelEntry extends ViewModel.EntryBase> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
     export const isContainerEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is ContainerEntry => "container" === entry.make;
     export const isVolatileDomEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is VolatileDomEntry<ViewModelEntry> => "volatile" === entry.make;
-    export type EventHandler<EventType = Tektite.UpdateScreenEventEype> = (event: EventType, path: ViewModel.PathType) => unknown;
-    export type EventHandlers = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<Key>; }
+    export type EventHandler<T extends Tektite.ParamTypes> = (tektite: Tektite.Tektite<T>, event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) => unknown;
+    export type EventHandlers<T extends Tektite.ParamTypes> = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<T>; }
     export const rootEntry = <DomEntry<ViewModel.RootEntry>>
     {
         make: async () => document.body,
@@ -133,8 +133,8 @@ export module ViewRenderer
                     const type = this.tektite.viewModel.getUnknown(path)?.type;
                     if (type)
                     {
-                        ((<DomEntry<any>>this.renderer[type])?.eventHandlers?.[event] as EventHandler<unknown>)
-                            ?.(event, path)
+                        ((<DomEntry<any>>this.renderer[type])?.eventHandlers?.[event])
+                            ?.(this.tektite, event, path)
                     }
                 }
             );
@@ -579,21 +579,30 @@ export module ViewRenderer
                     minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", ! (data?.isStrictShowPrimaryPage ?? true));
                     return dom;
                 },
-                // eventHandlers:
-                // {
-                //     "scroll": () => { },
-                //     "click": () =>
-                //     {
-                //         if (this.isStrictShowPrimaryPage())
-                //         {
-                //             await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
-                //         }
-                //         else
-                //         {
-                //             await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
-                //         }
-                //     },
-                // },
+                eventHandlers:
+                {
+                    "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
+                    {
+                        const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
+                        if (model)
+                        {
+                            const isStrictShowPrimaryPage = this.isStrictShowPrimaryPage();
+                            (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
+                                .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
+                        }
+                    }
+                    "click": <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
+                    {
+                        if (this.isStrictShowPrimaryPage())
+                        {
+                            await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
+                        }
+                        else
+                        {
+                            await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
+                        }
+                    },
+                },
             },
             "tektite-trail-page":
             {
