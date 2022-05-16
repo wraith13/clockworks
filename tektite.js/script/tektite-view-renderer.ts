@@ -586,14 +586,14 @@ export module ViewRenderer
                         const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
                         if (model)
                         {
-                            const isStrictShowPrimaryPage = this.isStrictShowPrimaryPage();
+                            const isStrictShowPrimaryPage = tektite.screen.isStrictShowPrimaryPage();
                             (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
                                 .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
                         }
                     }
-                    "click": <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
+                    "click": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
                     {
-                        if (this.isStrictShowPrimaryPage())
+                        if (tektite.screen.isStrictShowPrimaryPage())
                         {
                             await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
                         }
