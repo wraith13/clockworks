@@ -573,9 +573,23 @@ export module ViewRenderer
             "tektite-primary-page-footer-down-page-link":
             {
                 make: async () => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    const element = getPrimaryElement(dom);
+                    const element = getPrimaryElement(dom) as HTMLDivElement;
+                    if (null === element.onclick)
+                    {
+                        element.onclick = async () =>
+                        {
+                            if (tektite.screen.isStrictShowPrimaryPage())
+                            {
+                                await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
+                            }
+                            else
+                            {
+                                await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
+                            }
+                        }
+                    }
                     minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", ! (data?.isStrictShowPrimaryPage ?? true));
                     return dom;
                 },
@@ -591,18 +605,18 @@ export module ViewRenderer
                                 .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
                             tektite.viewModel.set(path, model);
                         }
-                    }
-                    "click": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
-                    {
-                        if (tektite.screen.isStrictShowPrimaryPage())
-                        {
-                            await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
-                        }
-                        else
-                        {
-                            await this.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
-                        }
                     },
+                    // "click": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
+                    // {
+                    //     if (tektite.screen.isStrictShowPrimaryPage())
+                    //     {
+                    //         await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
+                    //     }
+                    //     else
+                    //     {
+                    //         await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
+                    //     }
+                    // },
                 },
             },
             "tektite-trail-page":
