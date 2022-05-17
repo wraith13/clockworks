@@ -589,6 +589,7 @@ export module ViewRenderer
                             const isStrictShowPrimaryPage = tektite.screen.isStrictShowPrimaryPage();
                             (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
                                 .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
+                            tektite.viewModel.set(path, model);
                         }
                     }
                     "click": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
