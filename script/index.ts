@@ -245,6 +245,12 @@ export module Clockworks
             });
             await tektite.viewRenderer.renderRoot();
         }
+        document.getElementById("tektite-screen-body")?.addEventListener
+        (
+            "scroll",
+            () => tektite.viewRenderer.update("scroll"),
+        );
+
     };
 }
 export const tektite = Tektite.make<Type.PageParams, Resource.KeyType, typeof localeEn | typeof localeJa, typeof Clockworks.localeMaster>
