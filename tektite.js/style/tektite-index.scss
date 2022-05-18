@@ -266,7 +266,7 @@
                             }
                         }
                     }
-                    &:not(.tektite-reverse-down-page-link).tektite-icon
+                    &:not(.tektite-reverse-down-page-link) .tektite-icon
                     {
                         transform: scale(1, -1);
                     }
