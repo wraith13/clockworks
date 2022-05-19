@@ -7,8 +7,9 @@ import { Header } from "./tektite-header";
 import { Menu } from "./tektite-menu";
 import { Key as KeyModule } from "./tektite-key";
 import tektiteResource from "../images.json";
-import { ViewModel } from "./tektite-view-model.js";
+import { ViewModel } from "./tektite-view-model";
 import { ViewRenderer } from "./tektite-view-renderer";
+import { ViewCommand } from "./tektite-view-command";
 export module Tektite
 {
     export const $make = minamo.dom.make;
@@ -106,6 +107,7 @@ export module Tektite
         public date = TektiteDate.make<T>(this);
         public viewModel = ViewModel.make<T>(this);
         public viewRenderer = ViewRenderer.make<T>(this);
+        public viewCommand = ViewCommand.make<T>(this);
         public internalLink = (data: { className?: string, href: T["PageParams"], children: minamo.dom.Source}): minamo.dom.Source =>
         ({
             tag: "a",
