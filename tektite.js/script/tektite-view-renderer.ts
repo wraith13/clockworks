@@ -575,7 +575,6 @@ export module ViewRenderer
                 make: async () => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
                 update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    console.log("update");
                     const element = getPrimaryElement(dom) as HTMLDivElement;
                     if (null === element.onclick)
                     {
@@ -585,11 +584,17 @@ export module ViewRenderer
                             const isStrictShowPrimaryPage = 0 === body.scrollTop;
                             if (isStrictShowPrimaryPage)
                             {
-                                await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
+                                // await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
+                                const primary = minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0] as HTMLDivElement;
+                                const primaryOffsetTop = primary.offsetTop;
+                                const trail = minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0] as HTMLDivElement;
+                                const trailOffsetTop = trail.offsetTop;
+                                await tektite.screen.scrollToOffset(body, trailOffsetTop -primaryOffsetTop);
                             }
                             else
                             {
-                                await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
+                                // await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
+                                await tektite.screen.scrollToOffset(body, 0);
                             }
                         }
                     }
@@ -600,7 +605,6 @@ export module ViewRenderer
                 {
                     "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
                     {
-                        console.log("eventHandlers");
                         const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
                         if (model)
                         {
