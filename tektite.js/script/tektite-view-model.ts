@@ -21,16 +21,16 @@ export module ViewModel
     export const getPathLeaf = (path: PathType) => path.path.split("/").pop();
     let uniqueKeySource = 0;
     export const makeUniqueKey = () => `unique:${uniqueKeySource++}`;
-    export interface StrictEntry
+    export interface StrictEntry extends minamo.core.JsonableObject
     {
         type: string;
-        data?: unknown;
+        data?: minamo.core.Jsonable;
         children?: StrictListEntry[] | { [key: string]: StrictEntry };
     }
-    export interface EntryBase
+    export interface EntryBase extends minamo.core.JsonableObject
     {
         type: string;
-        data?: unknown;
+        data?: minamo.core.Jsonable;
         child?: Entry;
         children?: ListEntry[] | { [key: string]: Entry };
     }
@@ -150,7 +150,7 @@ export module ViewModel
         type: "tektite-screen-header-segment-core";
         data:
         {
-            icon: Tektite.ParamTypes<unknown>["IconKeyType"];
+            icon: Tektite.ParamTypes<unknown>["IconKeyType"] & minamo.core.Jsonable;
             title: string;
         };
     }
