@@ -24,13 +24,13 @@ export module ViewModel
     export interface StrictEntry extends minamo.core.JsonableObject
     {
         type: string;
-        data?: minamo.core.Jsonable;
+        data?: minamo.core.Jsonable & { isVolatile?: boolean; };
         children?: StrictListEntry[] | { [key: string]: StrictEntry };
     }
     export interface EntryBase extends minamo.core.JsonableObject
     {
         type: string;
-        data?: minamo.core.Jsonable;
+        data?: minamo.core.Jsonable & { isVolatile?: boolean; };
         child?: Entry;
         children?: ListEntry[] | { [key: string]: Entry };
     }

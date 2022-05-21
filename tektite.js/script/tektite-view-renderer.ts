@@ -152,19 +152,32 @@ export module ViewRenderer
         {
         };
         private isRendering = false;
+        private volatileModelPath: ViewModel.PathType[] = [];
         public renderRoot = async (data: ViewModel.StrictEntry | null = this.tektite.viewModel.getUnknown()) =>
         {
             let result: DomType | "rendering" | null = null;
             const json = JSON.stringify(data);
-            if (this.previousData === json)
-            {
-                result = this.getCache(ViewModel.makeRootPath())?.dom ?? null;
-            }
-            else
             if (this.isRendering)
             {
                 setTimeout(() => this.renderRoot(), 10);
                 result = "rendering";
+            }
+            else
+            if (this.previousData === json)
+            {
+                if (0 < this.volatileModelPath.length)
+                {
+                    try
+                    {
+                        this.isRendering = true;
+                        await Promise.all(this.volatileModelPath.map(async path => this.renderVolatile(path)));
+                    }
+                    finally
+                    {
+                        this.isRendering = false;
+                    }
+                }
+                result = this.getCache(ViewModel.makeRootPath())?.dom ?? null;
             }
             else
             {
@@ -177,6 +190,7 @@ export module ViewRenderer
                         //  pre-process
                         this.activePathList = [ ];
                         this.eventHandlers = { };
+                        this.volatileModelPath = [ ];
                         const oldCache: { [path: string]:DomCache } = { };
                         minamo.core.objectKeys(this.domCache).forEach
                         (
@@ -318,6 +332,10 @@ export module ViewRenderer
                         }
                         minamo.core.objectKeys(renderer.eventHandlers ?? { })
                             .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
+                        if (data.data?.isVolatile)
+                        {
+                            this.volatileModelPath.push(path);
+                        }
                         if (0 < childrenKeys.length)
                         {
                             if ( ! isContainerEntry(renderer))
@@ -362,6 +380,54 @@ export module ViewRenderer
             }
             return cache;
         };
+        public renderVolatile = async (path: ViewModel.PathType): Promise<void> =>
+        {
+            const outputError = (message: string) => console.error(`tektite-view-renderer: ${message} - path:${path.path}, data:${JSON.stringify(data)}`);
+            const data = this.tektite.viewModel.getUnknown(path);
+            if ( ! data)
+            {
+                outputError("No data");
+            }
+            else
+            {
+                const renderer = this.renderer[data?.type] ?? this.unknownRenderer;
+                if ( ! data?.type)
+                {
+                    outputError("It has not 'type'");
+                }
+                else
+                if ( ! renderer)
+                {
+                    outputError(`Unknown type ${JSON.stringify(data?.type)}`);
+                }
+                else
+                {
+                    if ( ! isContainerEntry(renderer))
+                    {
+                        let cache = this.getCache(path);
+                        const externalData = this.getExternalData(path, data, renderer.getExternalDataPath);
+                        let dom: DomType | null;
+                        if (isVolatileDomEntry(renderer))
+                        {
+                            dom = await renderer.update(this.tektite, path, data?.data, externalData);
+                        }
+                        else
+                        {
+                            dom = cache?.dom ?? await this.make(renderer.make);
+                            const newDom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
+                            if (dom !== newDom)
+                            {
+                                outputError("Volatile updater can not change to another dom");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        outputError("ContainerEntry can not volatile update");
+                    }
+                }
+            }
+        }
         public isSameOrder = (old: string[], now: string[]) =>
         {
             const filteredOld = old.filter(i => 0 <= now.indexOf(i));

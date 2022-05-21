@@ -6,7 +6,7 @@ export module ViewCommand
     export interface EntryBase
     {
         type: string;
-        data?: unknown;
+        data?: minamo.core.JsonableObject;
     }
     export type Entry = EntryBase | string;
     export type Command<OmegaEntry extends Entry> = (data: OmegaEntry) => unknown;
