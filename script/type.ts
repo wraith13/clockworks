@@ -48,13 +48,13 @@ export module Type
     export type ThemeType = keyof typeof themeObject;
     export const ThemeList = minamo.core.objectKeys(themeObject);
 
-    export interface Settings
+    export interface Settings extends minamo.core.JsonableObject
     {
         theme?: ThemeType;
         progressBarStyle?: Tektite.ProgressBarStyleType;
         locale?: Clockworks.LocaleType;
     }
-    export interface AlarmTimerEntry
+    export interface AlarmTimerEntry extends minamo.core.JsonableObject
     {
         type: "timer";
         start: number;
@@ -66,7 +66,7 @@ export module Type
         start: "new";
         end: string;
     }
-    export interface AlarmScheduleEntry
+    export interface AlarmScheduleEntry extends minamo.core.JsonableObject
     {
         type: "schedule";
         title: string;
@@ -74,12 +74,12 @@ export module Type
         end: number;
     }
     export type AlarmEntry = AlarmTimerEntry | AlarmScheduleEntry;
-    export interface TimezoneEntry
+    export interface TimezoneEntry extends minamo.core.JsonableObject
     {
         title: string;
         offset: number;
     }
-    export interface EventEntry
+    export interface EventEntry extends minamo.core.JsonableObject
     {
         title: string;
         tick: number;
