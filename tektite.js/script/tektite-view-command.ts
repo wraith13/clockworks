@@ -35,10 +35,23 @@ export module ViewCommand
             }
             else
             {
-                console.error(`tektite-view-model: Unknown command - data:${JSON.stringify(entry)}`);
+                console.error(`tektite-view-command: Unknown command - entry:${JSON.stringify(entry)}`);
             }
         }
-        public readonly commands: { [type: string ]: Command<any> } = { }
+        public readonly commands: { [type: string ]: Command<any> } =
+        {
+            "scroll-to": (entry: ScrollToCommand) =>
+            {
+                if ("string" === typeof entry)
+                {
+                    console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
+                }
+                else
+                {
+
+                }
+            }
+        }
     }
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new ViewCommand(tektite);
