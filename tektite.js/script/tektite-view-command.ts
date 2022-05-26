@@ -1,6 +1,7 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
 import { ViewModel } from "./tektite-view-model.js";
+import { ViewRenderer } from "./tektite-view-renderer.js";
 
 export module ViewCommand
 {
@@ -19,7 +20,7 @@ export module ViewCommand
     }
     export type Entry = EntryBase | string;
     export const getType = (entry: Entry) => "string" === typeof entry ? entry: entry.type;
-    export type Command<OmegaEntry extends Entry> = (data: OmegaEntry) => unknown;
+    export type Command<T extends Tektite.ParamTypes, OmegaEntry extends Entry> = (tektite: Tektite.Tektite<T>, data: OmegaEntry) => unknown;
     export class ViewCommand<T extends Tektite.ParamTypes>
     {
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -31,16 +32,16 @@ export module ViewCommand
             const executer = this.commands[getType(entry)];
             if (executer)
             {
-                executer(entry);
+                executer(this.tektite, entry);
             }
             else
             {
                 console.error(`tektite-view-command: Unknown command - entry:${JSON.stringify(entry)}`);
             }
         }
-        public readonly commands: { [type: string ]: Command<any> } =
+        public readonly commands: { [type: string ]: Command<T, any> } =
         {
-            "scroll-to": (entry: ScrollToCommand) =>
+            "scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand) =>
             {
                 if ("string" === typeof entry)
                 {
@@ -48,7 +49,11 @@ export module ViewCommand
                 }
                 else
                 {
-
+                    const dom = tektite.viewRenderer.getCache(entry.data.path)?.dom;
+                    if (dom)
+                    {
+                        await tektite.screen.scrollToElement(ViewRenderer.getPrimaryElement(dom) as HTMLElement);
+                    }
                 }
             }
         }
