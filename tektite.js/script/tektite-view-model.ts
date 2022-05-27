@@ -1,5 +1,6 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
+import { ViewCommand } from "./tektite-view-command.js";
 export module ViewModel
 {
     export type PathType = { type: "path", path: string, entryType?: string, };
@@ -21,16 +22,21 @@ export module ViewModel
     export const getPathLeaf = (path: PathType) => path.path.split("/").pop();
     let uniqueKeySource = 0;
     export const makeUniqueKey = () => `unique:${uniqueKeySource++}`;
+    export interface EntryData extends minamo.core.JsonableObject
+    {
+        isVolatile?: boolean;
+        onclick?: ViewCommand.Entry;
+    }
     export interface StrictEntry extends minamo.core.JsonableObject
     {
         type: string;
-        data?: minamo.core.Jsonable & { isVolatile?: boolean; };
+        data?: EntryData;
         children?: StrictListEntry[] | { [key: string]: StrictEntry };
     }
     export interface EntryBase extends minamo.core.JsonableObject
     {
         type: string;
-        data?: minamo.core.Jsonable & { isVolatile?: boolean; };
+        data?: EntryData;
         child?: Entry;
         children?: ListEntry[] | { [key: string]: Entry };
     }

@@ -5,7 +5,7 @@ import { ViewRenderer } from "./tektite-view-renderer.js";
 
 export module ViewCommand
 {
-    export interface EntryBase
+    export interface EntryBase extends minamo.core.JsonableObject
     {
         type: string;
         data?: minamo.core.JsonableObject;
