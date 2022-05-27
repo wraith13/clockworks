@@ -228,12 +228,25 @@ export module Screen
             }
             target.scrollTo(0, offset);
         };
+        scrollToTop = async (target: HTMLElement) => this.scrollToOffset(target, 0);
         scrollToElement = async (target: HTMLElement) =>
         {
             const parent = target.parentElement;
             if (parent)
             {
-                const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
+                // const targetOffsetTop = Math.min(target.offsetTop -parent.offsetTop, parent.scrollHeight -parent.clientHeight);
+                let targetOffsetTop = 0;
+                let i = 0;
+                while(true)
+                {
+                    const current = parent.children[i++] as HTMLElement;
+                    if (target === current || ! current)
+                    {
+                        break;
+                    }
+                    const style = window.getComputedStyle(current);
+                    targetOffsetTop += parseInt(style.marginTop) +current.offsetHeight +parseInt(style.marginBottom);
+                }
                 await this.scrollToOffset(parent, targetOffsetTop);
             }
         };

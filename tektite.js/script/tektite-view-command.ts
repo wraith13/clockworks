@@ -27,7 +27,7 @@ export module ViewCommand
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public execute(entry: Entry)
+        public call(entry: Entry)
         {
             const executer = this.commands[getType(entry)];
             if (executer)

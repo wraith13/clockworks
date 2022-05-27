@@ -1,5 +1,6 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
+import { ViewCommand } from "./tektite-view-command.js";
 import { ViewModel } from "./tektite-view-model";
 export module ViewRenderer
 {
@@ -646,21 +647,28 @@ export module ViewRenderer
                     {
                         element.onclick = async () =>
                         {
-                            const body = document.getElementById("tektite-screen-body") as HTMLDivElement;
-                            const isStrictShowPrimaryPage = 0 === body.scrollTop;
-                            if (isStrictShowPrimaryPage)
+                            const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
+                            if (dom)
                             {
-                                // await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
-                                const primary = minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0] as HTMLDivElement;
-                                const primaryOffsetTop = primary.offsetTop;
-                                const trail = minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0] as HTMLDivElement;
-                                const trailOffsetTop = trail.offsetTop;
-                                await tektite.screen.scrollToOffset(body, trailOffsetTop -primaryOffsetTop);
-                            }
-                            else
-                            {
-                                // await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
-                                await tektite.screen.scrollToOffset(body, 0);
+                                const body = getPrimaryElement(dom) as HTMLDivElement;
+                                const isStrictShowPrimaryPage = 0 === body.scrollTop;
+                                await tektite.viewCommand.call
+                                (
+                                    <ViewCommand.ScrollToCommand>
+                                    {
+                                        type: "scroll-to",
+                                        data:
+                                        {
+                                            path:
+                                            {
+                                                type: "path",
+                                                path: isStrictShowPrimaryPage ?
+                                                    "/root/screen/screen-body/trail":
+                                                    "/root/screen/screen-body/primary",
+                                            },
+                                        }
+                                    }
+                                );
                             }
                         }
                     }
@@ -674,11 +682,15 @@ export module ViewRenderer
                         const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
                         if (model)
                         {
-                            const body = document.getElementById("tektite-screen-body") as HTMLDivElement;
-                            const isStrictShowPrimaryPage = 0 === body.scrollTop;
-                            (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
-                                .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
-                            tektite.viewModel.set(path, model);
+                            const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
+                            if (dom)
+                            {
+                                const body = getPrimaryElement(dom) as HTMLDivElement;
+                                const isStrictShowPrimaryPage = 0 === body.scrollTop;
+                                (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
+                                    .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
+                                tektite.viewModel.set(path, model);
+                            }
                         }
                     },
                     // "click": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
