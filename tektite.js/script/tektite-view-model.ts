@@ -102,7 +102,7 @@ export module ViewModel
     export interface RootEntry extends EntryBase
     {
         type: "tektite-root";
-        data?:
+        data?: EntryData &
         {
             title?: string;
             theme?: "auto" | "light" | "dark";
@@ -139,7 +139,7 @@ export module ViewModel
     export interface ScreenHeaderProgressBarEntry extends EntryBase
     {
         type: "tektite-screen-header-progress-bar";
-        data?:
+        data?: EntryData &
         {
             color?: string;
             percent: null | number;
@@ -154,7 +154,7 @@ export module ViewModel
     export interface ScreenHeaderSegmentCoreEntry extends EntryBase
     {
         type: "tektite-screen-header-segment-core";
-        data:
+        data: EntryData &
         {
             icon: Tektite.ParamTypes<unknown>["IconKeyType"] & minamo.core.Jsonable;
             title: string;
@@ -163,7 +163,7 @@ export module ViewModel
     export interface ScreenHeaderLabelSegmentEntry extends ListEntry
     {
         type: "tektite-screen-header-label-segment";
-        data?:
+        data?: EntryData &
         {
             className?: string;
         }
@@ -189,7 +189,7 @@ export module ViewModel
     export interface ScreenBodyEntry extends EntryBase
     {
         type: "tektite-screen-body";
-        data?:
+        data?: EntryData &
         {
             className?: string;
         };
@@ -215,7 +215,7 @@ export module ViewModel
     export interface PrimaryPageFooterDownPageLinkEntry extends EntryBase
     {
         type: "tektite-primary-page-footer-down-page-link";
-        data?:
+        data?: EntryData &
         {
             isStrictShowPrimaryPage: boolean;
         }
@@ -237,7 +237,7 @@ export module ViewModel
     export interface ToastItemEntry extends ListEntry
     {
         type: "tektite-toast-item";
-        data:
+        data: EntryData &
         {
             state: ToastStateType,
             wait?: number,
@@ -257,7 +257,7 @@ export module ViewModel
     export interface ButtonEntry extends EntryBase
     {
         type: "tektite-button";
-        data:
+        data: EntryData &
         {
             className?: string;
             // onclick?: (event: MouseEvent) => unknown;
@@ -266,7 +266,7 @@ export module ViewModel
     export interface LinkButtonEntry extends EntryBase
     {
         type: "tektite-link-button";
-        data:
+        data: EntryData &
         {
             className?: string;
             href: string;
@@ -276,7 +276,7 @@ export module ViewModel
     export interface VanillaSpanEntry extends EntryBase
     {
         type: "tektite-vanilla-span";
-        data:
+        data: EntryData &
         {
             className?: string;
             innerText: string;
@@ -285,7 +285,7 @@ export module ViewModel
     export interface LabelSpanEntry extends EntryBase
     {
         type: "tektite-label-span";
-        data:
+        data: EntryData &
         {
             text: string;
         };

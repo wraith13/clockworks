@@ -100,7 +100,7 @@ export module Clockworks
         };
         minamo.core.objectKeys(renders).forEach
         (
-            key => tektite.viewRenderer.renderer[key] = renders[key]
+            key => (tektite.viewRenderer.renderer as any)[key] = renders[key]
         );
         const model = <ViewModel.RootEntry>
         {

@@ -39,6 +39,26 @@ export module ViewCommand
                 console.error(`tektite-view-command: Unknown command - entry:${JSON.stringify(entry)}`);
             }
         }
+        public callByEvent(path: ViewModel.PathType, event: "onclick")
+        {
+            const model = this.tektite.viewModel.getUnknownOrNull(path);
+            if (model)
+            {
+                const entry = model.data?.[event];
+                if (entry)
+                {
+                    this.call(entry);
+                }
+                else
+                {
+                    console.error(`tektite-view-command: Event not found - path:${path.path}, event:${event}`);
+                }
+            }
+            else
+            {
+                console.error(`tektite-view-command: Path not found - path:${path.path}, event:${event}`);
+            }
+        }
         public readonly commands: { [type: string ]: Command<T, any> } =
         {
             "scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand) =>

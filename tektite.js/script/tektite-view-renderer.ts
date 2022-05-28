@@ -44,67 +44,6 @@ export module ViewRenderer
     export const isVolatileDomEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is VolatileDomEntry<ViewModelEntry> => "volatile" === entry.make;
     export type EventHandler<T extends Tektite.ParamTypes> = (tektite: Tektite.Tektite<T>, event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) => unknown;
     export type EventHandlers<T extends Tektite.ParamTypes> = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<T>; }
-    export const rootEntry = <DomEntry<ViewModel.RootEntry>>
-    {
-        make: async () => document.body,
-        update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.RootEntry["data"], _externalModels: { [path: string]:any }) =>
-        {
-            if ("string" === typeof data?.title)
-            {
-                minamo.dom.setProperty(document, "title", data.title);
-            }
-            const setting = data?.theme ?? "auto";
-            const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
-            const theme = "auto" === setting ? system: setting;
-            [ "light", "dark", ].forEach
-            (
-                i => minamo.dom.toggleCSSClass(document.body, i, i === theme)
-            );
-            const style = "header" !== data?.progressBarStyle ? "modern": "classic";
-            [
-                { className: "tektite-style-modern", tottle: "modern" === style, },
-                { className: "tektite-style-classic", tottle: "classic" === style, },
-            ]
-            .forEach(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate);
-            if ("string" === typeof data?.windowColor)
-            {
-                minamo.dom.setStyleProperty(document.body, "backgroundColor", `${data.windowColor}E8`);
-                minamo.dom.setProperty("#tektite-theme-color", "content", data.windowColor);
-            }
-            return dom;
-        },
-        updateChildren: "append",
-        getChildModelContainer: (_dom: DomType) => document.body,
-    }
-    export const screenEntry =
-    {
-        make:
-        {
-            // parent: document.body,
-            tag: "div",
-            className: "tektite-foundation",
-            children:
-            {
-                tag: "div",
-                className: "tektite-screen",
-            }
-        },
-        getExternalDataPath: [ ViewModel.makeRootPath("tektite-root") ],
-        update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.RootEntry["data"], externalModels: { [path: string]:any }) =>
-        {
-            const div = dom as HTMLDivElement;
-            const rootEntryData = <ViewModel.RootEntry["data"]>(externalModels[ViewModel.makeRootPath().path]);
-            if (rootEntryData)
-            {
-                const style = "header" !== rootEntryData.progressBarStyle ? "modern": "classic";
-                minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": (rootEntryData.windowColor ?? ""));
-                minamo.dom.setProperty(screenEntry.getChildModelContainer(dom), "className", `tektite-screen ${rootEntryData.className ?? ""}`);
-            }
-            return dom;
-        },
-        updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
-        getChildModelContainer: (dom: DomType) => getPrimaryElement(dom).getElementsByClassName("tektite-screen")[0],
-    }
     interface DomCache
     {
         dom: DomType;
@@ -126,7 +65,26 @@ export module ViewRenderer
         }
         update = async (event: Tektite.UpdateScreenEventEype) =>
         {
-            await this.renderRoot(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
+            if (this.isRendering)
+            {
+                this.renderWaitQueue.push
+                (
+                    async () =>
+                    {
+                        this.updateCore(event);
+                        await this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
+                    }
+                );
+            }
+            else
+            {
+                await this.renderRoot(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
+                this.updateCore(event);
+                await this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
+            }
+        };
+        updateCore = async (event: Tektite.UpdateScreenEventEype) =>
+        {
             this.eventHandlers[event]?.forEach
             (
                 path =>
@@ -134,12 +92,11 @@ export module ViewRenderer
                     const type = this.tektite.viewModel.getUnknown(path)?.type;
                     if (type)
                     {
-                        ((<DomEntry<any>>this.renderer[type])?.eventHandlers?.[event])
+                        ((this.getAny(type) as DomEntryBase)?.eventHandlers?.[event])
                             ?.(this.tektite, event, path)
                     }
                 }
             );
-            await this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
         };
         pushEventHandler = (event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
         {
@@ -154,13 +111,15 @@ export module ViewRenderer
         };
         private isRendering = false;
         private volatileModelPath: ViewModel.PathType[] = [];
+        public renderWaitQueue: (() => Promise<unknown> | unknown)[] = [];
         public renderRoot = async (data: ViewModel.StrictEntry | null = this.tektite.viewModel.getUnknown()) =>
         {
             let result: DomType | "rendering" | null = null;
             const json = JSON.stringify(data);
             if (this.isRendering)
             {
-                setTimeout(() => this.renderRoot(), 10);
+                this.renderWaitQueue.push(this.renderRoot);
+                // setTimeout(() => this.renderRoot(), 10);
                 result = "rendering";
             }
             else
@@ -222,6 +181,25 @@ export module ViewRenderer
                 finally
                 {
                     this.isRendering = false;
+                    setTimeout
+                    (
+                        async () =>
+                        {
+                            while(true)
+                            {
+                                const current = this.renderWaitQueue.shift();
+                                if (current && ! this.isRendering)
+                                {
+                                    await current();
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        },
+                        0
+                    );
                 }
             }
             return result;
@@ -287,7 +265,7 @@ export module ViewRenderer
             }
             else
             {
-                const renderer = this.renderer[data?.type] ?? this.unknownRenderer;
+                const renderer = this.getAny(data?.type) ?? this.unknownRenderer;
                 if ( ! data?.type)
                 {
                     outputError("It has not 'type'");
@@ -319,7 +297,7 @@ export module ViewRenderer
                         });
                         if (cache?.json !== json)
                         {
-                            let dom: DomType | null;
+                            let dom: DomType;
                             if (isVolatileDomEntry(renderer))
                             {
                                 dom = await renderer.update(this.tektite, path, data?.data, externalData);
@@ -328,6 +306,12 @@ export module ViewRenderer
                             {
                                 dom = cache?.dom ?? await this.make(renderer.make);
                                 dom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
+                            }
+                            const primary = getPrimaryElement(dom) as HTMLElement;
+                            if (data?.data?.onclick || null === primary.onclick)
+                            {
+                                primary.onclick = () => this.tektite.viewCommand.callByEvent(path, "onclick");
+                                //  renderer.update() で独自に付与した onclick を消さない為、不要になっても dom.onclick は放置。(場合によっては、このせいで気にしないでいいエラーでログ出力される。)
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
                         }
@@ -391,7 +375,7 @@ export module ViewRenderer
             }
             else
             {
-                const renderer = this.renderer[data?.type] ?? this.unknownRenderer;
+                const renderer = this.getAny(data?.type) ?? this.unknownRenderer;
                 if ( ! data?.type)
                 {
                     outputError("It has not 'type'");
@@ -470,10 +454,71 @@ export module ViewRenderer
                 .map(key => this.getCache(ViewModel.makePath(path, key)) ?? { dom: this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key))})
                 .map(i => getElementList(i.dom))
                 .reduce((a, b) => a.concat(b), []);
-        public readonly renderer: { [type: string ]: Entry<any>} =
+        public get = <Type extends keyof ViewRenderer<T>["renderer"]>(type: Type): ViewRenderer<T>["renderer"][Type] => this.renderer[type];
+        public getAny = <ViewModelEntry extends ViewModel.EntryBase>(type: string): Entry<ViewModelEntry> => this.get(type as any);
+        public readonly renderer = //: { [type: string ]: Entry<any> } =
         {
-            "tektite-root": rootEntry,
-            "tektite-screen": screenEntry,
+            "tektite-root": // <DomEntry<ViewModel.RootEntry>>
+            {
+                make: async () => document.body,
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.RootEntry["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    if ("string" === typeof data?.title)
+                    {
+                        minamo.dom.setProperty(document, "title", data.title);
+                    }
+                    const setting = data?.theme ?? "auto";
+                    const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark": "light";
+                    const theme = "auto" === setting ? system: setting;
+                    [ "light", "dark", ].forEach
+                    (
+                        i => minamo.dom.toggleCSSClass(document.body, i, i === theme)
+                    );
+                    const style = "header" !== data?.progressBarStyle ? "modern": "classic";
+                    [
+                        { className: "tektite-style-modern", tottle: "modern" === style, },
+                        { className: "tektite-style-classic", tottle: "classic" === style, },
+                    ]
+                    .forEach(i => minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate);
+                    if ("string" === typeof data?.windowColor)
+                    {
+                        minamo.dom.setStyleProperty(document.body, "backgroundColor", `${data.windowColor}E8`);
+                        minamo.dom.setProperty("#tektite-theme-color", "content", data.windowColor);
+                    }
+                    return dom;
+                },
+                updateChildren: "append",
+                getChildModelContainer: (_dom: DomType) => document.body,
+            },
+            "tektite-screen": // <DomEntry<ViewModel.ScreenEntry>>
+            {
+                make:
+                {
+                    // parent: document.body,
+                    tag: "div",
+                    className: "tektite-foundation",
+                    children:
+                    {
+                        tag: "div",
+                        className: "tektite-screen",
+                    }
+                },
+                getExternalDataPath: [ ViewModel.makeRootPath("tektite-root") ],
+                update: async <T extends Tektite.ParamTypes>(_ektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.RootEntry["data"], externalModels: { [path: string]:any }) =>
+                {
+                    const div = dom as HTMLDivElement;
+                    const rootEntryData = <ViewModel.RootEntry["data"]>(externalModels[ViewModel.makeRootPath().path]);
+                    if (rootEntryData)
+                    {
+                        const style = "header" !== rootEntryData.progressBarStyle ? "modern": "classic";
+                        minamo.dom.setStyleProperty(div, "backgroundColor", "classic" === style ? "": (rootEntryData.windowColor ?? ""));
+                        minamo.dom.setProperty(this.tektite.viewRenderer.get("tektite-screen").getChildModelContainer(dom), "className", `tektite-screen ${rootEntryData.className ?? ""}`);
+                    }
+                    return dom;
+                },
+                updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
+                getChildModelContainer: (dom: DomType) => getPrimaryElement(dom).getElementsByClassName("tektite-screen")[0],
+            },
             "tektite-screen-header":
             {
                 make:
@@ -640,37 +685,41 @@ export module ViewRenderer
             "tektite-primary-page-footer-down-page-link":
             {
                 make: async () => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom) as HTMLDivElement;
-                    if (null === element.onclick)
+                    // if (null === element.onclick)
+                    // {
+                    //     element.onclick = async () =>
+                    //     {
+                    //         const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
+                    //         if (dom)
+                    //         {
+                    //             const body = getPrimaryElement(dom) as HTMLDivElement;
+                    //             const isStrictShowPrimaryPage = 0 === body.scrollTop;
+                    //             await tektite.viewCommand.call
+                    //             (
+                    //                 <ViewCommand.ScrollToCommand>
+                    //                 {
+                    //                     type: "scroll-to",
+                    //                     data:
+                    //                     {
+                    //                         path:
+                    //                         {
+                    //                             type: "path",
+                    //                             path: isStrictShowPrimaryPage ?
+                    //                                 "/root/screen/screen-body/trail":
+                    //                                 "/root/screen/screen-body/primary",
+                    //                         },
+                    //                     }
+                    //                 }
+                    //             );
+                    //         }
+                    //     }
+                    // }
+                    if ( ! data?.onclick)
                     {
-                        element.onclick = async () =>
-                        {
-                            const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
-                            if (dom)
-                            {
-                                const body = getPrimaryElement(dom) as HTMLDivElement;
-                                const isStrictShowPrimaryPage = 0 === body.scrollTop;
-                                await tektite.viewCommand.call
-                                (
-                                    <ViewCommand.ScrollToCommand>
-                                    {
-                                        type: "scroll-to",
-                                        data:
-                                        {
-                                            path:
-                                            {
-                                                type: "path",
-                                                path: isStrictShowPrimaryPage ?
-                                                    "/root/screen/screen-body/trail":
-                                                    "/root/screen/screen-body/primary",
-                                            },
-                                        }
-                                    }
-                                );
-                            }
-                        }
+                        tektite.viewRenderer.get("tektite-primary-page-footer-down-page-link").eventHandlers["scroll"](tektite, "scroll", path);
                     }
                     minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", ! (data?.isStrictShowPrimaryPage ?? true));
                     return dom;
@@ -689,6 +738,20 @@ export module ViewRenderer
                                 const isStrictShowPrimaryPage = 0 === body.scrollTop;
                                 (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
                                     .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
+                                model.data.onclick = <ViewCommand.ScrollToCommand>
+                                {
+                                    type: "scroll-to",
+                                    data:
+                                    {
+                                        path:
+                                        {
+                                            type: "path",
+                                            path: isStrictShowPrimaryPage ?
+                                                "/root/screen/screen-body/trail":
+                                                "/root/screen/screen-body/primary",
+                                        },
+                                    }
+                                };
                                 tektite.viewModel.set(path, model);
                             }
                         }
