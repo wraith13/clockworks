@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.wip.json release
-    build at: Sat May 28 2022 04:53:28 GMT+0900 (日本標準時)
+    build at: Sun May 29 2022 00:13:13 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -5891,6 +5891,7 @@ define("clockworks/nephila/minamo.js/index", ["require", "exports"], function (r
         (function (core_1) {
             var _this = this;
             core_1.jsonStringify = function (source, replacer, space) { return JSON.stringify(source, replacer, space); };
+            core_1.extender = function () { return function (x) { return x; }; }; // TypeScript 4.8 以降では satisfies の使用を推奨
             core_1.timeout = function (wait) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, wait); })];
             }); }); };
@@ -8804,8 +8805,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                 this.get = function (type) { return _this.renderer[type]; };
                 this.getAny = function (type) { return _this.get(type); };
                 this.renderer = {
-                    "tektite-root": //rootEntry,
-                    {
+                    "tektite-root": index_js_7.minamo.core.extender()({
                         make: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             return [2 /*return*/, document.body];
                         }); }); },
@@ -8835,10 +8835,8 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                         }); },
                         updateChildren: "append",
                         getChildModelContainer: function (_dom) { return document.body; },
-                    },
-                    "tektite-screen": //screenEntry,
-                    // <DomEntry<ViewModel.ScreenEntry>>
-                    {
+                    }),
+                    "tektite-screen": index_js_7.minamo.core.extender()({
                         make: {
                             // parent: document.body,
                             tag: "div",
@@ -8865,8 +8863,8 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                         }); },
                         updateChildren: ["screen-header", "screen-body", "screen-bar", "screen-toast"],
                         getChildModelContainer: function (dom) { return ViewRenderer_1.getPrimaryElement(dom).getElementsByClassName("tektite-screen")[0]; },
-                    },
-                    "tektite-screen-header": {
+                    }),
+                    "tektite-screen-header": index_js_7.minamo.core.extender()({
                         make: {
                             tag: "header",
                             id: "tektite-screen-header",
@@ -8887,8 +8885,8 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                             });
                         }); },
                         updateChildren: ["screen-header-progress-bar", "screen-header-segment", "screen-header-operator",],
-                    },
-                    "tektite-screen-header-progress-bar": {
+                    }),
+                    "tektite-screen-header-progress-bar": index_js_7.minamo.core.extender()({
                         make: { tag: "div", className: "tektite-progress-bar", },
                         update: function (_tektite, _path, dom, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
                             var element, percentString;
@@ -8909,7 +8907,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 return [2 /*return*/, dom];
                             });
                         }); },
-                    },
+                    }),
                     "tektite-screen-header-segment-list": ViewRenderer_1.containerEntry,
                     "tektite-screen-header-segment-core": {
                         make: [
@@ -9016,7 +9014,25 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                         make: tektite_index_4.Tektite.$div("tektite-page-footer")([]),
                         updateChildren: "append",
                     },
-                    "tektite-primary-page-footer-down-page-link": {
+                    "tektite-primary-page-footer-down-page-link": index_js_7.minamo.core.extender()({
+                        completer: function (_tektite, _path, model) {
+                            if (!model.data) {
+                                model.data =
+                                    {
+                                        isStrictShowPrimaryPage: true,
+                                        onclick: {
+                                            type: "scroll-to",
+                                            data: {
+                                                path: {
+                                                    type: "path",
+                                                    path: "/root/screen/screen-body/trail",
+                                                },
+                                            }
+                                        },
+                                    };
+                            }
+                            return model;
+                        },
                         make: function () { return __awaiter(_this, void 0, void 0, function () { var _a; return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0:
@@ -9025,43 +9041,16 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent()])];
                             }
                         }); }); },
-                        update: function (tektite, path, dom, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
+                        update: function (_tektite, _path, dom, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
                             var element;
                             var _a;
                             return __generator(this, function (_b) {
                                 element = ViewRenderer_1.getPrimaryElement(dom);
-                                // if (null === element.onclick)
+                                // if ( ! data?.onclick)
                                 // {
-                                //     element.onclick = async () =>
-                                //     {
-                                //         const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
-                                //         if (dom)
-                                //         {
-                                //             const body = getPrimaryElement(dom) as HTMLDivElement;
-                                //             const isStrictShowPrimaryPage = 0 === body.scrollTop;
-                                //             await tektite.viewCommand.call
-                                //             (
-                                //                 <ViewCommand.ScrollToCommand>
-                                //                 {
-                                //                     type: "scroll-to",
-                                //                     data:
-                                //                     {
-                                //                         path:
-                                //                         {
-                                //                             type: "path",
-                                //                             path: isStrictShowPrimaryPage ?
-                                //                                 "/root/screen/screen-body/trail":
-                                //                                 "/root/screen/screen-body/primary",
-                                //                         },
-                                //                     }
-                                //                 }
-                                //             );
-                                //         }
-                                //     }
+                                //     tektite.viewRenderer.get("tektite-primary-page-footer-down-page-link")
+                                //         .eventHandlers["scroll"](tektite, "scroll", path);
                                 // }
-                                if (!(data === null || data === void 0 ? void 0 : data.onclick)) {
-                                    tektite.viewRenderer.get("tektite-primary-page-footer-down-page-link").eventHandlers["scroll"](tektite, "scroll", path);
-                                }
                                 index_js_7.minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", !((_a = data === null || data === void 0 ? void 0 : data.isStrictShowPrimaryPage) !== null && _a !== void 0 ? _a : true));
                                 return [2 /*return*/, dom];
                             });
@@ -9077,34 +9066,15 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                         var isStrictShowPrimaryPage = 0 === body.scrollTop;
                                         ((_b = model.data) !== null && _b !== void 0 ? _b : (model.data = {}))
                                             .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
-                                        model.data.onclick = {
-                                            type: "scroll-to",
-                                            data: {
-                                                path: {
-                                                    type: "path",
-                                                    path: isStrictShowPrimaryPage ?
-                                                        "/root/screen/screen-body/trail" :
-                                                        "/root/screen/screen-body/primary",
-                                                },
-                                            }
-                                        };
-                                        tektite.viewModel.set(path, model);
+                                        model.data.onclick.data.path.path = isStrictShowPrimaryPage ?
+                                            "/root/screen/screen-body/trail" :
+                                            "/root/screen/screen-body/primary",
+                                            tektite.viewModel.set(path, model);
                                     }
                                 }
                             },
-                            // "click": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
-                            // {
-                            //     if (tektite.screen.isStrictShowPrimaryPage())
-                            //     {
-                            //         await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
-                            //     }
-                            //     else
-                            //     {
-                            //         await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
-                            //     }
-                            // },
                         },
-                    },
+                    }),
                     "tektite-trail-page": {
                         make: tektite_index_4.Tektite.$div("tektite-trail-page")([]),
                         updateChildren: "append",
@@ -9367,40 +9337,6 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
         ViewModel_1.getPathLeaf = function (path) { return path.path.split("/").pop(); };
         var uniqueKeySource = 0;
         ViewModel_1.makeUniqueKey = function () { return "unique:".concat(uniqueKeySource++); };
-        function makeSureStrictEntry(path, entry) {
-            if ("string" === typeof entry) {
-                return { type: entry, };
-            }
-            else {
-                if (entry) {
-                    var children_1 = entry.children;
-                    if (children_1) {
-                        if (Array.isArray(children_1)) {
-                            children_1.forEach(function (i) { return makeSureStrictEntry(ViewModel_1.makePath(path, i.key), i); });
-                        }
-                        else {
-                            index_js_8.minamo.core.objectKeys(children_1)
-                                .forEach(function (key) { return children_1[key] = makeSureStrictEntry(ViewModel_1.makePath(path, key), children_1[key]); });
-                        }
-                        if (entry.child) {
-                            console.error("tektite-view-model: Duplicated child and children - path:".concat(path.path, ", data:").concat(JSON.stringify(entry)));
-                        }
-                    }
-                    else {
-                        var child = entry.child;
-                        if (child) {
-                            entry.children =
-                                {
-                                    single: makeSureStrictEntry(ViewModel_1.makePath(path, "single"), child),
-                                };
-                            delete entry.child;
-                        }
-                    }
-                }
-                return entry;
-            }
-        }
-        ViewModel_1.makeSureStrictEntry = makeSureStrictEntry;
         ViewModel_1.isEntry = function (type) {
             return function (model) { return type === (model === null || model === void 0 ? void 0 : model.type); };
         };
@@ -9597,10 +9533,49 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
                     return _this.getRaw(path, true);
                 };
             }
+            ViewModel.prototype.makeSureStrictEntry = function (path, entry) {
+                var _this = this;
+                var _a;
+                if ("string" === typeof entry) {
+                    return this.makeSureStrictEntry(path, { type: entry, });
+                }
+                else {
+                    if (entry) {
+                        var children_1 = entry.children;
+                        if (children_1) {
+                            if (Array.isArray(children_1)) {
+                                children_1.forEach(function (i) { return _this.makeSureStrictEntry(ViewModel_1.makePath(path, i.key), i); });
+                            }
+                            else {
+                                index_js_8.minamo.core.objectKeys(children_1)
+                                    .forEach(function (key) { return children_1[key] = _this.makeSureStrictEntry(ViewModel_1.makePath(path, key), children_1[key]); });
+                            }
+                            if (entry.child) {
+                                console.error("tektite-view-model: Duplicated child and children - path:".concat(path.path, ", data:").concat(JSON.stringify(entry)));
+                            }
+                        }
+                        else {
+                            var child = entry.child;
+                            if (child) {
+                                entry.children =
+                                    {
+                                        single: this.makeSureStrictEntry(ViewModel_1.makePath(path, "single"), child),
+                                    };
+                                delete entry.child;
+                            }
+                        }
+                        var completer = (_a = this.tektite.viewRenderer.getAny(entry.type)) === null || _a === void 0 ? void 0 : _a.completer;
+                        if (completer) {
+                            return completer(this.tektite, path, entry);
+                        }
+                    }
+                    return entry;
+                }
+            };
             ViewModel.prototype.set = function (pathOrdata, dataOrType) {
                 if (ViewModel_1.isPathType(pathOrdata) && undefined !== dataOrType) {
                     var path = pathOrdata;
-                    var data = index_js_8.minamo.core.simpleDeepCopy(makeSureStrictEntry(path, dataOrType));
+                    var data = index_js_8.minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, dataOrType));
                     if ((!ViewModel_1.hasError(path, data)) && data) {
                         var keys_2 = path.path.split("/");
                         if ("" !== keys_2[0] || "root" !== keys_2[1]) {
@@ -9662,7 +9637,7 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
                 }
                 else {
                     var path = ViewModel_1.makeRootPath();
-                    var data = index_js_8.minamo.core.simpleDeepCopy(makeSureStrictEntry(path, pathOrdata));
+                    var data = index_js_8.minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, pathOrdata));
                     if (!ViewModel_1.hasError(path, data)) {
                         this.data = data;
                     }
@@ -10229,6 +10204,7 @@ define("nephila/minamo.js/index", ["require", "exports"], function (require, exp
         (function (core_2) {
             var _this = this;
             core_2.jsonStringify = function (source, replacer, space) { return JSON.stringify(source, replacer, space); };
+            core_2.extender = function () { return function (x) { return x; }; }; // TypeScript 4.8 以降では satisfies の使用を推奨
             core_2.timeout = function (wait) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, wait); })];
             }); }); };
@@ -15806,7 +15782,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.startWIP({ buildTimestampTick: 1653681208070, })">
+<body onload="require('clockworks/script/index').Clockworks.startWIP({ buildTimestampTick: 1653750793504, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

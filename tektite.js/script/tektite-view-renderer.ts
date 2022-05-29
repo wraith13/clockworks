@@ -1,6 +1,5 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
-import { ViewCommand } from "./tektite-view-command.js";
 import { ViewModel } from "./tektite-view-model";
 export module ViewRenderer
 {
@@ -29,12 +28,14 @@ export module ViewRenderer
     };
     export interface VolatileDomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBase
     {
+        completer?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModelEntry,
         make: "volatile",
         getExternalDataPath?: (ViewModel.PathType[]) | (<T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModel.PathType[]),
         update: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
     export interface DomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBase
     {
+        completer?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModelEntry,
         make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
         getExternalDataPath?: (ViewModel.PathType[]) | (<T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModel.PathType[]),
         update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
@@ -458,8 +459,8 @@ export module ViewRenderer
         public getAny = <ViewModelEntry extends ViewModel.EntryBase>(type: string): Entry<ViewModelEntry> => this.get(type as any);
         public readonly renderer = //: { [type: string ]: Entry<any> } =
         {
-            "tektite-root": // <DomEntry<ViewModel.RootEntry>>
-            {
+            "tektite-root": minamo.core.extender<DomEntry<ViewModel.RootEntry>>()
+            ({
                 make: async () => document.body,
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.RootEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
@@ -489,9 +490,9 @@ export module ViewRenderer
                 },
                 updateChildren: "append",
                 getChildModelContainer: (_dom: DomType) => document.body,
-            },
-            "tektite-screen": // <DomEntry<ViewModel.ScreenEntry>>
-            {
+            }),
+            "tektite-screen": minamo.core.extender<DomEntry<ViewModel.ScreenEntry>>()
+            ({
                 make:
                 {
                     // parent: document.body,
@@ -518,9 +519,9 @@ export module ViewRenderer
                 },
                 updateChildren: [ "screen-header", "screen-body", "screen-bar", "screen-toast" ],
                 getChildModelContainer: (dom: DomType) => getPrimaryElement(dom).getElementsByClassName("tektite-screen")[0],
-            },
-            "tektite-screen-header":
-            {
+            }),
+            "tektite-screen-header": minamo.core.extender<DomEntry<ViewModel.ScreenHeaderEntry>>()
+            ({
                 make:
                 {
                     tag: "header",
@@ -540,9 +541,9 @@ export module ViewRenderer
                     return dom;
                 },
                 updateChildren: [ "screen-header-progress-bar", "screen-header-segment", "screen-header-operator", ],
-            },
-            "tektite-screen-header-progress-bar":
-            {
+            }),
+            "tektite-screen-header-progress-bar": minamo.core.extender<DomEntry<ViewModel.ScreenHeaderProgressBarEntry>>()
+            ({
                 make: { tag: "div", className: "tektite-progress-bar", },
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenHeaderProgressBarEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
@@ -564,7 +565,7 @@ export module ViewRenderer
                     }
                     return dom;
                 },
-            },
+            }),
             "tektite-screen-header-segment-list": containerEntry,
             "tektite-screen-header-segment-core":
             {
@@ -682,45 +683,40 @@ export module ViewRenderer
                 make: Tektite.$div("tektite-page-footer")([]),
                 updateChildren: "append",
             },
-            "tektite-primary-page-footer-down-page-link":
-            {
+            "tektite-primary-page-footer-down-page-link": minamo.core.extender<DomEntry<ViewModel.PrimaryPageFooterDownPageLinkEntry>>()
+            ({
+                completer: <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, model: ViewModel.PrimaryPageFooterDownPageLinkEntry) =>
+                {
+                    if ( ! model.data)
+                    {
+                        model.data =
+                        {
+                            isStrictShowPrimaryPage: true,
+                            onclick:
+                            {
+                                type: "scroll-to",
+                                data:
+                                {
+                                    path:
+                                    {
+                                        type: "path",
+                                        path: "/root/screen/screen-body/trail",
+                                    },
+                                }
+                            },
+                        };
+                    }
+                    return model;
+                },
                 make: async () => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom) as HTMLDivElement;
-                    // if (null === element.onclick)
+                    // if ( ! data?.onclick)
                     // {
-                    //     element.onclick = async () =>
-                    //     {
-                    //         const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
-                    //         if (dom)
-                    //         {
-                    //             const body = getPrimaryElement(dom) as HTMLDivElement;
-                    //             const isStrictShowPrimaryPage = 0 === body.scrollTop;
-                    //             await tektite.viewCommand.call
-                    //             (
-                    //                 <ViewCommand.ScrollToCommand>
-                    //                 {
-                    //                     type: "scroll-to",
-                    //                     data:
-                    //                     {
-                    //                         path:
-                    //                         {
-                    //                             type: "path",
-                    //                             path: isStrictShowPrimaryPage ?
-                    //                                 "/root/screen/screen-body/trail":
-                    //                                 "/root/screen/screen-body/primary",
-                    //                         },
-                    //                     }
-                    //                 }
-                    //             );
-                    //         }
-                    //     }
+                    //     tektite.viewRenderer.get("tektite-primary-page-footer-down-page-link")
+                    //         .eventHandlers["scroll"](tektite, "scroll", path);
                     // }
-                    if ( ! data?.onclick)
-                    {
-                        tektite.viewRenderer.get("tektite-primary-page-footer-down-page-link").eventHandlers["scroll"](tektite, "scroll", path);
-                    }
                     minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", ! (data?.isStrictShowPrimaryPage ?? true));
                     return dom;
                 },
@@ -738,37 +734,15 @@ export module ViewRenderer
                                 const isStrictShowPrimaryPage = 0 === body.scrollTop;
                                 (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
                                     .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
-                                model.data.onclick = <ViewCommand.ScrollToCommand>
-                                {
-                                    type: "scroll-to",
-                                    data:
-                                    {
-                                        path:
-                                        {
-                                            type: "path",
-                                            path: isStrictShowPrimaryPage ?
-                                                "/root/screen/screen-body/trail":
-                                                "/root/screen/screen-body/primary",
-                                        },
-                                    }
-                                };
+                                model.data.onclick.data.path.path = isStrictShowPrimaryPage ?
+                                    "/root/screen/screen-body/trail":
+                                    "/root/screen/screen-body/primary",
                                 tektite.viewModel.set(path, model);
                             }
                         }
                     },
-                    // "click": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, _path: ViewModel.PathType) =>
-                    // {
-                    //     if (tektite.screen.isStrictShowPrimaryPage())
-                    //     {
-                    //         await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-trail-page")[0]);
-                    //     }
-                    //     else
-                    //     {
-                    //         await tektite.screen.scrollToElement(minamo.dom.getDivsByClassName(document, "tektite-primary-page")[0]);
-                    //     }
-                    // },
                 },
-            },
+            }),
             "tektite-trail-page":
             {
                 make:

@@ -1,6 +1,7 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
 import { ViewCommand } from "./tektite-view-command.js";
+import { ViewRenderer } from "./tektite-view-renderer.js";
 export module ViewModel
 {
     export type PathType = { type: "path", path: string, entryType?: string, };
@@ -41,52 +42,6 @@ export module ViewModel
         children?: ListEntry[] | { [key: string]: Entry };
     }
     export type Entry = EntryBase | string;
-    export function makeSureStrictEntry(path: PathType, entry: Entry): StrictEntry;
-    export function makeSureStrictEntry(path: PathType, entry: null): null;
-    export function makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null;
-    export function makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null
-    {
-        if ("string" === typeof entry)
-        {
-            return { type: entry, };
-        }
-        else
-        {
-            if (entry)
-            {
-                const children = entry.children;
-                if (children)
-                {
-                    if (Array.isArray(children))
-                    {
-                        children.forEach(i => makeSureStrictEntry(makePath(path, i.key), i));
-                    }
-                    else
-                    {
-                        minamo.core.objectKeys(children)
-                            .forEach(key => children[key] = makeSureStrictEntry(makePath(path, key), children[key]));
-                    }
-                    if (entry.child)
-                    {
-                        console.error(`tektite-view-model: Duplicated child and children - path:${path.path}, data:${JSON.stringify(entry)}`);
-                    }
-                }
-                else
-                {
-                    const child = entry.child;
-                    if (child)
-                    {
-                        entry.children =
-                        {
-                            single: makeSureStrictEntry(makePath(path, "single"), child),
-                        }
-                        delete entry.child;
-                    }
-                }
-            }
-            return entry as StrictEntry | null;
-        }
-    }
     export const isEntry = <Model extends (StrictEntry | EntryBase)>(type: Model["type"]) =>
         (model: StrictEntry | EntryBase | null): model is Model => type === model?.type;
     export interface StrictListEntry extends StrictEntry
@@ -218,6 +173,20 @@ export module ViewModel
         data?: EntryData &
         {
             isStrictShowPrimaryPage: boolean;
+            onclick:
+            {
+                type: "scroll-to",
+                data:
+                {
+                    path:
+                    {
+                        type: "path",
+                        path:
+                            "/root/screen/screen-body/primary" |
+                            "/root/screen/screen-body/trail",
+                    },
+                }
+            },
         }
     }
     export interface TrailPageEntry extends EntryBase
@@ -389,6 +358,57 @@ export module ViewModel
         public onLoad = () =>
         {
         };
+        private makeSureStrictEntry(path: PathType, entry: Entry): StrictEntry;
+        private makeSureStrictEntry(path: PathType, entry: null): null;
+        private makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null;
+        private makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null
+        {
+            if ("string" === typeof entry)
+            {
+                return this.makeSureStrictEntry(path, { type: entry, });
+            }
+            else
+            {
+                if (entry)
+                {
+                    const children = entry.children;
+                    if (children)
+                    {
+                        if (Array.isArray(children))
+                        {
+                            children.forEach(i => this.makeSureStrictEntry(makePath(path, i.key), i));
+                        }
+                        else
+                        {
+                            minamo.core.objectKeys(children)
+                                .forEach(key => children[key] = this.makeSureStrictEntry(makePath(path, key), children[key]));
+                        }
+                        if (entry.child)
+                        {
+                            console.error(`tektite-view-model: Duplicated child and children - path:${path.path}, data:${JSON.stringify(entry)}`);
+                        }
+                    }
+                    else
+                    {
+                        const child = entry.child;
+                        if (child)
+                        {
+                            entry.children =
+                            {
+                                single: this.makeSureStrictEntry(makePath(path, "single"), child),
+                            }
+                            delete entry.child;
+                        }
+                    }
+                    const completer = (this.tektite.viewRenderer.getAny(entry.type) as (ViewRenderer.VolatileDomEntry<any> | ViewRenderer.DomEntry<any>))?.completer;
+                    if (completer)
+                    {
+                        return completer(this.tektite, path, entry);
+                    }
+                }
+                return entry as StrictEntry | null;
+            }
+        }
         public set(dataOrType: Entry): void;
         public set(path: PathType, dataOrType: Entry): void;
         public set(pathOrdata: PathType | Entry, dataOrType?: Entry): void
@@ -396,7 +416,7 @@ export module ViewModel
             if (isPathType(pathOrdata) && undefined !== dataOrType)
             {
                 const path = pathOrdata;
-                const data = minamo.core.simpleDeepCopy(makeSureStrictEntry(path, dataOrType));
+                const data = minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, dataOrType));
                 if (( ! hasError(path, data)) && data)
                 {
                     const keys = path.path.split("/");
@@ -480,7 +500,7 @@ export module ViewModel
             else
             {
                 const path = makeRootPath();
-                const data = minamo.core.simpleDeepCopy(makeSureStrictEntry(path, pathOrdata));
+                const data = minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, pathOrdata));
                 if ( ! hasError(path, data))
                 {
                     this.data = data;
