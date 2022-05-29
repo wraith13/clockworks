@@ -371,6 +371,8 @@ export module ViewModel
             {
                 if (entry)
                 {
+                    const renderer = this.tektite.viewRenderer.getAny(entry.type) as ViewRenderer.DomEntryBeta<any>;
+                    entry = (renderer?.completer?.(this.tektite, path, entry) ?? entry) as StrictEntry;
                     const children = entry.children;
                     if (children)
                     {
@@ -399,11 +401,6 @@ export module ViewModel
                             }
                             delete entry.child;
                         }
-                    }
-                    const completer = (this.tektite.viewRenderer.getAny(entry.type) as (ViewRenderer.VolatileDomEntry<any> | ViewRenderer.DomEntry<any>))?.completer;
-                    if (completer)
-                    {
-                        return completer(this.tektite, path, entry);
                     }
                 }
                 return entry as StrictEntry | null;

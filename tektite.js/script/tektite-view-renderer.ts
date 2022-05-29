@@ -14,7 +14,7 @@ export module ViewRenderer
     {
         make: "container",
     };
-    export interface DomEntryBase
+    export interface DomEntryAlpha
     {
         updateChildren?:
             //  simple list ( default )
@@ -26,18 +26,19 @@ export module ViewRenderer
         getChildModelContainer?: (dom: DomType) => Element,
         eventHandlers?: EventHandlers<any>,
     };
-    export interface VolatileDomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBase
+    export interface DomEntryBeta<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryAlpha
     {
         completer?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModelEntry,
-        make: "volatile",
         getExternalDataPath?: (ViewModel.PathType[]) | (<T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModel.PathType[]),
+    };
+    export interface VolatileDomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBeta<ViewModelEntry>
+    {
+        make: "volatile",
         update: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
-    export interface DomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBase
+    export interface DomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBeta<ViewModelEntry>
     {
-        completer?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModelEntry,
         make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
-        getExternalDataPath?: (ViewModel.PathType[]) | (<T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModelEntry) => ViewModel.PathType[]),
         update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
     export type Entry<ViewModelEntry extends ViewModel.EntryBase> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
@@ -93,7 +94,7 @@ export module ViewRenderer
                     const type = this.tektite.viewModel.getUnknown(path)?.type;
                     if (type)
                     {
-                        ((this.getAny(type) as DomEntryBase)?.eventHandlers?.[event])
+                        ((this.getAny(type) as DomEntryAlpha)?.eventHandlers?.[event])
                             ?.(this.tektite, event, path)
                     }
                 }
