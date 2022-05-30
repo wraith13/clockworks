@@ -18,6 +18,14 @@ export module ViewCommand
             path: ViewModel.PathType;
         }
     }
+    export interface UpdatePrimaryPageFooterDownPageLinkCommand extends EntryBase
+    {
+        type: "update-primary-page-footer-down-page-link";
+        data:
+        {
+            path: ViewModel.PathType;
+        }
+    }
     export type Entry = EntryBase | string;
     export const getType = (entry: Entry) => "string" === typeof entry ? entry: entry.type;
     export type Command<T extends Tektite.ParamTypes, OmegaEntry extends Entry> = (tektite: Tektite.Tektite<T>, data: OmegaEntry) => unknown;
@@ -63,7 +71,7 @@ export module ViewCommand
         {
             "scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand) =>
             {
-                if ("string" === typeof entry)
+                if ("string" === typeof entry || ! entry.data)
                 {
                     console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
                 }
@@ -75,6 +83,33 @@ export module ViewCommand
                         await tektite.screen.scrollToElement(ViewRenderer.getPrimaryElement(dom) as HTMLElement);
                     }
                 }
+            },
+            "update-primary-page-footer-down-page-link": async (tektite: Tektite.Tektite<T>, entry: UpdatePrimaryPageFooterDownPageLinkCommand) =>
+            {
+                if ("string" === typeof entry || ! entry.data)
+                {
+                    console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
+                }
+                else
+                {
+                    const path = entry.data.path;
+                    const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
+                    if (model)
+                    {
+                        const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
+                        if (dom)
+                        {
+                            const body = ViewRenderer.getPrimaryElement(dom) as HTMLDivElement;
+                            const isStrictShowPrimaryPage = 0 === body.scrollTop;
+                            (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
+                                .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
+                            model.data.onclick.data.path.path = isStrictShowPrimaryPage ?
+                                "/root/screen/screen-body/trail":
+                                "/root/screen/screen-body/primary",
+                            tektite.viewModel.set(path, model);
+                        }
+                    }
+            }
             }
         }
     }

@@ -1,5 +1,6 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
+import { ViewCommand } from "./tektite-view-command.js";
 import { ViewModel } from "./tektite-view-model";
 export module ViewRenderer
 {
@@ -713,11 +714,6 @@ export module ViewRenderer
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom) as HTMLDivElement;
-                    // if ( ! data?.onclick)
-                    // {
-                    //     tektite.viewRenderer.get("tektite-primary-page-footer-down-page-link")
-                    //         .eventHandlers["scroll"](tektite, "scroll", path);
-                    // }
                     minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", ! (data?.isStrictShowPrimaryPage ?? true));
                     return dom;
                 },
@@ -725,22 +721,17 @@ export module ViewRenderer
                 {
                     "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
                     {
-                        const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
-                        if (model)
-                        {
-                            const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
-                            if (dom)
+                        tektite.viewCommand.call
+                        (
+                            <ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand>
                             {
-                                const body = getPrimaryElement(dom) as HTMLDivElement;
-                                const isStrictShowPrimaryPage = 0 === body.scrollTop;
-                                (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
-                                    .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
-                                model.data.onclick.data.path.path = isStrictShowPrimaryPage ?
-                                    "/root/screen/screen-body/trail":
-                                    "/root/screen/screen-body/primary",
-                                tektite.viewModel.set(path, model);
+                                type: "update-primary-page-footer-down-page-link",
+                                data:
+                                {
+                                    path,
+                                },
                             }
-                        }
+                        );
                     },
                 },
             }),
