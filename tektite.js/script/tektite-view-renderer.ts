@@ -696,7 +696,7 @@ export module ViewRenderer
                             isStrictShowPrimaryPage: true,
                             onclick:
                             {
-                                type: "scroll-to",
+                                type: "tektite-scroll-to",
                                 data:
                                 {
                                     path:
@@ -725,7 +725,7 @@ export module ViewRenderer
                         (
                             <ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand>
                             {
-                                type: "update-primary-page-footer-down-page-link",
+                                type: "tektite-update-primary-page-footer-down-page-link",
                                 data:
                                 {
                                     path,
@@ -828,22 +828,15 @@ export module ViewRenderer
                         (
                             async () =>
                             {
-                                const current = tektite.viewModel.getOrNull<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
-                                if (current)
-                                {
-                                    if (null === stateData.next)
+                                tektite.viewCommand.call<ViewCommand.UpdateToastItemCommand>
+                                ({
+                                    type: "tektite-update-toast-item",
+                                    data:
                                     {
-                                        tektite.viewModel.remove(path);
-                                        await this.renderRoot();
+                                        path,
+                                        next: stateData.next,
                                     }
-                                    else
-                                    if (current.data.state === data.state)
-                                    {
-                                        current.data.state = stateData.next;
-                                        tektite.viewModel.set(path, current);
-                                        await this.renderRoot();
-                                    }
-                                }
+                                });
                             },
                             stateData.wait
                         );
