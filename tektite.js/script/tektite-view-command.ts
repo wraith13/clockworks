@@ -27,6 +27,7 @@ export module ViewCommand
         }
     }
     export type Entry = EntryBase | string;
+    export type EntryOrList = Entry | Entry[];
     export const getType = (entry: Entry) => "string" === typeof entry ? entry: entry.type;
     export type Command<T extends Tektite.ParamTypes, OmegaEntry extends Entry> = (tektite: Tektite.Tektite<T>, data: OmegaEntry) => unknown;
     export class ViewCommand<T extends Tektite.ParamTypes>
@@ -47,15 +48,16 @@ export module ViewCommand
                 console.error(`tektite-view-command: Unknown command - entry:${JSON.stringify(entry)}`);
             }
         }
-        public callByEvent(path: ViewModel.PathType, event: "onclick")
+        public callByEvent(path: ViewModel.PathType, event: ViewModel.EventType)
         {
             const model = this.tektite.viewModel.getUnknownOrNull(path);
             if (model)
             {
-                const entry = model.data?.[event];
-                if (entry)
+                const entryOrList = model.data?.[event];
+                if (entryOrList)
                 {
-                    this.call(entry);
+                    minamo.core.arrayOrToArray(entryOrList)
+                        .map(entry => this.call(entry));
                 }
                 else
                 {

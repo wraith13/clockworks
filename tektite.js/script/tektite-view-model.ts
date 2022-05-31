@@ -23,10 +23,11 @@ export module ViewModel
     export const getPathLeaf = (path: PathType) => path.path.split("/").pop();
     let uniqueKeySource = 0;
     export const makeUniqueKey = () => `unique:${uniqueKeySource++}`;
+    export type EventType = "onclick";
     export interface EntryData extends minamo.core.JsonableObject
     {
         isVolatile?: boolean;
-        onclick?: ViewCommand.Entry;
+        onclick?: ViewCommand.EntryOrList;
     }
     export interface StrictEntry extends minamo.core.JsonableObject
     {
