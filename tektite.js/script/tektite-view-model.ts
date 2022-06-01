@@ -42,6 +42,37 @@ export module ViewModel
         child?: Entry;
         children?: ListEntry[] | { [key: string]: Entry };
     }
+    export const setEventHandler = <Entry extends StrictEntry>(entry: Entry, event: EventType, command: ViewCommand.Entry): Entry =>
+    {
+        if ( ! entry.data)
+        {
+            entry.data = { };
+        }
+        entry.data[event] = command;
+        return entry;
+    };
+    export const addEventHandler = <Entry extends StrictEntry>(entry: Entry, event: EventType, command: ViewCommand.Entry): Entry =>
+    {
+        if ( ! entry.data)
+        {
+            entry.data = { };
+        }
+        const current = entry.data[event];
+        if ( ! current)
+        {
+            entry.data[event] = command;
+        }
+        else
+        if ( ! Array.isArray(current))
+        {
+            entry.data[event] = [ current, command, ];
+        }
+        else
+        {
+            entry.data[event] = current.concat(command);
+        }
+        return entry;
+    };
     export type Entry = EntryBase | string;
     export const isEntry = <Model extends (StrictEntry | EntryBase)>(type: Model["type"]) =>
         (model: StrictEntry | EntryBase | null): model is Model => type === model?.type;
@@ -531,6 +562,22 @@ export module ViewModel
                 const key = makeUniqueKey();
                 const data = keyOrdata as Model;
                 return this.setListEntry(path, key, data);
+            }
+        }
+        public setEventHandler = (path: PathType, event: EventType, command: ViewCommand.Entry) =>
+        {
+            const entry = this.getUnknown(path);
+            if (entry)
+            {
+                setEventHandler(entry, event, command);
+            }
+        }
+        public addEventHandler = (path: PathType, event: EventType, command: ViewCommand.Entry) =>
+        {
+            const entry = this.getUnknown(path);
+            if (entry)
+            {
+                addEventHandler(entry, event, command);
             }
         }
         public remove = (path: PathType) =>

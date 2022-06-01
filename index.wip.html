@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.wip.json release
-    build at: Mon May 30 2022 21:27:19 GMT+0900 (日本標準時)
+    build at: Thu Jun 02 2022 02:28:43 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -9022,7 +9022,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                     {
                                         isStrictShowPrimaryPage: true,
                                         onclick: {
-                                            type: "scroll-to",
+                                            type: "tektite-scroll-to",
                                             data: {
                                                 path: {
                                                     type: "path",
@@ -9054,7 +9054,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                         eventHandlers: {
                             "scroll": function (tektite, _event, path) {
                                 tektite.viewCommand.call({
-                                    type: "update-primary-page-footer-down-page-link",
+                                    type: "tektite-update-primary-page-footer-down-page-link",
                                     data: {
                                         path: path,
                                     },
@@ -9135,28 +9135,15 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 index_js_7.minamo.dom.setProperty(element, "className", "tektite-item ".concat(stateData.className));
                                 if (0 < stateData.wait) {
                                     setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-                                        var current;
                                         return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0:
-                                                    current = tektite.viewModel.getOrNull(path, "tektite-toast-item");
-                                                    if (!current) return [3 /*break*/, 4];
-                                                    if (!(null === stateData.next)) return [3 /*break*/, 2];
-                                                    tektite.viewModel.remove(path);
-                                                    return [4 /*yield*/, this.renderRoot()];
-                                                case 1:
-                                                    _a.sent();
-                                                    return [3 /*break*/, 4];
-                                                case 2:
-                                                    if (!(current.data.state === data.state)) return [3 /*break*/, 4];
-                                                    current.data.state = stateData.next;
-                                                    tektite.viewModel.set(path, current);
-                                                    return [4 /*yield*/, this.renderRoot()];
-                                                case 3:
-                                                    _a.sent();
-                                                    _a.label = 4;
-                                                case 4: return [2 /*return*/];
-                                            }
+                                            tektite.viewCommand.call({
+                                                type: "tektite-update-toast-item",
+                                                data: {
+                                                    path: path,
+                                                    next: stateData.next,
+                                                }
+                                            });
+                                            return [2 /*return*/];
                                         });
                                     }); }, stateData.wait);
                                 }
@@ -9228,7 +9215,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
         };
     })(ViewRenderer = exports.ViewRenderer || (exports.ViewRenderer = {}));
 });
-define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports", "clockworks/tektite.js/script/tektite-view-renderer"], function (require, exports, tektite_view_renderer_js_1) {
+define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-view-renderer"], function (require, exports, index_js_8, tektite_view_renderer_js_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ViewCommand = void 0;
@@ -9241,7 +9228,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                 var _this = this;
                 this.tektite = tektite;
                 this.commands = {
-                    "scroll-to": function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-scroll-to": function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var dom;
                         var _a;
                         return __generator(this, function (_b) {
@@ -9261,7 +9248,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             }
                         });
                     }); },
-                    "update-primary-page-footer-down-page-link": function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-update-primary-page-footer-down-page-link": function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var path, model, dom, body, isStrictShowPrimaryPage;
                         var _a, _b;
                         return __generator(this, function (_c) {
@@ -9287,7 +9274,34 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             }
                             return [2 /*return*/];
                         });
-                    }); }
+                    }); },
+                    "tektite-update-toast-item": function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                        var path, model;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!("string" === typeof entry || !entry.data)) return [3 /*break*/, 1];
+                                    console.error("tektite-view-command: This command require data - entry:".concat(JSON.stringify(entry)));
+                                    return [3 /*break*/, 3];
+                                case 1:
+                                    path = entry.data.path;
+                                    model = tektite.viewModel.get(path, "tektite-toast-item");
+                                    if (!model) return [3 /*break*/, 3];
+                                    if (null === entry.data.next) {
+                                        tektite.viewModel.remove(path);
+                                    }
+                                    else {
+                                        model.data.state = entry.data.next;
+                                        tektite.viewModel.set(path, model);
+                                    }
+                                    return [4 /*yield*/, tektite.viewRenderer.renderRoot()];
+                                case 2:
+                                    _a.sent();
+                                    _a.label = 3;
+                                case 3: return [2 /*return*/];
+                            }
+                        });
+                    }); },
                 };
             }
             ViewCommand.prototype.call = function (entry) {
@@ -9300,12 +9314,14 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                 }
             };
             ViewCommand.prototype.callByEvent = function (path, event) {
+                var _this = this;
                 var _a;
                 var model = this.tektite.viewModel.getUnknownOrNull(path);
                 if (model) {
-                    var entry = (_a = model.data) === null || _a === void 0 ? void 0 : _a[event];
-                    if (entry) {
-                        this.call(entry);
+                    var entryOrList = (_a = model.data) === null || _a === void 0 ? void 0 : _a[event];
+                    if (entryOrList) {
+                        index_js_8.minamo.core.arrayOrToArray(entryOrList)
+                            .map(function (entry) { return _this.call(entry); });
                     }
                     else {
                         console.error("tektite-view-command: Event not found - path:".concat(path.path, ", event:").concat(event));
@@ -9323,7 +9339,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
         };
     })(ViewCommand = exports.ViewCommand || (exports.ViewCommand = {}));
 });
-define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports", "clockworks/nephila/minamo.js/index"], function (require, exports, index_js_8) {
+define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports", "clockworks/nephila/minamo.js/index"], function (require, exports, index_js_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ViewModel = void 0;
@@ -9351,6 +9367,29 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
         ViewModel_1.getPathLeaf = function (path) { return path.path.split("/").pop(); };
         var uniqueKeySource = 0;
         ViewModel_1.makeUniqueKey = function () { return "unique:".concat(uniqueKeySource++); };
+        ViewModel_1.setEventHandler = function (entry, event, command) {
+            if (!entry.data) {
+                entry.data = {};
+            }
+            entry.data[event] = command;
+            return entry;
+        };
+        ViewModel_1.addEventHandler = function (entry, event, command) {
+            if (!entry.data) {
+                entry.data = {};
+            }
+            var current = entry.data[event];
+            if (!current) {
+                entry.data[event] = command;
+            }
+            else if (!Array.isArray(current)) {
+                entry.data[event] = [current, command,];
+            }
+            else {
+                entry.data[event] = current.concat(command);
+            }
+            return entry;
+        };
         ViewModel_1.isEntry = function (type) {
             return function (model) { return type === (model === null || model === void 0 ? void 0 : model.type); };
         };
@@ -9360,13 +9399,13 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
             return !(data === null || data === void 0 ? void 0 : data.children) ? [] :
                 Array.isArray(data.children) ?
                     data.children.map(function (_, ix) { return ix; }) :
-                    index_js_8.minamo.core.objectKeys(data.children);
+                    index_js_9.minamo.core.objectKeys(data.children);
         };
         ViewModel_1.getChildrenModelKeys = function (data) {
             return !(data === null || data === void 0 ? void 0 : data.children) ? [] :
                 Array.isArray(data.children) ?
                     data.children.map(function (i) { return i.key; }) :
-                    index_js_8.minamo.core.objectKeys(data.children);
+                    index_js_9.minamo.core.objectKeys(data.children);
         };
         ViewModel_1.getChildFromModelKey = function (data, key) {
             var _a, _b, _c, _d, _e;
@@ -9378,7 +9417,7 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
             return !(data === null || data === void 0 ? void 0 : data.children) ? [] :
                 Array.isArray(data.children) ?
                     data.children :
-                    index_js_8.minamo.core.objectToArray(data.children, function (_k, v, _o) { return v; });
+                    index_js_9.minamo.core.objectToArray(data.children, function (_k, v, _o) { return v; });
         };
         ViewModel_1.hasInvalidViewModel = function (data) {
             var _a;
@@ -9446,6 +9485,18 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
                 this.tektite = tektite;
                 this.data = null;
                 this.onLoad = function () {
+                };
+                this.setEventHandler = function (path, event, command) {
+                    var entry = _this.getUnknown(path);
+                    if (entry) {
+                        ViewModel_1.setEventHandler(entry, event, command);
+                    }
+                };
+                this.addEventHandler = function (path, event, command) {
+                    var entry = _this.getUnknown(path);
+                    if (entry) {
+                        ViewModel_1.addEventHandler(entry, event, command);
+                    }
                 };
                 this.remove = function (path) {
                     if (!ViewModel_1.hasErrorPath(path)) {
@@ -9535,7 +9586,7 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
                                 keys.shift();
                             }
                         }
-                        return index_js_8.minamo.core.simpleDeepCopy((current === null || current === void 0 ? void 0 : current.type) === ((_a = path.entryType) !== null && _a !== void 0 ? _a : current === null || current === void 0 ? void 0 : current.type) ? current : null);
+                        return index_js_9.minamo.core.simpleDeepCopy((current === null || current === void 0 ? void 0 : current.type) === ((_a = path.entryType) !== null && _a !== void 0 ? _a : current === null || current === void 0 ? void 0 : current.type) ? current : null);
                     }
                 };
                 this.getUnknown = function (path) {
@@ -9563,7 +9614,7 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
                                 children_1.forEach(function (i) { return _this.makeSureStrictEntry(ViewModel_1.makePath(path, i.key), i); });
                             }
                             else {
-                                index_js_8.minamo.core.objectKeys(children_1)
+                                index_js_9.minamo.core.objectKeys(children_1)
                                     .forEach(function (key) { return children_1[key] = _this.makeSureStrictEntry(ViewModel_1.makePath(path, key), children_1[key]); });
                             }
                             if (entry.child) {
@@ -9587,7 +9638,7 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
             ViewModel.prototype.set = function (pathOrdata, dataOrType) {
                 if (ViewModel_1.isPathType(pathOrdata) && undefined !== dataOrType) {
                     var path = pathOrdata;
-                    var data = index_js_8.minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, dataOrType));
+                    var data = index_js_9.minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, dataOrType));
                     if ((!ViewModel_1.hasError(path, data)) && data) {
                         var keys_2 = path.path.split("/");
                         if ("" !== keys_2[0] || "root" !== keys_2[1]) {
@@ -9649,7 +9700,7 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
                 }
                 else {
                     var path = ViewModel_1.makeRootPath();
-                    var data = index_js_8.minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, pathOrdata));
+                    var data = index_js_9.minamo.core.simpleDeepCopy(this.makeSureStrictEntry(path, pathOrdata));
                     if (!ViewModel_1.hasError(path, data)) {
                         this.data = data;
                     }
@@ -9710,14 +9761,14 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
         };
     })(ViewModel = exports.ViewModel || (exports.ViewModel = {}));
 });
-define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-locale", "clockworks/tektite.js/script/tektite-date", "clockworks/tektite.js/script/tektite-fullscreen", "clockworks/tektite.js/script/tektite-screen", "clockworks/tektite.js/script/tektite-menu", "clockworks/tektite.js/script/tektite-key", "clockworks/tektite.js/script/tektite-view-model", "clockworks/tektite.js/script/tektite-view-renderer", "clockworks/tektite.js/script/tektite-view-command"], function (require, exports, index_js_9, tektite_locale_1, tektite_date_1, tektite_fullscreen_1, tektite_screen_1, tektite_menu_1, tektite_key_1, tektite_view_model_2, tektite_view_renderer_1, tektite_view_command_1) {
+define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-locale", "clockworks/tektite.js/script/tektite-date", "clockworks/tektite.js/script/tektite-fullscreen", "clockworks/tektite.js/script/tektite-screen", "clockworks/tektite.js/script/tektite-menu", "clockworks/tektite.js/script/tektite-key", "clockworks/tektite.js/script/tektite-view-model", "clockworks/tektite.js/script/tektite-view-renderer", "clockworks/tektite.js/script/tektite-view-command"], function (require, exports, index_js_10, tektite_locale_1, tektite_date_1, tektite_fullscreen_1, tektite_screen_1, tektite_menu_1, tektite_key_1, tektite_view_model_2, tektite_view_renderer_1, tektite_view_command_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Tektite = void 0;
     var Tektite;
     (function (Tektite_1) {
-        Tektite_1.$make = index_js_9.minamo.dom.make;
-        Tektite_1.$tag = index_js_9.minamo.dom.tag;
+        Tektite_1.$make = index_js_10.minamo.dom.make;
+        Tektite_1.$tag = index_js_10.minamo.dom.tag;
         Tektite_1.$div = Tektite_1.$tag("div");
         Tektite_1.$span = Tektite_1.$tag("span");
         Tektite_1.$labelSpan = Tektite_1.$span("label");
@@ -9736,7 +9787,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
             "horizontal": null,
             "vertical": null,
         };
-        Tektite_1.ProgressBarStyleList = index_js_9.minamo.core.objectKeys(Tektite_1.progressBarStyleObject);
+        Tektite_1.ProgressBarStyleList = index_js_10.minamo.core.objectKeys(Tektite_1.progressBarStyleObject);
         ;
         // export class Tektite<PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
         var Tektite = /** @class */ (function () {
@@ -9807,9 +9858,9 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                     if (!_this.key.isComposing(event)) {
                         switch (event.key) {
                             case "Enter":
-                                index_js_9.minamo.dom.getElementsByClassName(document, "popup")
+                                index_js_10.minamo.dom.getElementsByClassName(document, "popup")
                                     .filter(function (_i, ix, list) { return (ix + 1) === list.length; })
-                                    .forEach(function (popup) { var _a, _b; return (_b = (_a = index_js_9.minamo.dom.getElementsByClassName(popup, "tektite-default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
+                                    .forEach(function (popup) { var _a, _b; return (_b = (_a = index_js_10.minamo.dom.getElementsByClassName(popup, "tektite-default-button")) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.click(); });
                                 break;
                             case "Escape":
                                 if (_this.escape()) {
@@ -9853,12 +9904,12 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                 };
                 //  Window > Foundation > Screen
                 this.setWindowColor = function (color) {
-                    index_js_9.minamo.dom.setStyleProperty(document.body, "backgroundColor", "".concat(color, "E8"));
-                    index_js_9.minamo.dom.setProperty("#tektite-theme-color", "content", color);
+                    index_js_10.minamo.dom.setStyleProperty(document.body, "backgroundColor", "".concat(color, "E8"));
+                    index_js_10.minamo.dom.setProperty("#tektite-theme-color", "content", color);
                 };
                 this.foundation = null;
                 this.setFoundationColor = function (color) {
-                    return index_js_9.minamo.dom.setStyleProperty(index_js_9.minamo.core.existsOrThrow(_this.foundation), "backgroundColor", color !== null && color !== void 0 ? color : "");
+                    return index_js_10.minamo.dom.setStyleProperty(index_js_10.minamo.core.existsOrThrow(_this.foundation), "backgroundColor", color !== null && color !== void 0 ? color : "");
                 };
                 this.latestColor = null;
                 this.setBackgroundColor = function (color) {
@@ -9878,7 +9929,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                         { className: "tektite-style-modern", tottle: "modern" === style, },
                         { className: "tektite-style-classic", tottle: "classic" === style, },
                     ]
-                        .map(function (i) { return index_js_9.minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate; })
+                        .map(function (i) { return index_js_10.minamo.dom.toggleCSSClass(document.body, i.className, i.tottle).isUpdate; })
                         .reduce(function (a, b) { return a || b; }, false)) {
                         _this.setBackgroundColor((_a = _this.latestColor) !== null && _a !== void 0 ? _a : null);
                     }
@@ -9889,7 +9940,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                 this.getScreenBarElement = function () { return document.getElementsByClassName("tektite-screen-bar")[0]; };
                 this.resetScreenBarProgress = function () {
                     var screenBar = _this.getScreenBarElement();
-                    index_js_9.minamo.dom.setStyleProperty(screenBar, "display", "none");
+                    index_js_10.minamo.dom.setStyleProperty(screenBar, "display", "none");
                 };
                 this.resetProgress = function () {
                     _this.resetScreenBarProgress();
@@ -9900,26 +9951,26 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                     if (null !== percent && "header" !== progressBarStyle) {
                         var screenBar = _this.getScreenBarElement();
                         if (color) {
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "backgroundColor", color);
                         }
                         var percentString = Tektite_1.makePercentString(percent);
                         if ((window.innerHeight < window.innerWidth && "vertical" !== progressBarStyle) || "horizontal" === progressBarStyle) {
-                            index_js_9.minamo.dom.addCSSClass(screenBar, "tektite-horizontal");
-                            index_js_9.minamo.dom.removeCSSClass(screenBar, "tektite-vertical");
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "height", "initial");
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "width", percentString);
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
+                            index_js_10.minamo.dom.addCSSClass(screenBar, "tektite-horizontal");
+                            index_js_10.minamo.dom.removeCSSClass(screenBar, "tektite-vertical");
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "height", "initial");
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "maxHeight", "initial");
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "width", percentString);
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "maxWidth", percentString);
                         }
                         else {
-                            index_js_9.minamo.dom.addCSSClass(screenBar, "tektite-vertical");
-                            index_js_9.minamo.dom.removeCSSClass(screenBar, "tektite-horizontal");
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "width", "initial");
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "height", percentString);
-                            index_js_9.minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
+                            index_js_10.minamo.dom.addCSSClass(screenBar, "tektite-vertical");
+                            index_js_10.minamo.dom.removeCSSClass(screenBar, "tektite-horizontal");
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "width", "initial");
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "maxWidth", "initial");
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "height", percentString);
+                            index_js_10.minamo.dom.setStyleProperty(screenBar, "maxHeight", percentString);
                         }
-                        index_js_9.minamo.dom.setStyleProperty(screenBar, "display", "block");
+                        index_js_10.minamo.dom.setStyleProperty(screenBar, "display", "block");
                     }
                     else {
                         _this.resetScreenBarProgress();
@@ -9959,7 +10010,7 @@ define("clockworks/tektite.js/script/tektite-index", ["require", "exports", "clo
                 this.onLoad = function () {
                     var _a;
                     _this.screen.onLoad();
-                    _this.foundation = index_js_9.minamo.dom.make(HTMLDivElement)({
+                    _this.foundation = index_js_10.minamo.dom.make(HTMLDivElement)({
                         parent: document.body,
                         className: "tektite-foundation",
                         children: _this.screen.element,
@@ -15794,7 +15845,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.startWIP({ buildTimestampTick: 1653913639866, })">
+<body onload="require('clockworks/script/index').Clockworks.startWIP({ buildTimestampTick: 1654104523222, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
