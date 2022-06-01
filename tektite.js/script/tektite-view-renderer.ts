@@ -721,17 +721,14 @@ export module ViewRenderer
                 {
                     "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
                     {
-                        tektite.viewCommand.call
-                        (
-                            <ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand>
+                        tektite.viewCommand.call<ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand>
+                        ({
+                            type: "tektite-update-primary-page-footer-down-page-link",
+                            data:
                             {
-                                type: "tektite-update-primary-page-footer-down-page-link",
-                                data:
-                                {
-                                    path,
-                                },
-                            }
-                        );
+                                path,
+                            },
+                        });
                     },
                 },
             }),

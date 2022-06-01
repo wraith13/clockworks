@@ -176,7 +176,7 @@ export module ViewModel
             isStrictShowPrimaryPage: boolean;
             onclick:
             {
-                type: "scroll-to",
+                type: "tektite-scroll-to",
                 data:
                 {
                     path:
@@ -407,9 +407,9 @@ export module ViewModel
                 return entry as StrictEntry | null;
             }
         }
-        public set(dataOrType: Entry): void;
-        public set(path: PathType, dataOrType: Entry): void;
-        public set(pathOrdata: PathType | Entry, dataOrType?: Entry): void
+        public set<OmegaEntry extends Entry>(dataOrType: OmegaEntry): void;
+        public set<OmegaEntry extends Entry>(path: PathType, dataOrType: OmegaEntry): void;
+        public set<OmegaEntry extends Entry>(pathOrdata: PathType | OmegaEntry, dataOrType?: OmegaEntry): void
         {
             if (isPathType(pathOrdata) && undefined !== dataOrType)
             {
