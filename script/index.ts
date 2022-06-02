@@ -128,15 +128,16 @@ export module Clockworks
                                 {
                                     type: "tektite-screen-header-progress-bar",
                                 },
-                                "screen-header-segment":
+                                "screen-header-segment": <ViewModel.ScreenHeaderSegmentListEntry>
                                 {
                                     type: "tektite-screen-header-segment-list",
                                     children:
                                     [
+                                        <ViewModel.ScreenHeaderLabelSegmentEntry>
                                         {
                                             type: "tektite-screen-header-label-segment",
                                             key: "application-segment",
-                                            child:
+                                            child: <ViewModel.ScreenHeaderSegmentCoreEntry>
                                             {
                                                 type: "tektite-screen-header-segment-core",
                                                 data:
@@ -148,7 +149,7 @@ export module Clockworks
                                         },
                                     ],
                                 },
-                                "screen-header-operator":
+                                "screen-header-operator": <ViewModel.ScreenHeaderOperatorEntry>
                                 {
                                     "type": "tektite-screen-header-operator",
                                     children:
@@ -157,7 +158,7 @@ export module Clockworks
                                 },
                             }
                         },
-                        "screen-body":
+                        "screen-body": <ViewModel.ScreenBodyEntry>
                         {
                             type: "tektite-screen-body",
                             data:
