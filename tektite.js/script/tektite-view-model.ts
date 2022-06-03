@@ -274,6 +274,30 @@ export module ViewModel
         };
         child: ButtonEntry;
     }
+    export interface MenuButtonEntry extends EntryBase
+    {
+        type: "tektite-menu-button";
+        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry) };
+    }
+    export interface MenuItemButtonEntry extends EntryBase
+    {
+        type: "tektite-menu-item-button";
+        data: EntryData &
+        {
+            className?: string;
+            // onclick?: (event: MouseEvent) => unknown;
+        };
+    }
+    export interface MenuItemLinkButtonEntry extends EntryBase
+    {
+        type: "tektite-menu-item-link-button";
+        data: EntryData &
+        {
+            className?: string;
+            href: string;
+        };
+        child: ButtonEntry;
+    }
     export interface VanillaSpanEntry extends EntryBase
     {
         type: "tektite-vanilla-span";
