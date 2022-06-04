@@ -151,9 +151,85 @@ export module Clockworks
                                 },
                                 "screen-header-operator": <ViewModel.ScreenHeaderOperatorEntry>
                                 {
-                                    "type": "tektite-screen-header-operator",
-                                    children:
+                                    type: "tektite-screen-header-operator",
+                                    child: <ViewModel.MenuButtonEntry>
                                     {
+                                        type: "tektite-menu-button",
+                                        children:
+                                        {
+                                            fullscreen: <ViewModel.MenuItemButtonEntry>
+                                            {
+                                                type: "tektite-menu-item-button",
+                                                child: <ViewModel.LabelSpanEntry>
+                                                {
+                                                    type: "tektite-label-span",
+                                                    data:
+                                                    {
+                                                        text: null === tektite.fullscreen.element() ? "Full screen": "Cancel full screen",
+                                                    }
+                                                },
+                                            },
+                                            theme: <ViewModel.MenuItemButtonEntry>
+                                            {
+                                                type: "tektite-menu-item-button",
+                                                child: <ViewModel.LabelSpanEntry>
+                                                {
+                                                    type: "tektite-label-span",
+                                                    data:
+                                                    {
+                                                        text: "Theme setting",
+                                                    }
+                                                },
+                                            },
+                                            progressBarStyle: <ViewModel.MenuItemButtonEntry>
+                                            {
+                                                type: "tektite-menu-item-button",
+                                                child: <ViewModel.LabelSpanEntry>
+                                                {
+                                                    type: "tektite-label-span",
+                                                    data:
+                                                    {
+                                                        text: "Progress Bar Style setting",
+                                                    }
+                                                },
+                                            },
+                                            language: <ViewModel.MenuItemButtonEntry>
+                                            {
+                                                type: "tektite-menu-item-button",
+                                                child: <ViewModel.LabelSpanEntry>
+                                                {
+                                                    type: "tektite-label-span",
+                                                    data:
+                                                    {
+                                                        text: "Language setting",
+                                                    }
+                                                },
+                                            },
+                                            github: <ViewModel.MenuItemLinkButtonEntry>
+                                            {
+                                                type: "tektite-menu-item-link-button",
+                                                child: <ViewModel.ButtonEntry>
+                                                {
+                                                    type: "tektite-button",
+                                                    data: { },
+                                                    children:
+                                                    {
+                                                        "single": <ViewModel.LabelSpanEntry>
+                                                        {
+                                                            type: "tektite-label-span",
+                                                            data:
+                                                            {
+                                                                text: "Language setting",
+                                                            }
+                                                        }
+                                                    },
+                                                },
+                                                data:
+                                                {
+                                                    href: config.repositoryUrl,
+                                                }
+                                            },
+                                        }
                                     },
                                 },
                             }
