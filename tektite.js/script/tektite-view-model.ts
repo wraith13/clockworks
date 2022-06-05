@@ -282,10 +282,10 @@ export module ViewModel
     export interface MenuItemButtonEntry extends EntryBase
     {
         type: "tektite-menu-item-button";
-        data: EntryData &
+        data?: EntryData &
         {
             className?: string;
-            // onclick?: (event: MouseEvent) => unknown;
+            onclick?: (event: MouseEvent) => unknown;
         };
     }
     export interface MenuItemLinkButtonEntry extends EntryBase

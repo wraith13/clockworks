@@ -896,6 +896,26 @@ export module ViewRenderer
                 updateChildren: "append",
                 getChildModelContainer: (dom: DomType) => (dom as Element[])[1]
             },
+            "tektite-menu-item-button":
+            {
+                make: { tag: "button", },
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    minamo.dom.setProperties(dom as HTMLButtonElement, data ?? { });
+                    return dom;
+                },
+                updateChildren: "append",
+            },
+            "tektite-menu-item-link-button":
+            {
+                make: { tag: "a", },
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    minamo.dom.setProperties(dom as HTMLButtonElement, data);
+                    return dom;
+                },
+                updateChildren: "append",
+            },
             "tektite-vanilla-span":
             {
                 make: { tag: "span" },
