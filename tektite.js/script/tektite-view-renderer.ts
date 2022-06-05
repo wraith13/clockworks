@@ -872,6 +872,30 @@ export module ViewRenderer
                 },
                 updateChildren: "append",
             },
+            "tektite-menu-button":
+            {
+                make: async () =>
+                [
+                    {
+                        tag: "button",
+                        className: "tektite-menu-button",
+                        children: await this.tektite.loadIconOrCache("tektite-ellipsis-icon"),
+                    },
+                    {
+                        tag: "div",
+                        className: "tektite-menu-popup",
+                        // onclick: async (event: MouseEvent) =>
+                        // {
+                        //     event.stopPropagation();
+                        //     console.log("tektite-menu-popup.click!");
+                        //     cover?.close();
+                        //     close();
+                        // },
+                    },
+                ],
+                updateChildren: "append",
+                getChildModelContainer: (dom: DomType) => (dom as Element[])[1]
+            },
             "tektite-vanilla-span":
             {
                 make: { tag: "span" },
