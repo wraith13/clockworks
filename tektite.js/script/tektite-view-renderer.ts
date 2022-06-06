@@ -634,22 +634,9 @@ export module ViewRenderer
             {
                 make:
                 {
-                    tag: "header",
-                    id: "tektite-screen-header",
-                    className: "tektite-segmented",
+                    tag: "div",
+                    className: "tektite-header-operator",
                 },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderOperatorEntry["data"], _externalModels: { [path: string]:any }) =>
-                {
-                    return dom;
-                },
-                // getChildModelContainer: (dom: Element, key: string) =>
-                // {
-    
-                // },
-                eventHandlers:
-                {
-        
-                }
             },
             "tektite-screen-body":
             {
