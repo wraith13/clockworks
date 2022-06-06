@@ -39,7 +39,7 @@ export module ViewRenderer
     };
     export interface DomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBeta<ViewModelEntry>
     {
-        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
+        make: ((path: ViewModel.PathType) => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
         update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
     export type Entry<ViewModelEntry extends ViewModel.EntryBase> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
@@ -217,9 +217,9 @@ export module ViewRenderer
                 json: data,
                 childrenKeys
             };
-        public make = async (maker: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source): Promise<DomType> =>
+        private makeRaw = async (maker: ((path: ViewModel.PathType) => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source, path: ViewModel.PathType): Promise<DomType> =>
         {
-            const source = "function" === typeof maker ? await maker(): maker;
+            const source = "function" === typeof maker ? await maker(path): maker;
             try
             {
                 return source instanceof Element ? source:
@@ -236,6 +236,28 @@ export module ViewRenderer
                 console.log(JSON.stringify(source));
                 throw err;
             }
+        };
+        public make = async <Model extends ViewModel.StrictEntry>(type: string, path: ViewModel.PathType, data?: Model["data"]): Promise<DomType> =>
+        {
+            let dom: DomType = [];
+            const renderer = this.getAny(type) ?? this.unknownRenderer;
+            if ( ! isContainerEntry(renderer))
+            {
+                const externalData = this.getExternalData(path, { type, data, }, renderer.getExternalDataPath);
+                if (isVolatileDomEntry(renderer))
+                {
+                    dom = await renderer.update(this.tektite, path, data, externalData);
+                }
+                else
+                {
+                    dom = await this.makeRaw(renderer.make, path);
+                    if (undefined !== data)
+                    {
+                        dom = (await renderer?.update?.(this.tektite, path, dom, data, externalData)) ?? dom;
+                    }
+                }
+            }
+            return dom;
         };
         public getExternalData = (path: ViewModel.PathType, model: ViewModel.EntryBase, getExternalDataPath?: (ViewModel.PathType[]) | ((tektite: Tektite.Tektite<T>, path: ViewModel.PathType, model: ViewModel.EntryBase) => ViewModel.PathType[])): { [path: string]:any } =>
         {
@@ -307,7 +329,7 @@ export module ViewRenderer
                             }
                             else
                             {
-                                dom = cache?.dom ?? await this.make(renderer.make);
+                                dom = cache?.dom ?? await this.makeRaw(renderer.make, path);
                                 dom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             }
                             const primary = getPrimaryElement(dom) as HTMLElement;
@@ -401,7 +423,7 @@ export module ViewRenderer
                         }
                         else
                         {
-                            dom = cache?.dom ?? await this.make(renderer.make);
+                            dom = cache?.dom ?? await this.makeRaw(renderer.make);
                             const newDom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             if (dom !== newDom)
                             {
