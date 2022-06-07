@@ -20,6 +20,12 @@ export module ViewModel
         path: "/root",
         entryType,
     });
+    export const makeDummyPath = (entryType?: string): PathType =>
+    ({
+        type: "path",
+        path: "/dummy",
+        entryType,
+    });
     export const getPathLeaf = (path: PathType) => path.path.split("/").pop();
     let uniqueKeySource = 0;
     export const makeUniqueKey = () => `unique:${uniqueKeySource++}`;
@@ -414,10 +420,10 @@ export module ViewModel
         public onLoad = () =>
         {
         };
-        private makeSureStrictEntry(path: PathType, entry: Entry): StrictEntry;
-        private makeSureStrictEntry(path: PathType, entry: null): null;
-        private makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null;
-        private makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null
+        public makeSureStrictEntry(path: PathType, entry: Entry): StrictEntry;
+        public makeSureStrictEntry(path: PathType, entry: null): null;
+        public makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null;
+        public makeSureStrictEntry(path: PathType, entry: Entry | null): StrictEntry | null
         {
             if ("string" === typeof entry)
             {
