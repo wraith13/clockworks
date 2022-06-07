@@ -485,7 +485,7 @@ export module ViewRenderer
         {
             "tektite-root": minamo.core.extender<DomEntry<ViewModel.RootEntry>>()
             ({
-                make: async () => document.body,
+                make: async (_path: ViewModel.PathType) => document.body,
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.RootEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     if ("string" === typeof data?.title)
@@ -719,7 +719,7 @@ export module ViewRenderer
                     }
                     return model;
                 },
-                make: async () => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
+                make: async (_path: ViewModel.PathType) => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom) as HTMLDivElement;
@@ -857,8 +857,7 @@ export module ViewRenderer
             },
             "tektite-vertical-button-list":
             {
-                make:
-                Tektite.$div("tektite-vertical-button-list")([]),
+                make: Tektite.$div("tektite-vertical-button-list")([]),
                 updateChildren: "append",
             },
             "tektite-button":
@@ -883,7 +882,7 @@ export module ViewRenderer
             },
             "tektite-menu-button":
             {
-                make: async () =>
+                make: async (_path: ViewModel.PathType) =>
                 [
                     {
                         tag: "button",
