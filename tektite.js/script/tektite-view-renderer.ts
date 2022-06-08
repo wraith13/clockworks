@@ -39,7 +39,7 @@ export module ViewRenderer
     };
     export interface DomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBeta<ViewModelEntry>
     {
-        make: ((path: ViewModel.PathType) => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
+        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
         update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
     export type Entry<ViewModelEntry extends ViewModel.EntryBase> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
@@ -217,9 +217,9 @@ export module ViewRenderer
                 json: data,
                 childrenKeys
             };
-        private makeRaw = async (maker: ((path: ViewModel.PathType) => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source, path: ViewModel.PathType): Promise<DomType> =>
+        private make = async (maker: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source): Promise<DomType> =>
         {
-            const source = "function" === typeof maker ? await maker(path): maker;
+            const source = "function" === typeof maker ? await maker(): maker;
             try
             {
                 return source instanceof Element ? source:
@@ -237,25 +237,85 @@ export module ViewRenderer
                 throw err;
             }
         };
-        public make = async <Model extends ViewModel.StrictEntry>(type: string, path: ViewModel.PathType, data?: Model["data"]): Promise<DomType> =>
+        public instantMake = async <Model extends ViewModel.Entry>(model: Model): Promise<DomType> =>
         {
+            const outputError = (message: string) => console.error(`tektite-view-renderer: ${message} - path:${path.path}, data:${JSON.stringify(data)}`);
+            const path = ViewModel.makeDummyPath();
+            const data = this.tektite.viewModel.makeSureStrictEntry(path, model);
             let dom: DomType = [];
-            const renderer = this.getAny(type) ?? this.unknownRenderer;
+            const renderer = this.getAny(data.type) ?? this.unknownRenderer;
             if ( ! isContainerEntry(renderer))
             {
-                const externalData = this.getExternalData(path, { type, data, }, renderer.getExternalDataPath);
+                const externalData = this.getExternalData(path, data, renderer.getExternalDataPath);
                 if (isVolatileDomEntry(renderer))
                 {
-                    dom = await renderer.update(this.tektite, path, data, externalData);
+                    dom = await renderer.update(this.tektite, path, data.data, externalData);
                 }
                 else
                 {
-                    dom = await this.makeRaw(renderer.make, path);
-                    if (undefined !== data)
-                    {
-                        dom = (await renderer?.update?.(this.tektite, path, dom, data, externalData)) ?? dom;
-                    }
+                    dom = await this.make(renderer.make);
+                    dom = (await renderer?.update?.(this.tektite, path, dom, data.data, externalData)) ?? dom;
                 }
+                if (renderer.eventHandlers)
+                {
+                    outputError("Can not support eventHandlers");
+                }
+                if (data.data?.isVolatile)
+                {
+                    outputError("Can not support volatile");
+                }
+                const childrenKeys = ViewModel.getChildrenModelKeys(data);
+                if (0 < childrenKeys.length)
+                {
+                    const childrenCache = await Promise.all
+                    (
+                        childrenKeys.map
+                        (
+                            async key =>
+                            {
+                                const child = ViewModel.getChildFromModelKey(data, key);
+                                return child ? await this.instantMake(child): undefined;
+                            }
+                        )
+                    );
+                    const forceAppend = true;
+                    const childrenKeyDomMap: { [key:string]: DomType } = { };
+                    childrenKeys.forEach
+                    (
+                        (key, ix) => childrenKeyDomMap[key] =
+                            childrenCache[ix] ??
+                            this.aggregateChildren(ViewModel.makePath(path, key), ViewModel.getChildFromModelKey(data, key)) // これは実際には機能しない。
+                    );
+                    const container = renderer.getChildModelContainer?.(dom) ?? getPrimaryElement(dom);
+                    if (undefined === renderer.updateChildren || "append" === renderer.updateChildren)
+                    {
+                        this.appendChildren(container, childrenKeyDomMap, forceAppend);
+                    }
+                    else
+                    if (Array.isArray(renderer.updateChildren))
+                    {
+                        this.replaceChildren(container, childrenKeyDomMap, renderer.updateChildren);
+                    }
+                    else
+                    {
+                        await renderer.updateChildren(container, childrenKeyDomMap, forceAppend);
+                    }
+                    childrenKeys.forEach
+                    (
+                        (key, ix) =>
+                        {
+                            const dom = childrenCache[ix];
+                            if (minamo.core.exists(dom) && this.hasLeakChildren(dom))
+                            {
+                                outputError(`Not allocate dom ${key}`);
+                            }
+                        }
+                    );
+                }
+            }
+            else
+            {
+                outputError("Can not make ContainerEntry");
             }
             return dom;
         };
@@ -329,7 +389,7 @@ export module ViewRenderer
                             }
                             else
                             {
-                                dom = cache?.dom ?? await this.makeRaw(renderer.make, path);
+                                dom = cache?.dom ?? await this.make(renderer.make);
                                 dom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             }
                             const primary = getPrimaryElement(dom) as HTMLElement;
@@ -423,7 +483,7 @@ export module ViewRenderer
                         }
                         else
                         {
-                            dom = cache?.dom ?? await this.makeRaw(renderer.make);
+                            dom = cache?.dom ?? await this.make(renderer.make);
                             const newDom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             if (dom !== newDom)
                             {
@@ -485,7 +545,7 @@ export module ViewRenderer
         {
             "tektite-root": minamo.core.extender<DomEntry<ViewModel.RootEntry>>()
             ({
-                make: async (_path: ViewModel.PathType) => document.body,
+                make: async () => document.body,
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.RootEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     if ("string" === typeof data?.title)
@@ -719,7 +779,7 @@ export module ViewRenderer
                     }
                     return model;
                 },
-                make: async (_path: ViewModel.PathType) => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
+                make: async () => Tektite.$div("tektite-down-page-link tektite-icon-frame")(await this.tektite.loadIconOrCache("tektite-down-triangle-icon")),
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.PrimaryPageFooterDownPageLinkEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom) as HTMLDivElement;
@@ -882,7 +942,7 @@ export module ViewRenderer
             },
             "tektite-menu-button":
             {
-                make: async (_path: ViewModel.PathType) =>
+                make: async () =>
                 [
                     {
                         tag: "button",
