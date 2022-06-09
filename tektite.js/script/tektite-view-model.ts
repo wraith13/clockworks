@@ -92,6 +92,14 @@ export module ViewModel
     }
     export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
     export type EntryOrType<Model extends EntryBase> = Model | Model["type"];
+    export interface IconEntry extends EntryBase
+    {
+        type: "tektite-icon";
+        data?: EntryData &
+        {
+            icon: Tektite.ParamTypes<unknown>["IconKeyType"] & minamo.core.Jsonable;
+        };
+    }
     export interface RootEntry extends EntryBase
     {
         type: "tektite-root";

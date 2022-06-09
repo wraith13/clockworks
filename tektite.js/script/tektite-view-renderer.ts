@@ -543,6 +543,14 @@ export module ViewRenderer
         public getAny = <ViewModelEntry extends ViewModel.EntryBase>(type: string): Entry<ViewModelEntry> => this.get(type as any);
         public readonly renderer = //: { [type: string ]: Entry<any> } =
         {
+            "tektite-icon":
+            {
+                make: "volatile",
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, _dom: DomType, data: ViewModel.IconEntry<T>["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    return await tektite.params.loadIconOrCache(data.icon);
+                },
+            },
             "tektite-root": minamo.core.extender<DomEntry<ViewModel.RootEntry>>()
             ({
                 make: async () => document.body,
@@ -948,7 +956,14 @@ export module ViewRenderer
                     ({
                         type: "tektite-button",
                         data: { className: "tektite-menu-button" },
-                        child: await this.tektite.loadIconOrCache("tektite-ellipsis-icon"),
+                        children:
+                        {
+                            icon: <ViewModel.IconEntry<T>>
+                            {
+                                type: "tektite-icon",
+                                data: { icon: "tektite-ellipsis-icon", },
+                            }
+                        },
                     }),
                     {
                         tag: "div",
