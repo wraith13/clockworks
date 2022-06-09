@@ -944,11 +944,12 @@ export module ViewRenderer
             {
                 make: async () =>
                 [
-                    {
-                        tag: "button",
-                        className: "tektite-menu-button",
-                        children: await this.tektite.loadIconOrCache("tektite-ellipsis-icon"),
-                    },
+                    this.instantMake<ViewModel.ButtonEntry>
+                    ({
+                        type: "tektite-button",
+                        data: { className: "tektite-menu-button" },
+                        child: await this.tektite.loadIconOrCache("tektite-ellipsis-icon"),
+                    }),
                     {
                         tag: "div",
                         className: "tektite-menu-popup",
