@@ -92,12 +92,12 @@ export module ViewModel
     }
     export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
     export type EntryOrType<Model extends EntryBase> = Model | Model["type"];
-    export interface IconEntry extends EntryBase
+    export interface IconEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-icon";
-        data?: EntryData &
+        data: EntryData &
         {
-            icon: Tektite.ParamTypes<unknown>["IconKeyType"] & minamo.core.Jsonable;
+            icon: T["IconKeyType"] & minamo.core.Jsonable;
         };
     }
     export interface RootEntry extends EntryBase
@@ -291,6 +291,10 @@ export module ViewModel
     export interface MenuButtonEntry extends EntryBase
     {
         type: "tektite-menu-button";
+        data?: EntryData &
+        {
+            isPopuped?: boolean;
+        };
         children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry) };
     }
     export interface MenuItemButtonEntry extends EntryBase

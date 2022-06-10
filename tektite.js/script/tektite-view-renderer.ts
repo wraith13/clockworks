@@ -6,6 +6,7 @@ export module ViewRenderer
 {
     export type DomType = Element | Element[];
     export const getPrimaryElement = (dom: DomType): Element => Array.isArray(dom) ? dom[0]: dom;
+    export const getSecondaryElement = (dom: DomType): Element => Array.isArray(dom) ? dom[1]: dom;
     export const getElementList = (dom: DomType): Element[] => Array.isArray(dom) ? dom: [dom];
     export interface ContainerEntry
     {
@@ -39,7 +40,7 @@ export module ViewRenderer
     };
     export interface DomEntry<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryBeta<ViewModelEntry>
     {
-        make: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
+        make: ((path: ViewModel.PathType) => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
         update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
     export type Entry<ViewModelEntry extends ViewModel.EntryBase> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
@@ -217,9 +218,9 @@ export module ViewRenderer
                 json: data,
                 childrenKeys
             };
-        private make = async (maker: (() => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source): Promise<DomType> =>
+        private make = async (path: ViewModel.PathType, maker: ((path: ViewModel.PathType) => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source): Promise<DomType> =>
         {
-            const source = "function" === typeof maker ? await maker(): maker;
+            const source = "function" === typeof maker ? await maker(path): maker;
             try
             {
                 return source instanceof Element ? source:
@@ -253,8 +254,15 @@ export module ViewRenderer
                 }
                 else
                 {
-                    dom = await this.make(renderer.make);
+                    dom = await this.make(path, renderer.make);
                     dom = (await renderer?.update?.(this.tektite, path, dom, data.data, externalData)) ?? dom;
+                }
+                const primary = getPrimaryElement(dom) as HTMLElement;
+                const entryOrList = data?.data?.onclick;
+                if (entryOrList)
+                {
+                    primary.onclick = () => minamo.core.arrayOrToArray(entryOrList)
+                        .map(entry => this.tektite.viewCommand.call(entry));
                 }
                 if (renderer.eventHandlers)
                 {
@@ -389,7 +397,7 @@ export module ViewRenderer
                             }
                             else
                             {
-                                dom = cache?.dom ?? await this.make(renderer.make);
+                                dom = cache?.dom ?? await this.make(path, renderer.make);
                                 dom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             }
                             const primary = getPrimaryElement(dom) as HTMLElement;
@@ -483,7 +491,7 @@ export module ViewRenderer
                         }
                         else
                         {
-                            dom = cache?.dom ?? await this.make(renderer.make);
+                            dom = cache?.dom ?? await this.make(path, renderer.make);
                             const newDom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             if (dom !== newDom)
                             {
@@ -950,7 +958,7 @@ export module ViewRenderer
             },
             "tektite-menu-button":
             {
-                make: async () =>
+                make: async (path: ViewModel.PathType) =>
                 [
                     this.instantMake<ViewModel.ButtonEntry>
                     ({
@@ -962,6 +970,16 @@ export module ViewRenderer
                             {
                                 type: "tektite-icon",
                                 data: { icon: "tektite-ellipsis-icon", },
+                            },
+                            onclick: <ViewCommand.SetDataCommand>
+                            {
+                                type: "tektite-set-data",
+                                data:
+                                {
+                                    path,
+                                    key: "isPopuped",
+                                    value: true,
+                                }
                             }
                         },
                     }),
@@ -977,6 +995,12 @@ export module ViewRenderer
                         // },
                     },
                 ],
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    const secondary = getSecondaryElement(dom);
+                    minamo.dom.toggleCSSClass(secondary, "tektite-hide", ! (data?.isPopuped ?? false));
+                    return dom;
+                },
                 updateChildren: "append",
                 getChildModelContainer: (dom: DomType) => (dom as Element[])[1]
             },

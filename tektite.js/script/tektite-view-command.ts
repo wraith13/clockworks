@@ -10,6 +10,16 @@ export module ViewCommand
         type: string;
         data?: minamo.core.JsonableObject;
     }
+    export interface SetDataCommand extends EntryBase
+    {
+        type: "tektite-set-data";
+        data:
+        {
+            path: ViewModel.PathType;
+            key: string;
+            value: minamo.core.Jsonable;
+        }
+    }
     export interface ScrollToCommand extends EntryBase
     {
         type: "tektite-scroll-to";
@@ -80,6 +90,20 @@ export module ViewCommand
         }
         public readonly commands: { [type: string ]: Command<T, any> } =
         {
+            "tektite-set-data": async (tektite: Tektite.Tektite<T>, entry: SetDataCommand) =>
+            {
+                const path = entry.data.path;
+                const model = tektite.viewModel.getUnknown(path);
+                if (model)
+                {
+                    if ( ! model.data)
+                    {
+                        model.data = { };
+                    }
+                    model.data[entry.data.key] = entry.data.value;
+                    tektite.viewModel.set(path, model);
+                }
+            },
             "tektite-scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand) =>
             {
                 if ("string" === typeof entry || ! entry.data)
