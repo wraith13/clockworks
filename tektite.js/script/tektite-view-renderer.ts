@@ -994,11 +994,27 @@ export module ViewRenderer
                         //     close();
                         // },
                     },
+                    {
+                        tag: "div",
+                        className: "tektite-screen-cover tektite-fade-in",
+                        // onclick: async (event: MouseEvent) =>
+                        // {
+                        //     event.stopPropagation();
+                        //     console.log("tektite-menu-popup.click!");
+                        //     cover?.close();
+                        //     close();
+                        // },
+                    },
                 ],
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    const secondary = getSecondaryElement(dom);
-                    minamo.dom.toggleCSSClass(secondary, "tektite-hide", ! (data?.isPopuped ?? false));
+                    if (Array.isArray(dom))
+                    {
+                        const popup = dom[1];
+                        const cover = dom[2];
+                        minamo.dom.toggleCSSClass(popup, "tektite-hide", ! (data?.isPopuped ?? false));
+                        minamo.dom.toggleCSSClass(cover, "tektite-hide", ! (data?.isPopuped ?? false));
+                    }
                     return dom;
                 },
                 updateChildren: "append",
