@@ -245,6 +245,11 @@ export module ViewRenderer
             const data = this.tektite.viewModel.makeSureStrictEntry(path, model);
             let dom: DomType = [];
             const renderer = this.getAny(data.type) ?? this.unknownRenderer;
+            if ( ! renderer)
+            {
+                outputError(`Unknown type ${JSON.stringify(data.type)}`);
+            }
+            else
             if ( ! isContainerEntry(renderer))
             {
                 const externalData = this.getExternalData(path, data, renderer.getExternalDataPath);
@@ -960,17 +965,12 @@ export module ViewRenderer
             {
                 make: async (path: ViewModel.PathType) =>
                 [
-                    this.instantMake<ViewModel.ButtonEntry>
+                    await this.instantMake<ViewModel.ButtonEntry>
                     ({
                         type: "tektite-button",
-                        data: { className: "tektite-menu-button" },
-                        children:
+                        data:
                         {
-                            icon: <ViewModel.IconEntry<T>>
-                            {
-                                type: "tektite-icon",
-                                data: { icon: "tektite-ellipsis-icon", },
-                            },
+                            className: "tektite-menu-button",
                             onclick: <ViewCommand.SetDataCommand>
                             {
                                 type: "tektite-set-data",
@@ -980,7 +980,15 @@ export module ViewRenderer
                                     key: "isPopuped",
                                     value: true,
                                 }
-                            }
+                            },
+                        },
+                        children:
+                        {
+                            icon: <ViewModel.IconEntry<T>>
+                            {
+                                type: "tektite-icon",
+                                data: { icon: "tektite-ellipsis-icon", },
+                            },
                         },
                     }),
                     {
