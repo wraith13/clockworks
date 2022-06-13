@@ -240,7 +240,10 @@ export module ViewRenderer
         };
         public instantMake = async <Model extends ViewModel.Entry>(model: Model): Promise<DomType> =>
         {
-            const outputError = (message: string) => console.error(`tektite-view-renderer: ${message} - path:${path.path}, data:${JSON.stringify(data)}`);
+            const outputError = (message: string) =>
+            {
+                throw new Error(`tektite-view-renderer: ${message} - path:${path.path}, data:${JSON.stringify(data)}`)
+            };
             const path = ViewModel.makeDummyPath();
             const data = this.tektite.viewModel.makeSureStrictEntry(path, model);
             let dom: DomType = [];
@@ -556,14 +559,14 @@ export module ViewRenderer
         public getAny = <ViewModelEntry extends ViewModel.EntryBase>(type: string): Entry<ViewModelEntry> => this.get(type as any);
         public readonly renderer = //: { [type: string ]: Entry<any> } =
         {
-            "tektite-icon":
-            {
+            "tektite-icon":minamo.core.extender<VolatileDomEntry<ViewModel.IconEntry<T>>>()
+            ({
                 make: "volatile",
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, _dom: DomType, data: ViewModel.IconEntry<T>["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, data: ViewModel.IconEntry<T>["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    return await tektite.params.loadIconOrCache(data.icon);
+                    return await tektite.loadIconOrCache(data.icon);
                 },
-            },
+            }),
             "tektite-root": minamo.core.extender<DomEntry<ViewModel.RootEntry>>()
             ({
                 make: async () => document.body,

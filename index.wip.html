@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.wip.json release
-    build at: Thu Jun 02 2022 02:28:43 GMT+0900 (日本標準時)
+    build at: Mon Jun 13 2022 10:40:00 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -8387,6 +8387,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
     var ViewRenderer;
     (function (ViewRenderer_1) {
         ViewRenderer_1.getPrimaryElement = function (dom) { return Array.isArray(dom) ? dom[0] : dom; };
+        ViewRenderer_1.getSecondaryElement = function (dom) { return Array.isArray(dom) ? dom[1] : dom; };
         ViewRenderer_1.getElementList = function (dom) { return Array.isArray(dom) ? dom : [dom]; };
         ;
         ViewRenderer_1.containerEntry = {
@@ -8570,13 +8571,13 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                             childrenKeys: childrenKeys
                         };
                 };
-                this.make = function (maker) { return __awaiter(_this, void 0, void 0, function () {
+                this.make = function (path, maker) { return __awaiter(_this, void 0, void 0, function () {
                     var source, _a;
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
                                 if (!("function" === typeof maker)) return [3 /*break*/, 2];
-                                return [4 /*yield*/, maker()];
+                                return [4 /*yield*/, maker(path)];
                             case 1:
                                 _a = _b.sent();
                                 return [3 /*break*/, 3];
@@ -8601,6 +8602,109 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                         }
                     });
                 }); };
+                this.instantMake = function (model) { return __awaiter(_this, void 0, void 0, function () {
+                    var outputError, path, data, dom, renderer, externalData, primary, entryOrList_1, childrenKeys, childrenCache_1, forceAppend, childrenKeyDomMap_1, container;
+                    var _this = this;
+                    var _a, _b, _c, _d, _e, _f, _g;
+                    return __generator(this, function (_h) {
+                        switch (_h.label) {
+                            case 0:
+                                outputError = function (message) {
+                                    throw new Error("tektite-view-renderer: ".concat(message, " - path:").concat(path.path, ", data:").concat(JSON.stringify(data)));
+                                };
+                                path = tektite_view_model_1.ViewModel.makeDummyPath();
+                                data = this.tektite.viewModel.makeSureStrictEntry(path, model);
+                                dom = [];
+                                renderer = (_a = this.getAny(data.type)) !== null && _a !== void 0 ? _a : this.unknownRenderer;
+                                if (!!renderer) return [3 /*break*/, 1];
+                                outputError("Unknown type ".concat(JSON.stringify(data.type)));
+                                return [3 /*break*/, 14];
+                            case 1:
+                                if (!!ViewRenderer_1.isContainerEntry(renderer)) return [3 /*break*/, 13];
+                                externalData = this.getExternalData(path, data, renderer.getExternalDataPath);
+                                if (!ViewRenderer_1.isVolatileDomEntry(renderer)) return [3 /*break*/, 3];
+                                return [4 /*yield*/, renderer.update(this.tektite, path, data.data, externalData)];
+                            case 2:
+                                dom = _h.sent();
+                                return [3 /*break*/, 6];
+                            case 3: return [4 /*yield*/, this.make(path, renderer.make)];
+                            case 4:
+                                dom = _h.sent();
+                                return [4 /*yield*/, ((_b = renderer === null || renderer === void 0 ? void 0 : renderer.update) === null || _b === void 0 ? void 0 : _b.call(renderer, this.tektite, path, dom, data.data, externalData))];
+                            case 5:
+                                dom = (_c = (_h.sent())) !== null && _c !== void 0 ? _c : dom;
+                                _h.label = 6;
+                            case 6:
+                                primary = ViewRenderer_1.getPrimaryElement(dom);
+                                entryOrList_1 = (_d = data === null || data === void 0 ? void 0 : data.data) === null || _d === void 0 ? void 0 : _d.onclick;
+                                if (entryOrList_1) {
+                                    primary.onclick = function () { return index_js_7.minamo.core.arrayOrToArray(entryOrList_1)
+                                        .map(function (entry) { return _this.tektite.viewCommand.call(entry); }); };
+                                }
+                                if (renderer.eventHandlers) {
+                                    outputError("Can not support eventHandlers");
+                                }
+                                if ((_e = data.data) === null || _e === void 0 ? void 0 : _e.isVolatile) {
+                                    outputError("Can not support volatile");
+                                }
+                                childrenKeys = tektite_view_model_1.ViewModel.getChildrenModelKeys(data);
+                                if (!(0 < childrenKeys.length)) return [3 /*break*/, 12];
+                                return [4 /*yield*/, Promise.all(childrenKeys.map(function (key) { return __awaiter(_this, void 0, void 0, function () {
+                                        var child, _a;
+                                        return __generator(this, function (_b) {
+                                            switch (_b.label) {
+                                                case 0:
+                                                    child = tektite_view_model_1.ViewModel.getChildFromModelKey(data, key);
+                                                    if (!child) return [3 /*break*/, 2];
+                                                    return [4 /*yield*/, this.instantMake(child)];
+                                                case 1:
+                                                    _a = _b.sent();
+                                                    return [3 /*break*/, 3];
+                                                case 2:
+                                                    _a = undefined;
+                                                    _b.label = 3;
+                                                case 3: return [2 /*return*/, _a];
+                                            }
+                                        });
+                                    }); }))];
+                            case 7:
+                                childrenCache_1 = _h.sent();
+                                forceAppend = true;
+                                childrenKeyDomMap_1 = {};
+                                childrenKeys.forEach(function (key, ix) {
+                                    var _a;
+                                    return childrenKeyDomMap_1[key] =
+                                        (_a = childrenCache_1[ix]) !== null && _a !== void 0 ? _a : _this.aggregateChildren(tektite_view_model_1.ViewModel.makePath(path, key), tektite_view_model_1.ViewModel.getChildFromModelKey(data, key));
+                                } // これは実際には機能しない。
+                                );
+                                container = (_g = (_f = renderer.getChildModelContainer) === null || _f === void 0 ? void 0 : _f.call(renderer, dom)) !== null && _g !== void 0 ? _g : ViewRenderer_1.getPrimaryElement(dom);
+                                if (!(undefined === renderer.updateChildren || "append" === renderer.updateChildren)) return [3 /*break*/, 8];
+                                this.appendChildren(container, childrenKeyDomMap_1, forceAppend);
+                                return [3 /*break*/, 11];
+                            case 8:
+                                if (!Array.isArray(renderer.updateChildren)) return [3 /*break*/, 9];
+                                this.replaceChildren(container, childrenKeyDomMap_1, renderer.updateChildren);
+                                return [3 /*break*/, 11];
+                            case 9: return [4 /*yield*/, renderer.updateChildren(container, childrenKeyDomMap_1, forceAppend)];
+                            case 10:
+                                _h.sent();
+                                _h.label = 11;
+                            case 11:
+                                childrenKeys.forEach(function (key, ix) {
+                                    var dom = childrenCache_1[ix];
+                                    if (index_js_7.minamo.core.exists(dom) && _this.hasLeakChildren(dom)) {
+                                        outputError("Not allocate dom ".concat(key));
+                                    }
+                                });
+                                _h.label = 12;
+                            case 12: return [3 /*break*/, 14];
+                            case 13:
+                                outputError("Can not make ContainerEntry");
+                                _h.label = 14;
+                            case 14: return [2 /*return*/, dom];
+                        }
+                    });
+                }); };
                 this.getExternalData = function (path, model, getExternalDataPath) {
                     var result = {};
                     if (getExternalDataPath) {
@@ -8612,7 +8716,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                     return result;
                 };
                 this.renderOrCache = function (path, data) { return __awaiter(_this, void 0, void 0, function () {
-                    var cache, outputError, renderer, oldChildrenKeys, childrenKeys, childrenCache_1, externalData, json, dom, _a, primary, forceAppend, childrenKeyDomMap_1, container;
+                    var cache, outputError, renderer, oldChildrenKeys, childrenKeys, childrenCache_2, externalData, json, dom, _a, primary, forceAppend, childrenKeyDomMap_2, container;
                     var _this = this;
                     var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
                     return __generator(this, function (_o) {
@@ -8643,7 +8747,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                         }
                                     }); }); }))];
                             case 4:
-                                childrenCache_1 = _o.sent();
+                                childrenCache_2 = _o.sent();
                                 if (!!ViewRenderer_1.isContainerEntry(renderer)) return [3 /*break*/, 17];
                                 externalData = this.getExternalData(path, data, renderer.getExternalDataPath);
                                 json = JSON.stringify({
@@ -8662,7 +8766,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 if (!((_d = cache === null || cache === void 0 ? void 0 : cache.dom) !== null && _d !== void 0)) return [3 /*break*/, 7];
                                 _a = _d;
                                 return [3 /*break*/, 9];
-                            case 7: return [4 /*yield*/, this.make(renderer.make)];
+                            case 7: return [4 /*yield*/, this.make(path, renderer.make)];
                             case 8:
                                 _a = _o.sent();
                                 _o.label = 9;
@@ -8689,28 +8793,28 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 if (!(0 < childrenKeys.length)) return [3 /*break*/, 17];
                                 if (!!ViewRenderer_1.isContainerEntry(renderer)) return [3 /*break*/, 17];
                                 forceAppend = Array.isArray((_k = data.children) !== null && _k !== void 0 ? _k : []) && this.isSameOrder(oldChildrenKeys, childrenKeys);
-                                childrenKeyDomMap_1 = {};
+                                childrenKeyDomMap_2 = {};
                                 childrenKeys.forEach(function (key, ix) {
                                     var _a, _b;
-                                    return childrenKeyDomMap_1[key] =
-                                        (_b = (_a = childrenCache_1[ix]) === null || _a === void 0 ? void 0 : _a.dom) !== null && _b !== void 0 ? _b : _this.aggregateChildren(tektite_view_model_1.ViewModel.makePath(path, key), tektite_view_model_1.ViewModel.getChildFromModelKey(data, key));
+                                    return childrenKeyDomMap_2[key] =
+                                        (_b = (_a = childrenCache_2[ix]) === null || _a === void 0 ? void 0 : _a.dom) !== null && _b !== void 0 ? _b : _this.aggregateChildren(tektite_view_model_1.ViewModel.makePath(path, key), tektite_view_model_1.ViewModel.getChildFromModelKey(data, key));
                                 });
                                 container = (_m = (_l = renderer.getChildModelContainer) === null || _l === void 0 ? void 0 : _l.call(renderer, cache.dom)) !== null && _m !== void 0 ? _m : ViewRenderer_1.getPrimaryElement(cache.dom);
                                 if (!(undefined === renderer.updateChildren || "append" === renderer.updateChildren)) return [3 /*break*/, 13];
-                                this.appendChildren(container, childrenKeyDomMap_1, forceAppend);
+                                this.appendChildren(container, childrenKeyDomMap_2, forceAppend);
                                 return [3 /*break*/, 16];
                             case 13:
                                 if (!Array.isArray(renderer.updateChildren)) return [3 /*break*/, 14];
-                                this.replaceChildren(container, childrenKeyDomMap_1, renderer.updateChildren);
+                                this.replaceChildren(container, childrenKeyDomMap_2, renderer.updateChildren);
                                 return [3 /*break*/, 16];
-                            case 14: return [4 /*yield*/, renderer.updateChildren(container, childrenKeyDomMap_1, forceAppend)];
+                            case 14: return [4 /*yield*/, renderer.updateChildren(container, childrenKeyDomMap_2, forceAppend)];
                             case 15:
                                 _o.sent();
                                 _o.label = 16;
                             case 16:
                                 childrenKeys.forEach(function (key, ix) {
                                     var _a;
-                                    var dom = (_a = childrenCache_1[ix]) === null || _a === void 0 ? void 0 : _a.dom;
+                                    var dom = (_a = childrenCache_2[ix]) === null || _a === void 0 ? void 0 : _a.dom;
                                     if (index_js_7.minamo.core.exists(dom) && _this.hasLeakChildren(dom)) {
                                         outputError("Not allocate dom ".concat(key));
                                     }
@@ -8754,7 +8858,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 if (!((_c = cache === null || cache === void 0 ? void 0 : cache.dom) !== null && _c !== void 0)) return [3 /*break*/, 6];
                                 _a = _c;
                                 return [3 /*break*/, 8];
-                            case 6: return [4 /*yield*/, this.make(renderer.make)];
+                            case 6: return [4 /*yield*/, this.make(path, renderer.make)];
                             case 7:
                                 _a = _f.sent();
                                 _f.label = 8;
@@ -8806,6 +8910,17 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                 this.get = function (type) { return _this.renderer[type]; };
                 this.getAny = function (type) { return _this.get(type); };
                 this.renderer = {
+                    "tektite-icon": index_js_7.minamo.core.extender()({
+                        make: "volatile",
+                        update: function (tektite, _path, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, tektite.loadIconOrCache(data.icon)];
+                                    case 1: return [2 /*return*/, _a.sent()];
+                                }
+                            });
+                        }); },
+                    }),
                     "tektite-root": index_js_7.minamo.core.extender()({
                         make: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             return [2 /*return*/, document.body];
@@ -8973,19 +9088,9 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                     },
                     "tektite-screen-header-operator": {
                         make: {
-                            tag: "header",
-                            id: "tektite-screen-header",
-                            className: "tektite-segmented",
+                            tag: "div",
+                            className: "tektite-header-operator",
                         },
-                        update: function (_tektite, _path, dom, _data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                return [2 /*return*/, dom];
-                            });
-                        }); },
-                        // getChildModelContainer: (dom: Element, key: string) =>
-                        // {
-                        // },
-                        eventHandlers: {}
                     },
                     "tektite-screen-body": {
                         make: {
@@ -9177,6 +9282,94 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                         }); },
                         updateChildren: "append",
                     },
+                    "tektite-menu-button": {
+                        make: function (path) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, this.instantMake({
+                                            type: "tektite-button",
+                                            data: {
+                                                className: "tektite-menu-button",
+                                                onclick: {
+                                                    type: "tektite-set-data",
+                                                    data: {
+                                                        path: path,
+                                                        key: "isPopuped",
+                                                        value: true,
+                                                    }
+                                                },
+                                            },
+                                            children: {
+                                                icon: {
+                                                    type: "tektite-icon",
+                                                    data: { icon: "tektite-ellipsis-icon", },
+                                                },
+                                            },
+                                        })];
+                                    case 1: return [2 /*return*/, [
+                                            _a.sent(),
+                                            {
+                                                tag: "div",
+                                                className: "tektite-menu-popup",
+                                                // onclick: async (event: MouseEvent) =>
+                                                // {
+                                                //     event.stopPropagation();
+                                                //     console.log("tektite-menu-popup.click!");
+                                                //     cover?.close();
+                                                //     close();
+                                                // },
+                                            },
+                                            {
+                                                tag: "div",
+                                                className: "tektite-screen-cover tektite-fade-in",
+                                                // onclick: async (event: MouseEvent) =>
+                                                // {
+                                                //     event.stopPropagation();
+                                                //     console.log("tektite-menu-popup.click!");
+                                                //     cover?.close();
+                                                //     close();
+                                                // },
+                                            }
+                                        ]];
+                                }
+                            });
+                        }); },
+                        update: function (_tektite, _path, dom, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
+                            var popup, cover;
+                            var _a, _b;
+                            return __generator(this, function (_c) {
+                                if (Array.isArray(dom)) {
+                                    popup = dom[1];
+                                    cover = dom[2];
+                                    index_js_7.minamo.dom.toggleCSSClass(popup, "tektite-hide", !((_a = data === null || data === void 0 ? void 0 : data.isPopuped) !== null && _a !== void 0 ? _a : false));
+                                    index_js_7.minamo.dom.toggleCSSClass(cover, "tektite-hide", !((_b = data === null || data === void 0 ? void 0 : data.isPopuped) !== null && _b !== void 0 ? _b : false));
+                                }
+                                return [2 /*return*/, dom];
+                            });
+                        }); },
+                        updateChildren: "append",
+                        getChildModelContainer: function (dom) { return dom[1]; }
+                    },
+                    "tektite-menu-item-button": {
+                        make: { tag: "button", },
+                        update: function (_tektite, _path, dom, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                index_js_7.minamo.dom.setProperties(dom, data !== null && data !== void 0 ? data : {});
+                                return [2 /*return*/, dom];
+                            });
+                        }); },
+                        updateChildren: "append",
+                    },
+                    "tektite-menu-item-link-button": {
+                        make: { tag: "a", },
+                        update: function (_tektite, _path, dom, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                index_js_7.minamo.dom.setProperties(dom, data);
+                                return [2 /*return*/, dom];
+                            });
+                        }); },
+                        updateChildren: "append",
+                    },
                     "tektite-vanilla-span": {
                         make: { tag: "span" },
                         update: function (_tektite, _path, dom, data, _externalModels) { return __awaiter(_this, void 0, void 0, function () {
@@ -9228,6 +9421,21 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                 var _this = this;
                 this.tektite = tektite;
                 this.commands = {
+                    "tektite-set-data": function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                        var path, model;
+                        return __generator(this, function (_a) {
+                            path = entry.data.path;
+                            model = tektite.viewModel.getUnknown(path);
+                            if (model) {
+                                if (!model.data) {
+                                    model.data = {};
+                                }
+                                model.data[entry.data.key] = entry.data.value;
+                                tektite.viewModel.set(path, model);
+                            }
+                            return [2 /*return*/];
+                        });
+                    }); },
                     "tektite-scroll-to": function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var dom;
                         var _a;
@@ -9361,6 +9569,13 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
             return ({
                 type: "path",
                 path: "/root",
+                entryType: entryType,
+            });
+        };
+        ViewModel_1.makeDummyPath = function (entryType) {
+            return ({
+                type: "path",
+                path: "/dummy",
                 entryType: entryType,
             });
         };
@@ -11711,19 +11926,16 @@ define("clockworks/script/render/resource", ["require", "exports"], function (re
             }
         }); }); };
         Resource.loadSvgOrCache = function (className, key) { return __awaiter(_this, void 0, void 0, function () {
-            var result;
-            var _a, _b;
-            return __generator(this, function (_c) {
-                try {
-                    result = new DOMParser().parseFromString((_b = (_a = document.getElementById(key)) === null || _a === void 0 ? void 0 : _a.innerHTML) !== null && _b !== void 0 ? _b : "", "image/svg+xml").documentElement;
-                    result.classList.add(className);
-                    return [2 /*return*/, result];
+            var sourceDiv, result;
+            var _a;
+            return __generator(this, function (_b) {
+                sourceDiv = document.getElementById(key);
+                if (!sourceDiv) {
+                    throw new Error("resource: \"".concat(key, "\" svg is not found!"));
                 }
-                catch (error) {
-                    console.log({ key: key });
-                    throw error;
-                }
-                return [2 /*return*/];
+                result = new DOMParser().parseFromString((_a = sourceDiv.innerHTML) !== null && _a !== void 0 ? _a : "", "image/svg+xml").documentElement;
+                result.classList.add(className);
+                return [2 /*return*/, result];
             });
         }); };
     })(Resource = exports.Resource || (exports.Resource = {}));
@@ -15740,8 +15952,66 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                                                     ],
                                                 },
                                                 "screen-header-operator": {
-                                                    "type": "tektite-screen-header-operator",
-                                                    children: {},
+                                                    type: "tektite-screen-header-operator",
+                                                    child: {
+                                                        type: "tektite-menu-button",
+                                                        children: {
+                                                            fullscreen: {
+                                                                type: "tektite-menu-item-button",
+                                                                child: {
+                                                                    type: "tektite-label-span",
+                                                                    data: {
+                                                                        text: null === exports.tektite.fullscreen.element() ? "Full screen" : "Cancel full screen",
+                                                                    }
+                                                                },
+                                                            },
+                                                            theme: {
+                                                                type: "tektite-menu-item-button",
+                                                                child: {
+                                                                    type: "tektite-label-span",
+                                                                    data: {
+                                                                        text: "Theme setting",
+                                                                    }
+                                                                },
+                                                            },
+                                                            progressBarStyle: {
+                                                                type: "tektite-menu-item-button",
+                                                                child: {
+                                                                    type: "tektite-label-span",
+                                                                    data: {
+                                                                        text: "Progress Bar Style setting",
+                                                                    }
+                                                                },
+                                                            },
+                                                            language: {
+                                                                type: "tektite-menu-item-button",
+                                                                child: {
+                                                                    type: "tektite-label-span",
+                                                                    data: {
+                                                                        text: "Language setting",
+                                                                    }
+                                                                },
+                                                            },
+                                                            github: {
+                                                                type: "tektite-menu-item-link-button",
+                                                                child: {
+                                                                    type: "tektite-button",
+                                                                    data: {},
+                                                                    children: {
+                                                                        "single": {
+                                                                            type: "tektite-label-span",
+                                                                            data: {
+                                                                                text: "Language setting",
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                },
+                                                                data: {
+                                                                    href: config_json_11.default.repositoryUrl,
+                                                                }
+                                                            },
+                                                        }
+                                                    },
                                                 },
                                             }
                                         },
@@ -15845,7 +16115,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.startWIP({ buildTimestampTick: 1654104523222, })">
+<body onload="require('clockworks/script/index').Clockworks.startWIP({ buildTimestampTick: 1655084400786, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

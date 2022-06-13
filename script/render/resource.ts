@@ -6,16 +6,13 @@ export module Resource
     export const loadIconOrCache = async (key: KeyType): Promise<SVGElement> => await loadSvgOrCache("tektite-icon", key);
     export const loadSvgOrCache = async (className: string, key: KeyType): Promise<SVGElement> =>
     {
-        try
+        const sourceDiv = document.getElementById(key) as HTMLDivElement;
+        if ( ! sourceDiv)
         {
-            const result: SVGElement = new DOMParser().parseFromString(document.getElementById(key)?.innerHTML ?? "", "image/svg+xml").documentElement as any;
-            result.classList.add(className);
-            return result;
+            throw new Error(`resource: "${key}" svg is not found!`);
         }
-        catch(error)
-        {
-            console.log({key});
-            throw error;
-        }
+        const result: SVGElement = new DOMParser().parseFromString(sourceDiv.innerHTML ?? "", "image/svg+xml").documentElement as any;
+        result.classList.add(className);
+        return result;
     };
 }
