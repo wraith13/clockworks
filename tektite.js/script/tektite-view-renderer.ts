@@ -409,9 +409,9 @@ export module ViewRenderer
                                 dom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             }
                             const primary = getPrimaryElement(dom) as HTMLElement;
-                            if (data?.data?.onclick || null === primary.onclick)
+                            if (data?.data?.onclick && null === primary.onclick)
                             {
-                                primary.onclick = () => this.tektite.viewCommand.callByEvent(path, "onclick");
+                                primary.onclick = async () => await this.tektite.viewCommand.callByEvent(path, "onclick");
                                 //  renderer.update() で独自に付与した onclick を消さない為、不要になっても dom.onclick は放置。(場合によっては、このせいで気にしないでいいエラーでログ出力される。)
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);

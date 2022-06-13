@@ -48,26 +48,26 @@ export module ViewCommand
     export type Entry = EntryBase | string;
     export type EntryOrList = Entry | Entry[];
     export const getType = (entry: Entry) => "string" === typeof entry ? entry: entry.type;
-    export type Command<T extends Tektite.ParamTypes, OmegaEntry extends Entry> = (tektite: Tektite.Tektite<T>, data: OmegaEntry) => unknown;
+    export type Command<T extends Tektite.ParamTypes, OmegaEntry extends Entry> = (tektite: Tektite.Tektite<T>, data: OmegaEntry) => Promise<unknown>;
     export class ViewCommand<T extends Tektite.ParamTypes>
     {
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public call<OmegaEntry extends Entry>(entry: OmegaEntry)
+        public async call<OmegaEntry extends Entry>(entry: OmegaEntry)
         {
             const executer = this.commands[getType(entry)];
             if (executer)
             {
-                executer(this.tektite, entry);
+                await executer(this.tektite, entry);
             }
             else
             {
                 console.error(`tektite-view-command: Unknown command - entry:${JSON.stringify(entry)}`);
             }
         }
-        public callByEvent(path: ViewModel.PathType, event: ViewModel.EventType)
+        public async callByEvent(path: ViewModel.PathType, event: ViewModel.EventType)
         {
             const model = this.tektite.viewModel.getUnknownOrNull(path);
             if (model)
@@ -75,8 +75,12 @@ export module ViewCommand
                 const entryOrList = model.data?.[event];
                 if (entryOrList)
                 {
-                    minamo.core.arrayOrToArray(entryOrList)
-                        .map(entry => this.call(entry));
+                    await Promise.all
+                    (
+                        minamo.core.arrayOrToArray(entryOrList)
+                            .map(entry => this.call(entry))
+                    );
+                    await this.tektite.viewRenderer.renderRoot();
                 }
                 else
                 {
