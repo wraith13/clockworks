@@ -269,8 +269,15 @@ export module ViewRenderer
                 const entryOrList = data?.data?.onclick;
                 if (entryOrList)
                 {
-                    primary.onclick = () => minamo.core.arrayOrToArray(entryOrList)
-                        .map(entry => this.tektite.viewCommand.call(entry));
+                    primary.onclick = async () =>
+                    {
+                        await Promise.all
+                        (
+                            minamo.core.arrayOrToArray(entryOrList)
+                            .map(entry => this.tektite.viewCommand.call(entry))
+                        );
+                        await this.tektite.viewRenderer.renderRoot();
+                    }
                 }
                 if (renderer.eventHandlers)
                 {
@@ -411,7 +418,11 @@ export module ViewRenderer
                             const primary = getPrimaryElement(dom) as HTMLElement;
                             if (data?.data?.onclick && null === primary.onclick)
                             {
-                                primary.onclick = async () => await this.tektite.viewCommand.callByEvent(path, "onclick");
+                                primary.onclick = async () =>
+                                {
+                                    console.log(`onclick: ${path.path}`);
+                                    await this.tektite.viewCommand.callByEvent(path, "onclick")
+                                };
                                 //  renderer.update() で独自に付与した onclick を消さない為、不要になっても dom.onclick は放置。(場合によっては、このせいで気にしないでいいエラーでログ出力される。)
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
@@ -949,7 +960,8 @@ export module ViewRenderer
                 make: { tag: "button", },
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperties(dom as HTMLButtonElement, data);
+                    const element = getPrimaryElement(dom);
+                    minamo.dom.setProperty(element, "className", data.className);
                     return dom;
                 },
                 updateChildren: "append",
@@ -959,7 +971,9 @@ export module ViewRenderer
                 make: { tag: "a", },
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperties(dom as HTMLButtonElement, data);
+                    const element = getPrimaryElement(dom);
+                    minamo.dom.setProperty(element, "className", data.className);
+                    minamo.dom.setProperty(element, "href", data.href);
                     return dom;
                 },
                 updateChildren: "append",
