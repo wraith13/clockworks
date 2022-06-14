@@ -578,6 +578,16 @@ export module ViewRenderer
                     return await tektite.loadIconOrCache(data.icon);
                 },
             }),
+            "tektite-div":
+            {
+                make: { tag: "div", },
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenBodyEntry["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    minamo.dom.setProperty(dom as HTMLDivElement, "className", data?.className ?? "");
+                    return dom;
+                },
+                updateChildren: "append",
+            },
             "tektite-root": minamo.core.extender<DomEntry<ViewModel.RootEntry>>()
             ({
                 make: async () => document.body,

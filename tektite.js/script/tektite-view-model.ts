@@ -100,6 +100,14 @@ export module ViewModel
             icon: T["IconKeyType"] & minamo.core.Jsonable;
         };
     }
+    export interface DivEntry extends EntryBase
+    {
+        type: "tektite-div";
+        data?: EntryData &
+        {
+            className?: string;
+        };
+    }
     export interface RootEntry extends EntryBase
     {
         type: "tektite-root";
