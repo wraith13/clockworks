@@ -1018,28 +1018,42 @@ export module ViewRenderer
                             },
                         },
                     }),
-                    {
-                        tag: "div",
-                        className: "tektite-menu-popup",
-                        // onclick: async (event: MouseEvent) =>
-                        // {
-                        //     event.stopPropagation();
-                        //     console.log("tektite-menu-popup.click!");
-                        //     cover?.close();
-                        //     close();
-                        // },
-                    },
-                    {
-                        tag: "div",
-                        className: "tektite-screen-cover tektite-fade-in",
-                        // onclick: async (event: MouseEvent) =>
-                        // {
-                        //     event.stopPropagation();
-                        //     console.log("tektite-menu-popup.click!");
-                        //     cover?.close();
-                        //     close();
-                        // },
-                    },
+                    await this.instantMake<ViewModel.DivEntry>
+                    ({
+                        type: "tektite-div",
+                        data:
+                        {
+                            className: "tektite-menu-popup",
+                            onclick: <ViewCommand.SetDataCommand>
+                            {
+                                type: "tektite-set-data",
+                                data:
+                                {
+                                    path,
+                                    key: "isPopuped",
+                                    value: false,
+                                }
+                            },
+                        },
+                    }),
+                    await this.instantMake<ViewModel.DivEntry>
+                    ({
+                        type: "tektite-div",
+                        data:
+                        {
+                            className: "tektite-screen-cover tektite-fade-in",
+                            onclick: <ViewCommand.SetDataCommand>
+                            {
+                                type: "tektite-set-data",
+                                data:
+                                {
+                                    path,
+                                    key: "isPopuped",
+                                    value: false,
+                                }
+                            },
+                        },
+                    }),
                 ],
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
