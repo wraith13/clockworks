@@ -1041,7 +1041,7 @@ export module ViewRenderer
                         type: "tektite-div",
                         data:
                         {
-                            className: "tektite-screen-cover tektite-fade-in",
+                            className: "tektite-screen-cover",
                             onclick: <ViewCommand.SetDataCommand>
                             {
                                 type: "tektite-set-data",
@@ -1061,8 +1061,28 @@ export module ViewRenderer
                     {
                         const popup = dom[1];
                         const cover = dom[2];
-                        minamo.dom.toggleCSSClass(popup, "tektite-hide", ! (data?.isPopuped ?? false));
-                        minamo.dom.toggleCSSClass(cover, "tektite-hide", ! (data?.isPopuped ?? false));
+                        const show = (data?.isPopuped ?? false);
+                        minamo.dom.toggleCSSClass(popup, "tektite-fade-in", show);
+                        minamo.dom.toggleCSSClass(cover, "tektite-fade-in", show);
+                        minamo.dom.toggleCSSClass(popup, "tektite-fade-out", ! show);
+                        minamo.dom.toggleCSSClass(cover, "tektite-fade-out", ! show);
+                        if (show)
+                        {
+                            minamo.dom.toggleCSSClass(popup, "tektite-hide", ! show);
+                            minamo.dom.toggleCSSClass(cover, "tektite-hide", ! show);
+                        }
+                        else
+                        {
+                            setTimeout
+                            (
+                                async () =>
+                                {
+                                    minamo.dom.toggleCSSClass(popup, "tektite-hide", ! show);
+                                    minamo.dom.toggleCSSClass(cover, "tektite-hide", ! show);
+                                },
+                                500
+                            );
+                        }
                     }
                     return dom;
                 },
