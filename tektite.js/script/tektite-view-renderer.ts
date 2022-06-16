@@ -1023,7 +1023,7 @@ export module ViewRenderer
                         type: "tektite-div",
                         data:
                         {
-                            className: "tektite-menu-popup",
+                            className: "tektite-menu-popup tektite-hide",
                             onclick: <ViewCommand.SetDataCommand>
                             {
                                 type: "tektite-set-data",
@@ -1041,7 +1041,7 @@ export module ViewRenderer
                         type: "tektite-div",
                         data:
                         {
-                            className: "tektite-screen-cover",
+                            className: "tektite-screen-cover tektite-hide",
                             onclick: <ViewCommand.SetDataCommand>
                             {
                                 type: "tektite-set-data",
@@ -1055,7 +1055,7 @@ export module ViewRenderer
                         },
                     }),
                 ],
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     if (Array.isArray(dom))
                     {
@@ -1077,8 +1077,13 @@ export module ViewRenderer
                             (
                                 async () =>
                                 {
-                                    minamo.dom.toggleCSSClass(popup, "tektite-hide", ! show);
-                                    minamo.dom.toggleCSSClass(cover, "tektite-hide", ! show);
+                                    const current = tektite.viewModel.get<ViewModel.MenuButtonEntry>(path, "tektite-menu-button");
+                                    const current_show = (current?.data?.isPopuped ?? false);
+                                    if (show === current_show)
+                                    {
+                                        minamo.dom.toggleCSSClass(popup, "tektite-hide", ! show);
+                                        minamo.dom.toggleCSSClass(cover, "tektite-hide", ! show);
+                                    }
                                 },
                                 500
                             );
