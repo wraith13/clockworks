@@ -18,6 +18,7 @@ export module ViewCommand
             path: ViewModel.PathType;
             key: string;
             value: minamo.core.Jsonable;
+            oldValue?: minamo.core.Jsonable;
         }
     }
     export interface ScrollToCommand extends EntryBase
@@ -60,6 +61,7 @@ export module ViewCommand
             const executer = this.commands[getType(entry)];
             if (executer)
             {
+                // console.log(`tektite-view-command.call: ${JSON.stringify(entry)}`);
                 await executer(this.tektite, entry);
             }
             else
@@ -100,12 +102,15 @@ export module ViewCommand
                 const model = tektite.viewModel.getUnknown(path);
                 if (model)
                 {
-                    if ( ! model.data)
+                    if (undefined === entry.data.oldValue || JSON.stringify(entry.data.oldValue) === JSON.stringify(model?.data?.[entry.data.key]))
                     {
-                        model.data = { };
+                        if ( ! model.data)
+                        {
+                            model.data = { };
+                        }
+                        model.data[entry.data.key] = entry.data.value;
+                        tektite.viewModel.set(path, model);
                     }
-                    model.data[entry.data.key] = entry.data.value;
-                    tektite.viewModel.set(path, model);
                 }
             },
             "tektite-scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand) =>

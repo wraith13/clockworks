@@ -296,12 +296,13 @@ export module ViewModel
         };
         child: ButtonEntry;
     }
+    export type PopupStateType = "fade-in" | "show" | "fade-out" | "hide";
     export interface MenuButtonEntry extends EntryBase
     {
         type: "tektite-menu-button";
         data?: EntryData &
         {
-            isPopuped?: boolean;
+            state: PopupStateType;
         };
         children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry) };
     }

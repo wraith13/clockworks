@@ -1004,8 +1004,8 @@ export module ViewRenderer
                                 data:
                                 {
                                     path,
-                                    key: "isPopuped",
-                                    value: true,
+                                    key: "state",
+                                    value: "fade-in",
                                 }
                             },
                         },
@@ -1030,8 +1030,8 @@ export module ViewRenderer
                                 data:
                                 {
                                     path,
-                                    key: "isPopuped",
-                                    value: false,
+                                    key: "state",
+                                    value: "fade-out",
                                 }
                             },
                         },
@@ -1048,8 +1048,8 @@ export module ViewRenderer
                                 data:
                                 {
                                     path,
-                                    key: "isPopuped",
-                                    value: false,
+                                    key: "state",
+                                    value: "fade-out",
                                 }
                             },
                         },
@@ -1061,32 +1061,43 @@ export module ViewRenderer
                     {
                         const popup = dom[1];
                         const cover = dom[2];
-                        const show = (data?.isPopuped ?? false);
-                        minamo.dom.toggleCSSClass(popup, "tektite-fade-in", show);
-                        minamo.dom.toggleCSSClass(cover, "tektite-fade-in", show);
-                        minamo.dom.toggleCSSClass(popup, "tektite-fade-out", ! show);
-                        minamo.dom.toggleCSSClass(cover, "tektite-fade-out", ! show);
-                        if (show)
-                        {
-                            minamo.dom.toggleCSSClass(popup, "tektite-hide", ! show);
-                            minamo.dom.toggleCSSClass(cover, "tektite-hide", ! show);
-                        }
-                        else
+                        const state = data?.state ?? "hide";
+                        minamo.dom.toggleCSSClass(popup, "tektite-fade-in", "fade-in" === state);
+                        minamo.dom.toggleCSSClass(cover, "tektite-fade-in", "fade-in" === state);
+                        minamo.dom.toggleCSSClass(popup, "tektite-fade-out", "fade-out" === state);
+                        minamo.dom.toggleCSSClass(cover, "tektite-fade-out", "fade-out" === state);
+                        minamo.dom.toggleCSSClass(popup, "tektite-hide", "hide" === state);
+                        minamo.dom.toggleCSSClass(cover, "tektite-hide", "hide" === state);
+                        const switcher = (oldState: ViewModel.PopupStateType | undefined, newState: ViewModel.PopupStateType, wait: number) =>
                         {
                             setTimeout
                             (
                                 async () =>
                                 {
-                                    const current = tektite.viewModel.get<ViewModel.MenuButtonEntry>(path, "tektite-menu-button");
-                                    const current_show = (current?.data?.isPopuped ?? false);
-                                    if (show === current_show)
-                                    {
-                                        minamo.dom.toggleCSSClass(popup, "tektite-hide", ! show);
-                                        minamo.dom.toggleCSSClass(cover, "tektite-hide", ! show);
-                                    }
+                                    await tektite.viewCommand.call<ViewCommand.SetDataCommand>
+                                    ({
+                                        type: "tektite-set-data",
+                                        data:
+                                        {
+                                            path,
+                                            key: "state",
+                                            value: newState,
+                                            oldValue: oldState,
+                                        }
+                                    });
+                                    await tektite.viewRenderer.renderRoot();
                                 },
-                                500
+                                wait
                             );
+                        };
+                        switch(state)
+                        {
+                        case "fade-out":
+                            switcher(data?.state, "hide", 500);
+                            break;
+                        case "fade-in":
+                            switcher(data?.state, "show", 500);
+                            break;
                         }
                     }
                     return dom;
