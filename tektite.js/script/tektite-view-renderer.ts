@@ -835,7 +835,7 @@ export module ViewRenderer
                 {
                     "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
                     {
-                        tektite.viewCommand.call<ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand>
+                        tektite.viewCommand.call<ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand["params"]>
                         ({
                             type: "tektite-update-primary-page-footer-down-page-link",
                             data:
@@ -939,7 +939,7 @@ export module ViewRenderer
                         (
                             async () =>
                             {
-                                tektite.viewCommand.call<ViewCommand.UpdateToastItemCommand>
+                                tektite.viewCommand.call<ViewCommand.UpdateToastItemCommand["params"]>
                                 ({
                                     type: "tektite-update-toast-item",
                                     data:
@@ -998,7 +998,7 @@ export module ViewRenderer
                         data:
                         {
                             className: "tektite-menu-button",
-                            onclick: <ViewCommand.SetDataCommand>
+                            onclick: <ViewCommand.SetDataCommand["params"]>
                             {
                                 type: "tektite-set-data",
                                 data:
@@ -1024,7 +1024,7 @@ export module ViewRenderer
                         data:
                         {
                             className: "tektite-menu-popup tektite-hide",
-                            onclick: <ViewCommand.SetDataCommand>
+                            onclick: <ViewCommand.SetDataCommand["params"]>
                             {
                                 type: "tektite-set-data",
                                 data:
@@ -1042,7 +1042,7 @@ export module ViewRenderer
                         data:
                         {
                             className: "tektite-screen-cover tektite-hide",
-                            onclick: <ViewCommand.SetDataCommand>
+                            onclick: <ViewCommand.SetDataCommand["params"]>
                             {
                                 type: "tektite-set-data",
                                 data:
@@ -1074,7 +1074,7 @@ export module ViewRenderer
                             (
                                 async () =>
                                 {
-                                    await tektite.viewCommand.call<ViewCommand.SetDataCommand>
+                                    await tektite.viewCommand.call<ViewCommand.SetDataCommand["params"]>
                                     ({
                                         type: "tektite-set-data",
                                         data:

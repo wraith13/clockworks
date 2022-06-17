@@ -5,52 +5,72 @@ import { ViewRenderer } from "./tektite-view-renderer.js";
 
 export module ViewCommand
 {
-    export interface EntryBase extends minamo.core.JsonableObject
+    export interface EntryBase
     {
-        type: string;
-        data?: minamo.core.JsonableObject;
-        withLog?: true;
+        params:
+        {
+            type: string;
+            data?: minamo.core.JsonableObject;
+            withLog?: true;
+        } & minamo.core.JsonableObject;
+        result: void | minamo.core.JsonableObject;
     }
     export interface SetDataCommand extends EntryBase
     {
-        type: "tektite-set-data";
-        data:
+        params:
         {
-            path: ViewModel.PathType;
-            key: string;
-            value: minamo.core.Jsonable;
-            oldValue?: minamo.core.Jsonable;
-        }
+            type: "tektite-set-data";
+            data:
+            {
+                path: ViewModel.PathType;
+                key: string;
+                value: minamo.core.Jsonable;
+                oldValue?: minamo.core.Jsonable;
+            }
+        };
+        result: void;
     }
     export interface ScrollToCommand extends EntryBase
     {
-        type: "tektite-scroll-to";
-        data:
+        params:
         {
-            path: ViewModel.PathType;
+            type: "tektite-scroll-to";
+            data:
+            {
+                path: ViewModel.PathType;
+            }
         }
+        result: void;
     }
     export interface UpdatePrimaryPageFooterDownPageLinkCommand extends EntryBase
     {
-        type: "tektite-update-primary-page-footer-down-page-link";
-        data:
+        params:
         {
-            path: ViewModel.PathType;
+            type: "tektite-update-primary-page-footer-down-page-link";
+            data:
+            {
+                path: ViewModel.PathType;
+            }
         }
+        result: void;
     }
     export interface UpdateToastItemCommand extends EntryBase
     {
-        type: "tektite-update-toast-item";
-        data:
+        params:
         {
-            path: ViewModel.PathType;
-            next: ViewModel.ToastStateType | null,
+            type: "tektite-update-toast-item";
+            data:
+            {
+                path: ViewModel.PathType;
+                next: ViewModel.ToastStateType | null,
+            }
         }
+        result: void;
     }
-    export type Entry = EntryBase | string;
+    export type Entry = EntryBase["params"] | string;
     export type EntryOrList = Entry | Entry[];
     export const getType = (entry: Entry) => "string" === typeof entry ? entry: entry.type;
-    export type Command<T extends Tektite.ParamTypes, OmegaEntry extends Entry> = (tektite: Tektite.Tektite<T>, data: OmegaEntry) => Promise<unknown>;
+    export type Command<T extends Tektite.ParamTypes, OmegaEntryBase extends EntryBase> = (tektite: Tektite.Tektite<T>, data: OmegaEntryBase["params"]) => Promise<OmegaEntryBase["result"]>;
     export class ViewCommand<T extends Tektite.ParamTypes>
     {
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
@@ -100,7 +120,7 @@ export module ViewCommand
         }
         public readonly commands: { [type: string ]: Command<T, any> } =
         {
-            "tektite-set-data": async (tektite: Tektite.Tektite<T>, entry: SetDataCommand) =>
+            "tektite-set-data": async (tektite: Tektite.Tektite<T>, entry: SetDataCommand["params"]): Promise<SetDataCommand["result"]> =>
             {
                 const path = entry.data.path;
                 const model = tektite.viewModel.getUnknown(path);
@@ -117,7 +137,7 @@ export module ViewCommand
                     }
                 }
             },
-            "tektite-scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand) =>
+            "tektite-scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand["params"]): Promise<ScrollToCommand["result"]> =>
             {
                 if ("string" === typeof entry || ! entry.data)
                 {
@@ -132,7 +152,7 @@ export module ViewCommand
                     }
                 }
             },
-            "tektite-update-primary-page-footer-down-page-link": async (tektite: Tektite.Tektite<T>, entry: UpdatePrimaryPageFooterDownPageLinkCommand) =>
+            "tektite-update-primary-page-footer-down-page-link": async (tektite: Tektite.Tektite<T>, entry: UpdatePrimaryPageFooterDownPageLinkCommand["params"]): Promise<UpdatePrimaryPageFooterDownPageLinkCommand["result"]> =>
             {
                 if ("string" === typeof entry || ! entry.data)
                 {
@@ -159,7 +179,7 @@ export module ViewCommand
                     }
                 }
             },
-            "tektite-update-toast-item": async (tektite: Tektite.Tektite<T>, entry: UpdateToastItemCommand) =>
+            "tektite-update-toast-item": async (tektite: Tektite.Tektite<T>, entry: UpdateToastItemCommand["params"]): Promise<UpdateToastItemCommand["result"]> =>
             {
                 if ("string" === typeof entry || ! entry.data)
                 {
