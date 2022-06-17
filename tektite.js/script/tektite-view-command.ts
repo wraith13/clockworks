@@ -9,6 +9,7 @@ export module ViewCommand
     {
         type: string;
         data?: minamo.core.JsonableObject;
+        withLog?: true;
     }
     export interface SetDataCommand extends EntryBase
     {
@@ -56,12 +57,15 @@ export module ViewCommand
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public async call<OmegaEntry extends Entry>(entry: OmegaEntry)
+        public async call<OmegaEntry extends Entry>(entry: OmegaEntry, withLog?: boolean)
         {
             const executer = this.commands[getType(entry)];
             if (executer)
             {
-                // console.log(`tektite-view-command.call: ${JSON.stringify(entry)}`);
+                if (withLog || ("string" !== typeof entry && entry.withLog))
+                {
+                    console.log(`tektite-view-command.call: ${JSON.stringify(entry)}`);
+                }
                 await executer(this.tektite, entry);
             }
             else
