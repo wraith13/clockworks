@@ -67,19 +67,23 @@ export module ViewCommand
         }
         result: void;
     }
-    export type Entry<OmegaEntryBase extends EntryBase> = OmegaEntryBase["params"] | OmegaEntryBase["params"]["type"];
+    export type Entry<OmegaEntryBase extends EntryBase> =
+        OmegaEntryBase["params"]["data"] extends undefined ?
+            OmegaEntryBase["params"] | OmegaEntryBase["params"]["type"]:
+            OmegaEntryBase["params"];
+    export type Result<OmegaEntryBase extends EntryBase> = OmegaEntryBase["result"];
     export type EntryOrList = Entry<any> | Entry<any>[];
     export const getType = <OmegaEntryBase extends EntryBase>(entry: Entry<OmegaEntryBase>) => "string" === typeof entry ? entry: entry.type;
-    export type Command<T extends Tektite.ParamTypes, OmegaEntryBase extends EntryBase> = (tektite: Tektite.Tektite<T>, data: OmegaEntryBase["params"]) => Promise<OmegaEntryBase["result"]>;
+    export type Command<T extends Tektite.ParamTypes, OmegaEntryBase extends EntryBase> = (tektite: Tektite.Tektite<T>, data: Entry<OmegaEntryBase>) => Promise<Result<OmegaEntryBase>>;
     export class ViewCommand<T extends Tektite.ParamTypes>
     {
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public async call<OmegaEntryBase extends EntryBase>(entry: Entry<OmegaEntryBase>, withLog?: boolean): Promise<OmegaEntryBase["result"]>
+        public async call<OmegaEntryBase extends EntryBase>(entry: Entry<OmegaEntryBase>, withLog?: boolean): Promise<Result<OmegaEntryBase>>
         {
-            const executer: (tektite: Tektite.Tektite<T>, entry: Entry<OmegaEntryBase>) => Promise<OmegaEntryBase["result"]> = this.commands[getType(entry)];
+            const executer: Command<T, OmegaEntryBase> = this.commands[getType(entry)];
             if (executer)
             {
                 if (withLog || ("string" !== typeof entry && entry.withLog))
@@ -120,90 +124,109 @@ export module ViewCommand
         }
         public readonly commands: { [type: string ]: Command<T, any> } =
         {
-            "tektite-set-data": async (tektite: Tektite.Tektite<T>, entry: SetDataCommand["params"]): Promise<SetDataCommand["result"]> =>
-            {
-                const path = entry.data.path;
-                const model = tektite.viewModel.getUnknown(path);
-                if (model)
+            "tektite-set-data": <Command<T, SetDataCommand>>
+            (
+                async (tektite, entry) =>
                 {
-                    if (undefined === entry.data.oldValue || JSON.stringify(entry.data.oldValue) === JSON.stringify(model?.data?.[entry.data.key]))
+                    if ("string" === typeof entry || ! entry.data)
                     {
-                        if ( ! model.data)
+                        console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
+                    }
+                    else
+                    {
+                        const path = entry.data.path;
+                        const model = tektite.viewModel.getUnknown(path);
+                        if (model)
                         {
-                            model.data = { };
+                            if (undefined === entry.data.oldValue || JSON.stringify(entry.data.oldValue) === JSON.stringify(model?.data?.[entry.data.key]))
+                            {
+                                if ( ! model.data)
+                                {
+                                    model.data = { };
+                                }
+                                model.data[entry.data.key] = entry.data.value;
+                                tektite.viewModel.set(path, model);
+                            }
                         }
-                        model.data[entry.data.key] = entry.data.value;
-                        tektite.viewModel.set(path, model);
                     }
                 }
-            },
-            "tektite-scroll-to": async (tektite: Tektite.Tektite<T>, entry: ScrollToCommand["params"]): Promise<ScrollToCommand["result"]> =>
-            {
-                if ("string" === typeof entry || ! entry.data)
+            ),
+            "tektite-scroll-to": <Command<T, ScrollToCommand>>
+            (
+                async (tektite, entry) =>
                 {
-                    console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
-                }
-                else
-                {
-                    const dom = tektite.viewRenderer.getCache(entry.data.path)?.dom;
-                    if (dom)
+                    if ("string" === typeof entry || ! entry.data)
                     {
-                        await tektite.screen.scrollToElement(ViewRenderer.getPrimaryElement(dom) as HTMLElement);
+                        console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
                     }
-                }
-            },
-            "tektite-update-primary-page-footer-down-page-link": async (tektite: Tektite.Tektite<T>, entry: UpdatePrimaryPageFooterDownPageLinkCommand["params"]): Promise<UpdatePrimaryPageFooterDownPageLinkCommand["result"]> =>
-            {
-                if ("string" === typeof entry || ! entry.data)
-                {
-                    console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
-                }
-                else
-                {
-                    const path = entry.data.path;
-                    const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
-                    if (model)
+                    else
                     {
-                        const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
+                        const dom = tektite.viewRenderer.getCache(entry.data.path)?.dom;
                         if (dom)
                         {
-                            const body = ViewRenderer.getPrimaryElement(dom) as HTMLDivElement;
-                            const isStrictShowPrimaryPage = 0 === body.scrollTop;
-                            (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
-                                .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
-                            model.data.onclick.data.path.path = isStrictShowPrimaryPage ?
-                                "/root/screen/screen-body/trail":
-                                "/root/screen/screen-body/primary",
-                            tektite.viewModel.set(path, model);
+                            await tektite.screen.scrollToElement(ViewRenderer.getPrimaryElement(dom) as HTMLElement);
                         }
                     }
                 }
-            },
-            "tektite-update-toast-item": async (tektite: Tektite.Tektite<T>, entry: UpdateToastItemCommand["params"]): Promise<UpdateToastItemCommand["result"]> =>
-            {
-                if ("string" === typeof entry || ! entry.data)
+            ),
+            "tektite-update-primary-page-footer-down-page-link": <Command<T, UpdatePrimaryPageFooterDownPageLinkCommand>>
+            (
+                async (tektite, entry) =>
                 {
-                    console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
-                }
-                else
-                {
-                    const path = entry.data.path;
-                    const model = tektite.viewModel.get<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
-                    if (model)
+                    if ("string" === typeof entry || ! entry.data)
                     {
-                        if (null === entry.data.next)
+                        console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
+                    }
+                    else
+                    {
+                        const path = entry.data.path;
+                        const model = tektite.viewModel.get<ViewModel.PrimaryPageFooterDownPageLinkEntry>(path, "tektite-primary-page-footer-down-page-link");
+                        if (model)
                         {
-                            tektite.viewModel.remove(path);
+                            const dom = tektite.viewRenderer.getCache({ type: "path", path: "/root/screen/screen-body", })?.dom;
+                            if (dom)
+                            {
+                                const body = ViewRenderer.getPrimaryElement(dom) as HTMLDivElement;
+                                const isStrictShowPrimaryPage = 0 === body.scrollTop;
+                                (model.data ?? (model.data = { } as ViewModel.PrimaryPageFooterDownPageLinkEntry["data"] & { }))
+                                    .isStrictShowPrimaryPage = isStrictShowPrimaryPage;
+                                model.data.onclick.data.path.path = isStrictShowPrimaryPage ?
+                                    "/root/screen/screen-body/trail":
+                                    "/root/screen/screen-body/primary",
+                                tektite.viewModel.set(path, model);
+                            }
                         }
-                        else
-                        {
-                            model.data.state = entry.data.next;
-                            tektite.viewModel.set(path, model);
-                        }
-                        await tektite.viewRenderer.renderRoot();
                     }
                 }
-            },
+            ),
+            "tektite-update-toast-item": <Command<T, UpdateToastItemCommand>>
+            (
+                async (tektite, entry) =>
+                {
+                    if ("string" === typeof entry || ! entry.data)
+                    {
+                        console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
+                    }
+                    else
+                    {
+                        const path = entry.data.path;
+                        const model = tektite.viewModel.get<ViewModel.ToastItemEntry>(path, "tektite-toast-item");
+                        if (model)
+                        {
+                            if (null === entry.data.next)
+                            {
+                                tektite.viewModel.remove(path);
+                            }
+                            else
+                            {
+                                model.data.state = entry.data.next;
+                                tektite.viewModel.set(path, model);
+                            }
+                            await tektite.viewRenderer.renderRoot();
+                        }
+                    }
+                }
+            ),
         }
     }
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
