@@ -67,9 +67,9 @@ export module ViewCommand
         }
         result: void;
     }
-    export type Entry = EntryBase["params"] | string;
-    export type EntryOrList = Entry | Entry[];
-    export const getType = (entry: Entry) => "string" === typeof entry ? entry: entry.type;
+    export type Entry<OmegaEntryBase extends EntryBase> = OmegaEntryBase["params"] | OmegaEntryBase["params"]["type"];
+    export type EntryOrList = Entry<any> | Entry<any>[];
+    export const getType = <OmegaEntryBase extends EntryBase>(entry: Entry<OmegaEntryBase>) => "string" === typeof entry ? entry: entry.type;
     export type Command<T extends Tektite.ParamTypes, OmegaEntryBase extends EntryBase> = (tektite: Tektite.Tektite<T>, data: OmegaEntryBase["params"]) => Promise<OmegaEntryBase["result"]>;
     export class ViewCommand<T extends Tektite.ParamTypes>
     {
@@ -77,20 +77,20 @@ export module ViewCommand
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public async call<OmegaEntry extends Entry>(entry: OmegaEntry, withLog?: boolean)
+        public async call<OmegaEntryBase extends EntryBase>(entry: Entry<OmegaEntryBase>, withLog?: boolean): Promise<OmegaEntryBase["result"]>
         {
-            const executer = this.commands[getType(entry)];
+            const executer: (tektite: Tektite.Tektite<T>, entry: Entry<OmegaEntryBase>) => Promise<OmegaEntryBase["result"]> = this.commands[getType(entry)];
             if (executer)
             {
                 if (withLog || ("string" !== typeof entry && entry.withLog))
                 {
                     console.log(`tektite-view-command.call: ${JSON.stringify(entry)}`);
                 }
-                await executer(this.tektite, entry);
+                return await executer(this.tektite, entry);
             }
             else
             {
-                console.error(`tektite-view-command: Unknown command - entry:${JSON.stringify(entry)}`);
+                throw new Error(`tektite-view-command: Unknown command - entry:${JSON.stringify(entry)}`);
             }
         }
         public async callByEvent(path: ViewModel.PathType, event: ViewModel.EventType)

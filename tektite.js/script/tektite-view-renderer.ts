@@ -808,7 +808,7 @@ export module ViewRenderer
                         model.data =
                         {
                             isStrictShowPrimaryPage: true,
-                            onclick:
+                            onclick: <ViewCommand.ScrollToCommand["params"]>
                             {
                                 type: "tektite-scroll-to",
                                 data:
@@ -835,7 +835,7 @@ export module ViewRenderer
                 {
                     "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
                     {
-                        tektite.viewCommand.call<ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand["params"]>
+                        tektite.viewCommand.call<ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand>
                         ({
                             type: "tektite-update-primary-page-footer-down-page-link",
                             data:
@@ -939,7 +939,7 @@ export module ViewRenderer
                         (
                             async () =>
                             {
-                                tektite.viewCommand.call<ViewCommand.UpdateToastItemCommand["params"]>
+                                tektite.viewCommand.call<ViewCommand.UpdateToastItemCommand>
                                 ({
                                     type: "tektite-update-toast-item",
                                     data:
@@ -1074,7 +1074,7 @@ export module ViewRenderer
                             (
                                 async () =>
                                 {
-                                    await tektite.viewCommand.call<ViewCommand.SetDataCommand["params"]>
+                                    await tektite.viewCommand.call<ViewCommand.SetDataCommand>
                                     ({
                                         type: "tektite-set-data",
                                         data:

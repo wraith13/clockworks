@@ -48,7 +48,7 @@ export module ViewModel
         child?: Entry;
         children?: ListEntry[] | { [key: string]: Entry };
     }
-    export const setEventHandler = <Entry extends StrictEntry>(entry: Entry, event: EventType, command: ViewCommand.Entry): Entry =>
+    export const setEventHandler = <Entry extends StrictEntry, CommandBase extends ViewCommand.EntryBase>(entry: Entry, event: EventType, command: ViewCommand.Entry<CommandBase>): Entry =>
     {
         if ( ! entry.data)
         {
@@ -57,7 +57,7 @@ export module ViewModel
         entry.data[event] = command;
         return entry;
     };
-    export const addEventHandler = <Entry extends StrictEntry>(entry: Entry, event: EventType, command: ViewCommand.Entry): Entry =>
+    export const addEventHandler = <Entry extends StrictEntry, CommandBase extends ViewCommand.EntryBase>(entry: Entry, event: EventType, command: ViewCommand.Entry<CommandBase>): Entry =>
     {
         if ( ! entry.data)
         {
@@ -227,20 +227,7 @@ export module ViewModel
         data?: EntryData &
         {
             isStrictShowPrimaryPage: boolean;
-            onclick:
-            {
-                type: "tektite-scroll-to",
-                data:
-                {
-                    path:
-                    {
-                        type: "path",
-                        path:
-                            "/root/screen/screen-body/primary" |
-                            "/root/screen/screen-body/trail",
-                    },
-                }
-            },
+            onclick: ViewCommand.ScrollToCommand["params"];
         }
     }
     export interface TrailPageEntry extends EntryBase
@@ -615,7 +602,7 @@ export module ViewModel
                 return this.setListEntry(path, key, data);
             }
         }
-        public setEventHandler = (path: PathType, event: EventType, command: ViewCommand.Entry) =>
+        public setEventHandler = <CommandBase extends ViewCommand.EntryBase>(path: PathType, event: EventType, command: ViewCommand.Entry<CommandBase>) =>
         {
             const entry = this.getUnknown(path);
             if (entry)
@@ -623,7 +610,7 @@ export module ViewModel
                 setEventHandler(entry, event, command);
             }
         }
-        public addEventHandler = (path: PathType, event: EventType, command: ViewCommand.Entry) =>
+        public addEventHandler = <CommandBase extends ViewCommand.EntryBase>(path: PathType, event: EventType, command: ViewCommand.Entry<CommandBase>) =>
         {
             const entry = this.getUnknown(path);
             if (entry)
