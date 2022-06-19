@@ -1023,7 +1023,7 @@ export module ViewRenderer
                         type: "tektite-div",
                         data:
                         {
-                            className: "tektite-menu-popup tektite-hide",
+                            className: "tektite-menu-popup",
                             onclick: <ViewCommand.SetDataCommand["params"]>
                             {
                                 type: "tektite-set-data",
@@ -1066,7 +1066,7 @@ export module ViewRenderer
                         minamo.dom.toggleCSSClass(cover, "tektite-fade-in", "fade-in" === state);
                         minamo.dom.toggleCSSClass(popup, "tektite-fade-out", "fade-out" === state);
                         minamo.dom.toggleCSSClass(cover, "tektite-fade-out", "fade-out" === state);
-                        minamo.dom.toggleCSSClass(popup, "tektite-hide", "hide" === state);
+                        minamo.dom.toggleCSSClass(popup, "show", "hide" !== state);
                         minamo.dom.toggleCSSClass(cover, "tektite-hide", "hide" === state);
                         const switcher = (oldState: ViewModel.PopupStateType | undefined, newState: ViewModel.PopupStateType, wait: number) =>
                         {
