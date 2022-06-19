@@ -91,7 +91,12 @@ export module ViewModel
         key: string;
     }
     export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
-    export type EntryOrType<Model extends EntryBase> = Model | Model["type"];
+    export type EntryOrType<Model extends EntryBase> =
+        undefined extends Model["data"] ?
+            undefined extends Model["children"] ?
+                Model | Model["type"]:
+                Model:
+            Model;
     export interface IconEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-icon";
@@ -241,7 +246,7 @@ export module ViewModel
     export interface ScreenToastEntry extends EntryBase
     {
         type: "tektite-screen-toast";
-        children: ToastItemEntry[];
+        children?: ToastItemEntry[];
     }
     export type ToastStateType = "slide-in" | "show" | "slow-slide-out" | "slide-out";
     export interface ToastItemEntry extends ListEntry

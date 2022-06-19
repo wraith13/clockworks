@@ -68,7 +68,7 @@ export module ViewCommand
         result: void;
     }
     export type Entry<OmegaEntryBase extends EntryBase> =
-        OmegaEntryBase["params"]["data"] extends undefined ?
+        undefined extends OmegaEntryBase["params"]["data"] ?
             OmegaEntryBase["params"] | OmegaEntryBase["params"]["type"]:
             OmegaEntryBase["params"];
     export type Result<OmegaEntryBase extends EntryBase> = OmegaEntryBase["result"];
