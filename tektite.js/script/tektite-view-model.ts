@@ -113,6 +113,14 @@ export module ViewModel
             className?: string;
         };
     }
+    export interface SpanEntry extends EntryBase
+    {
+        type: "tektite-span";
+        data?: EntryData &
+        {
+            className?: string;
+        };
+    }
     export interface RootEntry extends EntryBase
     {
         type: "tektite-root";
