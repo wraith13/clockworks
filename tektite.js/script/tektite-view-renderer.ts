@@ -1149,10 +1149,51 @@ export module ViewRenderer
             },
             "tektite-label-span":
             {
-                make: { tag: "span", className: "label" },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LabelSpanEntry["data"], _externalModels: { [path: string]:any }) =>
+                make: async (_path: ViewModel.PathType) =>
+                [
+                    await this.instantMake<ViewModel.SpanEntry>
+                    ({
+                        type: "tektite-span",
+                        data:
+                        {
+                            className: "tektite-label",
+                        },
+                        children:
+                        {
+                            "locale-parallel": <ViewModel.SpanEntry>
+                            {
+                                type: "tektite-span",
+                                data:
+                                {
+                                    className: "locale-parallel",
+                                },
+                            },
+                            "locale-map": <ViewModel.SpanEntry>
+                            {
+                                type: "tektite-span",
+                                data:
+                                {
+                                    className: "locale-map",
+                                },
+                            },
+                        },
+                    }),
+                ],
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LabelSpanEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperty(dom as HTMLSpanElement, "innerText", data.text);
+                    const primary = getPrimaryElement(dom) as HTMLSpanElement;
+                    minamo.dom.setProperty
+                    (
+                        primary.getElementsByClassName("locale-parallel")[0],
+                        "innerText",
+                        tektite.locale.parallel(data.text)
+                    );
+                    minamo.dom.setProperty
+                    (
+                        primary.getElementsByClassName("locale-map")[0],
+                        "innerText",
+                        tektite.locale.string(data.text)
+                    );
                     return dom;
                 },
                 updateChildren: "append",
