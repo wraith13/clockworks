@@ -208,6 +208,10 @@ export module Clockworks
                                             github: <ViewModel.MenuItemLinkButtonEntry>
                                             {
                                                 type: "tektite-menu-item-link-button",
+                                                data:
+                                                {
+                                                    href: config.repositoryUrl,
+                                                },
                                                 child: <ViewModel.ButtonEntry>
                                                 {
                                                     type: "tektite-button",
@@ -219,15 +223,11 @@ export module Clockworks
                                                             type: "tektite-label-span",
                                                             data:
                                                             {
-                                                                text: "Language setting",
+                                                                text: "GitHub",
                                                             }
                                                         }
                                                     },
                                                 },
-                                                data:
-                                                {
-                                                    href: config.repositoryUrl,
-                                                }
                                             },
                                         }
                                     },

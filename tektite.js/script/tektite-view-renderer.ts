@@ -1120,7 +1120,7 @@ export module ViewRenderer
                 make: { tag: "button", },
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    minamo.dom.setProperties(dom as HTMLButtonElement, data ?? { });
+                    minamo.dom.setProperties(dom as HTMLButtonElement, data ?? { className: "tektite-menu-item-button" });
                     return dom;
                 },
                 updateChildren: "append",
