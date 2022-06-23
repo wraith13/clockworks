@@ -212,21 +212,14 @@ export module Clockworks
                                                 {
                                                     href: config.repositoryUrl,
                                                 },
-                                                child: <ViewModel.ButtonEntry>
+                                                child: <ViewModel.SpanEntry>
                                                 {
-                                                    type: "tektite-button",
-                                                    data: { },
-                                                    children:
+                                                    type: "tektite-span",
+                                                    data:
                                                     {
-                                                        "single": <ViewModel.LabelSpanEntry>
-                                                        {
-                                                            type: "tektite-label-span",
-                                                            data:
-                                                            {
-                                                                text: "GitHub",
-                                                            }
-                                                        }
-                                                    },
+                                                        className: "tektite-label",
+                                                        text: "GitHub",
+                                                    }
                                                 },
                                             },
                                         }
@@ -277,11 +270,12 @@ export module Clockworks
                                                                 {
                                                                     className: "tektite-default-button tektite-main-button tektite-long-button",
                                                                 },
-                                                                child: <ViewModel.LabelSpanEntry>
+                                                                child: <ViewModel.SpanEntry>
                                                                 {
-                                                                    type: "tektite-label-span",
+                                                                    type: "tektite-span",
                                                                     data:
                                                                     {
+                                                                        className: "tektite-label",
                                                                         text: Type.applicationList[i].title,
                                                                     }
                                                                 },

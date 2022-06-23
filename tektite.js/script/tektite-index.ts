@@ -421,7 +421,7 @@ export module Tektite
         {
             const toastPath = <ViewModel.PathType>{ type: "path", path: `/root/screen/screen-toast`, };
             const content = "string" === typeof data.content ?
-                <ViewModel.VanillaSpanEntry>{ type: "tektite-vanilla-span", data: { innerText: data.content, }, }:
+                <ViewModel.SpanEntry>{ type: "tektite-span", data: { text: data.content, }, }:
                 data.content;
             const { path, model } = this.viewModel.setListEntry
             (

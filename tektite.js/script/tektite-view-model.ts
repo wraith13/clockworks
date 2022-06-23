@@ -113,14 +113,27 @@ export module ViewModel
             className?: string;
         };
     }
-    export interface SpanEntry extends EntryBase
+    export interface TextSapnEntry extends EntryBase
+    {
+        type: "tektite-span";
+        data: EntryData &
+        {
+            className?: string;
+            text: string;
+        };
+        child?: never;
+        children?: never;
+    }
+    export interface ElementSpanEntry extends EntryBase
     {
         type: "tektite-span";
         data?: EntryData &
         {
             className?: string;
+            text?: never;
         };
     }
+    export type SpanEntry = TextSapnEntry | ElementSpanEntry;
     export interface RootEntry extends EntryBase
     {
         type: "tektite-root";
@@ -312,7 +325,6 @@ export module ViewModel
         data?: EntryData &
         {
             className?: string;
-            onclick?: (event: MouseEvent) => unknown;
         };
     }
     export interface MenuItemLinkButtonEntry extends EntryBase
@@ -322,16 +334,6 @@ export module ViewModel
         {
             className?: string;
             href: string;
-        };
-        child: ButtonEntry;
-    }
-    export interface VanillaSpanEntry extends EntryBase
-    {
-        type: "tektite-vanilla-span";
-        data: EntryData &
-        {
-            className?: string;
-            innerText: string;
         };
     }
     export interface LabelSpanEntry extends EntryBase
