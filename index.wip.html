@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.wip.json release
-    build at: Fri Jun 24 2022 00:31:49 GMT+0900 (日本標準時)
+    build at: Fri Jun 24 2022 22:54:29 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -16035,288 +16035,295 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                 }
             });
         }); };
-        Clockworks.initializeModel = function () {
-            var _a, _b;
-            var model = {
-                type: "tektite-root",
-                data: {
-                    title: config_json_11.default.applicationTitle,
-                    theme: (_a = storage_14.Storage.Settings.get().theme) !== null && _a !== void 0 ? _a : "auto",
-                    progressBarStyle: (_b = storage_14.Storage.Settings.get().progressBarStyle) !== null && _b !== void 0 ? _b : "auto",
-                    windowColor: color_7.Color.getSolidRainbowColor(0),
-                },
-                children: {
-                    "screen": {
-                        type: "tektite-screen",
-                        children: {
-                            "screen-header": {
-                                type: "tektite-screen-header",
-                                children: {
-                                    "screen-header-progress-bar": {
-                                        type: "tektite-screen-header-progress-bar",
-                                    },
-                                    "screen-header-segment": {
-                                        type: "tektite-screen-header-segment-list",
-                                        children: [
-                                            {
-                                                type: "tektite-screen-header-label-segment",
-                                                key: "application-segment",
-                                                child: {
-                                                    type: "tektite-screen-header-segment-core",
-                                                    data: {
-                                                        icon: "application-icon",
-                                                        title: config_json_11.default.applicationTitle,
+        var TektiteWIP;
+        (function (TektiteWIP) {
+            TektiteWIP.initializeModel = function () {
+                var _a, _b;
+                var model = {
+                    type: "tektite-root",
+                    data: {
+                        title: config_json_11.default.applicationTitle,
+                        theme: (_a = storage_14.Storage.Settings.get().theme) !== null && _a !== void 0 ? _a : "auto",
+                        progressBarStyle: (_b = storage_14.Storage.Settings.get().progressBarStyle) !== null && _b !== void 0 ? _b : "auto",
+                        windowColor: color_7.Color.getSolidRainbowColor(0),
+                    },
+                    children: {
+                        "screen": {
+                            type: "tektite-screen",
+                            children: {
+                                "screen-header": {
+                                    type: "tektite-screen-header",
+                                    children: {
+                                        "screen-header-progress-bar": {
+                                            type: "tektite-screen-header-progress-bar",
+                                        },
+                                        "screen-header-segment": {
+                                            type: "tektite-screen-header-segment-list",
+                                            children: [
+                                                {
+                                                    type: "tektite-screen-header-label-segment",
+                                                    key: "application-segment",
+                                                    child: {
+                                                        type: "tektite-screen-header-segment-core",
+                                                        data: {
+                                                            icon: "application-icon",
+                                                            title: config_json_11.default.applicationTitle,
+                                                        },
                                                     },
                                                 },
-                                            },
-                                        ],
-                                    },
-                                    "screen-header-operator": {
-                                        type: "tektite-screen-header-operator",
-                                        //child: 
-                                    },
-                                }
-                            },
-                            "screen-body": {
-                                type: "tektite-screen-body",
-                                // children:[ ]
-                            },
-                            "screen-bar": "tektite-screen-bar",
-                            "screen-toast": "tektite-screen-toast",
+                                            ],
+                                        },
+                                        "screen-header-operator": {
+                                            type: "tektite-screen-header-operator",
+                                            //child: 
+                                        },
+                                    }
+                                },
+                                "screen-body": {
+                                    type: "tektite-screen-body",
+                                    // children:[ ]
+                                },
+                                "screen-bar": "tektite-screen-bar",
+                                "screen-toast": "tektite-screen-toast",
+                            }
                         }
                     }
+                };
+                exports.tektite.viewModel.set(model);
+            };
+            TektiteWIP.setHeaderSegmented = function (children) {
+                var path = { type: "path", path: "/root/screen/screen-header/screen-header-segment", entryType: "tektite-screen-header-segment-list", };
+                var model = exports.tektite.viewModel.get(path);
+                if (model) {
+                    model.children = children;
+                    exports.tektite.viewModel.set(path, model);
                 }
             };
-            exports.tektite.viewModel.set(model);
-        };
-        Clockworks.setHeaderSegmented = function (children) {
-            var path = { type: "path", path: "/root/screen/screen-header/screen-header-segment", entryType: "tektite-screen-header-segment-list", };
-            var model = exports.tektite.viewModel.get(path);
-            if (model) {
-                model.children = children;
+            TektiteWIP.setHeaderOperator = function (children) {
+                var path = { type: "path", path: "/root/screen/screen-header/screen-header-operator", entryType: "tektite-screen-header-operator", };
+                var model = exports.tektite.viewModel.get(path);
+                if (model) {
+                    model.children = children;
+                    exports.tektite.viewModel.set(path, model);
+                }
+            };
+            TektiteWIP.setScreenBody = function (model) {
+                var path = { type: "path", path: "/root/screen/screen-body", entryType: "tektite-screen", };
                 exports.tektite.viewModel.set(path, model);
-            }
-        };
-        Clockworks.setHeaderOperator = function (children) {
-            var path = { type: "path", path: "/root/screen/screen-header/screen-header-operator", entryType: "tektite-screen-header-operator", };
-            var model = exports.tektite.viewModel.get(path);
-            if (model) {
-                model.children = children;
-                exports.tektite.viewModel.set(path, model);
-            }
-        };
-        Clockworks.setScreenBody = function (model) {
-            var path = { type: "path", path: "/root/screen/screen-body", entryType: "tektite-screen", };
-            exports.tektite.viewModel.set(path, model);
-        };
-        Clockworks.setScreen = function (screen) {
-            Clockworks.setHeaderSegmented(screen.header.segmented);
-            Clockworks.setHeaderOperator(screen.header.operator);
-            Clockworks.setScreenBody(screen.body);
-        };
-        Clockworks.showWelcomeScreen = function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        Clockworks.setScreen({
-                            header: {
-                                segmented: [
-                                    {
-                                        type: "tektite-screen-header-label-segment",
-                                        key: "application-segment",
-                                        child: {
-                                            type: "tektite-screen-header-segment-core",
-                                            data: {
-                                                icon: "application-icon",
-                                                title: config_json_11.default.applicationTitle,
+            };
+            TektiteWIP.setScreen = function (screen) {
+                TektiteWIP.setHeaderSegmented(screen.header.segmented);
+                TektiteWIP.setHeaderOperator(screen.header.operator);
+                TektiteWIP.setScreenBody(screen.body);
+            };
+        })(TektiteWIP = Clockworks.TektiteWIP || (Clockworks.TektiteWIP = {}));
+        var ClockworksWIP;
+        (function (ClockworksWIP) {
+            var _this = this;
+            ClockworksWIP.showWelcomeScreen = function () { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            TektiteWIP.setScreen({
+                                header: {
+                                    segmented: [
+                                        {
+                                            type: "tektite-screen-header-label-segment",
+                                            key: "application-segment",
+                                            child: {
+                                                type: "tektite-screen-header-segment-core",
+                                                data: {
+                                                    icon: "application-icon",
+                                                    title: config_json_11.default.applicationTitle,
+                                                },
                                             },
                                         },
-                                    },
-                                ],
-                                operator: {
-                                    single: {
-                                        type: "tektite-menu-button",
-                                        children: {
-                                            fullscreen: {
-                                                type: "tektite-menu-item-button",
-                                                child: {
-                                                    type: "tektite-label-span",
+                                    ],
+                                    operator: {
+                                        single: {
+                                            type: "tektite-menu-button",
+                                            children: {
+                                                fullscreen: {
+                                                    type: "tektite-menu-item-button",
+                                                    child: {
+                                                        type: "tektite-label-span",
+                                                        data: {
+                                                            text: null === exports.tektite.fullscreen.element() ? "Full screen" : "Cancel full screen",
+                                                        }
+                                                    },
+                                                },
+                                                theme: {
+                                                    type: "tektite-menu-item-button",
+                                                    child: {
+                                                        type: "tektite-label-span",
+                                                        data: {
+                                                            text: "Theme setting",
+                                                        }
+                                                    },
+                                                },
+                                                progressBarStyle: {
+                                                    type: "tektite-menu-item-button",
+                                                    child: {
+                                                        type: "tektite-label-span",
+                                                        data: {
+                                                            text: "Progress Bar Style setting",
+                                                        }
+                                                    },
+                                                },
+                                                language: {
+                                                    type: "tektite-menu-item-button",
+                                                    child: {
+                                                        type: "tektite-label-span",
+                                                        data: {
+                                                            text: "Language setting",
+                                                        }
+                                                    },
+                                                },
+                                                github: {
+                                                    type: "tektite-menu-item-link-button",
                                                     data: {
-                                                        text: null === exports.tektite.fullscreen.element() ? "Full screen" : "Cancel full screen",
-                                                    }
+                                                        href: config_json_11.default.repositoryUrl,
+                                                    },
+                                                    child: {
+                                                        type: "tektite-span",
+                                                        data: {
+                                                            className: "tektite-label",
+                                                            text: "GitHub",
+                                                        }
+                                                    },
                                                 },
-                                            },
-                                            theme: {
-                                                type: "tektite-menu-item-button",
-                                                child: {
-                                                    type: "tektite-label-span",
-                                                    data: {
-                                                        text: "Theme setting",
-                                                    }
-                                                },
-                                            },
-                                            progressBarStyle: {
-                                                type: "tektite-menu-item-button",
-                                                child: {
-                                                    type: "tektite-label-span",
-                                                    data: {
-                                                        text: "Progress Bar Style setting",
-                                                    }
-                                                },
-                                            },
-                                            language: {
-                                                type: "tektite-menu-item-button",
-                                                child: {
-                                                    type: "tektite-label-span",
-                                                    data: {
-                                                        text: "Language setting",
-                                                    }
-                                                },
-                                            },
-                                            github: {
-                                                type: "tektite-menu-item-link-button",
-                                                data: {
-                                                    href: config_json_11.default.repositoryUrl,
-                                                },
-                                                child: {
-                                                    type: "tektite-span",
-                                                    data: {
-                                                        className: "tektite-label",
-                                                        text: "GitHub",
-                                                    }
-                                                },
-                                            },
-                                        }
+                                            }
+                                        },
                                     },
                                 },
-                            },
-                            body: {
-                                type: "tektite-screen-body",
-                                data: {
-                                    className: "welcome-screen",
-                                },
-                                children: [
-                                    {
-                                        key: "primary",
-                                        type: "tektite-primary-page",
-                                        children: {
-                                            body: {
-                                                type: "tektite-primary-page-body",
-                                                children: {
-                                                    board: "welcome-board",
-                                                    // operators: "welcome-operators",
-                                                    operators: {
-                                                        type: "tektite-vertical-button-list",
-                                                        children: type_6.Type.applicationIdList.map(function (i) { return ({
-                                                            key: i,
-                                                            type: "tektite-link-button",
-                                                            data: {
-                                                                className: "tektite-link-button",
-                                                                href: exports.tektite.params.makeUrl({ application: i }),
-                                                            },
-                                                            child: {
-                                                                type: "tektite-button",
+                                body: {
+                                    type: "tektite-screen-body",
+                                    data: {
+                                        className: "welcome-screen",
+                                    },
+                                    children: [
+                                        {
+                                            key: "primary",
+                                            type: "tektite-primary-page",
+                                            children: {
+                                                body: {
+                                                    type: "tektite-primary-page-body",
+                                                    children: {
+                                                        board: "welcome-board",
+                                                        // operators: "welcome-operators",
+                                                        operators: {
+                                                            type: "tektite-vertical-button-list",
+                                                            children: type_6.Type.applicationIdList.map(function (i) { return ({
+                                                                key: i,
+                                                                type: "tektite-link-button",
                                                                 data: {
-                                                                    className: "tektite-default-button tektite-main-button tektite-long-button",
+                                                                    className: "tektite-link-button",
+                                                                    href: exports.tektite.params.makeUrl({ application: i }),
                                                                 },
                                                                 child: {
-                                                                    type: "tektite-span",
+                                                                    type: "tektite-button",
                                                                     data: {
-                                                                        className: "tektite-label",
-                                                                        text: type_6.Type.applicationList[i].title,
-                                                                    }
+                                                                        className: "tektite-default-button tektite-main-button tektite-long-button",
+                                                                    },
+                                                                    child: {
+                                                                        type: "tektite-span",
+                                                                        data: {
+                                                                            className: "tektite-label",
+                                                                            text: type_6.Type.applicationList[i].title,
+                                                                        }
+                                                                    },
                                                                 },
-                                                            },
-                                                        }); })
-                                                    }
+                                                            }); })
+                                                        }
+                                                    },
+                                                },
+                                                footer: {
+                                                    type: "tektite-primary-page-footer",
+                                                    child: "tektite-primary-page-footer-down-page-link",
                                                 },
                                             },
-                                            footer: {
-                                                type: "tektite-primary-page-footer",
-                                                child: "tektite-primary-page-footer-down-page-link",
-                                            },
                                         },
-                                    },
-                                    {
-                                        key: "trail",
-                                        type: "tektite-trail-page",
-                                        child: "welcome-footer",
-                                    },
-                                ]
-                            }
-                        });
-                        return [4 /*yield*/, exports.tektite.viewRenderer.renderRoot()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); };
-        Clockworks.startWIP = function (params) { return __awaiter(_this, void 0, void 0, function () {
-            var renders, _a, _b, _c;
-            var _d, _e;
-            var _f, _g, _h, _j;
-            return __generator(this, function (_k) {
-                switch (_k.label) {
-                    case 0:
-                        console.log("start timestamp: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())));
-                        console.log("buildTimestamp: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )"));
-                        console.log("".concat(JSON.stringify(params)));
-                        exports.tektite.locale.setLocale((_f = storage_14.Storage.Settings.get().locale) !== null && _f !== void 0 ? _f : null);
-                        // tektite.onLoad();
-                        window.matchMedia("(prefers-color-scheme: dark)").addListener(render_14.Render.updateStyle);
-                        _d = {};
-                        _a = "welcome-board";
-                        _e = {};
-                        _b = tektite_index_14.Tektite.$div("logo");
-                        _c = tektite_index_14.Tektite.$div("application-icon icon");
-                        return [4 /*yield*/, resource_6.Resource.loadIconOrCache("application-icon")];
-                    case 1:
-                        renders = (_d[_a] = (_e.make = _b.apply(void 0, [[
-                                _c.apply(void 0, [_k.sent()]),
-                                tektite_index_14.Tektite.$span("logo-text")(config_json_11.default.applicationTitle)
-                            ]]),
-                            _e),
-                            _d["welcome-operators"] = {
-                                make: tektite_index_14.Tektite.$div("tektite-vertical-button-list")(type_6.Type.applicationIdList.map(function (i) {
-                                    return exports.tektite.internalLink({
-                                        className: "tektite-link-button",
-                                        href: { application: i },
-                                        children: {
-                                            tag: "button",
-                                            className: "tektite-default-button tektite-main-button tektite-long-button",
-                                            children: tektite_index_14.Tektite.$labelSpan(type_6.Type.applicationList[i].title),
-                                            // onclick: async () => await showNeverStopwatchScreen(),
-                                        }
-                                    });
-                                })),
-                            },
-                            _d["welcome-footer"] = {
-                                make: tektite_index_14.Tektite.$div("description")(tektite_index_14.Tektite.$tag("ul")("tektite-locale-parallel-off")([
-                                    tektite_index_14.Tektite.$tag("li")("")(render_14.Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
-                                ])),
-                            },
-                            _d);
-                        minamo_js_15.minamo.core.objectKeys(renders).forEach(function (key) { return exports.tektite.viewRenderer.renderer[key] = renders[key]; });
-                        Clockworks.initializeModel();
-                        return [4 /*yield*/, Clockworks.showWelcomeScreen()];
-                    case 2:
-                        _k.sent();
-                        if (!("reload" === ((_h = (_g = performance.getEntriesByType("navigation")) === null || _g === void 0 ? void 0 : _g[0]) === null || _h === void 0 ? void 0 : _h.type))) return [3 /*break*/, 4];
-                        exports.tektite.makeToast({
-                            content: "\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )"),
-                            isWideContent: true,
-                        });
-                        return [4 /*yield*/, exports.tektite.viewRenderer.renderRoot()];
-                    case 3:
-                        _k.sent();
-                        _k.label = 4;
-                    case 4:
-                        (_j = document.getElementById("tektite-screen-body")) === null || _j === void 0 ? void 0 : _j.addEventListener("scroll", function () { return exports.tektite.viewRenderer.update("scroll"); });
-                        return [2 /*return*/];
-                }
-            });
-        }); };
+                                        {
+                                            key: "trail",
+                                            type: "tektite-trail-page",
+                                            child: "welcome-footer",
+                                        },
+                                    ]
+                                }
+                            });
+                            return [4 /*yield*/, exports.tektite.viewRenderer.renderRoot()];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            }); };
+            ClockworksWIP.start = function (params) { return __awaiter(_this, void 0, void 0, function () {
+                var renders, _a, _b, _c;
+                var _d, _e;
+                var _f, _g, _h, _j;
+                return __generator(this, function (_k) {
+                    switch (_k.label) {
+                        case 0:
+                            console.log("start timestamp: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())));
+                            console.log("buildTimestamp: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )"));
+                            console.log("".concat(JSON.stringify(params)));
+                            exports.tektite.locale.setLocale((_f = storage_14.Storage.Settings.get().locale) !== null && _f !== void 0 ? _f : null);
+                            // tektite.onLoad();
+                            window.matchMedia("(prefers-color-scheme: dark)").addListener(render_14.Render.updateStyle);
+                            TektiteWIP.initializeModel();
+                            _d = {};
+                            _a = "welcome-board";
+                            _e = {};
+                            _b = tektite_index_14.Tektite.$div("logo");
+                            _c = tektite_index_14.Tektite.$div("application-icon icon");
+                            return [4 /*yield*/, resource_6.Resource.loadIconOrCache("application-icon")];
+                        case 1:
+                            renders = (_d[_a] = (_e.make = _b.apply(void 0, [[
+                                    _c.apply(void 0, [_k.sent()]),
+                                    tektite_index_14.Tektite.$span("logo-text")(config_json_11.default.applicationTitle)
+                                ]]),
+                                _e),
+                                _d["welcome-operators"] = {
+                                    make: tektite_index_14.Tektite.$div("tektite-vertical-button-list")(type_6.Type.applicationIdList.map(function (i) {
+                                        return exports.tektite.internalLink({
+                                            className: "tektite-link-button",
+                                            href: { application: i },
+                                            children: {
+                                                tag: "button",
+                                                className: "tektite-default-button tektite-main-button tektite-long-button",
+                                                children: tektite_index_14.Tektite.$labelSpan(type_6.Type.applicationList[i].title),
+                                                // onclick: async () => await showNeverStopwatchScreen(),
+                                            }
+                                        });
+                                    })),
+                                },
+                                _d["welcome-footer"] = {
+                                    make: tektite_index_14.Tektite.$div("description")(tektite_index_14.Tektite.$tag("ul")("tektite-locale-parallel-off")([
+                                        tektite_index_14.Tektite.$tag("li")("")(render_14.Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                    ])),
+                                },
+                                _d);
+                            minamo_js_15.minamo.core.objectKeys(renders).forEach(function (key) { return exports.tektite.viewRenderer.renderer[key] = renders[key]; });
+                            return [4 /*yield*/, ClockworksWIP.showWelcomeScreen()];
+                        case 2:
+                            _k.sent();
+                            if (!("reload" === ((_h = (_g = performance.getEntriesByType("navigation")) === null || _g === void 0 ? void 0 : _g[0]) === null || _h === void 0 ? void 0 : _h.type))) return [3 /*break*/, 4];
+                            exports.tektite.makeToast({
+                                content: "\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )"),
+                                isWideContent: true,
+                            });
+                            return [4 /*yield*/, exports.tektite.viewRenderer.renderRoot()];
+                        case 3:
+                            _k.sent();
+                            _k.label = 4;
+                        case 4:
+                            (_j = document.getElementById("tektite-screen-body")) === null || _j === void 0 ? void 0 : _j.addEventListener("scroll", function () { return exports.tektite.viewRenderer.update("scroll"); });
+                            return [2 /*return*/];
+                    }
+                });
+            }); };
+        })(ClockworksWIP = Clockworks.ClockworksWIP || (Clockworks.ClockworksWIP = {}));
     })(Clockworks = exports.Clockworks || (exports.Clockworks = {}));
     exports.tektite = tektite_index_14.Tektite.make({
         makeUrl: domain_10.Domain.makeUrl,
@@ -16339,7 +16346,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.startWIP({ buildTimestampTick: 1655998309255, })">
+<body onload="require('clockworks/script/index').Clockworks.ClockworksWIP.start({ buildTimestampTick: 1656078869271, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>
