@@ -12,6 +12,11 @@ import localeEn from "../resource/lang.en.json";
 import localeJa from "../resource/lang.ja.json";
 import config from "../resource/config.json";
 import { minamo } from "../nephila/minamo.js";
+import { Base } from "./base";
+import { Render as RainbowClockRender } from "./application/rainbowclock/render";
+import { Render as CountdownTimerRender } from "./application/countdowntimer/render";
+import { Render as NeverStopwatchRender } from "./application/neverstopwatch/render";
+import { Render as ElapsedTimerRender } from "./application/elapsedtimer/render";
 export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
@@ -336,6 +341,53 @@ export module Clockworks
             });
             await tektite.viewRenderer.renderRoot();
         };
+        export const showPage = async (url: string = location.href) =>
+        {
+            tektite.screen.getScreenCover()?.click();
+            window.scrollTo(0,0);
+            document.getElementById("tektite-screen-body")?.scrollTo(0,0);
+            // const urlParams = getUrlParams(url);
+            const hash = Base.getUrlHash(url).split("/");
+            const applicationType = hash[0] as Type.ApplicationType;
+            const itemJson = hash[1];
+            const application =
+            {
+                "RainbowClock":
+                {
+                    show: async (item: Type.TimezoneEntry) => await RainbowClockRender.showRainbowClockScreen(item),
+                    parseItem: (json: string) => Domain.parseTimezone(json),
+                },
+                "CountdownTimer":
+                {
+                    show: async (item: Type.AlarmEntry) => await CountdownTimerRender.showCountdownTimerScreen(item),
+                    parseItem: (json: string) => Domain.parseAlarm(json),
+                },
+                "ElapsedTimer":
+                {
+                    show: async (item: Type.EventEntry) => await ElapsedTimerRender.showElapsedTimerScreen(item),
+                    parseItem: (json: string) => Domain.parseEvent(json),
+                },
+                "NeverStopwatch":
+                {
+                    show: async (item: number) => await NeverStopwatchRender.showNeverStopwatchScreen(item),
+                    parseItem: (json: string) => Domain.parseStamp(json),
+                },
+            }[applicationType] ??
+            {
+                show: async () => await showWelcomeScreen(),
+                parseItem: () => null,
+            };
+            const item = application.parseItem(itemJson);
+            if (Render.regulateLocation(applicationType, itemJson, item))
+            {
+                await application.show(item as any);
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        };
         export const start = async (params:{ buildTimestampTick:number, }) =>
         {
             console.log(`start timestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())}`);
@@ -343,6 +395,7 @@ export module Clockworks
             console.log(`${JSON.stringify(params)}`);
             tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
             // tektite.onLoad();
+            window.onpopstate = () => showPage(location.href);
             window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
             TektiteWIP.initializeModel();
             const renders: { [type: string ]: ViewRenderer.Entry<any>} =
@@ -392,7 +445,7 @@ export module Clockworks
             (
                 key => (tektite.viewRenderer.renderer as any)[key] = renders[key]
             );
-            await showWelcomeScreen();
+            await showPage();
             if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
             {
                 tektite.makeToast

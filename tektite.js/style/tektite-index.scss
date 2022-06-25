@@ -5,21 +5,12 @@
     @include tektite-positive-background-coloring-trait;
     @include tektite-screen-full-trait;
 }
-
 .tektite-screen-cover
 {
     @include tektite-screen-full-trait;
     @include tektite-center-vertical-flex-trait;
     background-color: $tektite-screen-cover-color;
     z-index: 88888;
-    &.tektite-fade-in
-    {
-        @include tektite-animation(tektite-fade-in, 0.5s);
-    }
-    &.tektite-fade-out
-    {
-        @include tektite-animation(tektite-fade-out, 0.5s);
-    }
     height: 100vh;
     width: 100vw;
 }
@@ -850,6 +841,14 @@
 .tektite-fade-and-slide-out
 {
     @include tektite-animation(tektite-fade-and-slide-out, 0.5s);
+}
+.tektite-fade-in
+{
+    @include tektite-animation(tektite-fade-in, 0.5s);
+}
+.tektite-fade-out
+{
+    @include tektite-animation(tektite-fade-out, 0.5s);
 }
 .tektite-hide
 {
