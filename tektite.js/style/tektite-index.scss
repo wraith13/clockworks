@@ -955,6 +955,14 @@
     {
         width: 100%;
     }
+    &.tektite-fade-in
+    {
+        @include tektite-animation(tektite-fade-in, 0.25s);
+    }
+    &.tektite-fade-out
+    {
+        @include tektite-animation(tektite-fade-out, 0.25s);
+    }
 }
 .tektite-menu-item-button
 {

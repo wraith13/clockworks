@@ -1137,7 +1137,7 @@ export module ViewRenderer
                 update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom);
-                    minamo.dom.setProperty(element, "className", data.href);
+                    minamo.dom.setProperty(element, "href", data.href);
                     minamo.dom.setProperty(tektite.viewRenderer.get("tektite-menu-item-link-button").getChildModelContainer(dom), "className", `tektite-menu-item-button ${data?.className ?? ""}`);
                     return dom;
                 },
