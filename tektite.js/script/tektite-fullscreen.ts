@@ -1,7 +1,7 @@
 export module Fullscreen
 {
     export const enabled = () => document.fullscreenEnabled ?? (document as any).webkitFullscreenEnabled;
-    export const element = () => (document.fullscreenElement ?? ((document as any).webkitFullscreenElement) ?? null);
+    export const getElement = () => (document.fullscreenElement ?? ((document as any).webkitFullscreenElement) ?? null);
     export const request = async (element: Element = document.documentElement) =>
     {
         if (element.requestFullscreen)
@@ -34,4 +34,18 @@ export module Fullscreen
             document.body.classList.remove("tektite-sleep-mouse");
         }
     };
+    export const toggle = async (element: Element = document.documentElement) =>
+    {
+        if (enabled())
+        {
+            if(null === getElement())
+            {
+                request(element);
+            }
+            else
+            {
+                exit();
+            }
+        }
+    }
 }

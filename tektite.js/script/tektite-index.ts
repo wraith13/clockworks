@@ -138,13 +138,13 @@ export module Tektite
                 {
                     document.body.classList.remove("tektite-sleep-mouse");
                 }
-                if (this.fullscreen.element())
+                if (this.fullscreen.getElement())
                 {
                     setTimeout
                     (
                         () =>
                         {
-                            if (this.fullscreen.element() && now === this.lastMouseMouseAt)
+                            if (this.fullscreen.getElement() && now === this.lastMouseMouseAt)
                             {
                                 if ( ! document.body.classList.contains("tektite-sleep-mouse"))
                                 {
@@ -166,7 +166,7 @@ export module Tektite
             this.screen.onWindowResize();
             if (0 <= navigator.userAgent.indexOf("iPad") || (0 <= navigator.userAgent.indexOf("Macintosh") && "ontouchend" in document))
             {
-                document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", this.fullscreen.element());
+                document.body.classList.toggle("tektite-fxxking-ipad-fullscreen", this.fullscreen.getElement());
             }
         };
         public onKeydown = (event: KeyboardEvent) =>
@@ -193,17 +193,7 @@ export module Tektite
                     switch(event.key.toLowerCase())
                     {
                         case "f":
-                            if (this.fullscreen.enabled())
-                            {
-                                if(null === this.fullscreen.element())
-                                {
-                                    this.fullscreen.request();
-                                }
-                                else
-                                {
-                                    this.fullscreen.exit();
-                                }
-                            }
+                            this.fullscreen.toggle();
                             break;
                     }
                 }

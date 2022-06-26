@@ -205,7 +205,7 @@ export module Clockworks
                                         type: "tektite-label-span",
                                         data:
                                         {
-                                            text: null === tektite.fullscreen.element() ? "Full screen": "Cancel full screen",
+                                            text: null === tektite.fullscreen.getElement() ? "Full screen": "Cancel full screen",
                                         }
                                     },
                                 },
@@ -354,22 +354,26 @@ export module Clockworks
             {
                 "RainbowClock":
                 {
-                    show: async (item: Type.TimezoneEntry) => await RainbowClockRender.showRainbowClockScreen(item),
+                    _show: async (item: Type.TimezoneEntry) => await RainbowClockRender.showRainbowClockScreen(item),
+                    show: async (_item: Type.TimezoneEntry) => await showWelcomeScreen(),
                     parseItem: (json: string) => Domain.parseTimezone(json),
                 },
                 "CountdownTimer":
                 {
-                    show: async (item: Type.AlarmEntry) => await CountdownTimerRender.showCountdownTimerScreen(item),
+                    _show: async (item: Type.AlarmEntry) => await CountdownTimerRender.showCountdownTimerScreen(item),
+                    show: async (_item: Type.AlarmEntry) => await showWelcomeScreen(),
                     parseItem: (json: string) => Domain.parseAlarm(json),
                 },
                 "ElapsedTimer":
                 {
-                    show: async (item: Type.EventEntry) => await ElapsedTimerRender.showElapsedTimerScreen(item),
+                    _show: async (item: Type.EventEntry) => await ElapsedTimerRender.showElapsedTimerScreen(item),
+                    show: async (_item: Type.EventEntry) => await showWelcomeScreen(),
                     parseItem: (json: string) => Domain.parseEvent(json),
                 },
                 "NeverStopwatch":
                 {
-                    show: async (item: number) => await NeverStopwatchRender.showNeverStopwatchScreen(item),
+                    _show: async (item: number) => await NeverStopwatchRender.showNeverStopwatchScreen(item),
+                    show: async (_item: number) => await showWelcomeScreen(),
                     parseItem: (json: string) => Domain.parseStamp(json),
                 },
             }[applicationType] ??

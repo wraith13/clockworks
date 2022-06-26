@@ -448,7 +448,7 @@ export module Render
     });
     export const fullscreenMenuItem = async () => tektite.fullscreen.enabled() ?
         (
-            null === tektite.fullscreen.element() ?
+            null === tektite.fullscreen.getElement() ?
                 tektite.menu.item
                 (
                     label("Full screen"),
