@@ -34,11 +34,11 @@ export module Fullscreen
             document.body.classList.remove("tektite-sleep-mouse");
         }
     };
-    export const toggle = async (element: Element = document.documentElement) =>
+    export const toggle = async (element: Element | null = document.documentElement) =>
     {
         if (enabled())
         {
-            if(null === getElement())
+            if(null !== element && element !== getElement())
             {
                 request(element);
             }

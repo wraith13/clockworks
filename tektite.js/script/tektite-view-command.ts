@@ -2,6 +2,7 @@ import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
 import { ViewModel } from "./tektite-view-model.js";
 import { ViewRenderer } from "./tektite-view-renderer.js";
+import { Fullscreen } from "./tektite-fullscreen";
 
 export module ViewCommand
 {
@@ -63,6 +64,18 @@ export module ViewCommand
             {
                 path: ViewModel.PathType;
                 next: ViewModel.ToastStateType | null,
+            }
+        }
+        result: void;
+    }
+    export interface ToggleFullscreenCommand extends EntryBase
+    {
+        params:
+        {
+            type: "tektite-toggle-fullscreen";
+            data?:
+            {
+                path: ViewModel.PathType | null;
             }
         }
         result: void;
@@ -223,6 +236,36 @@ export module ViewCommand
                                 tektite.viewModel.set(path, model);
                             }
                             await tektite.viewRenderer.renderRoot();
+                        }
+                    }
+                }
+            ),
+            "tektite-toggle-fullscreen": <Command<T, ToggleFullscreenCommand>>
+            (
+                async (tektite, entry) =>
+                {
+                    if ("string" === typeof entry || ! entry.data)
+                    {
+                        Fullscreen.toggle();
+                    }
+                    else
+                    {
+                        const path = entry.data.path;
+                        if (null === path)
+                        {
+                            Fullscreen.exit();
+                        }
+                        else
+                        {
+                            const cache = tektite.viewRenderer.getCache(path);
+                            if (cache && cache.dom)
+                            {
+                                const element = ViewRenderer.getPrimaryElement(cache.dom)
+                                if (element)
+                                {
+                                    Fullscreen.toggle(element);
+                                }
+                            }
                         }
                     }
                 }
