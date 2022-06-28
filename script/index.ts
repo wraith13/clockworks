@@ -200,6 +200,7 @@ export module Clockworks
                                 fullscreen: <ViewModel.MenuItemButtonEntry>
                                 {
                                     type: "tektite-menu-item-button",
+                                    data: { onclick: "tektite-toggle-fullscreen", },
                                     child: <ViewModel.LabelSpanEntry>
                                     {
                                         type: "tektite-label-span",
