@@ -8,6 +8,14 @@ export module ViewRenderer
     export const getPrimaryElement = (dom: DomType): Element => Array.isArray(dom) ? dom[0]: dom;
     export const getSecondaryElement = (dom: DomType): Element => Array.isArray(dom) ? dom[1]: dom;
     export const getElementList = (dom: DomType): Element[] => Array.isArray(dom) ? dom: [dom];
+    export interface NullEntry
+    {
+        make: "null",
+    };
+    export const nullEntry: NullEntry =
+    {
+        make: "null",
+    };
     export interface ContainerEntry
     {
         make: "container",
@@ -43,7 +51,8 @@ export module ViewRenderer
         make: ((path: ViewModel.PathType) => Promise<DomType | minamo.dom.Source>) | minamo.dom.Source,
         update?: <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModelEntry["data"], externalModels: { [path: string]:any }) => Promise<DomType>,
     };
-    export type Entry<ViewModelEntry extends ViewModel.EntryBase> = VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry> | ContainerEntry;
+    export type Entry<ViewModelEntry extends ViewModel.EntryBase> = NullEntry | ContainerEntry | VolatileDomEntry<ViewModelEntry> | DomEntry<ViewModelEntry>;
+    export const isNullEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is NullEntry => "null" === entry.make;
     export const isContainerEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is ContainerEntry => "container" === entry.make;
     export const isVolatileDomEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is VolatileDomEntry<ViewModelEntry> => "volatile" === entry.make;
     export type EventHandler<T extends Tektite.ParamTypes> = (tektite: Tektite.Tektite<T>, event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) => unknown;
@@ -253,6 +262,11 @@ export module ViewRenderer
                 outputError(`Unknown type ${JSON.stringify(data.type)}`);
             }
             else
+            if (isNullEntry(renderer))
+            {
+                //  null entry
+            }
+            else
             if ( ! isContainerEntry(renderer))
             {
                 const externalData = this.getExternalData(path, data, renderer.getExternalDataPath);
@@ -383,6 +397,10 @@ export module ViewRenderer
                 {
                     outputError(`Unknown type ${JSON.stringify(data?.type)}`);
                 }
+                if (isNullEntry(renderer))
+                {
+                    //  null entry
+                }
                 else
                 {
                     const oldChildrenKeys = cache?.childrenKeys ?? [];
@@ -498,6 +516,11 @@ export module ViewRenderer
                     outputError(`Unknown type ${JSON.stringify(data?.type)}`);
                 }
                 else
+                if (isNullEntry(renderer))
+                {
+                    //  null entry
+                }
+                else
                 {
                     if ( ! isContainerEntry(renderer))
                     {
@@ -570,6 +593,7 @@ export module ViewRenderer
         public getAny = <ViewModelEntry extends ViewModel.EntryBase>(type: string): Entry<ViewModelEntry> => this.get(type as any);
         public readonly renderer = //: { [type: string ]: Entry<any> } =
         {
+            "tektite-null": nullEntry,
             "tektite-icon":minamo.core.extender<VolatileDomEntry<ViewModel.IconEntry<T>>>()
             ({
                 make: "volatile",

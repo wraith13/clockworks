@@ -97,6 +97,12 @@ export module ViewModel
                 Model | Model["type"]:
                 Model:
             Model;
+    export interface NullEntry extends EntryBase
+    {
+        type: "tektite-null";
+        data?: never;
+        children?: never;
+    }
     export interface IconEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-icon";
