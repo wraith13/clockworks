@@ -323,7 +323,7 @@ export module ViewModel
         {
             state: PopupStateType;
         };
-        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry) };
+        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry | NullEntry) & ListEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry | EntryOrType<NullEntry>) };
     }
     export interface MenuItemButtonEntry extends EntryBase
     {

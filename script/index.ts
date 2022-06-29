@@ -197,19 +197,21 @@ export module Clockworks
                             type: "tektite-menu-button",
                             children:
                             {
-                                fullscreen: <ViewModel.MenuItemButtonEntry>
-                                {
-                                    type: "tektite-menu-item-button",
-                                    data: { onclick: "tektite-toggle-fullscreen", },
-                                    child: <ViewModel.LabelSpanEntry>
+                                fullscreen: tektite.fullscreen.enabled() ?
+                                    <ViewModel.MenuItemButtonEntry>
                                     {
-                                        type: "tektite-label-span",
-                                        data:
+                                        type: "tektite-menu-item-button",
+                                        data: { onclick: "tektite-toggle-fullscreen", },
+                                        child: <ViewModel.LabelSpanEntry>
                                         {
-                                            text: null === tektite.fullscreen.getElement() ? "Full screen": "Cancel full screen",
-                                        }
-                                    },
-                                },
+                                            type: "tektite-label-span",
+                                            data:
+                                            {
+                                                text: null === tektite.fullscreen.getElement() ? "Full screen": "Cancel full screen",
+                                            }
+                                        },
+                                    }:
+                                    "tektite-null",
                                 theme: <ViewModel.MenuItemButtonEntry>
                                 {
                                     type: "tektite-menu-item-button",
