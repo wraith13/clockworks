@@ -82,27 +82,34 @@ export module ViewModel
     export type Entry = EntryBase | string;
     export const isEntry = <Model extends (StrictEntry | EntryBase)>(type: Model["type"]) =>
         (model: StrictEntry | EntryBase | null): model is Model => type === model?.type;
-    export interface StrictListEntry extends StrictEntry
-    {
-        key: string;
-    }
-    export interface ListEntry extends EntryBase
-    {
-        key: string;
-    }
-    export const isListEntry = (data: Entry): data is ListEntry => "" !== ((data as ListEntry).key ?? "")
     export type EntryOrType<Model extends EntryBase> =
         undefined extends Model["data"] ?
             undefined extends Model["children"] ?
                 Model | Model["type"]:
                 Model:
             Model;
+    export const getType = (data: Entry) => "string" === typeof data ? data: data.type;
+    export interface StrictListEntryBase extends StrictEntry
+    {
+        key: string;
+    }
+    export type StrictListEntry = StrictListEntryBase | NullEntry;
+    export interface ListEntryBase extends EntryBase
+    {
+        key: string;
+    }
+    export type ListEntry = ListEntryBase | EntryOrType<NullEntry>;
+    export const isListEntryBase = (data: Entry): data is ListEntryBase => "" !== ((data as ListEntryBase).key ?? "");
+    export const isListEntry = (data: Entry): data is ListEntry => isNullEntry(data) || isListEntryBase(data);
     export interface NullEntry extends EntryBase
     {
         type: "tektite-null";
+        key?: never;
         data?: never;
         children?: never;
     }
+    export const isNullEntryBase = (data: EntryBase): data is NullEntry => "tektite-null" === data.type;
+    export const isNullEntry = (data: Entry): data is EntryOrType<NullEntry> => "tektite-null" === getType(data);
     export interface IconEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-icon";
@@ -201,7 +208,7 @@ export module ViewModel
             title: string;
         };
     }
-    export interface ScreenHeaderLabelSegmentEntry extends ListEntry
+    export interface ScreenHeaderLabelSegmentEntry extends ListEntryBase
     {
         type: "tektite-screen-header-label-segment";
         data?: EntryData &
@@ -210,12 +217,12 @@ export module ViewModel
         }
         child: ScreenHeaderSegmentCoreEntry;
     }
-    export interface ScreenHeaderLinkSegmentEntry extends ListEntry
+    export interface ScreenHeaderLinkSegmentEntry extends ListEntryBase
     {
         type: "tektite-screen-header-link-segment";
         child: ScreenHeaderSegmentCoreEntry;
     }
-    export interface ScreenHeaderPopupSegmentEntry extends ListEntry
+    export interface ScreenHeaderPopupSegmentEntry extends ListEntryBase
     {
         type: "tektite-screen-header-popup-segment";
         child: ScreenHeaderSegmentCoreEntry;
@@ -276,7 +283,7 @@ export module ViewModel
         children?: ToastItemEntry[];
     }
     export type ToastStateType = "slide-in" | "show" | "slow-slide-out" | "slide-out";
-    export interface ToastItemEntry extends ListEntry
+    export interface ToastItemEntry extends ListEntryBase
     {
         type: "tektite-toast-item";
         data: EntryData &
@@ -323,7 +330,7 @@ export module ViewModel
         {
             state: PopupStateType;
         };
-        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry | NullEntry) & ListEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry | EntryOrType<NullEntry>) };
+        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry | EntryOrType<NullEntry>) };
     }
     export interface MenuItemButtonEntry extends EntryBase
     {
@@ -356,10 +363,13 @@ export module ViewModel
                 data.children.map((_, ix) => ix):
                 minamo.core.objectKeys(data.children);
     export const getChildrenModelKeys = (data: StrictEntry | null): string[] =>
-        ! data?.children ? []:
-        Array.isArray(data.children) ?
-            data.children.map(i => i.key):
-            minamo.core.objectKeys(data.children);
+    {
+        const children = data?.children;
+        return ! children ? []:
+            Array.isArray(children) ?
+                (<ListEntryBase[]>children.filter(i => ! isNullEntry(i))).map(i => i.key):
+                minamo.core.objectKeys(children).filter(i => ! isNullEntry(children[i]));
+    };
     export const getChildFromModelKey = (data: StrictEntry | null, key: string): StrictEntry | null =>
         Array.isArray(data?.children) ?
             (data?.children?.filter(i => key === i.key)?.[0] ?? null):
@@ -375,7 +385,7 @@ export module ViewModel
             (
                 key =>
                     "" === (key ?? "") ||
-                    ( ! Array.isArray(data.children) && "" !== ((data.children?.[key] as ListEntry)?.key ?? "")) ||
+                    ( ! Array.isArray(data.children) && (isNullEntry(data.children?.[key] as StrictEntry) || "" !== ((data.children?.[key] as ListEntryBase)?.key ?? ""))) ||
                     hasInvalidViewModel(getChildFromModelKey(data, key) as StrictEntry)
             ).length;
     export const hasDuplicatedKeys = (data: StrictEntry): boolean =>
@@ -469,7 +479,7 @@ export module ViewModel
                     {
                         if (Array.isArray(children))
                         {
-                            children.forEach(i => this.makeSureStrictEntry(makePath(path, i.key), i));
+                            (<ListEntryBase[]>children.filter(i => ! isNullEntry(i))).forEach(i => this.makeSureStrictEntry(makePath(path, i.key), i));
                         }
                         else
                         {
@@ -538,7 +548,20 @@ export module ViewModel
                                 }
                                 if (Array.isArray(current.children))
                                 {
-                                    if (isListEntry(data))
+                                    if (isNullEntryBase(data))
+                                    {
+                                        const ix = current.children.findIndex(i => i.key === keys[0]);
+                                        if (0 <= ix)
+                                        {
+                                            current.children[ix] = data;
+                                        }
+                                        else
+                                        {
+                                            current.children.push(data);
+                                        }
+                                    }
+                                    else
+                                    if (isListEntryBase(data))
                                     {
                                         if (data.key !== keys[0])
                                         {
@@ -605,7 +628,10 @@ export module ViewModel
                 {
                     const key = keyOrdata;
                     const data = dataOrNothing as Model & ListEntry;
-                    data.key = key;
+                    if ( ! isNullEntry(data))
+                    {
+                        data.key = key;
+                    }
                     const result = { path: makePath(path, key), model: data, };
                     this.set(result.path, result.model);
                     return result;
