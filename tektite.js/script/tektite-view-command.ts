@@ -31,6 +31,18 @@ export module ViewCommand
         };
         result: void;
     }
+    export interface OnMenuButtonClickCommand extends EntryBase
+    {
+        params:
+        {
+            type: "tektite-on-menu-button-click";
+            data:
+            {
+                path: ViewModel.PathType;
+            }
+        };
+        result: void;
+    }
     export interface ScrollToCommand extends EntryBase
     {
         params:
@@ -160,6 +172,38 @@ export module ViewCommand
                                 model.data[entry.data.key] = entry.data.value;
                                 tektite.viewModel.set(path, model);
                             }
+                        }
+                    }
+                }
+            ),
+            "tektite-on-menu-button-click": <Command<T, OnMenuButtonClickCommand>>
+            (
+                async (tektite, entry) =>
+                {
+                    if ("string" === typeof entry || ! entry.data)
+                    {
+                        console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
+                    }
+                    else
+                    {
+                        const path = entry.data.path;
+                        const model = tektite.viewModel.get<ViewModel.MenuButtonEntry>(path, "tektite-menu-button");
+                        if (model)
+                        {
+                            const getMenu = model.data?.getMenu;
+                            if (getMenu)
+                            {
+                                model.children = (await tektite.viewCommand.call(getMenu)) as any;
+                            }
+                            if ( ! model.data)
+                            {
+                                model.data = { state: "fade-in" };
+                            }
+                            else
+                            {
+                                model.data.state = "fade-in";
+                            }
+                            tektite.viewModel.set(path, model);
                         }
                     }
                 }

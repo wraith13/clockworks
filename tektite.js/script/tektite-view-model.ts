@@ -329,6 +329,7 @@ export module ViewModel
         data?: EntryData &
         {
             state: PopupStateType;
+            getMenu?: ViewCommand.EntryOrList;
         };
         children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry | EntryOrType<NullEntry>) };
     }
