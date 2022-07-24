@@ -31,6 +31,31 @@ export module ViewCommand
         };
         result: void;
     }
+    export interface StaticUpdateChildrenCommand<ChildrenType extends ViewModel.EntryBase["children"]> extends EntryBase
+    {
+        params:
+        {
+            type: "tektite-update-children";
+            data:
+            {
+                children: ChildrenType;
+            }
+        };
+        result: void;
+    }
+    export interface DynamicUpdateChildrenCommand<ChildrenType extends ViewModel.EntryBase["children"]> extends EntryBase
+    {
+        params:
+        {
+            type: "tektite-update-children";
+            data:
+            {
+                updator: (EntryBase & { result: ChildrenType })["params"];
+            }
+        };
+        result: void;
+    }
+    export type UpdateChildrenCommand<ChildrenType extends ViewModel.EntryBase["children"]> = StaticUpdateChildrenCommand<ChildrenType> | DynamicUpdateChildrenCommand<ChildrenType>;
     export interface OnMenuButtonClickCommand extends EntryBase
     {
         params:
