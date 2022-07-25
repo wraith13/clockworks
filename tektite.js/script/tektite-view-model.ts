@@ -110,6 +110,7 @@ export module ViewModel
     }
     export const isNullEntryBase = (data: EntryBase): data is NullEntry => "tektite-null" === data.type;
     export const isNullEntry = (data: Entry): data is EntryOrType<NullEntry> => "tektite-null" === getType(data);
+    export type ChildrenUpdatorType<Model extends EntryBase> = (ViewCommand.EntryBase & { result: Model["children"] })["params"];
     export interface IconEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-icon";
@@ -329,7 +330,7 @@ export module ViewModel
         data?: EntryData &
         {
             state: PopupStateType;
-            getMenu?: ViewCommand.EntryOrList;
+            getMenu?: ChildrenUpdatorType<MenuButtonEntry>;
         };
         children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry | EntryOrType<NullEntry>) };
     }
