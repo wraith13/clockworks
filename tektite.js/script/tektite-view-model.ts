@@ -329,7 +329,7 @@ export module ViewModel
         type: "tektite-menu-button";
         data?: EntryData &
         {
-            state: PopupStateType;
+            state?: PopupStateType;
             getMenu?: ChildrenUpdatorType<MenuButtonEntry>;
         };
         children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry | EntryOrType<NullEntry>) };

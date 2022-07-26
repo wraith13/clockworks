@@ -17,6 +17,7 @@ import { Render as RainbowClockRender } from "./application/rainbowclock/render"
 import { Render as CountdownTimerRender } from "./application/countdowntimer/render";
 import { Render as NeverStopwatchRender } from "./application/neverstopwatch/render";
 import { Render as ElapsedTimerRender } from "./application/elapsedtimer/render";
+import { ViewCommand } from "../tektite.js/script/tektite-view-command";
 export module Clockworks
 {
     // export type ApplicationType = keyof typeof applicationList;
@@ -165,6 +166,15 @@ export module Clockworks
             setScreenBody(screen.body);
         };
     }
+    export interface GetScreenMenuCommand extends ViewCommand.EntryBase
+    {
+        params:
+        {
+            type: "get-screen-menu";
+        };
+        result: ViewModel.MenuButtonEntry["children"] & minamo.core.JsonableObject;
+    }
+
     export module ClockworksWIP
     {
         export const showWelcomeScreen = async () =>
@@ -195,77 +205,10 @@ export module Clockworks
                         single: <ViewModel.MenuButtonEntry>
                         {
                             type: "tektite-menu-button",
-                            children:
+                            data:
                             {
-                                fullscreen: tektite.fullscreen.enabled() ?
-                                    <ViewModel.MenuItemButtonEntry>
-                                    {
-                                        type: "tektite-menu-item-button",
-                                        data: { onclick: "tektite-toggle-fullscreen", },
-                                        child: <ViewModel.LabelSpanEntry>
-                                        {
-                                            type: "tektite-label-span",
-                                            data:
-                                            {
-                                                text: null === tektite.fullscreen.getElement() ? "Full screen": "Cancel full screen",
-                                            }
-                                        },
-                                    }:
-                                    "tektite-null",
-                                theme: <ViewModel.MenuItemButtonEntry>
-                                {
-                                    type: "tektite-menu-item-button",
-                                    child: <ViewModel.LabelSpanEntry>
-                                    {
-                                        type: "tektite-label-span",
-                                        data:
-                                        {
-                                            text: "Theme setting",
-                                        }
-                                    },
-                                },
-                                progressBarStyle: <ViewModel.MenuItemButtonEntry>
-                                {
-                                    type: "tektite-menu-item-button",
-                                    child: <ViewModel.LabelSpanEntry>
-                                    {
-                                        type: "tektite-label-span",
-                                        data:
-                                        {
-                                            text: "Progress Bar Style setting",
-                                        }
-                                    },
-                                },
-                                language: <ViewModel.MenuItemButtonEntry>
-                                {
-                                    type: "tektite-menu-item-button",
-                                    child: <ViewModel.LabelSpanEntry>
-                                    {
-                                        type: "tektite-label-span",
-                                        data:
-                                        {
-                                            text: "Language setting",
-                                        }
-                                    },
-                                },
-                                github: <ViewModel.MenuItemLinkButtonEntry>
-                                {
-                                    type: "tektite-menu-item-link-button",
-                                    data:
-                                    {
-                                        href: config.repositoryUrl,
-                                    },
-                                    child: <ViewModel.SpanEntry>
-                                    {
-                                        type: "tektite-span",
-                                        data:
-                                        {
-                                            className: "tektite-label",
-                                            text: "GitHub",
-                                        }
-                                    },
-                                },
-                            }
+                                getMenu: <GetScreenMenuCommand["params"]>{ type: "get-screen-menu", }
+                            },
                         },
                     },
                 },
@@ -451,6 +394,87 @@ export module Clockworks
             minamo.core.objectKeys(renders).forEach
             (
                 key => (tektite.viewRenderer.renderer as any)[key] = renders[key]
+            );
+            const commands: { [type: string ]: ViewCommand.Command<any, any> } =
+            {
+                "get-screen-menu": <ViewCommand.Command<any, GetScreenMenuCommand>>
+                (
+                    async (_tektite, _entry) =>
+                    ({
+                        fullscreen: tektite.fullscreen.enabled() ?
+                            <ViewModel.MenuItemButtonEntry>
+                            {
+                                type: "tektite-menu-item-button",
+                                data: { onclick: "tektite-toggle-fullscreen", },
+                                child: <ViewModel.LabelSpanEntry>
+                                {
+                                    type: "tektite-label-span",
+                                    data:
+                                    {
+                                        text: null === tektite.fullscreen.getElement() ? "Full screen": "Cancel full screen",
+                                    }
+                                },
+                            }:
+                            "tektite-null",
+                        theme: <ViewModel.MenuItemButtonEntry>
+                        {
+                            type: "tektite-menu-item-button",
+                            child: <ViewModel.LabelSpanEntry>
+                            {
+                                type: "tektite-label-span",
+                                data:
+                                {
+                                    text: "Theme setting",
+                                }
+                            },
+                        },
+                        progressBarStyle: <ViewModel.MenuItemButtonEntry>
+                        {
+                            type: "tektite-menu-item-button",
+                            child: <ViewModel.LabelSpanEntry>
+                            {
+                                type: "tektite-label-span",
+                                data:
+                                {
+                                    text: "Progress Bar Style setting",
+                                }
+                            },
+                        },
+                        language: <ViewModel.MenuItemButtonEntry>
+                        {
+                            type: "tektite-menu-item-button",
+                            child: <ViewModel.LabelSpanEntry>
+                            {
+                                type: "tektite-label-span",
+                                data:
+                                {
+                                    text: "Language setting",
+                                }
+                            },
+                        },
+                        github: <ViewModel.MenuItemLinkButtonEntry>
+                        {
+                            type: "tektite-menu-item-link-button",
+                            data:
+                            {
+                                href: config.repositoryUrl,
+                            },
+                            child: <ViewModel.SpanEntry>
+                            {
+                                type: "tektite-span",
+                                data:
+                                {
+                                    className: "tektite-label",
+                                    text: "GitHub",
+                                }
+                            },
+                        },
+                    })
+                ),
+            };
+            minamo.core.objectKeys(commands).forEach
+            (
+                key => (tektite.viewCommand.commands as any)[key] = commands[key]
             );
             await showPage();
             if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)

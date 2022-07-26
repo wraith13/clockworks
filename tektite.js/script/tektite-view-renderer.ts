@@ -1037,15 +1037,10 @@ export module ViewRenderer
                         data:
                         {
                             className: "tektite-menu-button",
-                            onclick: <ViewCommand.SetDataCommand["params"]>
+                            onclick: <ViewCommand.OnMenuButtonClickCommand["params"]>
                             {
-                                type: "tektite-set-data",
-                                data:
-                                {
-                                    path,
-                                    key: "state",
-                                    value: "fade-in",
-                                }
+                                type: "tektite-on-menu-button-click",
+                                data: { path, },
                             },
                         },
                         children:
