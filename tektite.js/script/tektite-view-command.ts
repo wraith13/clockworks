@@ -31,7 +31,7 @@ export module ViewCommand
         };
         result: void;
     }
-    export interface UpdateChildrenCommand<Model extends ViewModel.EntryBase> extends EntryBase
+    export interface StaticUpdateChildrenCommand<Model extends ViewModel.EntryBase> extends EntryBase
     {
         params:
         {
@@ -39,11 +39,25 @@ export module ViewCommand
             data:
             {
                 path: ViewModel.PathType;
-                children?: Model["children"];
+                children: Model["children"];
             }
         };
         result: void;
     }
+    export interface DynamicUpdateChildrenCommand<Model extends ViewModel.EntryBase> extends EntryBase
+    {
+        params:
+        {
+            type: "tektite-update-children";
+            data:
+            {
+                path: ViewModel.PathType;
+                updator: ViewModel.ChildrenUpdatorType<Model>;
+            }
+        };
+        result: void;
+    }
+    export type UpdateChildrenCommand<Model extends ViewModel.EntryBase> = StaticUpdateChildrenCommand<Model> | DynamicUpdateChildrenCommand<Model>
     export interface OnMenuButtonClickCommand extends EntryBase
     {
         params:
@@ -185,6 +199,34 @@ export module ViewCommand
                                 model.data[entry.data.key] = entry.data.value;
                                 tektite.viewModel.set(path, model);
                             }
+                        }
+                    }
+                }
+            ),
+            "tektite-update-children": <Command<T, UpdateChildrenCommand<any>>>
+            (
+                async (tektite, entry) =>
+                {
+                    if ("string" === typeof entry || ! entry.data)
+                    {
+                        console.error(`tektite-view-command: This command require data - entry:${JSON.stringify(entry)}`);
+                    }
+                    else
+                    {
+                        const path = entry.data.path;
+                        const model = tektite.viewModel.getUnknown(path);
+                        if (model)
+                        {
+                            if ("children" in entry.data)
+                            {
+                                model.children = entry.data.children;
+                            }
+                            if ("updator" in entry.data)
+                            {
+                                type CommandType = ViewCommand.EntryBase & { result: (typeof model)["children"] };
+                                model.children = await tektite.viewCommand.call<CommandType>(entry.data.updator);
+                            }
+                            tektite.viewModel.set(path, model);
                         }
                     }
                 }
