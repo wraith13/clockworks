@@ -60,7 +60,7 @@ export module Type
         start: number;
         end: number;
     }
-    export interface AlarmNewTimerEntry // URL インターフェイスとしてのみの利用。
+    export interface AlarmNewTimerEntry extends minamo.core.JsonableObject // URL インターフェイスとしてのみの利用。
     {
         type: "timer";
         start: "new";
@@ -91,10 +91,10 @@ export module Type
         "solid": (index: number) => Color.getSolidRainbowColor(index, 0),
     };
     export type rainbowClockColorPatternType = keyof typeof rainbowClockColorPatternMap;
-    export interface PageParams
+    export interface PageParams extends minamo.core.JsonableObject
     {
         application?: Type.ApplicationType;
         item?: Type.PageItemType;
-        hash?: string;
+        // hash?: string;
     }
 }

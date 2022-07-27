@@ -171,13 +171,17 @@ export module Clockworks
         params:
         {
             type: "get-screen-menu";
+            data:
+            {
+                params?: Type.PageParams;
+            },
         };
         result: ViewModel.MenuButtonEntry["children"] & minamo.core.JsonableObject;
     }
 
     export module ClockworksWIP
     {
-        export const showWelcomeScreen = async () =>
+        export const showWelcomeScreen = async (params: Type.PageParams) =>
         {
             TektiteWIP.setScreen
             ({
@@ -207,7 +211,11 @@ export module Clockworks
                             type: "tektite-menu-button",
                             data:
                             {
-                                getMenu: <GetScreenMenuCommand["params"]>{ type: "get-screen-menu", }
+                                getMenu: <GetScreenMenuCommand["params"]>
+                                {
+                                    type: "get-screen-menu",
+                                    data: { params, },
+                                }
                             },
                         },
                     },
@@ -301,30 +309,30 @@ export module Clockworks
                 "RainbowClock":
                 {
                     _show: async (item: Type.TimezoneEntry) => await RainbowClockRender.showRainbowClockScreen(item),
-                    show: async (_item: Type.TimezoneEntry) => await showWelcomeScreen(),
+                    show: async (item: Type.TimezoneEntry) => await showWelcomeScreen({application: "RainbowClock", item, }),
                     parseItem: (json: string) => Domain.parseTimezone(json),
                 },
                 "CountdownTimer":
                 {
                     _show: async (item: Type.AlarmEntry) => await CountdownTimerRender.showCountdownTimerScreen(item),
-                    show: async (_item: Type.AlarmEntry) => await showWelcomeScreen(),
+                    show: async (item: Type.AlarmEntry) => await showWelcomeScreen({application: "CountdownTimer", item, }),
                     parseItem: (json: string) => Domain.parseAlarm(json),
                 },
                 "ElapsedTimer":
                 {
                     _show: async (item: Type.EventEntry) => await ElapsedTimerRender.showElapsedTimerScreen(item),
-                    show: async (_item: Type.EventEntry) => await showWelcomeScreen(),
+                    show: async (item: Type.EventEntry) => await showWelcomeScreen({application: "ElapsedTimer", item, }),
                     parseItem: (json: string) => Domain.parseEvent(json),
                 },
                 "NeverStopwatch":
                 {
                     _show: async (item: number) => await NeverStopwatchRender.showNeverStopwatchScreen(item),
-                    show: async (_item: number) => await showWelcomeScreen(),
+                    show: async (item: number) => await showWelcomeScreen({application: "NeverStopwatch", item, }),
                     parseItem: (json: string) => Domain.parseStamp(json),
                 },
             }[applicationType] ??
             {
-                show: async () => await showWelcomeScreen(),
+                show: async () => await showWelcomeScreen({ }),
                 parseItem: () => null,
             };
             const item = application.parseItem(itemJson);
