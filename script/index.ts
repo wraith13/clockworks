@@ -309,36 +309,36 @@ export module Clockworks
                 "RainbowClock":
                 {
                     _show: async (item: Type.TimezoneEntry) => await RainbowClockRender.showRainbowClockScreen(item),
-                    show: async (item: Type.TimezoneEntry) => await showWelcomeScreen({application: "RainbowClock", item, }),
+                    show: async (params: Type.PageParams) => await showWelcomeScreen(params),
                     parseItem: (json: string) => Domain.parseTimezone(json),
                 },
                 "CountdownTimer":
                 {
                     _show: async (item: Type.AlarmEntry) => await CountdownTimerRender.showCountdownTimerScreen(item),
-                    show: async (item: Type.AlarmEntry) => await showWelcomeScreen({application: "CountdownTimer", item, }),
+                    show: async (params: Type.PageParams) => await showWelcomeScreen(params),
                     parseItem: (json: string) => Domain.parseAlarm(json),
                 },
                 "ElapsedTimer":
                 {
                     _show: async (item: Type.EventEntry) => await ElapsedTimerRender.showElapsedTimerScreen(item),
-                    show: async (item: Type.EventEntry) => await showWelcomeScreen({application: "ElapsedTimer", item, }),
+                    show: async (params: Type.PageParams) => await showWelcomeScreen(params),
                     parseItem: (json: string) => Domain.parseEvent(json),
                 },
                 "NeverStopwatch":
                 {
                     _show: async (item: number) => await NeverStopwatchRender.showNeverStopwatchScreen(item),
-                    show: async (item: number) => await showWelcomeScreen({application: "NeverStopwatch", item, }),
+                    show: async (params: Type.PageParams) => await showWelcomeScreen(params),
                     parseItem: (json: string) => Domain.parseStamp(json),
                 },
             }[applicationType] ??
             {
-                show: async () => await showWelcomeScreen({ }),
+                show: async (params: Type.PageParams) => await showWelcomeScreen(params),
                 parseItem: () => null,
             };
             const item = application.parseItem(itemJson);
             if (Render.regulateLocation(applicationType, itemJson, item))
             {
-                await application.show(item as any);
+                await application.show({application: applicationType, item: item as any, });
             }
             else
             {
