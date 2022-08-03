@@ -148,6 +148,15 @@ export module ViewModel
         };
     }
     export type SpanEntry = TextSapnEntry | ElementSpanEntry;
+    export interface LinkEntry extends EntryBase
+    {
+        type: "tektite-link";
+        data: EntryData &
+        {
+            className?: string;
+            href: string;
+        };
+    }
     export interface RootEntry extends EntryBase
     {
         type: "tektite-root";

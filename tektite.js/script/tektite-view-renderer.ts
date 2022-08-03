@@ -627,6 +627,18 @@ export module ViewRenderer
                 },
                 updateChildren: "append",
             },
+            "tektite-link":
+            {
+                make: { tag: "a", },
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                {
+                    const element = getPrimaryElement(dom);
+                    minamo.dom.setProperty(element, "className", data.className);
+                    minamo.dom.setProperty(element, "href", data.href);
+                    return dom;
+                },
+                updateChildren: "append",
+            },
             "tektite-root": minamo.core.extender<DomEntry<ViewModel.RootEntry>>()
             ({
                 make: async () => document.body,
