@@ -221,6 +221,11 @@ export module ViewModel
     export interface ScreenHeaderLinkSegmentEntry extends ListEntryBase
     {
         type: "tektite-screen-header-link-segment";
+        data: EntryData &
+        {
+            className?: string;
+            href: string | (Tektite.ParamTypes<unknown>["PageParams"] & minamo.core.Jsonable);
+        }
         child: ScreenHeaderSegmentCoreEntry;
     }
     export interface ScreenHeaderPopupSegmentEntry extends ListEntryBase

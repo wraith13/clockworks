@@ -762,14 +762,12 @@ export module ViewRenderer
             },
             "tektite-screen-header-link-segment":
             {
-                make:
+                make: Tektite.$tag("a")(`tektite-segment link-tektite-segment`)([]),
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenHeaderLinkSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    tag: "header",
-                    id: "tektite-screen-header",
-                    className: "tektite-segmented",
-                },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderLinkSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
-                {
+                    (getPrimaryElement(dom) as HTMLAnchorElement).href = "string" === typeof data.href ?
+                        data.href:
+                        tektite.params.makeUrl(data);
                     return dom;
                 },
                 updateChildren: "append",
@@ -780,12 +778,7 @@ export module ViewRenderer
             },
             "tektite-screen-header-popup-segment":
             {
-                make:
-                {
-                    tag: "header",
-                    id: "tektite-screen-header",
-                    className: "tektite-segmented",
-                },
+                make: Tektite.$div(`tektite-segment popup-tektite-segment`)([]),
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, _data: ViewModel.ScreenHeaderPopupSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     return dom;
