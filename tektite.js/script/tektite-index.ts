@@ -51,7 +51,7 @@ export module Tektite
     }
     export type TektiteIconKeyType = keyof typeof tektiteResource;
     export type UpdateScreenEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
-    export interface ParamTypes<PageParams = unknown, IconKeyType = unknown, LocaleEntryType extends LocaleEntry = LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType } = { [language: string]: LocaleEntryType }>
+    export interface ParamTypes<PageParams extends minamo.core.JsonableObject = { }, IconKeyType = unknown, LocaleEntryType extends LocaleEntry = LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType } = { [language: string]: LocaleEntryType }>
     {
         PageParams: PageParams;
         IconKeyType: IconKeyType;
@@ -455,8 +455,7 @@ export module Tektite
             return result;
         }
     }
-    export const make = <PageParams, IconKeyType, LocaleEntryType extends LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(params: TektiteParams<ParamTypes<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>>) =>
-        new Tektite<ParamTypes<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>>(params);
+    export const make = <T extends ParamTypes>(params: TektiteParams<T>) => new Tektite<T>(params);
     export const makePercentString = (percent: number) =>
         percent.toLocaleString("en", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, });
 }

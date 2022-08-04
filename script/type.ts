@@ -4,6 +4,9 @@ import tektiteResource from "../tektite.js/images.json";
 import { Clockworks } from ".";
 import { Tektite } from "../tektite.js/script/tektite-index";
 import { minamo } from "../nephila/minamo.js";
+import { Resource } from "./render/resource";
+import localeEn from "../resource/lang.en.json";
+import localeJa from "../resource/lang.ja.json";
 export module Type
 {
     export const applicationList =
@@ -97,4 +100,5 @@ export module Type
         item?: Type.PageItemType;
         // hash?: string;
     }
+    export type TektiteParams = Tektite.ParamTypes<PageParams, Resource.KeyType, typeof localeEn | typeof localeJa, typeof Clockworks.localeMaster>;
 }
