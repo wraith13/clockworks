@@ -767,7 +767,7 @@ export module ViewRenderer
                 make: Tektite.$div(`tektite-segment label-tektite-segment`)([]),
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenHeaderLabelSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    getPrimaryElement(dom).className = `tektite-segment label-tektite-segment ${data?.className ?? ""}`;
+                    minamo.dom.setProperty(getPrimaryElement(dom), "className", `tektite-segment label-tektite-segment ${data?.className ?? ""}`);
                     return dom;
                 },
                 updateChildren: "append",
@@ -777,9 +777,16 @@ export module ViewRenderer
                 make: Tektite.$tag("a")(`tektite-segment link-tektite-segment`)([]),
                 update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.ScreenHeaderLinkSegmentEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
-                    (getPrimaryElement(dom) as HTMLAnchorElement).href = "string" === typeof data.href ?
-                        data.href:
-                        tektite.params.makeUrl(data);
+                    const element = (getPrimaryElement(dom) as HTMLAnchorElement);
+                    minamo.dom.setProperty(element, "className", `tektite-segment link-tektite-segment ${data?.className ?? ""}`);
+                    minamo.dom.setProperty
+                    (
+                        element,
+                        "href",
+                        "string" === typeof data.href ?
+                            data.href:
+                            tektite.params.makeUrl(data)
+                    );
                     return dom;
                 },
                 updateChildren: "append",
