@@ -57,7 +57,7 @@ export module Clockworks
     {
         export const initializeModel = () =>
         {
-            const model = <ViewModel.RootEntry>
+            const model = <ViewModel.RootEntry<Type.TektiteParams>>
             {
                 type: "tektite-root",
                 data:
@@ -69,12 +69,12 @@ export module Clockworks
                 },
                 children:
                 {
-                    "screen": <ViewModel.ScreenEntry>
+                    "screen": <ViewModel.ScreenEntry<Type.TektiteParams>>
                     {
                         type: "tektite-screen",
                         children:
                         {
-                            "screen-header": <ViewModel.ScreenHeaderEntry>
+                            "screen-header": <ViewModel.ScreenHeaderEntry<Type.TektiteParams>>
                             {
                                 type: "tektite-screen-header",
                                 children:
@@ -83,16 +83,16 @@ export module Clockworks
                                     {
                                         type: "tektite-screen-header-progress-bar",
                                     },
-                                    "screen-header-segment": <ViewModel.ScreenHeaderSegmentListEntry>
+                                    "screen-header-segment": <ViewModel.ScreenHeaderSegmentListEntry<Type.TektiteParams>>
                                     {
                                         type: "tektite-screen-header-segment-list",
                                         children:
                                         [
-                                            <ViewModel.ScreenHeaderLabelSegmentEntry>
+                                            <ViewModel.ScreenHeaderLabelSegmentEntry<Type.TektiteParams>>
                                             {
                                                 type: "tektite-screen-header-label-segment",
                                                 key: "application-segment",
-                                                child: <ViewModel.ScreenHeaderSegmentCoreEntry>
+                                                child: <ViewModel.ScreenHeaderSegmentCoreEntry<Type.TektiteParams>>
                                                 {
                                                     type: "tektite-screen-header-segment-core",
                                                     data:
@@ -124,14 +124,14 @@ export module Clockworks
             };
             tektite.viewModel.set(model);
         };
-        export const setHeaderSegmented = (children: [ ViewModel.ScreenHeaderSegmentEntry, ...ViewModel.ScreenHeaderSegmentEntry[]]) =>
+        export const setHeaderSegmented = (children: [ ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>, ...ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>[]]) =>
         {
             const path = { type: "path", path: "/root/screen/screen-header/screen-header-segment", entryType: "tektite-screen-header-segment-list", } as const;
-            const model: ViewModel.ScreenHeaderSegmentListEntry | null = tektite.viewModel.get<ViewModel.ScreenHeaderSegmentListEntry>(path);
+            const model: ViewModel.ScreenHeaderSegmentListEntry<Type.TektiteParams> | null = tektite.viewModel.get<ViewModel.ScreenHeaderSegmentListEntry<Type.TektiteParams>>(path);
             if (model)
             {
                 model.children = children;
-                tektite.viewModel.set<ViewModel.ScreenHeaderSegmentListEntry>(path, model);
+                tektite.viewModel.set<ViewModel.ScreenHeaderSegmentListEntry<Type.TektiteParams>>(path, model);
             }
         };
         export const setHeaderOperator = (children: ViewModel.ListEntry[] | { [key: string]: ViewModel.Entry }) =>
@@ -154,7 +154,7 @@ export module Clockworks
             {
                 header:
                 {
-                    segmented: [ ViewModel.ScreenHeaderSegmentEntry, ...ViewModel.ScreenHeaderSegmentEntry[]],
+                    segmented: [ ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>, ...ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>[]],
                     operator: ViewModel.ListEntry[] | { [key: string]: ViewModel.Entry }
                 },
                 body: ViewModel.ScreenBodyEntry;
@@ -189,11 +189,11 @@ export module Clockworks
                 {
                     segmented:
                     [
-                        <ViewModel.ScreenHeaderLabelSegmentEntry>
+                        <ViewModel.ScreenHeaderLabelSegmentEntry<Type.TektiteParams>>
                         {
                             type: "tektite-screen-header-label-segment",
                             key: "application-segment",
-                            child: <ViewModel.ScreenHeaderSegmentCoreEntry>
+                            child: <ViewModel.ScreenHeaderSegmentCoreEntry<Type.TektiteParams>>
                             {
                                 type: "tektite-screen-header-segment-core",
                                 data:
@@ -502,7 +502,7 @@ export module Clockworks
         };
     }
 }
-export const tektite = Tektite.make<Type.PageParams, Resource.KeyType, typeof localeEn | typeof localeJa, typeof Clockworks.localeMaster>
+export const tektite = Tektite.make<Type.TektiteParams>
 ({
     makeUrl: Domain.makeUrl,
     showUrl: Render.showUrl,

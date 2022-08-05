@@ -148,16 +148,16 @@ export module ViewModel
         };
     }
     export type SpanEntry = TextSapnEntry | ElementSpanEntry;
-    export interface LinkEntry extends EntryBase
+    export interface LinkEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-link";
         data: EntryData &
         {
             className?: string;
-            href: string;
+            href: string | T["PageParams"];
         };
     }
-    export interface RootEntry extends EntryBase
+    export interface RootEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-root";
         data?: EntryData &
@@ -170,27 +170,27 @@ export module ViewModel
         };
         children:
         {
-            "screen": ScreenEntry,
+            "screen": ScreenEntry<T>,
         };
     }
-    export interface ScreenEntry extends EntryBase
+    export interface ScreenEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-screen";
         children:
         {
-            "screen-header": EntryOrType<ScreenHeaderEntry>,
+            "screen-header": EntryOrType<ScreenHeaderEntry<T>>,
             "screen-body": EntryOrType<ScreenBodyEntry>,
             "screen-bar": EntryOrType<ScreenBarEntry>,
             "screen-toast": EntryOrType<ScreenToastEntry>,
         };
     }
-    export interface ScreenHeaderEntry extends EntryBase
+    export interface ScreenHeaderEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-screen-header";
         children:
         {
             "screen-header-progress-bar": EntryOrType<ScreenHeaderProgressBarEntry>,
-            "screen-header-segment": EntryOrType<ScreenHeaderSegmentListEntry>,
+            "screen-header-segment": EntryOrType<ScreenHeaderSegmentListEntry<T>>,
             "screen-header-operator": EntryOrType<ScreenHeaderOperatorEntry>,
         };
     }
@@ -203,44 +203,44 @@ export module ViewModel
             percent: null | number;
         };
     }
-    export interface ScreenHeaderSegmentListEntry extends EntryBase
+    export interface ScreenHeaderSegmentListEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-screen-header-segment-list";
-        children: [ ScreenHeaderSegmentEntry, ...ScreenHeaderSegmentEntry[]];
+        children: [ ScreenHeaderSegmentEntry<T>, ...ScreenHeaderSegmentEntry<T>[]];
     }
-    export type ScreenHeaderSegmentEntry = ScreenHeaderLabelSegmentEntry | ScreenHeaderLinkSegmentEntry | ScreenHeaderPopupSegmentEntry;
-    export interface ScreenHeaderSegmentCoreEntry extends EntryBase
+    export type ScreenHeaderSegmentEntry<T extends Tektite.ParamTypes> = ScreenHeaderLabelSegmentEntry<T> | ScreenHeaderLinkSegmentEntry<T> | ScreenHeaderPopupSegmentEntry<T>;
+    export interface ScreenHeaderSegmentCoreEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-screen-header-segment-core";
         data: EntryData &
         {
-            icon: Tektite.ParamTypes<unknown>["IconKeyType"] & minamo.core.Jsonable;
+            icon: T["IconKeyType"] & minamo.core.Jsonable;
             title: string;
         };
     }
-    export interface ScreenHeaderLabelSegmentEntry extends ListEntryBase
+    export interface ScreenHeaderLabelSegmentEntry<T extends Tektite.ParamTypes> extends ListEntryBase
     {
         type: "tektite-screen-header-label-segment";
         data?: EntryData &
         {
             className?: string;
         }
-        child: ScreenHeaderSegmentCoreEntry;
+        child: ScreenHeaderSegmentCoreEntry<T>;
     }
-    export interface ScreenHeaderLinkSegmentEntry extends ListEntryBase
+    export interface ScreenHeaderLinkSegmentEntry<T extends Tektite.ParamTypes> extends ListEntryBase
     {
         type: "tektite-screen-header-link-segment";
         data: EntryData &
         {
             className?: string;
-            href: string | (Tektite.ParamTypes<unknown>["PageParams"] & minamo.core.Jsonable);
+            href: string | T["PageParams"];
         }
-        child: ScreenHeaderSegmentCoreEntry;
+        child: ScreenHeaderSegmentCoreEntry<T>;
     }
-    export interface ScreenHeaderPopupSegmentEntry extends ListEntryBase
+    export interface ScreenHeaderPopupSegmentEntry<T extends Tektite.ParamTypes> extends ListEntryBase
     {
         type: "tektite-screen-header-popup-segment";
-        child: ScreenHeaderSegmentCoreEntry;
+        child: ScreenHeaderSegmentCoreEntry<T>;
     }
     export interface ScreenHeaderOperatorEntry extends EntryBase
     {

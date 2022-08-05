@@ -15,7 +15,7 @@ export module Header
     {
         icon: IconKeyType;
         title: string;
-        href?: PageParams;
+        href?: string | PageParams;
         menu?: minamo.dom.Source | (() => Promise<minamo.dom.Source>);
     }
     export interface Source<PageParams, IconKeyType>
@@ -74,51 +74,56 @@ export module Header
             .filter(i => undefined !== i)
             .join(" ");
         segmented = async (data: Source<T["PageParams"], T["IconKeyType"]>) =>
-        [
-            Tektite.$div(progressBarClassName)([]),
-            (
-                await Promise.all
+        {
+            const parent = data.parent;
+            const result =
+            [
+                Tektite.$div(progressBarClassName)([]),
                 (
-                    data.items
-                    .filter(i => i)
-                    .map
+                    await Promise.all
                     (
-                        async (item, ix, list) =>
-                            (item.href && this.linkSegment(item, this.getLastSegmentClass(ix, list))) ||
-                            (item.menu && this.popupSegment(item, this.getLastSegmentClass(ix, list))) ||
-                            (true && this.labelSegment(item, this.getLastSegmentClass(ix, list)))
+                        data.items
+                        .filter(i => i)
+                        .map
+                        (
+                            async (item, ix, list) =>
+                                (item.href && this.linkSegment(item as any, this.getLastSegmentClass(ix, list))) ||
+                                (item.menu && this.popupSegment(item, this.getLastSegmentClass(ix, list))) ||
+                                (true && this.labelSegment(item, this.getLastSegmentClass(ix, list)))
+                        )
                     )
-                )
-            ).reduce((a, b) => (a as any[]).concat(b), []),
-            Tektite.$div("tektite-header-operator")
-            ([
-                data.parent ?
-                {
-                    tag: "button",
-                    className: "tektite-icon-button tektite-close-button",
-                    children:
-                    [
-                        await this.tektite.loadIconOrCache("tektite-cross-icon"),
-                    ],
-                    onclick: (event: MouseEvent) =>
+                ).reduce((a, b) => (a as any[]).concat(b), []),
+                Tektite.$div("tektite-header-operator")
+                ([
+                    parent ?
                     {
-                        event.stopPropagation();
-                        // if ("" !== getFilterText() || getHeaderElement().classList.contains("tektite-header-operator-has-focus"))
-                        // {
-                        //     setFilterText("");
-                        //     blurFilterInputElement();
-                        // }
-                        // else
-                        // {
-                            this.tektite.params.showUrl(data.parent);
-                        // }
-                    },
-                }:
-                [],
-                data.menu ? await this.tektite.menu.button(data.menu): [],
-                data.operator ?? []
-            ]),
-        ];
+                        tag: "button",
+                        className: "tektite-icon-button tektite-close-button",
+                        children:
+                        [
+                            await this.tektite.loadIconOrCache("tektite-cross-icon"),
+                        ],
+                        onclick: (event: MouseEvent) =>
+                        {
+                            event.stopPropagation();
+                            // if ("" !== getFilterText() || getHeaderElement().classList.contains("tektite-header-operator-has-focus"))
+                            // {
+                            //     setFilterText("");
+                            //     blurFilterInputElement();
+                            // }
+                            // else
+                            // {
+                                this.tektite.params.showUrl(parent);
+                            // }
+                        },
+                    }:
+                    [],
+                    data.menu ? await this.tektite.menu.button(data.menu): [],
+                    data.operator ?? []
+                ]),
+            ];
+            return result;
+        };
         getCloseButton = () => minamo.dom.getButtonsByClassName(this.getElement(), "tektite-close-button")[0];
         segmentCore = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>) =>
         [
@@ -127,10 +132,10 @@ export module Header
         ];
         labelSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") =>
         Tektite.$div(`tektite-segment label-tektite-segment ${className}`)(await this.segmentCore(item));
-        linkSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") => this.tektite.internalLink
+        linkSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]> & { href: string | T["PageParams"] }, className: string = "") => this.tektite.internalLink
         ({
             className: `tektite-segment ${className}`,
-            href: item.href,
+            href: this.tektite.makeSureUrl(item.href),
             children: await this.segmentCore(item),
         });
         popupSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") =>

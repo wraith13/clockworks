@@ -98,6 +98,9 @@ export module Tektite
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
+        public makeSureUrl = (href: string | T["PageParams"]) => "string" === typeof href ?
+            href:
+            this.params.makeUrl(href);
         public loadIconOrCache = (key: T["IconKeyType"] | TektiteIconKeyType) => this.params.loadIconOrCache(key);
         public fullscreen = FullscreenModule;
         public key = KeyModule;
