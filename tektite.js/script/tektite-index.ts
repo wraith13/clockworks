@@ -67,6 +67,7 @@ export module Tektite
     //     localeMaster: LocaleMapType;
     //     timer?: { resolution?: number, highResolution?: number, };
     // }
+    export type HrefType<T extends ParamTypes> = string | T["PageParams"]
     export interface TektiteParams<T extends ParamTypes>
     {
         makeUrl: (args: T["PageParams"]) => string;
@@ -98,7 +99,7 @@ export module Tektite
             window.addEventListener("compositionstart", this.key.onCompositionStart);
             window.addEventListener("compositionend", this.key.onCompositionEnd);
         }
-        public makeSureUrl = (href: string | T["PageParams"]) => "string" === typeof href ?
+        public makeSureUrl = (href: HrefType<T>) => "string" === typeof href ?
             href:
             this.params.makeUrl(href);
         public loadIconOrCache = (key: T["IconKeyType"] | TektiteIconKeyType) => this.params.loadIconOrCache(key);

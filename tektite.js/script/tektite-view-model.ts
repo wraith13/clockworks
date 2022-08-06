@@ -154,7 +154,7 @@ export module ViewModel
         data: EntryData &
         {
             className?: string;
-            href: string | T["PageParams"];
+            href: Tektite.HrefType<T>;
         };
     }
     export interface RootEntry<T extends Tektite.ParamTypes> extends EntryBase
@@ -233,7 +233,7 @@ export module ViewModel
         data: EntryData &
         {
             className?: string;
-            href: string | T["PageParams"];
+            href: Tektite.HrefType<T>;
         }
         child: ScreenHeaderSegmentCoreEntry<T>;
     }
