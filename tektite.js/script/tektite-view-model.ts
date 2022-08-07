@@ -116,7 +116,7 @@ export module ViewModel
         type: "tektite-icon";
         data: EntryData &
         {
-            icon: T["IconKeyType"] & minamo.core.Jsonable;
+            icon: T["IconKeyType"];
         };
     }
     export interface DivEntry extends EntryBase
@@ -214,7 +214,7 @@ export module ViewModel
         type: "tektite-screen-header-segment-core";
         data: EntryData &
         {
-            icon: T["IconKeyType"] & minamo.core.Jsonable;
+            icon: T["IconKeyType"];
             title: string;
         };
     }

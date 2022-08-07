@@ -51,7 +51,7 @@ export module Tektite
     }
     export type TektiteIconKeyType = keyof typeof tektiteResource;
     export type UpdateScreenEventEype = "high-resolution-timer" | "timer" | "scroll" | "storage" | "focus" | "blur" | "operate";
-    export interface ParamTypes<PageParams extends minamo.core.JsonableObject = { }, IconKeyType = unknown, LocaleEntryType extends LocaleEntry = LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType } = { [language: string]: LocaleEntryType }>
+    export interface ParamTypes<PageParams extends minamo.core.JsonableObject = { }, IconKeyType extends minamo.core.Jsonable = string, LocaleEntryType extends LocaleEntry = LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType } = { [language: string]: LocaleEntryType }>
     {
         PageParams: PageParams;
         IconKeyType: IconKeyType;
