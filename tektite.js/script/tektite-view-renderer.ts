@@ -35,6 +35,7 @@ export module ViewRenderer
             ((dom: DomType, children: { [Key: string]: DomType }, forceAppend: boolean) => Promise<unknown>),
         getChildModelContainer?: (dom: DomType) => Element,
         eventHandlers?: EventHandlers<any>,
+        screenEventHandlers?: ScreenEventHandlers<any>,
     };
     export interface DomEntryBeta<ViewModelEntry extends ViewModel.EntryBase> extends DomEntryAlpha
     {
@@ -55,8 +56,11 @@ export module ViewRenderer
     export const isNullEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is NullEntry => "null" === entry.make;
     export const isContainerEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is ContainerEntry => "container" === entry.make;
     export const isVolatileDomEntry = <ViewModelEntry extends ViewModel.EntryBase>(entry: Entry<ViewModelEntry>): entry is VolatileDomEntry<ViewModelEntry> => "volatile" === entry.make;
-    export type EventHandler<T extends Tektite.ParamTypes> = (tektite: Tektite.Tektite<T>, event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) => unknown;
-    export type EventHandlers<T extends Tektite.ParamTypes> = { [Key in Tektite.UpdateScreenEventEype]?: EventHandler<T>; }
+    export type EventType = "onclick";
+    export type EventHandler<T extends Tektite.ParamTypes> = (tektite: Tektite.Tektite<T>, event: EventType, path: ViewModel.PathType) => unknown;
+    export type EventHandlers<T extends Tektite.ParamTypes> = { [Key in EventType]?: EventHandler<T>; }
+    export type ScreenEventHandler<T extends Tektite.ParamTypes> = (tektite: Tektite.Tektite<T>, event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) => unknown;
+    export type ScreenEventHandlers<T extends Tektite.ParamTypes> = { [Key in Tektite.UpdateScreenEventEype]?: ScreenEventHandler<T>; }
     interface DomCache
     {
         dom: DomType;
@@ -67,7 +71,7 @@ export module ViewRenderer
     export class ViewRenderer<T extends Tektite.ParamTypes>
     {
         private previousData: string = "";
-        private eventHandlers:
+        private screenEventHandlers:
         {
             [Key in Tektite.UpdateScreenEventEype]?: ViewModel.PathType[];
         } = { };
@@ -85,27 +89,27 @@ export module ViewRenderer
                     async () =>
                     {
                         this.updateCore(event);
-                        await this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
+                        await this.renderRoot(); // this.screenEventHandlers によって更新された model を rendering する為
                     }
                 );
             }
             else
             {
-                await this.renderRoot(); // this.eventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
+                await this.renderRoot(); // this.screenEventHandlers を最新の状態にする為( だけど、ほぼ大半のケースで、何もせずに返ってくる。 )
                 this.updateCore(event);
-                await this.renderRoot(); // this.eventHandlers によって更新された model を rendering する為
+                await this.renderRoot(); // this.screenEventHandlers によって更新された model を rendering する為
             }
         };
         updateCore = async (event: Tektite.UpdateScreenEventEype) =>
         {
-            this.eventHandlers[event]?.forEach
+            this.screenEventHandlers[event]?.forEach
             (
                 path =>
                 {
                     const type = this.tektite.viewModel.getUnknown(path)?.type;
                     if (type)
                     {
-                        ((this.getAny(type) as DomEntryAlpha)?.eventHandlers?.[event])
+                        ((this.getAny(type) as DomEntryAlpha)?.screenEventHandlers?.[event])
                             ?.(this.tektite, event, path)
                     }
                 }
@@ -113,11 +117,11 @@ export module ViewRenderer
         };
         pushEventHandler = (event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
         {
-            if ( ! this.eventHandlers[event])
+            if ( ! this.screenEventHandlers[event])
             {
-                this.eventHandlers[event] = [];
+                this.screenEventHandlers[event] = [];
             }
-            this.eventHandlers[event]?.push(path);
+            this.screenEventHandlers[event]?.push(path);
         };
         public onLoad = () =>
         {
@@ -162,7 +166,7 @@ export module ViewRenderer
                     {
                         //  pre-process
                         this.activePathList = [ ];
-                        this.eventHandlers = { };
+                        this.screenEventHandlers = { };
                         this.volatileModelPath = [ ];
                         const oldCache: { [path: string]:DomCache } = { };
                         minamo.core.objectKeys(this.domCache).forEach
@@ -293,9 +297,9 @@ export module ViewRenderer
                         await this.tektite.viewRenderer.renderRoot();
                     }
                 }
-                if (renderer.eventHandlers)
+                if (renderer.screenEventHandlers)
                 {
-                    outputError("Can not support eventHandlers");
+                    outputError("Can not support screenEventHandlers");
                 }
                 if (data.data?.isVolatile)
                 {
@@ -445,7 +449,7 @@ export module ViewRenderer
                             }
                             cache = this.setCache(path, dom, json, childrenKeys);
                         }
-                        minamo.core.objectKeys(renderer.eventHandlers ?? { })
+                        minamo.core.objectKeys(renderer.screenEventHandlers ?? { })
                             .forEach(event => this.pushEventHandler(event as Tektite.UpdateScreenEventEype, path));
                         if (data.data?.isVolatile)
                         {
@@ -882,7 +886,7 @@ export module ViewRenderer
                     minamo.dom.toggleCSSClass(element, "tektite-reverse-down-page-link", ! (data?.isStrictShowPrimaryPage ?? true));
                     return dom;
                 },
-                eventHandlers:
+                screenEventHandlers:
                 {
                     "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
                     {
