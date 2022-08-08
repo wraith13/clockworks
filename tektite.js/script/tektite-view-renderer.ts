@@ -285,16 +285,17 @@ export module ViewRenderer
                 }
                 const primary = getPrimaryElement(dom) as HTMLElement;
                 const entryOrList = data?.data?.onclick;
-                if (entryOrList)
+                const onclick = renderer.eventHandlers?.onclick;
+                if (onclick || entryOrList)
                 {
                     primary.onclick = async () =>
                     {
-                        await Promise.all
-                        (
-                            minamo.core.arrayOrToArray(entryOrList)
-                            .map(entry => this.tektite.viewCommand.call(entry))
-                        );
-                        await this.tektite.viewRenderer.renderRoot();
+                        console.log(`onclick: ${path.path}`);
+                        if (onclick)
+                        {
+                            onclick(this.tektite, "onclick", path);
+                        }
+                        await this.tektite.viewCommand.callByEvent(path, "onclick")
                     }
                 }
                 if (renderer.screenEventHandlers)
@@ -438,11 +439,17 @@ export module ViewRenderer
                                 dom = (await renderer?.update?.(this.tektite, path, dom, data?.data, externalData)) ?? dom;
                             }
                             const primary = getPrimaryElement(dom) as HTMLElement;
-                            if (data?.data?.onclick && null === primary.onclick)
+                            const entryOrList = data?.data?.onclick;
+                            const onclick = renderer.eventHandlers?.onclick;
+                            if ((onclick || entryOrList) && null === primary.onclick)
                             {
                                 primary.onclick = async () =>
                                 {
                                     console.log(`onclick: ${path.path}`);
+                                    if (onclick)
+                                    {
+                                        onclick(this.tektite, "onclick", path);
+                                    }
                                     await this.tektite.viewCommand.callByEvent(path, "onclick")
                                 };
                                 //  renderer.update() で独自に付与した onclick を消さない為、不要になっても dom.onclick は放置。(場合によっては、このせいで気にしないでいいエラーでログ出力される。)
