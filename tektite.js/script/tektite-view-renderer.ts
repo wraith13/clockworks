@@ -640,7 +640,21 @@ export module ViewRenderer
             },
             "tektite-link":
             {
-                make: { tag: "a", },
+                make: (path: ViewModel.PathType) =>
+                ({
+                    tag: "a",
+                    onclick: (event: MouseEvent) =>
+                    {
+                        const model = this.tektite.viewModel.getOrNull<ViewModel.LinkEntry<T>>(path, "tektite-link");
+                        if (model && model.data.href && "string" !== typeof model.data.href)
+                        {
+                            this.tektite.params.showUrl(model.data.href);
+                            event.preventDefault();
+                            return false;
+                        }
+                        return true;
+                    }
+                }),
                 update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom);
