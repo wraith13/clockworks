@@ -242,7 +242,7 @@ export module ViewCommand
                     else
                     {
                         const path = entry.data.path;
-                        const model = tektite.viewModel.get<ViewModel.MenuButtonEntry>(path, "tektite-menu-button");
+                        const model = tektite.viewModel.get<ViewModel.MenuButtonEntry<T>>(path, "tektite-menu-button");
                         if (model)
                         {
                             const getMenu = model.data?.getMenu;

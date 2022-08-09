@@ -176,7 +176,7 @@ export module Clockworks
                 params?: Type.PageParams;
             },
         };
-        result: ViewModel.MenuButtonEntry["children"] & minamo.core.JsonableObject;
+        result: ViewModel.MenuButtonEntry<Type.TektiteParams>["children"] & minamo.core.JsonableObject;
     }
 
     export module ClockworksWIP
@@ -206,7 +206,7 @@ export module Clockworks
                     ],
                     operator:
                     {
-                        single: <ViewModel.MenuButtonEntry>
+                        single: <ViewModel.MenuButtonEntry<Type.TektiteParams>>
                         {
                             type: "tektite-menu-button",
                             data:
@@ -242,12 +242,12 @@ export module Clockworks
                                     {
                                         board: "welcome-board",
                                         // operators: "welcome-operators",
-                                        operators: <ViewModel.VerticalButtonListEntry>
+                                        operators: <ViewModel.VerticalButtonListEntry<Type.TektiteParams>>
                                         {
                                             type: "tektite-vertical-button-list",
                                             children: Type.applicationIdList.map
                                             (
-                                                (i: Type.ApplicationType) => <ViewModel.LinkButtonEntry & ViewModel.ListEntry>
+                                                (i: Type.ApplicationType) => <ViewModel.LinkButtonEntry<Type.TektiteParams> & ViewModel.ListEntry>
                                                 ({
                                                     key: i,
                                                     type: "tektite-link-button",
@@ -460,7 +460,7 @@ export module Clockworks
                                 }
                             },
                         },
-                        github: <ViewModel.MenuItemLinkButtonEntry>
+                        github: <ViewModel.MenuItemLinkButtonEntry<Type.TektiteParams>>
                         {
                             type: "tektite-menu-item-link-button",
                             data:
