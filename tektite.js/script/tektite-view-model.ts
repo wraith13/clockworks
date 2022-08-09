@@ -313,10 +313,10 @@ export module ViewModel
             forwardOperator?: EntryOrType<EntryBase>,
         }
     }
-    export interface VerticalButtonListEntry extends EntryBase
+    export interface VerticalButtonListEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-vertical-button-list";
-        children: ((ButtonEntry | LinkButtonEntry) & ListEntry)[] | { [key: string]: (ButtonEntry | LinkButtonEntry) };
+        children: ((ButtonEntry | LinkButtonEntry<T>) & ListEntry)[] | { [key: string]: (ButtonEntry | LinkButtonEntry<T>) };
     };
     export interface ButtonEntry extends EntryBase
     {
@@ -327,26 +327,26 @@ export module ViewModel
             // onclick?: (event: MouseEvent) => unknown;
         };
     }
-    export interface LinkButtonEntry extends EntryBase
+    export interface LinkButtonEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-link-button";
         data: EntryData &
         {
             className?: string;
-            href: string;
+            href: Tektite.HrefType<T>;
         };
         child: ButtonEntry;
     }
     export type PopupStateType = "fade-in" | "show" | "fade-out" | "hide";
-    export interface MenuButtonEntry extends EntryBase
+    export interface MenuButtonEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-menu-button";
         data?: EntryData &
         {
             state?: PopupStateType;
-            getMenu?: ChildrenUpdatorType<MenuButtonEntry>;
+            getMenu?: ChildrenUpdatorType<MenuButtonEntry<T>>;
         };
-        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry | EntryOrType<NullEntry>) };
+        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry<T>) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry<T> | EntryOrType<NullEntry>) };
     }
     export interface MenuItemButtonEntry extends EntryBase
     {
@@ -356,13 +356,13 @@ export module ViewModel
             className?: string;
         };
     }
-    export interface MenuItemLinkButtonEntry extends EntryBase
+    export interface MenuItemLinkButtonEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-menu-item-link-button";
         data: EntryData &
         {
             className?: string;
-            href: string;
+            href: Tektite.HrefType<T>;
         };
     }
     export interface LabelSpanEntry extends EntryBase

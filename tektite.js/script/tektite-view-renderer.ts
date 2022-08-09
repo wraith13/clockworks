@@ -68,6 +68,18 @@ export module ViewRenderer
         childrenKeys: string[];
     }
     // export class ViewRenderer<PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>
+    export const onClickLink = <T extends Tektite.ParamTypes, Model extends (ViewModel.EntryBase & { data: { href: Tektite.HrefType<T> } })>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, type: Model["type"]) => (event: MouseEvent) =>
+    {
+        const model = tektite.viewModel.getOrNull<Model>(path, type);
+        if (model && model.data && model.data.href && "string" !== typeof model.data.href)
+        {
+            tektite.params.showUrl(model.data.href);
+            event.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
     export class ViewRenderer<T extends Tektite.ParamTypes>
     {
         private previousData: string = "";
@@ -643,19 +655,9 @@ export module ViewRenderer
                 make: (path: ViewModel.PathType) =>
                 ({
                     tag: "a",
-                    onclick: (event: MouseEvent) =>
-                    {
-                        const model = this.tektite.viewModel.getOrNull<ViewModel.LinkEntry<T>>(path, "tektite-link");
-                        if (model && model.data.href && "string" !== typeof model.data.href)
-                        {
-                            this.tektite.params.showUrl(model.data.href);
-                            event.preventDefault();
-                            return false;
-                        }
-                        return true;
-                    }
+                    onclick: onClickLink<T, ViewModel.LinkEntry<T>>(this.tektite, path, "tektite-link"),
                 }),
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry<T>["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom);
                     minamo.dom.setProperty(element, "className", data.className);
@@ -1054,8 +1056,12 @@ export module ViewRenderer
             },
             "tektite-link-button":
             {
-                make: { tag: "a", },
-                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                make: (path: ViewModel.PathType) =>
+                ({
+                    tag: "a",
+                    onclick: onClickLink<T, ViewModel.LinkButtonEntry<T>>(this.tektite, path, "tektite-link-button"),
+                }),
+                update: async <T extends Tektite.ParamTypes>(_tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry<T>["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom);
                     minamo.dom.setProperty(element, "className", data.className);
@@ -1126,7 +1132,7 @@ export module ViewRenderer
                         },
                     }),
                 ],
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuButtonEntry<T>["data"], _externalModels: { [path: string]:any }) =>
                 {
                     if (Array.isArray(dom))
                     {
@@ -1189,8 +1195,13 @@ export module ViewRenderer
             },
             "tektite-menu-item-link-button":
             {
-                make: { tag: "a", children: [{ tag: "button", }] },
-                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LinkButtonEntry["data"], _externalModels: { [path: string]:any }) =>
+                make: (path: ViewModel.PathType) =>
+                ({
+                    tag: "a",
+                    onclick: onClickLink<T, ViewModel.MenuItemLinkButtonEntry<T>>(this.tektite, path, "tektite-menu-item-link-button"),
+                    children: [{ tag: "button", }],
+                }),
+                update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.MenuItemLinkButtonEntry<T>["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const element = getPrimaryElement(dom);
                     minamo.dom.setProperty(element, "href", data.href);
