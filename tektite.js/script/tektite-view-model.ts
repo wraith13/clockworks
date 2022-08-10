@@ -393,12 +393,6 @@ export module ViewModel
             },
         },
     };
-    export const makeLabelSpanEntry = (data: LabelSpanEntry["data"]): LabelSpanEntry =>
-    ({
-        type: "tektite-label-span",
-        data,
-        children: LabelSpanEntryChildren,
-    });
     export const getChildrenKeys = (data: StrictEntry): number[] | string[] =>
         ! data?.children ? []:
             Array.isArray(data.children) ?
@@ -860,6 +854,12 @@ export module ViewModel
             }
             return null;
         }
+        public makeLabelSpan = (data: LabelSpanEntry["data"]): LabelSpanEntry =>
+        ({
+            type: "tektite-label-span",
+            data,
+            children: LabelSpanEntryChildren,
+        });
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);

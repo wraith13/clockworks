@@ -414,7 +414,7 @@ export module Clockworks
                             {
                                 type: "tektite-menu-item-button",
                                 data: { onclick: "tektite-toggle-fullscreen", },
-                                child: ViewModel.makeLabelSpanEntry
+                                child: tektite.viewModel.makeLabelSpan
                                 ({
                                     text: null === tektite.fullscreen.getElement() ? "Full screen": "Cancel full screen",
                                 }),
@@ -423,7 +423,7 @@ export module Clockworks
                         theme: <ViewModel.MenuItemButtonEntry>
                         {
                             type: "tektite-menu-item-button",
-                            child: ViewModel.makeLabelSpanEntry
+                            child: tektite.viewModel.makeLabelSpan
                             ({
                                 text: "Theme setting",
                             }),
@@ -431,7 +431,7 @@ export module Clockworks
                         progressBarStyle: <ViewModel.MenuItemButtonEntry>
                         {
                             type: "tektite-menu-item-button",
-                            child: ViewModel.makeLabelSpanEntry
+                            child: tektite.viewModel.makeLabelSpan
                             ({
                                 text: "Progress Bar Style setting",
                             }),
@@ -439,7 +439,7 @@ export module Clockworks
                         language: <ViewModel.MenuItemButtonEntry>
                         {
                             type: "tektite-menu-item-button",
-                            child: ViewModel.makeLabelSpanEntry
+                            child: tektite.viewModel.makeLabelSpan
                             ({
                                 text: "Language setting",
                             }),
