@@ -372,7 +372,33 @@ export module ViewModel
         {
             text: string;
         };
+        children: typeof LabelSpanEntryChildren,
     }
+    export const LabelSpanEntryChildren =
+    {
+        "locale-parallel":
+        {
+            type: "tektite-span",
+            data:
+            {
+                className: "locale-parallel",
+            },
+        },
+        "locale-map":
+        {
+            type: "tektite-span",
+            data:
+            {
+                className: "locale-map",
+            },
+        },
+    };
+    export const makeLabelSpanEntry = (data: LabelSpanEntry["data"]): LabelSpanEntry =>
+    ({
+        type: "tektite-label-span",
+        data,
+        children: LabelSpanEntryChildren,
+    });
     export const getChildrenKeys = (data: StrictEntry): number[] | string[] =>
         ! data?.children ? []:
             Array.isArray(data.children) ?

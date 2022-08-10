@@ -1213,36 +1213,7 @@ export module ViewRenderer
             },
             "tektite-label-span":
             {
-                make: async (_path: ViewModel.PathType) =>
-                [
-                    await this.instantMake<ViewModel.SpanEntry>
-                    ({
-                        type: "tektite-span",
-                        data:
-                        {
-                            className: "tektite-label",
-                        },
-                        children:
-                        {
-                            "locale-parallel": <ViewModel.SpanEntry>
-                            {
-                                type: "tektite-span",
-                                data:
-                                {
-                                    className: "locale-parallel",
-                                },
-                            },
-                            "locale-map": <ViewModel.SpanEntry>
-                            {
-                                type: "tektite-span",
-                                data:
-                                {
-                                    className: "locale-map",
-                                },
-                            },
-                        },
-                    }),
-                ],
+                make: { tag: "span", className: "tektite-label", },
                 update: async <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _path: ViewModel.PathType, dom: DomType, data: ViewModel.LabelSpanEntry["data"], _externalModels: { [path: string]:any }) =>
                 {
                     const primary = getPrimaryElement(dom) as HTMLSpanElement;
