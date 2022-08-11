@@ -854,6 +854,11 @@ export module ViewModel
             }
             return null;
         }
+        public makeIcon = (data: IconEntry<T>["data"]): IconEntry<T> =>
+        ({
+            type: "tektite-icon",
+            data,
+        });
         public makeLabelSpan = (data: LabelSpanEntry["data"]): LabelSpanEntry =>
         ({
             type: "tektite-label-span",

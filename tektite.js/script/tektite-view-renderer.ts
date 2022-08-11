@@ -1088,11 +1088,7 @@ export module ViewRenderer
                         },
                         children:
                         {
-                            icon: <ViewModel.IconEntry<T>>
-                            {
-                                type: "tektite-icon",
-                                data: { icon: "tektite-ellipsis-icon", },
-                            },
+                            icon: this.tektite.viewModel.makeIcon({ icon: "tektite-ellipsis-icon", }),
                         },
                     }),
                     await this.instantMake<ViewModel.DivEntry>
