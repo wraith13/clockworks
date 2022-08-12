@@ -854,11 +854,44 @@ export module ViewModel
             }
             return null;
         }
-        public makeIcon = (data: IconEntry<T>["data"]): IconEntry<T> =>
-        ({
-            type: "tektite-icon",
-            data,
-        });
+        public make<Model extends EntryBase>(type: Model["type"], data: Model["data"], children?: Model["children"]): Model;
+        public make<Model extends EntryBase>(type: Model["type"], key: string, data: Model["data"], children?: Model["children"]): Model & ListEntryBase;
+        public make<Model extends EntryBase>(type: Model["type"], keyOrData: string | Model["data"], dataOrchildren?: Model["data"] | Model["children"], childrenOrUndefined?: Model["children"]): Model | (Model & ListEntryBase);
+        public make<Model extends EntryBase>(type: Model["type"], keyOrData: string | Model["data"], dataOrchildren?: Model["data"] | Model["children"], childrenOrUndefined?: Model["children"]): Model | (Model & ListEntryBase)
+        {
+            if ("string" === typeof keyOrData)
+            {
+                const key = <string>keyOrData;
+                const data = <Model["data"]>dataOrchildren;
+                const children = <Model["children"]>childrenOrUndefined;
+                const result =
+                {
+                    type,
+                    key,
+                    data,
+                    children,
+                };
+                return result as Model & ListEntryBase;
+            }
+            else
+            {
+                const data = <Model["data"]>keyOrData;
+                const children = <Model["children"]>dataOrchildren;
+                const result =
+                {
+                    type,
+                    data,
+                    children,
+                };
+                return result as Model;
+            }
+        }
+        public makeIcon(data: IconEntry<T>["data"], children?: IconEntry<T>["children"]): IconEntry<T>;
+        public makeIcon(key: string, data: IconEntry<T>["data"], children?: IconEntry<T>["children"]): IconEntry<T> & ListEntryBase;
+        public makeIcon(keyOrData: string | IconEntry<T>["data"], dataOrchildren?: IconEntry<T>["data"] | IconEntry<T>["children"], childrenOrUndefined?: IconEntry<T>["children"]): IconEntry<T> | (IconEntry<T> & ListEntryBase)
+        {
+            return this.make<IconEntry<T>>("tektite-icon", keyOrData, dataOrchildren, childrenOrUndefined);
+        }
         public makeLabelSpan = (data: LabelSpanEntry["data"]): LabelSpanEntry =>
         ({
             type: "tektite-label-span",
