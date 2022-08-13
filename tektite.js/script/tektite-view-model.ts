@@ -854,6 +854,38 @@ export module ViewModel
             }
             return null;
         }
+        public makeCore = <Model extends EntryBase>(type: Model["type"], defaltParams?: { data?: Model["data"], children?: Model["children"] }):
+            ((data: Model["data"], children?: Model["children"]) => Model) &
+            ((key: string, data: Model["data"], children?: Model["children"]) => Model & ListEntryBase) =>
+        (keyOrData: string | Model["data"], dataOrchildren?: Model["data"] | Model["children"], childrenOrUndefined?: Model["children"]): Model & (Model & ListEntryBase) =>
+        {
+            if ("string" === typeof keyOrData)
+            {
+                const key = <string>keyOrData;
+                const data = <Model["data"]>dataOrchildren ?? defaltParams?.data;
+                const children = <Model["children"]>childrenOrUndefined ?? defaltParams?.children;
+                const result =
+                {
+                    type,
+                    key,
+                    data,
+                    children,
+                };
+                return result as Model & ListEntryBase;
+            }
+            else
+            {
+                const data = <Model["data"]>keyOrData ?? defaltParams?.data;
+                const children = <Model["children"]>dataOrchildren ?? defaltParams?.children;
+                const result =
+                {
+                    type,
+                    data,
+                    children,
+                };
+                return result as Model & ListEntryBase;
+            }
+        };
         public make<Model extends EntryBase>(type: Model["type"], data: Model["data"], children?: Model["children"]): Model;
         public make<Model extends EntryBase>(type: Model["type"], key: string, data: Model["data"], children?: Model["children"]): Model & ListEntryBase;
         public make<Model extends EntryBase>(type: Model["type"], keyOrData: string | Model["data"], dataOrchildren?: Model["data"] | Model["children"], childrenOrUndefined?: Model["children"]): Model | (Model & ListEntryBase);
@@ -886,25 +918,8 @@ export module ViewModel
                 return result as Model;
             }
         }
-        public makeIcon(data: IconEntry<T>["data"], children?: IconEntry<T>["children"]): IconEntry<T>;
-        public makeIcon(key: string, data: IconEntry<T>["data"], children?: IconEntry<T>["children"]): IconEntry<T> & ListEntryBase;
-        public makeIcon(keyOrData: string | IconEntry<T>["data"], dataOrchildren?: IconEntry<T>["data"] | IconEntry<T>["children"], childrenOrUndefined?: IconEntry<T>["children"]): IconEntry<T> | (IconEntry<T> & ListEntryBase)
-        {
-            return this.make<IconEntry<T>>("tektite-icon", keyOrData, dataOrchildren, childrenOrUndefined);
-        }
-        public makeLabelSpan(data: LabelSpanEntry["data"]): LabelSpanEntry;
-        public makeLabelSpan(key: string, data: LabelSpanEntry["data"]): LabelSpanEntry & ListEntryBase;
-        public makeLabelSpan(keyOrData: string | LabelSpanEntry["data"], dataOrchildren?: LabelSpanEntry["data"]): LabelSpanEntry | (LabelSpanEntry & ListEntryBase)
-        {
-            if ("string" === typeof keyOrData)
-            {
-                return this.make<LabelSpanEntry>("tektite-label-span", keyOrData, dataOrchildren, LabelSpanEntryChildren);
-            }
-            else
-            {
-                return this.make<LabelSpanEntry>("tektite-label-span", keyOrData, LabelSpanEntryChildren);
-            }
-        }
+        public makeIcon = this.makeCore<IconEntry<T>>("tektite-icon");
+        public makeLabelSpan = this.makeCore<LabelSpanEntry>("tektite-label-span", { children: LabelSpanEntryChildren });
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);
