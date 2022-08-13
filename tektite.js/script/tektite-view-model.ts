@@ -127,7 +127,7 @@ export module ViewModel
             className?: string;
         };
     }
-    export interface TextSapnEntry extends EntryBase
+    export interface TextSpanEntry extends EntryBase
     {
         type: "tektite-span";
         data: EntryData &
@@ -147,7 +147,7 @@ export module ViewModel
             text?: never;
         };
     }
-    export type SpanEntry = TextSapnEntry | ElementSpanEntry;
+    export type SpanEntry = TextSpanEntry | ElementSpanEntry;
     export interface LinkEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-link";
@@ -854,16 +854,24 @@ export module ViewModel
             }
             return null;
         }
-        public makeCore = <Model extends EntryBase>(type: Model["type"], defaltParams?: { data?: Model["data"], children?: Model["children"] }):
-            ((data: Model["data"], children?: Model["children"]) => Model) &
-            ((key: string, data: Model["data"], children?: Model["children"]) => Model & ListEntryBase) =>
-        (keyOrData: string | Model["data"], dataOrchildren?: Model["data"] | Model["children"], childrenOrUndefined?: Model["children"]): Model & (Model & ListEntryBase) =>
+        public make = <Model extends EntryBase>(type: Model["type"], defaltParams?: { data?: Model["data"], child?:never, children?: Model["children"], } | { data?: Model["data"], child?: Model["child"], children?:never, }):
+            ((data?: Model["data"], childOrchildren?: Model["child"] | (Model["children"])) => Model) &
+            ((key: string, data?: Model["data"], childOrchildren?: Model["child"] | Model["children"]) => Model & ListEntryBase) =>
+        (keyOrData?: string | Model["data"], dataOrChildOrChildren?: Model["data"] | Model["child"] | Model["children"], childOrChildrenOrUndefined?: Model["child"] | Model["children"]): Model & (Model & ListEntryBase) =>
         {
+            const getChildren = (childOrchildren: any) => "string" === typeof (childOrchildren?.type) ?
+                { single: childOrchildren }:
+                <Model["children"]>childOrchildren ??
+                (
+                    defaltParams?.child ?
+                    { single: defaltParams.child }:
+                    defaltParams?.children
+                );
             if ("string" === typeof keyOrData)
             {
                 const key = <string>keyOrData;
-                const data = <Model["data"]>dataOrchildren ?? defaltParams?.data;
-                const children = <Model["children"]>childrenOrUndefined ?? defaltParams?.children;
+                const data = <Model["data"]>dataOrChildOrChildren ?? defaltParams?.data;
+                const children = getChildren(childOrChildrenOrUndefined);
                 const result =
                 {
                     type,
@@ -876,7 +884,7 @@ export module ViewModel
             else
             {
                 const data = <Model["data"]>keyOrData ?? defaltParams?.data;
-                const children = <Model["children"]>dataOrchildren ?? defaltParams?.children;
+                const children = getChildren(dataOrChildOrChildren);
                 const result =
                 {
                     type,
@@ -886,40 +894,52 @@ export module ViewModel
                 return result as Model & ListEntryBase;
             }
         };
-        public make<Model extends EntryBase>(type: Model["type"], data: Model["data"], children?: Model["children"]): Model;
-        public make<Model extends EntryBase>(type: Model["type"], key: string, data: Model["data"], children?: Model["children"]): Model & ListEntryBase;
-        public make<Model extends EntryBase>(type: Model["type"], keyOrData: string | Model["data"], dataOrchildren?: Model["data"] | Model["children"], childrenOrUndefined?: Model["children"]): Model | (Model & ListEntryBase);
-        public make<Model extends EntryBase>(type: Model["type"], keyOrData: string | Model["data"], dataOrchildren?: Model["data"] | Model["children"], childrenOrUndefined?: Model["children"]): Model | (Model & ListEntryBase)
+        public makeWithoutData = <Model extends EntryBase>(type: Model["type"], defaltParams?: { data?: Model["data"], child?:never, children?: Model["children"], } | { data?: Model["data"], child?: Model["child"], children?:never, }):
+            ((childOrchildren?: Model["child"] | (Model["children"])) => Model) &
+            ((key: string, childOrchildren?: Model["child"] | Model["children"]) => Model & ListEntryBase) =>
+        (keyOrChildOrChildren?: string | Model["data"] | Model["child"] | Model["children"]): Model & (Model & ListEntryBase) =>
         {
-            if ("string" === typeof keyOrData)
+            const getChildren = (childOrchildren: any) => "string" === typeof (childOrchildren?.type) ?
+                { single: childOrchildren }:
+                <Model["children"]>childOrchildren ??
+                (
+                    defaltParams?.child ?
+                    { single: defaltParams.child }:
+                    defaltParams?.children
+                );
+            if ("string" === typeof keyOrChildOrChildren)
             {
-                const key = <string>keyOrData;
-                const data = <Model["data"]>dataOrchildren;
-                const children = <Model["children"]>childrenOrUndefined;
+                const key = <string>keyOrChildOrChildren;
+                const children = getChildren(keyOrChildOrChildren);
                 const result =
                 {
                     type,
                     key,
-                    data,
                     children,
                 };
                 return result as Model & ListEntryBase;
             }
             else
             {
-                const data = <Model["data"]>keyOrData;
-                const children = <Model["children"]>dataOrchildren;
+                const children = getChildren(keyOrChildOrChildren);
                 const result =
                 {
                     type,
-                    data,
                     children,
                 };
-                return result as Model;
+                return result as Model & ListEntryBase;
             }
-        }
-        public makeIcon = this.makeCore<IconEntry<T>>("tektite-icon");
-        public makeLabelSpan = this.makeCore<LabelSpanEntry>("tektite-label-span", { children: LabelSpanEntryChildren });
+        };
+        public makeIcon = this.make<IconEntry<T>>("tektite-icon");
+        public makeDiv = this.make<DivEntry>("tektite-div");
+        public makeTextSpan = this.make<TextSpanEntry>("tektite-span");
+        public makeElementSpan = this.make<ElementSpanEntry>("tektite-span");
+        public makeLink = this.make<LinkEntry<T>>("tektite-link");
+        public makeRoot = this.make<RootEntry<T>>("tektite-root");
+        public makeScreen = this.makeWithoutData<ScreenEntry<T>>("tektite-screen");
+        public makeScreenHeader = this.makeWithoutData<ScreenHeaderEntry<T>>("tektite-screen-header");
+        public makeLabelSpan = this.make<LabelSpanEntry>("tektite-label-span", { children: LabelSpanEntryChildren });
+        public makeScreenHeaderSegmentCore = this.make<ScreenHeaderSegmentCoreEntry<T>>("tektite-screen-header-segment-core");
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);
