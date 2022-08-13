@@ -892,12 +892,19 @@ export module ViewModel
         {
             return this.make<IconEntry<T>>("tektite-icon", keyOrData, dataOrchildren, childrenOrUndefined);
         }
-        public makeLabelSpan = (data: LabelSpanEntry["data"]): LabelSpanEntry =>
-        ({
-            type: "tektite-label-span",
-            data,
-            children: LabelSpanEntryChildren,
-        });
+        public makeLabelSpan(data: LabelSpanEntry["data"]): LabelSpanEntry;
+        public makeLabelSpan(key: string, data: LabelSpanEntry["data"]): LabelSpanEntry & ListEntryBase;
+        public makeLabelSpan(keyOrData: string | LabelSpanEntry["data"], dataOrchildren?: LabelSpanEntry["data"]): LabelSpanEntry | (LabelSpanEntry & ListEntryBase)
+        {
+            if ("string" === typeof keyOrData)
+            {
+                return this.make<LabelSpanEntry>("tektite-label-span", keyOrData, dataOrchildren, LabelSpanEntryChildren);
+            }
+            else
+            {
+                return this.make<LabelSpanEntry>("tektite-label-span", keyOrData, LabelSpanEntryChildren);
+            }
+        }
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);
