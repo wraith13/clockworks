@@ -934,13 +934,16 @@ export module ViewModel
         public makeDiv = this.make<DivEntry>("tektite-div");
         public makeTextSpan = this.make<TextSpanEntry>("tektite-span");
         public makeElementSpan = this.make<ElementSpanEntry>("tektite-span");
+        public makeLabelSpan = this.make<LabelSpanEntry>("tektite-label-span", { children: LabelSpanEntryChildren });
         public makeLink = this.make<LinkEntry<T>>("tektite-link");
         public makeRoot = this.make<RootEntry<T>>("tektite-root");
         public makeScreen = this.makeWithoutData<ScreenEntry<T>>("tektite-screen");
         public makeScreenHeader = this.makeWithoutData<ScreenHeaderEntry<T>>("tektite-screen-header");
         public maekScreenHeaderProgressBar = this.make<ScreenHeaderProgressBarEntry>("tektite-screen-header-progress-bar");
-        public makeLabelSpan = this.make<LabelSpanEntry>("tektite-label-span", { children: LabelSpanEntryChildren });
+        public makeScreenHeaderSegmentList = this.makeWithoutData<ScreenHeaderSegmentListEntry<T>>("tektite-screen-header-segment-list");
         public makeScreenHeaderSegmentCore = this.make<ScreenHeaderSegmentCoreEntry<T>>("tektite-screen-header-segment-core");
+        public makeScreenHeaderLabelSegment = this.make<ScreenHeaderLabelSegmentEntry<T>>("tektite-screen-header-label-segment");
+        public makeScreenHeaderLinkSegmentEntry = this.make<ScreenHeaderLinkSegmentEntry<T>>("tektite-screen-header-link-segment");
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);
