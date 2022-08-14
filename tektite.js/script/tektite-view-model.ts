@@ -938,6 +938,7 @@ export module ViewModel
         public makeRoot = this.make<RootEntry<T>>("tektite-root");
         public makeScreen = this.makeWithoutData<ScreenEntry<T>>("tektite-screen");
         public makeScreenHeader = this.makeWithoutData<ScreenHeaderEntry<T>>("tektite-screen-header");
+        public maekScreenHeaderProgressBar = this.make<ScreenHeaderProgressBarEntry>("tektite-screen-header-progress-bar");
         public makeLabelSpan = this.make<LabelSpanEntry>("tektite-label-span", { children: LabelSpanEntryChildren });
         public makeScreenHeaderSegmentCore = this.make<ScreenHeaderSegmentCoreEntry<T>>("tektite-screen-header-segment-core");
     }
