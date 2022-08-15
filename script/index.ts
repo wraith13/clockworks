@@ -57,72 +57,50 @@ export module Clockworks
     {
         export const initializeModel = () =>
         {
-            const model = <ViewModel.RootEntry<Type.TektiteParams>>
-            {
-                type: "tektite-root",
-                data:
+            const $model = tektite.viewModel;
+            const model = $model.makeRoot
+            (
                 {
                     title: config.applicationTitle,
                     theme: Storage.Settings.get().theme ?? "auto",
                     progressBarStyle: Storage.Settings.get().progressBarStyle ?? "auto",
                     windowColor: Color.getSolidRainbowColor(0),
                 },
-                children:
                 {
-                    "screen": <ViewModel.ScreenEntry<Type.TektiteParams>>
-                    {
-                        type: "tektite-screen",
-                        children:
+                    "screen": $model.makeScreen
+                    ({
+                        "screen-header": $model.makeScreenHeader
+                        ({
+                            "screen-header-progress-bar": $model.maekScreenHeaderProgressBar(),
+                            "screen-header-segment": $model.makeScreenHeaderSegmentList
+                            ([
+                                $model.makeScreenHeaderLabelSegment
+                                (
+                                    {},
+                                    $model.makeScreenHeaderSegmentCore
+                                    ({
+                                        icon: "application-icon",
+                                        title: config.applicationTitle,
+                                    })
+                                ),
+                            ]),
+                            "screen-header-operator": <ViewModel.ScreenHeaderOperatorEntry>
+                            {
+                                type: "tektite-screen-header-operator",
+                                //child: 
+                            },
+                        }),
+                        "screen-body": <ViewModel.ScreenBodyEntry>
                         {
-                            "screen-header": <ViewModel.ScreenHeaderEntry<Type.TektiteParams>>
-                            {
-                                type: "tektite-screen-header",
-                                children:
-                                {
-                                    "screen-header-progress-bar": <ViewModel.ScreenHeaderProgressBarEntry>
-                                    {
-                                        type: "tektite-screen-header-progress-bar",
-                                    },
-                                    "screen-header-segment": <ViewModel.ScreenHeaderSegmentListEntry<Type.TektiteParams>>
-                                    {
-                                        type: "tektite-screen-header-segment-list",
-                                        children:
-                                        [
-                                            <ViewModel.ScreenHeaderLabelSegmentEntry<Type.TektiteParams>>
-                                            {
-                                                type: "tektite-screen-header-label-segment",
-                                                key: "application-segment",
-                                                child: <ViewModel.ScreenHeaderSegmentCoreEntry<Type.TektiteParams>>
-                                                {
-                                                    type: "tektite-screen-header-segment-core",
-                                                    data:
-                                                    {
-                                                        icon: "application-icon",
-                                                        title: config.applicationTitle,
-                                                    },
-                                                },
-                                            },
-                                        ],
-                                    },
-                                    "screen-header-operator": <ViewModel.ScreenHeaderOperatorEntry>
-                                    {
-                                        type: "tektite-screen-header-operator",
-                                        //child: 
-                                    },
-                                }
-                            },
-                            "screen-body": <ViewModel.ScreenBodyEntry>
-                            {
-                                type: "tektite-screen-body",
-                                // children:[ ]
-                            },
-                            "screen-bar": "tektite-screen-bar",
-                            "screen-toast": "tektite-screen-toast",
-                        }
-                    }
+                            type: "tektite-screen-body",
+                            // children:[ ]
+                        },
+                        "screen-bar": "tektite-screen-bar",
+                        "screen-toast": "tektite-screen-toast",
+                    })
                 }
-            };
-            tektite.viewModel.set(model);
+            );
+            $model.set(model);
         };
         export const setHeaderSegmented = (children: [ ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>, ...ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>[]]) =>
         {
