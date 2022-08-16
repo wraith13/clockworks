@@ -944,6 +944,8 @@ export module ViewModel
         public makeScreenHeaderSegmentCore = this.make<ScreenHeaderSegmentCoreEntry<T>>("tektite-screen-header-segment-core");
         public makeScreenHeaderLabelSegment = this.make<ScreenHeaderLabelSegmentEntry<T>>("tektite-screen-header-label-segment");
         public makeScreenHeaderLinkSegment = this.make<ScreenHeaderLinkSegmentEntry<T>>("tektite-screen-header-link-segment");
+        public makeScreenHeaderPopupSegment = this.makeWithoutData<ScreenHeaderPopupSegmentEntry<T>>("tektite-screen-header-popup-segment");
+        public makeScreenHeaderOperator = this.makeWithoutData<ScreenHeaderOperatorEntry>("tektite-screen-header-operator");
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);
