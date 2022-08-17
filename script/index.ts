@@ -84,17 +84,9 @@ export module Clockworks
                                     })
                                 ),
                             ]),
-                            "screen-header-operator": <ViewModel.ScreenHeaderOperatorEntry>
-                            {
-                                type: "tektite-screen-header-operator",
-                                //child: 
-                            },
+                            "screen-header-operator": $model.makeScreenHeaderOperator(),
                         }),
-                        "screen-body": <ViewModel.ScreenBodyEntry>
-                        {
-                            type: "tektite-screen-body",
-                            // children:[ ]
-                        },
+                        "screen-body": $model.makeScreenBody(),
                         "screen-bar": "tektite-screen-bar",
                         "screen-toast": "tektite-screen-toast",
                     })
