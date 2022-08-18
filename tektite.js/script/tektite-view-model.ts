@@ -948,8 +948,9 @@ export module ViewModel
         public makeScreenHeaderOperator = this.makeWithoutData<ScreenHeaderOperatorEntry>("tektite-screen-header-operator");
         public makeScreenBody = this.make<ScreenBodyEntry>("tektite-screen-body");
         public makePrimaryPage = this.makeWithoutData<PrimaryPageEntry>("tektite-primary-page");
-        public makePrimaryPageBody = this.makeWithoutData<PrimaryPageBodyEntry>("tektite-primary-page");
-        public makePrimaryPageFooter = this.makeWithoutData<PrimaryPageFooterEntry>("tektite-primary-page");
+        public makePrimaryPageBody = this.makeWithoutData<PrimaryPageBodyEntry>("tektite-primary-page-body");
+        public makePrimaryPageFooter = this.makeWithoutData<PrimaryPageFooterEntry>("tektite-primary-page-footer");
+        public makePrimaryPageFooterDownPageLink = this.make<PrimaryPageFooterDownPageLinkEntry>("tektite-primary-page-footer-down-page-link");
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);
