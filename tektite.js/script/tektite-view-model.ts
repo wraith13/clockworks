@@ -951,6 +951,8 @@ export module ViewModel
         public makePrimaryPageBody = this.makeWithoutData<PrimaryPageBodyEntry>("tektite-primary-page-body");
         public makePrimaryPageFooter = this.makeWithoutData<PrimaryPageFooterEntry>("tektite-primary-page-footer");
         public makePrimaryPageFooterDownPageLink = this.make<PrimaryPageFooterDownPageLinkEntry>("tektite-primary-page-footer-down-page-link");
+        public makeTrailPage = this.makeWithoutData<TrailPageEntry>("tektite-trail-page");
+        public makeScreenBar = this.makeWithoutData<ScreenBarEntry>("tektite-screen-bar");
     }
     // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
     //     new ViewModel(tektite);
