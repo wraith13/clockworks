@@ -1,5 +1,6 @@
 import { minamo } from "../../nephila/minamo.js/index.js";
 import { Tektite } from "./tektite-index";
+import { ViewModel } from "./tektite-view-model.js";
 export module Toast
 {
     export interface Type
@@ -74,6 +75,39 @@ export module Toast
             minamo.core.existsOrThrow(this.element).appendChild(dom);
             setTimeout(() => dom.classList.remove("tektite-slide-up-in"), 250);
             return result;
+        };
+        public makeWIP =
+        (
+            data:
+            {
+                content: ViewModel.EntryOrType<ViewModel.EntryBase>,
+                backwardOperator?:ViewModel.EntryOrType<ViewModel.EntryBase>,
+                forwardOperator?: ViewModel.EntryOrType<ViewModel.EntryBase>,
+                isWideContent?: boolean,
+                wait?: number,
+            }
+        ): { path: ViewModel.PathType, model: ViewModel.ToastItemEntry } =>
+        {
+            const $model = this.tektite.viewModel;
+            return $model.setListEntry<ViewModel.ToastItemEntry>
+            (
+                {
+                    type: "path",
+                    path: `/root/screen/screen-toast/{key}`,
+                },
+                $model.makeToastItem
+                (
+                    {
+                        state: "slide-in",
+                        wait: data.wait,
+                    },
+                    {
+                        content: data.content,
+                        backwardOperator: data.backwardOperator,
+                        forwardOperator: data.forwardOperator,
+                    }
+                )
+            );
         };
         public onLoad = () =>
         {
