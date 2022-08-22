@@ -855,9 +855,9 @@ export module ViewModel
             return null;
         }
         public make = <Model extends EntryBase>(type: Model["type"], defaltParams?: { data?: Model["data"], child?:never, children?: Model["children"], } | { data?: Model["data"], child?: Model["child"], children?:never, }):
-            ((data?: Model["data"], childOrchildren?: Model["child"] | (Model["children"])) => Model) &
+            ((data?: Model["data"], childOrchildren?: Model["child"] | (Model["children"])) => Model & { key: never; }) &
             ((key: string, data?: Model["data"], childOrchildren?: Model["child"] | Model["children"]) => Model & ListEntryBase) =>
-        (keyOrData?: string | Model["data"], dataOrChildOrChildren?: Model["data"] | Model["child"] | Model["children"], childOrChildrenOrUndefined?: Model["child"] | Model["children"]): Model & (Model & ListEntryBase) =>
+        (keyOrData?: string | Model["data"], dataOrChildOrChildren?: Model["data"] | Model["child"] | Model["children"], childOrChildrenOrUndefined?: Model["child"] | Model["children"]): (Model & { key: never; }) & (Model & ListEntryBase) =>
         {
             const getChildren = (childOrchildren: any) => "string" === typeof (childOrchildren?.type) ?
                 { single: childOrchildren }:
@@ -879,7 +879,7 @@ export module ViewModel
                     data,
                     children,
                 };
-                return result as Model & ListEntryBase;
+                return result as Model & { key: never; } & ListEntryBase;
             }
             else
             {
@@ -891,7 +891,7 @@ export module ViewModel
                     data,
                     children,
                 };
-                return result as Model & ListEntryBase;
+                return result as Model & { key: never; } & ListEntryBase;
             }
         };
         public makeWithoutData = <Model extends EntryBase>(type: Model["type"], defaltParams?: { data?: Model["data"], child?:never, children?: Model["children"], } | { data?: Model["data"], child?: Model["child"], children?:never, }):
