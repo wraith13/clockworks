@@ -163,15 +163,11 @@ export module Clockworks
                         {
                             type: "tektite-screen-header-label-segment",
                             key: "application-segment",
-                            child: <ViewModel.ScreenHeaderSegmentCoreEntry<Type.TektiteParams>>
-                            {
-                                type: "tektite-screen-header-segment-core",
-                                data:
-                                {
-                                    icon: "application-icon",
-                                    title: config.applicationTitle,
-                                },
-                            },
+                            child: tektite.viewModel.makeScreenHeaderSegmentCore
+                            ({
+                                icon: "application-icon",
+                                title: config.applicationTitle,
+                            }),
                         },
                     ],
                     operator:
