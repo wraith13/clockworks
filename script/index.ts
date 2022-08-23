@@ -151,7 +151,7 @@ export module Clockworks
 
     export module ClockworksWIP
     {
-        export const showWelcomeScreen = async (params: Type.PageParams) =>
+        export const showWelcomeScreen = async (params: Type.PageParams, $model = tektite.viewModel) =>
         {
             TektiteWIP.setScreen
             ({
@@ -159,16 +159,16 @@ export module Clockworks
                 {
                     segmented:
                     [
-                        <ViewModel.ScreenHeaderLabelSegmentEntry<Type.TektiteParams>>
-                        {
-                            type: "tektite-screen-header-label-segment",
-                            key: "application-segment",
-                            child: tektite.viewModel.makeScreenHeaderSegmentCore
+                        $model.makeScreenHeaderLabelSegment
+                        (
+                            "application-segment",
+                            { },
+                            tektite.viewModel.makeScreenHeaderSegmentCore
                             ({
                                 icon: "application-icon",
                                 title: config.applicationTitle,
-                            }),
-                        },
+                            })
+                        ),
                     ],
                     operator:
                     {
@@ -186,25 +186,18 @@ export module Clockworks
                         },
                     },
                 },
-                body: <ViewModel.ScreenBodyEntry>
-                {
-                    type: "tektite-screen-body",
-                    data:
+                body: $model.makeScreenBody
+                (
                     {
                         className: "welcome-screen",
                     },
-                    children:
                     [
-                        <ViewModel.PrimaryPageEntry & ViewModel.ListEntry>
-                        {
-                            key: "primary",
-                            type: "tektite-primary-page",
-                            children:
+                        $model.makePrimaryPage
+                        (
+                            "primary",
                             {
-                                body: <ViewModel.PrimaryPageBodyEntry>
-                                {
-                                    type: "tektite-primary-page-body",
-                                    children:
+                                body: $model.makePrimaryPageBody
+                                (
                                     {
                                         board: "welcome-board",
                                         // operators: "welcome-operators",
@@ -242,22 +235,22 @@ export module Clockworks
                                                 }),
                                             )
                                         }
-                                    },
-                                },
+                                    }
+                                ),
                                 footer: <ViewModel.PrimaryPageFooterEntry>
                                 {
                                     type: "tektite-primary-page-footer",
                                     child: "tektite-primary-page-footer-down-page-link",
                                 },
-                            },
-                        },
+                            }
+                        ),
                         {
                             key: "trail",
                             type: "tektite-trail-page",
                             child: "welcome-footer",
                         },
                     ]
-                }
+                )
             });
             await tektite.viewRenderer.renderRoot();
         };
