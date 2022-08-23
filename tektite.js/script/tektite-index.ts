@@ -413,22 +413,21 @@ export module Tektite
             }
         ) =>
         {
+            const $model = this.viewModel;
             const toastPath = <ViewModel.PathType>{ type: "path", path: `/root/screen/screen-toast`, };
             const content = "string" === typeof data.content ?
-                <ViewModel.SpanEntry>{ type: "tektite-span", data: { text: data.content, }, }:
+                $model.makeTextSpan({ text: data.content, }):
                 data.content;
-            const { path, model } = this.viewModel.setListEntry
+            const { path, model } = $model.setListEntry
             (
                 toastPath,
-                <ViewModel.ToastItemEntry>
-                {
-                    type: "tektite-toast-item",
-                    data:
+                $model.makeToastItem
+                (
                     {
                         state: "slide-in",
                         wait: data.wait,
                     },
-                    children: data.isWideContent ?
+                    data.isWideContent ?
                     {
                         content,
                         backwardOperator: data.backwardOperator,
@@ -439,7 +438,7 @@ export module Tektite
                         backwardOperator: data.backwardOperator ?? "tektite-dummy-span",
                         forwardOperator: data.forwardOperator ?? "tektite-dummy-span",
                     }
-                }
+                )
             );
             const result =
             {
@@ -451,7 +450,7 @@ export module Tektite
                     if (current)
                     {
                         current.data.state = "slide-out";
-                        this.viewModel.set(path, current);
+                        $model.set(path, current);
                         await this.viewRenderer.renderRoot();
                     }
                 },
