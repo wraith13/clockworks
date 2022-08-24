@@ -897,7 +897,7 @@ export module ViewModel
         public makeWithoutData = <Model extends EntryBase>(type: Model["type"], defaltParams?: { data?: Model["data"], child?:never, children?: Model["children"], } | { data?: Model["data"], child?: Model["child"], children?:never, }):
             ((childOrchildren?: Model["child"] | (Model["children"])) => Model) &
             ((key: string, childOrchildren?: Model["child"] | Model["children"]) => Model & ListEntryBase) =>
-        (keyOrChildOrChildren?: string | Model["data"] | Model["child"] | Model["children"]): Model & (Model & ListEntryBase) =>
+        (keyOrChildOrChildren?: string | Model["data"] | Model["child"] | Model["children"], childOrChildrenOrUndefined?: Model["child"] | Model["children"]): Model & (Model & ListEntryBase) =>
         {
             const getChildren = (childOrchildren: any) => "string" === typeof (childOrchildren?.type) ?
                 { single: childOrchildren }:
@@ -910,7 +910,7 @@ export module ViewModel
             if ("string" === typeof keyOrChildOrChildren)
             {
                 const key = <string>keyOrChildOrChildren;
-                const children = getChildren(keyOrChildOrChildren);
+                const children = getChildren(childOrChildrenOrUndefined);
                 const result =
                 {
                     type,
