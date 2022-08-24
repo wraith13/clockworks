@@ -72,18 +72,7 @@ export module Clockworks
                         "screen-header": $model.makeScreenHeader
                         ({
                             "screen-header-progress-bar": $model.maekScreenHeaderProgressBar(),
-                            "screen-header-segment": $model.makeScreenHeaderSegmentList
-                            ([
-                                $model.makeScreenHeaderLabelSegment
-                                (
-                                    {},
-                                    $model.makeScreenHeaderSegmentCore
-                                    ({
-                                        icon: "application-icon",
-                                        title: config.applicationTitle,
-                                    })
-                                ),
-                            ]),
+                            "screen-header-segment": $model.makeScreenHeaderSegmentList(),
                             "screen-header-operator": $model.makeScreenHeaderOperator(),
                         }),
                         "screen-body": $model.makeScreenBody(),
