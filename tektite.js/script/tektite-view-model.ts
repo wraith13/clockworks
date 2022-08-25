@@ -4,6 +4,7 @@ import { ViewCommand } from "./tektite-view-command.js";
 import { ViewRenderer } from "./tektite-view-renderer.js";
 export module ViewModel
 {
+    export type ParamType<Target> = { [key in keyof Target]?: Target[key] } & minamo.core.JsonableObject;
     export type PathType = { type: "path", path: string, entryType?: string, };
     export const isPathType = (data: unknown): data is PathType =>
         "path" === (<PathType>data)?.type &&
@@ -826,6 +827,50 @@ export module ViewModel
             {
                 if (isEntry(<Model["type"]>(type ?? path.entryType))(model))
                 {
+                    return model;
+                }
+                else
+                {
+                    console.error(`tektite-view-model: Unmatch type - path:${path.path}, entryType:${path.entryType}, model:${JSON.stringify(model)}`);
+                }
+            }
+            return null;
+        }
+        public setData<Model extends EntryBase, DataType = ParamType<Model["data"]>>(path: PathType & { entryType: Model["type"] }, data: DataType): Model & StrictEntry | null;
+        public setData<Model extends EntryBase, DataType = ParamType<Model["data"]>>(path: PathType, type: Model["type"], data: DataType): Model & StrictEntry | null;
+        public setData<Model extends EntryBase, DataType extends ParamType<Model["data"]>>(path: PathType, typeOrData: Model["type"] | DataType, dataOrNothing?: DataType): Model & StrictEntry | null
+        {
+            const model = this.getUnknown(path);
+            if (model)
+            {
+                if (isEntry(<Model["type"]>("string" === typeof typeOrData ? typeOrData: path.entryType))(model))
+                {
+                    const data: DataType = ("string" !== typeof typeOrData ? typeOrData: dataOrNothing) as DataType;
+                    if (data)
+                    {
+                        model.data ??= { };
+                        const modelData = model.data;
+                        minamo.core.objectKeys(data).forEach
+                        (
+                            key =>
+                            {
+                                const value = data[key];
+                                if (undefined === value)
+                                {
+                                    delete modelData[key];
+                                }
+                                else
+                                {
+                                    modelData[key] = value;
+                                }
+                            }
+                        );
+                    }
+                    else
+                    {
+                        delete model.data;
+                    }
+                    this.set(path, model);
                     return model;
                 }
                 else
