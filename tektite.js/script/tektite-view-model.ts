@@ -564,7 +564,7 @@ export module ViewModel
                         keys.shift();
                         keys.shift();
                         let current: StrictEntry | null;
-                        if (1 < keys.length)
+                        if (0 < keys.length)
                         {
                             current = this.data as StrictEntry;
                             while(1 < keys.length)
@@ -634,13 +634,8 @@ export module ViewModel
                             }
                         }
                         else
-                        if (0 < keys.length)
                         {
                             this.data = data;
-                        }
-                        else
-                        {
-                            console.error(`tektite-view-model: Path not found - path:${path.path}`);
                         }
                     }
                 }
