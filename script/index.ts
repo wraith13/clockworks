@@ -60,12 +60,7 @@ export module Clockworks
             const $model = tektite.viewModel;
             const model = $model.makeRoot
             (
-                {
-                    title: config.applicationTitle,
-                    theme: Storage.Settings.get().theme ?? "auto",
-                    progressBarStyle: Storage.Settings.get().progressBarStyle ?? "auto",
-                    windowColor: Color.getSolidRainbowColor(0),
-                },
+                { },
                 {
                     "screen": $model.makeScreen
                     ({
@@ -83,6 +78,8 @@ export module Clockworks
             );
             $model.set(model);
         };
+        export const setRootData = (data: ViewModel.ParamType<ViewModel.RootEntry<Type.TektiteParams>["data"]>) =>
+            tektite.viewModel.setData<ViewModel.RootEntry<Type.TektiteParams>>(ViewModel.makeRootPath(), "tektite-root", data);
         export const setHeaderSegmented = (children: [ ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>, ...ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>[]]) =>
         {
             const path = { type: "path", path: "/root/screen/screen-header/screen-header-segment", entryType: "tektite-screen-header-segment-list", } as const;
@@ -304,6 +301,13 @@ export module Clockworks
             window.onpopstate = () => showPage(location.href);
             window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
             TektiteWIP.initializeModel();
+            TektiteWIP.setRootData
+            ({
+                title: config.applicationTitle,
+                theme: Storage.Settings.get().theme ?? "auto",
+                progressBarStyle: Storage.Settings.get().progressBarStyle ?? "auto",
+                windowColor: Color.getSolidRainbowColor(0),
+            });
             const renders: { [type: string ]: ViewRenderer.Entry<any>} =
             {
                 "welcome-board":
