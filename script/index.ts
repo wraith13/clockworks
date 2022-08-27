@@ -78,7 +78,7 @@ export module Clockworks
             );
             $model.set(model);
         };
-        export const setRootData = (data: ViewModel.ParamType<ViewModel.RootEntry<Type.TektiteParams>["data"]>) =>
+        export const setRootData = (data: minamo.core.JsonablePartial<ViewModel.RootEntry<Type.TektiteParams>["data"]>) =>
             tektite.viewModel.setData<ViewModel.RootEntry<Type.TektiteParams>>(ViewModel.makeRootPath(), "tektite-root", data);
         export const setHeaderSegmented = (children: [ ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>, ...ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>[]]) =>
         {
