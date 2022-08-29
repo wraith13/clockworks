@@ -108,7 +108,7 @@ export module Clockworks
         export const setScreen = (
             screen:
             {
-                data: minamo.core.JsonablePartial<ViewModel.RootEntry<Type.TektiteParams>["data"]>,
+                data?: minamo.core.JsonablePartial<ViewModel.RootEntry<Type.TektiteParams>["data"]>,
                 header:
                 {
                     segmented: [ ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>, ...ViewModel.ScreenHeaderSegmentEntry<Type.TektiteParams>[]],
@@ -118,7 +118,10 @@ export module Clockworks
             }
         ) =>
         {
-            setRootData(screen.data);
+            if (screen.data)
+            {
+                setRootData(screen.data);
+            }
             setHeaderSegmented(screen.header.segmented);
             setHeaderOperator(screen.header.operator);
             setScreenBody(screen.body);
@@ -143,7 +146,6 @@ export module Clockworks
         {
             TektiteWIP.setScreen
             ({
-                data: { },
                 header:
                 {
                     segmented:
