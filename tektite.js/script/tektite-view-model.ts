@@ -513,6 +513,11 @@ export module ViewModel
                     const children = entry.children;
                     if (children)
                     {
+                        if ("string" === typeof children)
+                        {
+                            entry.children = { single: this.makeSureStrictEntry(makePath(path, "single"), children as Entry), };
+                        }
+                        else
                         if (Array.isArray(children))
                         {
                             (<ListEntryBase[]>children.filter(i => ! isNullEntry(i))).forEach(i => this.makeSureStrictEntry(makePath(path, i.key), i));
@@ -913,8 +918,8 @@ export module ViewModel
                 <Model["children"]>childOrchildren ??
                 (
                     defaltParams?.child ?
-                    { single: defaltParams.child }:
-                    defaltParams?.children
+                        { single: defaltParams.child }:
+                        defaltParams?.children
                 );
             if ("string" === typeof keyOrData)
             {
