@@ -228,18 +228,10 @@ export module Clockworks
                                         }
                                     }
                                 ),
-                                footer: <ViewModel.PrimaryPageFooterEntry>
-                                {
-                                    type: "tektite-primary-page-footer",
-                                    child: "tektite-primary-page-footer-down-page-link",
-                                },
+                                footer: $model.makePrimaryPageFooter({ single:"tektite-primary-page-footer-down-page-link", }),
                             }
                         ),
-                        {
-                            key: "trail",
-                            type: "tektite-trail-page",
-                            child: "welcome-footer",
-                        },
+                        $model.makeTrailPage("trail", "welcome-footer"),
                     ]
                 )
             });
