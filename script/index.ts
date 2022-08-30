@@ -55,6 +55,18 @@ export module Clockworks
     };
     export module TektiteWIP
     {
+        export const initialize = () =>
+        {
+            (window as any).Tektite =
+            {
+                model:
+                {
+                    get: () => tektite.viewModel.getUnknown(ViewModel.makeRootPath()),
+                    set: (model: any) => tektite.viewModel.set(model),
+                }
+            };
+            initializeModel();
+        };
         export const initializeModel = () =>
         {
             const $model = tektite.viewModel;
@@ -297,7 +309,7 @@ export module Clockworks
             // tektite.onLoad();
             window.onpopstate = () => showPage(location.href);
             window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
-            TektiteWIP.initializeModel();
+            TektiteWIP.initialize();
             TektiteWIP.setRootData
             ({
                 title: config.applicationTitle,
