@@ -989,6 +989,7 @@ export module ViewModel
         public makeTextSpan = this.make<TextSpanEntry>("tektite-span");
         public makeElementSpan = this.make<ElementSpanEntry>("tektite-span");
         public makeLabelSpan = this.make<LabelSpanEntry>("tektite-label-span", { children: LabelSpanEntryChildren });
+        public makeButton = this.make<ButtonEntry>("tektite-button");
         public makeLink = this.make<LinkEntry<T>>("tektite-link");
         public makeRoot = this.make<RootEntry<T>>("tektite-root");
         public makeScreen = this.makeWithoutData<ScreenEntry<T>>("tektite-screen");
@@ -1010,8 +1011,6 @@ export module ViewModel
         public makeScreenToast = this.makeWithoutData<ScreenToastEntry>("tektite-screen-toast");
         public makeToastItem = this.make<ToastItemEntry>("tektite-toast-item");
     }
-    // export const make = <PageParams, IconKeyType, LocaleEntryType extends Tektite.LocaleEntry, LocaleMapType extends { [language: string]: LocaleEntryType }>(tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>) =>
-    //     new ViewModel(tektite);
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new ViewModel(tektite);
 }

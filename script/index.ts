@@ -218,23 +218,17 @@ export module Clockworks
                                                         className: "tektite-link-button",
                                                         href: tektite.params.makeUrl({ application: i }),
                                                     },
-                                                    child: <ViewModel.ButtonEntry>
-                                                    {
-                                                        type: "tektite-button",
-                                                        data:
+                                                    child: $model.makeButton
+                                                    (
                                                         {
                                                             className: "tektite-default-button tektite-main-button tektite-long-button",
                                                         },
-                                                        child: <ViewModel.SpanEntry>
-                                                        {
-                                                            type: "tektite-span",
-                                                            data:
-                                                            {
-                                                                className: "tektite-label",
-                                                                text: Type.applicationList[i].title,
-                                                            }
-                                                        },
-                                                    },
+                                                        $model.makeTextSpan
+                                                        ({
+                                                            className: "tektite-label",
+                                                            text: Type.applicationList[i].title,
+                                                        })
+                                                    ),
                                                 }),
                                             )
                                         }
