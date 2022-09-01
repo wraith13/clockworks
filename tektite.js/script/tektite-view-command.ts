@@ -126,14 +126,18 @@ export module ViewCommand
     export type Result<OmegaEntryBase extends EntryBase> = OmegaEntryBase["result"];
     export type EntryOrList = Entry<any> | Entry<any>[];
     export const getType = <OmegaEntryBase extends EntryBase>(entry: Entry<OmegaEntryBase>) => "string" === typeof entry ? entry: entry.type;
-    export type Command<T extends Tektite.ParamTypes, OmegaEntryBase extends EntryBase> = (tektite: Tektite.Tektite<T>, data: Entry<OmegaEntryBase>) => Promise<Result<OmegaEntryBase>>;
+    export interface Context
+    {
+        path?: ViewModel.PathType;
+    }
+    export type Command<T extends Tektite.ParamTypes, OmegaEntryBase extends EntryBase> = (tektite: Tektite.Tektite<T>, context: Context, data: Entry<OmegaEntryBase>) => Promise<Result<OmegaEntryBase>>;
     export class ViewCommand<T extends Tektite.ParamTypes>
     {
         // constructor(public tektite: Tektite.Tektite<PageParams, IconKeyType, LocaleEntryType, LocaleMapType>)
         constructor(public tektite: Tektite.Tektite<T>)
         {
         }
-        public async call<OmegaEntryBase extends EntryBase>(entry: Entry<OmegaEntryBase>, withLog?: boolean): Promise<Result<OmegaEntryBase>>
+        public async call<OmegaEntryBase extends EntryBase>(context: Context, entry: Entry<OmegaEntryBase>, withLog?: boolean): Promise<Result<OmegaEntryBase>>
         {
             const executer: Command<T, OmegaEntryBase> = this.commands[getType(entry)];
             if (executer)
@@ -142,7 +146,7 @@ export module ViewCommand
                 {
                     console.log(`tektite-view-command.call: ${JSON.stringify(entry)}`);
                 }
-                return await executer(this.tektite, entry);
+                return await executer(this.tektite, context, entry);
             }
             else
             {
@@ -160,7 +164,7 @@ export module ViewCommand
                     await Promise.all
                     (
                         minamo.core.arrayOrToArray(entryOrList)
-                            .map(entry => this.call(entry))
+                            .map(entry => this.call({ path, }, entry))
                     );
                     await this.tektite.viewRenderer.renderRoot();
                 }
@@ -178,7 +182,7 @@ export module ViewCommand
         {
             "tektite-set-data": <Command<T, SetDataCommand>>
             (
-                async (tektite, entry) =>
+                async (tektite, _context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -205,7 +209,7 @@ export module ViewCommand
             ),
             "tektite-update-children": <Command<T, UpdateChildrenCommand<any>>>
             (
-                async (tektite, entry) =>
+                async (tektite, _context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -233,7 +237,7 @@ export module ViewCommand
             ),
             "tektite-on-menu-button-click": <Command<T, OnMenuButtonClickCommand>>
             (
-                async (tektite, entry) =>
+                async (tektite, _context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -265,7 +269,7 @@ export module ViewCommand
             ),
             "tektite-scroll-to": <Command<T, ScrollToCommand>>
             (
-                async (tektite, entry) =>
+                async (tektite, _context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -283,7 +287,7 @@ export module ViewCommand
             ),
             "tektite-update-primary-page-footer-down-page-link": <Command<T, UpdatePrimaryPageFooterDownPageLinkCommand>>
             (
-                async (tektite, entry) =>
+                async (tektite, _context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -313,7 +317,7 @@ export module ViewCommand
             ),
             "tektite-update-toast-item": <Command<T, UpdateToastItemCommand>>
             (
-                async (tektite, entry) =>
+                async (tektite, _context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -341,7 +345,7 @@ export module ViewCommand
             ),
             "tektite-toggle-fullscreen": <Command<T, ToggleFullscreenCommand>>
             (
-                async (tektite, entry) =>
+                async (tektite, _context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
