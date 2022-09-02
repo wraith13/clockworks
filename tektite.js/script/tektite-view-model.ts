@@ -26,6 +26,36 @@ export module ViewModel
         path: "/dummy",
         entryType,
     });
+    export const isAbsolutePath = (path: PathType) => path.path.startsWith("/");
+    export const loopReplace = (text: string, match: RegExp, replace: string) =>
+    {
+        let result = text;
+        while(true)
+        {
+            const previous = result;
+            result = result.replace(match, replace);
+            if (previous == result)
+            {
+                break;
+            }
+        }
+        return result;
+    }
+    export const regulatePath = (path: PathType): PathType =>
+    ({
+        type: "path",
+        path: loopReplace(loopReplace(path.path, /\/[^\/\.]+\/\.\.\//gm, "/"), /\/\.?\//gm, "/"),
+        entryType: path.entryType,
+    });
+    export const solvePath = (currentPath: PathType, targetPath: PathType): PathType =>
+        isAbsolutePath(targetPath) ?
+            targetPath:
+            regulatePath
+            ({
+                type: "path",
+                path: `${currentPath.path}/${targetPath.path}`,
+                entryType: targetPath.entryType,
+            });
     export const getPathLeaf = (path: PathType) => path.path.split("/").pop();
     let uniqueKeySource = 0;
     export const makeUniqueKey = () => `unique:${uniqueKeySource++}`;
