@@ -228,7 +228,7 @@ export module ViewCommand
                             if ("updator" in entry.data)
                             {
                                 type CommandType = ViewCommand.EntryBase & { result: (typeof model)["children"] };
-                                model.children = await tektite.viewCommand.call<CommandType>(entry.data.updator);
+                                model.children = await tektite.viewCommand.call<CommandType>({ path, }, entry.data.updator);
                             }
                             tektite.viewModel.set(path, model);
                         }
@@ -252,7 +252,7 @@ export module ViewCommand
                             const getMenu = model.data?.getMenu;
                             if (getMenu)
                             {
-                                model.children = (await tektite.viewCommand.call(getMenu)) as any;
+                                model.children = (await tektite.viewCommand.call({ path, }, getMenu)) as any;
                             }
                             if ( ! model.data)
                             {
