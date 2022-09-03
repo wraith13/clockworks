@@ -209,7 +209,7 @@ export module ViewCommand
             ),
             "tektite-update-children": <Command<T, UpdateChildrenCommand<any>>>
             (
-                async (tektite, _context, entry) =>
+                async (tektite, context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -217,7 +217,9 @@ export module ViewCommand
                     }
                     else
                     {
-                        const path = entry.data.path;
+                        const path = context.path ?
+                            ViewModel.solvePath(context.path, entry.data.path):
+                            entry.data.path;
                         const model = tektite.viewModel.getUnknown(path);
                         if (model)
                         {
@@ -237,7 +239,7 @@ export module ViewCommand
             ),
             "tektite-on-menu-button-click": <Command<T, OnMenuButtonClickCommand>>
             (
-                async (tektite, _context, entry) =>
+                async (tektite, context, entry) =>
                 {
                     if ("string" === typeof entry || ! entry.data)
                     {
@@ -245,7 +247,9 @@ export module ViewCommand
                     }
                     else
                     {
-                        const path = entry.data.path;
+                        const path = context.path ?
+                            ViewModel.solvePath(context.path, entry.data.path):
+                            entry.data.path;
                         const model = tektite.viewModel.get<ViewModel.MenuButtonEntry<T>>(path, "tektite-menu-button");
                         if (model)
                         {
