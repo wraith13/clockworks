@@ -243,6 +243,112 @@ export module Clockworks
             });
             await tektite.viewRenderer.renderRoot();
         };
+        export const showRainbowClockScreen = async (params: Type.PageParams, $model = tektite.viewModel) =>
+        {
+            TektiteWIP.setScreen
+            ({
+                header:
+                {
+                    segmented:
+                    [
+                        $model.makeScreenHeaderLinkSegment
+                        (
+                            "application-segment",
+                            {
+                                href: { }
+                            },
+                            $model.makeScreenHeaderSegmentCore
+                            ({
+                                icon: "application-icon",
+                                title: config.applicationTitle,
+                            })
+                        ),
+                        $model.makeScreenHeaderPopupSegment
+                        (
+                            "application-segment",
+                            $model.makeScreenHeaderSegmentCore
+                            ({
+                                icon: "application-icon",
+                                title: params.application as string,
+                            })
+                        ),
+                    ],
+                    operator:
+                    {
+                        single: <ViewModel.MenuButtonEntry<Type.TektiteParams>>
+                        {
+                            type: "tektite-menu-button",
+                            data:
+                            {
+                                getMenu: <GetScreenMenuCommand["params"]>
+                                {
+                                    type: "get-screen-menu",
+                                    data: { params, },
+                                }
+                            },
+                        },
+                    },
+                },
+                body: $model.makeScreenBody
+                (
+                    {
+                        className: "welcome-screen",
+                    },
+                    [
+                        $model.makePrimaryPage
+                        (
+                            "primary",
+                            {
+                                body: $model.makePrimaryPageBody
+                                ({
+                                    board: "welcome-board",
+                                    // operators: "welcome-operators",
+                                    operators: <ViewModel.VerticalButtonListEntry<Type.TektiteParams>>
+                                    {
+                                        type: "tektite-vertical-button-list",
+                                        children: Type.applicationIdList.map
+                                        (
+                                            (i: Type.ApplicationType) => <ViewModel.LinkButtonEntry<Type.TektiteParams> & ViewModel.ListEntry>
+                                            ({
+                                                key: i,
+                                                type: "tektite-link-button",
+                                                data:
+                                                {
+                                                    className: "tektite-link-button",
+                                                    href: tektite.params.makeUrl({ application: i }),
+                                                },
+                                                child: $model.makeButton
+                                                (
+                                                    {
+                                                        className: "tektite-default-button tektite-main-button tektite-long-button",
+                                                    },
+                                                    $model.makeTextSpan
+                                                    ({
+                                                        className: "tektite-label",
+                                                        text: Type.applicationList[i].title,
+                                                    })
+                                                ),
+                                            }),
+                                        )
+                                    }
+                                }),
+                                footer: $model.makePrimaryPageFooter
+                                ({
+                                    type: "tektite-primary-page-footer",
+                                    child: "tektite-primary-page-footer-down-page-link",
+                                }),
+                            },
+                        ),
+                        {
+                            key: "trail",
+                            type: "tektite-trail-page",
+                            child: "welcome-footer",
+                        },
+                    ]
+                )
+            });
+            await tektite.viewRenderer.renderRoot();
+        };
         export const showPage = async (url: string = location.href) =>
         {
             tektite.screen.getScreenCover()?.click();
@@ -257,7 +363,7 @@ export module Clockworks
                 "RainbowClock":
                 {
                     _show: async (item: Type.TimezoneEntry) => await RainbowClockRender.showRainbowClockScreen(item),
-                    show: async (params: Type.PageParams) => await showWelcomeScreen(params),
+                    show: async (params: Type.PageParams) => await showRainbowClockScreen(params),
                     parseItem: (json: string) => Domain.parseTimezone(json),
                 },
                 "CountdownTimer":

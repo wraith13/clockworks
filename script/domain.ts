@@ -94,27 +94,27 @@ export module Domain
             case "string":
                 if (timer.endsWith("ms"))
                 {
-                    return parseFloat(timer.substr(0, timer.length -2).trim());
+                    return parseFloat(timer.substring(0, timer.length -2).trim());
                 }
                 else
                 if (timer.endsWith("s"))
                 {
-                    return parseFloat(timer.substr(0, timer.length -1).trim()) *1000;
+                    return parseFloat(timer.substring(0, timer.length -1).trim()) *1000;
                 }
                 else
                 if (timer.endsWith("m"))
                 {
-                    return parseFloat(timer.substr(0, timer.length -1).trim()) *60 *1000;
+                    return parseFloat(timer.substring(0, timer.length -1).trim()) *60 *1000;
                 }
                 else
                 if (timer.endsWith("h"))
                 {
-                    return parseFloat(timer.substr(0, timer.length -1).trim()) *60 *60 *1000;
+                    return parseFloat(timer.substring(0, timer.length -1).trim()) *60 *60 *1000;
                 }
                 else
                 if (timer.endsWith("d"))
                 {
-                    return parseFloat(timer.substr(0, timer.length -1).trim()) *24 *60 *60 *1000;
+                    return parseFloat(timer.substring(0, timer.length -1).trim()) *24 *60 *60 *1000;
                 }
                 else
                 {

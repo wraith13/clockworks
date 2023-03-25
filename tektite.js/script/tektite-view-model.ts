@@ -368,6 +368,7 @@ export module ViewModel
         child: ButtonEntry;
     }
     export type PopupStateType = "fade-in" | "show" | "fade-out" | "hide";
+    export type MenuButtonItemsType<T extends Tektite.ParamTypes> = ((MenuItemButtonEntry | MenuItemLinkButtonEntry<T>) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry<T> | EntryOrType<NullEntry>) };
     export interface MenuButtonEntry<T extends Tektite.ParamTypes> extends EntryBase
     {
         type: "tektite-menu-button";
@@ -376,7 +377,7 @@ export module ViewModel
             state?: PopupStateType;
             getMenu?: ChildrenUpdatorType<MenuButtonEntry<T>>;
         };
-        children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry<T>) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry<T> | EntryOrType<NullEntry>) };
+        // children: ((MenuItemButtonEntry | MenuItemLinkButtonEntry<T>) & ListEntry | NullEntry)[] | { [key: string]: (MenuItemButtonEntry | MenuItemLinkButtonEntry<T> | EntryOrType<NullEntry>) };
     }
     export interface MenuItemButtonEntry extends EntryBase
     {
@@ -1040,6 +1041,105 @@ export module ViewModel
         public makeScreenBar = this.makeWithoutData<ScreenBarEntry>("tektite-screen-bar");
         public makeScreenToast = this.makeWithoutData<ScreenToastEntry>("tektite-screen-toast");
         public makeToastItem = this.make<ToastItemEntry>("tektite-toast-item");
+        // public makeMenuButton =
+        //     <((data?: MenuButtonEntry<T>["data"], menuItems?: MenuButtonItemsType<T>) => MenuButtonEntry<T>) &
+        //     ((key: string, data?: MenuButtonEntry<T>["data"], menuItems?: MenuButtonItemsType<T>) => MenuButtonEntry<T> & ListEntryBase)>
+        //     (
+        //         (keyOrData?: string | MenuButtonEntry<T>["data"], dataOrMenuItems?: MenuButtonEntry<T>["data"] | MenuButtonItemsType<T>, menuItemsOrUndefined?: MenuButtonItemsType<T>): MenuButtonEntry<T> & (MenuButtonEntry<T> & ListEntryBase) =>
+        //         {
+        //             const type: MenuButtonEntry<T>["type"] = "tektite-menu-button";
+        //             const getChildren = (childOrchildren: any) =>
+        //             {
+        //                 const children = "string" === typeof (childOrchildren?.type) ?
+        //                     { single: childOrchildren }:
+        //                     <MenuButtonItemsType<T>>childOrchildren;
+        //                 const result =
+        //                 {
+        //                     button: <ViewModel.ButtonEntry>
+        //                     {
+        //                         type: "tektite-button",
+        //                         data:
+        //                         {
+        //                             className: "tektite-menu-button",
+        //                             onclick: <ViewCommand.OnMenuButtonClickCommand["params"]>
+        //                             {
+        //                                 type: "tektite-on-menu-button-click",
+        //                                 data: { path, },
+        //                             },
+        //                         },
+        //                         children:
+        //                         {
+        //                             icon: this.makeIcon({ icon: "tektite-ellipsis-icon", }),
+        //                         },
+        //                     },
+        //                     popup:
+        //                     {
+        //                         type: "tektite-div",
+        //                         data:
+        //                         {
+        //                             className: "tektite-menu-popup",
+        //                             onclick: <ViewCommand.SetDataCommand["params"]>
+        //                             {
+        //                                 type: "tektite-set-data",
+        //                                 data:
+        //                                 {
+        //                                     path,
+        //                                     key: "state",
+        //                                     value: "fade-out",
+        //                                 },
+        //                                 children,
+        //                             },
+        //                         },
+        //                     },
+        //                     cover:
+        //                     {
+        //                         type: "tektite-div",
+        //                         data:
+        //                         {
+        //                             className: "tektite-screen-cover tektite-hide",
+        //                             onclick: <ViewCommand.SetDataCommand["params"]>
+        //                             {
+        //                                 type: "tektite-set-data",
+        //                                 data:
+        //                                 {
+        //                                     path,
+        //                                     key: "state",
+        //                                     value: "fade-out",
+        //                                 }
+        //                             },
+        //                         },
+        //                     },
+        //                 };
+        //                 return result;
+        //             };
+        //             if ("string" === typeof keyOrData)
+        //             {
+        //                 const key = <string>keyOrData;
+        //                 const data = <MenuButtonEntry<T>["data"]>dataOrMenuItems;
+        //                 const children = getChildren(menuItemsOrUndefined);
+        //                 const result =
+        //                 {
+        //                     type,
+        //                     key,
+        //                     data,
+        //                     children,
+        //                 };
+        //                 return result as MenuButtonEntry<T> & ListEntryBase;
+        //             }
+        //             else
+        //             {
+        //                 const data = <MenuButtonEntry<T>["data"]>keyOrData;
+        //                 const children = getChildren(dataOrMenuItems);
+        //                 const result =
+        //                 {
+        //                     type,
+        //                     data,
+        //                     children,
+        //                 };
+        //                 return result as unknown as MenuButtonEntry<T> & ListEntryBase;
+        //             }
+        //         }
+        //     );
     }
     export const make = <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>) =>
         new ViewModel(tektite);

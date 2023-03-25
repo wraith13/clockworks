@@ -914,13 +914,16 @@ export module ViewRenderer
                     "scroll": <T extends Tektite.ParamTypes>(tektite: Tektite.Tektite<T>, _event: Tektite.UpdateScreenEventEype, path: ViewModel.PathType) =>
                     {
                         tektite.viewCommand.call<ViewCommand.UpdatePrimaryPageFooterDownPageLinkCommand>
-                        ({
-                            type: "tektite-update-primary-page-footer-down-page-link",
-                            data:
+                        (
+                            { path, },
                             {
-                                path,
-                            },
-                        });
+                                type: "tektite-update-primary-page-footer-down-page-link",
+                                data:
+                                {
+                                    path,
+                                },
+                            }
+                        );
                     },
                 },
             }),
@@ -1018,14 +1021,17 @@ export module ViewRenderer
                             async () =>
                             {
                                 tektite.viewCommand.call<ViewCommand.UpdateToastItemCommand>
-                                ({
-                                    type: "tektite-update-toast-item",
-                                    data:
+                                (
+                                    { path, },
                                     {
-                                        path,
-                                        next: stateData.next,
+                                        type: "tektite-update-toast-item",
+                                        data:
+                                        {
+                                            path,
+                                            next: stateData.next,
+                                        }
                                     }
-                                });
+                                );
                             },
                             stateData.wait
                         );
@@ -1148,16 +1154,19 @@ export module ViewRenderer
                                 async () =>
                                 {
                                     await tektite.viewCommand.call<ViewCommand.SetDataCommand>
-                                    ({
-                                        type: "tektite-set-data",
-                                        data:
+                                    (
+                                        { path, },
                                         {
-                                            path,
-                                            key: "state",
-                                            value: newState,
-                                            oldValue: oldState,
+                                            type: "tektite-set-data",
+                                            data:
+                                            {
+                                                path,
+                                                key: "state",
+                                                value: newState,
+                                                oldValue: oldState,
+                                            }
                                         }
-                                    });
+                                    );
                                     await tektite.viewRenderer.renderRoot();
                                 },
                                 wait
