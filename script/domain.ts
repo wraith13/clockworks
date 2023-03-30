@@ -83,51 +83,7 @@ export module Domain
     };
     export const makeStampUrl = (item: "new" | number) => makeUrl(makePageParams("NeverStopwatch", item));
     export const parseStamp = (json: string): number | null => parseStampCore(parseOrNull(json));
-    export const parseTimer = (timer: any) =>
-    {
-        try
-        {
-            switch(typeof timer)
-            {
-            case "number":
-                return timer;
-            case "string":
-                if (timer.endsWith("ms"))
-                {
-                    return parseFloat(timer.substring(0, timer.length -2).trim());
-                }
-                else
-                if (timer.endsWith("s"))
-                {
-                    return parseFloat(timer.substring(0, timer.length -1).trim()) *1000;
-                }
-                else
-                if (timer.endsWith("m"))
-                {
-                    return parseFloat(timer.substring(0, timer.length -1).trim()) *60 *1000;
-                }
-                else
-                if (timer.endsWith("h"))
-                {
-                    return parseFloat(timer.substring(0, timer.length -1).trim()) *60 *60 *1000;
-                }
-                else
-                if (timer.endsWith("d"))
-                {
-                    return parseFloat(timer.substring(0, timer.length -1).trim()) *24 *60 *60 *1000;
-                }
-                else
-                {
-                    return parseInt(timer.trim());
-                }
-            }
-        }
-        catch(err)
-        {
-            console.error(err);
-        }
-        return null;
-    };
+    export const parseTimer = (timer: unknown) => minamo.core.parseTimespan(timer);
     export const parseAlarmCore = (item: any): Type.AlarmEntry | null =>
     {
         if (null !== item && undefined !== item && "object" === typeof item)
