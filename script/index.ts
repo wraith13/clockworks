@@ -33,8 +33,29 @@ export module Clockworks
     export type LocaleType = keyof typeof localeMaster;
     export const localeMap = (key: LocaleKeyType) => tektite.locale.map(key);
     export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
-    export const start = async (params:{ buildTimestampTick:number, }) =>
+    export const getLatestBuildTimestamp = async (): Promise<number> =>
+        JSON.parse(await minamo.http.get(`./build.timestamp.json?dummy=${new Date().getTime()}`));
+    let buildTimestamp: { stamp: string, tick: number, };
+    export const isNewVersionReady = async (): Promise<boolean> =>
     {
+        try
+        {
+            const latestBuildTimestamp = await getLatestBuildTimestamp();
+            return "number" === typeof latestBuildTimestamp && latestBuildTimestamp !== buildTimestamp.tick;
+        }
+        catch(error)
+        {
+            console.error(error);
+            return false;
+        }
+    };
+    export const start = async (params:{ buildTimestamp: string, buildTimestampTick:number, }) =>
+    {
+        buildTimestamp =
+        {
+            stamp: params.buildTimestamp,
+            tick: params.buildTimestampTick,
+        };
         console.log(`start timestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())}`);
         console.log(`buildTimestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`);
         console.log(`${JSON.stringify(params)}`);
