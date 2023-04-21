@@ -25,6 +25,7 @@ export module Locale
         public getSecondary = (key : keyof T["LocaleEntryType"]) => this.master[this.locales.filter(locale => this.masterKey !== locale)[0]][key];
         public string = (key : string) : string => this.getPrimary(key as keyof T["LocaleEntryType"]) ?? key;
         public map = (key : keyof T["LocaleEntryType"] & string) : string => this.string(key);
+        public immutable = (key : string) : string => key;
         public parallel = (key : keyof T["LocaleEntryType"]) : string => `${this.getPrimary(key)} / ${this.getSecondary(key)}`;
     
     }
