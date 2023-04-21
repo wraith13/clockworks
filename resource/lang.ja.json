@@ -71,5 +71,6 @@
     "timezone.Istanbul": "イスタンブール",
     "timezone.London": "ロンドン",
     "timezone.New York": "ニューヨーク",
-    "timezone.Seattle": "シアトル"
+    "timezone.Seattle": "シアトル",
+    "ago": "前"
 }

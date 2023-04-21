@@ -49,6 +49,7 @@ export module Clockworks
             return false;
         }
     };
+    export const getVersionInfromationText = () => `${tektite.locale.immutable("build timestamp")}: ${tektite.date.format("YYYY-MM-DD HH:MM", buildTimestamp.tick)} ( ${tektite.date.format("formal-time", buildTimestamp.tick, "elapsed")} ${tektite.locale.map("ago")} )`;
     export const start = async (params:{ buildTimestamp: string, buildTimestampTick:number, }) =>
     {
         buildTimestamp =
@@ -57,7 +58,7 @@ export module Clockworks
             tick: params.buildTimestampTick,
         };
         console.log(`start timestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())}`);
-        console.log(`buildTimestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`);
+        console.log(`buildTimestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", buildTimestamp.tick)} ( ${tektite.date.format("formal-time", buildTimestamp.tick, "elapsed")} 前 )`);
         console.log(`${JSON.stringify(params)}`);
         tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
         tektite.onLoad();
@@ -69,7 +70,7 @@ export module Clockworks
         {
             tektite.screen.toast.make
             ({
-                content: Tektite.$span("")(`ビルドタイムスタンプ: ${tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick)} ( ${tektite.date.format("formal-time", params.buildTimestampTick, "elapsed")} 前 )`),
+                content: getVersionInfromationText(),
                 isWideContent: true,
             });
         }

@@ -71,5 +71,6 @@
     "timezone.Istanbul": "Istanbul",
     "timezone.London": "London",
     "timezone.New York": "New York",
-    "timezone.Seattle": "Seattle"
+    "timezone.Seattle": "Seattle",
+    "ago": "ago"
 }
