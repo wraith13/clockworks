@@ -293,6 +293,9 @@ export module Render
                     tektite.screen.adjustPageFooterPosition();
                     await updateScreen("timer");
                     break;
+                case "focus":
+                    Clockworks.checkApplicationUpdate();
+                    break;
             }
         };
         await RenderBase.showScreen(await neverStopwatchScreen(item, ticks), updateScreen);

@@ -354,6 +354,9 @@ export module Render
                     await tektite.screen.scrollToOffset(minamo.core.existsOrThrow(document.getElementById("tektite-screen-body")), 0);
                     tektite.screen.adjustPageFooterPosition();
                     break;
+                case "focus":
+                    Clockworks.checkApplicationUpdate();
+                    break;
             }
         };
         await RenderBase.showScreen(await rainbowClockScreen(item, timezones), updateScreen);

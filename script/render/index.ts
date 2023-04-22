@@ -603,11 +603,15 @@ export module Render
                 break;
             case "operate":
                 break;
+            case "focus":
+                Clockworks.checkApplicationUpdate();
+                break;
             }
         };
         tektite.setWindowColor(Color.getSolidRainbowColor(0));
         await showScreen(await welcomeScreen(), updateScreen);
         await updateScreen("timer");
+        Clockworks.checkApplicationUpdate();
     };
     export const flashIntervalLabel = async (entry: HeaderSegmentSource) =>
     ({

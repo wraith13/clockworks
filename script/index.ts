@@ -33,6 +33,92 @@ export module Clockworks
     export type LocaleType = keyof typeof localeMaster;
     export const localeMap = (key: LocaleKeyType) => tektite.locale.map(key);
     export const localeParallel = (key: LocaleKeyType) => tektite.locale.parallel(key);
+    let lastNewVersionCheckAt = 0;
+    let wasShowNewVersionToast = false;
+    export const checkApplicationUpdate = async () =>
+    {
+        if ( ! wasShowNewVersionToast)
+        {
+            const now = new Date().getTime();
+            if (lastNewVersionCheckAt +(60 * 60 *1000) < now)
+            {
+                lastNewVersionCheckAt = now;
+                if (await isNewVersionReady())
+                {
+                    wasShowNewVersionToast = true;
+                    const toast = tektite.screen.toast.make
+                    ({
+                        forwardOperator:
+                        {
+                            tag: "button",
+                            className: "text-button",
+                            children: Tektite.$span("")(tektite.locale.string(`アップデート`)),
+                            onclick: () =>
+                            {
+                                toast.hide();
+                                reloadScreen();
+                            },
+                        },
+                        content: Tektite.$span("")(tektite.locale.string(`新しいバージョンがあります！`)),
+                        wait: 0,
+                    });
+                }
+            }
+        }
+    };
+    export const reloadScreen = async () =>
+    {
+        let isCanceled = false;
+        const loadingToast = tektite.screen.toast.make
+        ({
+            content: Tektite.$span("")(tektite.locale.string("サーバーと通信中...")),
+            backwardOperator: Render.cancelTextButton
+            (
+                async () =>
+                {
+                    await loadingToast.hide();
+                    isCanceled = true;
+                }
+            ),
+            wait: 0,
+        });
+        try
+        {
+            await getLatestBuildTimestamp();
+            if ( ! isCanceled)
+            {
+                location.reload();
+            }
+            await loadingToast.hide();
+        }
+        catch(error)
+        {
+            loadingToast.hide();
+            const retryToast = tektite.screen.toast.make
+            ({
+                forwardOperator:{
+                    tag: "button",
+                    className: "text-button",
+                    children: Tektite.$span("")(tektite.locale.string(`リトライ`)),
+                    onclick: async () =>
+                    {
+                        reloadScreen();
+                        await retryToast.hide();
+                    },
+                },
+                content: Tektite.$span("")(tektite.locale.string(`サーバーに正常アクセスできませんでした。`)),
+                backwardOperator: Render.cancelTextButton
+                (
+                    async () =>
+                    {
+                        await retryToast.hide();
+                    }
+                ),
+                wait: 0,
+            });
+            console.error(error);
+        }
+    };
     export const getLatestBuildTimestamp = async (): Promise<number> =>
         JSON.parse(await minamo.http.get(`./build.timestamp.json?dummy=${new Date().getTime()}`));
     let buildTimestamp: { stamp: string, tick: number, };
