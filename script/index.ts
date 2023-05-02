@@ -51,7 +51,7 @@ export module Clockworks
                         forwardOperator:
                         {
                             tag: "button",
-                            className: "text-button",
+                            className: "tektite-text-button",
                             children: Tektite.$span("")(tektite.locale.string(`アップデート`)),
                             onclick: () =>
                             {

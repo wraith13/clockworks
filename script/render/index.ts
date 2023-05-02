@@ -446,6 +446,12 @@ export module Render
         title: 0 === flashInterval ? Clockworks.localeMap(zeroLabel): `${Clockworks.localeMap("Interval")}: ${tektite.date.format("formal-time", flashInterval)}`,
         menu: await screenHeaderFlashSegmentMenu(adder, flashIntervalPreset, flashInterval, setter, zeroIcon, zeroLabel),
     });
+    export const reloadMenuItem = async () =>
+        tektite.menu.item
+        (
+            label("Reload screen"),
+            Clockworks.reloadScreen
+        );
     export const fullscreenMenuItem = async () => tektite.fullscreen.enabled() ?
         (
             null === tektite.fullscreen.getElement() ?
@@ -534,6 +540,7 @@ export module Render
         });
     export const welcomeScreenMenu = async () =>
     [
+        await reloadMenuItem(),
         await fullscreenMenuItem(),
         await themeMenuItem(),
         await progressBarStyleMenuItem(),
