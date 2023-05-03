@@ -592,6 +592,7 @@ export module Render
                 Tektite.$tag("ul")("tektite-locale-parallel-off")
                 ([
                     Tektite.$tag("li")("")(label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                    Tektite.$tag("li")("version-information")(Clockworks.getVersionInfromationText("short-time")),
                 ])
             ),
         }
@@ -605,6 +606,7 @@ export module Render
             case "high-resolution-timer":
                 break;
             case "timer":
+                minamo.dom.setProperty(document.getElementsByClassName("version-information")[0], "innerText", Clockworks.getVersionInfromationText("short-time"));
                 break;
             case "storage":
                 break;

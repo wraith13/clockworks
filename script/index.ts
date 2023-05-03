@@ -1,5 +1,6 @@
 // import { minamo } from "./minamo.js";
 import { Tektite } from "../tektite.js/script/tektite-index";
+import { TektiteDate } from "../tektite.js/script/tektite-date";
 import { ViewModel } from "../tektite.js/script/tektite-view-model.js";
 import { ViewRenderer } from "../tektite.js/script/tektite-view-renderer";
 import { Type } from "./type";
@@ -135,7 +136,7 @@ export module Clockworks
             return false;
         }
     };
-    export const getVersionInfromationText = () => `${tektite.locale.immutable("build timestamp")}: ${tektite.date.format("YYYY-MM-DD HH:MM", buildTimestamp.tick)} ( ${tektite.date.format("formal-time", buildTimestamp.tick, "elapsed")} ${tektite.locale.map("ago")} )`;
+    export const getVersionInfromationText = (format: TektiteDate.VariableTimespanFormatType) => `${tektite.locale.immutable("build timestamp")}: ${tektite.date.format("YYYY-MM-DD HH:MM", buildTimestamp.tick)} ( ${tektite.date.format(format, buildTimestamp.tick, "elapsed")} ${tektite.locale.map("ago")} )`;
     export const start = async (params:{ buildTimestamp: string, buildTimestampTick:number, }) =>
     {
         buildTimestamp =
@@ -144,7 +145,7 @@ export module Clockworks
             tick: params.buildTimestampTick,
         };
         console.log(`start timestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())}`);
-        console.log(`buildTimestamp: ${tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", buildTimestamp.tick)} ( ${tektite.date.format("formal-time", buildTimestamp.tick, "elapsed")} 前 )`);
+        console.log(`buildTimestamp: ${getVersionInfromationText("formal-time")}`);
         console.log(`${JSON.stringify(params)}`);
         tektite.locale.setLocale(Storage.Settings.get().locale ?? null);
         tektite.onLoad();
@@ -156,7 +157,7 @@ export module Clockworks
         {
             tektite.screen.toast.make
             ({
-                content: getVersionInfromationText(),
+                content: getVersionInfromationText("formal-time"),
                 isWideContent: true,
             });
         }
