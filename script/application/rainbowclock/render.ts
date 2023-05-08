@@ -177,7 +177,7 @@ export module Render
                     "capital-time",
                     tektite.date.format
                     (
-                        "HH:MM:SS.mmm",
+                        "HH:MM:SS",
                         tektite.date.getTime
                         (
                             null !== item ?
