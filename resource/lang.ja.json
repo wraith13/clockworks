@@ -73,5 +73,6 @@
     "timezone.London": "ロンドン",
     "timezone.New York": "ニューヨーク",
     "timezone.Seattle": "シアトル",
-    "ago": "前"
+    "ago": "前",
+    "Retry": "Retry"
 }

@@ -100,7 +100,7 @@ export module Clockworks
                 forwardOperator:{
                     tag: "button",
                     className: "text-button",
-                    children: Tektite.$span("")(tektite.locale.string(`リトライ`)),
+                    children: Tektite.$span("")(tektite.locale.map("Retry")),
                     onclick: async () =>
                     {
                         reloadScreen();

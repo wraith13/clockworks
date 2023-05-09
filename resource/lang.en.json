@@ -73,5 +73,6 @@
     "timezone.London": "London",
     "timezone.New York": "New York",
     "timezone.Seattle": "Seattle",
-    "ago": "ago"
+    "ago": "ago",
+    "Retry": "Retry"
 }
