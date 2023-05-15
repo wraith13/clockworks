@@ -812,7 +812,7 @@ export module ViewRenderer
                         "href",
                         "string" === typeof data.href ?
                             data.href:
-                            tektite.params.makeUrl(data)
+                            tektite.params.makeUrl(data.href)
                     );
                     return dom;
                 },
