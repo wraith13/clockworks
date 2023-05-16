@@ -132,10 +132,10 @@ export module Header
         ];
         labelSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") =>
         Tektite.$div(`tektite-segment label-tektite-segment ${className}`)(await this.segmentCore(item));
-        linkSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]> & { href: string | T["PageParams"] }, className: string = "") => this.tektite.internalLink
+        linkSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]> & { href: T["PageParams"] }, className: string = "") => this.tektite.internalLink
         ({
             className: `tektite-segment ${className}`,
-            href: this.tektite.makeSureUrl(item.href),
+            href: item.href,
             children: await this.segmentCore(item),
         });
         popupSegment = async (item: SegmentSource<T["PageParams"], T["IconKeyType"]>, className: string = "") =>
