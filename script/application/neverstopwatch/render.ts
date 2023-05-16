@@ -189,7 +189,7 @@ export module Render
             items:
             [
                 await RenderBase.screenHeaderHomeSegment(),
-                await RenderBase.screenHeaderApplicationSegment("NeverStopwatch"),
+                await RenderBase.screenHeaderApplicationSegmentMenu("NeverStopwatch"),
                 // await screenHeaderFlashSegment(Storage.NeverStopwatch.flashInterval.get()),
             ],
             menu: neverStopwatchScreenMenu,

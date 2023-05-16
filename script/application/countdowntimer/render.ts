@@ -442,7 +442,7 @@ export module Render
             items:
             [
                 await RenderBase.screenHeaderHomeSegment(),
-                await RenderBase.screenHeaderApplicationSegment("CountdownTimer"),
+                await RenderBase.screenHeaderApplicationSegmentMenu("CountdownTimer"),
             ],
             menu: countdownTimerScreenMenu,
             parent: { },

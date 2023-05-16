@@ -252,7 +252,7 @@ export module Render
             items:
             [
                 await RenderBase.screenHeaderHomeSegment(),
-                await RenderBase.screenHeaderApplicationSegment("RainbowClock"),
+                await RenderBase.screenHeaderApplicationSegmentMenu("RainbowClock"),
             ],
             menu: rainbowClockScreenMenu,
             parent: { },

@@ -373,6 +373,12 @@ export module Render
     ({
         icon: Type.applicationList[applicationType].icon,
         title: Type.applicationList[applicationType].title,
+        href: { application: "RainbowClock", }
+    });
+    export const screenHeaderApplicationSegmentMenu = async (applicationType: Type.ApplicationType): Promise<HeaderSegmentSource> =>
+    ({
+        icon: Type.applicationList[applicationType].icon,
+        title: Type.applicationList[applicationType].title,
         menu: await Promise.all
         (
             Type.applicationIdList.map

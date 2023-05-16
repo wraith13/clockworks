@@ -145,7 +145,7 @@ export module Render
             items:
             [
                 await RenderBase.screenHeaderHomeSegment(),
-                await RenderBase.screenHeaderApplicationSegment("ElapsedTimer"),
+                await RenderBase.screenHeaderApplicationSegmentMenu("ElapsedTimer"),
             ],
             menu: elapsedTimerScreenMenu,
             parent: { },
