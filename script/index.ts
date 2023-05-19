@@ -53,14 +53,14 @@ export module Clockworks
                         {
                             tag: "button",
                             className: "tektite-text-button",
-                            children: Tektite.$span("")(tektite.locale.string(`アップデート`)),
+                            children: Tektite.$span("")(tektite.locale.map("Update")),
                             onclick: () =>
                             {
                                 toast.hide();
                                 reloadScreen();
                             },
                         },
-                        content: Tektite.$span("")(tektite.locale.string(`新しいバージョンがあります！`)),
+                        content: Tektite.$span("")(tektite.locale.map("There is a new version!")),
                         wait: 0,
                     });
                 }
