@@ -76,5 +76,6 @@
     "ago": "ago",
     "Retry": "Retry",
     "Update": "Update",
-    "There is a new version!": "There is a new version!"
+    "There is a new version!": "There is a new version!",
+    "Communicating with server...": "Communicating with server..."
 }

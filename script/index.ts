@@ -72,7 +72,7 @@ export module Clockworks
         let isCanceled = false;
         const loadingToast = tektite.screen.toast.make
         ({
-            content: Tektite.$span("")(tektite.locale.string("サーバーと通信中...")),
+            content: Tektite.$span("")(tektite.locale.map("Communicating with server...")),
             backwardOperator: Render.cancelTextButton
             (
                 async () =>

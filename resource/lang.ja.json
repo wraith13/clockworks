@@ -76,5 +76,6 @@
     "ago": "前",
     "Retry": "リトライ",
     "Update": "アップデート",
-    "There is a new version!": "新しいバージョンがあります！"
+    "There is a new version!": "新しいバージョンがあります！",
+    "Communicating with server...": "サーバーと通信中..."
 }
