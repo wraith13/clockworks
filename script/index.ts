@@ -88,7 +88,13 @@ export module Clockworks
             await getLatestBuildTimestamp();
             if ( ! isCanceled)
             {
-                location.reload();
+                const reload =
+                {
+                    url: location.href,
+                    fullscreen: tektite.fullscreen.enabled() && tektite.fullscreen.getElement(),
+                    dummy: new Date().getTime(),
+                };
+                location.href = `?reload=${encodeURIComponent(JSON.stringify(reload))}`;
             }
             await loadingToast.hide();
         }
@@ -99,7 +105,7 @@ export module Clockworks
             ({
                 forwardOperator:{
                     tag: "button",
-                    className: "text-button",
+                    className: "tektite-text-button",
                     children: Tektite.$span("")(tektite.locale.map("Retry")),
                     onclick: async () =>
                     {
@@ -152,8 +158,38 @@ export module Clockworks
         window.matchMedia("(prefers-color-scheme: dark)").addListener(Render.updateStyle);
         Render.updateStyle();
         Render.updateProgressBarStyle();
+        const urlParams = Base.getUrlParams(location.href);
+        const reload = urlParams["reload"];
+        if (reload)
+        {
+            const json = JSON.parse(reload);
+            const url = json["url"];
+            if (url)
+            {
+                history.replaceState(null, config.applicationTitle, url);
+            }
+            const fullscreen = json["fullscreen"];
+            if (fullscreen && tektite.fullscreen.enabled())
+            {
+                const toast = tektite.screen.toast.make
+                ({
+                    forwardOperator:
+                    {
+                        tag: "button",
+                        className: "tektite-text-button",
+                        children: Tektite.$span("")(tektite.locale.map("Full screen")),
+                        onclick: async () =>
+                        {
+                            toast.hide();
+                            await tektite.fullscreen.request();
+                        },
+                    },
+                    content: Tektite.$span("")(tektite.locale.string("再読み込みした為、フルスクリーンが解かれました。")),
+                });
+            }
+        }
         await Render.showPage();
-        if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
+        if (reload || "reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
         {
             tektite.screen.toast.make
             ({
@@ -526,6 +562,36 @@ export module Clockworks
                 progressBarStyle: Storage.Settings.get().progressBarStyle ?? "auto",
                 windowColor: Color.getSolidRainbowColor(0),
             });
+            const urlParams = Base.getUrlParams(location.href);
+            const reload = urlParams["reload"];
+            if (reload)
+            {
+                const json = JSON.parse(reload);
+                const url = json["url"];
+                if (url)
+                {
+                    history.replaceState(null, config.applicationTitle, url);
+                }
+                const fullscreen = json["fullscreen"];
+                if (fullscreen && tektite.fullscreen.enabled())
+                {
+                    const toast = tektite.screen.toast.make
+                    ({
+                        forwardOperator:
+                        {
+                            tag: "button",
+                            className: "tektite-text-button",
+                            children: Tektite.$span("")(tektite.locale.map("Full screen")),
+                            onclick: async () =>
+                            {
+                                toast.hide();
+                                await tektite.fullscreen.request();
+                            },
+                        },
+                        content: Tektite.$span("")(tektite.locale.string("再読み込みした為、フルスクリーンが解かれました。")),
+                    });
+                }
+            }
             const renders: { [type: string ]: ViewRenderer.Entry<any>} =
             {
                 "welcome-board":
@@ -639,7 +705,7 @@ export module Clockworks
                 key => (tektite.viewCommand.commands as any)[key] = commands[key]
             );
             await showPage();
-            if ("reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
+            if (reload || "reload" === (<any>performance.getEntriesByType("navigation"))?.[0]?.type)
             {
                 tektite.makeToast
                 ({
