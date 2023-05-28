@@ -113,7 +113,7 @@ export module Clockworks
                         await retryToast.hide();
                     },
                 },
-                content: Tektite.$span("")(tektite.locale.string(`サーバーに正常アクセスできませんでした。`)),
+                content: Tektite.$span("")(tektite.locale.map("Could not access the server successfully.")),
                 backwardOperator: Render.cancelTextButton
                 (
                     async () =>
