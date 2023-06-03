@@ -184,7 +184,7 @@ export module Clockworks
                             await tektite.fullscreen.request();
                         },
                     },
-                    content: Tektite.$span("")(tektite.locale.string("再読み込みした為、フルスクリーンが解かれました。")),
+                    content: Tektite.$span("")(tektite.locale.map("Full screen has been canceled due to reloading.")),
                 });
             }
         }
@@ -588,7 +588,7 @@ export module Clockworks
                                 await tektite.fullscreen.request();
                             },
                         },
-                        content: Tektite.$span("")(tektite.locale.string("再読み込みした為、フルスクリーンが解かれました。")),
+                        content: Tektite.$span("")(tektite.locale.map("Full screen has been canceled due to reloading.")),
                     });
                 }
             }
