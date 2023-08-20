@@ -4,17 +4,6 @@
     {
         "default":
         {
-            "files":
-            [
-                {
-                    "template": { "path": "./index.template.html" },
-                    "output": { "path": "./index.html" }
-                },
-                {
-                    "template": "__BUILD_TIMESTAMP_TICK__",
-                    "output": { "path": "./build.timestamp.json" }
-                }
-            ],
             "parameters":
             {
                 "__BUILD_MESSAGE__": "This file is genereted by build.js. このファイルは build.js によって生成されました。",
@@ -22,7 +11,15 @@
                 "__BUILD_TIMESTAMP__": { "call": "timestamp" },
                 "__BUILD_TIMESTAMP_TICK__": { "call": "timestamp_tick" },
                 "__REPOSITORY_URL_": { "json": "./resource/config.json", "key": "repositoryUrl" },
-                "__LICENSE__": { "path": "./LICENSE_1_0.txt" },
+                "__LICENSE__": { "path": "./LICENSE_1_0.txt" }
+            }
+        },
+        "index.html":
+        {
+            "template": { "path": "./index.template.html" },
+            "output": { "path": "./index.html" },
+            "parameters":
+            {
                 "__LIGHT_STYLE__": { "path": "./style/theme.light.css", "replace": { "match": "sourceMappingURL=theme.light.css.map", "text": "sourceMappingURL=style/theme.light.css.map" } },
                 "__DARK_STYLE__": { "path": "./style/theme.dark.css", "replace": { "match": "sourceMappingURL=theme.dark.css.map", "text": "sourceMappingURL=style/theme.dark.css.map" } },
                 "__EVIL_COMMONJS__": { "path": "./nephila/evil-commonjs/index.js", "replace": { "match": "sourceMappingURL=index.js.map", "text": "sourceMappingURL=nephila/evil-commonjs/index.js.map" } },
@@ -33,35 +30,84 @@
                 "__STARTUP__": "start"
             }
         },
-        "none":
+        "build.timestamp.json":
         {
-            "preprocesses":[ ]
+            "template": "__BUILD_TIMESTAMP_TICK__",
+            "output": { "path": "./build.timestamp.json" }
         },
-        "release":
+        "release.style":
         {
-            "preprocesses":
+            "processes":
             [
                 "npm run-script \"build light style\"",
-                "npm run-script \"build dark style\"",
+                "npm run-script \"build dark style\""
+            ]
+        },
+        "release.script":
+        {
+            "processes":
+            [
                 "npm run-script \"build script\""
             ]
         },
-        "wip":
+        "debug.style":
         {
+            "processes":
+            [
+                "npm run-script \"build light style\"",
+                "npm run-script \"build dark style\""
+            ]
+        },
+        "debug.script":
+        {
+            "processes":
+            [
+                "npm run-script \"build script\""
+            ]
+        },
+        "none":
+        {
+            "steps":
+            [
+                { "references": "index.html" },
+                { "references": "build.timestamp.json" }
+            ]
+        },
+        "release":
+        {
+            "steps":
+            [
+                { "references": "release.style" },
+                { "references": "release.script" },
+                { "references": "index.html" },
+                { "references": "build.timestamp.json" }
+            ]
+        },
+        "wip.index.html":
+        {
+            "base": "index.html",
             "output": { "path": "./index.wip.html" },
             "parameters":
             {
                 "__STARTUP__": "ClockworksWIP.start"
             }
         },
+        "wip":
+        {
+            "steps":
+            [
+                { "references": "wip.index.html" },
+                { "references": "build.timestamp.json" }
+            ]
+        },
         "wip.release":
         {
-            "base": "wip",
-            "preprocesses":
+            "steps":
             [
-                "npm run-script \"build light style\"",
-                "npm run-script \"build dark style\"",
-                "npm run-script \"build script\""
+                { "references": "debug.style" },
+                { "references": "debug.script" },
+                { "references": "wip.index.html" },
+                { "references": "build.timestamp.json" }
             ]
         }
     }
