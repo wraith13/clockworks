@@ -2,7 +2,7 @@
 <!--
     This file is genereted by build.js. このファイルは build.js によって生成されました。
     build options: ../../build.json wip.release
-    build at: Wed Aug 31 2022 20:15:29 GMT+0900 (日本標準時)
+    build at: Sun Aug 20 2023 20:07:05 GMT+0900 (日本標準時)
     repository: https://github.com/wraith13/clockworks/
 -->
 <!--
@@ -833,8 +833,8 @@ body.light button.tektite-long-button {
   100% {
     opacity: 1;
     max-height: 6rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 }
 @keyframes tektite-slide-down-out {
@@ -2605,7 +2605,7 @@ _::-webkit-full-page-media, _:future, :root .tektite-screen > .tektite-screen-bo
   padding-top: 2.5rem;
 }
 
-/*# sourceMappingURL=style/theme.light.css.map */
+/*# sourceMappingURL=theme.light.css.map */
 
 </style>
 <style type="text/css">
@@ -3400,8 +3400,8 @@ body.dark button.tektite-long-button {
   100% {
     opacity: 1;
     max-height: 6rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 }
 @keyframes tektite-slide-down-out {
@@ -5167,7 +5167,7 @@ body.dark ::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 
-/*# sourceMappingURL=style/theme.dark.css.map */
+/*# sourceMappingURL=theme.dark.css.map */
 
 </style>
 <script type="text/javascript">
@@ -5428,7 +5428,7 @@ var _this = this;
     };
     window.module = evil.module;
 })();
-//# sourceMappingURL=nephila/evil-commonjs/index.js.map
+//# sourceMappingURL=index.js.map
 </script>
 <script type="text/javascript">
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
@@ -5442,7 +5442,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 var EvilTimer;
 (function (EvilTimer) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     var gThis = ((_a = self !== null && self !== void 0 ? self : window) !== null && _a !== void 0 ? _a : global);
     var VanillaDate = Date;
     var vanillaSetTimeout = setTimeout;
@@ -5464,6 +5464,7 @@ var EvilTimer;
     var originalStyleRules = null;
     // let originalStyleSheets:string[] = null;
     var speed = 1;
+    var isRegularSpeed = function () { return 1 === speed; };
     var isPaused = false;
     var susppendedTasks = [];
     var ankerAt = {
@@ -5482,11 +5483,14 @@ var EvilTimer;
             vanilla: EvilTimer.getVanillaNow(),
             evil: evil !== null && evil !== void 0 ? evil : EvilTimer.getEvilNow(),
         }; };
-    var resetAnkerAt = function () { return ankerAt =
-        {
-            vanilla: 0,
-            evil: 0,
-        }; };
+    var resetAnkerAt = function (vanilla) {
+        if (vanilla === void 0) { vanilla = isRegularSpeed() ? 0 : EvilTimer.getVanillaNow(); }
+        return ankerAt =
+            {
+                vanilla: vanilla,
+                evil: vanilla,
+            };
+    };
     /*
     remain for support to timezone and locale.
     class EvilDateBody
@@ -5561,8 +5565,8 @@ var EvilTimer;
         static now = () => new EvilDateBody().getTime();
     }
     */
-    EvilTimer.EvilDate = function _f() {
-        var _newTarget = this && this instanceof _f ? this.constructor : void 0;
+    EvilTimer.EvilDate = function _e() {
+        var _newTarget = this && this instanceof _e ? this.constructor : void 0;
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -5590,9 +5594,9 @@ var EvilTimer;
                     date.getTime());
         }
     };
-    EvilTimer.resetDate = function () { return setAnkerAt(EvilTimer.getVanillaNow()); };
+    EvilTimer.resetDate = function () { return resetAnkerAt(); };
     EvilTimer.restore = function () {
-        EvilTimer.setSpeed(1.0);
+        EvilTimer.setSpeed(1);
         EvilTimer.unpause();
         resetAnkerAt();
     };
@@ -5603,8 +5607,22 @@ var EvilTimer;
     EvilTimer.unpause = function () {
         setAnkerAt();
         isPaused = false;
-        susppendedTasks.forEach(function (i) { return i(); });
-        susppendedTasks = [];
+        EvilTimer.stepOut();
+    };
+    EvilTimer.step = function (count) {
+        var _a;
+        if (count === void 0) { count = 1; }
+        for (var i = 0; i < count; ++i) {
+            (_a = susppendedTasks.shift()) === null || _a === void 0 ? void 0 : _a();
+        }
+        return susppendedTasks.length;
+    };
+    EvilTimer.stepAll = function () {
+        EvilTimer.step(susppendedTasks.length);
+    };
+    EvilTimer.stepOut = function () {
+        while (0 < EvilTimer.step())
+            ;
     };
     var styleTimerRegExp = /((?:animation|transition)(?:-duration|-delay)?\s*:)([\+\-0-9A-Za-z.\s]+);/gmu;
     var hasTimer = function (css) { return styleTimerRegExp.test(css); };
@@ -5616,9 +5634,9 @@ var EvilTimer;
             originalEmbeddedStyles = styles.map(function (i) { return i.innerHTML; });
         }
         styles.forEach(function (i, ix) {
-            var _a;
-            if (hasTimer((_a = originalEmbeddedStyles[ix]) !== null && _a !== void 0 ? _a : "")) {
-                i.innerHTML = replaceTimer(rate, originalEmbeddedStyles[ix]);
+            var _a, _b;
+            if (hasTimer((_a = originalEmbeddedStyles === null || originalEmbeddedStyles === void 0 ? void 0 : originalEmbeddedStyles[ix]) !== null && _a !== void 0 ? _a : "")) {
+                i.innerHTML = replaceTimer(rate, (_b = originalEmbeddedStyles === null || originalEmbeddedStyles === void 0 ? void 0 : originalEmbeddedStyles[ix]) !== null && _b !== void 0 ? _b : "");
             }
         });
     };
@@ -5640,11 +5658,12 @@ var EvilTimer;
             });
         }
         styles.forEach(function (stylesheet, ix) {
-            if (null !== originalStyleRules[ix]) {
+            var _a;
+            if (null !== (originalStyleRules === null || originalStyleRules === void 0 ? void 0 : originalStyleRules[ix])) {
                 while (0 < stylesheet.cssRules.length) {
                     stylesheet.deleteRule(0);
                 }
-                originalStyleRules[ix].forEach(function (rule) { return stylesheet.insertRule(replaceTimer(rate, rule)); });
+                (_a = originalStyleRules === null || originalStyleRules === void 0 ? void 0 : originalStyleRules[ix]) === null || _a === void 0 ? void 0 : _a.forEach(function (rule) { return stylesheet.insertRule(replaceTimer(rate, rule)); });
             }
         });
     };
@@ -5741,9 +5760,14 @@ var EvilTimer;
         }
     };
     EvilTimer.setSpeed = function (rate) {
-        setAnkerAt();
-        speed = rate;
-        updateStyle();
+        if (0 == rate) {
+            EvilTimer.pause();
+        }
+        else {
+            setAnkerAt();
+            speed = rate;
+            updateStyle();
+        }
     };
     EvilTimer.evilSetTimeout = function (callback, wait) {
         var args = [];
@@ -5757,7 +5781,7 @@ var EvilTimer;
             else {
                 callback.apply(void 0, args);
             }
-        }, wait / Math.abs(speed));
+        }, undefined === wait ? wait : wait / Math.abs(speed));
     };
     EvilTimer.evilSetInterval = function (callback, wait) {
         var args = [];
@@ -5776,7 +5800,7 @@ var EvilTimer;
                 pushed = false;
                 callback.apply(void 0, args);
             }
-        }, wait / Math.abs(speed));
+        }, undefined === wait ? wait : wait / Math.abs(speed));
     };
     var Vanilla;
     (function (Vanilla) {
@@ -5846,21 +5870,67 @@ var EvilTimer;
             }
         }
     };
-    var configFromUrl = (_e = (_d = (_c = (_b = location.href
-        .split("#")[0]
-        .split("?")[1]) === null || _b === void 0 ? void 0 : _b.split("&")) === null || _c === void 0 ? void 0 : _c.filter(function (i) { return i.startsWith("evil-timer="); })) === null || _d === void 0 ? void 0 : _d.map(function (i) { return JSON.parse(decodeURIComponent(i.substr("evil-timer=".length))); })) === null || _e === void 0 ? void 0 : _e[0];
-    var evilTimerConfig = (configFromUrl !== null && configFromUrl !== void 0 ? configFromUrl : gThis.evilTimerConfig);
-    if (false !== evilTimerConfig && !(evilTimerConfig === null || evilTimerConfig === void 0 ? void 0 : evilTimerConfig.disabled)) {
-        EvilTimer.set(true);
-        if (!(evilTimerConfig === null || evilTimerConfig === void 0 ? void 0 : evilTimerConfig.disabledLoadMessage)) {
-            console.log("evil-timer.js is loaded. You can use EvilTimer commands with your own risk. see: https://github.com/wraith13/evil-timer.js");
+    EvilTimer.debugKey = "evil-timer.debug";
+    EvilTimer.isDebug = function () { var _a; return JSON.parse((_a = window.localStorage.getItem(EvilTimer.debugKey)) !== null && _a !== void 0 ? _a : "false"); };
+    EvilTimer.debugOn = function () { return window.localStorage.setItem(EvilTimer.debugKey, JSON.stringify(true)); };
+    EvilTimer.debugOff = function () { return window.localStorage.removeItem(EvilTimer.debugKey); };
+    EvilTimer.getStatus = function () {
+        var vanilla = new VanillaDate();
+        var evil = new EvilTimer.EvilDate();
+        var result = {
+            enabled: gThis.EvilTimer === EvilTimer,
+            debug: EvilTimer.isDebug(),
+            speed: speed,
+            isPaused: isPaused,
+            susppendedTasksCount: susppendedTasks.length,
+            date: {
+                vanilla: {
+                    text: vanilla.toLocaleString(),
+                    tick: vanilla.getTime(),
+                },
+                evil: {
+                    text: evil.toLocaleString(),
+                    tick: evil.getTime(),
+                }
+            }
+        };
+        return result;
+    };
+    var getConfigFromUrl = function () {
+        var _a, _b, _c, _d;
+        if (EvilTimer.isDebug()) {
+            try {
+                return (_d = (_c = (_b = (_a = location.href
+                    .split("#")[0]
+                    .split("?")[1]) === null || _a === void 0 ? void 0 : _a.split("&")) === null || _b === void 0 ? void 0 : _b.filter(function (i) { return i.startsWith("evil-timer="); })) === null || _c === void 0 ? void 0 : _c.map(function (i) { return JSON.parse(decodeURIComponent(i.substr("evil-timer=".length))); })) === null || _d === void 0 ? void 0 : _d[0];
+            }
+            catch (err) {
+                console.log(err);
+            }
         }
-        if (evilTimerConfig) {
-            EvilTimer.set(evilTimerConfig);
+        return null;
+    };
+    var globalEvilTimerConfig = gThis.evilTimerConfig;
+    if ("object" === typeof globalEvilTimerConfig && "boolean" === typeof globalEvilTimerConfig.debug) {
+        if (globalEvilTimerConfig.debug) {
+            EvilTimer.debugOn();
+        }
+        else {
+            EvilTimer.debugOff();
         }
     }
+    var configFromUrl = getConfigFromUrl();
+    var configOrBoolean = ((_b = configFromUrl !== null && configFromUrl !== void 0 ? configFromUrl : gThis.evilTimerConfig) !== null && _b !== void 0 ? _b : true);
+    var evilTimerConfig = "boolean" === typeof configOrBoolean ? { disabled: !configOrBoolean, } : configOrBoolean;
+    if (!((_c = evilTimerConfig.disabled) !== null && _c !== void 0 ? _c : false)) {
+        EvilTimer.set(true);
+        if (!((_d = evilTimerConfig.disabledLoadMessage) !== null && _d !== void 0 ? _d : false)) {
+            console.log("evil-timer.js is loaded. You can use EvilTimer commands with your own risk. see: https://github.com/wraith13/evil-timer.js");
+        }
+        EvilTimer.set(evilTimerConfig);
+    }
 })(EvilTimer || (EvilTimer = {}));
-//# sourceMappingURL=nephila/evil-timer.js/index.js.map
+//# sourceMappingURL=index.js.map
 </script>
 <script type="text/javascript">
 var __extends = (this && this.__extends) || (function () {
@@ -5926,6 +5996,18 @@ define("clockworks/nephila/minamo.js/index", ["require", "exports"], function (r
         var core;
         (function (core_1) {
             var _this = this;
+            function undefinedable(target, defaultResult) {
+                return function (parameter) { return undefined === parameter ? defaultResult : target(parameter); };
+            }
+            core_1.undefinedable = undefinedable;
+            function nullable(target, defaultResult) {
+                return function (parameter) { return null === parameter ? (defaultResult !== null && defaultResult !== void 0 ? defaultResult : null) : target(parameter); };
+            }
+            core_1.nullable = nullable;
+            function nonexistentable(target, defaultResult) {
+                return function (parameter) { return undefined === parameter || null === parameter ? defaultResult : target(parameter); };
+            }
+            core_1.nonexistentable = nonexistentable;
             core_1.jsonStringify = function (source, replacer, space) { return JSON.stringify(source, replacer, space); };
             core_1.extender = function () { return function (x) { return x; }; }; // TypeScript 4.8 以降では satisfies の使用を推奨
             core_1.timeout = function (wait) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -6336,6 +6418,84 @@ define("clockworks/nephila/minamo.js/index", ["require", "exports"], function (r
                 };
                 comparer.lowerCase = comparer.make([function (a) { return a.toLowerCase(); }, { raw: comparer.basic }]);
             })(comparer = core_1.comparer || (core_1.comparer = {}));
+            core_1.parseTimespan = function (timespan) {
+                try {
+                    switch (typeof timespan) {
+                        case "number":
+                            return timespan;
+                        case "string":
+                            if (timespan.endsWith("ms")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 2).trim());
+                            }
+                            else if (timespan.endsWith("s")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 1000;
+                            }
+                            else if (timespan.endsWith("m")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("h")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 60 * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("d")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 24 * 60 * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("w")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 7 * 24 * 60 * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("y")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 365.2425 * 24 * 60 * 60 * 1000;
+                            }
+                            else {
+                                return parseInt(timespan.trim());
+                            }
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                }
+                return null;
+            };
+            core_1.timespanToString = function (value) {
+                if (value < 0) {
+                    return "-".concat(core_1.timespanToString(-value));
+                }
+                else {
+                    var units = [
+                        {
+                            label: "y",
+                            size: 365.2425 * 24 * 60 * 60 * 1000
+                        },
+                        {
+                            label: "d",
+                            size: 24 * 60 * 60 * 1000
+                        },
+                        {
+                            label: "h",
+                            size: 60 * 60 * 1000
+                        },
+                        {
+                            label: "m",
+                            size: 60 * 1000
+                        },
+                        {
+                            label: "s",
+                            size: 1000
+                        },
+                        {
+                            label: "ms",
+                            size: 1
+                        }
+                    ];
+                    var i = 0;
+                    do {
+                        var unit = units[i];
+                        if (unit.size <= value) {
+                            return "".concat(value / unit.size).concat(unit.label);
+                        }
+                    } while (++i < units.length);
+                    return "".concat(value, "ms");
+                }
+            };
         })(core = minamo.core || (minamo.core = {}));
         var environment;
         (function (environment) {
@@ -6934,6 +7094,7 @@ define("clockworks/tektite.js/script/tektite-locale", ["require", "exports", "cl
                 this.getSecondary = function (key) { return _this.master[_this.locales.filter(function (locale) { return _this.masterKey !== locale; })[0]][key]; };
                 this.string = function (key) { var _a; return (_a = _this.getPrimary(key)) !== null && _a !== void 0 ? _a : key; };
                 this.map = function (key) { return _this.string(key); };
+                this.immutable = function (key) { return key; };
                 this.parallel = function (key) { return "".concat(_this.getPrimary(key), " / ").concat(_this.getSecondary(key)); };
             }
             return Locale;
@@ -7525,7 +7686,7 @@ define("clockworks/tektite.js/script/tektite-header", ["require", "exports", "cl
                                     _b = (_a = this.tektite).internalLink;
                                     _c = {
                                         className: "tektite-segment ".concat(className),
-                                        href: this.tektite.makeSureUrl(item.href)
+                                        href: item.href
                                     };
                                     return [4 /*yield*/, this.segmentCore(item)];
                                 case 1: return [2 /*return*/, _b.apply(_a, [(_c.children = _d.sent(),
@@ -9219,7 +9380,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 index_js_7.minamo.dom.setProperty(element, "className", "tektite-segment link-tektite-segment ".concat((_a = data === null || data === void 0 ? void 0 : data.className) !== null && _a !== void 0 ? _a : ""));
                                 index_js_7.minamo.dom.setProperty(element, "href", "string" === typeof data.href ?
                                     data.href :
-                                    tektite.params.makeUrl(data));
+                                    tektite.params.makeUrl(data.href));
                                 return [2 /*return*/, dom];
                             });
                         }); },
@@ -9308,7 +9469,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                         }); },
                         screenEventHandlers: {
                             "scroll": function (tektite, _event, path) {
-                                tektite.viewCommand.call({
+                                tektite.viewCommand.call({ path: path, }, {
                                     type: "tektite-update-primary-page-footer-down-page-link",
                                     data: {
                                         path: path,
@@ -9391,7 +9552,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                 if (0 < stateData.wait) {
                                     setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
                                         return __generator(this, function (_a) {
-                                            tektite.viewCommand.call({
+                                            tektite.viewCommand.call({ path: path, }, {
                                                 type: "tektite-update-toast-item",
                                                 data: {
                                                     path: path,
@@ -9521,7 +9682,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
                                         setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, tektite.viewCommand.call({
+                                                    case 0: return [4 /*yield*/, tektite.viewCommand.call({ path: path, }, {
                                                             type: "tektite-set-data",
                                                             data: {
                                                                 path: path,
@@ -9617,7 +9778,7 @@ define("clockworks/tektite.js/script/tektite-view-renderer", ["require", "export
         };
     })(ViewRenderer = exports.ViewRenderer || (exports.ViewRenderer = {}));
 });
-define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-view-renderer", "clockworks/tektite.js/script/tektite-fullscreen"], function (require, exports, index_js_8, tektite_view_renderer_js_1, tektite_fullscreen_1) {
+define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports", "clockworks/nephila/minamo.js/index", "clockworks/tektite.js/script/tektite-view-model", "clockworks/tektite.js/script/tektite-view-renderer", "clockworks/tektite.js/script/tektite-fullscreen"], function (require, exports, index_js_8, tektite_view_model_js_1, tektite_view_renderer_js_1, tektite_fullscreen_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ViewCommand = void 0;
@@ -9630,7 +9791,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                 var _this = this;
                 this.tektite = tektite;
                 this.commands = {
-                    "tektite-set-data": (function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-set-data": (function (tektite, _context, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var path, model;
                         var _a;
                         return __generator(this, function (_b) {
@@ -9653,7 +9814,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             return [2 /*return*/];
                         });
                     }); }),
-                    "tektite-update-children": (function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-update-children": (function (tektite, context, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var path, model, _a;
                         return __generator(this, function (_b) {
                             switch (_b.label) {
@@ -9662,7 +9823,9 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                                     console.error("tektite-view-command: This command require data - entry:".concat(JSON.stringify(entry)));
                                     return [3 /*break*/, 4];
                                 case 1:
-                                    path = entry.data.path;
+                                    path = context.path ?
+                                        tektite_view_model_js_1.ViewModel.solvePath(context.path, entry.data.path) :
+                                        entry.data.path;
                                     model = tektite.viewModel.getUnknown(path);
                                     if (!model) return [3 /*break*/, 4];
                                     if ("children" in entry.data) {
@@ -9670,7 +9833,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                                     }
                                     if (!("updator" in entry.data)) return [3 /*break*/, 3];
                                     _a = model;
-                                    return [4 /*yield*/, tektite.viewCommand.call(entry.data.updator)];
+                                    return [4 /*yield*/, tektite.viewCommand.call({ path: path, }, entry.data.updator)];
                                 case 2:
                                     _a.children = _b.sent();
                                     _b.label = 3;
@@ -9681,7 +9844,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             }
                         });
                     }); }),
-                    "tektite-on-menu-button-click": (function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-on-menu-button-click": (function (tektite, context, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var path, model, getMenu, _a;
                         var _b;
                         return __generator(this, function (_c) {
@@ -9691,13 +9854,15 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                                     console.error("tektite-view-command: This command require data - entry:".concat(JSON.stringify(entry)));
                                     return [3 /*break*/, 4];
                                 case 1:
-                                    path = entry.data.path;
+                                    path = context.path ?
+                                        tektite_view_model_js_1.ViewModel.solvePath(context.path, entry.data.path) :
+                                        entry.data.path;
                                     model = tektite.viewModel.get(path, "tektite-menu-button");
                                     if (!model) return [3 /*break*/, 4];
                                     getMenu = (_b = model.data) === null || _b === void 0 ? void 0 : _b.getMenu;
                                     if (!getMenu) return [3 /*break*/, 3];
                                     _a = model;
-                                    return [4 /*yield*/, tektite.viewCommand.call(getMenu)];
+                                    return [4 /*yield*/, tektite.viewCommand.call({ path: path, }, getMenu)];
                                 case 2:
                                     _a.children = (_c.sent());
                                     _c.label = 3;
@@ -9714,7 +9879,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             }
                         });
                     }); }),
-                    "tektite-scroll-to": (function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-scroll-to": (function (tektite, _context, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var dom;
                         var _a;
                         return __generator(this, function (_b) {
@@ -9734,7 +9899,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             }
                         });
                     }); }),
-                    "tektite-update-primary-page-footer-down-page-link": (function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-update-primary-page-footer-down-page-link": (function (tektite, _context, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var path, model, dom, body, isStrictShowPrimaryPage;
                         var _a, _b;
                         return __generator(this, function (_c) {
@@ -9761,7 +9926,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             return [2 /*return*/];
                         });
                     }); }),
-                    "tektite-update-toast-item": (function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-update-toast-item": (function (tektite, _context, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var path, model;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
@@ -9788,7 +9953,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                             }
                         });
                     }); }),
-                    "tektite-toggle-fullscreen": (function (tektite, entry) { return __awaiter(_this, void 0, void 0, function () {
+                    "tektite-toggle-fullscreen": (function (tektite, _context, entry) { return __awaiter(_this, void 0, void 0, function () {
                         var path, cache, element;
                         return __generator(this, function (_a) {
                             if ("string" === typeof entry || !entry.data) {
@@ -9814,7 +9979,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                     }); }),
                 };
             }
-            ViewCommand.prototype.call = function (entry, withLog) {
+            ViewCommand.prototype.call = function (context, entry, withLog) {
                 return __awaiter(this, void 0, void 0, function () {
                     var executer;
                     return __generator(this, function (_a) {
@@ -9825,7 +9990,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                                 if (withLog || ("string" !== typeof entry && entry.withLog)) {
                                     console.log("tektite-view-command.call: ".concat(JSON.stringify(entry)));
                                 }
-                                return [4 /*yield*/, executer(this.tektite, entry)];
+                                return [4 /*yield*/, executer(this.tektite, context, entry)];
                             case 1: return [2 /*return*/, _a.sent()];
                             case 2: throw new Error("tektite-view-command: Unknown command - entry:".concat(JSON.stringify(entry)));
                         }
@@ -9845,7 +10010,7 @@ define("clockworks/tektite.js/script/tektite-view-command", ["require", "exports
                                 entryOrList = (_a = model.data) === null || _a === void 0 ? void 0 : _a[event];
                                 if (!entryOrList) return [3 /*break*/, 3];
                                 return [4 /*yield*/, Promise.all(index_js_8.minamo.core.arrayOrToArray(entryOrList)
-                                        .map(function (entry) { return _this.call(entry); }))];
+                                        .map(function (entry) { return _this.call({ path: path, }, entry); }))];
                             case 1:
                                 _b.sent();
                                 return [4 /*yield*/, this.tektite.viewRenderer.renderRoot()];
@@ -9903,6 +10068,34 @@ define("clockworks/tektite.js/script/tektite-view-model", ["require", "exports",
                 path: "/dummy",
                 entryType: entryType,
             });
+        };
+        ViewModel_1.isAbsolutePath = function (path) { return path.path.startsWith("/"); };
+        ViewModel_1.loopReplace = function (text, match, replace) {
+            var result = text;
+            while (true) {
+                var previous = result;
+                result = result.replace(match, replace);
+                if (previous == result) {
+                    break;
+                }
+            }
+            return result;
+        };
+        ViewModel_1.regulatePath = function (path) {
+            return ({
+                type: "path",
+                path: ViewModel_1.loopReplace(ViewModel_1.loopReplace(path.path, /\/[^\/\.]+\/\.\.\//gm, "/"), /\/\.?\//gm, "/"),
+                entryType: path.entryType,
+            });
+        };
+        ViewModel_1.solvePath = function (currentPath, targetPath) {
+            return ViewModel_1.isAbsolutePath(targetPath) ?
+                targetPath :
+                ViewModel_1.regulatePath({
+                    type: "path",
+                    path: "".concat(currentPath.path, "/").concat(targetPath.path),
+                    entryType: targetPath.entryType,
+                });
         };
         ViewModel_1.getPathLeaf = function (path) { return path.path.split("/").pop(); };
         var uniqueKeySource = 0;
@@ -10938,6 +11131,7 @@ define("clockworks/script/render/resource", ["require", "exports"], function (re
 });
 define("clockworks/resource/lang.en", [], {
     "$name": "English",
+    "Reload screen": "Reload screen",
     "Full screen": "Full screen",
     "Cancel full screen": "Cancel full screen",
     "Elapsed time": "elapsed time",
@@ -11009,10 +11203,18 @@ define("clockworks/resource/lang.en", [], {
     "timezone.Istanbul": "Istanbul",
     "timezone.London": "London",
     "timezone.New York": "New York",
-    "timezone.Seattle": "Seattle"
+    "timezone.Seattle": "Seattle",
+    "ago": "ago",
+    "Retry": "Retry",
+    "Update": "Update",
+    "There is a new version!": "There is a new version!",
+    "Communicating with server...": "Communicating with server...",
+    "Could not access the server successfully.": "Could not access the server successfully.",
+    "Full screen has been canceled due to reloading.": "Full screen has been canceled due to reloading."
 });
 define("clockworks/resource/lang.ja", [], {
     "$name": "日本語",
+    "Reload screen": "画面の再読み込み",
     "Full screen": "フルスクリーン表示",
     "Cancel full screen": "フルスクリーン解除",
     "Elapsed time": "経過時間",
@@ -11084,7 +11286,14 @@ define("clockworks/resource/lang.ja", [], {
     "timezone.Istanbul": "イスタンブール",
     "timezone.London": "ロンドン",
     "timezone.New York": "ニューヨーク",
-    "timezone.Seattle": "シアトル"
+    "timezone.Seattle": "シアトル",
+    "ago": "前",
+    "Retry": "リトライ",
+    "Update": "アップデート",
+    "There is a new version!": "新しいバージョンがあります！",
+    "Communicating with server...": "サーバーと通信中...",
+    "Could not access the server successfully.": "サーバーに正常にアクセスできませんでした。",
+    "Full screen has been canceled due to reloading.": "再読み込みした為、フルスクリーンが解かれました。"
 });
 define("clockworks/script/type", ["require", "exports", "clockworks/script/color", "clockworks/nephila/minamo.js/index"], function (require, exports, color_1, minamo_js_1) {
     "use strict";
@@ -11132,6 +11341,18 @@ define("nephila/minamo.js/index", ["require", "exports"], function (require, exp
         var core;
         (function (core_2) {
             var _this = this;
+            function undefinedable(target, defaultResult) {
+                return function (parameter) { return undefined === parameter ? defaultResult : target(parameter); };
+            }
+            core_2.undefinedable = undefinedable;
+            function nullable(target, defaultResult) {
+                return function (parameter) { return null === parameter ? (defaultResult !== null && defaultResult !== void 0 ? defaultResult : null) : target(parameter); };
+            }
+            core_2.nullable = nullable;
+            function nonexistentable(target, defaultResult) {
+                return function (parameter) { return undefined === parameter || null === parameter ? defaultResult : target(parameter); };
+            }
+            core_2.nonexistentable = nonexistentable;
             core_2.jsonStringify = function (source, replacer, space) { return JSON.stringify(source, replacer, space); };
             core_2.extender = function () { return function (x) { return x; }; }; // TypeScript 4.8 以降では satisfies の使用を推奨
             core_2.timeout = function (wait) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -11542,6 +11763,84 @@ define("nephila/minamo.js/index", ["require", "exports"], function (require, exp
                 };
                 comparer.lowerCase = comparer.make([function (a) { return a.toLowerCase(); }, { raw: comparer.basic }]);
             })(comparer = core_2.comparer || (core_2.comparer = {}));
+            core_2.parseTimespan = function (timespan) {
+                try {
+                    switch (typeof timespan) {
+                        case "number":
+                            return timespan;
+                        case "string":
+                            if (timespan.endsWith("ms")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 2).trim());
+                            }
+                            else if (timespan.endsWith("s")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 1000;
+                            }
+                            else if (timespan.endsWith("m")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("h")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 60 * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("d")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 24 * 60 * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("w")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 7 * 24 * 60 * 60 * 1000;
+                            }
+                            else if (timespan.endsWith("y")) {
+                                return parseFloat(timespan.substring(0, timespan.length - 1).trim()) * 365.2425 * 24 * 60 * 60 * 1000;
+                            }
+                            else {
+                                return parseInt(timespan.trim());
+                            }
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                }
+                return null;
+            };
+            core_2.timespanToString = function (value) {
+                if (value < 0) {
+                    return "-".concat(core_2.timespanToString(-value));
+                }
+                else {
+                    var units = [
+                        {
+                            label: "y",
+                            size: 365.2425 * 24 * 60 * 60 * 1000
+                        },
+                        {
+                            label: "d",
+                            size: 24 * 60 * 60 * 1000
+                        },
+                        {
+                            label: "h",
+                            size: 60 * 60 * 1000
+                        },
+                        {
+                            label: "m",
+                            size: 60 * 1000
+                        },
+                        {
+                            label: "s",
+                            size: 1000
+                        },
+                        {
+                            label: "ms",
+                            size: 1
+                        }
+                    ];
+                    var i = 0;
+                    do {
+                        var unit = units[i];
+                        if (unit.size <= value) {
+                            return "".concat(value / unit.size).concat(unit.label);
+                        }
+                    } while (++i < units.length);
+                    return "".concat(value, "ms");
+                }
+            };
         })(core = minamo.core || (minamo.core = {}));
         var environment;
         (function (environment) {
@@ -12441,37 +12740,7 @@ define("clockworks/script/domain", ["require", "exports", "clockworks/nephila/mi
         };
         Domain.makeStampUrl = function (item) { return Domain.makeUrl(Domain.makePageParams("NeverStopwatch", item)); };
         Domain.parseStamp = function (json) { return Domain.parseStampCore(Domain.parseOrNull(json)); };
-        Domain.parseTimer = function (timer) {
-            try {
-                switch (typeof timer) {
-                    case "number":
-                        return timer;
-                    case "string":
-                        if (timer.endsWith("ms")) {
-                            return parseFloat(timer.substr(0, timer.length - 2).trim());
-                        }
-                        else if (timer.endsWith("s")) {
-                            return parseFloat(timer.substr(0, timer.length - 1).trim()) * 1000;
-                        }
-                        else if (timer.endsWith("m")) {
-                            return parseFloat(timer.substr(0, timer.length - 1).trim()) * 60 * 1000;
-                        }
-                        else if (timer.endsWith("h")) {
-                            return parseFloat(timer.substr(0, timer.length - 1).trim()) * 60 * 60 * 1000;
-                        }
-                        else if (timer.endsWith("d")) {
-                            return parseFloat(timer.substr(0, timer.length - 1).trim()) * 24 * 60 * 60 * 1000;
-                        }
-                        else {
-                            return parseInt(timer.trim());
-                        }
-                }
-            }
-            catch (err) {
-                console.error(err);
-            }
-            return null;
-        };
+        Domain.parseTimer = function (timer) { return minamo_js_8.minamo.core.parseTimespan(timer); };
         Domain.parseAlarmCore = function (item) {
             if (null !== item && undefined !== item && "object" === typeof item) {
                 if ("timer" === item.type &&
@@ -13455,7 +13724,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                             tektite_index_9.Tektite.monospace("current-date", __7.tektite.date.format("YYYY-MM-DD", null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks())),
-                            tektite_index_9.Tektite.monospace("capital-time", __7.tektite.date.format("HH:MM:SS.mmm", __7.tektite.date.getTime(null !== item ?
+                            tektite_index_9.Tektite.monospace("capital-time", __7.tektite.date.format("HH:MM:SS", __7.tektite.date.getTime(null !== item ?
                                 domain_5.Domain.getUTCTicks() - item.offset :
                                 domain_5.Domain.getTicks()))),
                             null !== item ?
@@ -13528,7 +13797,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                         _b = [
                             _g.sent()
                         ];
-                        return [4 /*yield*/, render_5.Render.screenHeaderApplicationSegment("RainbowClock")];
+                        return [4 /*yield*/, render_5.Render.screenHeaderApplicationSegmentMenu("RainbowClock")];
                     case 2:
                         _a = (_e.items = _b.concat([
                             _g.sent()
@@ -13591,8 +13860,9 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                             case "timer": return [3 /*break*/, 2];
                                             case "storage": return [3 /*break*/, 3];
                                             case "operate": return [3 /*break*/, 5];
+                                            case "focus": return [3 /*break*/, 10];
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 1:
                                         capitalTime = __7.tektite.date.format("HH:MM:SS", __7.tektite.date.getTime(tick));
                                         capitalTimeSpan = screen.getElementsByClassName("capital-time")[0].getElementsByClassName("value")[0];
@@ -13629,7 +13899,7 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                                 });
                                             }
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 2:
                                         dateString = __7.tektite.date.format("YYYY-MM-DD www", tick);
                                         currentDateSpan = screen.getElementsByClassName("current-date")[0].getElementsByClassName("value")[0];
@@ -13642,11 +13912,11 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                         nextColor = getRainbowColor(currentNow.getHours() + 1);
                                         render_5.Render.setProgress(minutes, nextColor);
                                         __7.tektite.setWindowColor(color_2.Color.mixColors(currentColor, nextColor, minutes));
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 3: return [4 /*yield*/, render_5.Render.reload()];
                                     case 4:
                                         _d.sent();
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 5:
                                         timezones = storage_9.Storage.RainbowClock.Timezone.get();
                                         _c = (_b = __7.tektite.screen).replaceBody;
@@ -13662,8 +13932,11 @@ define("clockworks/script/application/rainbowclock/render", ["require", "exports
                                     case 9:
                                         _d.sent();
                                         __7.tektite.screen.adjustPageFooterPosition();
-                                        return [3 /*break*/, 10];
-                                    case 10: return [2 /*return*/];
+                                        return [3 /*break*/, 11];
+                                    case 10:
+                                        __7.Clockworks.checkApplicationUpdate();
+                                        return [3 /*break*/, 11];
+                                    case 11: return [2 /*return*/];
                                 }
                             });
                         }); };
@@ -14239,7 +14512,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                         _b = [
                             _g.sent()
                         ];
-                        return [4 /*yield*/, render_6.Render.screenHeaderApplicationSegment("CountdownTimer")];
+                        return [4 /*yield*/, render_6.Render.screenHeaderApplicationSegmentMenu("CountdownTimer")];
                     case 2:
                         _a = (_e.items = _b.concat([
                             _g.sent()
@@ -14303,8 +14576,9 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             case "timer": return [3 /*break*/, 2];
                                             case "storage": return [3 /*break*/, 3];
                                             case "operate": return [3 /*break*/, 5];
+                                            case "focus": return [3 /*break*/, 10];
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 1:
                                         screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText =
                                             __8.tektite.date.format("long-time", current === null || current === void 0 ? void 0 : current.end, "clip-rest", tick);
@@ -14340,7 +14614,7 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             currentColor = color_3.Color.getSolidRainbowColor(storage_10.Storage.CountdownTimer.ColorIndex.get());
                                             __8.tektite.setBackgroundColor(currentColor);
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 2:
                                         __8.tektite.setTitle(current ? __8.tektite.date.format("short-time", current.end, "clip-rest", tick) + " - " + applicationTitle : applicationTitle);
                                         alarmListDiv = minamo_js_11.minamo.dom.getDivsByClassName(screen, "alarm-list")[0];
@@ -14364,11 +14638,11 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                             currentColor = color_3.Color.getSolidRainbowColor(storage_10.Storage.CountdownTimer.ColorIndex.get());
                                             __8.tektite.setWindowColor(currentColor);
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 3: return [4 /*yield*/, render_6.Render.reload()];
                                     case 4:
                                         _e.sent();
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 5:
                                         previousPrimaryStep = 0;
                                         alarms = storage_10.Storage.CountdownTimer.Alarms.get();
@@ -14385,8 +14659,11 @@ define("clockworks/script/application/countdowntimer/render", ["require", "expor
                                     case 9:
                                         _e.sent();
                                         __8.tektite.screen.adjustPageFooterPosition();
-                                        return [3 /*break*/, 10];
-                                    case 10: return [2 /*return*/];
+                                        return [3 /*break*/, 11];
+                                    case 10:
+                                        __8.Clockworks.checkApplicationUpdate();
+                                        return [3 /*break*/, 11];
+                                    case 11: return [2 /*return*/];
                                 }
                             });
                         }); };
@@ -14644,7 +14921,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                         _b = [
                             _g.sent()
                         ];
-                        return [4 /*yield*/, render_7.Render.screenHeaderApplicationSegment("NeverStopwatch")];
+                        return [4 /*yield*/, render_7.Render.screenHeaderApplicationSegmentMenu("NeverStopwatch")];
                     case 2:
                         _a = (_e.items = _b.concat([
                             _g.sent()
@@ -14710,8 +14987,9 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                             case "timer": return [3 /*break*/, 2];
                                             case "storage": return [3 /*break*/, 3];
                                             case "operate": return [3 /*break*/, 5];
+                                            case "focus": return [3 /*break*/, 9];
                                         }
-                                        return [3 /*break*/, 9];
+                                        return [3 /*break*/, 10];
                                     case 1:
                                         screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText =
                                             __9.tektite.date.format("long-time", current, "clip-elapsed", tick);
@@ -14738,7 +15016,7 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                             currentColor = color_4.Color.getSolidRainbowColor(0);
                                             __9.tektite.setBackgroundColor(currentColor);
                                         }
-                                        return [3 /*break*/, 9];
+                                        return [3 /*break*/, 10];
                                     case 2:
                                         __9.tektite.setTitle(__9.tektite.date.format("short-time", current, "clip-elapsed", tick) + " - " + applicationTitle);
                                         stampListDiv = minamo_js_12.minamo.dom.getDivsByClassName(screen, "stamp-list")[0];
@@ -14761,11 +15039,11 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                             currentColor = color_4.Color.getSolidRainbowColor(0);
                                             __9.tektite.setWindowColor(currentColor);
                                         }
-                                        return [3 /*break*/, 9];
+                                        return [3 /*break*/, 10];
                                     case 3: return [4 /*yield*/, render_7.Render.reload()];
                                     case 4:
                                         _e.sent();
-                                        return [3 /*break*/, 9];
+                                        return [3 /*break*/, 10];
                                     case 5:
                                         previousPrimaryStep = 0;
                                         ticks = storage_11.Storage.NeverStopwatch.Stamps.get();
@@ -14779,8 +15057,11 @@ define("clockworks/script/application/neverstopwatch/render", ["require", "expor
                                         return [4 /*yield*/, updateScreen("timer")];
                                     case 8:
                                         _e.sent();
-                                        return [3 /*break*/, 9];
-                                    case 9: return [2 /*return*/];
+                                        return [3 /*break*/, 10];
+                                    case 9:
+                                        __9.Clockworks.checkApplicationUpdate();
+                                        return [3 /*break*/, 10];
+                                    case 10: return [2 /*return*/];
                                 }
                             });
                         }); };
@@ -14985,7 +15266,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                         _b = [
                             _g.sent()
                         ];
-                        return [4 /*yield*/, render_8.Render.screenHeaderApplicationSegment("ElapsedTimer")];
+                        return [4 /*yield*/, render_8.Render.screenHeaderApplicationSegmentMenu("ElapsedTimer")];
                     case 2:
                         _a = (_e.items = _b.concat([
                             _g.sent()
@@ -15049,8 +15330,9 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                             case "timer": return [3 /*break*/, 2];
                                             case "storage": return [3 /*break*/, 3];
                                             case "operate": return [3 /*break*/, 5];
+                                            case "focus": return [3 /*break*/, 10];
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 1:
                                         screen.getElementsByClassName("capital-interval")[0].getElementsByClassName("value")[0].innerText =
                                             __10.tektite.date.format("long-time", current === null || current === void 0 ? void 0 : current.tick, "clip-elapsed", tick);
@@ -15077,7 +15359,7 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                             currentColor = color_5.Color.getSolidRainbowColor(0);
                                             __10.tektite.setBackgroundColor(currentColor);
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 2:
                                         __10.tektite.setTitle(__10.tektite.date.format("short-time", current === null || current === void 0 ? void 0 : current.tick, "clip-elapsed", tick) + " - " + applicationTitle);
                                         eventListDiv = minamo_js_13.minamo.dom.getDivsByClassName(screen, "event-list")[0];
@@ -15101,11 +15383,11 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                             currentColor = color_5.Color.getSolidRainbowColor(0);
                                             __10.tektite.setWindowColor(currentColor);
                                         }
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 3: return [4 /*yield*/, render_8.Render.reload()];
                                     case 4:
                                         _e.sent();
-                                        return [3 /*break*/, 10];
+                                        return [3 /*break*/, 11];
                                     case 5:
                                         previousPrimaryStep = 0;
                                         events = storage_12.Storage.ElapsedTimer.Events.get();
@@ -15122,8 +15404,11 @@ define("clockworks/script/application/elapsedtimer/render", ["require", "exports
                                     case 9:
                                         _e.sent();
                                         __10.tektite.screen.adjustPageFooterPosition();
-                                        return [3 /*break*/, 10];
-                                    case 10: return [2 /*return*/];
+                                        return [3 /*break*/, 11];
+                                    case 10:
+                                        __10.Clockworks.checkApplicationUpdate();
+                                        return [3 /*break*/, 11];
+                                    case 11: return [2 /*return*/];
                                 }
                             });
                         }); };
@@ -15672,6 +15957,15 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             });
         }); };
         Render.screenHeaderApplicationSegment = function (applicationType) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, ({
+                        icon: type_5.Type.applicationList[applicationType].icon,
+                        title: type_5.Type.applicationList[applicationType].title,
+                        href: { application: "RainbowClock", }
+                    })];
+            });
+        }); };
+        Render.screenHeaderApplicationSegmentMenu = function (applicationType) { return __awaiter(_this, void 0, void 0, function () {
             var _a;
             var _this = this;
             return __generator(this, function (_b) {
@@ -15795,6 +16089,11 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                 });
             });
         };
+        Render.reloadMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, __11.tektite.menu.item(Render.label("Reload screen"), __11.Clockworks.reloadScreen)];
+            });
+        }); };
         Render.fullscreenMenuItem = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -15926,28 +16225,33 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, Render.fullscreenMenuItem()];
+                    case 0: return [4 /*yield*/, Render.reloadMenuItem()];
                     case 1:
                         _a = [
                             _b.sent()
                         ];
-                        return [4 /*yield*/, Render.themeMenuItem()];
+                        return [4 /*yield*/, Render.fullscreenMenuItem()];
                     case 2:
                         _a = _a.concat([
                             _b.sent()
                         ]);
-                        return [4 /*yield*/, Render.progressBarStyleMenuItem()];
+                        return [4 /*yield*/, Render.themeMenuItem()];
                     case 3:
                         _a = _a.concat([
                             _b.sent()
                         ]);
-                        return [4 /*yield*/, Render.languageMenuItem()];
+                        return [4 /*yield*/, Render.progressBarStyleMenuItem()];
                     case 4:
                         _a = _a.concat([
                             _b.sent()
                         ]);
+                        return [4 /*yield*/, Render.languageMenuItem()];
+                    case 5:
+                        _a = _a.concat([
+                            _b.sent()
+                        ]);
                         return [4 /*yield*/, Render.githubMenuItem()];
-                    case 5: return [2 /*return*/, _a.concat([
+                    case 6: return [2 /*return*/, _a.concat([
                             _b.sent()
                         ])];
                 }
@@ -15994,6 +16298,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         ],
                             _e.trail = tektite_index_13.Tektite.$div("description")(tektite_index_13.Tektite.$tag("ul")("tektite-locale-parallel-off")([
                                 tektite_index_13.Tektite.$tag("li")("")(Render.label("You can use this web app like an app by registering it on the home screen of your smartphone.")),
+                                tektite_index_13.Tektite.$tag("li")("version-information")(__11.Clockworks.getVersionInfromationText("short-time")),
                             ])),
                             _e),
                             _c)];
@@ -16012,10 +16317,14 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                                     case "high-resolution-timer":
                                         break;
                                     case "timer":
+                                        minamo_js_14.minamo.dom.setProperty(document.getElementsByClassName("version-information")[0], "innerText", __11.Clockworks.getVersionInfromationText("short-time"));
                                         break;
                                     case "storage":
                                         break;
                                     case "operate":
+                                        break;
+                                    case "focus":
+                                        __11.Clockworks.checkApplicationUpdate();
                                         break;
                                 }
                                 return [2 /*return*/];
@@ -16030,6 +16339,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
                         return [4 /*yield*/, updateScreen("timer")];
                     case 3:
                         _b.sent();
+                        __11.Clockworks.checkApplicationUpdate();
                         return [2 /*return*/];
                 }
             });
@@ -16300,7 +16610,7 @@ define("clockworks/script/render/index", ["require", "exports", "clockworks/neph
         }); }); };
     })(Render = exports.Render || (exports.Render = {}));
 });
-define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/script/tektite-index", "clockworks/tektite.js/script/tektite-view-model", "clockworks/script/type", "clockworks/script/color", "clockworks/script/render/index", "clockworks/script/render/resource", "clockworks/script/storage", "clockworks/script/domain", "clockworks/resource/lang.en", "clockworks/resource/lang.ja", "clockworks/resource/config", "clockworks/nephila/minamo.js/index", "clockworks/script/base", "clockworks/script/application/rainbowclock/render", "clockworks/script/application/countdowntimer/render", "clockworks/script/application/neverstopwatch/render", "clockworks/script/application/elapsedtimer/render"], function (require, exports, tektite_index_14, tektite_view_model_js_1, type_6, color_7, render_14, resource_6, storage_14, domain_10, lang_en_json_1, lang_ja_json_1, config_json_11, minamo_js_15, base_9, render_15, render_16, render_17, render_18) {
+define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/script/tektite-index", "clockworks/tektite.js/script/tektite-view-model", "clockworks/script/type", "clockworks/script/color", "clockworks/script/render/index", "clockworks/script/render/resource", "clockworks/script/storage", "clockworks/script/domain", "clockworks/resource/lang.en", "clockworks/resource/lang.ja", "clockworks/resource/config", "clockworks/nephila/minamo.js/index", "clockworks/script/base", "clockworks/script/application/rainbowclock/render", "clockworks/script/application/countdowntimer/render", "clockworks/script/application/neverstopwatch/render", "clockworks/script/application/elapsedtimer/render"], function (require, exports, tektite_index_14, tektite_view_model_js_2, type_6, color_7, render_14, resource_6, storage_14, domain_10, lang_en_json_1, lang_ja_json_1, config_json_11, minamo_js_15, base_9, render_15, render_16, render_17, render_18) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.tektite = exports.Clockworks = void 0;
@@ -16318,25 +16628,206 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
         };
         Clockworks.localeMap = function (key) { return exports.tektite.locale.map(key); };
         Clockworks.localeParallel = function (key) { return exports.tektite.locale.parallel(key); };
+        var lastNewVersionCheckAt = 0;
+        var wasShowNewVersionToast = false;
+        Clockworks.checkApplicationUpdate = function () { return __awaiter(_this, void 0, void 0, function () {
+            var now, toast_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!!wasShowNewVersionToast) return [3 /*break*/, 2];
+                        now = new Date().getTime();
+                        if (!(lastNewVersionCheckAt + (60 * 60 * 1000) < now)) return [3 /*break*/, 2];
+                        lastNewVersionCheckAt = now;
+                        return [4 /*yield*/, Clockworks.isNewVersionReady()];
+                    case 1:
+                        if (_a.sent()) {
+                            wasShowNewVersionToast = true;
+                            toast_1 = exports.tektite.screen.toast.make({
+                                forwardOperator: {
+                                    tag: "button",
+                                    className: "tektite-text-button",
+                                    children: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Update")),
+                                    onclick: function () {
+                                        toast_1.hide();
+                                        Clockworks.reloadScreen();
+                                    },
+                                },
+                                content: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("There is a new version!")),
+                                wait: 0,
+                            });
+                        }
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
+                }
+            });
+        }); };
+        Clockworks.reloadScreen = function () { return __awaiter(_this, void 0, void 0, function () {
+            var isCanceled, loadingToast, reload, error_1, retryToast_1;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        isCanceled = false;
+                        loadingToast = exports.tektite.screen.toast.make({
+                            content: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Communicating with server...")),
+                            backwardOperator: render_14.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, loadingToast.hide()];
+                                        case 1:
+                                            _a.sent();
+                                            isCanceled = true;
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }),
+                            wait: 0,
+                        });
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, Clockworks.getLatestBuildTimestamp()];
+                    case 2:
+                        _a.sent();
+                        if (!isCanceled) {
+                            reload = {
+                                url: location.href,
+                                fullscreen: exports.tektite.fullscreen.enabled() && exports.tektite.fullscreen.getElement(),
+                                dummy: new Date().getTime(),
+                            };
+                            location.href = "?reload=".concat(encodeURIComponent(JSON.stringify(reload)));
+                        }
+                        return [4 /*yield*/, loadingToast.hide()];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_1 = _a.sent();
+                        loadingToast.hide();
+                        retryToast_1 = exports.tektite.screen.toast.make({
+                            forwardOperator: {
+                                tag: "button",
+                                className: "tektite-text-button",
+                                children: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Retry")),
+                                onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                Clockworks.reloadScreen();
+                                                return [4 /*yield*/, retryToast_1.hide()];
+                                            case 1:
+                                                _a.sent();
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); },
+                            },
+                            content: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Could not access the server successfully.")),
+                            backwardOperator: render_14.Render.cancelTextButton(function () { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, retryToast_1.hide()];
+                                        case 1:
+                                            _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }),
+                            wait: 0,
+                        });
+                        console.error(error_1);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        }); };
+        Clockworks.getLatestBuildTimestamp = function () { return __awaiter(_this, void 0, void 0, function () { var _a, _b; return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = (_a = JSON).parse;
+                    return [4 /*yield*/, minamo_js_15.minamo.http.get("./build.timestamp.json?dummy=".concat(new Date().getTime()))];
+                case 1: return [2 /*return*/, _b.apply(_a, [_c.sent()])];
+            }
+        }); }); };
+        var buildTimestamp;
+        Clockworks.isNewVersionReady = function () { return __awaiter(_this, void 0, void 0, function () {
+            var latestBuildTimestamp, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Clockworks.getLatestBuildTimestamp()];
+                    case 1:
+                        latestBuildTimestamp = _a.sent();
+                        return [2 /*return*/, "number" === typeof latestBuildTimestamp && latestBuildTimestamp !== buildTimestamp.tick];
+                    case 2:
+                        error_2 = _a.sent();
+                        console.error(error_2);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        Clockworks.getVersionInfromationText = function (format) { return "".concat(exports.tektite.locale.immutable("build timestamp"), ": ").concat(exports.tektite.date.format("YYYY-MM-DD HH:MM", buildTimestamp.tick), " ( ").concat(exports.tektite.date.format(format, buildTimestamp.tick, "elapsed"), " ").concat(exports.tektite.locale.map("ago"), " )"); };
         Clockworks.start = function (params) { return __awaiter(_this, void 0, void 0, function () {
+            var urlParams, reload, json, url, fullscreen, toast_2;
+            var _this = this;
             var _a, _b, _c;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
+                        buildTimestamp =
+                            {
+                                stamp: params.buildTimestamp,
+                                tick: params.buildTimestampTick,
+                            };
                         console.log("start timestamp: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", new Date())));
-                        console.log("buildTimestamp: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM:SS.mmm", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )"));
+                        console.log("buildTimestamp: ".concat(Clockworks.getVersionInfromationText("formal-time")));
                         console.log("".concat(JSON.stringify(params)));
                         exports.tektite.locale.setLocale((_a = storage_14.Storage.Settings.get().locale) !== null && _a !== void 0 ? _a : null);
                         exports.tektite.onLoad();
                         window.matchMedia("(prefers-color-scheme: dark)").addListener(render_14.Render.updateStyle);
                         render_14.Render.updateStyle();
                         render_14.Render.updateProgressBarStyle();
+                        urlParams = base_9.Base.getUrlParams(location.href);
+                        reload = urlParams["reload"];
+                        if (reload) {
+                            json = JSON.parse(reload);
+                            url = json["url"];
+                            if (url) {
+                                history.replaceState(null, config_json_11.default.applicationTitle, url);
+                            }
+                            fullscreen = json["fullscreen"];
+                            if (fullscreen && exports.tektite.fullscreen.enabled()) {
+                                toast_2 = exports.tektite.screen.toast.make({
+                                    forwardOperator: {
+                                        tag: "button",
+                                        className: "tektite-text-button",
+                                        children: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Full screen")),
+                                        onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0:
+                                                        toast_2.hide();
+                                                        return [4 /*yield*/, exports.tektite.fullscreen.request()];
+                                                    case 1:
+                                                        _a.sent();
+                                                        return [2 /*return*/];
+                                                }
+                                            });
+                                        }); },
+                                    },
+                                    content: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Full screen has been canceled due to reloading.")),
+                                });
+                            }
+                        }
                         return [4 /*yield*/, render_14.Render.showPage()];
                     case 1:
                         _d.sent();
-                        if ("reload" === ((_c = (_b = performance.getEntriesByType("navigation")) === null || _b === void 0 ? void 0 : _b[0]) === null || _c === void 0 ? void 0 : _c.type)) {
+                        if (reload || "reload" === ((_c = (_b = performance.getEntriesByType("navigation")) === null || _b === void 0 ? void 0 : _b[0]) === null || _c === void 0 ? void 0 : _c.type)) {
                             exports.tektite.screen.toast.make({
-                                content: tektite_index_14.Tektite.$span("")("\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )")),
+                                content: Clockworks.getVersionInfromationText("formal-time"),
                                 isWideContent: true,
                             });
                         }
@@ -16350,7 +16841,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                 window.Tektite =
                     {
                         model: {
-                            get: function () { return exports.tektite.viewModel.getUnknown(tektite_view_model_js_1.ViewModel.makeRootPath()); },
+                            get: function () { return exports.tektite.viewModel.getUnknown(tektite_view_model_js_2.ViewModel.makeRootPath()); },
                             set: function (model) { return exports.tektite.viewModel.set(model); },
                         }
                     };
@@ -16373,7 +16864,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                 $model.set(model);
             };
             TektiteWIP.setRootData = function (data) {
-                return exports.tektite.viewModel.setData(tektite_view_model_js_1.ViewModel.makeRootPath(), "tektite-root", data);
+                return exports.tektite.viewModel.setData(tektite_view_model_js_2.ViewModel.makeRootPath(), "tektite-root", data);
             };
             TektiteWIP.setHeaderSegmented = function (children) {
                 var path = { type: "path", path: "/root/screen/screen-header/screen-header-segment", entryType: "tektite-screen-header-segment-list", };
@@ -16646,7 +17137,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                 });
             };
             ClockworksWIP.start = function (params) { return __awaiter(_this, void 0, void 0, function () {
-                var renders, _a, _b, _c, commands;
+                var urlParams, reload, json, url, fullscreen, toast_3, renders, _a, _b, _c, commands;
                 var _d, _e;
                 var _this = this;
                 var _f, _g, _h, _j, _k, _l;
@@ -16667,6 +17158,38 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                                 progressBarStyle: (_h = storage_14.Storage.Settings.get().progressBarStyle) !== null && _h !== void 0 ? _h : "auto",
                                 windowColor: color_7.Color.getSolidRainbowColor(0),
                             });
+                            urlParams = base_9.Base.getUrlParams(location.href);
+                            reload = urlParams["reload"];
+                            if (reload) {
+                                json = JSON.parse(reload);
+                                url = json["url"];
+                                if (url) {
+                                    history.replaceState(null, config_json_11.default.applicationTitle, url);
+                                }
+                                fullscreen = json["fullscreen"];
+                                if (fullscreen && exports.tektite.fullscreen.enabled()) {
+                                    toast_3 = exports.tektite.screen.toast.make({
+                                        forwardOperator: {
+                                            tag: "button",
+                                            className: "tektite-text-button",
+                                            children: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Full screen")),
+                                            onclick: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            toast_3.hide();
+                                                            return [4 /*yield*/, exports.tektite.fullscreen.request()];
+                                                        case 1:
+                                                            _a.sent();
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); },
+                                        },
+                                        content: tektite_index_14.Tektite.$span("")(exports.tektite.locale.map("Full screen has been canceled due to reloading.")),
+                                    });
+                                }
+                            }
                             _d = {};
                             _a = "welcome-board";
                             _e = {};
@@ -16752,7 +17275,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
                             return [4 /*yield*/, ClockworksWIP.showPage()];
                         case 2:
                             _m.sent();
-                            if (!("reload" === ((_k = (_j = performance.getEntriesByType("navigation")) === null || _j === void 0 ? void 0 : _j[0]) === null || _k === void 0 ? void 0 : _k.type))) return [3 /*break*/, 4];
+                            if (!(reload || "reload" === ((_k = (_j = performance.getEntriesByType("navigation")) === null || _j === void 0 ? void 0 : _j[0]) === null || _k === void 0 ? void 0 : _k.type))) return [3 /*break*/, 4];
                             exports.tektite.makeToast({
                                 content: "\u30D3\u30EB\u30C9\u30BF\u30A4\u30E0\u30B9\u30BF\u30F3\u30D7: ".concat(exports.tektite.date.format("YYYY-MM-DD HH:MM", params.buildTimestampTick), " ( ").concat(exports.tektite.date.format("formal-time", params.buildTimestampTick, "elapsed"), " \u524D )"),
                                 isWideContent: true,
@@ -16781,7 +17304,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
         },
     });
 });
-//# sourceMappingURL=script/index.js.map
+//# sourceMappingURL=index.js.map
 </script>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@wraith13">
@@ -16790,7 +17313,7 @@ define("clockworks/script/index", ["require", "exports", "clockworks/tektite.js/
 <meta name="twitter:description" content="Clockworks Static Web Application">
 <meta name="twitter:image" content="https://wraith13.github.io/clockworks/image/clockworks-twitter-card.png">
 </head>
-<body onload="require('clockworks/script/index').Clockworks.ClockworksWIP.start({ buildTimestampTick: 1661944529959, })">
+<body onload="require('clockworks/script/index').Clockworks.ClockworksWIP.start({ buildTimestamp: 'Sun Aug 20 2023 20:07:05 GMT+0900 (日本標準時)', buildTimestampTick: 1692529625853, })">
 <div id="tektite-images" style="display: none;"><div id="tektite-history-icon"><svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <path d="M561.152,59.236C579.856,43.119 608.157,43.938 625.887,61.686L626.43,62.231C637.182,72.994 641.705,87.638 640,101.665L640,148.097C807.056,202.145 928,359.06 928,544C928,773.597 741.597,960 512,960C282.403,960 96,773.597 96,544C96,517.508 117.508,496 144,496C170.492,496 192,517.508 192,544C192,720.613 335.387,864 512,864C688.613,864 832,720.613 832,544C832,412.9 752.992,300.108 640.041,250.684C641.629,264.605 637.093,279.096 626.43,289.769L625.887,290.314C608.157,308.062 579.856,308.881 561.152,292.764C559.536,291.407 558.011,289.945 556.587,288.389L477.954,209.837C468.634,200.526 463.982,188.3 464,176.078L464,176L464,175.922C463.982,163.7 468.634,151.474 477.954,142.163L556.587,63.611C558.011,62.055 559.536,60.593 561.152,59.236ZM489.624,621.751C482.539,619.505 475.871,615.575 470.254,609.961L284.062,423.882C265.324,405.155 265.315,374.738 284.042,356C302.769,337.262 333.186,337.253 351.924,355.979L504.164,508.127L598.486,413.917C617.079,395.345 647.253,395.363 665.824,413.957L666.368,414.501C684.939,433.095 684.921,463.268 666.328,481.839L539.524,608.493C539.075,608.981 538.611,609.464 538.136,609.94C531.085,616.995 522.377,621.395 513.26,623.14L513.085,623.173L513.002,623.189L512.962,623.196L512.893,623.209L512.801,623.226L512.744,623.236L512.667,623.25L512.556,623.269L512.516,623.276L512.487,623.281L512.372,623.302L512.23,623.326C510.638,623.595 509.019,623.786 507.378,623.894L507.256,623.903L507.113,623.911L507.077,623.913L507.049,623.915L506.95,623.921L506.84,623.927L506.79,623.93L506.738,623.932L506.644,623.937L506.561,623.941L506.502,623.944L506.425,623.948L506.337,623.952L506.276,623.955L506.214,623.957L506.108,623.962L506.029,623.965L505.987,623.966L505.927,623.969L505.788,623.973L505.721,623.976L505.695,623.976L505.639,623.978L505.462,623.983L505.413,623.984L505.399,623.985L505.351,623.986L505.126,623.991L505.1,623.991C504.795,623.997 504.491,624 504.186,624L504.175,624L504.043,624L503.911,623.999L503.899,623.999L503.865,623.999L503.653,623.997L503.618,623.997C498.806,623.942 494.164,623.178 489.792,621.804L489.696,621.774L489.624,621.751Z"/>
 </svg>

@@ -10,7 +10,7 @@
                 "__BUILD_OPTIONS__": { "call": "command_options" },
                 "__BUILD_TIMESTAMP__": { "call": "timestamp" },
                 "__BUILD_TIMESTAMP_TICK__": { "call": "timestamp_tick" },
-                "__REPOSITORY_URL_": { "json": "./resource/config.json", "key": "repositoryUrl" },
+                "__REPOSITORY_URL_": { "json": "./resource/config.json", "value": "repositoryUrl" },
                 "__LICENSE__": { "path": "./LICENSE_1_0.txt" }
             }
         },

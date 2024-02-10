@@ -249,9 +249,8 @@ export module Render
                                     const tick = await RenderBase.timePrompt(Clockworks.localeMap("input a time"), 0);
                                     if (null !== tick)
                                     {
-                                        const minutes = tick /(60 *1000);
-                                        Storage.CountdownTimer.recentlyTimer.add(minutes);
-                                        await Operate.newTimer(minutes);
+                                        Storage.CountdownTimer.recentlyTimer.add(tick);
+                                        await Operate.newTimer(tick);
                                         instance.set(true).close();
                                     }
                                 }
