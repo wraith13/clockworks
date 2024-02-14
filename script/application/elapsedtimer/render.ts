@@ -107,7 +107,7 @@ export module Render
                             const result = await CountdownTimerRender.eventPrompt(Clockworks.localeMap("New Event"), Clockworks.localeMap("New Event"), Domain.getAppropriateTicks());
                             if (result)
                             {
-                                if (Domain.getTicks() < result.tick)
+                                if (result.tick <= Domain.getTicks())
                                 {
                                     await Operate.newEvent(result.title, result.tick);
                                 }

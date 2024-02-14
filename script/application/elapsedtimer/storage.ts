@@ -8,7 +8,7 @@ export module Storage
     {
         export const makeKey = () => `${config.localDbPrefix}:${applicationName}:alarms`;
         export const get = (): Type.EventEntry[] => minamo.localStorage.getOrNull<Type.EventEntry[]>(makeKey()) ?? [];
-        export const set = (list: Type.EventEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => i.tick)));
+        export const set = (list: Type.EventEntry[]) => minamo.localStorage.set(makeKey(), list.sort(minamo.core.comparer.make(i => -i.tick)));
         export const removeKey = () => minamo.localStorage.remove(makeKey());
         export const add = (item: Type.EventEntry | Type.EventEntry[]) =>
             set(get().concat(item));
